@@ -1,7 +1,14 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
+
 import { prisma } from "@/lib/prisma";
+
+type AuthUser = {
+  id: string;
+  name: string | null;
+  username: string;
+};
 
 export const authOptions: NextAuthOptions = {
   debug: true,
@@ -16,29 +23,46 @@ export const authOptions: NextAuthOptions = {
       name: "Credentials",
 
       credentials: {
-        username: { label: "Username", type: "text" },
-        password: { label: "Password", type: "password" },
+        username: {
+          label: "Username",
+          type: "text",
+        },
+
+        password: {
+          label: "Password",
+          type: "password",
+        },
       },
 
       async authorize(credentials) {
-        if (!credentials?.username || !credentials?.password) {
+        if (
+          !credentials?.username ||
+          !credentials?.password
+        ) {
           return null;
         }
 
-        const user = await prisma.user.findUnique({
-          where: {
-            username: credentials.username,
-          },
-        });
+        const user =
+          await prisma.user.findUnique({
+            where: {
+              username:
+                credentials.username,
+            },
+          });
 
-        if (!user) return null;
+        if (!user) {
+          return null;
+        }
 
-        const isPasswordValid = await bcrypt.compare(
-          credentials.password,
-          user.passwordHash
-        );
+        const isPasswordValid =
+          await bcrypt.compare(
+            credentials.password,
+            user.passwordHash
+          );
 
-        if (!isPasswordValid) return null;
+        if (!isPasswordValid) {
+          return null;
+        }
 
         return {
           id: user.id,
@@ -53,18 +77,28 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.username = (user as any).username;
+      const typedUser =
+        user as AuthUser | undefined;
+
+      if (typedUser) {
+        token.id = typedUser.id;
+        token.username =
+          typedUser.username;
       }
 
       return token;
     },
 
-    async session({ session, token }) {
+    async session({
+      session,
+      token,
+    }) {
       if (session.user) {
-        session.user.id = token.id as string;
-        (session.user as any).username = token.username;
+        session.user.id =
+          token.id as string;
+
+        session.user.username =
+          token.username as string;
       }
 
       return session;

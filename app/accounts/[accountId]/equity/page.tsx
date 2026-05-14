@@ -15,17 +15,16 @@ export default async function EquityPage({
 
   const { accountId } = await params;
 
-  const membership =
-    await prisma.accountMember.findFirst({
-      where: {
-        userId: session.user.id,
-        tradingAccountId: accountId,
-      },
+  const membership = await prisma.accountMember.findFirst({
+    where: {
+      userId: session.user.id,
+      tradingAccountId: accountId,
+    },
 
-      include: {
-        tradingAccount: true,
-      },
-    });
+    include: {
+      tradingAccount: true,
+    },
+  });
 
   if (!membership) {
     redirect("/accounts");
@@ -39,13 +38,14 @@ export default async function EquityPage({
     orderBy: [{ openDate: "asc" }],
   });
 
+  const initialBalance =
+    membership.tradingAccount.initialBalance;
+
   const currentEquity =
     trades.length > 0
       ? trades[trades.length - 1].equity ||
-        membership.tradingAccount
-          .initialBalance
-      : membership.tradingAccount
-          .initialBalance;
+        initialBalance
+      : initialBalance;
 
   const totalPnl = trades.reduce(
     (acc, trade) =>
@@ -53,51 +53,20 @@ export default async function EquityPage({
     0
   );
 
-  const positiveTrades =
-    trades.filter(
-      (trade) =>
-        (trade.resultUsd || 0) > 0
-    ).length;
+  const positiveTrades = trades.filter(
+    (trade) => (trade.resultUsd || 0) > 0
+  ).length;
 
-  const negativeTrades =
-    trades.filter(
-      (trade) =>
-        (trade.resultUsd || 0) < 0
-    ).length;
-
-  const maxEquity =
-    trades.length > 0
-      ? Math.max(
-          ...trades.map(
-            (trade) =>
-              trade.equity ||
-              membership.tradingAccount
-                .initialBalance
-          )
-        )
-      : membership.tradingAccount
-          .initialBalance;
-
-  const minEquity =
-    trades.length > 0
-      ? Math.min(
-          ...trades.map(
-            (trade) =>
-              trade.equity ||
-              membership.tradingAccount
-                .initialBalance
-          )
-        )
-      : membership.tradingAccount
-          .initialBalance;
+  const negativeTrades = trades.filter(
+    (trade) => (trade.resultUsd || 0) < 0
+  ).length;
 
   const maxDrawdown =
     trades.length > 0
       ? Math.min(
           ...trades.map(
             (trade) =>
-              trade.drawdownPercent ||
-              0
+              trade.drawdownPercent || 0
           )
         )
       : 0;
@@ -176,21 +145,10 @@ export default async function EquityPage({
         <table className="w-full border-collapse">
           <thead className="bg-white/5 text-left text-sm text-gray-400">
             <tr>
-              <th className="p-4">
-                Data
-              </th>
-
-              <th className="p-4">
-                Equity
-              </th>
-
-              <th className="p-4">
-                PnL
-              </th>
-
-              <th className="p-4">
-                Drawdown
-              </th>
+              <th className="p-4">Data</th>
+              <th className="p-4">Equity</th>
+              <th className="p-4">PnL</th>
+              <th className="p-4">Drawdown</th>
             </tr>
           </thead>
 
@@ -209,39 +167,28 @@ export default async function EquityPage({
                 <td className="p-4 font-semibold">
                   {(
                     trade.equity ||
-                    membership
-                      .tradingAccount
-                      .initialBalance
+                    initialBalance
                   ).toFixed(2)}
                 </td>
 
                 <td
                   className={
-                    (trade.resultUsd ||
-                      0) >= 0
+                    (trade.resultUsd || 0) >= 0
                       ? "p-4 text-green-400"
                       : "p-4 text-red-400"
                   }
                 >
-                  {(
-                    trade.resultUsd ||
-                    0
-                  ).toFixed(2)}
+                  {(trade.resultUsd || 0).toFixed(2)}
                 </td>
 
                 <td
                   className={
-                    (trade.drawdownPercent ||
-                      0) < 0
+                    (trade.drawdownPercent || 0) < 0
                       ? "p-4 text-red-400"
                       : "p-4 text-gray-300"
                   }
                 >
-                  {(
-                    trade.drawdownPercent ||
-                    0
-                  ).toFixed(2)}
-                  %
+                  {(trade.drawdownPercent || 0).toFixed(2)}%
                 </td>
               </tr>
             ))}
