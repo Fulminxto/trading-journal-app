@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
@@ -14,8 +15,17 @@ function formatCurrency(value: number, currency: string) {
 
 export default async function DiaryPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ accountId: string }>;
+  searchParams: Promise<{
+    symbol?: string;
+    outcome?: string;
+    direction?: string;
+    strategy?: string;
+    from?: string;
+    to?: string;
+  }>;
 }) {
   const session = await auth();
 
@@ -24,6 +34,7 @@ export default async function DiaryPage({
   }
 
   const { accountId } = await params;
+  const filters = await searchParams;
 
   const membership = await prisma.accountMember.findFirst({
     where: {
@@ -41,7 +52,58 @@ export default async function DiaryPage({
 
   const account = membership.tradingAccount;
 
+  const where: Prisma.TradeWhereInput = {
+    tradingAccountId: accountId,
+  };
+
+  if (filters.symbol) {
+    where.symbol = filters.symbol;
+  }
+
+  if (filters.outcome) {
+    where.outcome = filters.outcome;
+  }
+
+  if (filters.direction) {
+    where.direction = filters.direction;
+  }
+
+  if (filters.strategy) {
+    where.strategy = {
+      contains: filters.strategy,
+      mode: "insensitive",
+    };
+  }
+
+  if (filters.from || filters.to) {
+    where.openDate = {
+      ...(filters.from
+        ? {
+            gte: new Date(filters.from),
+          }
+        : {}),
+
+      ...(filters.to
+        ? {
+            lte: new Date(filters.to),
+          }
+        : {}),
+    };
+  }
+
   const trades = await prisma.trade.findMany({
+    where,
+    orderBy: [
+      {
+        openDate: "desc",
+      },
+      {
+        id: "desc",
+      },
+    ],
+  });
+
+  const allTrades = await prisma.trade.findMany({
     where: {
       tradingAccountId: accountId,
     },
@@ -54,6 +116,18 @@ export default async function DiaryPage({
       },
     ],
   });
+
+  const symbols = Array.from(
+    new Set(allTrades.map((trade) => trade.symbol))
+  ).sort();
+
+  const strategies = Array.from(
+    new Set(
+      allTrades
+        .map((trade) => trade.strategy)
+        .filter(Boolean)
+    )
+  ).sort();
 
   const totalTrades = trades.length;
 
@@ -77,10 +151,11 @@ export default async function DiaryPage({
   const winRate =
     totalTrades > 0 ? (wins / totalTrades) * 100 : 0;
 
-  const currentEquity =
-    trades.length > 0
-      ? trades[0].equity || account.initialBalance
-      : account.initialBalance;
+  const latestTrade = allTrades[0];
+
+  const currentEquity = latestTrade
+    ? latestTrade.equity || account.initialBalance
+    : account.initialBalance;
 
   const bestTrade =
     trades.length > 0
@@ -96,9 +171,17 @@ export default async function DiaryPage({
         )
       : 0;
 
+  const hasActiveFilters =
+    Boolean(filters.symbol) ||
+    Boolean(filters.outcome) ||
+    Boolean(filters.direction) ||
+    Boolean(filters.strategy) ||
+    Boolean(filters.from) ||
+    Boolean(filters.to);
+
   const statCards = [
     {
-      label: "Total PnL",
+      label: "Filtered PnL",
       value: formatCurrency(totalPnl, account.currency),
       tone:
         totalPnl >= 0
@@ -116,7 +199,7 @@ export default async function DiaryPage({
       tone: "text-green-400",
     },
     {
-      label: "Total Trades",
+      label: "Filtered Trades",
       value: totalTrades,
       tone: "text-white",
     },
@@ -150,7 +233,7 @@ export default async function DiaryPage({
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-gray-300">
-          {wins} Win · {losses} Loss · {breakEven} BE
+          {wins} Win - {losses} Loss - {breakEven} BE
         </div>
       </div>
 
@@ -170,6 +253,107 @@ export default async function DiaryPage({
           </div>
         ))}
       </div>
+
+      <form
+        action={`/accounts/${accountId}/diary`}
+        className="mb-10 rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+      >
+        <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-sm text-gray-400">
+              Filtri operativi
+            </p>
+
+            <h2 className="mt-1 text-2xl font-bold">
+              Analizza i tuoi trade
+            </h2>
+          </div>
+
+          {hasActiveFilters && (
+            <Link
+              href={`/accounts/${accountId}/diary`}
+              className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-gray-300 hover:bg-white/[0.06]"
+            >
+              Reset filtri
+            </Link>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-6">
+          <select
+            name="symbol"
+            defaultValue={filters.symbol || ""}
+            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+          >
+            <option value="">Tutti i simboli</option>
+
+            {symbols.map((symbol) => (
+              <option key={symbol} value={symbol}>
+                {symbol}
+              </option>
+            ))}
+          </select>
+
+          <select
+            name="outcome"
+            defaultValue={filters.outcome || ""}
+            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+          >
+            <option value="">Tutti gli outcome</option>
+            <option value="win">Win</option>
+            <option value="loss">Loss</option>
+            <option value="be">BE</option>
+          </select>
+
+          <select
+            name="direction"
+            defaultValue={filters.direction || ""}
+            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+          >
+            <option value="">Tutte le direzioni</option>
+            <option value="LONG">LONG</option>
+            <option value="SHORT">SHORT</option>
+          </select>
+
+          <input
+            name="strategy"
+            defaultValue={filters.strategy || ""}
+            list="strategy-list"
+            placeholder="Strategia"
+            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+          />
+
+          <datalist id="strategy-list">
+            {strategies.map((strategy) => (
+              <option
+                key={strategy}
+                value={strategy || ""}
+              />
+            ))}
+          </datalist>
+
+          <input
+            name="from"
+            type="date"
+            defaultValue={filters.from || ""}
+            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+          />
+
+          <input
+            name="to"
+            type="date"
+            defaultValue={filters.to || ""}
+            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+          />
+
+          <button
+            type="submit"
+            className="rounded-2xl bg-green-500 p-4 font-bold text-black transition hover:bg-green-400 sm:col-span-2 xl:col-span-6"
+          >
+            Applica filtri
+          </button>
+        </div>
+      </form>
 
       <form
         action={createAccountTrade.bind(null, accountId)}
@@ -343,7 +527,7 @@ export default async function DiaryPage({
         </div>
 
         <p className="text-sm text-gray-500">
-          {totalTrades} operazioni totali
+          {totalTrades} operazioni filtrate su {allTrades.length} totali
         </p>
       </div>
 
@@ -357,6 +541,7 @@ export default async function DiaryPage({
               <th className="p-4">Outcome</th>
               <th className="p-4">Result</th>
               <th className="p-4">Equity</th>
+              <th className="p-4">Strategy</th>
               <th className="p-4">R:R</th>
               <th className="p-4">Actions</th>
             </tr>
@@ -429,6 +614,10 @@ export default async function DiaryPage({
                 </td>
 
                 <td className="p-4 text-gray-300">
+                  {trade.strategy || "-"}
+                </td>
+
+                <td className="p-4 text-gray-300">
                   {trade.riskReward || "-"}
                 </td>
 
@@ -463,10 +652,10 @@ export default async function DiaryPage({
             {trades.length === 0 && (
               <tr>
                 <td
-                  colSpan={8}
+                  colSpan={9}
                   className="p-8 text-center text-gray-500"
                 >
-                  Nessun trade registrato.
+                  Nessun trade trovato con questi filtri.
                 </td>
               </tr>
             )}
@@ -477,7 +666,7 @@ export default async function DiaryPage({
       <div className="space-y-4 lg:hidden">
         {trades.length === 0 ? (
           <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 text-center text-gray-500">
-            Nessun trade registrato.
+            Nessun trade trovato con questi filtri.
           </div>
         ) : (
           trades.map((trade) => (
@@ -492,8 +681,8 @@ export default async function DiaryPage({
                   </h3>
 
                   <p className="text-sm text-gray-500">
-                    {new Date(trade.openDate).toLocaleDateString("it-IT")}{" "}
-                    · {trade.openTime || "-"}
+                    {new Date(trade.openDate).toLocaleDateString("it-IT")} -{" "}
+                    {trade.openTime || "-"}
                   </p>
                 </div>
 
@@ -550,10 +739,20 @@ export default async function DiaryPage({
                 </div>
               </div>
 
-              {trade.notes && (
-                <p className="mt-4 rounded-2xl bg-black/20 p-3 text-sm text-gray-400">
-                  {trade.notes}
-                </p>
+              {(trade.strategy || trade.notes) && (
+                <div className="mt-4 space-y-3">
+                  {trade.strategy && (
+                    <p className="rounded-2xl bg-black/20 p-3 text-sm text-gray-400">
+                      Strategia: {trade.strategy}
+                    </p>
+                  )}
+
+                  {trade.notes && (
+                    <p className="rounded-2xl bg-black/20 p-3 text-sm text-gray-400">
+                      {trade.notes}
+                    </p>
+                  )}
+                </div>
               )}
 
               <div className="mt-4 flex gap-3">
