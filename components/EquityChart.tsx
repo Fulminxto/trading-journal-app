@@ -1,14 +1,14 @@
 "use client";
 
 import {
-  ResponsiveContainer,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
   Area,
   AreaChart,
+  CartesianGrid,
+  Line,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts";
 
 type EquityPoint = {
@@ -20,15 +20,31 @@ type Props = {
   data: EquityPoint[];
 };
 
-export default function EquityChart({
-  data,
-}: Props) {
+function formatMoney(value: number) {
+  return `$${value.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+}
+
+export default function EquityChart({ data }: Props) {
+  const hasData = data.length > 0;
+
+  if (!hasData) {
+    return (
+      <div className="flex h-[340px] items-center justify-center rounded-2xl border border-white/10 bg-black/20 text-sm text-gray-500">
+        Nessun dato equity disponibile.
+      </div>
+    );
+  }
+
+  const firstEquity = data[0]?.equity || 0;
+  const lastEquity = data[data.length - 1]?.equity || 0;
+  const isPositive = lastEquity >= firstEquity;
+
   return (
     <div className="h-[340px] min-h-[340px] w-full min-w-0 overflow-hidden">
-      <ResponsiveContainer
-        width="100%"
-        height={340}
-      >
+      <ResponsiveContainer width="100%" height={340}>
         <AreaChart data={data}>
           <defs>
             <linearGradient
@@ -40,13 +56,13 @@ export default function EquityChart({
             >
               <stop
                 offset="0%"
-                stopColor="#22c55e"
+                stopColor={isPositive ? "#22c55e" : "#ef4444"}
                 stopOpacity={0.35}
               />
 
               <stop
                 offset="100%"
-                stopColor="#22c55e"
+                stopColor={isPositive ? "#22c55e" : "#ef4444"}
                 stopOpacity={0}
               />
             </linearGradient>
@@ -70,16 +86,26 @@ export default function EquityChart({
             tick={{ fontSize: 11 }}
             tickLine={false}
             axisLine={false}
-            width={55}
+            width={72}
+            tickFormatter={(value) =>
+              formatMoney(Number(value))
+            }
           />
 
           <Tooltip
+            formatter={(value) => [
+              formatMoney(Number(value)),
+              "Equity",
+            ]}
+            labelFormatter={(label) => `Data: ${label}`}
             contentStyle={{
               backgroundColor: "#0f172a",
-              border:
-                "1px solid rgba(255,255,255,0.1)",
+              border: "1px solid rgba(255,255,255,0.1)",
               borderRadius: "16px",
               color: "white",
+            }}
+            labelStyle={{
+              color: "#d4d4d8",
             }}
           />
 
@@ -93,7 +119,7 @@ export default function EquityChart({
           <Line
             type="monotone"
             dataKey="equity"
-            stroke="#22c55e"
+            stroke={isPositive ? "#22c55e" : "#ef4444"}
             strokeWidth={3}
             dot={false}
             activeDot={{
