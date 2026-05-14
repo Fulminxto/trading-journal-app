@@ -2,8 +2,9 @@
 
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
 
-const STARTING_EQUITY = 10000; // Cambia qui il capitale iniziale del conto
+const STARTING_EQUITY = 10000;
 
 function toNumber(value: FormDataEntryValue | null) {
   if (!value) return null;
@@ -19,8 +20,19 @@ function toDate(value: FormDataEntryValue | null) {
   return new Date(value.toString());
 }
 
-async function recalculateEquity() {
+async function getCurrentUserId() {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
+
+  return session.user.id;
+}
+
+async function recalculateEquity(userId: string) {
   const trades = await prisma.trade.findMany({
+    where: { userId },
     orderBy: [{ openDate: "asc" }, { id: "asc" }],
   });
 
@@ -41,9 +53,7 @@ async function recalculateEquity() {
       equityPeak > 0 ? ((equity - equityPeak) / equityPeak) * 100 : 0;
 
     await prisma.trade.update({
-      where: {
-        id: trade.id,
-      },
+      where: { id: trade.id },
       data: {
         resultPercent,
         equity,
@@ -55,8 +65,11 @@ async function recalculateEquity() {
 }
 
 export async function createTrade(formData: FormData) {
+  const userId = await getCurrentUserId();
+
   await prisma.trade.create({
     data: {
+      userId,
       openDate: new Date(formData.get("openDate") as string),
       openTime: formData.get("openTime") as string,
       reason: formData.get("reason") as string,
@@ -76,28 +89,36 @@ export async function createTrade(formData: FormData) {
     },
   });
 
-  await recalculateEquity();
+  await recalculateEquity(userId);
 
   redirect("/diary");
 }
 
 export async function deleteTrade(formData: FormData) {
+  const userId = await getCurrentUserId();
   const id = Number(formData.get("id"));
 
   await prisma.trade.delete({
-    where: { id },
+    where: {
+      id,
+      userId,
+    },
   });
 
-  await recalculateEquity();
+  await recalculateEquity(userId);
 
   redirect("/diary");
 }
 
 export async function updateTrade(formData: FormData) {
+  const userId = await getCurrentUserId();
   const id = Number(formData.get("id"));
 
   await prisma.trade.update({
-    where: { id },
+    where: {
+      id,
+      userId,
+    },
     data: {
       openDate: new Date(formData.get("openDate") as string),
       openTime: formData.get("openTime") as string,
@@ -118,7 +139,7 @@ export async function updateTrade(formData: FormData) {
     },
   });
 
-  await recalculateEquity();
+  await recalculateEquity(userId);
 
   redirect("/diary");
 }

@@ -3,31 +3,111 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  username      String   @unique
+  passwordHash  String
+
+  role          String   @default("USER")
+
+  name          String?
+
+  memberships   AccountMember[]
+  createdTrades Trade[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model TradingAccount {
+  id             String   @id @default(cuid())
+  name           String
+  type           AccountType
+  status         AccountStatus @default(ACTIVE)
+
+  initialBalance Float
+  currency       String   @default("USD")
+
+  broker          String?
+  phase           String?
+  profitTarget    Float?
+  maxDrawdown     Float?
+  dailyDrawdown   Float?
+
+  members        AccountMember[]
+  trades         Trade[]
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model AccountMember {
+  id               String @id @default(cuid())
+  userId           String
+  tradingAccountId String
+  role             MemberRole @default(MEMBER)
+
+  user             User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tradingAccount   TradingAccount @relation(fields: [tradingAccountId], references: [id], onDelete: Cascade)
+
+  createdAt        DateTime @default(now())
+
+  @@unique([userId, tradingAccountId])
 }
 
 model Trade {
-  id              Int      @id @default(autoincrement())
-  openDate        DateTime
-  openTime        String?
-  reason          String?
-  strategy        String?
-  symbol          String
-  direction       String
-  amount          Float?
-  openingPrice    Float?
-  stopLoss        Float?
-  takeProfit      Float?
-  riskReward      Float?
-  closeDate       DateTime?
-  closingPrice    Float?
-  outcome         String?
-  resultUsd       Float?
-  resultPercent   Float?
-  equity          Float?
-  equityPeak      Float?
-  drawdownPercent Float?
-  notes           String?
-  createdAt       DateTime @default(now())
+  id               Int      @id @default(autoincrement())
+
+  tradingAccountId String
+  createdById      String
+
+  tradingAccount   TradingAccount @relation(fields: [tradingAccountId], references: [id], onDelete: Cascade)
+  createdBy        User           @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  openDate         DateTime
+  openTime         String?
+  reason           String?
+  strategy         String?
+  symbol           String
+  direction        String
+  amount           Float?
+  openingPrice     Float?
+  stopLoss         Float?
+  takeProfit       Float?
+  riskReward       Float?
+  closeDate        DateTime?
+  closingPrice     Float?
+  outcome          String?
+  resultUsd        Float?
+  resultPercent    Float?
+  equity           Float?
+  equityPeak       Float?
+  drawdownPercent  Float?
+  notes            String?
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+enum AccountType {
+  DEMO
+  LIVE
+  PROP
+  SHARED
+  CHALLENGE
+  FUNDED
+}
+
+enum AccountStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+enum MemberRole {
+  OWNER
+  MEMBER
 }

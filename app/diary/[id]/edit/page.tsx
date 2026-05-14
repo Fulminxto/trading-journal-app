@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { updateTrade } from "../../actions";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 function formatDateForInput(date: Date | null) {
   if (!date) return "";
@@ -11,11 +13,18 @@ export default async function EditTradePage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
+
   const { id } = await params;
 
-  const trade = await prisma.trade.findUnique({
+  const trade = await prisma.trade.findFirst({
     where: {
       id: Number(id),
+      userId: session.user.id,
     },
   });
 
@@ -36,41 +45,12 @@ export default async function EditTradePage({
       >
         <input type="hidden" name="id" value={trade.id} />
 
-        <input
-          name="openDate"
-          type="date"
-          defaultValue={formatDateForInput(trade.openDate)}
-          className="rounded-xl bg-zinc-900 p-3"
-          required
-        />
+        <input name="openDate" type="date" defaultValue={formatDateForInput(trade.openDate)} className="rounded-xl bg-zinc-900 p-3" required />
+        <input name="openTime" type="time" defaultValue={trade.openTime || ""} className="rounded-xl bg-zinc-900 p-3" />
+        <input name="reason" defaultValue={trade.reason || ""} placeholder="Motivo" className="rounded-xl bg-zinc-900 p-3" />
+        <input name="strategy" defaultValue={trade.strategy || ""} placeholder="Strategia" className="rounded-xl bg-zinc-900 p-3" />
 
-        <input
-          name="openTime"
-          type="time"
-          defaultValue={trade.openTime || ""}
-          className="rounded-xl bg-zinc-900 p-3"
-        />
-
-        <input
-          name="reason"
-          defaultValue={trade.reason || ""}
-          placeholder="Motivo"
-          className="rounded-xl bg-zinc-900 p-3"
-        />
-
-        <input
-          name="strategy"
-          defaultValue={trade.strategy || ""}
-          placeholder="Strategia"
-          className="rounded-xl bg-zinc-900 p-3"
-        />
-
-        <select
-          name="symbol"
-          defaultValue={trade.symbol}
-          className="rounded-xl bg-zinc-900 p-3"
-          required
-        >
+        <select name="symbol" defaultValue={trade.symbol} className="rounded-xl bg-zinc-900 p-3" required>
           <option value="">Strumento</option>
           <option value="XAUUSD">XAUUSD</option>
           <option value="BTCUSD">BTCUSD</option>
@@ -81,99 +61,28 @@ export default async function EditTradePage({
           <option value="S&P500">S&P500</option>
         </select>
 
-        <select
-          name="direction"
-          defaultValue={trade.direction}
-          className="rounded-xl bg-zinc-900 p-3"
-          required
-        >
+        <select name="direction" defaultValue={trade.direction} className="rounded-xl bg-zinc-900 p-3" required>
           <option value="LONG">LONG</option>
           <option value="SHORT">SHORT</option>
         </select>
 
-        <select
-          name="amount"
-          defaultValue={trade.amount ?? ""}
-          className="rounded-xl bg-zinc-900 p-3"
-        >
-          <option value="">Amount / Lotto</option>
-          <option value="0.01">0.01</option>
-          <option value="0.02">0.02</option>
-          <option value="0.03">0.03</option>
-          <option value="0.05">0.05</option>
-          <option value="0.10">0.10</option>
-          <option value="0.20">0.20</option>
-          <option value="0.50">0.50</option>
-          <option value="1.00">1.00</option>
-        </select>
+        <input name="amount" defaultValue={trade.amount ?? ""} placeholder="Amount / Lotto" className="rounded-xl bg-zinc-900 p-3" />
+        <input name="openingPrice" defaultValue={trade.openingPrice ?? ""} placeholder="Opening Price" className="rounded-xl bg-zinc-900 p-3" />
+        <input name="stopLoss" defaultValue={trade.stopLoss ?? ""} placeholder="Stop Loss" className="rounded-xl bg-zinc-900 p-3" />
+        <input name="takeProfit" defaultValue={trade.takeProfit ?? ""} placeholder="Take Profit" className="rounded-xl bg-zinc-900 p-3" />
+        <input name="riskReward" defaultValue={trade.riskReward ?? ""} placeholder="Risk / Reward" className="rounded-xl bg-zinc-900 p-3" />
 
-        <input
-          name="openingPrice"
-          defaultValue={trade.openingPrice ?? ""}
-          placeholder="Opening Price"
-          className="rounded-xl bg-zinc-900 p-3"
-        />
+        <input name="closeDate" type="date" defaultValue={formatDateForInput(trade.closeDate)} className="rounded-xl bg-zinc-900 p-3" />
+        <input name="closingPrice" defaultValue={trade.closingPrice ?? ""} placeholder="Closing Price" className="rounded-xl bg-zinc-900 p-3" />
 
-        <input
-          name="stopLoss"
-          defaultValue={trade.stopLoss ?? ""}
-          placeholder="Stop Loss"
-          className="rounded-xl bg-zinc-900 p-3"
-        />
-
-        <input
-          name="takeProfit"
-          defaultValue={trade.takeProfit ?? ""}
-          placeholder="Take Profit"
-          className="rounded-xl bg-zinc-900 p-3"
-        />
-
-        <select
-          name="riskReward"
-          defaultValue={trade.riskReward ?? ""}
-          className="rounded-xl bg-zinc-900 p-3"
-        >
-          <option value="">Risk / Reward</option>
-          <option value="1">1R</option>
-          <option value="1.5">1.5R</option>
-          <option value="2">2R</option>
-          <option value="2.5">2.5R</option>
-          <option value="3">3R</option>
-          <option value="4">4R</option>
-          <option value="5">5R</option>
-        </select>
-
-        <input
-          name="closeDate"
-          type="date"
-          defaultValue={formatDateForInput(trade.closeDate)}
-          className="rounded-xl bg-zinc-900 p-3"
-        />
-
-        <input
-          name="closingPrice"
-          defaultValue={trade.closingPrice ?? ""}
-          placeholder="Closing Price"
-          className="rounded-xl bg-zinc-900 p-3"
-        />
-
-        <select
-          name="outcome"
-          defaultValue={trade.outcome || ""}
-          className="rounded-xl bg-zinc-900 p-3"
-        >
+        <select name="outcome" defaultValue={trade.outcome || ""} className="rounded-xl bg-zinc-900 p-3">
           <option value="">Outcome</option>
           <option value="win">Win</option>
           <option value="loss">Loss</option>
           <option value="be">BE</option>
         </select>
 
-        <input
-          name="resultUsd"
-          defaultValue={trade.resultUsd ?? ""}
-          placeholder="Result $"
-          className="rounded-xl bg-zinc-900 p-3"
-        />
+        <input name="resultUsd" defaultValue={trade.resultUsd ?? ""} placeholder="Result $" className="rounded-xl bg-zinc-900 p-3" />
 
         <textarea
           name="notes"
@@ -182,10 +91,7 @@ export default async function EditTradePage({
           className="rounded-xl bg-zinc-900 p-3 sm:col-span-2 xl:col-span-4"
         />
 
-        <button
-          type="submit"
-          className="rounded-xl bg-green-500 p-3 font-bold text-black sm:col-span-2 xl:col-span-4"
-        >
+        <button type="submit" className="rounded-xl bg-green-500 p-3 font-bold text-black sm:col-span-2 xl:col-span-4">
           Salva modifiche
         </button>
       </form>

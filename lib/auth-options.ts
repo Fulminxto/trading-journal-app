@@ -1,9 +1,9 @@
-import NextAuth from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
   debug: true,
 
   session: {
@@ -31,18 +31,14 @@ const handler = NextAuth({
           },
         });
 
-        if (!user) {
-          return null;
-        }
+        if (!user) return null;
 
         const isPasswordValid = await bcrypt.compare(
           credentials.password,
           user.passwordHash
         );
 
-        if (!isPasswordValid) {
-          return null;
-        }
+        if (!isPasswordValid) return null;
 
         return {
           id: user.id,
@@ -74,6 +70,4 @@ const handler = NextAuth({
       return session;
     },
   },
-});
-
-export { handler as GET, handler as POST };
+};
