@@ -2,6 +2,8 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
+import EquityChart from "@/components/EquityChart";
+
 export default async function DashboardPage({
   params,
 }: {
@@ -36,7 +38,14 @@ export default async function DashboardPage({
       tradingAccountId: accountId,
     },
 
-    orderBy: [{ openDate: "asc" }],
+    orderBy: [
+      {
+        openDate: "asc",
+      },
+      {
+        id: "asc",
+      },
+    ],
   });
 
   const account =
@@ -148,70 +157,105 @@ export default async function DashboardPage({
         )
       : 0;
 
+  const chartData = trades.map((trade) => ({
+    date: new Date(
+      trade.openDate
+    ).toLocaleDateString("it-IT", {
+      day: "2-digit",
+      month: "2-digit",
+    }),
+
+    equity:
+      trade.equity ||
+      account.initialBalance,
+  }));
+
   const stats = [
     {
       label: "Current Equity",
-      value: `${currentEquity.toFixed(2)} ${account.currency}`,
+      value: `${currentEquity.toFixed(2)} $`,
+      tone: "text-white",
     },
 
     {
       label: "Current Profit",
       value: `${currentProfitPercent.toFixed(2)}%`,
+      tone:
+        currentProfitPercent >= 0
+          ? "text-green-400"
+          : "text-red-400",
     },
 
     {
       label: "Trades",
       value: totalTrades,
+      tone: "text-white",
     },
 
     {
       label: "Win Rate",
       value: `${winRate.toFixed(2)}%`,
+      tone:
+        winRate >= 50
+          ? "text-green-400"
+          : "text-red-400",
     },
 
     {
       label: "Wins",
       value: wins,
+      tone: "text-green-400",
     },
 
     {
       label: "Losses",
       value: losses,
+      tone: "text-red-400",
     },
 
     {
       label: "Break Even",
       value: be,
+      tone: "text-yellow-400",
     },
 
     {
       label: "Total PnL",
-      value: `${totalPnl.toFixed(2)} ${account.currency}`,
+      value: `${totalPnl.toFixed(2)} $`,
+      tone:
+        totalPnl >= 0
+          ? "text-green-400"
+          : "text-red-400",
     },
 
     {
       label: "Average Win",
-      value: `${averageWin.toFixed(2)} ${account.currency}`,
+      value: `${averageWin.toFixed(2)} $`,
+      tone: "text-green-400",
     },
 
     {
       label: "Average Loss",
-      value: `${averageLoss.toFixed(2)} ${account.currency}`,
+      value: `${averageLoss.toFixed(2)} $`,
+      tone: "text-red-400",
     },
 
     {
       label: "Best Trade",
-      value: `${bestTrade.toFixed(2)} ${account.currency}`,
+      value: `${bestTrade.toFixed(2)} $`,
+      tone: "text-green-400",
     },
 
     {
       label: "Worst Trade",
-      value: `${worstTrade.toFixed(2)} ${account.currency}`,
+      value: `${worstTrade.toFixed(2)} $`,
+      tone: "text-red-400",
     },
 
     {
       label: "Max Drawdown",
       value: `${maxDrawdown.toFixed(2)}%`,
+      tone: "text-red-400",
     },
 
     {
@@ -222,6 +266,11 @@ export default async function DashboardPage({
               2
             )}%`
           : "-",
+      tone:
+        remainingToTarget !== null &&
+        remainingToTarget <= 0
+          ? "text-green-400"
+          : "text-yellow-400",
     },
   ];
 
@@ -238,7 +287,7 @@ export default async function DashboardPage({
       </div>
 
       <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4">
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             Account Type
           </p>
@@ -248,28 +297,28 @@ export default async function DashboardPage({
           </h2>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             Initial Balance
           </p>
 
           <h2 className="mt-2 text-3xl font-bold">
-            {account.initialBalance.toLocaleString()}{" "}
-            {account.currency}
+            $
+            {account.initialBalance.toLocaleString()}
           </h2>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             Currency
           </p>
 
           <h2 className="mt-2 text-3xl font-bold">
-            {account.currency}
+            $
           </h2>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             Broker / Firm
           </p>
@@ -279,7 +328,7 @@ export default async function DashboardPage({
           </h2>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             Phase
           </p>
@@ -289,7 +338,7 @@ export default async function DashboardPage({
           </h2>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             Profit Target
           </p>
@@ -301,7 +350,7 @@ export default async function DashboardPage({
           </h2>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             Max Drawdown
           </p>
@@ -313,7 +362,7 @@ export default async function DashboardPage({
           </h2>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             Daily Drawdown
           </p>
@@ -326,17 +375,33 @@ export default async function DashboardPage({
         </div>
       </div>
 
+      <div className="mb-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="mb-6">
+          <p className="text-sm text-gray-400">
+            Account Growth
+          </p>
+
+          <h2 className="mt-1 text-2xl font-bold">
+            Equity Curve
+          </h2>
+        </div>
+
+        <EquityChart data={chartData} />
+      </div>
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"
+            className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
           >
             <p className="text-sm text-gray-400">
               {stat.label}
             </p>
 
-            <h2 className="mt-2 text-3xl font-bold">
+            <h2
+              className={`mt-2 text-3xl font-bold ${stat.tone}`}
+            >
               {stat.value}
             </h2>
           </div>
