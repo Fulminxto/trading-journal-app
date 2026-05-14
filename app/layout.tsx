@@ -1,28 +1,36 @@
-import "./globals.css";
+"use client";
 
+import { useState } from "react";
+import { Menu } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 
-export const metadata = {
-  title: "Trading Journal",
-  description: "Professional Trading Platform",
-};
-
-export default function RootLayout({
+export default function AppShell({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <html lang="it">
-      <body className="bg-[#050b10] text-white">
-        <div className="flex min-h-screen">
-          <Sidebar />
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-          <main className="flex-1 p-4 sm:p-6 lg:p-8">
-            {children}
-          </main>
+  return (
+    <div className="flex min-h-screen">
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+      <main className="min-h-screen flex-1 overflow-x-hidden">
+        <div className="sticky top-0 z-30 flex items-center justify-between border-b border-white/10 bg-[#050b10]/90 px-4 py-4 backdrop-blur lg:hidden">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="rounded-xl border border-white/10 bg-white/5 p-2"
+          >
+            <Menu size={22} />
+          </button>
+
+          <span className="text-sm font-semibold text-gray-300">
+            Trading App
+          </span>
         </div>
-      </body>
-    </html>
+
+        <div className="p-4 sm:p-6 lg:p-8">{children}</div>
+      </main>
+    </div>
   );
 }
