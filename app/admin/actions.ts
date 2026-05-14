@@ -12,63 +12,73 @@ async function requireOwner() {
     redirect("/login");
   }
 
-  const currentUser =
-    await prisma.user.findUnique({
-      where: {
-        id: session.user.id,
-      },
-    });
+  const currentUser = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+  });
 
-  if (
-    !currentUser ||
-    currentUser.role !== "OWNER"
-  ) {
+  if (!currentUser || currentUser.role !== "OWNER") {
     redirect("/accounts");
   }
 
   return currentUser;
 }
 
-export async function createUser(
-  formData: FormData
-) {
+function getString(formData: FormData, key: string) {
+  const value = formData.get(key);
+
+  if (typeof value !== "string") {
+    return "";
+  }
+
+  return value.trim();
+}
+
+function getNumber(formData: FormData, key: string) {
+  const value = getString(formData, key);
+
+  if (!value) {
+    return null;
+  }
+
+  const number = Number(value);
+
+  if (Number.isNaN(number)) {
+    return null;
+  }
+
+  return number;
+}
+
+export async function createUser(formData: FormData) {
   await requireOwner();
 
-  const username = formData.get(
-    "username"
-  ) as string;
-
-  const password = formData.get(
-    "password"
-  ) as string;
-
-  const name = formData.get(
-    "name"
-  ) as string;
+  const username = getString(formData, "username");
+  const password = getString(formData, "password");
+  const name = getString(formData, "name");
 
   if (!username || !password) {
     return;
   }
 
-  const existingUser =
-    await prisma.user.findUnique({
-      where: {
-        username,
-      },
-    });
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      username,
+    },
+  });
 
   if (existingUser) {
     return;
   }
 
-  const passwordHash =
-    await bcrypt.hash(password, 10);
+  const passwordHash = await bcrypt.hash(password, 10);
 
   await prisma.user.create({
     data: {
       username,
       passwordHash,
-      name,
+      name: name || null,
       role: "USER",
     },
   });
@@ -76,19 +86,34 @@ export async function createUser(
   redirect("/admin");
 }
 
-export async function createTradingAccount(
-  formData: FormData
-) {
-  const currentUser =
-    await requireOwner();
+export async function deleteUser(formData: FormData) {
+  const currentUser = await requireOwner();
 
-  const name = formData.get(
-    "name"
-  ) as string;
+  const userId = getString(formData, "userId");
 
-  const type = formData.get(
-    "type"
-  ) as
+  if (!userId) {
+    return;
+  }
+
+  if (userId === currentUser.id) {
+    return;
+  }
+
+  await prisma.user.delete({
+    where: {
+      id: userId,
+    },
+  });
+
+  redirect("/admin");
+}
+
+export async function createTradingAccount(formData: FormData) {
+  const currentUser = await requireOwner();
+
+  const name = getString(formData, "name");
+
+  const type = getString(formData, "type") as
     | "DEMO"
     | "LIVE"
     | "PROP"
@@ -96,74 +121,52 @@ export async function createTradingAccount(
     | "CHALLENGE"
     | "FUNDED";
 
-  const initialBalance = Number(
-    formData.get("initialBalance")
+  const initialBalance =
+    getNumber(formData, "initialBalance") || 0;
+
+  const currency =
+    getString(formData, "currency") || "USD";
+
+  const broker = getString(formData, "broker");
+  const phase = getString(formData, "phase");
+
+  const profitTarget = getNumber(
+    formData,
+    "profitTarget"
   );
 
-  const currency = formData.get(
-    "currency"
-  ) as string;
-
-  const broker = formData.get(
-    "broker"
-  ) as string;
-
-  const phase = formData.get(
-    "phase"
-  ) as string;
-
-  const profitTarget = Number(
-    formData.get("profitTarget")
+  const maxDrawdown = getNumber(
+    formData,
+    "maxDrawdown"
   );
 
-  const maxDrawdown = Number(
-    formData.get("maxDrawdown")
-  );
-
-  const dailyDrawdown = Number(
-    formData.get("dailyDrawdown")
+  const dailyDrawdown = getNumber(
+    formData,
+    "dailyDrawdown"
   );
 
   if (!name || !type) {
     return;
   }
 
-  const account =
-    await prisma.tradingAccount.create({
-      data: {
-        name,
-        type,
-        initialBalance,
-        currency,
-
-        broker:
-          broker || null,
-
-        phase:
-          phase || null,
-
-        profitTarget:
-          !isNaN(profitTarget)
-            ? profitTarget
-            : null,
-
-        maxDrawdown:
-          !isNaN(maxDrawdown)
-            ? maxDrawdown
-            : null,
-
-        dailyDrawdown:
-          !isNaN(dailyDrawdown)
-            ? dailyDrawdown
-            : null,
-      },
-    });
+  const account = await prisma.tradingAccount.create({
+    data: {
+      name,
+      type,
+      initialBalance,
+      currency,
+      broker: broker || null,
+      phase: phase || null,
+      profitTarget,
+      maxDrawdown,
+      dailyDrawdown,
+    },
+  });
 
   await prisma.accountMember.create({
     data: {
       userId: currentUser.id,
-      tradingAccountId:
-        account.id,
+      tradingAccountId: account.id,
       role: "OWNER",
     },
   });
@@ -171,42 +174,36 @@ export async function createTradingAccount(
   redirect("/admin/accounts");
 }
 
-export async function addMemberToAccount(
-  formData: FormData
-) {
+export async function addMemberToAccount(formData: FormData) {
   await requireOwner();
 
-  const username = formData.get(
-    "username"
-  ) as string;
+  const username = getString(formData, "username");
 
-  const tradingAccountId =
-    formData.get(
-      "tradingAccountId"
-    ) as string;
+  const tradingAccountId = getString(
+    formData,
+    "tradingAccountId"
+  );
 
-  const role = formData.get(
-    "role"
-  ) as "OWNER" | "MEMBER";
+  const role = getString(formData, "role") as
+    | "OWNER"
+    | "MEMBER";
 
-  const user =
-    await prisma.user.findUnique({
-      where: {
-        username,
-      },
-    });
+  const user = await prisma.user.findUnique({
+    where: {
+      username,
+    },
+  });
 
   if (!user) {
     return;
   }
 
-  const existing =
-    await prisma.accountMember.findFirst({
-      where: {
-        userId: user.id,
-        tradingAccountId,
-      },
-    });
+  const existing = await prisma.accountMember.findFirst({
+    where: {
+      userId: user.id,
+      tradingAccountId,
+    },
+  });
 
   if (existing) {
     return;
@@ -223,14 +220,14 @@ export async function addMemberToAccount(
   redirect("/admin/accounts");
 }
 
-export async function removeMemberFromAccount(
-  formData: FormData
-) {
+export async function removeMemberFromAccount(formData: FormData) {
   await requireOwner();
 
-  const membershipId = formData.get(
-    "membershipId"
-  ) as string;
+  const membershipId = getString(formData, "membershipId");
+
+  if (!membershipId) {
+    return;
+  }
 
   await prisma.accountMember.delete({
     where: {
