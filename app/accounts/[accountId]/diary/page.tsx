@@ -500,11 +500,100 @@ export default async function DiaryPage({
             className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
           />
 
-          <textarea
-            name="notes"
-            placeholder="Note operative"
-            className="min-h-[110px] rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40 sm:col-span-2 xl:col-span-4"
-          />
+          <select
+  name="session"
+  className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+>
+  <option value="">Sessione</option>
+
+  <option value="ASIA">
+    Asia
+  </option>
+
+  <option value="LONDON">
+    London
+  </option>
+
+  <option value="NEW_YORK">
+    New York
+  </option>
+
+  <option value="OVERLAP">
+    Overlap
+  </option>
+</select>
+
+<select
+  name="emotionalState"
+  className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+>
+  <option value="">
+    Stato emotivo
+  </option>
+
+  <option value="CALM">
+    Calmo
+  </option>
+
+  <option value="FOCUSED">
+    Focused
+  </option>
+
+  <option value="CONFIDENT">
+    Confident
+  </option>
+
+  <option value="TIRED">
+    Stanco
+  </option>
+
+  <option value="STRESSED">
+    Stressato
+  </option>
+
+  <option value="IMPULSIVE">
+    Impulsivo
+  </option>
+</select>
+
+<input
+  name="setupQuality"
+  type="number"
+  min="1"
+  max="10"
+  placeholder="Setup Quality (1-10)"
+  className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+/>
+
+<input
+  name="executionRating"
+  type="number"
+  min="1"
+  max="10"
+  placeholder="Execution Rating (1-10)"
+  className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+/>
+
+<input
+  name="confidence"
+  type="number"
+  min="1"
+  max="10"
+  placeholder="Confidence (1-10)"
+  className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+/>
+
+<textarea
+  name="mistakes"
+  placeholder="Errori commessi"
+  className="min-h-[110px] rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40 sm:col-span-2"
+/>
+
+<textarea
+  name="lessonsLearned"
+  placeholder="Lessons learned"
+  className="min-h-[110px] rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40 sm:col-span-2"
+/>
 
           <button
             type="submit"

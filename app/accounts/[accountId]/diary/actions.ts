@@ -173,6 +173,14 @@ export async function createAccountTrade(
       resultUsd: getNumber(formData, "resultUsd"),
 
       notes: getString(formData, "notes"),
+
+      session: getString(formData, "session"),
+      emotionalState: getString(formData, "emotionalState"),
+      setupQuality: getNumber(formData, "setupQuality"),
+      executionRating: getNumber(formData, "executionRating"),
+      confidence: getNumber(formData, "confidence"),
+      mistakes: getString(formData, "mistakes"),
+      lessonsLearned: getString(formData, "lessonsLearned"),
     },
   });
 
@@ -221,6 +229,14 @@ export async function updateAccountTrade(
       resultUsd: getNumber(formData, "resultUsd"),
 
       notes: getString(formData, "notes"),
+
+      session: getString(formData, "session"),
+      emotionalState: getString(formData, "emotionalState"),
+      setupQuality: getNumber(formData, "setupQuality"),
+      executionRating: getNumber(formData, "executionRating"),
+      confidence: getNumber(formData, "confidence"),
+      mistakes: getString(formData, "mistakes"),
+      lessonsLearned: getString(formData, "lessonsLearned"),
     },
   });
 
