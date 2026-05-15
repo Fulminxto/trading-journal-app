@@ -1,5 +1,7 @@
 import "./globals.css";
 
+import { Toaster } from "sonner";
+
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import AppShell from "@/components/AppShell";
@@ -29,6 +31,13 @@ export default async function RootLayout({
   return (
     <html lang="it">
       <body className="bg-[#050b10] text-white">
+        <Toaster
+          position="top-right"
+          richColors
+          closeButton
+          theme="dark"
+        />
+
         <AppShell
           user={
             currentUser

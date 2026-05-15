@@ -3,6 +3,9 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
+import { updateProfile } from "./actions";
+import ProfileToast from "@/components/ProfileToast";
+
 function formatCurrency(value: number) {
   return `$${value.toLocaleString("en-US", {
     minimumFractionDigits: 2,
@@ -18,7 +21,15 @@ function formatDate(date: Date) {
   });
 }
 
-export default async function ProfilePage() {
+export default async function ProfilePage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    toast?: string;
+  }>;
+}) {
+  const query = await searchParams;
+
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -94,19 +105,17 @@ export default async function ProfilePage() {
   const winRate =
     totalTrades > 0 ? (wins / totalTrades) * 100 : 0;
 
-  const firstTrade = allTrades
-    .sort(
-      (a, b) =>
-        new Date(a.openDate).getTime() -
-        new Date(b.openDate).getTime()
-    )[0];
+  const firstTrade = [...allTrades].sort(
+    (a, b) =>
+      new Date(a.openDate).getTime() -
+      new Date(b.openDate).getTime()
+  )[0];
 
-  const lastTrade = allTrades
-    .sort(
-      (a, b) =>
-        new Date(b.openDate).getTime() -
-        new Date(a.openDate).getTime()
-    )[0];
+  const lastTrade = [...allTrades].sort(
+    (a, b) =>
+      new Date(b.openDate).getTime() -
+      new Date(a.openDate).getTime()
+  )[0];
 
   const journalStartDate =
     firstTrade?.openDate || user.createdAt;
@@ -161,6 +170,8 @@ export default async function ProfilePage() {
 
   return (
     <div>
+      <ProfileToast status={query.toast} />
+
       <div className="mb-8">
         <p className="text-sm text-gray-400">
           Profilo trader
@@ -210,6 +221,43 @@ export default async function ProfilePage() {
           </div>
         </div>
       </div>
+
+      <form
+        action={updateProfile}
+        className="mb-8 grid grid-cols-1 gap-4 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:grid-cols-2"
+      >
+        <div className="md:col-span-2">
+          <p className="text-sm text-gray-400">
+            Modifica profilo
+          </p>
+
+          <h2 className="mt-1 text-2xl font-bold">
+            Informazioni personali
+          </h2>
+        </div>
+
+        <input
+          name="name"
+          defaultValue={user.name || ""}
+          placeholder="Nome"
+          className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+        />
+
+        <input
+          name="username"
+          defaultValue={user.username}
+          placeholder="Username"
+          className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+          required
+        />
+
+        <button
+          type="submit"
+          className="rounded-2xl bg-green-500 p-4 font-bold text-black transition hover:bg-green-400 md:col-span-2"
+        >
+          Salva modifiche
+        </button>
+      </form>
 
       <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-6">
         {statCards.map((stat) => (
