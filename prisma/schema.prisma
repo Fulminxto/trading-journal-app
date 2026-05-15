@@ -18,6 +18,7 @@ model User {
 
   memberships   AccountMember[]
   createdTrades Trade[]
+  createdSessions TradingSession[]
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -40,6 +41,7 @@ model TradingAccount {
 
   members        AccountMember[]
   trades         Trade[]
+  sessions       TradingSession[]
 
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
@@ -96,6 +98,34 @@ model Trade {
   confidence       Int?
   mistakes         String?
   lessonsLearned   String?
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model TradingSession {
+  id               String   @id @default(cuid())
+
+  tradingAccountId String
+  createdById      String
+
+  tradingAccount   TradingAccount @relation(fields: [tradingAccountId], references: [id], onDelete: Cascade)
+  createdBy        User           @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  date             DateTime
+
+  title            String?
+  marketBias       String?
+  focus            String?
+  emotionalState   String?
+  sessionType      String?
+
+  checklist        String?
+  goals            String?
+  mistakesToAvoid  String?
+
+  sessionReview    String?
+  finalScore       Int?
 
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
