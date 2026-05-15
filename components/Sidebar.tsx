@@ -51,6 +51,12 @@ const baseLinks = [
   },
 
   {
+    path: "sessions",
+    label: "Sessions",
+    icon: BookOpen,
+  },
+
+  {
     path: "rules",
     label: "Rules & Goals",
     icon: Target,
