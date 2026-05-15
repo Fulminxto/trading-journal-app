@@ -828,117 +828,21 @@ export default async function DiaryPage({
                 </div>
               </div>
 
-             {(
-  trade.strategy ||
-  trade.notes ||
-  trade.session ||
-  trade.emotionalState ||
-  trade.setupQuality ||
-  trade.executionRating ||
-  trade.confidence ||
-  trade.mistakes ||
-  trade.lessonsLearned
-) && (
-  <div className="mt-4 space-y-3">
-    <div className="grid grid-cols-2 gap-3">
-      {trade.session && (
-        <div className="rounded-2xl bg-black/20 p-3">
-          <p className="text-xs text-gray-500">
-            Session
-          </p>
+              {(trade.strategy || trade.notes) && (
+                <div className="mt-4 space-y-3">
+                  {trade.strategy && (
+                    <p className="rounded-2xl bg-black/20 p-3 text-sm text-gray-400">
+                      Strategia: {trade.strategy}
+                    </p>
+                  )}
 
-          <p className="mt-1 font-bold text-white">
-            {trade.session}
-          </p>
-        </div>
-      )}
-
-      {trade.emotionalState && (
-        <div className="rounded-2xl bg-black/20 p-3">
-          <p className="text-xs text-gray-500">
-            Emotional State
-          </p>
-
-          <p className="mt-1 font-bold text-white">
-            {trade.emotionalState}
-          </p>
-        </div>
-      )}
-
-      {trade.setupQuality && (
-        <div className="rounded-2xl bg-black/20 p-3">
-          <p className="text-xs text-gray-500">
-            Setup Quality
-          </p>
-
-          <p className="mt-1 font-bold text-green-400">
-            {trade.setupQuality}/10
-          </p>
-        </div>
-      )}
-
-      {trade.executionRating && (
-        <div className="rounded-2xl bg-black/20 p-3">
-          <p className="text-xs text-gray-500">
-            Execution
-          </p>
-
-          <p className="mt-1 font-bold text-yellow-400">
-            {trade.executionRating}/10
-          </p>
-        </div>
-      )}
-
-      {trade.confidence && (
-        <div className="rounded-2xl bg-black/20 p-3">
-          <p className="text-xs text-gray-500">
-            Confidence
-          </p>
-
-          <p className="mt-1 font-bold text-blue-400">
-            {trade.confidence}/10
-          </p>
-        </div>
-      )}
-    </div>
-
-    {trade.strategy && (
-      <p className="rounded-2xl bg-black/20 p-3 text-sm text-gray-400">
-        Strategia: {trade.strategy}
-      </p>
-    )}
-
-    {trade.notes && (
-      <p className="rounded-2xl bg-black/20 p-3 text-sm text-gray-400">
-        {trade.notes}
-      </p>
-    )}
-
-    {trade.mistakes && (
-      <div className="rounded-2xl border border-red-500/10 bg-red-500/[0.03] p-3">
-        <p className="text-xs font-semibold uppercase tracking-wide text-red-400">
-          Mistakes
-        </p>
-
-        <p className="mt-2 text-sm text-gray-300">
-          {trade.mistakes}
-        </p>
-      </div>
-    )}
-
-    {trade.lessonsLearned && (
-      <div className="rounded-2xl border border-green-500/10 bg-green-500/[0.03] p-3">
-        <p className="text-xs font-semibold uppercase tracking-wide text-green-400">
-          Lessons Learned
-        </p>
-
-        <p className="mt-2 text-sm text-gray-300">
-          {trade.lessonsLearned}
-        </p>
-      </div>
-    )}
-  </div>
-)}
+                  {trade.notes && (
+                    <p className="rounded-2xl bg-black/20 p-3 text-sm text-gray-400">
+                      {trade.notes}
+                    </p>
+                  )}
+                </div>
+              )}
 
               <div className="mt-4 flex gap-3">
                 <Link
