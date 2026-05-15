@@ -17,41 +17,12 @@ import {
 } from "lucide-react";
 
 const baseLinks = [
-  {
-    path: "dashboard",
-    label: "Dashboard",
-    icon: LayoutDashboard,
-  },
-
-  {
-    path: "diary",
-    label: "Trading Diary",
-    icon: BookOpen,
-  },
-
-  {
-    path: "calendar",
-    label: "Calendar",
-    icon: CalendarDays,
-  },
-
-  {
-    path: "equity",
-    label: "Equity",
-    icon: LineChart,
-  },
-
-  {
-    path: "analytics",
-    label: "Analytics",
-    icon: BarChart3,
-  },
-
-  {
-    path: "rules",
-    label: "Rules & Goals",
-    icon: Target,
-  },
+  { path: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { path: "diary", label: "Trading Diary", icon: BookOpen },
+  { path: "calendar", label: "Calendar", icon: CalendarDays },
+  { path: "equity", label: "Equity", icon: LineChart },
+  { path: "analytics", label: "Analytics", icon: BarChart3 },
+  { path: "rules", label: "Rules & Goals", icon: Target },
 ];
 
 type SidebarProps = {
@@ -65,10 +36,7 @@ export default function Sidebar({
 }: SidebarProps) {
   const pathname = usePathname();
 
-  const match = pathname.match(
-    /^\/accounts\/([^/]+)/
-  );
-
+  const match = pathname.match(/^\/accounts\/([^/]+)/);
   const accountId = match?.[1];
 
   const links = accountId
@@ -78,13 +46,11 @@ export default function Sidebar({
           label: link.label,
           icon: link.icon,
         })),
-
         {
           href: "/accounts",
           label: "Switch Account",
           icon: ArrowLeftRight,
         },
-
         ...(pathname.includes("/admin")
           ? [
               {
@@ -92,7 +58,6 @@ export default function Sidebar({
                 label: "Admin Panel",
                 icon: Shield,
               },
-
               {
                 href: "/admin/accounts",
                 label: "Accounts Management",
@@ -107,7 +72,6 @@ export default function Sidebar({
           label: "Accounts",
           icon: Users,
         },
-
         ...(pathname.includes("/admin")
           ? [
               {
@@ -115,7 +79,6 @@ export default function Sidebar({
                 label: "Admin Panel",
                 icon: Shield,
               },
-
               {
                 href: "/admin/accounts",
                 label: "Accounts Management",
@@ -135,22 +98,24 @@ export default function Sidebar({
       )}
 
       <aside
-        className={`fixed left-0 top-0 z-50 h-screen w-72 border-r border-white/10 bg-[#071018] p-6 transition-transform duration-300 lg:static lg:z-auto lg:w-64 lg:translate-x-0 ${
-          open
-            ? "translate-x-0"
-            : "-translate-x-full"
+        className={`fixed left-0 top-0 z-50 h-screen w-72 overflow-y-auto border-r border-white/10 bg-[#071018] p-6 transition-transform duration-300 lg:sticky lg:z-40 lg:w-64 lg:translate-x-0 ${
+          open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="flex items-center justify-between">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-gray-500">
+          <Link
+            href="/accounts"
+            onClick={onClose}
+            className="group"
+          >
+            <p className="text-xs uppercase tracking-[0.3em] text-gray-500 transition group-hover:text-gray-400">
               Trading
             </p>
 
-            <h1 className="mt-1 text-2xl font-bold text-green-400">
+            <h1 className="mt-1 text-2xl font-bold text-green-400 transition group-hover:text-green-300">
               Journal
             </h1>
-          </div>
+          </Link>
 
           <button
             onClick={onClose}
@@ -162,9 +127,7 @@ export default function Sidebar({
 
         <nav className="mt-10 flex flex-col gap-3 text-sm">
           {links.map((link) => {
-            const active =
-              pathname === link.href;
-
+            const active = pathname === link.href;
             const Icon = link.icon;
 
             return (
