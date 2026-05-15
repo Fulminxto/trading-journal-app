@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import {
@@ -31,6 +31,8 @@ export default function AppShell({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
 
+  const profileRef = useRef<HTMLDivElement | null>(null);
+
   const displayName = user?.name || user?.username || "Profile";
   const username = user?.username || "user";
   const role = user?.role || "USER";
@@ -44,6 +46,23 @@ export default function AppShell({
 
   const supportHref =
     "mailto:yarikdziuban@gmail.com?subject=Support%20request%20-%20Trading%20Journal";
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(event.target as Node)
+      ) {
+        setProfileOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="flex min-h-screen">
@@ -67,7 +86,7 @@ export default function AppShell({
             </p>
           </div>
 
-          <div className="relative">
+          <div ref={profileRef} className="relative">
             <button
               onClick={() => setProfileOpen(!profileOpen)}
               className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-1 transition hover:bg-white/[0.06]"
