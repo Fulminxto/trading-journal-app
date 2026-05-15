@@ -13,6 +13,7 @@ import {
   Shield,
   ArrowLeftRight,
   X,
+  BarChart3,
 } from "lucide-react";
 
 const baseLinks = [
@@ -38,6 +39,12 @@ const baseLinks = [
     path: "equity",
     label: "Equity",
     icon: LineChart,
+  },
+
+  {
+    path: "analytics",
+    label: "Analytics",
+    icon: BarChart3,
   },
 
   {
