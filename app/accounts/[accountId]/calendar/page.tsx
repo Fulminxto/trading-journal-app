@@ -474,6 +474,18 @@ export default async function CalendarPage({
               </div>
             );
           })}
+          {Array.from({
+  length:
+    (7 -
+      ((adjustedFirstDay + days) %
+        7)) %
+    7,
+}).map((_, index) => (
+  <div
+    key={`end-empty-${index}`}
+    className="min-h-[140px] border-r border-b border-white/10 bg-black/10"
+  />
+))}
         </div>
       </div>
 
