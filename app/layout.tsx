@@ -1,36 +1,48 @@
-"use client";
+import "./globals.css";
 
-import { useState } from "react";
-import { Menu } from "lucide-react";
-import Sidebar from "@/components/Sidebar";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import AppShell from "@/components/AppShell";
 
-export default function AppShell({
+export const metadata = {
+  title: "Trading Journal",
+  description: "Professional Trading Platform",
+};
+
+export const dynamic = "force-dynamic";
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const session = await auth();
+
+  const currentUser = session?.user?.id
+    ? await prisma.user.findUnique({
+        where: {
+          id: session.user.id,
+        },
+      })
+    : null;
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-
-      <main className="min-h-screen flex-1 overflow-x-hidden">
-        <div className="sticky top-0 z-30 flex items-center justify-between border-b border-white/10 bg-[#050b10]/90 px-4 py-4 backdrop-blur lg:hidden">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="rounded-xl border border-white/10 bg-white/5 p-2"
-          >
-            <Menu size={22} />
-          </button>
-
-          <span className="text-sm font-semibold text-gray-300">
-            Trading App
-          </span>
-        </div>
-
-        <div className="p-4 sm:p-6 lg:p-8">{children}</div>
-      </main>
-    </div>
+    <html lang="it">
+      <body className="bg-[#050b10] text-white">
+        <AppShell
+          user={
+            currentUser
+              ? {
+                  name: currentUser.name,
+                  username: currentUser.username,
+                  role: currentUser.role,
+                }
+              : null
+          }
+        >
+          {children}
+        </AppShell>
+      </body>
+    </html>
   );
 }
