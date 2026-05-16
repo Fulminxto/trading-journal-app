@@ -66,51 +66,41 @@ export default function AppShell({
   }, []);
 
   return (
-  <div className="flex min-h-screen">
-    <OnboardingModal />
-  
+    <div className="flex min-h-screen bg-[#050b10] text-white">
+      <OnboardingModal />
+
       <Sidebar
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
       />
 
-      <main className="min-h-screen flex-1 overflow-x-hidden">
-        <div className="sticky top-0 z-30 flex items-center justify-between border-b border-white/10 bg-[#050b10]/90 px-4 py-3 backdrop-blur">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="rounded-xl border border-white/10 bg-white/5 p-2 lg:hidden"
+      <main className="relative min-h-screen flex-1 overflow-x-hidden">
+        <div className="pointer-events-none fixed right-4 top-4 z-40 lg:right-8 lg:top-6">
+          <div
+            ref={profileRef}
+            className="pointer-events-auto relative"
           >
-            <Menu size={20} />
-          </button>
-
-          <div className="hidden lg:block">
-            <p className="text-sm font-semibold text-gray-400">
-              Trading Journal
-            </p>
-          </div>
-
-          <div ref={profileRef} className="relative">
             <button
               onClick={() => setProfileOpen(!profileOpen)}
-              className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-1 transition hover:bg-white/[0.06]"
+              className="flex items-center gap-2 rounded-2xl border border-white/10 bg-[#071018]/80 px-3 py-2 shadow-2xl backdrop-blur-xl transition hover:bg-[#071018]"
             >
-              <div className="flex h-[30px] w-[30px] items-center justify-center rounded-lg bg-green-500/10 text-[11px] font-bold text-green-400">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-green-500/10 text-xs font-bold text-green-400">
                 {initials}
               </div>
 
               <div className="hidden text-left sm:block">
-                <p className="text-[11px] font-semibold text-white">
+                <p className="text-xs font-semibold text-white">
                   {displayName}
                 </p>
 
-                <p className="text-[10px] text-gray-500">
+                <p className="text-[11px] text-gray-500">
                   {role}
                 </p>
               </div>
             </button>
 
             {profileOpen && (
-              <div className="absolute right-0 mt-2 w-60 overflow-hidden rounded-2xl border border-white/10 bg-[#071018] shadow-2xl">
+              <div className="absolute right-0 mt-3 w-60 overflow-hidden rounded-2xl border border-white/10 bg-[#071018] shadow-2xl">
                 <div className="border-b border-white/10 p-4">
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-500/10 text-sm font-bold text-green-400">
@@ -194,7 +184,16 @@ export default function AppShell({
           </div>
         </div>
 
-        <div className="p-4 sm:p-6 lg:p-8">
+        <div className="sticky top-0 z-30 flex items-center px-4 pt-4 lg:hidden">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="rounded-2xl border border-white/10 bg-white/5 p-2"
+          >
+            <Menu size={20} />
+          </button>
+        </div>
+
+        <div className="p-4 pt-20 sm:p-6 sm:pt-24 lg:p-8 lg:pt-24">
           {children}
         </div>
       </main>
