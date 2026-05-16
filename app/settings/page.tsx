@@ -8,6 +8,8 @@ import {
   BookOpen,
 } from "lucide-react";
 
+import ReopenOnboardingButton from "@/components/ReopenOnboardingButton";
+
 export default function SettingsPage() {
   return (
     <div>
@@ -200,18 +202,8 @@ export default function SettingsPage() {
       Riavvia onboarding e guida iniziale della piattaforma.
     </p>
 
-    <button
-      onClick={() => {
-        localStorage.removeItem(
-          "trading-journal-onboarding"
-        );
-
-        window.location.reload();
-      }}
-      className="mt-5 rounded-2xl bg-green-500 px-5 py-3 font-bold text-black transition hover:bg-green-400"
-    >
-      Apri guida iniziale
-    </button>
+   <ReopenOnboardingButton />
+   
   </div>
 </div>
 
