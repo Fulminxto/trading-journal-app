@@ -195,6 +195,15 @@ export default function AppShell({
 
         <div className="p-4 pt-20 sm:p-6 sm:pt-24 lg:p-8 lg:pt-24">
           {children}
+
+          <footer className="mt-16 border-t border-white/5 pt-6 text-center">
+            <p className="text-xs tracking-wide text-gray-600">
+              Built by Fulminato.
+              <span className="ml-1">
+                AI-assisted development.
+              </span>
+            </p>
+          </footer>
         </div>
       </main>
     </div>
