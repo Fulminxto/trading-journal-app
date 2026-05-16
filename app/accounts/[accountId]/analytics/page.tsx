@@ -91,31 +91,31 @@ export default async function AnalyticsPage({
   const averageRR =
     trades.length > 0
       ? trades.reduce(
-          (acc, trade) =>
-            acc +
-            (trade.riskReward || 0),
-          0
-        ) / trades.length
+        (acc, trade) =>
+          acc +
+          (trade.riskReward || 0),
+        0
+      ) / trades.length
       : 0;
 
   const bestTrade =
     trades.length > 0
       ? Math.max(
-          ...trades.map(
-            (trade) =>
-              trade.resultUsd || 0
-          )
+        ...trades.map(
+          (trade) =>
+            trade.resultUsd || 0
         )
+      )
       : 0;
 
   const worstTrade =
     trades.length > 0
       ? Math.min(
-          ...trades.map(
-            (trade) =>
-              trade.resultUsd || 0
-          )
+        ...trades.map(
+          (trade) =>
+            trade.resultUsd || 0
         )
+      )
       : 0;
 
   const symbolStats: Record<
@@ -160,6 +160,50 @@ export default async function AnalyticsPage({
         b[1].trades - a[1].trades
     )[0];
 
+  const emotionalStats: Record<
+    string,
+    {
+      trades: number;
+      wins: number;
+      pnl: number;
+    }
+  > = {};
+
+  for (const trade of trades) {
+    if (!trade.emotionalState) {
+      continue;
+    }
+
+    if (
+      !emotionalStats[
+      trade.emotionalState
+      ]
+    ) {
+      emotionalStats[
+        trade.emotionalState
+      ] = {
+        trades: 0,
+        wins: 0,
+        pnl: 0,
+      };
+    }
+
+    emotionalStats[
+      trade.emotionalState
+    ].trades += 1;
+
+    if (trade.outcome === "win") {
+      emotionalStats[
+        trade.emotionalState
+      ].wins += 1;
+    }
+
+    emotionalStats[
+      trade.emotionalState
+    ].pnl +=
+      trade.resultUsd || 0;
+  }
+
   const winRate =
     totalTrades > 0
       ? (wins.length / totalTrades) * 100
@@ -168,21 +212,21 @@ export default async function AnalyticsPage({
   const longWinRate =
     longTrades.length > 0
       ? (longTrades.filter(
-          (trade) =>
-            trade.outcome === "win"
-        ).length /
-          longTrades.length) *
-        100
+        (trade) =>
+          trade.outcome === "win"
+      ).length /
+        longTrades.length) *
+      100
       : 0;
 
   const shortWinRate =
     shortTrades.length > 0
       ? (shortTrades.filter(
-          (trade) =>
-            trade.outcome === "win"
-        ).length /
-          shortTrades.length) *
-        100
+        (trade) =>
+          trade.outcome === "win"
+      ).length /
+        shortTrades.length) *
+      100
       : 0;
 
   const cards = [
@@ -294,9 +338,9 @@ export default async function AnalyticsPage({
                 <p className="font-semibold text-green-400">
                   {bestSymbol
                     ? formatCurrency(
-                        bestSymbol[1].pnl,
-                        account.currency
-                      )
+                      bestSymbol[1].pnl,
+                      account.currency
+                    )
                     : "-"}
                 </p>
               </div>
@@ -315,9 +359,9 @@ export default async function AnalyticsPage({
                 <p className="font-semibold text-red-400">
                   {worstSymbol
                     ? formatCurrency(
-                        worstSymbol[1].pnl,
-                        account.currency
-                      )
+                      worstSymbol[1].pnl,
+                      account.currency
+                    )
                     : "-"}
                 </p>
               </div>
@@ -495,6 +539,91 @@ export default async function AnalyticsPage({
             </div>
           </div>
         </div>
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
+          <p className="text-sm text-gray-400">
+            Trading Psychology
+          </p>
+
+          <h2 className="mt-1 text-2xl font-bold">
+            Emotional Performance
+          </h2>
+
+          <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {Object.entries(
+              emotionalStats
+            ).map(([state, stats]) => {
+              const stateWinRate =
+                stats.trades > 0
+                  ? (stats.wins /
+                    stats.trades) *
+                  100
+                  : 0;
+
+              return (
+                <div
+                  key={state}
+                  className="rounded-2xl border border-white/10 bg-black/20 p-5"
+                >
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-bold text-white">
+                      {state}
+                    </h3>
+
+                    <div
+                      className={`rounded-xl px-3 py-1 text-xs font-bold ${stateWinRate >= 50
+                          ? "bg-green-500/10 text-green-400"
+                          : "bg-red-500/10 text-red-400"
+                        }`}
+                    >
+                      {stateWinRate.toFixed(0)}%
+                    </div>
+                  </div>
+
+                  <div className="mt-5 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm text-gray-500">
+                        Trades
+                      </p>
+
+                      <p className="font-bold text-white">
+                        {stats.trades}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm text-gray-500">
+                        Wins
+                      </p>
+
+                      <p className="font-bold text-green-400">
+                        {stats.wins}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm text-gray-500">
+                        Total PnL
+                      </p>
+
+                      <p
+                        className={`font-bold ${stats.pnl >= 0
+                            ? "text-green-400"
+                            : "text-red-400"
+                          }`}
+                      >
+                        {formatCurrency(
+                          stats.pnl,
+                          account.currency
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
       </div>
     </div>
   );
