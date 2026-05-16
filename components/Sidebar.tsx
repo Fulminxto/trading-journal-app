@@ -166,24 +166,25 @@ export default function Sidebar({
             href="/accounts"
             onClick={onClose}
             className={`group flex items-center transition ${collapsed
-                ? "justify-center"
-                : "gap-4"
+              ? "justify-center"
+              : "gap-4"
               }`}
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-green-500/20 bg-green-500/10 shadow-[0_0_25px_rgba(34,197,94,0.15)] transition group-hover:scale-105 group-hover:bg-green-500/15">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/5 bg-white/[0.02] transition group-hover:bg-white/[0.04]">
               <Zap
-                size={24}
-                className="text-green-400"
+                size={18}
+                strokeWidth={2.3}
+                className="text-white"
               />
             </div>
 
             {!collapsed && (
               <div>
-                <p className="text-xs uppercase tracking-[0.35em] text-gray-500">
-                  Trading
+                <p className="text-[10px] uppercase tracking-[0.45em] text-gray-600">
+                  Private Desk
                 </p>
 
-                <h1 className="mt-1 text-2xl font-bold tracking-wide text-white">
+                <h1 className="mt-1 text-[26px] font-semibold tracking-tight text-white">
                   Journal
                 </h1>
               </div>
