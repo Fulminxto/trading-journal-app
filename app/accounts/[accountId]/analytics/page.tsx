@@ -283,6 +283,41 @@ export default async function AnalyticsPage({
       100
       : 0;
 
+  const monthlyStats: Record<
+    string,
+    {
+      trades: number;
+      wins: number;
+      pnl: number;
+    }
+  > = {};
+
+  for (const trade of trades) {
+    const month = new Date(
+      trade.openDate
+    ).toLocaleDateString("en-US", {
+      month: "long",
+      year: "numeric",
+    });
+
+    if (!monthlyStats[month]) {
+      monthlyStats[month] = {
+        trades: 0,
+        wins: 0,
+        pnl: 0,
+      };
+    }
+
+    monthlyStats[month].trades += 1;
+
+    if (trade.outcome === "win") {
+      monthlyStats[month].wins += 1;
+    }
+
+    monthlyStats[month].pnl +=
+      trade.resultUsd || 0;
+  }
+
   const sessionStats: Record<
     string,
     {
@@ -1101,6 +1136,93 @@ export default async function AnalyticsPage({
             </div>
           </div>
         )}
+
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
+          <p className="text-sm text-gray-400">
+            Monthly Performance
+          </p>
+
+          <h2 className="mt-1 text-2xl font-bold">
+            Monthly Dashboard
+          </h2>
+
+          <div className="mt-6 space-y-4">
+            {Object.entries(monthlyStats)
+              .reverse()
+              .map(([month, stats]) => {
+                const wr =
+                  stats.trades > 0
+                    ? (
+                      (stats.wins /
+                        stats.trades) *
+                      100
+                    ).toFixed(0)
+                    : "0";
+
+                return (
+                  <div
+                    key={month}
+                    className="card-hover flex flex-col gap-4 rounded-2xl border border-white/10 bg-black/20 p-5 md:flex-row md:items-center md:justify-between"
+                  >
+                    <div>
+                      <h3 className="text-lg font-bold text-white">
+                        {month}
+                      </h3>
+
+                      <p className="mt-1 text-sm text-gray-500">
+                        {stats.trades} trades
+                      </p>
+                    </div>
+
+                    <div className="flex gap-6">
+                      <div>
+                        <p className="text-xs text-gray-500">
+                          WR
+                        </p>
+
+                        <p
+                          className={`font-bold ${Number(wr) >= 50
+                              ? "text-green-400"
+                              : "text-red-400"
+                            }`}
+                        >
+                          {wr}%
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="text-xs text-gray-500">
+                          Wins
+                        </p>
+
+                        <p className="font-bold text-green-400">
+                          {stats.wins}
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="text-xs text-gray-500">
+                          PnL
+                        </p>
+
+                        <p
+                          className={`font-bold ${stats.pnl >= 0
+                              ? "text-green-400"
+                              : "text-red-400"
+                            }`}
+                        >
+                          {formatCurrency(
+                            stats.pnl,
+                            account.currency
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
+        </div>
 
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
           <p className="text-sm text-gray-400">
