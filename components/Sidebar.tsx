@@ -157,7 +157,7 @@ export default function Sidebar({
           }`}
       >
         <div
-          className={`flex items-center ${collapsed
+          className={`flex items-start ${collapsed
             ? "justify-center"
             : "justify-between"
             }`}
@@ -165,33 +165,38 @@ export default function Sidebar({
           <Link
             href="/accounts"
             onClick={onClose}
-            className={`group flex items-center transition ${collapsed
-              ? "justify-center"
-              : "gap-4"
+            className={`group flex items-center transition-all duration-300 ${collapsed
+              ? "justify-center pt-1"
+              : "gap-3"
               }`}
           >
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/5 bg-white/[0.02] transition group-hover:bg-white/[0.04]">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/5 bg-white/[0.02] transition-all duration-300 group-hover:bg-white/[0.05]">
               <Zap
-                size={18}
-                strokeWidth={2.3}
-                className="text-white"
+                size={17}
+                strokeWidth={2.4}
+                className="translate-y-[-0.5px] text-white"
               />
             </div>
 
             {!collapsed && (
-              <div>
-                <p className="text-[10px] uppercase tracking-[0.45em] text-gray-600">
-                  Private Desk
+              <div className="pt-[1px]">
+                <p className="text-[9px] uppercase tracking-[0.42em] text-gray-600">
+                  PRIVATE DESK
                 </p>
 
-                <h1 className="mt-1 text-[26px] font-semibold tracking-tight text-white">
+                <h1 className="mt-[2px] text-[24px] font-semibold leading-none tracking-tight text-white">
                   Journal
                 </h1>
               </div>
             )}
           </Link>
 
-          <div className="flex items-center gap-2">
+          <div
+            className={`flex items-center ${collapsed
+                ? "mt-1"
+                : "pt-1"
+              } gap-2`}
+          >
             <button
               onClick={() =>
                 setCollapsed(

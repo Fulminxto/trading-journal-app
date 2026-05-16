@@ -82,18 +82,18 @@ export default function AppShell({
           >
             <button
               onClick={() => setProfileOpen(!profileOpen)}
-              className="flex items-center gap-2 rounded-2xl border border-white/10 bg-[#071018]/80 px-3 py-2 shadow-2xl backdrop-blur-xl transition hover:bg-[#071018]"
+              className="flex items-center gap-2 rounded-2xl border border-white/10 bg-[#071018]/80 px-3 py-2 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:bg-[#071018]"
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-green-500/10 text-xs font-bold text-green-400">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-green-500/10 text-[11px] font-bold text-green-400">
                 {initials}
               </div>
 
               <div className="hidden text-left sm:block">
-                <p className="text-xs font-semibold text-white">
+                <p className="text-[13px] font-semibold leading-tight text-white">
                   {displayName}
                 </p>
 
-                <p className="text-[11px] text-gray-500">
+                <p className="mt-0.5 text-[9px] uppercase tracking-[0.18em] text-gray-500">
                   {role}
                 </p>
               </div>
@@ -193,7 +193,7 @@ export default function AppShell({
           </button>
         </div>
 
-        <div className="p-4 pt-20 sm:p-6 sm:pt-24 lg:p-8 lg:pt-24">
+        <div className="p-4 pt-16 sm:p-6 sm:pt-18 lg:p-8 lg:pt-14">
           {children}
 
           <footer className="mt-16 border-t border-white/5 pt-6 text-center">
