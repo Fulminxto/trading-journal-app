@@ -50,9 +50,27 @@ export default async function AnalyticsPage({
 
   const account = membership.tradingAccount;
 
+  const accountMembers =
+    await prisma.accountMember.findMany({
+      where: {
+        tradingAccountId: accountId,
+      },
+
+      include: {
+        user: true,
+      },
+    });
+
+  const isSharedAccount =
+    accountMembers.length > 1;
+
   const trades = await prisma.trade.findMany({
     where: {
       tradingAccountId: accountId,
+    },
+
+    include: {
+      createdBy: true,
     },
 
     orderBy: {
@@ -265,6 +283,38 @@ export default async function AnalyticsPage({
       100
       : 0;
 
+  const sessionStats: Record<
+    string,
+    {
+      trades: number;
+      wins: number;
+      pnl: number;
+    }
+  > = {};
+
+  for (const trade of trades) {
+    if (!trade.session) {
+      continue;
+    }
+
+    if (!sessionStats[trade.session]) {
+      sessionStats[trade.session] = {
+        trades: 0,
+        wins: 0,
+        pnl: 0,
+      };
+    }
+
+    sessionStats[trade.session].trades += 1;
+
+    if (trade.outcome === "win") {
+      sessionStats[trade.session].wins += 1;
+    }
+
+    sessionStats[trade.session].pnl +=
+      trade.resultUsd || 0;
+  }
+
   const setupQualityStats = {
     low: {
       trades: 0,
@@ -389,6 +439,44 @@ export default async function AnalyticsPage({
     insights.push(
       "Focus on risk management and trade selection."
     );
+  }
+
+  const traderStats: Record<
+    string,
+    {
+      name: string;
+      trades: number;
+      wins: number;
+      pnl: number;
+    }
+  > = {};
+
+  for (const trade of trades) {
+    const traderId =
+      trade.createdById;
+
+    const traderName =
+      trade.createdBy?.username ||
+      trade.createdBy?.name ||
+      "Trader";
+
+    if (!traderStats[traderId]) {
+      traderStats[traderId] = {
+        name: traderName,
+        trades: 0,
+        wins: 0,
+        pnl: 0,
+      };
+    }
+
+    traderStats[traderId].trades += 1;
+
+    if (trade.outcome === "win") {
+      traderStats[traderId].wins += 1;
+    }
+
+    traderStats[traderId].pnl +=
+      trade.resultUsd || 0;
   }
 
   const cards = [
@@ -557,6 +645,93 @@ export default async function AnalyticsPage({
           <h2 className="mt-1 text-2xl font-bold">
             Long vs Short
           </h2>
+
+          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+            <p className="text-sm text-gray-400">
+              Session Analytics
+            </p>
+
+            <h2 className="mt-1 text-2xl font-bold">
+              Session Performance
+            </h2>
+
+            <div className="mt-6 space-y-4">
+              {Object.entries(sessionStats).map(
+                ([session, stats]) => {
+                  const wr =
+                    stats.trades > 0
+                      ? (
+                        (stats.wins /
+                          stats.trades) *
+                        100
+                      ).toFixed(0)
+                      : "0";
+
+                  return (
+                    <div
+                      key={session}
+                      className="rounded-2xl border border-white/10 bg-black/20 p-4"
+                    >
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-bold text-white">
+                          {session}
+                        </h3>
+
+                        <div
+                          className={`rounded-xl px-3 py-1 text-xs font-bold ${Number(wr) >= 50
+                              ? "bg-green-500/10 text-green-400"
+                              : "bg-red-500/10 text-red-400"
+                            }`}
+                        >
+                          {wr}%
+                        </div>
+                      </div>
+
+                      <div className="mt-5 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm text-gray-500">
+                            Trades
+                          </p>
+
+                          <p className="font-bold text-white">
+                            {stats.trades}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm text-gray-500">
+                            Wins
+                          </p>
+
+                          <p className="font-bold text-green-400">
+                            {stats.wins}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm text-gray-500">
+                            PnL
+                          </p>
+
+                          <p
+                            className={`font-bold ${stats.pnl >= 0
+                                ? "text-green-400"
+                                : "text-red-400"
+                              }`}
+                          >
+                            {formatCurrency(
+                              stats.pnl,
+                              account.currency
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+              )}
+            </div>
+          </div>
 
           <div className="mt-6 space-y-4">
             <div className="rounded-2xl bg-black/20 p-4">
@@ -782,8 +957,8 @@ export default async function AnalyticsPage({
 
                     <div
                       className={`rounded-xl px-3 py-1 text-xs font-bold ${Number(wr) >= 50
-                          ? "bg-green-500/10 text-green-400"
-                          : "bg-red-500/10 text-red-400"
+                        ? "bg-green-500/10 text-green-400"
+                        : "bg-red-500/10 text-red-400"
                         }`}
                     >
                       {wr}%
@@ -818,8 +993,8 @@ export default async function AnalyticsPage({
 
                       <p
                         className={`font-bold ${stats.pnl >= 0
-                            ? "text-green-400"
-                            : "text-red-400"
+                          ? "text-green-400"
+                          : "text-red-400"
                           }`}
                       >
                         {formatCurrency(
@@ -834,6 +1009,98 @@ export default async function AnalyticsPage({
             })}
           </div>
         </div>
+
+        {isSharedAccount && (
+          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
+            <p className="text-sm text-gray-400">
+              Team Analytics
+            </p>
+
+            <h2 className="mt-1 text-2xl font-bold">
+              Trader Leaderboard
+            </h2>
+
+            <div className="mt-6 space-y-4">
+              {Object.values(traderStats)
+                .sort((a, b) => b.pnl - a.pnl)
+                .map((trader, index) => {
+                  const wr =
+                    trader.trades > 0
+                      ? (
+                        (trader.wins /
+                          trader.trades) *
+                        100
+                      ).toFixed(0)
+                      : "0";
+
+                  return (
+                    <div
+                      key={trader.name}
+                      className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-black/20 p-5 md:flex-row md:items-center md:justify-between"
+                    >
+                      <div>
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-green-500/10 font-bold text-green-400">
+                            #{index + 1}
+                          </div>
+
+                          <div>
+                            <h3 className="text-lg font-bold text-white">
+                              {trader.name}
+                            </h3>
+
+                            <p className="text-sm text-gray-500">
+                              {trader.trades} trades
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-6">
+                        <div>
+                          <p className="text-xs text-gray-500">
+                            WR
+                          </p>
+
+                          <p className="font-bold text-white">
+                            {wr}%
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-gray-500">
+                            Wins
+                          </p>
+
+                          <p className="font-bold text-green-400">
+                            {trader.wins}
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-gray-500">
+                            PnL
+                          </p>
+
+                          <p
+                            className={`font-bold ${trader.pnl >= 0
+                              ? "text-green-400"
+                              : "text-red-400"
+                              }`}
+                          >
+                            {formatCurrency(
+                              trader.pnl,
+                              account.currency
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
+        )}
 
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
           <p className="text-sm text-gray-400">
