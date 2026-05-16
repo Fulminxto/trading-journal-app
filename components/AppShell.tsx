@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 
 import Sidebar from "@/components/Sidebar";
+import OnboardingModal from "@/components/OnboardingModal";
 
 type AppShellUser = {
   name: string | null;
@@ -65,7 +66,10 @@ export default function AppShell({
   }, []);
 
   return (
-    <div className="flex min-h-screen">
+  <div className="flex min-h-screen">
+    <OnboardingModal />
+
+    <Sidebar
       <Sidebar
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
