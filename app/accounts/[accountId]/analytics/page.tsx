@@ -646,93 +646,6 @@ export default async function AnalyticsPage({
             Long vs Short
           </h2>
 
-          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-            <p className="text-sm text-gray-400">
-              Session Analytics
-            </p>
-
-            <h2 className="mt-1 text-2xl font-bold">
-              Session Performance
-            </h2>
-
-            <div className="mt-6 space-y-4">
-              {Object.entries(sessionStats).map(
-                ([session, stats]) => {
-                  const wr =
-                    stats.trades > 0
-                      ? (
-                        (stats.wins /
-                          stats.trades) *
-                        100
-                      ).toFixed(0)
-                      : "0";
-
-                  return (
-                    <div
-                      key={session}
-                      className="rounded-2xl border border-white/10 bg-black/20 p-4"
-                    >
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-bold text-white">
-                          {session}
-                        </h3>
-
-                        <div
-                          className={`rounded-xl px-3 py-1 text-xs font-bold ${Number(wr) >= 50
-                              ? "bg-green-500/10 text-green-400"
-                              : "bg-red-500/10 text-red-400"
-                            }`}
-                        >
-                          {wr}%
-                        </div>
-                      </div>
-
-                      <div className="mt-5 space-y-3">
-                        <div className="flex items-center justify-between">
-                          <p className="text-sm text-gray-500">
-                            Trades
-                          </p>
-
-                          <p className="font-bold text-white">
-                            {stats.trades}
-                          </p>
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                          <p className="text-sm text-gray-500">
-                            Wins
-                          </p>
-
-                          <p className="font-bold text-green-400">
-                            {stats.wins}
-                          </p>
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                          <p className="text-sm text-gray-500">
-                            PnL
-                          </p>
-
-                          <p
-                            className={`font-bold ${stats.pnl >= 0
-                                ? "text-green-400"
-                                : "text-red-400"
-                              }`}
-                          >
-                            {formatCurrency(
-                              stats.pnl,
-                              account.currency
-                            )}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                }
-              )}
-            </div>
-          </div>
-
           <div className="mt-6 space-y-4">
             <div className="rounded-2xl bg-black/20 p-4">
               <div className="flex items-center justify-between">
@@ -829,6 +742,93 @@ export default async function AnalyticsPage({
                 )}
               </h3>
             </div>
+          </div>
+        </div>
+
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+          <p className="text-sm text-gray-400">
+            Session Analytics
+          </p>
+
+          <h2 className="mt-1 text-2xl font-bold">
+            Session Performance
+          </h2>
+
+          <div className="mt-6 space-y-4">
+            {Object.entries(sessionStats).map(
+              ([session, stats]) => {
+                const wr =
+                  stats.trades > 0
+                    ? (
+                      (stats.wins /
+                        stats.trades) *
+                      100
+                    ).toFixed(0)
+                    : "0";
+
+                return (
+                  <div
+                    key={session}
+                    className="rounded-2xl border border-white/10 bg-black/20 p-4"
+                  >
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-bold text-white">
+                        {session}
+                      </h3>
+
+                      <div
+                        className={`rounded-xl px-3 py-1 text-xs font-bold ${Number(wr) >= 50
+                          ? "bg-green-500/10 text-green-400"
+                          : "bg-red-500/10 text-red-400"
+                          }`}
+                      >
+                        {wr}%
+                      </div>
+                    </div>
+
+                    <div className="mt-5 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm text-gray-500">
+                          Trades
+                        </p>
+
+                        <p className="font-bold text-white">
+                          {stats.trades}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm text-gray-500">
+                          Wins
+                        </p>
+
+                        <p className="font-bold text-green-400">
+                          {stats.wins}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm text-gray-500">
+                          PnL
+                        </p>
+
+                        <p
+                          className={`font-bold ${stats.pnl >= 0
+                            ? "text-green-400"
+                            : "text-red-400"
+                            }`}
+                        >
+                          {formatCurrency(
+                            stats.pnl,
+                            account.currency
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+            )}
           </div>
         </div>
 
