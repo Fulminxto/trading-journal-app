@@ -17,6 +17,7 @@ import {
   BarChart3,
   PanelLeftClose,
   PanelLeftOpen,
+  Zap,
 } from "lucide-react";
 
 const baseLinks = [
@@ -85,57 +86,57 @@ export default function Sidebar({
 
   const links = accountId
     ? [
-        ...baseLinks.map((link) => ({
-          href: `/accounts/${accountId}/${link.path}`,
-          label: link.label,
-          icon: link.icon,
-        })),
+      ...baseLinks.map((link) => ({
+        href: `/accounts/${accountId}/${link.path}`,
+        label: link.label,
+        icon: link.icon,
+      })),
 
-        {
-          href: "/accounts",
-          label: "Switch Account",
-          icon: ArrowLeftRight,
-        },
+      {
+        href: "/accounts",
+        label: "Switch Account",
+        icon: ArrowLeftRight,
+      },
 
-        ...(pathname.includes("/admin")
-          ? [
-              {
-                href: "/admin",
-                label: "Admin Panel",
-                icon: Shield,
-              },
+      ...(pathname.includes("/admin")
+        ? [
+          {
+            href: "/admin",
+            label: "Admin Panel",
+            icon: Shield,
+          },
 
-              {
-                href: "/admin/accounts",
-                label: "Accounts Management",
-                icon: Users,
-              },
-            ]
-          : []),
-      ]
+          {
+            href: "/admin/accounts",
+            label: "Accounts Management",
+            icon: Users,
+          },
+        ]
+        : []),
+    ]
     : [
-        {
-          href: "/accounts",
-          label: "Accounts",
-          icon: Users,
-        },
+      {
+        href: "/accounts",
+        label: "Accounts",
+        icon: Users,
+      },
 
-        ...(pathname.includes("/admin")
-          ? [
-              {
-                href: "/admin",
-                label: "Admin Panel",
-                icon: Shield,
-              },
+      ...(pathname.includes("/admin")
+        ? [
+          {
+            href: "/admin",
+            label: "Admin Panel",
+            icon: Shield,
+          },
 
-              {
-                href: "/admin/accounts",
-                label: "Accounts Management",
-                icon: Users,
-              },
-            ]
-          : []),
-      ];
+          {
+            href: "/admin/accounts",
+            label: "Accounts Management",
+            icon: Users,
+          },
+        ]
+        : []),
+    ];
 
   return (
     <>
@@ -147,38 +148,47 @@ export default function Sidebar({
       )}
 
       <aside
-        className={`fixed left-0 top-0 z-50 h-screen overflow-y-auto border-r border-white/10 bg-[#071018] p-4 transition-all duration-300 lg:sticky lg:z-40 ${
-          collapsed
-            ? "w-[88px]"
-            : "w-72 lg:w-64"
-        } ${
-          open
+        className={`fixed left-0 top-0 z-50 h-screen overflow-y-auto border-r border-white/10 bg-[#071018] p-4 transition-all duration-300 lg:sticky lg:z-40 ${collapsed
+          ? "w-[88px]"
+          : "w-72 lg:w-64"
+          } ${open
             ? "translate-x-0"
             : "-translate-x-full lg:translate-x-0"
-        }`}
+          }`}
       >
         <div
-          className={`flex items-center ${
-            collapsed
-              ? "justify-center"
-              : "justify-between"
-          }`}
+          className={`flex items-center ${collapsed
+            ? "justify-center"
+            : "justify-between"
+            }`}
         >
-          {!collapsed && (
-            <Link
-              href="/accounts"
-              onClick={onClose}
-              className="group"
-            >
-              <p className="text-xs uppercase tracking-[0.3em] text-gray-500 transition group-hover:text-gray-400">
-                Trading
-              </p>
+          <Link
+            href="/accounts"
+            onClick={onClose}
+            className={`group flex items-center transition ${collapsed
+                ? "justify-center"
+                : "gap-4"
+              }`}
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-green-500/20 bg-green-500/10 shadow-[0_0_25px_rgba(34,197,94,0.15)] transition group-hover:scale-105 group-hover:bg-green-500/15">
+              <Zap
+                size={24}
+                className="text-green-400"
+              />
+            </div>
 
-              <h1 className="mt-1 text-2xl font-bold text-green-400 transition group-hover:text-green-300">
-                Journal
-              </h1>
-            </Link>
-          )}
+            {!collapsed && (
+              <div>
+                <p className="text-xs uppercase tracking-[0.35em] text-gray-500">
+                  Trading
+                </p>
+
+                <h1 className="mt-1 text-2xl font-bold tracking-wide text-white">
+                  Journal
+                </h1>
+              </div>
+            )}
+          </Link>
 
           <div className="flex items-center gap-2">
             <button
@@ -221,15 +231,13 @@ export default function Sidebar({
                 key={link.href}
                 href={link.href}
                 onClick={onClose}
-                className={`group flex items-center rounded-xl transition ${
-                  collapsed
-                    ? "justify-center px-3 py-3"
-                    : "gap-3 px-4 py-3"
-                } ${
-                  active
+                className={`group flex items-center rounded-xl transition ${collapsed
+                  ? "justify-center px-3 py-3"
+                  : "gap-3 px-4 py-3"
+                  } ${active
                     ? "bg-green-400/10 text-green-400"
                     : "text-gray-300 hover:bg-white/5 hover:text-white"
-                }`}
+                  }`}
               >
                 <Icon size={18} />
 
