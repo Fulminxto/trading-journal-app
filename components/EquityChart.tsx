@@ -11,6 +11,8 @@ import {
   YAxis,
 } from "recharts";
 
+import EmptyState from "@/components/EmptyState";
+
 type EquityPoint = {
   date: string;
   equity: number;
@@ -32,9 +34,10 @@ export default function EquityChart({ data }: Props) {
 
   if (!hasData) {
     return (
-      <div className="flex h-[340px] items-center justify-center rounded-2xl border border-white/10 bg-black/20 text-sm text-gray-500">
-        Nessun dato equity disponibile.
-      </div>
+      <EmptyState
+        title="No equity data yet"
+        description="Start tracking executions to generate your equity curve and performance analytics."
+      />
     );
   }
 
