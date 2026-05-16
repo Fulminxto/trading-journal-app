@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   LayoutDashboard,
@@ -76,7 +76,7 @@ export default function Sidebar({
   const pathname = usePathname();
 
   const [collapsed, setCollapsed] =
-    useState(false);
+    useState(true);
 
   const match = pathname.match(
     /^\/accounts\/([^/]+)/
@@ -148,7 +148,13 @@ export default function Sidebar({
       )}
 
       <aside
-        className={`fixed left-0 top-0 z-50 h-screen overflow-y-auto border-r border-white/10 bg-[#071018] p-4 transition-all duration-300 lg:sticky lg:z-40 ${collapsed
+        onMouseEnter={() =>
+          setCollapsed(false)
+        }
+        onMouseLeave={() =>
+          setCollapsed(true)
+        }
+        className={`fixed left-0 top-0 z-50 h-screen overflow-y-auto border-r border-white/10 bg-[#071018] p-4 transition-all duration-500 ease-out lg:sticky lg:z-40 ${collapsed
           ? "w-[88px]"
           : "w-72 lg:w-64"
           } ${open
@@ -193,29 +199,10 @@ export default function Sidebar({
 
           <div
             className={`flex items-center ${collapsed
-                ? "mt-1"
-                : "pt-1"
+              ? "mt-1"
+              : "pt-1"
               } gap-2`}
           >
-            <button
-              onClick={() =>
-                setCollapsed(
-                  !collapsed
-                )
-              }
-              className="hidden rounded-xl border border-white/10 bg-white/5 p-2 text-gray-400 transition hover:bg-white/10 hover:text-white lg:flex"
-            >
-              {collapsed ? (
-                <PanelLeftOpen
-                  size={18}
-                />
-              ) : (
-                <PanelLeftClose
-                  size={18}
-                />
-              )}
-            </button>
-
             <button
               onClick={onClose}
               className="rounded-lg p-2 text-gray-400 hover:bg-white/10 lg:hidden"
