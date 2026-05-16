@@ -68,8 +68,7 @@ export default function AppShell({
   return (
   <div className="flex min-h-screen">
     <OnboardingModal />
-
-    <Sidebar
+  
       <Sidebar
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
