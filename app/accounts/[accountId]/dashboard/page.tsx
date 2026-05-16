@@ -287,7 +287,7 @@ export default async function DashboardPage({
       </div>
 
       <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4">
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             Account Type
           </p>
@@ -297,7 +297,7 @@ export default async function DashboardPage({
           </h2>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             Initial Balance
           </p>
@@ -308,7 +308,7 @@ export default async function DashboardPage({
           </h2>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             Currency
           </p>
@@ -318,7 +318,7 @@ export default async function DashboardPage({
           </h2>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             Broker / Firm
           </p>
@@ -328,7 +328,7 @@ export default async function DashboardPage({
           </h2>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             Phase
           </p>
@@ -338,7 +338,7 @@ export default async function DashboardPage({
           </h2>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             Profit Target
           </p>
@@ -350,7 +350,7 @@ export default async function DashboardPage({
           </h2>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             Max Drawdown
           </p>
@@ -362,7 +362,7 @@ export default async function DashboardPage({
           </h2>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             Daily Drawdown
           </p>
@@ -375,7 +375,7 @@ export default async function DashboardPage({
         </div>
       </div>
 
-      <div className="mb-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+      <div className="card-hover mb-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6">
         <div className="mb-6">
           <p className="text-sm text-gray-400">
             Account Growth
@@ -393,7 +393,7 @@ export default async function DashboardPage({
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+            className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-5"
           >
             <p className="text-sm text-gray-400">
               {stat.label}
