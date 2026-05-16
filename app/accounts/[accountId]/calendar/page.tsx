@@ -224,32 +224,32 @@ export default async function CalendarPage({
 
   const bestDay =
     Object.values(grouped).length >
-    0
+      0
       ? Math.max(
-          ...Object.values(
-            grouped
-          ).map(
-            (day) => day.pnl
-          )
+        ...Object.values(
+          grouped
+        ).map(
+          (day) => day.pnl
         )
+      )
       : 0;
 
   const worstDay =
     Object.values(grouped).length >
-    0
+      0
       ? Math.min(
-          ...Object.values(
-            grouped
-          ).map(
-            (day) => day.pnl
-          )
+        ...Object.values(
+          grouped
+        ).map(
+          (day) => day.pnl
         )
+      )
       : 0;
 
   const averageDailyPnl =
     activeDays > 0
       ? totalMonthPnl /
-        activeDays
+      activeDays
       : 0;
 
   const weekdays = [
@@ -311,11 +311,10 @@ export default async function CalendarPage({
           </p>
 
           <h2
-            className={`mt-2 text-3xl font-bold ${
-              totalMonthPnl >= 0
-                ? "text-green-400"
-                : "text-red-400"
-            }`}
+            className={`mt-2 text-3xl font-bold ${totalMonthPnl >= 0
+              ? "text-green-400"
+              : "text-red-400"
+              }`}
           >
             {formatCurrency(
               totalMonthPnl,
@@ -353,11 +352,10 @@ export default async function CalendarPage({
           </p>
 
           <h2
-            className={`mt-2 text-3xl font-bold ${
-              averageDailyPnl >= 0
-                ? "text-green-400"
-                : "text-red-400"
-            }`}
+            className={`mt-2 text-3xl font-bold ${averageDailyPnl >= 0
+              ? "text-green-400"
+              : "text-red-400"
+              }`}
           >
             {formatCurrency(
               averageDailyPnl,
@@ -410,56 +408,76 @@ export default async function CalendarPage({
             const negative =
               pnl < 0;
 
+            const intensity =
+              Math.min(
+                Math.abs(pnl) / 500,
+                1
+              );
+
             const isToday =
               now.getDate() ===
-                day &&
+              day &&
               now.getMonth() ===
-                month &&
+              month &&
               now.getFullYear() ===
-                year;
+              year;
 
             return (
               <div
                 key={day}
-                className={`min-h-[140px] border-r border-b border-white/10 p-3 transition last:border-r-0 ${
-                  positive
+                className={`group relative min-h-[140px] border-r border-b border-white/10 p-3 transition-all duration-300 last:border-r-0 hover:z-10 hover:scale-[1.02] ${positive
                     ? "bg-green-500/10"
                     : negative
-                    ? "bg-red-500/10"
-                    : "bg-transparent"
-                }`}
+                      ? "bg-red-500/10"
+                      : "bg-transparent"
+                  }`}
+                style={{
+                  backgroundColor: positive
+                    ? `rgba(34,197,94,${0.06 + intensity * 0.18
+                    })`
+                    : negative
+                      ? `rgba(239,68,68,${0.06 + intensity * 0.18
+                      })`
+                      : undefined,
+                }}
               >
-                <div className="mb-4 flex items-center justify-between">
+                <div
+                  className={`pointer-events-none absolute inset-0 opacity-0 blur-2xl transition duration-500 group-hover:opacity-100 ${positive
+                      ? "bg-green-500/10"
+                      : negative
+                        ? "bg-red-500/10"
+                        : "bg-white/5"
+                    }`}
+                />
+
+                <div className="relative mb-4 flex items-center justify-between">
                   <div
-                    className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold ${
-                      isToday
+                    className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold ${isToday
                         ? "bg-white text-black"
                         : "bg-white/5 text-white"
-                    }`}
+                      }`}
                   >
                     {day}
                   </div>
 
                   <div
-                    className={`h-2.5 w-2.5 rounded-full ${
-                      positive
+                    className={`h-2.5 w-2.5 rounded-full ${positive
                         ? "bg-green-400"
                         : negative
-                        ? "bg-red-400"
-                        : "bg-gray-500"
-                    }`}
+                          ? "bg-red-400"
+                          : "bg-gray-500"
+                      }`}
                   />
                 </div>
 
-                <div className="space-y-2">
+                <div className="relative space-y-2">
                   <p
-                    className={`text-sm font-bold ${
-                      positive
+                    className={`text-sm font-bold ${positive
                         ? "text-green-400"
                         : negative
-                        ? "text-red-400"
-                        : "text-gray-400"
-                    }`}
+                          ? "text-red-400"
+                          : "text-gray-400"
+                      }`}
                   >
                     {formatCurrency(
                       pnl,
@@ -475,17 +493,17 @@ export default async function CalendarPage({
             );
           })}
           {Array.from({
-  length:
-    (7 -
-      ((adjustedFirstDay + days) %
-        7)) %
-    7,
-}).map((_, index) => (
-  <div
-    key={`end-empty-${index}`}
-    className="min-h-[140px] border-r border-b border-white/10 bg-black/10"
-  />
-))}
+            length:
+              (7 -
+                ((adjustedFirstDay + days) %
+                  7)) %
+              7,
+          }).map((_, index) => (
+            <div
+              key={`end-empty-${index}`}
+              className="min-h-[140px] border-r border-b border-white/10 bg-black/10"
+            />
+          ))}
         </div>
       </div>
 

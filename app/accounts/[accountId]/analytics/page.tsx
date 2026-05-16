@@ -514,6 +514,29 @@ export default async function AnalyticsPage({
       trade.resultUsd || 0;
   }
 
+  const monthlyEntries =
+    Object.entries(monthlyStats);
+
+  const greenMonths =
+    monthlyEntries.filter(
+      ([_, stats]) => stats.pnl >= 0
+    ).length;
+
+  const redMonths =
+    monthlyEntries.filter(
+      ([_, stats]) => stats.pnl < 0
+    ).length;
+
+  const bestMonth =
+    monthlyEntries.sort(
+      (a, b) => b[1].pnl - a[1].pnl
+    )[0];
+
+  const worstMonth =
+    monthlyEntries.sort(
+      (a, b) => a[1].pnl - b[1].pnl
+    )[0];
+
   const cards = [
     {
       label: "Total Trades",
@@ -1146,6 +1169,66 @@ export default async function AnalyticsPage({
             Monthly Dashboard
           </h2>
 
+          <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <p className="text-sm text-gray-500">
+                Best Month
+              </p>
+
+              <h3 className="mt-2 text-lg font-bold text-green-400">
+                {bestMonth?.[0] || "-"}
+              </h3>
+
+              <p className="mt-1 text-sm text-green-400">
+                {bestMonth
+                  ? formatCurrency(
+                    bestMonth[1].pnl,
+                    account.currency
+                  )
+                  : "-"}
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <p className="text-sm text-gray-500">
+                Worst Month
+              </p>
+
+              <h3 className="mt-2 text-lg font-bold text-red-400">
+                {worstMonth?.[0] || "-"}
+              </h3>
+
+              <p className="mt-1 text-sm text-red-400">
+                {worstMonth
+                  ? formatCurrency(
+                    worstMonth[1].pnl,
+                    account.currency
+                  )
+                  : "-"}
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <p className="text-sm text-gray-500">
+                Green Months
+              </p>
+
+              <h3 className="mt-2 text-2xl font-bold text-green-400">
+                {greenMonths}
+              </h3>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <p className="text-sm text-gray-500">
+                Red Months
+              </p>
+
+              <h3 className="mt-2 text-2xl font-bold text-red-400">
+                {redMonths}
+              </h3>
+            </div>
+          </div>
+
           <div className="mt-6 space-y-4">
             {Object.entries(monthlyStats)
               .reverse()
@@ -1182,8 +1265,8 @@ export default async function AnalyticsPage({
 
                         <p
                           className={`font-bold ${Number(wr) >= 50
-                              ? "text-green-400"
-                              : "text-red-400"
+                            ? "text-green-400"
+                            : "text-red-400"
                             }`}
                         >
                           {wr}%
@@ -1207,8 +1290,8 @@ export default async function AnalyticsPage({
 
                         <p
                           className={`font-bold ${stats.pnl >= 0
-                              ? "text-green-400"
-                              : "text-red-400"
+                            ? "text-green-400"
+                            : "text-red-400"
                             }`}
                         >
                           {formatCurrency(
