@@ -174,38 +174,37 @@ export default function SettingsPage() {
 
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <div className="mb-6 flex items-center gap-3">
+            <BookOpen
+              size={22}
+              className="text-green-400"
+            />
+
+            <div>
+              <p className="text-sm text-gray-400">
+                Guide
+              </p>
+
+              <h2 className="text-2xl font-bold">
+                Help Center
+              </h2>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              Riavvia onboarding e guida iniziale della piattaforma.
+            </p>
+
+            <ReopenOnboardingButton />
+          </div>
+        </div>
+
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+          <div className="mb-6 flex items-center gap-3">
             <LifeBuoy
               size={22}
               className="text-cyan-400"
             />
-
-<div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-  <div className="mb-6 flex items-center gap-3">
-    <BookOpen
-      size={22}
-      className="text-green-400"
-    />
-
-    <div>
-      <p className="text-sm text-gray-400">
-        Guide
-      </p>
-
-      <h2 className="text-2xl font-bold">
-        Help Center
-      </h2>
-    </div>
-  </div>
-
-  <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-    <p className="text-sm text-gray-400">
-      Riavvia onboarding e guida iniziale della piattaforma.
-    </p>
-
-   <ReopenOnboardingButton />
-   
-  </div>
-</div>
 
             <div>
               <p className="text-sm text-gray-400">
