@@ -83,3 +83,13 @@ textarea:focus {
     0 10px 30px rgba(0, 0, 0, 0.22),
     0 0 0 1px rgba(255, 255, 255, 0.02);
 }
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  appearance: textfield;
+}
