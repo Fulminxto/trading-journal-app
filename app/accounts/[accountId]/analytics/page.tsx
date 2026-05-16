@@ -160,6 +160,42 @@ export default async function AnalyticsPage({
         b[1].trades - a[1].trades
     )[0];
 
+  const mistakesStats: Record<
+    string,
+    {
+      count: number;
+      pnl: number;
+    }
+  > = {};
+
+  for (const trade of trades) {
+    if (!trade.mistakes) {
+      continue;
+    }
+
+    const mistakes =
+      trade.mistakes
+        .split(",")
+        .map((mistake) =>
+          mistake.trim()
+        )
+        .filter(Boolean);
+
+    for (const mistake of mistakes) {
+      if (!mistakesStats[mistake]) {
+        mistakesStats[mistake] = {
+          count: 0,
+          pnl: 0,
+        };
+      }
+
+      mistakesStats[mistake].count += 1;
+
+      mistakesStats[mistake].pnl +=
+        trade.resultUsd || 0;
+    }
+  }
+
   const emotionalStats: Record<
     string,
     {
@@ -539,6 +575,53 @@ export default async function AnalyticsPage({
             </div>
           </div>
         </div>
+
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
+          <p className="text-sm text-gray-400">
+            Mistakes Analytics
+          </p>
+
+          <h2 className="mt-1 text-2xl font-bold">
+            Errori ricorrenti
+          </h2>
+
+          <div className="mt-6 space-y-4">
+            {Object.entries(mistakesStats).length === 0 ? (
+              <p className="text-sm text-gray-500">
+                Nessun errore registrato nei trade.
+              </p>
+            ) : (
+              Object.entries(mistakesStats)
+                .sort((a, b) => b[1].count - a[1].count)
+                .map(([mistake, stats]) => (
+                  <div
+                    key={mistake}
+                    className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/20 p-4 md:flex-row md:items-center md:justify-between"
+                  >
+                    <div>
+                      <h3 className="font-bold text-white">
+                        {mistake}
+                      </h3>
+
+                      <p className="mt-1 text-sm text-gray-500">
+                        Ripetuto {stats.count} volte
+                      </p>
+                    </div>
+
+                    <p
+                      className={`font-bold ${stats.pnl >= 0
+                          ? "text-green-400"
+                          : "text-red-400"
+                        }`}
+                    >
+                      {formatCurrency(stats.pnl, account.currency)}
+                    </p>
+                  </div>
+                ))
+            )}
+          </div>
+        </div>
+
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
           <p className="text-sm text-gray-400">
             Trading Psychology
@@ -571,8 +654,8 @@ export default async function AnalyticsPage({
 
                     <div
                       className={`rounded-xl px-3 py-1 text-xs font-bold ${stateWinRate >= 50
-                          ? "bg-green-500/10 text-green-400"
-                          : "bg-red-500/10 text-red-400"
+                        ? "bg-green-500/10 text-green-400"
+                        : "bg-red-500/10 text-red-400"
                         }`}
                     >
                       {stateWinRate.toFixed(0)}%
@@ -607,8 +690,8 @@ export default async function AnalyticsPage({
 
                       <p
                         className={`font-bold ${stats.pnl >= 0
-                            ? "text-green-400"
-                            : "text-red-400"
+                          ? "text-green-400"
+                          : "text-red-400"
                           }`}
                       >
                         {formatCurrency(
