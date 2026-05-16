@@ -7,8 +7,9 @@ import { prisma } from "@/lib/prisma";
 import AppShell from "@/components/AppShell";
 
 export const metadata = {
-  title: "Trading Journal",
-  description: "Professional Trading Platform",
+  title: "VOLTIS",
+  description:
+    "Performance Operating System for disciplined traders.",
 };
 
 export const dynamic = "force-dynamic";
@@ -22,10 +23,10 @@ export default async function RootLayout({
 
   const currentUser = session?.user?.id
     ? await prisma.user.findUnique({
-        where: {
-          id: session.user.id,
-        },
-      })
+      where: {
+        id: session.user.id,
+      },
+    })
     : null;
 
   return (
@@ -42,11 +43,11 @@ export default async function RootLayout({
           user={
             currentUser
               ? {
-                  name: currentUser.name,
-                  username:
-                    currentUser.username,
-                  role: currentUser.role,
-                }
+                name: currentUser.name,
+                username:
+                  currentUser.username,
+                role: currentUser.role,
+              }
               : null
           }
         >
@@ -59,7 +60,7 @@ export default async function RootLayout({
               <div className="flex flex-col gap-2 text-center text-xs text-gray-500 lg:flex-row lg:items-center lg:justify-between lg:text-left">
                 <div>
                   <p>
-                    Trading Journal © 2026
+                    VOLTIS © 2026
                   </p>
 
                   <p className="mt-1 text-gray-600">
@@ -69,9 +70,8 @@ export default async function RootLayout({
 
                 <div className="max-w-xl">
                   <p>
-                    Private performance
-                    analysis software for
-                    professional traders.
+                    Performance operating system
+                    built for disciplined traders.
                   </p>
 
                   <p className="mt-1 text-gray-600">
