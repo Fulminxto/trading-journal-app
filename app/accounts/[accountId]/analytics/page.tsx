@@ -265,6 +265,76 @@ export default async function AnalyticsPage({
       100
       : 0;
 
+  const insights: string[] = [];
+
+  const bestEmotion =
+    Object.entries(emotionalStats).sort(
+      (a, b) => {
+        const aRate =
+          a[1].trades > 0
+            ? a[1].wins /
+            a[1].trades
+            : 0;
+
+        const bRate =
+          b[1].trades > 0
+            ? b[1].wins /
+            b[1].trades
+            : 0;
+
+        return bRate - aRate;
+      }
+    )[0];
+
+  if (bestEmotion) {
+    const rate =
+      bestEmotion[1].trades > 0
+        ? (
+          (bestEmotion[1].wins /
+            bestEmotion[1].trades) *
+          100
+        ).toFixed(0)
+        : "0";
+
+    insights.push(
+      `Best emotional state: ${bestEmotion[0]} (${rate}% WR)`
+    );
+  }
+
+  const worstMistake =
+    Object.entries(mistakesStats).sort(
+      (a, b) =>
+        a[1].pnl - b[1].pnl
+    )[0];
+
+  if (worstMistake) {
+    insights.push(
+      `Most expensive mistake: ${worstMistake[0]}`
+    );
+  }
+
+  if (longWinRate > shortWinRate) {
+    insights.push(
+      "Long trades currently perform better than short trades."
+    );
+  } else if (
+    shortWinRate > longWinRate
+  ) {
+    insights.push(
+      "Short trades currently perform better than long trades."
+    );
+  }
+
+  if (winRate >= 60) {
+    insights.push(
+      "Your overall execution is currently very solid."
+    );
+  } else if (winRate <= 40) {
+    insights.push(
+      "Focus on risk management and trade selection."
+    );
+  }
+
   const cards = [
     {
       label: "Total Trades",
@@ -610,14 +680,43 @@ export default async function AnalyticsPage({
 
                     <p
                       className={`font-bold ${stats.pnl >= 0
-                          ? "text-green-400"
-                          : "text-red-400"
+                        ? "text-green-400"
+                        : "text-red-400"
                         }`}
                     >
                       {formatCurrency(stats.pnl, account.currency)}
                     </p>
                   </div>
                 ))
+            )}
+          </div>
+        </div>
+
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
+          <p className="text-sm text-gray-400">
+            AI Insights
+          </p>
+
+          <h2 className="mt-1 text-2xl font-bold">
+            Performance Insights
+          </h2>
+
+          <div className="mt-6 space-y-4">
+            {insights.length === 0 ? (
+              <p className="text-sm text-gray-500">
+                Non ci sono ancora abbastanza dati.
+              </p>
+            ) : (
+              insights.map((insight) => (
+                <div
+                  key={insight}
+                  className="rounded-2xl border border-white/10 bg-black/20 p-4"
+                >
+                  <p className="text-sm leading-6 text-gray-300">
+                    {insight}
+                  </p>
+                </div>
+              ))
             )}
           </div>
         </div>
