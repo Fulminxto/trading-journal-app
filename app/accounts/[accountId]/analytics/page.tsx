@@ -265,6 +265,62 @@ export default async function AnalyticsPage({
       100
       : 0;
 
+  const setupQualityStats = {
+    low: {
+      trades: 0,
+      wins: 0,
+      pnl: 0,
+    },
+
+    medium: {
+      trades: 0,
+      wins: 0,
+      pnl: 0,
+    },
+
+    high: {
+      trades: 0,
+      wins: 0,
+      pnl: 0,
+    },
+  };
+
+  for (const trade of trades) {
+    if (!trade.setupQuality) {
+      continue;
+    }
+
+    let bucket:
+      | "low"
+      | "medium"
+      | "high";
+
+    if (trade.setupQuality <= 4) {
+      bucket = "low";
+    } else if (
+      trade.setupQuality <= 7
+    ) {
+      bucket = "medium";
+    } else {
+      bucket = "high";
+    }
+
+    setupQualityStats[
+      bucket
+    ].trades += 1;
+
+    if (trade.outcome === "win") {
+      setupQualityStats[
+        bucket
+      ].wins += 1;
+    }
+
+    setupQualityStats[
+      bucket
+    ].pnl +=
+      trade.resultUsd || 0;
+  }
+
   const insights: string[] = [];
 
   const bestEmotion =
@@ -689,6 +745,93 @@ export default async function AnalyticsPage({
                   </div>
                 ))
             )}
+          </div>
+        </div>
+
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
+          <p className="text-sm text-gray-400">
+            Setup Quality
+          </p>
+
+          <h2 className="mt-1 text-2xl font-bold">
+            Setup Performance
+          </h2>
+
+          <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+            {Object.entries(
+              setupQualityStats
+            ).map(([level, stats]) => {
+              const wr =
+                stats.trades > 0
+                  ? (
+                    (stats.wins /
+                      stats.trades) *
+                    100
+                  ).toFixed(0)
+                  : "0";
+
+              return (
+                <div
+                  key={level}
+                  className="rounded-2xl border border-white/10 bg-black/20 p-5"
+                >
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-bold capitalize text-white">
+                      {level}
+                    </h3>
+
+                    <div
+                      className={`rounded-xl px-3 py-1 text-xs font-bold ${Number(wr) >= 50
+                          ? "bg-green-500/10 text-green-400"
+                          : "bg-red-500/10 text-red-400"
+                        }`}
+                    >
+                      {wr}%
+                    </div>
+                  </div>
+
+                  <div className="mt-5 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm text-gray-500">
+                        Trades
+                      </p>
+
+                      <p className="font-bold text-white">
+                        {stats.trades}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm text-gray-500">
+                        Wins
+                      </p>
+
+                      <p className="font-bold text-green-400">
+                        {stats.wins}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm text-gray-500">
+                        PnL
+                      </p>
+
+                      <p
+                        className={`font-bold ${stats.pnl >= 0
+                            ? "text-green-400"
+                            : "text-red-400"
+                          }`}
+                      >
+                        {formatCurrency(
+                          stats.pnl,
+                          account.currency
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
