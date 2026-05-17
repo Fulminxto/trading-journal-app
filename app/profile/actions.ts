@@ -36,6 +36,26 @@ export async function updateProfile(
     "username"
   );
 
+  const bio = getString(
+    formData,
+    "bio"
+  );
+
+  const tradingStyle = getString(
+    formData,
+    "tradingStyle"
+  );
+
+  const favoriteMarket = getString(
+    formData,
+    "favoriteMarket"
+  );
+
+  const timezone = getString(
+    formData,
+    "timezone"
+  );
+
   const existingUser =
     await prisma.user.findUnique({
       where: {
@@ -60,6 +80,10 @@ export async function updateProfile(
     data: {
       name: name || null,
       username,
+      bio: bio || null,
+      tradingStyle: tradingStyle || null,
+      favoriteMarket: favoriteMarket || null,
+      timezone: timezone || null,
     },
   });
 

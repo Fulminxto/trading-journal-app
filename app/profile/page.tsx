@@ -66,6 +66,21 @@ export default async function ProfilePage({
 
   const displayName = user.name || user.username;
 
+  const profileInfo = [
+    {
+      label: "Trading Style",
+      value: user.tradingStyle || "Non impostato",
+    },
+    {
+      label: "Favorite Market",
+      value: user.favoriteMarket || "Non impostato",
+    },
+    {
+      label: "Timezone",
+      value: user.timezone || "Non impostato",
+    },
+  ];
+
   const initials = displayName
     .split(" ")
     .map((part) => part[0])
@@ -251,6 +266,34 @@ export default async function ProfilePage({
           required
         />
 
+        <textarea
+          name="bio"
+          defaultValue={user.bio || ""}
+          placeholder="Bio trader"
+          className="min-h-[120px] rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40 md:col-span-2"
+        />
+
+        <input
+          name="tradingStyle"
+          defaultValue={user.tradingStyle || ""}
+          placeholder="Trading Style"
+          className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+        />
+
+        <input
+          name="favoriteMarket"
+          defaultValue={user.favoriteMarket || ""}
+          placeholder="Favorite Market"
+          className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+        />
+
+        <input
+          name="timezone"
+          defaultValue={user.timezone || ""}
+          placeholder="Timezone"
+          className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40 md:col-span-2"
+        />
+
         <button
           type="submit"
           className="rounded-2xl bg-green-500 p-4 font-bold text-black transition hover:bg-green-400 md:col-span-2"
@@ -274,6 +317,47 @@ export default async function ProfilePage({
             </h2>
           </div>
         ))}
+      </div>
+
+      <div className="mb-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="mb-6">
+          <p className="text-sm text-gray-400">
+            Identità trader
+          </p>
+
+          <h2 className="mt-1 text-2xl font-bold">
+            Trading Profile
+          </h2>
+        </div>
+
+        {user.bio && (
+          <div className="mb-6 rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              Bio
+            </p>
+
+            <p className="mt-3 leading-relaxed text-gray-200">
+              {user.bio}
+            </p>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          {profileInfo.map((item) => (
+            <div
+              key={item.label}
+              className="rounded-2xl border border-white/10 bg-black/20 p-5"
+            >
+              <p className="text-sm text-gray-400">
+                {item.label}
+              </p>
+
+              <h3 className="mt-2 text-lg font-bold text-white">
+                {item.value}
+              </h3>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_360px]">
