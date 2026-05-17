@@ -7,6 +7,7 @@ import SymbolPerformance from "@/components/analytics/SymbolPerformance";
 import SessionPerformance from "@/components/analytics/SessionPerformance";
 import PerformanceInsights from "@/components/analytics/PerformanceInsights";
 import PsychologyAnalytics from "@/components/analytics/PsychologyAnalytics";
+import AnalyticsHero from "@/components/analytics/AnalyticsHero";
 
 import {
   BarChart3,
@@ -587,6 +588,17 @@ export default async function AnalyticsPage({
 
   return (
     <div>
+
+      <AnalyticsHero
+        accountName={account.name}
+        totalPnl={formatCurrency(
+          totalPnl,
+          account.currency
+        )}
+        winRate={winRate}
+        totalTrades={trades.length}
+      />
+
       <div className="mb-8">
         <p className="text-sm text-gray-400">
           Statistiche avanzate
