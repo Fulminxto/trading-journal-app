@@ -9,8 +9,15 @@ import {
   deleteAccountTrade,
 } from "./actions";
 
-function formatCurrency(value: number, currency: string) {
-  return `${value.toFixed(2)} ${currency}`;
+function formatCurrency(
+  value: number,
+  currency: string
+) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+    minimumFractionDigits: 2,
+  }).format(value);
 }
 
 export default async function DiaryPage({
