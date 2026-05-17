@@ -6,6 +6,7 @@ import PerformanceIntelligence from "@/components/analytics/PerformanceIntellige
 import SymbolPerformance from "@/components/analytics/SymbolPerformance";
 import SessionPerformance from "@/components/analytics/SessionPerformance";
 import PerformanceInsights from "@/components/analytics/PerformanceInsights";
+import PsychologyAnalytics from "@/components/analytics/PsychologyAnalytics";
 
 import {
   BarChart3,
@@ -640,6 +641,38 @@ export default async function AnalyticsPage({
         averageRR={averageRR}
         totalPnl={totalPnl}
         bestSymbol={bestSymbol?.[0]}
+      />
+
+      <PsychologyAnalytics
+        averageConfidence={
+          Math.round(
+            trades.reduce(
+              (acc, trade) =>
+                acc + (trade.confidence || 0),
+              0
+            ) / Math.max(trades.length, 1)
+          )
+        }
+        averageExecution={
+          Math.round(
+            trades.reduce(
+              (acc, trade) =>
+                acc +
+                (trade.executionRating || 0),
+              0
+            ) / Math.max(trades.length, 1)
+          )
+        }
+        averageSetupQuality={
+          Math.round(
+            trades.reduce(
+              (acc, trade) =>
+                acc +
+                (trade.setupQuality || 0),
+              0
+            ) / Math.max(trades.length, 1)
+          )
+        }
       />
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
