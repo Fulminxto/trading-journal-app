@@ -81,6 +81,35 @@ export default async function ProfilePage({
     },
   ];
 
+  const traderPreferences = [
+    {
+      label: "Preferred Session",
+      value:
+        user.preferredSession ||
+        "Non impostata",
+    },
+    {
+      label: "Risk Per Trade",
+      value:
+        user.riskPerTrade !== null &&
+        user.riskPerTrade !== undefined
+          ? `${user.riskPerTrade}%`
+          : "Non impostato",
+    },
+    {
+      label: "Preferred Broker",
+      value:
+        user.preferredBroker ||
+        "Non impostato",
+    },
+    {
+      label: "Setup Style",
+      value:
+        user.setupStyle ||
+        "Non impostato",
+    },
+  ];
+
   const initials = displayName
     .split(" ")
     .map((part) => part[0])
@@ -294,6 +323,36 @@ export default async function ProfilePage({
           className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40 md:col-span-2"
         />
 
+        <input
+          name="preferredSession"
+          defaultValue={user.preferredSession || ""}
+          placeholder="Preferred Session"
+          className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+        />
+
+        <input
+          name="riskPerTrade"
+          type="number"
+          step="0.1"
+          defaultValue={user.riskPerTrade || ""}
+          placeholder="Risk Per Trade (%)"
+          className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+        />
+
+        <input
+          name="preferredBroker"
+          defaultValue={user.preferredBroker || ""}
+          placeholder="Preferred Broker"
+          className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+        />
+
+        <input
+          name="setupStyle"
+          defaultValue={user.setupStyle || ""}
+          placeholder="Setup Style"
+          className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+        />
+
         <button
           type="submit"
           className="rounded-2xl bg-green-500 p-4 font-bold text-black transition hover:bg-green-400 md:col-span-2"
@@ -344,6 +403,35 @@ export default async function ProfilePage({
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {profileInfo.map((item) => (
+            <div
+              key={item.label}
+              className="rounded-2xl border border-white/10 bg-black/20 p-5"
+            >
+              <p className="text-sm text-gray-400">
+                {item.label}
+              </p>
+
+              <h3 className="mt-2 text-lg font-bold text-white">
+                {item.value}
+              </h3>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="mb-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="mb-6">
+          <p className="text-sm text-gray-400">
+            Trader preferences
+          </p>
+
+          <h2 className="mt-1 text-2xl font-bold">
+            Performance Setup
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {traderPreferences.map((item) => (
             <div
               key={item.label}
               className="rounded-2xl border border-white/10 bg-black/20 p-5"

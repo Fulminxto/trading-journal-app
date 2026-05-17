@@ -17,6 +17,25 @@ function getString(
   return value.trim();
 }
 
+function getNumber(
+  formData: FormData,
+  key: string
+) {
+  const value = getString(formData, key);
+
+  if (!value) {
+    return null;
+  }
+
+  const parsed = Number(value);
+
+  if (Number.isNaN(parsed)) {
+    return null;
+  }
+
+  return parsed;
+}
+
 export async function updateProfile(
   formData: FormData
 ) {
@@ -56,6 +75,26 @@ export async function updateProfile(
     "timezone"
   );
 
+  const preferredSession = getString(
+    formData,
+    "preferredSession"
+  );
+
+  const riskPerTrade = getNumber(
+    formData,
+    "riskPerTrade"
+  );
+
+  const preferredBroker = getString(
+    formData,
+    "preferredBroker"
+  );
+
+  const setupStyle = getString(
+    formData,
+    "setupStyle"
+  );
+
   const existingUser =
     await prisma.user.findUnique({
       where: {
@@ -84,6 +123,10 @@ export async function updateProfile(
       tradingStyle: tradingStyle || null,
       favoriteMarket: favoriteMarket || null,
       timezone: timezone || null,
+      preferredSession: preferredSession || null,
+      riskPerTrade,
+      preferredBroker: preferredBroker || null,
+      setupStyle: setupStyle || null,
     },
   });
 

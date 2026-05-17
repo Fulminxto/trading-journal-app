@@ -20,6 +20,11 @@ model User {
   favoriteMarket String?
   timezone      String?
 
+  preferredSession String?
+  riskPerTrade     Float?
+  preferredBroker  String?
+  setupStyle       String?
+
   memberships   AccountMember[]
   createdTrades Trade[]
   createdSessions TradingSession[]
