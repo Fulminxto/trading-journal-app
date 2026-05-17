@@ -687,7 +687,7 @@ export default async function AnalyticsPage({
         }
       />
 
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+      <div className="grid grid-cols-1 gap-8 xl:grid-cols-2">
         <SymbolPerformance
           bestSymbol={bestSymbol}
           worstSymbol={worstSymbol}

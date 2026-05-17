@@ -1,3 +1,5 @@
+import AnalyticsSection from "./AnalyticsSection";
+
 type Props = {
   londonTrades: number;
   newYorkTrades: number;
@@ -10,16 +12,11 @@ export default function SessionPerformance({
   asianTrades,
 }: Props) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-      <p className="text-sm text-gray-400">
-        Session Performance
-      </p>
-
-      <h2 className="mt-1 text-2xl font-bold">
-        Trading Sessions
-      </h2>
-
-      <div className="mt-6 space-y-4">
+    <AnalyticsSection
+      subtitle="Session intelligence"
+      title="Trading Sessions"
+    >
+      <div className="space-y-4">
         <div className="rounded-2xl bg-black/20 p-4">
           <div className="flex items-center justify-between">
             <span className="text-gray-400">
@@ -56,6 +53,6 @@ export default function SessionPerformance({
           </div>
         </div>
       </div>
-    </div>
+    </AnalyticsSection>
   );
 }

@@ -1,3 +1,5 @@
+import AnalyticsSection from "./AnalyticsSection";
+
 type SymbolStats = {
   pnl: number;
   trades: number;
@@ -22,16 +24,11 @@ export default function SymbolPerformance({
   formatCurrency,
 }: Props) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-      <p className="text-sm text-gray-400">
-        Symbol Performance
-      </p>
-
-      <h2 className="mt-1 text-2xl font-bold">
-        Performance strumenti
-      </h2>
-
-      <div className="mt-6 space-y-4">
+    <AnalyticsSection
+      subtitle="Market intelligence"
+      title="Symbol Performance"
+    >
+      <div className="space-y-4">
         <div className="rounded-2xl bg-black/20 p-4">
           <p className="text-sm text-gray-500">
             Best Symbol
@@ -92,6 +89,6 @@ export default function SymbolPerformance({
           </div>
         </div>
       </div>
-    </div>
+    </AnalyticsSection>
   );
 }

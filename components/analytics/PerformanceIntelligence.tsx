@@ -1,3 +1,5 @@
+import AnalyticsSection from "./AnalyticsSection";
+
 type Props = {
   averageWin: string;
   averageLoss: string;
@@ -12,17 +14,10 @@ export default function PerformanceIntelligence({
   bestWinStreak,
 }: Props) {
   return (
-    <div className="mb-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-      <div className="mb-6">
-        <p className="text-sm text-gray-400">
-          Performance intelligence
-        </p>
-
-        <h2 className="mt-1 text-2xl font-bold">
-          Advanced Metrics
-        </h2>
-      </div>
-
+    <AnalyticsSection
+      subtitle="Performance intelligence"
+      title="Advanced Metrics"
+    >
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
           <p className="text-sm text-gray-400">
@@ -64,6 +59,6 @@ export default function PerformanceIntelligence({
           </h3>
         </div>
       </div>
-    </div>
+    </AnalyticsSection>
   );
 }
