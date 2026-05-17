@@ -5,6 +5,7 @@ import AnalyticsStatCard from "@/components/analytics/AnalyticsStatCard";
 import PerformanceIntelligence from "@/components/analytics/PerformanceIntelligence";
 import SymbolPerformance from "@/components/analytics/SymbolPerformance";
 import SessionPerformance from "@/components/analytics/SessionPerformance";
+import PerformanceInsights from "@/components/analytics/PerformanceInsights";
 
 import {
   BarChart3,
