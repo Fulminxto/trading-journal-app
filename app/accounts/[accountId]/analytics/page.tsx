@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import AnalyticsStatCard from "@/components/analytics/AnalyticsStatCard";
 import PerformanceIntelligence from "@/components/analytics/PerformanceIntelligence";
+import SymbolPerformance from "@/components/analytics/SymbolPerformance";
 
 import {
   BarChart3,
@@ -633,377 +634,135 @@ export default async function AnalyticsPage({
       />
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            Symbol Performance
-          </p>
+        <SymbolPerformance
+          bestSymbol={bestSymbol}
+          worstSymbol={worstSymbol}
+          mostTraded={mostTraded}
+          currency={account.currency}
+          formatCurrency={formatCurrency}
+        />
+      </div>
 
-          <h2 className="mt-1 text-2xl font-bold">
-            Performance strumenti
-          </h2>
+      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <p className="text-sm text-gray-400">
+          Trade Direction
+        </p>
 
-          <div className="mt-6 space-y-4">
-            <div className="rounded-2xl bg-black/20 p-4">
-              <p className="text-sm text-gray-500">
-                Best Symbol
-              </p>
+        <h2 className="mt-1 text-2xl font-bold">
+          Long vs Short
+        </h2>
 
-              <div className="mt-2 flex items-center justify-between">
-                <h3 className="text-xl font-bold text-green-400">
-                  {bestSymbol?.[0] || "-"}
-                </h3>
-
-                <p className="font-semibold text-green-400">
-                  {bestSymbol
-                    ? formatCurrency(
-                      bestSymbol[1].pnl,
-                      account.currency
-                    )
-                    : "-"}
-                </p>
-              </div>
-            </div>
-
-            <div className="rounded-2xl bg-black/20 p-4">
-              <p className="text-sm text-gray-500">
-                Worst Symbol
-              </p>
-
-              <div className="mt-2 flex items-center justify-between">
-                <h3 className="text-xl font-bold text-red-400">
-                  {worstSymbol?.[0] || "-"}
-                </h3>
-
-                <p className="font-semibold text-red-400">
-                  {worstSymbol
-                    ? formatCurrency(
-                      worstSymbol[1].pnl,
-                      account.currency
-                    )
-                    : "-"}
-                </p>
-              </div>
-            </div>
-
-            <div className="rounded-2xl bg-black/20 p-4">
-              <p className="text-sm text-gray-500">
-                Most Traded
-              </p>
-
-              <div className="mt-2 flex items-center justify-between">
-                <h3 className="text-xl font-bold text-white">
-                  {mostTraded?.[0] || "-"}
-                </h3>
-
-                <p className="font-semibold text-white">
-                  {mostTraded
-                    ? `${mostTraded[1].trades} trades`
-                    : "-"}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            Trade Direction
-          </p>
-
-          <h2 className="mt-1 text-2xl font-bold">
-            Long vs Short
-          </h2>
-
-          <div className="mt-6 space-y-4">
-            <div className="rounded-2xl bg-black/20 p-4">
-              <div className="flex items-center justify-between">
-                <p className="text-gray-400">
-                  Long Trades
-                </p>
-
-                <p className="font-bold text-white">
-                  {longTrades.length}
-                </p>
-              </div>
-
-              <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
-                <div
-                  className="h-full rounded-full bg-green-400"
-                  style={{
-                    width: `${Math.min(
-                      longWinRate,
-                      100
-                    )}%`,
-                  }}
-                />
-              </div>
-
-              <p className="mt-2 text-sm text-green-400">
-                {longWinRate.toFixed(2)}%
-                winrate
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-black/20 p-4">
-              <div className="flex items-center justify-between">
-                <p className="text-gray-400">
-                  Short Trades
-                </p>
-
-                <p className="font-bold text-white">
-                  {shortTrades.length}
-                </p>
-              </div>
-
-              <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
-                <div
-                  className="h-full rounded-full bg-red-400"
-                  style={{
-                    width: `${Math.min(
-                      shortWinRate,
-                      100
-                    )}%`,
-                  }}
-                />
-              </div>
-
-              <p className="mt-2 text-sm text-red-400">
-                {shortWinRate.toFixed(2)}%
-                winrate
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            Trade Results
-          </p>
-
-          <h2 className="mt-1 text-2xl font-bold">
-            Migliori risultati
-          </h2>
-
-          <div className="mt-6 space-y-4">
-            <div className="rounded-2xl bg-black/20 p-4">
-              <p className="text-sm text-gray-500">
-                Best Trade
-              </p>
-
-              <h3 className="mt-2 text-2xl font-bold text-green-400">
-                {formatCurrency(
-                  bestTrade,
-                  account.currency
-                )}
-              </h3>
-            </div>
-
-            <div className="rounded-2xl bg-black/20 p-4">
-              <p className="text-sm text-gray-500">
-                Worst Trade
-              </p>
-
-              <h3 className="mt-2 text-2xl font-bold text-red-400">
-                {formatCurrency(
-                  worstTrade,
-                  account.currency
-                )}
-              </h3>
-            </div>
-          </div>
-        </div>
-
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            Session Analytics
-          </p>
-
-          <h2 className="mt-1 text-2xl font-bold">
-            Session Performance
-          </h2>
-
-          <div className="mt-6 space-y-4">
-            {Object.entries(sessionStats).map(
-              ([session, stats]) => {
-                const wr =
-                  stats.trades > 0
-                    ? (
-                      (stats.wins /
-                        stats.trades) *
-                      100
-                    ).toFixed(0)
-                    : "0";
-
-                return (
-                  <div
-                    key={session}
-                    className="rounded-2xl border border-white/10 bg-black/20 p-4"
-                  >
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-bold text-white">
-                        {session}
-                      </h3>
-
-                      <div
-                        className={`rounded-xl px-3 py-1 text-xs font-bold ${Number(wr) >= 50
-                          ? "bg-green-500/10 text-green-400"
-                          : "bg-red-500/10 text-red-400"
-                          }`}
-                      >
-                        {wr}%
-                      </div>
-                    </div>
-
-                    <div className="mt-5 space-y-3">
-                      <div className="flex items-center justify-between">
-                        <p className="text-sm text-gray-500">
-                          Trades
-                        </p>
-
-                        <p className="font-bold text-white">
-                          {stats.trades}
-                        </p>
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <p className="text-sm text-gray-500">
-                          Wins
-                        </p>
-
-                        <p className="font-bold text-green-400">
-                          {stats.wins}
-                        </p>
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <p className="text-sm text-gray-500">
-                          PnL
-                        </p>
-
-                        <p
-                          className={`font-bold ${stats.pnl >= 0
-                            ? "text-green-400"
-                            : "text-red-400"
-                            }`}
-                        >
-                          {formatCurrency(
-                            stats.pnl,
-                            account.currency
-                          )}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              }
-            )}
-          </div>
-        </div>
-
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            Outcome Breakdown
-          </p>
-
-          <h2 className="mt-1 text-2xl font-bold">
-            Breakdown risultati
-          </h2>
-
-          <div className="mt-6 space-y-4">
-            <div className="flex items-center justify-between rounded-2xl bg-black/20 p-4">
+        <div className="mt-6 space-y-4">
+          <div className="rounded-2xl bg-black/20 p-4">
+            <div className="flex items-center justify-between">
               <p className="text-gray-400">
-                Wins
+                Long Trades
               </p>
 
-              <p className="font-bold text-green-400">
-                {wins.length}
+              <p className="font-bold text-white">
+                {longTrades.length}
               </p>
             </div>
 
-            <div className="flex items-center justify-between rounded-2xl bg-black/20 p-4">
+            <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
+              <div
+                className="h-full rounded-full bg-green-400"
+                style={{
+                  width: `${Math.min(
+                    longWinRate,
+                    100
+                  )}%`,
+                }}
+              />
+            </div>
+
+            <p className="mt-2 text-sm text-green-400">
+              {longWinRate.toFixed(2)}%
+              winrate
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-black/20 p-4">
+            <div className="flex items-center justify-between">
               <p className="text-gray-400">
-                Losses
+                Short Trades
               </p>
 
-              <p className="font-bold text-red-400">
-                {losses.length}
+              <p className="font-bold text-white">
+                {shortTrades.length}
               </p>
             </div>
 
-            <div className="flex items-center justify-between rounded-2xl bg-black/20 p-4">
-              <p className="text-gray-400">
-                Break Even
-              </p>
-
-              <p className="font-bold text-yellow-400">
-                {trades.filter(
-                  (trade) =>
-                    trade.outcome === "be"
-                ).length}
-              </p>
+            <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
+              <div
+                className="h-full rounded-full bg-red-400"
+                style={{
+                  width: `${Math.min(
+                    shortWinRate,
+                    100
+                  )}%`,
+                }}
+              />
             </div>
+
+            <p className="mt-2 text-sm text-red-400">
+              {shortWinRate.toFixed(2)}%
+              winrate
+            </p>
           </div>
         </div>
+      </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
-          <p className="text-sm text-gray-400">
-            Mistakes Analytics
-          </p>
+      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <p className="text-sm text-gray-400">
+          Trade Results
+        </p>
 
-          <h2 className="mt-1 text-2xl font-bold">
-            Errori ricorrenti
-          </h2>
+        <h2 className="mt-1 text-2xl font-bold">
+          Migliori risultati
+        </h2>
 
-          <div className="mt-6 space-y-4">
-            {Object.entries(mistakesStats).length === 0 ? (
-              <p className="text-sm text-gray-500">
-                Nessun errore registrato nei trade.
-              </p>
-            ) : (
-              Object.entries(mistakesStats)
-                .sort((a, b) => b[1].count - a[1].count)
-                .map(([mistake, stats]) => (
-                  <div
-                    key={mistake}
-                    className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/20 p-4 md:flex-row md:items-center md:justify-between"
-                  >
-                    <div>
-                      <h3 className="font-bold text-white">
-                        {mistake}
-                      </h3>
+        <div className="mt-6 space-y-4">
+          <div className="rounded-2xl bg-black/20 p-4">
+            <p className="text-sm text-gray-500">
+              Best Trade
+            </p>
 
-                      <p className="mt-1 text-sm text-gray-500">
-                        Ripetuto {stats.count} volte
-                      </p>
-                    </div>
+            <h3 className="mt-2 text-2xl font-bold text-green-400">
+              {formatCurrency(
+                bestTrade,
+                account.currency
+              )}
+            </h3>
+          </div>
 
-                    <p
-                      className={`font-bold ${stats.pnl >= 0
-                        ? "text-green-400"
-                        : "text-red-400"
-                        }`}
-                    >
-                      {formatCurrency(stats.pnl, account.currency)}
-                    </p>
-                  </div>
-                ))
-            )}
+          <div className="rounded-2xl bg-black/20 p-4">
+            <p className="text-sm text-gray-500">
+              Worst Trade
+            </p>
+
+            <h3 className="mt-2 text-2xl font-bold text-red-400">
+              {formatCurrency(
+                worstTrade,
+                account.currency
+              )}
+            </h3>
           </div>
         </div>
+      </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
-          <p className="text-sm text-gray-400">
-            Setup Quality
-          </p>
+      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <p className="text-sm text-gray-400">
+          Session Analytics
+        </p>
 
-          <h2 className="mt-1 text-2xl font-bold">
-            Setup Performance
-          </h2>
+        <h2 className="mt-1 text-2xl font-bold">
+          Session Performance
+        </h2>
 
-          <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
-            {Object.entries(
-              setupQualityStats
-            ).map(([level, stats]) => {
+        <div className="mt-6 space-y-4">
+          {Object.entries(sessionStats).map(
+            ([session, stats]) => {
               const wr =
                 stats.trades > 0
                   ? (
@@ -1015,12 +774,12 @@ export default async function AnalyticsPage({
 
               return (
                 <div
-                  key={level}
-                  className="rounded-2xl border border-white/10 bg-black/20 p-5"
+                  key={session}
+                  className="rounded-2xl border border-white/10 bg-black/20 p-4"
                 >
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-bold capitalize text-white">
-                      {level}
+                    <h3 className="text-lg font-bold text-white">
+                      {session}
                     </h3>
 
                     <div
@@ -1074,197 +833,233 @@ export default async function AnalyticsPage({
                   </div>
                 </div>
               );
-            })}
-          </div>
+            }
+          )}
         </div>
+      </div>
 
-        {isSharedAccount && (
-          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
-            <p className="text-sm text-gray-400">
-              Team Analytics
+      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <p className="text-sm text-gray-400">
+          Outcome Breakdown
+        </p>
+
+        <h2 className="mt-1 text-2xl font-bold">
+          Breakdown risultati
+        </h2>
+
+        <div className="mt-6 space-y-4">
+          <div className="flex items-center justify-between rounded-2xl bg-black/20 p-4">
+            <p className="text-gray-400">
+              Wins
             </p>
 
-            <h2 className="mt-1 text-2xl font-bold">
-              Trader Leaderboard
-            </h2>
-
-            <div className="mt-6 space-y-4">
-              {Object.values(traderStats)
-                .sort((a, b) => b.pnl - a.pnl)
-                .map((trader, index) => {
-                  const wr =
-                    trader.trades > 0
-                      ? (
-                        (trader.wins /
-                          trader.trades) *
-                        100
-                      ).toFixed(0)
-                      : "0";
-
-                  return (
-                    <div
-                      key={trader.name}
-                      className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-black/20 p-5 md:flex-row md:items-center md:justify-between"
-                    >
-                      <div>
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-green-500/10 font-bold text-green-400">
-                            #{index + 1}
-                          </div>
-
-                          <div>
-                            <h3 className="text-lg font-bold text-white">
-                              {trader.name}
-                            </h3>
-
-                            <p className="text-sm text-gray-500">
-                              {trader.trades} trades
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex gap-6">
-                        <div>
-                          <p className="text-xs text-gray-500">
-                            WR
-                          </p>
-
-                          <p className="font-bold text-white">
-                            {wr}%
-                          </p>
-                        </div>
-
-                        <div>
-                          <p className="text-xs text-gray-500">
-                            Wins
-                          </p>
-
-                          <p className="font-bold text-green-400">
-                            {trader.wins}
-                          </p>
-                        </div>
-
-                        <div>
-                          <p className="text-xs text-gray-500">
-                            PnL
-                          </p>
-
-                          <p
-                            className={`font-bold ${trader.pnl >= 0
-                              ? "text-green-400"
-                              : "text-red-400"
-                              }`}
-                          >
-                            {formatCurrency(
-                              trader.pnl,
-                              account.currency
-                            )}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-            </div>
+            <p className="font-bold text-green-400">
+              {wins.length}
+            </p>
           </div>
-        )}
 
+          <div className="flex items-center justify-between rounded-2xl bg-black/20 p-4">
+            <p className="text-gray-400">
+              Losses
+            </p>
+
+            <p className="font-bold text-red-400">
+              {losses.length}
+            </p>
+          </div>
+
+          <div className="flex items-center justify-between rounded-2xl bg-black/20 p-4">
+            <p className="text-gray-400">
+              Break Even
+            </p>
+
+            <p className="font-bold text-yellow-400">
+              {trades.filter(
+                (trade) =>
+                  trade.outcome === "be"
+              ).length}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
+        <p className="text-sm text-gray-400">
+          Mistakes Analytics
+        </p>
+
+        <h2 className="mt-1 text-2xl font-bold">
+          Errori ricorrenti
+        </h2>
+
+        <div className="mt-6 space-y-4">
+          {Object.entries(mistakesStats).length === 0 ? (
+            <p className="text-sm text-gray-500">
+              Nessun errore registrato nei trade.
+            </p>
+          ) : (
+            Object.entries(mistakesStats)
+              .sort((a, b) => b[1].count - a[1].count)
+              .map(([mistake, stats]) => (
+                <div
+                  key={mistake}
+                  className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/20 p-4 md:flex-row md:items-center md:justify-between"
+                >
+                  <div>
+                    <h3 className="font-bold text-white">
+                      {mistake}
+                    </h3>
+
+                    <p className="mt-1 text-sm text-gray-500">
+                      Ripetuto {stats.count} volte
+                    </p>
+                  </div>
+
+                  <p
+                    className={`font-bold ${stats.pnl >= 0
+                      ? "text-green-400"
+                      : "text-red-400"
+                      }`}
+                  >
+                    {formatCurrency(stats.pnl, account.currency)}
+                  </p>
+                </div>
+              ))
+          )}
+        </div>
+      </div>
+
+      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
+        <p className="text-sm text-gray-400">
+          Setup Quality
+        </p>
+
+        <h2 className="mt-1 text-2xl font-bold">
+          Setup Performance
+        </h2>
+
+        <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+          {Object.entries(
+            setupQualityStats
+          ).map(([level, stats]) => {
+            const wr =
+              stats.trades > 0
+                ? (
+                  (stats.wins /
+                    stats.trades) *
+                  100
+                ).toFixed(0)
+                : "0";
+
+            return (
+              <div
+                key={level}
+                className="rounded-2xl border border-white/10 bg-black/20 p-5"
+              >
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-bold capitalize text-white">
+                    {level}
+                  </h3>
+
+                  <div
+                    className={`rounded-xl px-3 py-1 text-xs font-bold ${Number(wr) >= 50
+                      ? "bg-green-500/10 text-green-400"
+                      : "bg-red-500/10 text-red-400"
+                      }`}
+                  >
+                    {wr}%
+                  </div>
+                </div>
+
+                <div className="mt-5 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm text-gray-500">
+                      Trades
+                    </p>
+
+                    <p className="font-bold text-white">
+                      {stats.trades}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm text-gray-500">
+                      Wins
+                    </p>
+
+                    <p className="font-bold text-green-400">
+                      {stats.wins}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm text-gray-500">
+                      PnL
+                    </p>
+
+                    <p
+                      className={`font-bold ${stats.pnl >= 0
+                        ? "text-green-400"
+                        : "text-red-400"
+                        }`}
+                    >
+                      {formatCurrency(
+                        stats.pnl,
+                        account.currency
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {isSharedAccount && (
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
           <p className="text-sm text-gray-400">
-            Monthly Performance
+            Team Analytics
           </p>
 
           <h2 className="mt-1 text-2xl font-bold">
-            Monthly Dashboard
+            Trader Leaderboard
           </h2>
 
-          <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <p className="text-sm text-gray-500">
-                Best Month
-              </p>
-
-              <h3 className="mt-2 text-lg font-bold text-green-400">
-                {bestMonth?.[0] || "-"}
-              </h3>
-
-              <p className="mt-1 text-sm text-green-400">
-                {bestMonth
-                  ? formatCurrency(
-                    bestMonth[1].pnl,
-                    account.currency
-                  )
-                  : "-"}
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <p className="text-sm text-gray-500">
-                Worst Month
-              </p>
-
-              <h3 className="mt-2 text-lg font-bold text-red-400">
-                {worstMonth?.[0] || "-"}
-              </h3>
-
-              <p className="mt-1 text-sm text-red-400">
-                {worstMonth
-                  ? formatCurrency(
-                    worstMonth[1].pnl,
-                    account.currency
-                  )
-                  : "-"}
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <p className="text-sm text-gray-500">
-                Green Months
-              </p>
-
-              <h3 className="mt-2 text-2xl font-bold text-green-400">
-                {greenMonths}
-              </h3>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <p className="text-sm text-gray-500">
-                Red Months
-              </p>
-
-              <h3 className="mt-2 text-2xl font-bold text-red-400">
-                {redMonths}
-              </h3>
-            </div>
-          </div>
-
           <div className="mt-6 space-y-4">
-            {Object.entries(monthlyStats)
-              .reverse()
-              .map(([month, stats]) => {
+            {Object.values(traderStats)
+              .sort((a, b) => b.pnl - a.pnl)
+              .map((trader, index) => {
                 const wr =
-                  stats.trades > 0
+                  trader.trades > 0
                     ? (
-                      (stats.wins /
-                        stats.trades) *
+                      (trader.wins /
+                        trader.trades) *
                       100
                     ).toFixed(0)
                     : "0";
 
                 return (
                   <div
-                    key={month}
-                    className="card-hover flex flex-col gap-4 rounded-2xl border border-white/10 bg-black/20 p-5 md:flex-row md:items-center md:justify-between"
+                    key={trader.name}
+                    className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-black/20 p-5 md:flex-row md:items-center md:justify-between"
                   >
                     <div>
-                      <h3 className="text-lg font-bold text-white">
-                        {month}
-                      </h3>
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-green-500/10 font-bold text-green-400">
+                          #{index + 1}
+                        </div>
 
-                      <p className="mt-1 text-sm text-gray-500">
-                        {stats.trades} trades
-                      </p>
+                        <div>
+                          <h3 className="text-lg font-bold text-white">
+                            {trader.name}
+                          </h3>
+
+                          <p className="text-sm text-gray-500">
+                            {trader.trades} trades
+                          </p>
+                        </div>
+                      </div>
                     </div>
 
                     <div className="flex gap-6">
@@ -1273,12 +1068,7 @@ export default async function AnalyticsPage({
                           WR
                         </p>
 
-                        <p
-                          className={`font-bold ${Number(wr) >= 50
-                            ? "text-green-400"
-                            : "text-red-400"
-                            }`}
-                        >
+                        <p className="font-bold text-white">
                           {wr}%
                         </p>
                       </div>
@@ -1289,7 +1079,7 @@ export default async function AnalyticsPage({
                         </p>
 
                         <p className="font-bold text-green-400">
-                          {stats.wins}
+                          {trader.wins}
                         </p>
                       </div>
 
@@ -1299,13 +1089,13 @@ export default async function AnalyticsPage({
                         </p>
 
                         <p
-                          className={`font-bold ${stats.pnl >= 0
+                          className={`font-bold ${trader.pnl >= 0
                             ? "text-green-400"
                             : "text-red-400"
                             }`}
                         >
                           {formatCurrency(
-                            stats.pnl,
+                            trader.pnl,
                             account.currency
                           )}
                         </p>
@@ -1316,89 +1106,123 @@ export default async function AnalyticsPage({
               })}
           </div>
         </div>
+      )}
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
-          <p className="text-sm text-gray-400">
-            AI Insights
-          </p>
+      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
+        <p className="text-sm text-gray-400">
+          Monthly Performance
+        </p>
 
-          <h2 className="mt-1 text-2xl font-bold">
-            Performance Insights
-          </h2>
+        <h2 className="mt-1 text-2xl font-bold">
+          Monthly Dashboard
+        </h2>
 
-          <div className="mt-6 space-y-4">
-            {insights.length === 0 ? (
-              <p className="text-sm text-gray-500">
-                Non ci sono ancora abbastanza dati.
-              </p>
-            ) : (
-              insights.map((insight) => (
-                <div
-                  key={insight}
-                  className="rounded-2xl border border-white/10 bg-black/20 p-4"
-                >
-                  <p className="text-sm leading-6 text-gray-300">
-                    {insight}
-                  </p>
-                </div>
-              ))
-            )}
+        <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+            <p className="text-sm text-gray-500">
+              Best Month
+            </p>
+
+            <h3 className="mt-2 text-lg font-bold text-green-400">
+              {bestMonth?.[0] || "-"}
+            </h3>
+
+            <p className="mt-1 text-sm text-green-400">
+              {bestMonth
+                ? formatCurrency(
+                  bestMonth[1].pnl,
+                  account.currency
+                )
+                : "-"}
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+            <p className="text-sm text-gray-500">
+              Worst Month
+            </p>
+
+            <h3 className="mt-2 text-lg font-bold text-red-400">
+              {worstMonth?.[0] || "-"}
+            </h3>
+
+            <p className="mt-1 text-sm text-red-400">
+              {worstMonth
+                ? formatCurrency(
+                  worstMonth[1].pnl,
+                  account.currency
+                )
+                : "-"}
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+            <p className="text-sm text-gray-500">
+              Green Months
+            </p>
+
+            <h3 className="mt-2 text-2xl font-bold text-green-400">
+              {greenMonths}
+            </h3>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+            <p className="text-sm text-gray-500">
+              Red Months
+            </p>
+
+            <h3 className="mt-2 text-2xl font-bold text-red-400">
+              {redMonths}
+            </h3>
           </div>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
-          <p className="text-sm text-gray-400">
-            Trading Psychology
-          </p>
-
-          <h2 className="mt-1 text-2xl font-bold">
-            Emotional Performance
-          </h2>
-
-          <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {Object.entries(
-              emotionalStats
-            ).map(([state, stats]) => {
-              const stateWinRate =
+        <div className="mt-6 space-y-4">
+          {Object.entries(monthlyStats)
+            .reverse()
+            .map(([month, stats]) => {
+              const wr =
                 stats.trades > 0
-                  ? (stats.wins /
-                    stats.trades) *
-                  100
-                  : 0;
+                  ? (
+                    (stats.wins /
+                      stats.trades) *
+                    100
+                  ).toFixed(0)
+                  : "0";
 
               return (
                 <div
-                  key={state}
-                  className="rounded-2xl border border-white/10 bg-black/20 p-5"
+                  key={month}
+                  className="card-hover flex flex-col gap-4 rounded-2xl border border-white/10 bg-black/20 p-5 md:flex-row md:items-center md:justify-between"
                 >
-                  <div className="flex items-center justify-between">
+                  <div>
                     <h3 className="text-lg font-bold text-white">
-                      {state}
+                      {month}
                     </h3>
 
-                    <div
-                      className={`rounded-xl px-3 py-1 text-xs font-bold ${stateWinRate >= 50
-                        ? "bg-green-500/10 text-green-400"
-                        : "bg-red-500/10 text-red-400"
-                        }`}
-                    >
-                      {stateWinRate.toFixed(0)}%
-                    </div>
+                    <p className="mt-1 text-sm text-gray-500">
+                      {stats.trades} trades
+                    </p>
                   </div>
 
-                  <div className="mt-5 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm text-gray-500">
-                        Trades
+                  <div className="flex gap-6">
+                    <div>
+                      <p className="text-xs text-gray-500">
+                        WR
                       </p>
 
-                      <p className="font-bold text-white">
-                        {stats.trades}
+                      <p
+                        className={`font-bold ${Number(wr) >= 50
+                          ? "text-green-400"
+                          : "text-red-400"
+                          }`}
+                      >
+                        {wr}%
                       </p>
                     </div>
 
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm text-gray-500">
+                    <div>
+                      <p className="text-xs text-gray-500">
                         Wins
                       </p>
 
@@ -1407,9 +1231,9 @@ export default async function AnalyticsPage({
                       </p>
                     </div>
 
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm text-gray-500">
-                        Total PnL
+                    <div>
+                      <p className="text-xs text-gray-500">
+                        PnL
                       </p>
 
                       <p
@@ -1428,9 +1252,121 @@ export default async function AnalyticsPage({
                 </div>
               );
             })}
-          </div>
         </div>
+      </div>
 
+      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
+        <p className="text-sm text-gray-400">
+          AI Insights
+        </p>
+
+        <h2 className="mt-1 text-2xl font-bold">
+          Performance Insights
+        </h2>
+
+        <div className="mt-6 space-y-4">
+          {insights.length === 0 ? (
+            <p className="text-sm text-gray-500">
+              Non ci sono ancora abbastanza dati.
+            </p>
+          ) : (
+            insights.map((insight) => (
+              <div
+                key={insight}
+                className="rounded-2xl border border-white/10 bg-black/20 p-4"
+              >
+                <p className="text-sm leading-6 text-gray-300">
+                  {insight}
+                </p>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
+        <p className="text-sm text-gray-400">
+          Trading Psychology
+        </p>
+
+        <h2 className="mt-1 text-2xl font-bold">
+          Emotional Performance
+        </h2>
+
+        <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {Object.entries(
+            emotionalStats
+          ).map(([state, stats]) => {
+            const stateWinRate =
+              stats.trades > 0
+                ? (stats.wins /
+                  stats.trades) *
+                100
+                : 0;
+
+            return (
+              <div
+                key={state}
+                className="rounded-2xl border border-white/10 bg-black/20 p-5"
+              >
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-bold text-white">
+                    {state}
+                  </h3>
+
+                  <div
+                    className={`rounded-xl px-3 py-1 text-xs font-bold ${stateWinRate >= 50
+                      ? "bg-green-500/10 text-green-400"
+                      : "bg-red-500/10 text-red-400"
+                      }`}
+                  >
+                    {stateWinRate.toFixed(0)}%
+                  </div>
+                </div>
+
+                <div className="mt-5 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm text-gray-500">
+                      Trades
+                    </p>
+
+                    <p className="font-bold text-white">
+                      {stats.trades}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm text-gray-500">
+                      Wins
+                    </p>
+
+                    <p className="font-bold text-green-400">
+                      {stats.wins}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm text-gray-500">
+                      Total PnL
+                    </p>
+
+                    <p
+                      className={`font-bold ${stats.pnl >= 0
+                        ? "text-green-400"
+                        : "text-red-400"
+                        }`}
+                    >
+                      {formatCurrency(
+                        stats.pnl,
+                        account.currency
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
