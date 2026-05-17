@@ -14,16 +14,21 @@ model User {
 
   role          String   @default("USER")
 
-  name          String?
-  bio           String?
-  tradingStyle  String?
-  favoriteMarket String?
-  timezone      String?
+  name              String?
+  bio               String?
+  tradingStyle      String?
+  favoriteMarket    String?
+  timezone          String?
 
-  preferredSession String?
-  riskPerTrade     Float?
-  preferredBroker  String?
-  setupStyle       String?
+  preferredSession  String?
+  riskPerTrade      Float?
+  preferredBroker   String?
+  setupStyle        String?
+
+  defaultCurrency    String   @default("USD")
+  compactMode        Boolean  @default(false)
+  performanceBlur    Boolean  @default(false)
+  emailNotifications Boolean  @default(false)
 
   memberships   AccountMember[]
   createdTrades Trade[]
