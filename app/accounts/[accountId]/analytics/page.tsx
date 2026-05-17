@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import AnalyticsStatCard from "@/components/analytics/AnalyticsStatCard";
+import PerformanceIntelligence from "@/components/analytics/PerformanceIntelligence";
 
 import {
   BarChart3,
@@ -605,78 +606,31 @@ export default async function AnalyticsPage({
         ))}
       </div>
 
-      <div className="mb-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-        <div className="mb-6">
-          <p className="text-sm text-gray-400">
-            Performance intelligence
-          </p>
-
-          <h2 className="mt-1 text-2xl font-bold">
-            Advanced Metrics
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-sm text-gray-400">
-              Average Win
-            </p>
-
-            <h3 className="mt-2 text-2xl font-bold text-green-400">
-              {formatCurrency(
-                wins.reduce(
-                  (acc, trade) =>
-                    acc + (trade.resultUsd || 0),
-                  0
-                ) / Math.max(wins.length, 1),
-                account.currency
-              )}
-            </h3>
-          </div>
-
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-sm text-gray-400">
-              Average Loss
-            </p>
-
-            <h3 className="mt-2 text-2xl font-bold text-red-400">
-              {formatCurrency(
-                Math.abs(
-                  losses.reduce(
-                    (acc, trade) =>
-                      acc + (trade.resultUsd || 0),
-                    0
-                  ) / Math.max(losses.length, 1)
-                ),
-                account.currency
-              )}
-            </h3>
-          </div>
-
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-sm text-gray-400">
-              Best Win Streak
-            </p>
-
-            <h3 className="mt-2 text-2xl font-bold text-green-400">
-              {wins.length}
-            </h3>
-          </div>
-
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-sm text-gray-400">
-              Profit Factor
-            </p>
-
-            <h3 className="mt-2 text-2xl font-bold text-cyan-400">
-              {(
-                Math.abs(totalPnl) /
-                Math.max(losses.length, 1)
-              ).toFixed(2)}
-            </h3>
-          </div>
-        </div>
-      </div>
+      <PerformanceIntelligence
+        averageWin={formatCurrency(
+          wins.reduce(
+            (acc, trade) =>
+              acc + (trade.resultUsd || 0),
+            0
+          ) / Math.max(wins.length, 1),
+          account.currency
+        )}
+        averageLoss={formatCurrency(
+          Math.abs(
+            losses.reduce(
+              (acc, trade) =>
+                acc + (trade.resultUsd || 0),
+              0
+            ) / Math.max(losses.length, 1)
+          ),
+          account.currency
+        )}
+        profitFactor={(
+          Math.abs(totalPnl) /
+          Math.max(losses.length, 1)
+        ).toFixed(2)}
+        bestWinStreak={wins.length}
+      />
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
