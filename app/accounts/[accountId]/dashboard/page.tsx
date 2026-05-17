@@ -4,6 +4,17 @@ import { redirect } from "next/navigation";
 
 import EquityChart from "@/components/EquityChart";
 
+function formatCurrency(
+  value: number,
+  currency: string
+) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+    minimumFractionDigits: 2,
+  }).format(value);
+}
+
 export default async function DashboardPage({
   params,
 }: {
@@ -51,6 +62,8 @@ export default async function DashboardPage({
   const account =
     membership.tradingAccount;
 
+  const currency = account.currency;
+
   const totalTrades = trades.length;
 
   const wins = trades.filter(
@@ -74,7 +87,7 @@ export default async function DashboardPage({
   const currentEquity =
     trades.length > 0
       ? trades[trades.length - 1].equity ||
-        account.initialBalance
+      account.initialBalance
       : account.initialBalance;
 
   const currentProfitPercent =
@@ -86,7 +99,7 @@ export default async function DashboardPage({
   const remainingToTarget =
     account.profitTarget
       ? account.profitTarget -
-        currentProfitPercent
+      currentProfitPercent
       : null;
 
   const winRate =
@@ -97,64 +110,64 @@ export default async function DashboardPage({
   const averageWin =
     wins > 0
       ? trades
-          .filter(
-            (trade) =>
-              trade.outcome ===
-              "win"
-          )
-          .reduce(
-            (acc, trade) =>
-              acc +
-              (trade.resultUsd || 0),
-            0
-          ) / wins
+        .filter(
+          (trade) =>
+            trade.outcome ===
+            "win"
+        )
+        .reduce(
+          (acc, trade) =>
+            acc +
+            (trade.resultUsd || 0),
+          0
+        ) / wins
       : 0;
 
   const averageLoss =
     losses > 0
       ? trades
-          .filter(
-            (trade) =>
-              trade.outcome ===
-              "loss"
-          )
-          .reduce(
-            (acc, trade) =>
-              acc +
-              (trade.resultUsd || 0),
-            0
-          ) / losses
+        .filter(
+          (trade) =>
+            trade.outcome ===
+            "loss"
+        )
+        .reduce(
+          (acc, trade) =>
+            acc +
+            (trade.resultUsd || 0),
+          0
+        ) / losses
       : 0;
 
   const bestTrade =
     trades.length > 0
       ? Math.max(
-          ...trades.map(
-            (trade) =>
-              trade.resultUsd || 0
-          )
+        ...trades.map(
+          (trade) =>
+            trade.resultUsd || 0
         )
+      )
       : 0;
 
   const worstTrade =
     trades.length > 0
       ? Math.min(
-          ...trades.map(
-            (trade) =>
-              trade.resultUsd || 0
-          )
+        ...trades.map(
+          (trade) =>
+            trade.resultUsd || 0
         )
+      )
       : 0;
 
   const maxDrawdown =
     trades.length > 0
       ? Math.min(
-          ...trades.map(
-            (trade) =>
-              trade.drawdownPercent ||
-              0
-          )
+        ...trades.map(
+          (trade) =>
+            trade.drawdownPercent ||
+            0
         )
+      )
       : 0;
 
   const chartData = trades.map((trade) => ({
@@ -173,7 +186,10 @@ export default async function DashboardPage({
   const stats = [
     {
       label: "Current Equity",
-      value: `${currentEquity.toFixed(2)} $`,
+      value: formatCurrency(
+        currentEquity,
+        currency
+      ),
       tone: "text-white",
     },
 
@@ -221,7 +237,10 @@ export default async function DashboardPage({
 
     {
       label: "Total PnL",
-      value: `${totalPnl.toFixed(2)} $`,
+      value: formatCurrency(
+        totalPnl,
+        currency
+      ),
       tone:
         totalPnl >= 0
           ? "text-green-400"
@@ -230,25 +249,37 @@ export default async function DashboardPage({
 
     {
       label: "Average Win",
-      value: `${averageWin.toFixed(2)} $`,
+      value: formatCurrency(
+        averageWin,
+        currency
+      ),
       tone: "text-green-400",
     },
 
     {
       label: "Average Loss",
-      value: `${averageLoss.toFixed(2)} $`,
+      value: formatCurrency(
+        averageLoss,
+        currency
+      ),
       tone: "text-red-400",
     },
 
     {
       label: "Best Trade",
-      value: `${bestTrade.toFixed(2)} $`,
+      value: formatCurrency(
+        bestTrade,
+        currency
+      ),
       tone: "text-green-400",
     },
 
     {
       label: "Worst Trade",
-      value: `${worstTrade.toFixed(2)} $`,
+      value: formatCurrency(
+        worstTrade,
+        currency
+      ),
       tone: "text-red-400",
     },
 
@@ -263,12 +294,12 @@ export default async function DashboardPage({
       value:
         remainingToTarget !== null
           ? `${remainingToTarget.toFixed(
-              2
-            )}%`
+            2
+          )}%`
           : "-",
       tone:
         remainingToTarget !== null &&
-        remainingToTarget <= 0
+          remainingToTarget <= 0
           ? "text-green-400"
           : "text-yellow-400",
     },
