@@ -2,6 +2,14 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
+function formatCurrency(value: number, currency: string) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+    minimumFractionDigits: 2,
+  }).format(value);
+}
+
 export default async function EquityPage({
   params,
 }: {
@@ -41,10 +49,13 @@ export default async function EquityPage({
   const initialBalance =
     membership.tradingAccount.initialBalance;
 
+  const currency =
+    membership.tradingAccount.currency;
+
   const currentEquity =
     trades.length > 0
       ? trades[trades.length - 1].equity ||
-        initialBalance
+      initialBalance
       : initialBalance;
 
   const totalPnl = trades.reduce(
@@ -64,11 +75,11 @@ export default async function EquityPage({
   const maxDrawdown =
     trades.length > 0
       ? Math.min(
-          ...trades.map(
-            (trade) =>
-              trade.drawdownPercent || 0
-          )
+        ...trades.map(
+          (trade) =>
+            trade.drawdownPercent || 0
         )
+      )
       : 0;
 
   return (
@@ -90,7 +101,7 @@ export default async function EquityPage({
           </p>
 
           <h2 className="mt-2 text-3xl font-bold">
-            {currentEquity.toFixed(2)}
+            {formatCurrency(currentEquity, currency)}
           </h2>
         </div>
 
@@ -100,13 +111,12 @@ export default async function EquityPage({
           </p>
 
           <h2
-            className={`mt-2 text-3xl font-bold ${
-              totalPnl >= 0
-                ? "text-green-400"
-                : "text-red-400"
-            }`}
+            className={`mt-2 text-3xl font-bold ${totalPnl >= 0
+              ? "text-green-400"
+              : "text-red-400"
+              }`}
           >
-            {totalPnl.toFixed(2)}
+            {formatCurrency(totalPnl, currency)}
           </h2>
         </div>
 
@@ -165,10 +175,10 @@ export default async function EquityPage({
                 </td>
 
                 <td className="p-4 font-semibold">
-                  {(
-                    trade.equity ||
-                    initialBalance
-                  ).toFixed(2)}
+                  {formatCurrency(
+                    trade.equity || initialBalance,
+                    currency
+                  )}
                 </td>
 
                 <td
@@ -178,7 +188,10 @@ export default async function EquityPage({
                       : "p-4 text-red-400"
                   }
                 >
-                  {(trade.resultUsd || 0).toFixed(2)}
+                  {formatCurrency(
+                    trade.resultUsd || 0,
+                    currency
+                  )}
                 </td>
 
                 <td
