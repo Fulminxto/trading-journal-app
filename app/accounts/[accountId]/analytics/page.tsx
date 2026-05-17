@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import AnalyticsStatCard from "@/components/analytics/AnalyticsStatCard";
 
 import {
   BarChart3,
@@ -593,33 +594,15 @@ export default async function AnalyticsPage({
       </div>
 
       <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {cards.map((card) => {
-          const Icon = card.icon;
-
-          return (
-            <div
-              key={card.label}
-              className="rounded-3xl border border-white/10 bg-white/[0.03] p-6"
-            >
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-gray-400">
-                  {card.label}
-                </p>
-
-                <Icon
-                  size={20}
-                  className="text-gray-500"
-                />
-              </div>
-
-              <h2
-                className={`mt-4 text-3xl font-bold ${card.tone}`}
-              >
-                {card.value}
-              </h2>
-            </div>
-          );
-        })}
+        {cards.map((card) => (
+          <AnalyticsStatCard
+            key={card.label}
+            label={card.label}
+            value={card.value}
+            tone={card.tone}
+            icon={card.icon}
+          />
+        ))}
       </div>
 
       <div className="mb-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6">
