@@ -13,6 +13,10 @@ type AuthUser = {
 export const authOptions: NextAuthOptions = {
   debug: true,
 
+  pages: {
+    signIn: "/login",
+  },
+
   session: {
     strategy: "jwt",
     maxAge: 60 * 60 * 24,

@@ -23,10 +23,10 @@ export default async function RootLayout({
 
   const currentUser = session?.user?.id
     ? await prisma.user.findUnique({
-      where: {
-        id: session.user.id,
-      },
-    })
+        where: {
+          id: session.user.id,
+        },
+      })
     : null;
 
   return (
@@ -39,52 +39,47 @@ export default async function RootLayout({
           theme="dark"
         />
 
-        <AppShell
-          user={
-            currentUser
-              ? {
-                name: currentUser.name,
-                username:
-                  currentUser.username,
-                role: currentUser.role,
-              }
-              : null
-          }
-        >
-          <div className="flex min-h-screen flex-col">
-            <main className="flex-1">
-              {children}
-            </main>
+        {!currentUser ? (
+          children
+        ) : (
+          <AppShell
+            user={{
+              name: currentUser.name,
+              username: currentUser.username,
+              role: currentUser.role,
+            }}
+          >
+            <div className="flex min-h-screen flex-col">
+              <main className="flex-1">
+                {children}
+              </main>
 
-            <footer className="border-t border-white/10 bg-black/20 px-6 py-5">
-              <div className="flex flex-col gap-2 text-center text-xs text-gray-500 lg:flex-row lg:items-center lg:justify-between lg:text-left">
-                <div>
-                  <p>
-                    VOLTIS © 2026
-                  </p>
+              <footer className="border-t border-white/10 bg-black/20 px-6 py-5">
+                <div className="flex flex-col gap-2 text-center text-xs text-gray-500 lg:flex-row lg:items-center lg:justify-between lg:text-left">
+                  <div>
+                    <p>VOLTIS © 2026</p>
 
-                  <p className="mt-1 text-gray-600">
-                    All rights reserved.
-                  </p>
+                    <p className="mt-1 text-gray-600">
+                      All rights reserved.
+                    </p>
+                  </div>
+
+                  <div className="max-w-xl">
+                    <p>
+                      Performance operating system
+                      built for disciplined traders.
+                    </p>
+
+                    <p className="mt-1 text-gray-600">
+                      Unauthorized duplication or
+                      redistribution is prohibited.
+                    </p>
+                  </div>
                 </div>
-
-                <div className="max-w-xl">
-                  <p>
-                    Performance operating system
-                    built for disciplined traders.
-                  </p>
-
-                  <p className="mt-1 text-gray-600">
-                    Unauthorized
-                    duplication or
-                    redistribution is
-                    prohibited.
-                  </p>
-                </div>
-              </div>
-            </footer>
-          </div>
-        </AppShell>
+              </footer>
+            </div>
+          </AppShell>
+        )}
       </body>
     </html>
   );
