@@ -1,17 +1,38 @@
 "use client";
 
 import { Eye, EyeOff } from "lucide-react";
+import { signIn } from "next-auth/react";
 import { useState } from "react";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleSubmit(
+    event: React.FormEvent<HTMLFormElement>
+  ) {
+    event.preventDefault();
+    setError("");
+
+    const formData = new FormData(event.currentTarget);
+
+    const result = await signIn("credentials", {
+      username: formData.get("username"),
+      password: formData.get("password"),
+      redirect: false,
+      callbackUrl: "/accounts",
+    });
+
+    if (result?.error) {
+      setError("Username o password non corretti.");
+      return;
+    }
+
+    window.location.href = "/accounts";
+  }
 
   return (
-    <form
-      action="/api/auth/callback/credentials"
-      method="POST"
-      className="space-y-4"
-    >
+    <form onSubmit={handleSubmit} className="space-y-4">
       <input
         name="username"
         placeholder="Username"
@@ -33,13 +54,15 @@ export default function LoginForm() {
           onClick={() => setShowPassword(!showPassword)}
           className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 transition hover:text-white"
         >
-          {showPassword ? (
-            <EyeOff size={18} />
-          ) : (
-            <Eye size={18} />
-          )}
+          {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
         </button>
       </div>
+
+      {error && (
+        <p className="rounded-2xl border border-red-500/10 bg-red-500/10 p-3 text-sm text-red-400">
+          {error}
+        </p>
+      )}
 
       <button
         type="submit"
