@@ -1,3 +1,5 @@
+import AnalyticsSection from "./AnalyticsSection";
+
 type Props = {
   winRate: number;
   averageRR: number;
@@ -14,6 +16,11 @@ export default function PerformanceInsights({
   const insights = [
     {
       title: "Performance Health",
+      label: totalPnl >= 0 ? "Positive" : "Defensive",
+      tone:
+        totalPnl >= 0
+          ? "text-green-400"
+          : "text-red-400",
       text:
         totalPnl >= 0
           ? "Il conto è in fase positiva. Mantieni focus su esecuzione e gestione rischio."
@@ -21,6 +28,11 @@ export default function PerformanceInsights({
     },
     {
       title: "Win Rate Quality",
+      label: winRate >= 50 ? "Stable" : "Review",
+      tone:
+        winRate >= 50
+          ? "text-cyan-400"
+          : "text-yellow-400",
       text:
         winRate >= 50
           ? "Il win rate è sopra la soglia base. Ora il focus è migliorare il rapporto rischio/rendimento."
@@ -28,6 +40,11 @@ export default function PerformanceInsights({
     },
     {
       title: "Risk Reward",
+      label: averageRR >= 1.5 ? "Healthy" : "Weak",
+      tone:
+        averageRR >= 1.5
+          ? "text-violet-400"
+          : "text-yellow-400",
       text:
         averageRR >= 1.5
           ? "Il rapporto rischio/rendimento è sano. Continua a proteggere questa metrica."
@@ -35,6 +52,10 @@ export default function PerformanceInsights({
     },
     {
       title: "Market Edge",
+      label: bestSymbol || "Pending",
+      tone: bestSymbol
+        ? "text-green-400"
+        : "text-gray-400",
       text: bestSymbol
         ? `${bestSymbol} sembra essere lo strumento con maggiore edge operativo.`
         : "Non ci sono ancora abbastanza dati per identificare un mercato dominante.",
@@ -42,31 +63,36 @@ export default function PerformanceInsights({
   ];
 
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
-      <p className="text-sm text-gray-400">
-        Performance insights
-      </p>
+    <div className="xl:col-span-2">
+      <AnalyticsSection
+        subtitle="Performance insights"
+        title="VOLTIS Intelligence"
+      >
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {insights.map((insight) => (
+            <div
+              key={insight.title}
+              className="group rounded-3xl border border-white/10 bg-black/20 p-5 transition-all duration-300 hover:border-cyan-500/20 hover:bg-white/[0.04]"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <p className="font-bold text-white">
+                  {insight.title}
+                </p>
 
-      <h2 className="mt-1 text-2xl font-bold">
-        VOLTIS Intelligence
-      </h2>
+                <span
+                  className={`rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-bold ${insight.tone}`}
+                >
+                  {insight.label}
+                </span>
+              </div>
 
-      <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-        {insights.map((insight) => (
-          <div
-            key={insight.title}
-            className="rounded-2xl border border-white/10 bg-black/20 p-5"
-          >
-            <p className="font-bold text-white">
-              {insight.title}
-            </p>
-
-            <p className="mt-2 text-sm leading-relaxed text-gray-400">
-              {insight.text}
-            </p>
-          </div>
-        ))}
-      </div>
+              <p className="mt-4 text-sm leading-relaxed text-gray-400">
+                {insight.text}
+              </p>
+            </div>
+          ))}
+        </div>
+      </AnalyticsSection>
     </div>
   );
 }
