@@ -47,26 +47,28 @@ export default function EquityChart({ data }: Props) {
 
   const mainColor = isPositive ? "#22c55e" : "#ef4444";
   const glowColor = isPositive
-    ? "rgba(34,197,94,0.18)"
-    : "rgba(239,68,68,0.18)";
+    ? "rgba(34,197,94,0.22)"
+    : "rgba(239,68,68,0.22)";
 
   return (
-    <div className="relative h-[360px] min-h-[360px] w-full min-w-0 overflow-hidden rounded-2xl bg-black/10 p-2">
+    <div className="relative h-[390px] min-h-[390px] w-full min-w-0 overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.03] p-4 backdrop-blur-xl">
       <div
-        className="pointer-events-none absolute inset-0 opacity-60 blur-3xl"
+        className="pointer-events-none absolute inset-0 opacity-80 blur-3xl"
         style={{
-          background: `radial-gradient(circle at 50% 20%, ${glowColor}, transparent 45%)`,
+          background: `radial-gradient(circle at 50% 10%, ${glowColor}, transparent 45%)`,
         }}
       />
 
-      <ResponsiveContainer width="100%" height={340}>
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(34,211,238,0.06),transparent_35%)]" />
+
+      <ResponsiveContainer width="100%" height={355}>
         <AreaChart
           data={data}
           margin={{
-            top: 18,
-            right: 18,
-            left: 0,
-            bottom: 8,
+            top: 20,
+            right: 22,
+            left: 4,
+            bottom: 10,
           }}
         >
           <defs>
@@ -77,53 +79,33 @@ export default function EquityChart({ data }: Props) {
               x2="0"
               y2="1"
             >
-              <stop
-                offset="0%"
-                stopColor={mainColor}
-                stopOpacity={0.28}
-              />
-
-              <stop
-                offset="65%"
-                stopColor={mainColor}
-                stopOpacity={0.08}
-              />
-
-              <stop
-                offset="100%"
-                stopColor={mainColor}
-                stopOpacity={0}
-              />
+              <stop offset="0%" stopColor={mainColor} stopOpacity={0.35} />
+              <stop offset="55%" stopColor={mainColor} stopOpacity={0.1} />
+              <stop offset="100%" stopColor={mainColor} stopOpacity={0} />
             </linearGradient>
           </defs>
 
           <CartesianGrid
-            strokeDasharray="4 8"
-            stroke="rgba(255,255,255,0.06)"
+            strokeDasharray="4 10"
+            stroke="rgba(255,255,255,0.07)"
             vertical={false}
           />
 
           <XAxis
             dataKey="date"
             stroke="#71717a"
-            tick={{
-              fontSize: 11,
-              fill: "#71717a",
-            }}
+            tick={{ fontSize: 11, fill: "#8b98ad" }}
             tickLine={false}
             axisLine={false}
-            dy={8}
+            dy={10}
           />
 
           <YAxis
             stroke="#71717a"
-            tick={{
-              fontSize: 11,
-              fill: "#71717a",
-            }}
+            tick={{ fontSize: 11, fill: "#8b98ad" }}
             tickLine={false}
             axisLine={false}
-            width={78}
+            width={82}
             tickFormatter={(value) =>
               formatMoney(Number(value))
             }
@@ -131,21 +113,21 @@ export default function EquityChart({ data }: Props) {
 
           <Tooltip
             cursor={{
-              stroke: "rgba(255,255,255,0.12)",
+              stroke: "rgba(34,211,238,0.25)",
               strokeWidth: 1,
             }}
             formatter={(value) => [
               formatMoney(Number(value)),
               "Equity",
             ]}
-            labelFormatter={(label) => `Data: ${label}`}
+            labelFormatter={(label) => `Date: ${label}`}
             contentStyle={{
-              backgroundColor: "rgba(7,16,24,0.95)",
-              border: "1px solid rgba(255,255,255,0.10)",
-              borderRadius: "18px",
+              backgroundColor: "rgba(7,11,20,0.94)",
+              border: "1px solid rgba(255,255,255,0.12)",
+              borderRadius: "20px",
               color: "white",
-              boxShadow: "0 20px 50px rgba(0,0,0,0.35)",
-              backdropFilter: "blur(16px)",
+              boxShadow: "0 24px 70px rgba(0,0,0,0.45)",
+              backdropFilter: "blur(18px)",
             }}
             labelStyle={{
               color: "#a1a1aa",
@@ -166,7 +148,7 @@ export default function EquityChart({ data }: Props) {
             type="monotone"
             dataKey="equity"
             stroke={mainColor}
-            strokeWidth={3}
+            strokeWidth={3.5}
             dot={false}
             activeDot={{
               r: 6,
