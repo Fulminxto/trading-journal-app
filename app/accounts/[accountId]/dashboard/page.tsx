@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 import EquityChart from "@/components/EquityChart";
+import DashboardHero from "@/components/dashboard/DashboardHero";
 
 function formatCurrency(
   value: number,
@@ -307,137 +308,151 @@ export default async function DashboardPage({
 
   return (
     <div>
-      <div className="mb-8">
-        <p className="text-sm text-gray-400">
-          Dashboard account
-        </p>
+        <DashboardHero
+          accountName={account.name}
+          currentEquity={formatCurrency(
+            currentEquity,
+            currency
+          )}
+          totalPnl={formatCurrency(
+            totalPnl,
+            currency
+          )}
+          winRate={`${winRate.toFixed(2)}%`}
+          totalTrades={totalTrades}
+        />
 
-        <h1 className="text-3xl font-bold sm:text-4xl">
-          {account.name}
-        </h1>
-      </div>
-
-      <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4">
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="mb-8">
           <p className="text-sm text-gray-400">
-            Account Type
+            Dashboard account
           </p>
 
-          <h2 className="mt-2 text-3xl font-bold">
-            {account.type}
-          </h2>
+          <h1 className="text-3xl font-bold sm:text-4xl">
+            {account.name}
+          </h1>
         </div>
 
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            Initial Balance
-          </p>
-
-          <h2 className="mt-2 text-3xl font-bold">
-            $
-            {account.initialBalance.toLocaleString()}
-          </h2>
-        </div>
-
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            Currency
-          </p>
-
-          <h2 className="mt-2 text-3xl font-bold">
-            {account.currency}
-          </h2>
-        </div>
-
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            Broker / Firm
-          </p>
-
-          <h2 className="mt-2 text-3xl font-bold">
-            {account.broker || "-"}
-          </h2>
-        </div>
-
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            Phase
-          </p>
-
-          <h2 className="mt-2 text-3xl font-bold">
-            {account.phase || "-"}
-          </h2>
-        </div>
-
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            Profit Target
-          </p>
-
-          <h2 className="mt-2 text-3xl font-bold text-green-400">
-            {account.profitTarget
-              ? `${account.profitTarget}%`
-              : "-"}
-          </h2>
-        </div>
-
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            Max Drawdown
-          </p>
-
-          <h2 className="mt-2 text-3xl font-bold text-red-400">
-            {account.maxDrawdown
-              ? `${account.maxDrawdown}%`
-              : "-"}
-          </h2>
-        </div>
-
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            Daily Drawdown
-          </p>
-
-          <h2 className="mt-2 text-3xl font-bold text-red-400">
-            {account.dailyDrawdown
-              ? `${account.dailyDrawdown}%`
-              : "-"}
-          </h2>
-        </div>
-      </div>
-
-      <div className="card-hover mb-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-        <div className="mb-6">
-          <p className="text-sm text-gray-400">
-            Account Growth
-          </p>
-
-          <h2 className="mt-1 text-2xl font-bold">
-            Equity Curve
-          </h2>
-        </div>
-
-        <EquityChart data={chartData} />
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {stats.map((stat) => (
-          <div
-            key={stat.label}
-            className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-5"
-          >
+        <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4">
+          <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
             <p className="text-sm text-gray-400">
-              {stat.label}
+              Account Type
             </p>
 
-            <h2
-              className={`mt-2 text-3xl font-bold ${stat.tone}`}
-            >
-              {stat.value}
+            <h2 className="mt-2 text-3xl font-bold">
+              {account.type}
             </h2>
           </div>
-        ))}
+
+          <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+            <p className="text-sm text-gray-400">
+              Initial Balance
+            </p>
+
+            <h2 className="mt-2 text-3xl font-bold">
+              $
+              {account.initialBalance.toLocaleString()}
+            </h2>
+          </div>
+
+          <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+            <p className="text-sm text-gray-400">
+              Currency
+            </p>
+
+            <h2 className="mt-2 text-3xl font-bold">
+              {account.currency}
+            </h2>
+          </div>
+
+          <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+            <p className="text-sm text-gray-400">
+              Broker / Firm
+            </p>
+
+            <h2 className="mt-2 text-3xl font-bold">
+              {account.broker || "-"}
+            </h2>
+          </div>
+
+          <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+            <p className="text-sm text-gray-400">
+              Phase
+            </p>
+
+            <h2 className="mt-2 text-3xl font-bold">
+              {account.phase || "-"}
+            </h2>
+          </div>
+
+          <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+            <p className="text-sm text-gray-400">
+              Profit Target
+            </p>
+
+            <h2 className="mt-2 text-3xl font-bold text-green-400">
+              {account.profitTarget
+                ? `${account.profitTarget}%`
+                : "-"}
+            </h2>
+          </div>
+
+          <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+            <p className="text-sm text-gray-400">
+              Max Drawdown
+            </p>
+
+            <h2 className="mt-2 text-3xl font-bold text-red-400">
+              {account.maxDrawdown
+                ? `${account.maxDrawdown}%`
+                : "-"}
+            </h2>
+          </div>
+
+          <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+            <p className="text-sm text-gray-400">
+              Daily Drawdown
+            </p>
+
+            <h2 className="mt-2 text-3xl font-bold text-red-400">
+              {account.dailyDrawdown
+                ? `${account.dailyDrawdown}%`
+                : "-"}
+            </h2>
+          </div>
+        </div>
+
+        <div className="card-hover mb-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+          <div className="mb-6">
+            <p className="text-sm text-gray-400">
+              Account Growth
+            </p>
+
+            <h2 className="mt-1 text-2xl font-bold">
+              Equity Curve
+            </h2>
+          </div>
+
+          <EquityChart data={chartData} />
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {stats.map((stat) => (
+            <div
+              key={stat.label}
+              className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+            >
+              <p className="text-sm text-gray-400">
+                {stat.label}
+              </p>
+
+              <h2
+                className={`mt-2 text-3xl font-bold ${stat.tone}`}
+              >
+                {stat.value}
+              </h2>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-  );
+      );
 }
