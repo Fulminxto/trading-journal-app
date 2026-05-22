@@ -7,6 +7,7 @@ import Link from "next/link";
 import TradeQualityHero from "@/components/diary/TradeQualityHero";
 import TradeQualityIntelligence from "@/components/diary/TradeQualityIntelligence";
 import TradeBehaviorWarnings from "@/components/diary/TradeBehaviorWarnings";
+import ExecutionPatternEngine from "@/components/diary/ExecutionPatternEngine";
 
 import {
   createAccountTrade,
@@ -289,6 +290,24 @@ export default async function DiaryPage({
       trade.emotionalState.length > 0
   ).length;
 
+  const lowConfidenceTrades = trades.filter(
+    (trade) =>
+      (trade.confidence || 0) > 0 &&
+      (trade.confidence || 0) <= 4
+  ).length;
+
+  const weakSetupTrades = trades.filter(
+    (trade) =>
+      (trade.setupQuality || 0) > 0 &&
+      (trade.setupQuality || 0) <= 4
+  ).length;
+
+  const impulsiveTrades = trades.filter(
+    (trade) =>
+      trade.mistakes &&
+      trade.mistakes.toLowerCase().includes("impuls")
+  ).length;
+
   return (
     <div>
 
@@ -311,6 +330,14 @@ export default async function DiaryPage({
           weakExecutionTrades={weakExecutionTrades}
           emotionalTrades={emotionalTrades}
           highQualityTrades={highQualityTrades}
+        />
+      </div>
+
+      <div className="mt-8">
+        <ExecutionPatternEngine
+          lowConfidenceTrades={lowConfidenceTrades}
+          weakSetupTrades={weakSetupTrades}
+          impulsiveTrades={impulsiveTrades}
         />
       </div>
 
