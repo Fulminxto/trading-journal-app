@@ -7,6 +7,7 @@ import SessionsHero from "@/components/sessions/SessionsHero";
 import SessionInsightCard from "@/components/sessions/SessionInsightCard";
 import PostMarketIntelligence from "@/components/sessions/PostMarketIntelligence";
 import BehaviorWarningCard from "@/components/sessions/BehaviorWarningCard";
+import ExecutionIntelligence from "@/components/sessions/ExecutionIntelligence";
 
 export default async function SessionsPage({
   params,
@@ -309,124 +310,128 @@ export default async function SessionsPage({
           sessions.map((session) => (
             <div
               key={session.id}
-              className="rounded-3xl border border-white/10 bg-white/[0.03] p-6"
+              className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl transition-all duration-300 hover:border-cyan-500/20 hover:bg-white/[0.06]"
             >
-              <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                <div>
-                  <p className="text-sm text-gray-500">
-                    {new Date(
-                      session.date
-                    ).toLocaleDateString(
-                      "it-IT"
-                    )}
-                  </p>
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.06),transparent_35%)] opacity-0 transition group-hover:opacity-100" />
 
-                  <h2 className="mt-1 text-2xl font-bold">
-                    {session.title ||
-                      "Trading Session"}
-                  </h2>
+              <div className="relative z-10">
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                  <div>
+                    <p className="text-sm text-gray-500">
+                      {new Date(
+                        session.date
+                      ).toLocaleDateString(
+                        "it-IT"
+                      )}
+                    </p>
 
-                  <div className="mt-3 flex flex-wrap gap-3">
-                    {session.sessionType && (
-                      <span className="rounded-xl bg-blue-500/10 px-3 py-1 text-sm text-blue-400">
-                        {session.sessionType}
-                      </span>
-                    )}
+                    <h2 className="mt-1 text-2xl font-bold">
+                      {session.title ||
+                        "Trading Session"}
+                    </h2>
 
-                    {session.emotionalState && (
-                      <span className="rounded-xl bg-yellow-500/10 px-3 py-1 text-sm text-yellow-400">
+                    <div className="mt-3 flex flex-wrap gap-3">
+                      {session.sessionType && (
+                        <span className="rounded-xl bg-blue-500/10 px-3 py-1 text-sm text-blue-400">
+                          {session.sessionType}
+                        </span>
+                      )}
+
+                      {session.emotionalState && (
+                        <span className="rounded-xl bg-yellow-500/10 px-3 py-1 text-sm text-yellow-400">
+                          {
+                            session.emotionalState
+                          }
+                        </span>
+                      )}
+
+                      {session.finalScore && (
+                        <span className="rounded-xl bg-green-500/10 px-3 py-1 text-sm text-green-400">
+                          Score:{" "}
+                          {session.finalScore}
+                          /10
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {session.marketBias && (
+                    <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm">
+                      <p className="text-gray-500">
+                        Market Bias
+                      </p>
+
+                      <p className="mt-1 font-bold">
+                        {session.marketBias}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                <div className="mt-6 grid grid-cols-1 gap-4 xl:grid-cols-2">
+                  {session.focus && (
+                    <div className="rounded-2xl bg-black/20 p-4">
+                      <p className="text-sm text-gray-500">
+                        Focus
+                      </p>
+
+                      <p className="mt-2 text-gray-300">
+                        {session.focus}
+                      </p>
+                    </div>
+                  )}
+
+                  {session.goals && (
+                    <div className="rounded-2xl bg-black/20 p-4">
+                      <p className="text-sm text-gray-500">
+                        Goals
+                      </p>
+
+                      <p className="mt-2 text-gray-300 whitespace-pre-wrap">
+                        {session.goals}
+                      </p>
+                    </div>
+                  )}
+
+                  {session.checklist && (
+                    <div className="rounded-2xl bg-black/20 p-4">
+                      <p className="text-sm text-gray-500">
+                        Checklist
+                      </p>
+
+                      <p className="mt-2 text-gray-300 whitespace-pre-wrap">
+                        {session.checklist}
+                      </p>
+                    </div>
+                  )}
+
+                  {session.mistakesToAvoid && (
+                    <div className="rounded-2xl border border-red-500/10 bg-red-500/[0.03] p-4">
+                      <p className="text-sm text-red-400">
+                        Mistakes To Avoid
+                      </p>
+
+                      <p className="mt-2 text-gray-300 whitespace-pre-wrap">
                         {
-                          session.emotionalState
+                          session.mistakesToAvoid
                         }
-                      </span>
-                    )}
-
-                    {session.finalScore && (
-                      <span className="rounded-xl bg-green-500/10 px-3 py-1 text-sm text-green-400">
-                        Score:{" "}
-                        {session.finalScore}
-                        /10
-                      </span>
-                    )}
-                  </div>
+                      </p>
+                    </div>
+                  )}
                 </div>
 
-                {session.marketBias && (
-                  <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm">
-                    <p className="text-gray-500">
-                      Market Bias
+                {session.sessionReview && (
+                  <div className="mt-5 rounded-2xl border border-green-500/10 bg-green-500/[0.03] p-4">
+                    <p className="text-sm text-green-400">
+                      Session Review
                     </p>
 
-                    <p className="mt-1 font-bold">
-                      {session.marketBias}
+                    <p className="mt-2 whitespace-pre-wrap text-gray-300">
+                      {session.sessionReview}
                     </p>
                   </div>
                 )}
               </div>
-
-              <div className="mt-6 grid grid-cols-1 gap-4 xl:grid-cols-2">
-                {session.focus && (
-                  <div className="rounded-2xl bg-black/20 p-4">
-                    <p className="text-sm text-gray-500">
-                      Focus
-                    </p>
-
-                    <p className="mt-2 text-gray-300">
-                      {session.focus}
-                    </p>
-                  </div>
-                )}
-
-                {session.goals && (
-                  <div className="rounded-2xl bg-black/20 p-4">
-                    <p className="text-sm text-gray-500">
-                      Goals
-                    </p>
-
-                    <p className="mt-2 text-gray-300 whitespace-pre-wrap">
-                      {session.goals}
-                    </p>
-                  </div>
-                )}
-
-                {session.checklist && (
-                  <div className="rounded-2xl bg-black/20 p-4">
-                    <p className="text-sm text-gray-500">
-                      Checklist
-                    </p>
-
-                    <p className="mt-2 text-gray-300 whitespace-pre-wrap">
-                      {session.checklist}
-                    </p>
-                  </div>
-                )}
-
-                {session.mistakesToAvoid && (
-                  <div className="rounded-2xl border border-red-500/10 bg-red-500/[0.03] p-4">
-                    <p className="text-sm text-red-400">
-                      Mistakes To Avoid
-                    </p>
-
-                    <p className="mt-2 text-gray-300 whitespace-pre-wrap">
-                      {
-                        session.mistakesToAvoid
-                      }
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              {session.sessionReview && (
-                <div className="mt-5 rounded-2xl border border-green-500/10 bg-green-500/[0.03] p-4">
-                  <p className="text-sm text-green-400">
-                    Session Review
-                  </p>
-
-                  <p className="mt-2 whitespace-pre-wrap text-gray-300">
-                    {session.sessionReview}
-                  </p>
-                </div>
-              )}
             </div>
           ))
         )}
