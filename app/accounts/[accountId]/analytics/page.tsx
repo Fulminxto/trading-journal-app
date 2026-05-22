@@ -10,6 +10,18 @@ import PerformanceInsights from "@/components/analytics/PerformanceInsights";
 import PsychologyAnalytics from "@/components/analytics/PsychologyAnalytics";
 import AnalyticsHero from "@/components/analytics/AnalyticsHero";
 import WeekdayHeatmap from "@/components/analytics/WeekdayHeatmap";
+import EmotionalStateHeatmap from "@/components/analytics/EmotionalStateHeatmap";
+import ConfidencePerformanceHeatmap from "@/components/analytics/ConfidencePerformanceHeatmap";
+import ExecutionQualityHeatmap from "@/components/analytics/ExecutionQualityHeatmap";
+import SetupQualityHeatmap from "@/components/analytics/SetupQualityHeatmap";
+import BehavioralRiskHeatmap from "@/components/analytics/BehavioralRiskHeatmap";
+import RiskConcentrationMatrix from "@/components/analytics/RiskConcentrationMatrix";
+import ExecutionTrendChart from "@/components/analytics/ExecutionTrendChart";
+import ConfidenceEvolutionChart from "@/components/analytics/ConfidenceEvolutionChart";
+import EmotionalTimelineChart from "@/components/analytics/EmotionalTimelineChart";
+import DisciplineEvolutionChart from "@/components/analytics/DisciplineEvolutionChart";
+import ConsistencyCurveChart from "@/components/analytics/ConsistencyCurveChart";
+import PsychologicalStabilityCurve from "@/components/analytics/PsychologicalStabilityCurve";
 
 import {
   BarChart3,
@@ -624,6 +636,478 @@ export default async function AnalyticsPage({
     pnl,
   }));
 
+  const emotionalStateMap = trades.reduce(
+    (acc, trade) => {
+      const emotion =
+        trade.emotionalState || "Unknown";
+
+      if (!acc[emotion]) {
+        acc[emotion] = {
+          count: 0,
+          pnl: 0,
+        };
+      }
+
+      acc[emotion].count += 1;
+      acc[emotion].pnl += trade.resultUsd || 0;
+
+      return acc;
+    },
+    {} as Record<
+      string,
+      {
+        count: number;
+        pnl: number;
+      }
+    >
+  );
+
+  const emotionalStateHeatmapData =
+    Object.entries(emotionalStateMap).map(
+      ([emotion, stats]) => ({
+        emotion,
+        count: stats.count,
+        pnl: stats.pnl,
+      })
+    );
+
+  const confidenceHeatmapData = [
+    {
+      level: "Low Confidence",
+      count: trades.filter(
+        (trade) =>
+          (trade.confidence || 0) > 0 &&
+          (trade.confidence || 0) <= 4
+      ).length,
+      pnl: trades
+        .filter(
+          (trade) =>
+            (trade.confidence || 0) > 0 &&
+            (trade.confidence || 0) <= 4
+        )
+        .reduce(
+          (acc, trade) =>
+            acc + (trade.resultUsd || 0),
+          0
+        ),
+    },
+    {
+      level: "Medium Confidence",
+      count: trades.filter(
+        (trade) =>
+          (trade.confidence || 0) >= 5 &&
+          (trade.confidence || 0) <= 7
+      ).length,
+      pnl: trades
+        .filter(
+          (trade) =>
+            (trade.confidence || 0) >= 5 &&
+            (trade.confidence || 0) <= 7
+        )
+        .reduce(
+          (acc, trade) =>
+            acc + (trade.resultUsd || 0),
+          0
+        ),
+    },
+    {
+      level: "High Confidence",
+      count: trades.filter(
+        (trade) =>
+          (trade.confidence || 0) >= 8
+      ).length,
+      pnl: trades
+        .filter(
+          (trade) =>
+            (trade.confidence || 0) >= 8
+        )
+        .reduce(
+          (acc, trade) =>
+            acc + (trade.resultUsd || 0),
+          0
+        ),
+    },
+  ];
+
+  const executionHeatmapData = [
+    {
+      level: "Weak Execution",
+      count: trades.filter(
+        (trade) =>
+          (trade.executionRating || 0) > 0 &&
+          (trade.executionRating || 0) <= 4
+      ).length,
+      pnl: trades
+        .filter(
+          (trade) =>
+            (trade.executionRating || 0) > 0 &&
+            (trade.executionRating || 0) <= 4
+        )
+        .reduce(
+          (acc, trade) =>
+            acc + (trade.resultUsd || 0),
+          0
+        ),
+    },
+    {
+      level: "Average Execution",
+      count: trades.filter(
+        (trade) =>
+          (trade.executionRating || 0) >= 5 &&
+          (trade.executionRating || 0) <= 7
+      ).length,
+      pnl: trades
+        .filter(
+          (trade) =>
+            (trade.executionRating || 0) >= 5 &&
+            (trade.executionRating || 0) <= 7
+        )
+        .reduce(
+          (acc, trade) =>
+            acc + (trade.resultUsd || 0),
+          0
+        ),
+    },
+    {
+      level: "Elite Execution",
+      count: trades.filter(
+        (trade) =>
+          (trade.executionRating || 0) >= 8
+      ).length,
+      pnl: trades
+        .filter(
+          (trade) =>
+            (trade.executionRating || 0) >= 8
+        )
+        .reduce(
+          (acc, trade) =>
+            acc + (trade.resultUsd || 0),
+          0
+        ),
+    },
+  ];
+
+  const setupHeatmapData = [
+    {
+      level: "Weak Setup",
+      count: trades.filter(
+        (trade) =>
+          (trade.setupQuality || 0) > 0 &&
+          (trade.setupQuality || 0) <= 4
+      ).length,
+      pnl: trades
+        .filter(
+          (trade) =>
+            (trade.setupQuality || 0) > 0 &&
+            (trade.setupQuality || 0) <= 4
+        )
+        .reduce(
+          (acc, trade) =>
+            acc + (trade.resultUsd || 0),
+          0
+        ),
+    },
+    {
+      level: "Average Setup",
+      count: trades.filter(
+        (trade) =>
+          (trade.setupQuality || 0) >= 5 &&
+          (trade.setupQuality || 0) <= 7
+      ).length,
+      pnl: trades
+        .filter(
+          (trade) =>
+            (trade.setupQuality || 0) >= 5 &&
+            (trade.setupQuality || 0) <= 7
+        )
+        .reduce(
+          (acc, trade) =>
+            acc + (trade.resultUsd || 0),
+          0
+        ),
+    },
+    {
+      level: "Elite Setup",
+      count: trades.filter(
+        (trade) =>
+          (trade.setupQuality || 0) >= 8
+      ).length,
+      pnl: trades
+        .filter(
+          (trade) =>
+            (trade.setupQuality || 0) >= 8
+        )
+        .reduce(
+          (acc, trade) =>
+            acc + (trade.resultUsd || 0),
+          0
+        ),
+    },
+  ];
+
+  function getRiskSeverity(
+    count: number,
+    total: number
+  ): "low" | "medium" | "high" {
+    if (total === 0) {
+      return "low";
+    }
+
+    const ratio = count / total;
+
+    if (ratio >= 0.4) {
+      return "high";
+    }
+
+    if (ratio >= 0.2) {
+      return "medium";
+    }
+
+    return "low";
+  }
+
+  const lowConfidenceCount = trades.filter(
+    (trade) =>
+      (trade.confidence || 0) > 0 &&
+      (trade.confidence || 0) <= 4
+  ).length;
+
+  const weakExecutionCount = trades.filter(
+    (trade) =>
+      (trade.executionRating || 0) > 0 &&
+      (trade.executionRating || 0) <= 4
+  ).length;
+
+  const weakSetupCount = trades.filter(
+    (trade) =>
+      (trade.setupQuality || 0) > 0 &&
+      (trade.setupQuality || 0) <= 4
+  ).length;
+
+  const emotionalCount = trades.filter(
+    (trade) =>
+      trade.emotionalState &&
+      trade.emotionalState.length > 0
+  ).length;
+
+  const behavioralRiskHeatmapData = [
+    {
+      factor: "Low Confidence",
+      count: lowConfidenceCount,
+      severity: getRiskSeverity(
+        lowConfidenceCount,
+        trades.length
+      ),
+    },
+    {
+      factor: "Weak Execution",
+      count: weakExecutionCount,
+      severity: getRiskSeverity(
+        weakExecutionCount,
+        trades.length
+      ),
+    },
+    {
+      factor: "Weak Setups",
+      count: weakSetupCount,
+      severity: getRiskSeverity(
+        weakSetupCount,
+        trades.length
+      ),
+    },
+    {
+      factor: "Emotional Trades",
+      count: emotionalCount,
+      severity: getRiskSeverity(
+        emotionalCount,
+        trades.length
+      ),
+    },
+  ];
+
+  const riskConcentrationData = [
+    {
+      label: "Psychology",
+      value:
+        trades.length > 0
+          ? Math.round(
+            (emotionalCount / trades.length) *
+            100
+          )
+          : 0,
+    },
+    {
+      label: "Confidence",
+      value:
+        trades.length > 0
+          ? Math.round(
+            (lowConfidenceCount /
+              trades.length) *
+            100
+          )
+          : 0,
+    },
+    {
+      label: "Execution",
+      value:
+        trades.length > 0
+          ? Math.round(
+            (weakExecutionCount /
+              trades.length) *
+            100
+          )
+          : 0,
+    },
+    {
+      label: "Setup Quality",
+      value:
+        trades.length > 0
+          ? Math.round(
+            (weakSetupCount / trades.length) *
+            100
+          )
+          : 0,
+    },
+  ];
+
+  const executionTrendData = trades
+    .filter(
+      (trade) =>
+        typeof trade.executionRating === "number"
+    )
+    .map((trade) => ({
+      date: new Date(trade.openDate).toLocaleDateString(
+        "it-IT",
+        {
+          day: "2-digit",
+          month: "2-digit",
+        }
+      ),
+      execution: trade.executionRating || 0,
+    }));
+
+  const confidenceEvolutionData = trades
+    .filter(
+      (trade) =>
+        typeof trade.confidence === "number"
+    )
+    .map((trade) => ({
+      date: new Date(trade.openDate).toLocaleDateString(
+        "it-IT",
+        {
+          day: "2-digit",
+          month: "2-digit",
+        }
+      ),
+      confidence: trade.confidence || 0,
+    }));
+
+  const emotionalTimelineData = trades
+    .filter(
+      (trade) =>
+        trade.emotionalState &&
+        trade.emotionalState.length > 0
+    )
+    .map((trade) => ({
+      date: new Date(trade.openDate).toLocaleDateString(
+        "it-IT",
+        {
+          day: "2-digit",
+          month: "2-digit",
+        }
+      ),
+      emotional: 1,
+    }));
+
+  const disciplineEvolutionData = trades
+    .filter(
+      (trade) =>
+        typeof trade.executionRating === "number" ||
+        typeof trade.setupQuality === "number"
+    )
+    .map((trade) => {
+      const execution =
+        trade.executionRating || 0;
+
+      const setupQuality =
+        trade.setupQuality || 0;
+
+      const discipline =
+        Math.round(
+          (execution + setupQuality) / 2
+        );
+
+      return {
+        date: new Date(trade.openDate).toLocaleDateString(
+          "it-IT",
+          {
+            day: "2-digit",
+            month: "2-digit",
+          }
+        ),
+        discipline,
+      };
+    });
+
+  const consistencyCurveData = trades.map((trade) => {
+    const execution =
+      trade.executionRating || 0;
+
+    const setupQuality =
+      trade.setupQuality || 0;
+
+    const confidence =
+      trade.confidence || 0;
+
+    const tradeScore = Math.round(
+      execution * 4 +
+      setupQuality * 4 +
+      confidence * 2
+    );
+
+    return {
+      date: new Date(trade.openDate).toLocaleDateString(
+        "it-IT",
+        {
+          day: "2-digit",
+          month: "2-digit",
+        }
+      ),
+      consistency: Math.min(100, tradeScore),
+    };
+  });
+
+  const psychologicalStabilityData = trades.map((trade) => {
+    const confidence =
+      trade.confidence || 0;
+
+    const hasEmotion =
+      trade.emotionalState &&
+      trade.emotionalState.length > 0;
+
+    const stability = Math.max(
+      0,
+      Math.min(
+        100,
+        Math.round(
+          confidence * 10 -
+          (hasEmotion ? 20 : 0)
+        )
+      )
+    );
+
+    return {
+      date: new Date(trade.openDate).toLocaleDateString(
+        "it-IT",
+        {
+          day: "2-digit",
+          month: "2-digit",
+        }
+      ),
+      stability,
+    };
+  });
+
   return (
     <div>
 
@@ -696,6 +1180,78 @@ export default async function AnalyticsPage({
       <div className="mt-8">
         <WeekdayHeatmap
           data={weekdayHeatmapData}
+        />
+      </div>
+
+      <div className="mt-8">
+        <EmotionalStateHeatmap
+          data={emotionalStateHeatmapData}
+        />
+      </div>
+
+      <div className="mt-8">
+        <ConfidencePerformanceHeatmap
+          data={confidenceHeatmapData}
+        />
+      </div>
+
+      <div className="mt-8">
+        <ExecutionQualityHeatmap
+          data={executionHeatmapData}
+        />
+      </div>
+
+      <div className="mt-8">
+        <SetupQualityHeatmap
+          data={setupHeatmapData}
+        />
+      </div>
+
+      <div className="mt-8">
+        <BehavioralRiskHeatmap
+          data={behavioralRiskHeatmapData}
+        />
+      </div>
+
+      <div className="mt-8">
+        <RiskConcentrationMatrix
+          risks={riskConcentrationData}
+        />
+      </div>
+
+      <div className="mt-8">
+        <ExecutionTrendChart
+          data={executionTrendData}
+        />
+      </div>
+
+      <div className="mt-8">
+        <ConfidenceEvolutionChart
+          data={confidenceEvolutionData}
+        />
+      </div>
+
+      <div className="mt-8">
+        <EmotionalTimelineChart
+          data={emotionalTimelineData}
+        />
+      </div>
+
+      <div className="mt-8">
+        <DisciplineEvolutionChart
+          data={disciplineEvolutionData}
+        />
+      </div>
+
+      <div className="mt-8">
+        <ConsistencyCurveChart
+          data={consistencyCurveData}
+        />
+      </div>
+
+      <div className="mt-8">
+        <PsychologicalStabilityCurve
+          data={psychologicalStabilityData}
         />
       </div>
 
