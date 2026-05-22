@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { FileText } from "lucide-react";
 
 import {
   LayoutDashboard,
@@ -45,6 +46,11 @@ const baseLinks = [
     icon: BarChart3,
   },
   {
+    path: "reports",
+    label: "Reports",
+    icon: FileText,
+  },
+  {
     path: "sessions",
     label: "Sessions",
     icon: BookOpen,
@@ -77,55 +83,55 @@ export default function Sidebar({
 
   const links = accountId
     ? [
-        ...baseLinks.map((link) => ({
-          href: `/accounts/${accountId}/${link.path}`,
-          label: link.label,
-          icon: link.icon,
-        })),
+      ...baseLinks.map((link) => ({
+        href: `/accounts/${accountId}/${link.path}`,
+        label: link.label,
+        icon: link.icon,
+      })),
 
-        {
-          href: "/accounts",
-          label: "Switch Account",
-          icon: ArrowLeftRight,
-        },
+      {
+        href: "/accounts",
+        label: "Switch Account",
+        icon: ArrowLeftRight,
+      },
 
-        ...(pathname.includes("/admin")
-          ? [
-              {
-                href: "/admin",
-                label: "Admin Panel",
-                icon: Shield,
-              },
-              {
-                href: "/admin/accounts",
-                label: "Accounts Management",
-                icon: Users,
-              },
-            ]
-          : []),
-      ]
+      ...(pathname.includes("/admin")
+        ? [
+          {
+            href: "/admin",
+            label: "Admin Panel",
+            icon: Shield,
+          },
+          {
+            href: "/admin/accounts",
+            label: "Accounts Management",
+            icon: Users,
+          },
+        ]
+        : []),
+    ]
     : [
-        {
-          href: "/accounts",
-          label: "Accounts",
-          icon: Users,
-        },
+      {
+        href: "/accounts",
+        label: "Accounts",
+        icon: Users,
+      },
 
-        ...(pathname.includes("/admin")
-          ? [
-              {
-                href: "/admin",
-                label: "Admin Panel",
-                icon: Shield,
-              },
-              {
-                href: "/admin/accounts",
-                label: "Accounts Management",
-                icon: Users,
-              },
-            ]
-          : []),
-      ];
+      ...(pathname.includes("/admin")
+        ? [
+          {
+            href: "/admin",
+            label: "Admin Panel",
+            icon: Shield,
+          },
+          {
+            href: "/admin/accounts",
+            label: "Accounts Management",
+            icon: Users,
+          },
+        ]
+        : []),
+    ];
 
   return (
     <>
@@ -139,25 +145,21 @@ export default function Sidebar({
       <aside
         onMouseEnter={() => setCollapsed(false)}
         onMouseLeave={() => setCollapsed(true)}
-        className={`fixed left-0 top-0 z-50 h-screen overflow-y-auto border-r border-white/10 bg-[#071018] p-4 transition-all duration-500 ease-out lg:sticky lg:z-40 ${
-          isCollapsed ? "w-[88px]" : "w-72 lg:w-64"
-        } ${
-          open
+        className={`fixed left-0 top-0 z-50 h-screen overflow-y-auto border-r border-white/10 bg-[#071018] p-4 transition-all duration-500 ease-out lg:sticky lg:z-40 ${isCollapsed ? "w-[88px]" : "w-72 lg:w-64"
+          } ${open
             ? "translate-x-0"
             : "-translate-x-full lg:translate-x-0"
-        }`}
+          }`}
       >
         <div
-          className={`flex items-center ${
-            isCollapsed ? "justify-center" : "justify-between"
-          }`}
+          className={`flex items-center ${isCollapsed ? "justify-center" : "justify-between"
+            }`}
         >
           <Link
             href="/accounts"
             onClick={onClose}
-            className={`group flex items-center transition-all duration-500 ${
-              isCollapsed ? "justify-center" : "gap-3"
-            }`}
+            className={`group flex items-center transition-all duration-500 ${isCollapsed ? "justify-center" : "gap-3"
+              }`}
           >
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/5 bg-white/[0.02] transition-all duration-300 group-hover:bg-white/[0.05]">
               <Zap
@@ -201,15 +203,13 @@ export default function Sidebar({
                 key={link.href}
                 href={link.href}
                 onClick={onClose}
-                className={`group flex items-center rounded-xl transition ${
-                  isCollapsed
-                    ? "justify-center px-3 py-3"
-                    : "gap-3 px-4 py-3"
-                } ${
-                  active
+                className={`group flex items-center rounded-xl transition ${isCollapsed
+                  ? "justify-center px-3 py-3"
+                  : "gap-3 px-4 py-3"
+                  } ${active
                     ? "bg-green-400/10 text-green-400"
                     : "text-gray-300 hover:bg-white/5 hover:text-white"
-                }`}
+                  }`}
               >
                 <Icon size={18} />
 
