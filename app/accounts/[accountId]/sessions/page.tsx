@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { createTradingSession } from "./actions";
 import SessionsHero from "@/components/sessions/SessionsHero";
 import SessionInsightCard from "@/components/sessions/SessionInsightCard";
+import PostMarketIntelligence from "@/components/sessions/PostMarketIntelligence";
 
 export default async function SessionsPage({
   params,
