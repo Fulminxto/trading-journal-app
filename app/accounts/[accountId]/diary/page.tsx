@@ -8,6 +8,7 @@ import TradeQualityHero from "@/components/diary/TradeQualityHero";
 import TradeQualityIntelligence from "@/components/diary/TradeQualityIntelligence";
 import TradeBehaviorWarnings from "@/components/diary/TradeBehaviorWarnings";
 import ExecutionPatternEngine from "@/components/diary/ExecutionPatternEngine";
+import TradeDisciplineScore from "@/components/diary/TradeDisciplineScore";
 
 import {
   createAccountTrade,
@@ -308,6 +309,24 @@ export default async function DiaryPage({
       trade.mistakes.toLowerCase().includes("impuls")
   ).length;
 
+  const disciplineScore =
+    trades.length > 0
+      ? Math.max(
+        0,
+        Math.min(
+          100,
+          Math.round(
+            averageExecution * 4 +
+            averageConfidence * 3 +
+            (highQualityTrades /
+              Math.max(trades.length, 1)) *
+            30 -
+            weakExecutionTrades * 2
+          )
+        )
+      )
+      : 0;
+
   return (
     <div>
 
@@ -316,6 +335,12 @@ export default async function DiaryPage({
         averageExecution={averageExecution}
         averageConfidence={averageConfidence}
       />
+
+      <div className="mt-8">
+        <TradeDisciplineScore
+          score={disciplineScore}
+        />
+      </div>
 
       <div className="mt-8">
         <TradeQualityIntelligence
@@ -888,214 +913,220 @@ export default async function DiaryPage({
           trades.map((trade) => (
             <div
               key={trade.id}
-              className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+              className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl transition-all duration-300 hover:border-cyan-500/20 hover:bg-white/[0.06]"
             >
-              <div className="mb-4 flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-xl font-bold">
-                    {trade.symbol}
-                  </h3>
 
-                  <p className="text-sm text-gray-500">
-                    {new Date(trade.openDate).toLocaleDateString("it-IT")} -{" "}
-                    {trade.openTime || "-"}
-                  </p>
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.06),transparent_35%)] opacity-0 transition group-hover:opacity-100" />
 
-                  {isSharedAccount && (
-                    <p className="mt-2 inline-flex rounded-xl bg-white/10 px-3 py-1 text-xs font-semibold text-white">
-                      {trade.createdBy?.name ||
-                        trade.createdBy?.username ||
-                        "Trader"}
+              <div className="relative z-10">
+
+                <div className="mb-4 flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="text-xl font-bold">
+                      {trade.symbol}
+                    </h3>
+
+                    <p className="text-sm text-gray-500">
+                      {new Date(trade.openDate).toLocaleDateString("it-IT")} -{" "}
+                      {trade.openTime || "-"}
                     </p>
-                  )}
-                </div>
 
-                <span
-                  className={`rounded-xl px-3 py-1 text-sm font-bold ${trade.direction === "LONG"
-                    ? "bg-green-500/10 text-green-400"
-                    : "bg-red-500/10 text-red-400"
-                    }`}
-                >
-                  {trade.direction}
-                </span>
-              </div>
+                    {isSharedAccount && (
+                      <p className="mt-2 inline-flex rounded-xl bg-white/10 px-3 py-1 text-xs font-semibold text-white">
+                        {trade.createdBy?.name ||
+                          trade.createdBy?.username ||
+                          "Trader"}
+                      </p>
+                    )}
+                  </div>
 
-              <div className="grid grid-cols-2 gap-3 text-sm">
-                <div className="rounded-2xl bg-black/20 p-3">
-                  <p className="text-gray-500">Outcome</p>
-                  <p className="mt-1 font-bold">
-                    {trade.outcome || "-"}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl bg-black/20 p-3">
-                  <p className="text-gray-500">Result</p>
-                  <p
-                    className={`mt-1 font-bold ${(trade.resultUsd || 0) >= 0
-                      ? "text-green-400"
-                      : "text-red-400"
+                  <span
+                    className={`rounded-xl px-3 py-1 text-sm font-bold ${trade.direction === "LONG"
+                      ? "bg-green-500/10 text-green-400"
+                      : "bg-red-500/10 text-red-400"
                       }`}
                   >
-                    {formatCurrency(
-                      trade.resultUsd || 0,
-                      account.currency
-                    )}
-                  </p>
+                    {trade.direction}
+                  </span>
                 </div>
 
-                <div className="rounded-2xl bg-black/20 p-3">
-                  <p className="text-gray-500">Equity</p>
-                  <p className="mt-1 font-bold">
-                    {formatCurrency(
-                      trade.equity || account.initialBalance,
-                      account.currency
-                    )}
-                  </p>
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div className="rounded-2xl bg-black/20 p-3">
+                    <p className="text-gray-500">Outcome</p>
+                    <p className="mt-1 font-bold">
+                      {trade.outcome || "-"}
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl bg-black/20 p-3">
+                    <p className="text-gray-500">Result</p>
+                    <p
+                      className={`mt-1 font-bold ${(trade.resultUsd || 0) >= 0
+                        ? "text-green-400"
+                        : "text-red-400"
+                        }`}
+                    >
+                      {formatCurrency(
+                        trade.resultUsd || 0,
+                        account.currency
+                      )}
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl bg-black/20 p-3">
+                    <p className="text-gray-500">Equity</p>
+                    <p className="mt-1 font-bold">
+                      {formatCurrency(
+                        trade.equity || account.initialBalance,
+                        account.currency
+                      )}
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl bg-black/20 p-3">
+                    <p className="text-gray-500">R:R</p>
+                    <p className="mt-1 font-bold">
+                      {trade.riskReward || "-"}
+                    </p>
+                  </div>
                 </div>
 
-                <div className="rounded-2xl bg-black/20 p-3">
-                  <p className="text-gray-500">R:R</p>
-                  <p className="mt-1 font-bold">
-                    {trade.riskReward || "-"}
-                  </p>
-                </div>
-              </div>
+                {(
+                  trade.strategy ||
+                  trade.notes ||
+                  trade.session ||
+                  trade.emotionalState ||
+                  trade.setupQuality ||
+                  trade.executionRating ||
+                  trade.confidence ||
+                  trade.mistakes ||
+                  trade.lessonsLearned
+                ) && (
+                    <div className="mt-4 space-y-3">
+                      <div className="grid grid-cols-2 gap-3">
+                        {trade.session && (
+                          <div className="rounded-2xl bg-black/20 p-3">
+                            <p className="text-xs text-gray-500">
+                              Session
+                            </p>
 
-              {(
-                trade.strategy ||
-                trade.notes ||
-                trade.session ||
-                trade.emotionalState ||
-                trade.setupQuality ||
-                trade.executionRating ||
-                trade.confidence ||
-                trade.mistakes ||
-                trade.lessonsLearned
-              ) && (
-                  <div className="mt-4 space-y-3">
-                    <div className="grid grid-cols-2 gap-3">
-                      {trade.session && (
-                        <div className="rounded-2xl bg-black/20 p-3">
-                          <p className="text-xs text-gray-500">
-                            Session
+                            <p className="mt-1 font-bold text-white">
+                              {trade.session}
+                            </p>
+                          </div>
+                        )}
+
+                        {trade.emotionalState && (
+                          <div className="rounded-2xl bg-black/20 p-3">
+                            <p className="text-xs text-gray-500">
+                              Emotional State
+                            </p>
+
+                            <p className="mt-1 font-bold text-white">
+                              {trade.emotionalState}
+                            </p>
+                          </div>
+                        )}
+
+                        {trade.setupQuality && (
+                          <div className="rounded-2xl bg-black/20 p-3">
+                            <p className="text-xs text-gray-500">
+                              Setup Quality
+                            </p>
+
+                            <p className="mt-1 font-bold text-green-400">
+                              {trade.setupQuality}/10
+                            </p>
+                          </div>
+                        )}
+
+                        {trade.executionRating && (
+                          <div className="rounded-2xl bg-black/20 p-3">
+                            <p className="text-xs text-gray-500">
+                              Execution
+                            </p>
+
+                            <p className="mt-1 font-bold text-yellow-400">
+                              {trade.executionRating}/10
+                            </p>
+                          </div>
+                        )}
+
+                        {trade.confidence && (
+                          <div className="rounded-2xl bg-black/20 p-3">
+                            <p className="text-xs text-gray-500">
+                              Confidence
+                            </p>
+
+                            <p className="mt-1 font-bold text-blue-400">
+                              {trade.confidence}/10
+                            </p>
+                          </div>
+                        )}
+                      </div>
+
+                      {trade.strategy && (
+                        <p className="rounded-2xl bg-black/20 p-3 text-sm text-gray-400">
+                          Strategia: {trade.strategy}
+                        </p>
+                      )}
+
+                      {trade.notes && (
+                        <p className="rounded-2xl bg-black/20 p-3 text-sm text-gray-400">
+                          {trade.notes}
+                        </p>
+                      )}
+
+                      {trade.mistakes && (
+                        <div className="rounded-2xl border border-red-500/10 bg-red-500/[0.03] p-3">
+                          <p className="text-xs font-semibold uppercase tracking-wide text-red-400">
+                            Mistakes
                           </p>
 
-                          <p className="mt-1 font-bold text-white">
-                            {trade.session}
+                          <p className="mt-2 text-sm text-gray-300">
+                            {trade.mistakes}
                           </p>
                         </div>
                       )}
 
-                      {trade.emotionalState && (
-                        <div className="rounded-2xl bg-black/20 p-3">
-                          <p className="text-xs text-gray-500">
-                            Emotional State
+                      {trade.lessonsLearned && (
+                        <div className="rounded-2xl border border-green-500/10 bg-green-500/[0.03] p-3">
+                          <p className="text-xs font-semibold uppercase tracking-wide text-green-400">
+                            Lessons Learned
                           </p>
 
-                          <p className="mt-1 font-bold text-white">
-                            {trade.emotionalState}
-                          </p>
-                        </div>
-                      )}
-
-                      {trade.setupQuality && (
-                        <div className="rounded-2xl bg-black/20 p-3">
-                          <p className="text-xs text-gray-500">
-                            Setup Quality
-                          </p>
-
-                          <p className="mt-1 font-bold text-green-400">
-                            {trade.setupQuality}/10
-                          </p>
-                        </div>
-                      )}
-
-                      {trade.executionRating && (
-                        <div className="rounded-2xl bg-black/20 p-3">
-                          <p className="text-xs text-gray-500">
-                            Execution
-                          </p>
-
-                          <p className="mt-1 font-bold text-yellow-400">
-                            {trade.executionRating}/10
-                          </p>
-                        </div>
-                      )}
-
-                      {trade.confidence && (
-                        <div className="rounded-2xl bg-black/20 p-3">
-                          <p className="text-xs text-gray-500">
-                            Confidence
-                          </p>
-
-                          <p className="mt-1 font-bold text-blue-400">
-                            {trade.confidence}/10
+                          <p className="mt-2 text-sm text-gray-300">
+                            {trade.lessonsLearned}
                           </p>
                         </div>
                       )}
                     </div>
-
-                    {trade.strategy && (
-                      <p className="rounded-2xl bg-black/20 p-3 text-sm text-gray-400">
-                        Strategia: {trade.strategy}
-                      </p>
-                    )}
-
-                    {trade.notes && (
-                      <p className="rounded-2xl bg-black/20 p-3 text-sm text-gray-400">
-                        {trade.notes}
-                      </p>
-                    )}
-
-                    {trade.mistakes && (
-                      <div className="rounded-2xl border border-red-500/10 bg-red-500/[0.03] p-3">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-red-400">
-                          Mistakes
-                        </p>
-
-                        <p className="mt-2 text-sm text-gray-300">
-                          {trade.mistakes}
-                        </p>
-                      </div>
-                    )}
-
-                    {trade.lessonsLearned && (
-                      <div className="rounded-2xl border border-green-500/10 bg-green-500/[0.03] p-3">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-green-400">
-                          Lessons Learned
-                        </p>
-
-                        <p className="mt-2 text-sm text-gray-300">
-                          {trade.lessonsLearned}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-              <div className="mt-4 flex gap-3">
-                <Link
-                  href={`/accounts/${accountId}/diary/${trade.id}/edit`}
-                  className="flex-1 rounded-xl bg-white/10 px-3 py-3 text-center text-sm hover:bg-white/20"
-                >
-                  Edit
-                </Link>
-
-                <form
-                  action={deleteAccountTrade.bind(
-                    null,
-                    accountId,
-                    trade.id
                   )}
-                  className="flex-1"
-                >
-                  <button
-                    type="submit"
-                    className="w-full rounded-xl bg-red-500/10 px-3 py-3 text-sm text-red-400 hover:bg-red-500/20"
+
+                <div className="mt-4 flex gap-3">
+                  <Link
+                    href={`/accounts/${accountId}/diary/${trade.id}/edit`}
+                    className="flex-1 rounded-xl bg-white/10 px-3 py-3 text-center text-sm hover:bg-white/20"
                   >
-                    Delete
-                  </button>
-                </form>
+                    Edit
+                  </Link>
+
+                  <form
+                    action={deleteAccountTrade.bind(
+                      null,
+                      accountId,
+                      trade.id
+                    )}
+                    className="flex-1"
+                  >
+                    <button
+                      type="submit"
+                      className="w-full rounded-xl bg-red-500/10 px-3 py-3 text-sm text-red-400 hover:bg-red-500/20"
+                    >
+                      Delete
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
           ))
