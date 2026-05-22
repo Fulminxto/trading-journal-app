@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 import { createTradingSession } from "./actions";
+import SessionsHero from "@/components/sessions/SessionsHero";
 
 export default async function SessionsPage({
   params,
@@ -45,6 +46,18 @@ export default async function SessionsPage({
         date: "desc",
       },
     });
+
+  const averageScore =
+    sessions.length > 0
+      ? Math.round(
+        sessions.reduce(
+          (acc, session) =>
+            acc +
+            (session.finalScore || 0),
+          0
+        ) / sessions.length
+      )
+      : 0;
 
   return (
     <div>
