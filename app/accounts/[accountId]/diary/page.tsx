@@ -13,6 +13,10 @@ import TradePerformanceClusters from "@/components/diary/TradePerformanceCluster
 import EdgeDetectionEngine from "@/components/diary/EdgeDetectionEngine";
 import TraderIdentityEngine from "@/components/diary/TraderIdentityEngine";
 import AdaptiveCoachingLayer from "@/components/diary/AdaptiveCoachingLayer";
+import MarketPsychologyEngine from "@/components/diary/MarketPsychologyEngine";
+import ConfidenceAnalyticsEngine from "@/components/diary/ConfidenceAnalyticsEngine";
+import BehavioralCorrelationEngine from "@/components/diary/BehavioralCorrelationEngine";
+import AIPerformanceTimeline from "@/components/diary/AIPerformanceTimeline";
 
 import {
   createAccountTrade,
@@ -416,6 +420,11 @@ export default async function DiaryPage({
         ? "Setup Selection"
         : "Consistency";
 
+  const highConfidenceTrades = trades.filter(
+    (trade) =>
+      (trade.confidence || 0) >= 8
+  ).length;
+
   return (
     <div>
 
@@ -478,6 +487,40 @@ export default async function DiaryPage({
           weakness={traderWeakness}
           weakExecutionTrades={weakExecutionTrades}
           emotionalTrades={emotionalTrades}
+        />
+      </div>
+
+      <div className="mt-8">
+        <MarketPsychologyEngine
+          emotionalTrades={emotionalTrades}
+          lowConfidenceTrades={lowConfidenceTrades}
+          highQualityTrades={highQualityTrades}
+        />
+      </div>
+
+      <div className="mt-8">
+        <ConfidenceAnalyticsEngine
+          lowConfidenceTrades={lowConfidenceTrades}
+          highConfidenceTrades={highConfidenceTrades}
+          highQualityTrades={highQualityTrades}
+        />
+      </div>
+
+      <div className="mt-8">
+        <BehavioralCorrelationEngine
+          emotionalTrades={emotionalTrades}
+          weakExecutionTrades={weakExecutionTrades}
+          lowConfidenceTrades={lowConfidenceTrades}
+          totalTrades={trades.length}
+        />
+      </div>
+
+      <div className="mt-8">
+        <AIPerformanceTimeline
+          totalTrades={trades.length}
+          highQualityTrades={highQualityTrades}
+          weakExecutionTrades={weakExecutionTrades}
+          disciplineScore={disciplineScore}
         />
       </div>
 

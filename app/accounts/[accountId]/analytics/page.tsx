@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+
 import AnalyticsStatCard from "@/components/analytics/AnalyticsStatCard";
 import PerformanceIntelligence from "@/components/analytics/PerformanceIntelligence";
 import SymbolPerformance from "@/components/analytics/SymbolPerformance";
@@ -8,6 +9,7 @@ import SessionPerformance from "@/components/analytics/SessionPerformance";
 import PerformanceInsights from "@/components/analytics/PerformanceInsights";
 import PsychologyAnalytics from "@/components/analytics/PsychologyAnalytics";
 import AnalyticsHero from "@/components/analytics/AnalyticsHero";
+import WeekdayHeatmap from "@/components/analytics/WeekdayHeatmap";
 
 import {
   BarChart3,
@@ -586,6 +588,42 @@ export default async function AnalyticsPage({
     },
   ];
 
+  const weekdayMap = {
+    Sun: 0,
+    Mon: 0,
+    Tue: 0,
+    Wed: 0,
+    Thu: 0,
+    Fri: 0,
+  };
+
+  trades.forEach((trade) => {
+    const date = new Date(trade.openDate);
+
+    const day = date.toLocaleDateString(
+      "en-US",
+      {
+        weekday: "short",
+      }
+    );
+
+    if (
+      day in weekdayMap &&
+      typeof trade.resultUsd === "number"
+    ) {
+      weekdayMap[
+        day as keyof typeof weekdayMap
+      ] += trade.resultUsd;
+    }
+  });
+
+  const weekdayHeatmapData = Object.entries(
+    weekdayMap
+  ).map(([day, pnl]) => ({
+    day,
+    pnl,
+  }));
+
   return (
     <div>
 
@@ -654,6 +692,12 @@ export default async function AnalyticsPage({
         totalPnl={totalPnl}
         bestSymbol={bestSymbol?.[0]}
       />
+
+      <div className="mt-8">
+        <WeekdayHeatmap
+          data={weekdayHeatmapData}
+        />
+      </div>
 
       <PsychologyAnalytics
         averageConfidence={
