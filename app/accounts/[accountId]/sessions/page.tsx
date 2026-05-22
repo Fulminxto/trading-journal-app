@@ -6,6 +6,7 @@ import { createTradingSession } from "./actions";
 import SessionsHero from "@/components/sessions/SessionsHero";
 import SessionInsightCard from "@/components/sessions/SessionInsightCard";
 import PostMarketIntelligence from "@/components/sessions/PostMarketIntelligence";
+import BehaviorWarningCard from "@/components/sessions/BehaviorWarningCard";
 
 export default async function SessionsPage({
   params,
@@ -78,6 +79,11 @@ export default async function SessionsPage({
       (session.finalScore || 0) >= 8
   ).length;
 
+  const lowScoreSessions = sessions.filter(
+    (session) =>
+      (session.finalScore || 0) <= 4
+  ).length;
+
   return (
     <div>
 
@@ -106,6 +112,25 @@ export default async function SessionsPage({
           value={highScoreSessions}
           tone="text-green-400"
           description="Sessioni con execution score superiore a 8/10."
+        />
+      </div>
+
+      <div className="mt-8">
+        <PostMarketIntelligence
+          reviewedSessions={reviewedSessions}
+          pendingReviews={
+            sessions.length - reviewedSessions
+          }
+          highScoreSessions={highScoreSessions}
+        />
+      </div>
+
+      <div className="mt-8">
+        <BehaviorWarningCard
+          lowScoreSessions={lowScoreSessions}
+          pendingReviews={
+            sessions.length - reviewedSessions
+          }
         />
       </div>
 
