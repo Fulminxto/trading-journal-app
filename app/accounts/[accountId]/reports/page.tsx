@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 import WeeklyReportCard from "@/components/reports/WeeklyReportCard";
+import MonthlyReportCard from "@/components/reports/MonthlyReportCard";
 
 export default async function ReportsPage({
   params,
@@ -60,6 +61,26 @@ export default async function ReportsPage({
   const winRate =
     totalTrades > 0
       ? Math.round((wins / totalTrades) * 100)
+      : 0;
+
+  const emotionalTrades = trades.filter(
+    (trade) =>
+      trade.emotionalState &&
+      trade.emotionalState.length > 0
+  ).length;
+
+  const disciplineScore =
+    totalTrades > 0
+      ? Math.max(
+        0,
+        Math.min(
+          100,
+          Math.round(
+            winRate +
+            (totalPnl > 0 ? 10 : -10)
+          )
+        )
+      )
       : 0;
 
   return (
@@ -134,6 +155,16 @@ export default async function ReportsPage({
         totalPnl={totalPnl}
         winRate={winRate}
       />
+
+      <div className="mt-8">
+        <MonthlyReportCard
+          totalTrades={totalTrades}
+          totalPnl={totalPnl}
+          winRate={winRate}
+          emotionalTrades={emotionalTrades}
+          disciplineScore={disciplineScore}
+        />
+      </div>
 
       <h2 className="mt-3 text-3xl font-black text-white">
         Performance Summary
