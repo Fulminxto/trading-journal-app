@@ -6,6 +6,7 @@ import Link from "next/link";
 
 import TradeQualityHero from "@/components/diary/TradeQualityHero";
 import TradeQualityIntelligence from "@/components/diary/TradeQualityIntelligence";
+import TradeBehaviorWarnings from "@/components/diary/TradeBehaviorWarnings";
 
 import {
   createAccountTrade,
@@ -302,6 +303,14 @@ export default async function DiaryPage({
           highQualityTrades={highQualityTrades}
           weakExecutionTrades={weakExecutionTrades}
           emotionalTrades={emotionalTrades}
+        />
+      </div>
+
+      <div className="mt-8">
+        <TradeBehaviorWarnings
+          weakExecutionTrades={weakExecutionTrades}
+          emotionalTrades={emotionalTrades}
+          highQualityTrades={highQualityTrades}
         />
       </div>
 
