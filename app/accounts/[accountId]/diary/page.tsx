@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 
 import TradeQualityHero from "@/components/diary/TradeQualityHero";
+import TradeQualityIntelligence from "@/components/diary/TradeQualityIntelligence";
 
 import {
   createAccountTrade,
@@ -269,6 +270,24 @@ export default async function DiaryPage({
       )
       : 0;
 
+  const highQualityTrades = trades.filter(
+    (trade) =>
+      (trade.setupQuality || 0) >= 8 &&
+      (trade.executionRating || 0) >= 8
+  ).length;
+
+  const weakExecutionTrades = trades.filter(
+    (trade) =>
+      (trade.executionRating || 0) > 0 &&
+      (trade.executionRating || 0) <= 4
+  ).length;
+
+  const emotionalTrades = trades.filter(
+    (trade) =>
+      trade.emotionalState &&
+      trade.emotionalState.length > 0
+  ).length;
+
   return (
     <div>
 
@@ -277,6 +296,14 @@ export default async function DiaryPage({
         averageExecution={averageExecution}
         averageConfidence={averageConfidence}
       />
+
+      <div className="mt-8">
+        <TradeQualityIntelligence
+          highQualityTrades={highQualityTrades}
+          weakExecutionTrades={weakExecutionTrades}
+          emotionalTrades={emotionalTrades}
+        />
+      </div>
 
       <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
