@@ -9,6 +9,10 @@ import TradeQualityIntelligence from "@/components/diary/TradeQualityIntelligenc
 import TradeBehaviorWarnings from "@/components/diary/TradeBehaviorWarnings";
 import ExecutionPatternEngine from "@/components/diary/ExecutionPatternEngine";
 import TradeDisciplineScore from "@/components/diary/TradeDisciplineScore";
+import TradePerformanceClusters from "@/components/diary/TradePerformanceClusters";
+import EdgeDetectionEngine from "@/components/diary/EdgeDetectionEngine";
+import TraderIdentityEngine from "@/components/diary/TraderIdentityEngine";
+import AdaptiveCoachingLayer from "@/components/diary/AdaptiveCoachingLayer";
 
 import {
   createAccountTrade,
@@ -327,6 +331,91 @@ export default async function DiaryPage({
       )
       : 0;
 
+  const strongTrades = trades.filter(
+    (trade) =>
+      (trade.executionRating || 0) >= 8 &&
+      (trade.setupQuality || 0) >= 8
+  ).length;
+
+  const averageTrades = trades.filter(
+    (trade) =>
+      (trade.executionRating || 0) >= 5 &&
+      (trade.executionRating || 0) < 8
+  ).length;
+
+  const weakTrades = trades.filter(
+    (trade) =>
+      (trade.executionRating || 0) > 0 &&
+      (trade.executionRating || 0) <= 4
+  ).length;
+
+  const setupStats = trades.reduce(
+    (acc, trade) => {
+      const setup =
+        trade.strategy || "Unknown";
+
+      if (!acc[setup]) {
+        acc[setup] = {
+          count: 0,
+          wins: 0,
+        };
+      }
+
+      acc[setup].count += 1;
+
+      if (trade.outcome === "win") {
+        acc[setup].wins += 1;
+      }
+
+      return acc;
+    },
+    {} as Record<
+      string,
+      {
+        count: number;
+        wins: number;
+      }
+    >
+  );
+
+  const bestSetup =
+    Object.entries(setupStats)
+      .sort((a, b) => {
+        const winRateA =
+          a[1].count > 0
+            ? a[1].wins / a[1].count
+            : 0;
+
+        const winRateB =
+          b[1].count > 0
+            ? b[1].wins / b[1].count
+            : 0;
+
+        return winRateB - winRateA;
+      })[0]?.[0] || "Not enough data";
+
+  const traderType =
+    averageConfidence >= 7 &&
+      averageExecution >= 7
+      ? "Confident Executor"
+      : averageExecution >= 7
+        ? "Technical Executor"
+        : averageConfidence >= 7
+          ? "High Conviction Trader"
+          : "Developing Trader";
+
+  const traderStrength =
+    highQualityTrades >= weakExecutionTrades
+      ? "Execution Quality"
+      : "Data Awareness";
+
+  const traderWeakness =
+    emotionalTrades > highQualityTrades
+      ? "Emotional Discipline"
+      : weakSetupTrades > strongTrades
+        ? "Setup Selection"
+        : "Consistency";
+
   return (
     <div>
 
@@ -355,6 +444,40 @@ export default async function DiaryPage({
           weakExecutionTrades={weakExecutionTrades}
           emotionalTrades={emotionalTrades}
           highQualityTrades={highQualityTrades}
+        />
+      </div>
+
+      <div className="mt-8">
+        <TradePerformanceClusters
+          strongTrades={strongTrades}
+          averageTrades={averageTrades}
+          weakTrades={weakTrades}
+        />
+      </div>
+
+      <div className="mt-8">
+        <EdgeDetectionEngine
+          bestSetup={bestSetup}
+          weakSetupCount={weakSetupTrades}
+          strongTradeCount={strongTrades}
+        />
+      </div>
+
+      <div className="mt-8">
+        <TraderIdentityEngine
+          traderType={traderType}
+          strength={traderStrength}
+          weakness={traderWeakness}
+        />
+      </div>
+
+      <div className="mt-8">
+        <AdaptiveCoachingLayer
+          disciplineScore={disciplineScore}
+          traderType={traderType}
+          weakness={traderWeakness}
+          weakExecutionTrades={weakExecutionTrades}
+          emotionalTrades={emotionalTrades}
         />
       </div>
 
