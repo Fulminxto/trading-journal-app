@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import EquityChart from "@/components/EquityChart";
 import DashboardHero from "@/components/dashboard/DashboardHero";
 import DashboardStatCard from "@/components/dashboard/DashboardStatCard";
+import ConsistencyScoreCard from "@/components/dashboard/ConsistencyScoreCard";
 
 function formatCurrency(
   value: number,
@@ -185,6 +186,22 @@ export default async function DashboardPage({
       account.initialBalance,
   }));
 
+  const consistencyScore = Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round(
+        winRate * 0.5 +
+        (averageWin > Math.abs(averageLoss)
+          ? 20
+          : 10) +
+        (maxDrawdown > -5
+          ? 20
+          : 10)
+      )
+    )
+  );
+
   const stats = [
     {
       label: "Current Equity",
@@ -322,6 +339,12 @@ export default async function DashboardPage({
         winRate={`${winRate.toFixed(2)}%`}
         totalTrades={totalTrades}
       />
+
+      <div className="mt-8">
+        <ConsistencyScoreCard
+          score={consistencyScore}
+        />
+      </div>
 
       <div className="mb-8">
         <p className="text-sm text-gray-400">
