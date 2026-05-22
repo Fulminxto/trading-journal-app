@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 import { createTradingSession } from "./actions";
 import SessionsHero from "@/components/sessions/SessionsHero";
+import SessionInsightCard from "@/components/sessions/SessionInsightCard";
 
 export default async function SessionsPage({
   params,
@@ -59,8 +60,54 @@ export default async function SessionsPage({
       )
       : 0;
 
+  const focusedSessions = sessions.filter(
+    (session) =>
+      session.focus &&
+      session.focus.length > 10
+  ).length;
+
+  const reviewedSessions = sessions.filter(
+    (session) =>
+      session.sessionReview &&
+      session.sessionReview.length > 10
+  ).length;
+
+  const highScoreSessions = sessions.filter(
+    (session) =>
+      (session.finalScore || 0) >= 8
+  ).length;
+
   return (
     <div>
+
+      <SessionsHero
+        totalSessions={sessions.length}
+        averageScore={averageScore}
+      />
+
+      <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+        <SessionInsightCard
+          title="Focused Sessions"
+          value={focusedSessions}
+          tone="text-cyan-400"
+          description="Sessioni con focus operativo dettagliato e pianificazione reale."
+        />
+
+        <SessionInsightCard
+          title="Reviewed Sessions"
+          value={reviewedSessions}
+          tone="text-violet-400"
+          description="Sessioni con review post-market completata."
+        />
+
+        <SessionInsightCard
+          title="High Score Sessions"
+          value={highScoreSessions}
+          tone="text-green-400"
+          description="Sessioni con execution score superiore a 8/10."
+        />
+      </div>
+
       <div className="mb-8">
         <p className="text-sm text-gray-400">
           Trading Sessions
