@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
+import TradeQualityHero from "@/components/diary/TradeQualityHero";
+
 import {
   createAccountTrade,
   deleteAccountTrade,
@@ -243,8 +245,39 @@ export default async function DiaryPage({
     },
   ];
 
+  const averageExecution =
+    trades.length > 0
+      ? Math.round(
+        trades.reduce(
+          (acc, trade) =>
+            acc +
+            (trade.executionRating || 0),
+          0
+        ) / trades.length
+      )
+      : 0;
+
+  const averageConfidence =
+    trades.length > 0
+      ? Math.round(
+        trades.reduce(
+          (acc, trade) =>
+            acc +
+            (trade.confidence || 0),
+          0
+        ) / trades.length
+      )
+      : 0;
+
   return (
     <div>
+
+      <TradeQualityHero
+        totalTrades={trades.length}
+        averageExecution={averageExecution}
+        averageConfidence={averageConfidence}
+      />
+
       <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <p className="text-sm text-gray-400">

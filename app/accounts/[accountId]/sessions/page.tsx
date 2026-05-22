@@ -135,6 +135,15 @@ export default async function SessionsPage({
         />
       </div>
 
+      <div className="mt-8">
+        <ExecutionIntelligence
+          lowScoreSessions={lowScoreSessions}
+          highScoreSessions={highScoreSessions}
+          reviewedSessions={reviewedSessions}
+          totalSessions={sessions.length}
+        />
+      </div>
+
       <div className="mb-8">
         <p className="text-sm text-gray-400">
           Trading Sessions
