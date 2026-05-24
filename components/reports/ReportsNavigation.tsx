@@ -91,7 +91,7 @@ const sections = [
 
 export default function ReportsNavigation() {
   return (
-    <div className="sticky top-4 z-30 rounded-[28px] border border-white/10 bg-black/40 p-4 backdrop-blur-xl">
+    <div className="print-hidden sticky top-4 z-30 rounded-[28px] border border-white/10 bg-black/40 p-4 backdrop-blur-xl">
       <div className="flex gap-3 overflow-x-auto">
         {sections.map((section) => (
           <a

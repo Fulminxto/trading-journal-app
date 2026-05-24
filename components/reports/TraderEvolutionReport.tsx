@@ -33,7 +33,7 @@ export default function TraderEvolutionReport({
       : "text-red-400";
 
   return (
-    <div className="relative overflow-hidden rounded-[36px] border border-white/10 bg-gradient-to-br from-[#0b0f1a] via-[#111827] to-black p-8">
+    <div className="report-card relative overflow-hidden rounded-[36px] border border-white/10 bg-gradient-to-br from-[#0b0f1a] via-[#111827] to-black p-8">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.12),transparent_35%)]" />
 
       <div className="relative z-10">

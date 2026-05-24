@@ -89,3 +89,52 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   appearance: textfield;
 }
+
+@media print {
+
+  aside,
+  nav,
+  .print-hidden {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  main {
+    padding: 0 !important;
+  }
+
+  * {
+    box-shadow: none !important;
+  }
+}
+
+@media print {
+  .report-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .report-section {
+    margin-top: 24px !important;
+  }
+
+  body {
+    zoom: 0.82;
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: #000 !important;
+  }
+
+  p,
+  span,
+  div {
+    color: #222 !important;
+  }
+}

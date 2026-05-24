@@ -37,7 +37,7 @@ export default function BehavioralReportCard({
       : "text-green-400";
 
   return (
-    <div className="relative overflow-hidden rounded-[36px] border border-white/10 bg-gradient-to-br from-[#140909] via-[#171020] to-black p-8">
+    <div className="report-card relative overflow-hidden rounded-[36px] border border-white/10 bg-gradient-to-br from-[#140909] via-[#171020] to-black p-8">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.12),transparent_35%)]" />
 
       <div className="relative z-10">
