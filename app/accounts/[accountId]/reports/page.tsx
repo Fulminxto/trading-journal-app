@@ -4,6 +4,27 @@ import { redirect } from "next/navigation";
 
 import WeeklyReportCard from "@/components/reports/WeeklyReportCard";
 import MonthlyReportCard from "@/components/reports/MonthlyReportCard";
+import BehavioralReportCard from "@/components/reports/BehavioralReportCard";
+import PerformanceBreakdownCard from "@/components/reports/PerformanceBreakdownCard";
+import TraderEvolutionReport from "@/components/reports/TraderEvolutionReport";
+import ExecutiveSummaryCard from "@/components/reports/ExecutiveSummaryCard";
+import AICoachingReport from "@/components/reports/AICoachingReport";
+import RiskManagementReport from "@/components/reports/RiskManagementReport";
+import ConsistencyIntelligenceReport from "@/components/reports/ConsistencyIntelligenceReport";
+import PsychologicalStabilityReport from "@/components/reports/PsychologicalStabilityReport";
+import PerformanceForecastReport from "@/components/reports/PerformanceForecastReport";
+import GrowthRoadmapReport from "@/components/reports/GrowthRoadmapReport";
+import EdgeAnalysisReport from "@/components/reports/EdgeAnalysisReport";
+import DecisionQualityReport from "@/components/reports/DecisionQualityReport";
+import ExecutionIntelligenceReport from "@/components/reports/ExecutionIntelligenceReport";
+import SetupIntelligenceReport from "@/components/reports/SetupIntelligenceReport";
+import ConfidenceIntelligenceReport from "@/components/reports/ConfidenceIntelligenceReport";
+import DisciplineIntelligenceReport from "@/components/reports/DisciplineIntelligenceReport";
+import EmotionalIntelligenceReport from "@/components/reports/EmotionalIntelligenceReport";
+import TraderIdentityReport from "@/components/reports/TraderIdentityReport";
+import CognitivePerformanceReport from "@/components/reports/CognitivePerformanceReport";
+import MentalResilienceReport from "@/components/reports/MentalResilienceReport";
+import ReportsNavigation from "@/components/reports/ReportsNavigation";
 
 export default async function ReportsPage({
   params,
@@ -83,8 +104,73 @@ export default async function ReportsPage({
       )
       : 0;
 
+  const lowConfidenceTrades = trades.filter(
+    (trade) =>
+      (trade.confidence || 0) > 0 &&
+      (trade.confidence || 0) <= 4
+  ).length;
+
+  const weakExecutionTrades = trades.filter(
+    (trade) =>
+      (trade.executionRating || 0) > 0 &&
+      (trade.executionRating || 0) <= 4
+  ).length;
+
+  const breakEven = trades.filter(
+    (trade) => trade.outcome === "be"
+  ).length;
+
+  const averageWin =
+    wins > 0
+      ? trades
+        .filter(
+          (trade) =>
+            trade.outcome === "win"
+        )
+        .reduce(
+          (acc, trade) =>
+            acc + (trade.resultUsd || 0),
+          0
+        ) / wins
+      : 0;
+
+  const averageLoss =
+    losses > 0
+      ? trades
+        .filter(
+          (trade) =>
+            trade.outcome === "loss"
+        )
+        .reduce(
+          (acc, trade) =>
+            acc + (trade.resultUsd || 0),
+          0
+        ) / losses
+      : 0;
+
+  const behavioralRisk =
+    totalTrades > 0
+      ? Math.round(
+        ((emotionalTrades +
+          lowConfidenceTrades +
+          weakExecutionTrades) /
+          totalTrades) *
+        100
+      )
+      : 0;
+
   return (
     <div className="space-y-8">
+
+      <div id="executive">
+        <ExecutiveSummaryCard
+          totalPnl={totalPnl}
+          winRate={winRate}
+          disciplineScore={disciplineScore}
+          behavioralRisk={behavioralRisk}
+        />
+      </div>
+
       <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#070b14] via-[#0f1726] to-black p-8 shadow-2xl shadow-cyan-500/5">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.12),transparent_35%)]" />
 
@@ -107,6 +193,8 @@ export default async function ReportsPage({
           </p>
         </div>
       </div>
+
+      <ReportsNavigation />
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
         <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
@@ -150,19 +238,257 @@ export default async function ReportsPage({
         </div>
       </div>
 
-      <WeeklyReportCard
-        totalTrades={totalTrades}
-        totalPnl={totalPnl}
-        winRate={winRate}
-      />
+      <div id="weekly">
+        <WeeklyReportCard
+          totalTrades={totalTrades}
+          totalPnl={totalPnl}
+          winRate={winRate}
+        />
+      </div>
 
-      <div className="mt-8">
+      <div
+        id="monthly"
+        className="mt-8"
+      >
         <MonthlyReportCard
           totalTrades={totalTrades}
           totalPnl={totalPnl}
           winRate={winRate}
           emotionalTrades={emotionalTrades}
           disciplineScore={disciplineScore}
+        />
+      </div>
+
+      <div
+        id="behavior"
+        className="mt-8"
+      >
+        <BehavioralReportCard
+          emotionalTrades={emotionalTrades}
+          lowConfidenceTrades={lowConfidenceTrades}
+          weakExecutionTrades={weakExecutionTrades}
+          totalTrades={totalTrades}
+        />
+      </div>
+
+      <div
+        id="performance"
+        className="mt-8"
+      >
+        <PerformanceBreakdownCard
+          wins={wins}
+          losses={losses}
+          breakEven={breakEven}
+          averageWin={averageWin}
+          averageLoss={averageLoss}
+        />
+      </div>
+
+      <div
+        id="growth"
+        className="mt-8"
+      >
+        <GrowthRoadmapReport
+          disciplineScore={disciplineScore}
+          behavioralRisk={behavioralRisk}
+          winRate={winRate}
+        />
+      </div>
+
+      <div
+        id="edge"
+        className="mt-8"
+      >
+        <EdgeAnalysisReport
+          averageWin={averageWin}
+          averageLoss={averageLoss}
+          winRate={winRate}
+          disciplineScore={disciplineScore}
+        />
+      </div>
+
+      <div
+        id="decision"
+        className="mt-8"
+      >
+        <DecisionQualityReport
+          disciplineScore={disciplineScore}
+          behavioralRisk={behavioralRisk}
+          winRate={winRate}
+          emotionalTrades={emotionalTrades}
+        />
+      </div>
+
+      <div
+        id="execution"
+        className="mt-8"
+      >
+        <ExecutionIntelligenceReport
+          weakExecutionTrades={weakExecutionTrades}
+          totalTrades={totalTrades}
+          disciplineScore={disciplineScore}
+          averageWin={averageWin}
+          averageLoss={averageLoss}
+        />
+      </div>
+
+      <div
+        id="setup"
+        className="mt-8"
+      >
+        <SetupIntelligenceReport
+          totalTrades={totalTrades}
+          disciplineScore={disciplineScore}
+          averageWin={averageWin}
+          averageLoss={averageLoss}
+          winRate={winRate}
+        />
+      </div>
+
+      <div
+        id="confidence"
+        className="mt-8"
+      >
+        <ConfidenceIntelligenceReport
+          lowConfidenceTrades={lowConfidenceTrades}
+          totalTrades={totalTrades}
+          disciplineScore={disciplineScore}
+          winRate={winRate}
+        />
+      </div>
+
+      <div
+        id="discipline"
+        className="mt-8"
+      >
+        <DisciplineIntelligenceReport
+          disciplineScore={disciplineScore}
+          behavioralRisk={behavioralRisk}
+          emotionalTrades={emotionalTrades}
+          totalTrades={totalTrades}
+        />
+      </div>
+
+      <div
+        id="emotion"
+        className="mt-8"
+      >
+        <EmotionalIntelligenceReport
+          emotionalTrades={emotionalTrades}
+          totalTrades={totalTrades}
+          behavioralRisk={behavioralRisk}
+          disciplineScore={disciplineScore}
+        />
+      </div>
+
+      <div
+        id="identity"
+        className="mt-8"
+      >
+        <TraderIdentityReport
+          disciplineScore={disciplineScore}
+          behavioralRisk={behavioralRisk}
+          winRate={winRate}
+          emotionalTrades={emotionalTrades}
+          totalTrades={totalTrades}
+        />
+      </div>
+
+      <div
+        id="cognitive"
+        className="mt-8"
+      >
+        <CognitivePerformanceReport
+          disciplineScore={disciplineScore}
+          behavioralRisk={behavioralRisk}
+          lowConfidenceTrades={lowConfidenceTrades}
+          weakExecutionTrades={weakExecutionTrades}
+          totalTrades={totalTrades}
+        />
+      </div>
+
+      <div
+        id="resilience"
+        className="mt-8"
+      >
+        <MentalResilienceReport
+          disciplineScore={disciplineScore}
+          behavioralRisk={behavioralRisk}
+          emotionalTrades={emotionalTrades}
+          losses={losses}
+          totalTrades={totalTrades}
+        />
+      </div>
+
+      <div
+        id="evolution"
+        className="mt-8"
+      >
+        <TraderEvolutionReport
+          disciplineScore={disciplineScore}
+          winRate={winRate}
+          emotionalTrades={emotionalTrades}
+          totalTrades={totalTrades}
+        />
+      </div>
+
+      <div
+        id="coaching"
+        className="mt-8"
+      >
+        <AICoachingReport
+          disciplineScore={disciplineScore}
+          behavioralRisk={behavioralRisk}
+          winRate={winRate}
+          emotionalTrades={emotionalTrades}
+        />
+      </div>
+
+      <div
+        id="risk"
+        className="mt-8"
+      >
+        <RiskManagementReport
+          averageLoss={averageLoss}
+          averageWin={averageWin}
+          behavioralRisk={behavioralRisk}
+          losses={losses}
+        />
+      </div>
+
+      <div
+        id="consistency"
+        className="mt-8"
+      >
+        <ConsistencyIntelligenceReport
+          disciplineScore={disciplineScore}
+          winRate={winRate}
+          totalTrades={totalTrades}
+          emotionalTrades={emotionalTrades}
+        />
+      </div>
+
+      <div
+        id="psychology"
+        className="mt-8"
+      >
+        <PsychologicalStabilityReport
+          emotionalTrades={emotionalTrades}
+          totalTrades={totalTrades}
+          behavioralRisk={behavioralRisk}
+          disciplineScore={disciplineScore}
+        />
+      </div>
+
+      <div
+        id="forecast"
+        className="mt-8"
+      >
+        <PerformanceForecastReport
+          winRate={winRate}
+          disciplineScore={disciplineScore}
+          behavioralRisk={behavioralRisk}
+          totalPnl={totalPnl}
         />
       </div>
 
