@@ -17,6 +17,7 @@ import {
   X,
   BarChart3,
   Zap,
+  Bot,
 } from "lucide-react";
 
 const baseLinks = [
@@ -49,6 +50,11 @@ const baseLinks = [
     path: "reports",
     label: "Reports",
     icon: FileText,
+  },
+  {
+    path: "copilot",
+    label: "Copilot",
+    icon: Bot,
   },
   {
     path: "sessions",
