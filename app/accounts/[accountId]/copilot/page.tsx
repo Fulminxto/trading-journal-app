@@ -42,9 +42,9 @@ export default async function CopilotPage({
           </h1>
 
           <p className="mt-6 max-w-3xl text-base leading-relaxed text-gray-400 xl:text-lg">
-            Assistant intelligente per analizzare
-            performance, comportamento, execution,
-            psicologia operativa e pattern ricorrenti.
+            Assistant intelligente per analizzare performance,
+            comportamento, execution, psicologia operativa e pattern
+            ricorrenti.
           </p>
         </div>
       </div>
@@ -61,9 +61,110 @@ export default async function CopilotPage({
         <p className="mt-5 max-w-3xl text-sm leading-relaxed text-gray-400">
           In questa sezione costruiremo il layer AI di VOLTIS:
           analisi automatica dei trade, coaching dinamico,
-          pattern detection, warning comportamentali e
-          suggerimenti operativi contestuali.
+          pattern detection, warning comportamentali e suggerimenti
+          operativi contestuali.
         </p>
+      </div>
+
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="rounded-[32px] border border-white/10 bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 p-6">
+          <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+            Behavioral Detection
+          </p>
+
+          <h3 className="mt-4 text-2xl font-black text-white">
+            Emotional Trading
+          </h3>
+
+          <p className="mt-4 text-sm leading-relaxed text-gray-400">
+            VOLTIS analizzerà pattern emotivi, overtrading, revenge
+            trading e instabilità decisionale.
+          </p>
+        </div>
+
+        <div className="rounded-[32px] border border-white/10 bg-gradient-to-br from-violet-500/10 to-violet-500/5 p-6">
+          <p className="text-sm uppercase tracking-[0.2em] text-violet-400">
+            AI Coaching
+          </p>
+
+          <h3 className="mt-4 text-2xl font-black text-white">
+            Dynamic Coaching
+          </h3>
+
+          <p className="mt-4 text-sm leading-relaxed text-gray-400">
+            Coaching operativo dinamico basato sui tuoi dati reali e
+            comportamento.
+          </p>
+        </div>
+
+        <div className="rounded-[32px] border border-white/10 bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 p-6">
+          <p className="text-sm uppercase tracking-[0.2em] text-emerald-400">
+            Pattern Intelligence
+          </p>
+
+          <h3 className="mt-4 text-2xl font-black text-white">
+            Pattern Recognition
+          </h3>
+
+          <p className="mt-4 text-sm leading-relaxed text-gray-400">
+            Riconoscimento automatico di pattern profittevoli e
+            comportamenti ricorrenti.
+          </p>
+        </div>
+      </div>
+
+      <div className="rounded-[36px] border border-white/10 bg-black/30 p-8 backdrop-blur-xl">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+              AI Conversation
+            </p>
+
+            <h2 className="mt-3 text-3xl font-black text-white">
+              VOLTIS Assistant
+            </h2>
+          </div>
+
+          <div className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-emerald-400">
+            Online
+          </div>
+        </div>
+
+        <div className="mt-8 space-y-6">
+          <div className="max-w-2xl rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
+            <p className="text-sm leading-relaxed text-gray-300">
+              Ho rilevato che il tuo win rate rimane stabile, ma il profit
+              factor diminuisce nelle giornate con più di 4 operazioni
+              consecutive.
+            </p>
+          </div>
+
+          <div className="ml-auto max-w-2xl rounded-[28px] border border-cyan-500/20 bg-cyan-500/10 p-5">
+            <p className="text-sm leading-relaxed text-cyan-100">
+              Quali pattern negativi sto ripetendo?
+            </p>
+          </div>
+
+          <div className="max-w-2xl rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
+            <p className="text-sm leading-relaxed text-gray-300">
+              Il pattern principale è aumento della frequenza operativa dopo
+              una perdita consecutiva. Questo comportamento riduce qualità
+              esecutiva e disciplina.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-8 flex items-center gap-4">
+          <input
+            type="text"
+            placeholder="Ask VOLTIS Copilot..."
+            className="h-14 flex-1 rounded-2xl border border-white/10 bg-white/[0.04] px-5 text-sm text-white outline-none placeholder:text-gray-500"
+          />
+
+          <button className="h-14 rounded-2xl bg-cyan-500 px-6 text-sm font-black uppercase tracking-[0.15em] text-black transition hover:bg-cyan-400">
+            Send
+          </button>
+        </div>
       </div>
     </div>
   );
