@@ -1,15 +1,16 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
-export async function sendCopilotMessage({
-  tradingAccountId,
-  content,
-}: {
-  tradingAccountId: string;
-  content: string;
-}) {
-  if (!content.trim()) {
+export async function sendCopilotMessage(formData: FormData) {
+  const tradingAccountId = String(
+    formData.get("tradingAccountId")
+  );
+
+  const content = String(formData.get("content") || "");
+
+  if (!tradingAccountId || !content.trim()) {
     return;
   }
 
@@ -21,14 +22,16 @@ export async function sendCopilotMessage({
     },
   });
 
-  const aiResponse =
-    "VOLTIS sta analizzando il tuo account e il comportamento operativo.";
-
   await prisma.copilotMessage.create({
     data: {
       tradingAccountId,
       role: "assistant",
-      content: aiResponse,
+      content:
+        "Ho ricevuto il messaggio. Nel prossimo step collegheremo questa risposta ai dati reali del tuo account.",
     },
   });
+
+  revalidatePath(
+    `/accounts/${tradingAccountId}/copilot`
+  );
 }
