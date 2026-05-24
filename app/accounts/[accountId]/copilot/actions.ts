@@ -276,6 +276,34 @@ export async function sendCopilotMessage(formData: FormData) {
                 : `Ho analizzato ${totalTrades} trade. Win rate: ${winRate}%, disciplina: ${disciplineScore}%, rischio comportamentale: ${behavioralRisk}%. Streak attuale: ${winStreak > 0 ? `${winStreak} win consecutivi` : lossStreak > 0 ? `${lossStreak} loss consecutivi` : "neutrale"}.`;
     }
 
+    if (revengeRiskTrades > 0) {
+        await prisma.copilotPattern.upsert({
+            where: {
+                id: `revenge-${tradingAccountId}`,
+            },
+            update: {
+                occurrences: {
+                    increment: 1,
+                },
+                description:
+                    "Possibili segnali di revenge trading dopo una perdita.",
+                severity:
+                    revengeRiskTrades >= 3 ? "high" : "medium",
+            },
+            create: {
+                id: `revenge-${tradingAccountId}`,
+                tradingAccountId,
+                type: "behavior",
+                title: "Revenge Trading Risk",
+                description:
+                    "Possibili segnali di revenge trading dopo una perdita.",
+                severity:
+                    revengeRiskTrades >= 3 ? "high" : "medium",
+                occurrences: 1,
+            },
+        });
+    }
+
     await prisma.copilotMessage.create({
         data: {
             tradingAccountId,

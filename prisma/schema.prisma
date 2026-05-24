@@ -62,6 +62,7 @@ model TradingAccount {
   updatedAt      DateTime @updatedAt
 
   copilotMessages CopilotMessage[]
+  copilotPatterns CopilotPattern[]
 }
 
 model AccountMember {
@@ -130,6 +131,23 @@ model CopilotMessage {
   content          String
 
   createdAt        DateTime @default(now())
+}
+
+model CopilotPattern {
+  id               String   @id @default(cuid())
+
+  tradingAccountId String
+  tradingAccount   TradingAccount @relation(fields: [tradingAccountId], references: [id], onDelete: Cascade)
+
+  type             String
+  title            String
+  description      String
+  severity         String
+
+  occurrences      Int      @default(1)
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
 model TradingSession {
