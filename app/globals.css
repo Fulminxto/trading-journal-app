@@ -138,3 +138,15 @@ input[type="number"] {
     color: #222 !important;
   }
 }
+
+@media print {
+  .print-cover-page {
+    page-break-after: always;
+    break-after: page;
+  }
+
+  .print-page-break {
+    page-break-before: always;
+    break-before: page;
+  }
+}
