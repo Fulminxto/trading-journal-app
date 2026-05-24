@@ -27,6 +27,7 @@ import MentalResilienceReport from "@/components/reports/MentalResilienceReport"
 import ReportsNavigation from "@/components/reports/ReportsNavigation";
 import PrintReportButton from "@/components/reports/PrintReportButton";
 import PDFReportHeader from "@/components/reports/PDFReportHeader";
+import PDFReportFooter from "@/components/reports/PDFReportFooter";
 
 export default async function ReportsPage({
   params,
@@ -506,6 +507,9 @@ export default async function ReportsPage({
           totalTrades={totalTrades}
         />
       </div>
+
+      <PDFReportFooter />
+
     </div>
   );
 }
