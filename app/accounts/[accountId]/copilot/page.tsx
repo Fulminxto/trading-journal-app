@@ -27,6 +27,83 @@ export default async function CopilotPage({
     redirect("/accounts");
   }
 
+  const trades = await prisma.trade.findMany({
+    where: {
+      tradingAccountId: accountId,
+    },
+    orderBy: {
+      openDate: "desc",
+    },
+  });
+
+  const totalTrades = trades.length;
+
+  const wins = trades.filter(
+    (trade) => trade.outcome === "win"
+  ).length;
+
+  const winRate =
+    totalTrades > 0
+      ? Math.round((wins / totalTrades) * 100)
+      : 0;
+
+  const weakExecutionTrades = trades.filter(
+    (trade) =>
+      (trade.executionRating || 0) > 0 &&
+      (trade.executionRating || 0) <= 4
+  ).length;
+
+  const emotionalTrades = trades.filter(
+    (trade) =>
+      trade.emotionalState &&
+      trade.emotionalState.length > 0
+  ).length;
+
+  const lowConfidenceTrades = trades.filter(
+    (trade) =>
+      (trade.confidence || 0) > 0 &&
+      (trade.confidence || 0) <= 4
+  ).length;
+
+  const behavioralRisk =
+    totalTrades > 0
+      ? Math.round(
+          ((weakExecutionTrades +
+            emotionalTrades +
+            lowConfidenceTrades) /
+            totalTrades) *
+            100
+        )
+      : 0;
+
+  const disciplineScore = Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round(
+        winRate -
+          behavioralRisk * 0.4 +
+          (totalTrades > 0 ? 20 : 0)
+      )
+    )
+  );
+
+  const riskLabel =
+    behavioralRisk >= 50
+      ? "High"
+      : behavioralRisk >= 25
+      ? "Medium"
+      : "Low";
+
+  const summaryText =
+    totalTrades === 0
+      ? "Non ci sono ancora abbastanza dati per generare una lettura intelligente del conto."
+      : disciplineScore >= 75 && behavioralRisk < 25
+      ? "VOLTIS ha rilevato una struttura operativa stabile. La disciplina rimane elevata e il rischio comportamentale appare controllato."
+      : behavioralRisk >= 50
+      ? "VOLTIS rileva segnali di rischio comportamentale elevato. Serve ridurre impulsività, migliorare review e proteggere execution."
+      : "VOLTIS rileva una struttura in sviluppo. Il focus principale è migliorare consistenza, selezione setup e stabilità decisionale.";
+
   return (
     <div className="space-y-8">
       <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#070b14] via-[#0f1726] to-black p-8">
@@ -113,6 +190,74 @@ export default async function CopilotPage({
         </div>
       </div>
 
+      <div className="grid gap-6 xl:grid-cols-2">
+        <div className="rounded-[32px] border border-cyan-500/20 bg-cyan-500/10 p-7">
+          <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+            AI Summary
+          </p>
+
+          <h2 className="mt-4 text-3xl font-black text-white">
+            Operational Intelligence
+          </h2>
+
+          <p className="mt-5 text-sm leading-relaxed text-cyan-100">
+            {summaryText}
+          </p>
+
+          <div className="mt-6 grid grid-cols-2 gap-4">
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+                Discipline
+              </p>
+
+              <h3 className="mt-2 text-2xl font-black text-white">
+                {disciplineScore}%
+              </h3>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+                Behavioral Risk
+              </p>
+
+              <h3 className="mt-2 text-2xl font-black text-emerald-400">
+                {riskLabel}
+              </h3>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-[32px] border border-violet-500/20 bg-violet-500/10 p-7">
+          <p className="text-sm uppercase tracking-[0.2em] text-violet-400">
+            AI Recommendations
+          </p>
+
+          <h2 className="mt-4 text-3xl font-black text-white">
+            Strategic Focus
+          </h2>
+
+          <div className="mt-6 space-y-4">
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <p className="text-sm leading-relaxed text-gray-300">
+                Ridurre frequenza operativa dopo una perdita consecutiva.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <p className="text-sm leading-relaxed text-gray-300">
+                Proteggere qualità execution durante alta volatilità.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <p className="text-sm leading-relaxed text-gray-300">
+                Mantenere focus su setup ad alta probabilità.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="rounded-[36px] border border-white/10 bg-black/30 p-8 backdrop-blur-xl">
         <div className="flex items-center justify-between">
           <div>
@@ -133,9 +278,9 @@ export default async function CopilotPage({
         <div className="mt-8 space-y-6">
           <div className="max-w-2xl rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
             <p className="text-sm leading-relaxed text-gray-300">
-              Ho rilevato che il tuo win rate rimane stabile, ma il profit
-              factor diminuisce nelle giornate con più di 4 operazioni
-              consecutive.
+              Ho analizzato {totalTrades} trade sul conto. Il win rate
+              attuale è {winRate}% e il rischio comportamentale è
+              classificato come {riskLabel}.
             </p>
           </div>
 
@@ -147,9 +292,9 @@ export default async function CopilotPage({
 
           <div className="max-w-2xl rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
             <p className="text-sm leading-relaxed text-gray-300">
-              Il pattern principale è aumento della frequenza operativa dopo
-              una perdita consecutiva. Questo comportamento riduce qualità
-              esecutiva e disciplina.
+              I segnali principali da monitorare sono emotional trading,
+              bassa confidence ed execution debole. Questi fattori
+              aumentano il rischio operativo quando diventano ricorrenti.
             </p>
           </div>
         </div>
