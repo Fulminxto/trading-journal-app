@@ -80,7 +80,121 @@ export async function sendCopilotMessage(formData: FormData) {
         )
     );
 
+    const recentTrades = trades
+        .slice()
+        .sort(
+            (a, b) =>
+                new Date(b.openDate).getTime() -
+                new Date(a.openDate).getTime()
+        );
+
+    let lossStreak = 0;
+
+    for (const trade of recentTrades) {
+        if (trade.outcome === "loss") {
+            lossStreak += 1;
+        } else {
+            break;
+        }
+    }
+
+    let winStreak = 0;
+
+    for (const trade of recentTrades) {
+        if (trade.outcome === "win") {
+            winStreak += 1;
+        } else {
+            break;
+        }
+    }
+
+    const revengeRiskTrades = recentTrades.filter(
+        (trade, index) => {
+            const previousTrade = recentTrades[index + 1];
+
+            if (!previousTrade) {
+                return false;
+            }
+
+            return (
+                previousTrade.outcome === "loss" &&
+                ((trade.executionRating || 0) <= 4 ||
+                    trade.emotionalState ||
+                    (trade.confidence || 0) <= 4)
+            );
+        }
+    ).length;
+
+    const sessionStats = trades.reduce(
+        (acc, trade) => {
+            const hour = trade.openTime
+                ? Number(trade.openTime.split(":")[0])
+                : null;
+
+            const session =
+                hour === null
+                    ? "Unknown"
+                    : hour >= 7 && hour < 13
+                        ? "London"
+                        : hour >= 13 && hour < 22
+                            ? "New York"
+                            : "Asia";
+
+            if (!acc[session]) {
+                acc[session] = {
+                    trades: 0,
+                    pnl: 0,
+                };
+            }
+
+            acc[session].trades += 1;
+            acc[session].pnl += trade.resultUsd || 0;
+
+            return acc;
+        },
+        {} as Record<
+            string,
+            {
+                trades: number;
+                pnl: number;
+            }
+        >
+    );
+
+    const sessionEntries = Object.entries(sessionStats);
+
+    const bestSession =
+        sessionEntries.length >= 2
+            ? sessionEntries.sort(
+                (a, b) => b[1].pnl - a[1].pnl
+            )[0]?.[0] || "Not enough data"
+            : "Not enough data";
+
+    const worstSession =
+        sessionEntries.length >= 2
+            ? sessionEntries.sort(
+                (a, b) => a[1].pnl - b[1].pnl
+            )[0]?.[0] || "Not enough data"
+            : "Not enough data";
+
     const lowerContent = content.toLowerCase();
+
+    const weakTimeTrades = trades.filter((trade) => {
+        const hour = trade.openTime
+            ? Number(trade.openTime.split(":")[0])
+            : null;
+
+        if (hour === null) {
+            return false;
+        }
+
+        return (
+            hour >= 18 &&
+            ((trade.executionRating || 0) <= 4 ||
+                (trade.confidence || 0) <= 4 ||
+                trade.emotionalState)
+        );
+    }).length;
 
     let aiResponse = "";
 
@@ -95,13 +209,23 @@ export async function sendCopilotMessage(formData: FormData) {
                 : `La tua disciplina operativa è ancora instabile (${disciplineScore}%). VOLTIS rileva necessità di migliorare routine, execution e controllo emotivo.`;
     } else if (
         lowerContent.includes("emotion") ||
-        lowerContent.includes("emotivo") ||
-        lowerContent.includes("revenge")
+        lowerContent.includes("emotivo")
     ) {
         aiResponse =
             emotionalTrades > 0
                 ? `Ho rilevato ${emotionalTrades} trade con componente emotiva. Il focus è ridurre revenge trading e decisioni prese sotto pressione emotiva.`
                 : "Non rilevo segnali importanti di emotional trading. La struttura emotiva appare stabile.";
+
+    } else if (
+        lowerContent.includes("revenge") ||
+        lowerContent.includes("impuls") ||
+        lowerContent.includes("overtrading")
+    ) {
+        aiResponse =
+            revengeRiskTrades > 0
+                ? `Ho rilevato ${revengeRiskTrades} possibili segnali di revenge trading: dopo una perdita compaiono execution debole, bassa confidence o componente emotiva. Il focus è fermarti dopo una loss e fare review prima del trade successivo.`
+                : "Non rilevo segnali forti di revenge trading nei dati attuali. Continua comunque a monitorare le operazioni successive a una perdita.";
+
     } else if (
         lowerContent.includes("risk") ||
         lowerContent.includes("rischio")
@@ -119,11 +243,37 @@ export async function sendCopilotMessage(formData: FormData) {
             winRate >= 60
                 ? `La performance operativa è positiva. Win rate attuale: ${winRate}%. La priorità ora è scalare mantenendo disciplina e qualità setup.`
                 : `Il win rate attuale (${winRate}%) suggerisce necessità di migliorare selezione setup e qualità execution.`;
+
+    } else if (
+        lowerContent.includes("orari") ||
+        lowerContent.includes("fascia") ||
+        lowerContent.includes("time quality") ||
+        lowerContent.includes("sera")
+    ) {
+        aiResponse =
+            weakTimeTrades > 0
+                ? `Ho rilevato ${weakTimeTrades} trade potenzialmente deboli nelle fasce orarie serali. Questo può indicare calo di lucidità, stanchezza o decisioni meno selettive.`
+                : "Non rilevo un peggioramento evidente della qualità operativa nelle fasce orarie serali.";
+
+    } else if (
+        lowerContent.includes("session") ||
+        lowerContent.includes("londra") ||
+        lowerContent.includes("new york") ||
+        lowerContent.includes("orario") ||
+        lowerContent.includes("time")
+    ) {
+        aiResponse =
+            totalTrades === 0
+                ? "Non ho ancora abbastanza dati per analizzare le sessioni operative."
+                : sessionEntries.length < 2
+                    ? "Per ora i dati sono concentrati in una sola sessione, quindi non posso confrontare in modo affidabile sessione migliore e peggiore. Inserisci trade in più fasce orarie per attivare un confronto reale."
+                    : `La sessione migliore risulta essere ${bestSession}, mentre quella più debole è ${worstSession}. Usa questa informazione per capire dove il tuo edge operativo è più forte e dove invece rischi di perdere qualità.`;
+
     } else {
         aiResponse =
             totalTrades === 0
                 ? "Non ho ancora abbastanza dati per analizzare il tuo conto. Inserisci trade nel Diary per attivare il motore intelligence."
-                : `Ho analizzato ${totalTrades} trade. Attualmente il win rate è ${winRate}%, la disciplina ${disciplineScore}% e il rischio comportamentale ${behavioralRisk}%.`;
+                : `Ho analizzato ${totalTrades} trade. Win rate: ${winRate}%, disciplina: ${disciplineScore}%, rischio comportamentale: ${behavioralRisk}%. Streak attuale: ${winStreak > 0 ? `${winStreak} win consecutivi` : lossStreak > 0 ? `${lossStreak} loss consecutivi` : "neutrale"}.`;
     }
 
     await prisma.copilotMessage.create({
