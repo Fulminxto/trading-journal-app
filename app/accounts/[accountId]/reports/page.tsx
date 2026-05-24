@@ -164,7 +164,7 @@ export default async function ReportsPage({
       : 0;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 print:space-y-0 print:bg-[#050b10]">
 
       <PDFCompactReport
         userName={session.user.name ?? "Trader"}
@@ -184,7 +184,7 @@ export default async function ReportsPage({
 
       <div className="web-report-content space-y-8">
 
-        <div className="print-cover-page">
+        <div className="print-hidden">
           <PDFReportHeader
             totalTrades={totalTrades}
             totalPnl={totalPnl}

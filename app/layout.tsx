@@ -54,7 +54,7 @@ export default async function RootLayout({
                 {children}
               </main>
 
-              <footer className="border-t border-white/10 bg-black/20 px-6 py-5">
+              <footer className="hidden print:hidden border-t border-white/10 bg-black/20 px-6 py-5">
                 <div className="flex flex-col gap-2 text-center text-xs text-gray-500 lg:flex-row lg:items-center lg:justify-between lg:text-left">
                   <div>
                     <p>VOLTIS © 2026</p>

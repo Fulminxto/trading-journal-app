@@ -120,11 +120,6 @@ input[type="number"] {
     background-image: none !important;
   }
 
-  .print-cover-page {
-    page-break-after: always;
-    break-after: page;
-  }
-
   .print-page-break {
     page-break-before: always;
     break-before: page;
@@ -243,6 +238,124 @@ input[type="number"] {
 
   .pdf-only {
     display: block !important;
+  }
+
+  .pdf-only,
+  .pdf-only * {
+    color: #111827 !important;
+  }
+
+  .pdf-only .text-gray-500,
+  .pdf-only .text-gray-400 {
+    color: #374151 !important;
+  }
+
+  button,
+  [aria-label="Open sidebar"],
+  [aria-label="Menu"] {
+    display: none !important;
+  }
+
+  .pdf-only,
+  .pdf-only * {
+    color: #ffffff !important;
+  }
+
+  .pdf-only {
+    background: #050b10 !important;
+  }
+
+  .pdf-only section,
+  .pdf-only div,
+  .pdf-only footer {
+    background: #050b10 !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+  }
+
+  .pdf-only p,
+  .pdf-only span {
+    color: #d1d5db !important;
+  }
+
+  .pdf-only h1,
+  .pdf-only h2,
+  .pdf-only h3 {
+    color: #ffffff !important;
+  }
+
+  html,
+  body {
+    height: auto !important;
+    overflow: hidden !important;
+  }
+
+  body::after,
+  body::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  .pdf-only {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  footer:empty,
+  div:empty {
+    display: none !important;
+  }
+
+  @page {
+    size: A4;
+    margin: 6mm;
+  }
+
+  .pdf-only {
+    display: block !important;
+    width: 100% !important;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .web-report-content,
+  .print-hidden,
+  aside,
+  nav,
+  button {
+    display: none !important;
+  }
+
+  .pdf-only {
+    transform: scale(0.96);
+    transform-origin: top left;
+    width: 104% !important;
+  }
+
+  html,
+  body {
+    height: 297mm !important;
+    overflow: hidden !important;
+  }
+
+  .web-report-content,
+  .print-hidden,
+  aside,
+  nav,
+  button {
+    display: none !important;
+  }
+
+  .pdf-only {
+    display: block !important;
+  }
+
+  .pdf-page {
+    width: 100% !important;
+    max-height: 280mm !important;
+    overflow: hidden !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
   }
 }
 
