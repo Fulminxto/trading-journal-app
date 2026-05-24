@@ -164,11 +164,6 @@ input[type="number"] {
     border: 1px solid #e5e7eb !important;
   }
 
-  .report-card *,
-  .report-section * {
-    color: #111827 !important;
-  }
-
   .text-green-400 {
     color: #16a34a !important;
   }
@@ -193,7 +188,7 @@ input[type="number"] {
 @media print {
   @page {
     size: A4;
-    margin: 14mm;
+    margin: 8mm;
   }
 
   .print-hidden {
@@ -206,5 +201,42 @@ input[type="number"] {
 
   .report-card {
     margin-bottom: 18px !important;
+  }
+}
+
+@media print {
+  body {
+    zoom: 0.62 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .report-card {
+    padding: 18px !important;
+    margin-bottom: 10px !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .report-section {
+    margin-top: 12px !important;
+    padding-top: 0 !important;
+  }
+
+  h1 {
+    font-size: 28px !important;
+  }
+
+  h2 {
+    font-size: 22px !important;
+  }
+
+  h3 {
+    font-size: 16px !important;
+  }
+
+  p,
+  span {
+    font-size: 10px !important;
   }
 }

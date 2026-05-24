@@ -253,7 +253,10 @@ export default async function ReportsPage({
         </div>
       </div>
 
-      <div id="weekly">
+      <div
+        id="weekly"
+        className="print-hidden"
+      >
         <WeeklyReportCard
           totalTrades={totalTrades}
           totalPnl={totalPnl}
@@ -302,7 +305,7 @@ export default async function ReportsPage({
 
       <div
         id="evolution"
-        className="report-section mt-8"
+        className="print-hidden report-section mt-8"
       >
         <TraderEvolutionReport
           disciplineScore={disciplineScore}
@@ -338,7 +341,7 @@ export default async function ReportsPage({
 
       <div
         id="consistency"
-        className="report-section mt-8"
+        className="print-hidden report-section mt-8"
       >
         <ConsistencyIntelligenceReport
           disciplineScore={disciplineScore}
@@ -350,7 +353,7 @@ export default async function ReportsPage({
 
       <div
         id="psychology"
-        className="print-page-break report-section mt-8"
+        className="print-hidden report-section mt-8"
       >
         <PsychologicalStabilityReport
           emotionalTrades={emotionalTrades}
@@ -362,7 +365,7 @@ export default async function ReportsPage({
 
       <div
         id="forecast"
-        className="report-section mt-8"
+        className="print-hidden report-section mt-8"
       >
         <PerformanceForecastReport
           winRate={winRate}
@@ -374,7 +377,7 @@ export default async function ReportsPage({
 
       <div
         id="growth"
-        className="print-page-break report-section mt-8"
+        className="print-hidden report-section mt-8"
       >
         <GrowthRoadmapReport
           disciplineScore={disciplineScore}
@@ -385,7 +388,7 @@ export default async function ReportsPage({
 
       <div
         id="edge"
-        className="report-section mt-8"
+        className="print-hidden report-section mt-8"
       >
         <EdgeAnalysisReport
           averageWin={averageWin}
@@ -397,7 +400,7 @@ export default async function ReportsPage({
 
       <div
         id="decision"
-        className="print-page-break report-section mt-8"
+        className="print-hidden report-section mt-8"
       >
         <DecisionQualityReport
           disciplineScore={disciplineScore}
@@ -409,7 +412,7 @@ export default async function ReportsPage({
 
       <div
         id="execution"
-        className="report-section mt-8"
+        className="print-hidden report-section mt-8"
       >
         <ExecutionIntelligenceReport
           weakExecutionTrades={weakExecutionTrades}
@@ -422,7 +425,7 @@ export default async function ReportsPage({
 
       <div
         id="setup"
-        className="print-page-break report-section mt-8"
+        className="print-hidden report-section mt-8"
       >
         <SetupIntelligenceReport
           totalTrades={totalTrades}
@@ -435,7 +438,7 @@ export default async function ReportsPage({
 
       <div
         id="confidence"
-        className="report-section mt-8"
+        className="print-hidden report-section mt-8"
       >
         <ConfidenceIntelligenceReport
           lowConfidenceTrades={lowConfidenceTrades}
@@ -447,7 +450,7 @@ export default async function ReportsPage({
 
       <div
         id="discipline"
-        className="print-page-break report-section mt-8"
+        className="print-hidden report-section mt-8"
       >
         <DisciplineIntelligenceReport
           disciplineScore={disciplineScore}
@@ -459,7 +462,7 @@ export default async function ReportsPage({
 
       <div
         id="emotion"
-        className="report-section mt-8"
+        className="print-hidden report-section mt-8"
       >
         <EmotionalIntelligenceReport
           emotionalTrades={emotionalTrades}
@@ -471,7 +474,7 @@ export default async function ReportsPage({
 
       <div
         id="identity"
-        className="print-page-break report-section mt-8"
+        className="print-hidden report-section mt-8"
       >
         <TraderIdentityReport
           disciplineScore={disciplineScore}
@@ -484,7 +487,7 @@ export default async function ReportsPage({
 
       <div
         id="cognitive"
-        className="report-section mt-8"
+        className="print-hidden report-section mt-8"
       >
         <CognitivePerformanceReport
           disciplineScore={disciplineScore}
@@ -497,7 +500,7 @@ export default async function ReportsPage({
 
       <div
         id="resilience"
-        className="print-page-break report-section mt-8"
+        className="print-hidden report-section mt-8"
       >
         <MentalResilienceReport
           disciplineScore={disciplineScore}
