@@ -28,6 +28,7 @@ import ReportsNavigation from "@/components/reports/ReportsNavigation";
 import PrintReportButton from "@/components/reports/PrintReportButton";
 import PDFReportHeader from "@/components/reports/PDFReportHeader";
 import PDFReportFooter from "@/components/reports/PDFReportFooter";
+import PDFCompactReport from "@/components/reports/PDFCompactReport";
 
 export default async function ReportsPage({
   params,
@@ -165,354 +166,375 @@ export default async function ReportsPage({
   return (
     <div className="space-y-8">
 
-      <div className="print-cover-page">
-        <PDFReportHeader
-          totalTrades={totalTrades}
-          totalPnl={totalPnl}
-          winRate={winRate}
-        />
-      </div>
+      <PDFCompactReport
+        userName={session.user.name ?? "Trader"}
 
-      <div id="executive">
-        <ExecutiveSummaryCard
-          totalPnl={totalPnl}
-          winRate={winRate}
-          disciplineScore={disciplineScore}
-          behavioralRisk={behavioralRisk}
-        />
-      </div>
+        totalTrades={totalTrades}
+        totalPnl={totalPnl}
+        winRate={winRate}
+        wins={wins}
+        losses={losses}
+        averageWin={averageWin}
+        averageLoss={averageLoss}
+        disciplineScore={disciplineScore}
+        behavioralRisk={behavioralRisk}
+        emotionalTrades={emotionalTrades}
+        weakExecutionTrades={weakExecutionTrades}
+      />
 
-      <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#070b14] via-[#0f1726] to-black p-8 shadow-2xl shadow-cyan-500/5">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.12),transparent_35%)]" />
+      <div className="web-report-content space-y-8">
 
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.10),transparent_35%)]" />
+        <div className="print-cover-page">
+          <PDFReportHeader
+            totalTrades={totalTrades}
+            totalPnl={totalPnl}
+            winRate={winRate}
+          />
+        </div>
 
-        <div className="relative z-10">
-          <p className="text-sm uppercase tracking-[0.25em] text-cyan-400">
-            VOLTIS AI Reports
-          </p>
+        <div id="executive">
+          <ExecutiveSummaryCard
+            totalPnl={totalPnl}
+            winRate={winRate}
+            disciplineScore={disciplineScore}
+            behavioralRisk={behavioralRisk}
+          />
+        </div>
 
-          <h1 className="mt-4 text-5xl font-black tracking-tight text-white xl:text-7xl">
-            Intelligence Reports
-          </h1>
+        <div className="print-hidden relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#070b14] via-[#0f1726] to-black p-8 shadow-2xl shadow-cyan-500/5">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.12),transparent_35%)]" />
 
-          <p className="mt-6 max-w-3xl text-base leading-relaxed text-gray-400 xl:text-lg">
-            Report automatici su
-            performance, comportamento,
-            disciplina, execution e
-            psicologia operativa del trader.
-          </p>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.10),transparent_35%)]" />
 
-          <div className="mt-8">
-            <PrintReportButton />
+          <div className="relative z-10">
+            <p className="text-sm uppercase tracking-[0.25em] text-cyan-400">
+              VOLTIS AI Reports
+            </p>
+
+            <h1 className="mt-4 text-5xl font-black tracking-tight text-white xl:text-7xl">
+              Intelligence Reports
+            </h1>
+
+            <p className="mt-6 max-w-3xl text-base leading-relaxed text-gray-400 xl:text-lg">
+              Report automatici su
+              performance, comportamento,
+              disciplina, execution e
+              psicologia operativa del trader.
+            </p>
+
+            <div className="mt-8">
+              <PrintReportButton />
+            </div>
           </div>
         </div>
-      </div>
 
-      <ReportsNavigation />
+        <ReportsNavigation />
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
-          <p className="text-sm text-gray-400">
-            Total Trades
-          </p>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
+            <p className="text-sm text-gray-400">
+              Total Trades
+            </p>
 
-          <h2 className="mt-4 text-4xl font-black text-cyan-400">
-            {totalTrades}
-          </h2>
+            <h2 className="mt-4 text-4xl font-black text-cyan-400">
+              {totalTrades}
+            </h2>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
+            <p className="text-sm text-gray-400">
+              Total PnL
+            </p>
+
+            <h2 className="mt-4 text-4xl font-black text-green-400">
+              ${totalPnl.toFixed(0)}
+            </h2>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
+            <p className="text-sm text-gray-400">
+              Win Rate
+            </p>
+
+            <h2 className="mt-4 text-4xl font-black text-violet-400">
+              {winRate}%
+            </h2>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
+            <p className="text-sm text-gray-400">
+              Losses
+            </p>
+
+            <h2 className="mt-4 text-4xl font-black text-red-400">
+              {losses}
+            </h2>
+          </div>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
-          <p className="text-sm text-gray-400">
-            Total PnL
-          </p>
-
-          <h2 className="mt-4 text-4xl font-black text-green-400">
-            ${totalPnl.toFixed(0)}
-          </h2>
+        <div
+          id="weekly"
+          className="print-hidden"
+        >
+          <WeeklyReportCard
+            totalTrades={totalTrades}
+            totalPnl={totalPnl}
+            winRate={winRate}
+          />
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
-          <p className="text-sm text-gray-400">
-            Win Rate
-          </p>
-
-          <h2 className="mt-4 text-4xl font-black text-violet-400">
-            {winRate}%
-          </h2>
+        <div
+          id="monthly"
+          className="report-section mt-8"
+        >
+          <MonthlyReportCard
+            totalTrades={totalTrades}
+            totalPnl={totalPnl}
+            winRate={winRate}
+            emotionalTrades={emotionalTrades}
+            disciplineScore={disciplineScore}
+          />
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
-          <p className="text-sm text-gray-400">
-            Losses
-          </p>
-
-          <h2 className="mt-4 text-4xl font-black text-red-400">
-            {losses}
-          </h2>
+        <div
+          id="behavior"
+          className="report-section mt-8"
+        >
+          <BehavioralReportCard
+            emotionalTrades={emotionalTrades}
+            lowConfidenceTrades={lowConfidenceTrades}
+            weakExecutionTrades={weakExecutionTrades}
+            totalTrades={totalTrades}
+          />
         </div>
+
+        <div
+          id="performance"
+          className="report-section mt-8"
+        >
+          <PerformanceBreakdownCard
+            wins={wins}
+            losses={losses}
+            breakEven={breakEven}
+            averageWin={averageWin}
+            averageLoss={averageLoss}
+          />
+        </div>
+
+
+        <div
+          id="evolution"
+          className="print-hidden report-section mt-8"
+        >
+          <TraderEvolutionReport
+            disciplineScore={disciplineScore}
+            winRate={winRate}
+            emotionalTrades={emotionalTrades}
+            totalTrades={totalTrades}
+          />
+        </div>
+
+        <div
+          id="coaching"
+          className="report-section mt-8"
+        >
+          <AICoachingReport
+            disciplineScore={disciplineScore}
+            behavioralRisk={behavioralRisk}
+            winRate={winRate}
+            emotionalTrades={emotionalTrades}
+          />
+        </div>
+
+        <div
+          id="risk"
+          className="report-section mt-8"
+        >
+          <RiskManagementReport
+            averageLoss={averageLoss}
+            averageWin={averageWin}
+            behavioralRisk={behavioralRisk}
+            losses={losses}
+          />
+        </div>
+
+        <div
+          id="consistency"
+          className="print-hidden report-section mt-8"
+        >
+          <ConsistencyIntelligenceReport
+            disciplineScore={disciplineScore}
+            winRate={winRate}
+            totalTrades={totalTrades}
+            emotionalTrades={emotionalTrades}
+          />
+        </div>
+
+        <div
+          id="psychology"
+          className="print-hidden report-section mt-8"
+        >
+          <PsychologicalStabilityReport
+            emotionalTrades={emotionalTrades}
+            totalTrades={totalTrades}
+            behavioralRisk={behavioralRisk}
+            disciplineScore={disciplineScore}
+          />
+        </div>
+
+        <div
+          id="forecast"
+          className="print-hidden report-section mt-8"
+        >
+          <PerformanceForecastReport
+            winRate={winRate}
+            disciplineScore={disciplineScore}
+            behavioralRisk={behavioralRisk}
+            totalPnl={totalPnl}
+          />
+        </div>
+
+        <div
+          id="growth"
+          className="print-hidden report-section mt-8"
+        >
+          <GrowthRoadmapReport
+            disciplineScore={disciplineScore}
+            behavioralRisk={behavioralRisk}
+            winRate={winRate}
+          />
+        </div>
+
+        <div
+          id="edge"
+          className="print-hidden report-section mt-8"
+        >
+          <EdgeAnalysisReport
+            averageWin={averageWin}
+            averageLoss={averageLoss}
+            winRate={winRate}
+            disciplineScore={disciplineScore}
+          />
+        </div>
+
+        <div
+          id="decision"
+          className="print-hidden report-section mt-8"
+        >
+          <DecisionQualityReport
+            disciplineScore={disciplineScore}
+            behavioralRisk={behavioralRisk}
+            winRate={winRate}
+            emotionalTrades={emotionalTrades}
+          />
+        </div>
+
+        <div
+          id="execution"
+          className="print-hidden report-section mt-8"
+        >
+          <ExecutionIntelligenceReport
+            weakExecutionTrades={weakExecutionTrades}
+            totalTrades={totalTrades}
+            disciplineScore={disciplineScore}
+            averageWin={averageWin}
+            averageLoss={averageLoss}
+          />
+        </div>
+
+        <div
+          id="setup"
+          className="print-hidden report-section mt-8"
+        >
+          <SetupIntelligenceReport
+            totalTrades={totalTrades}
+            disciplineScore={disciplineScore}
+            averageWin={averageWin}
+            averageLoss={averageLoss}
+            winRate={winRate}
+          />
+        </div>
+
+        <div
+          id="confidence"
+          className="print-hidden report-section mt-8"
+        >
+          <ConfidenceIntelligenceReport
+            lowConfidenceTrades={lowConfidenceTrades}
+            totalTrades={totalTrades}
+            disciplineScore={disciplineScore}
+            winRate={winRate}
+          />
+        </div>
+
+        <div
+          id="discipline"
+          className="print-hidden report-section mt-8"
+        >
+          <DisciplineIntelligenceReport
+            disciplineScore={disciplineScore}
+            behavioralRisk={behavioralRisk}
+            emotionalTrades={emotionalTrades}
+            totalTrades={totalTrades}
+          />
+        </div>
+
+        <div
+          id="emotion"
+          className="print-hidden report-section mt-8"
+        >
+          <EmotionalIntelligenceReport
+            emotionalTrades={emotionalTrades}
+            totalTrades={totalTrades}
+            behavioralRisk={behavioralRisk}
+            disciplineScore={disciplineScore}
+          />
+        </div>
+
+        <div
+          id="identity"
+          className="print-hidden report-section mt-8"
+        >
+          <TraderIdentityReport
+            disciplineScore={disciplineScore}
+            behavioralRisk={behavioralRisk}
+            winRate={winRate}
+            emotionalTrades={emotionalTrades}
+            totalTrades={totalTrades}
+          />
+        </div>
+
+        <div
+          id="cognitive"
+          className="print-hidden report-section mt-8"
+        >
+          <CognitivePerformanceReport
+            disciplineScore={disciplineScore}
+            behavioralRisk={behavioralRisk}
+            lowConfidenceTrades={lowConfidenceTrades}
+            weakExecutionTrades={weakExecutionTrades}
+            totalTrades={totalTrades}
+          />
+        </div>
+
+        <div
+          id="resilience"
+          className="print-hidden report-section mt-8"
+        >
+          <MentalResilienceReport
+            disciplineScore={disciplineScore}
+            behavioralRisk={behavioralRisk}
+            emotionalTrades={emotionalTrades}
+            losses={losses}
+            totalTrades={totalTrades}
+          />
+        </div>
+
+        <div className="print-hidden">
+          <PDFReportFooter />
+        </div>
+
       </div>
-
-      <div
-        id="weekly"
-        className="print-hidden"
-      >
-        <WeeklyReportCard
-          totalTrades={totalTrades}
-          totalPnl={totalPnl}
-          winRate={winRate}
-        />
-      </div>
-
-      <div
-        id="monthly"
-        className="print-page-break report-section mt-8"
-      >
-        <MonthlyReportCard
-          totalTrades={totalTrades}
-          totalPnl={totalPnl}
-          winRate={winRate}
-          emotionalTrades={emotionalTrades}
-          disciplineScore={disciplineScore}
-        />
-      </div>
-
-      <div
-        id="behavior"
-        className="print-page-break report-section mt-8"
-      >
-        <BehavioralReportCard
-          emotionalTrades={emotionalTrades}
-          lowConfidenceTrades={lowConfidenceTrades}
-          weakExecutionTrades={weakExecutionTrades}
-          totalTrades={totalTrades}
-        />
-      </div>
-
-      <div
-        id="performance"
-        className="print-page-break report-section mt-8"
-      >
-        <PerformanceBreakdownCard
-          wins={wins}
-          losses={losses}
-          breakEven={breakEven}
-          averageWin={averageWin}
-          averageLoss={averageLoss}
-        />
-      </div>
-
-
-      <div
-        id="evolution"
-        className="print-hidden report-section mt-8"
-      >
-        <TraderEvolutionReport
-          disciplineScore={disciplineScore}
-          winRate={winRate}
-          emotionalTrades={emotionalTrades}
-          totalTrades={totalTrades}
-        />
-      </div>
-
-      <div
-        id="coaching"
-        className="print-page-break report-section mt-8"
-      >
-        <AICoachingReport
-          disciplineScore={disciplineScore}
-          behavioralRisk={behavioralRisk}
-          winRate={winRate}
-          emotionalTrades={emotionalTrades}
-        />
-      </div>
-
-      <div
-        id="risk"
-        className="print-page-break report-section mt-8"
-      >
-        <RiskManagementReport
-          averageLoss={averageLoss}
-          averageWin={averageWin}
-          behavioralRisk={behavioralRisk}
-          losses={losses}
-        />
-      </div>
-
-      <div
-        id="consistency"
-        className="print-hidden report-section mt-8"
-      >
-        <ConsistencyIntelligenceReport
-          disciplineScore={disciplineScore}
-          winRate={winRate}
-          totalTrades={totalTrades}
-          emotionalTrades={emotionalTrades}
-        />
-      </div>
-
-      <div
-        id="psychology"
-        className="print-hidden report-section mt-8"
-      >
-        <PsychologicalStabilityReport
-          emotionalTrades={emotionalTrades}
-          totalTrades={totalTrades}
-          behavioralRisk={behavioralRisk}
-          disciplineScore={disciplineScore}
-        />
-      </div>
-
-      <div
-        id="forecast"
-        className="print-hidden report-section mt-8"
-      >
-        <PerformanceForecastReport
-          winRate={winRate}
-          disciplineScore={disciplineScore}
-          behavioralRisk={behavioralRisk}
-          totalPnl={totalPnl}
-        />
-      </div>
-
-      <div
-        id="growth"
-        className="print-hidden report-section mt-8"
-      >
-        <GrowthRoadmapReport
-          disciplineScore={disciplineScore}
-          behavioralRisk={behavioralRisk}
-          winRate={winRate}
-        />
-      </div>
-
-      <div
-        id="edge"
-        className="print-hidden report-section mt-8"
-      >
-        <EdgeAnalysisReport
-          averageWin={averageWin}
-          averageLoss={averageLoss}
-          winRate={winRate}
-          disciplineScore={disciplineScore}
-        />
-      </div>
-
-      <div
-        id="decision"
-        className="print-hidden report-section mt-8"
-      >
-        <DecisionQualityReport
-          disciplineScore={disciplineScore}
-          behavioralRisk={behavioralRisk}
-          winRate={winRate}
-          emotionalTrades={emotionalTrades}
-        />
-      </div>
-
-      <div
-        id="execution"
-        className="print-hidden report-section mt-8"
-      >
-        <ExecutionIntelligenceReport
-          weakExecutionTrades={weakExecutionTrades}
-          totalTrades={totalTrades}
-          disciplineScore={disciplineScore}
-          averageWin={averageWin}
-          averageLoss={averageLoss}
-        />
-      </div>
-
-      <div
-        id="setup"
-        className="print-hidden report-section mt-8"
-      >
-        <SetupIntelligenceReport
-          totalTrades={totalTrades}
-          disciplineScore={disciplineScore}
-          averageWin={averageWin}
-          averageLoss={averageLoss}
-          winRate={winRate}
-        />
-      </div>
-
-      <div
-        id="confidence"
-        className="print-hidden report-section mt-8"
-      >
-        <ConfidenceIntelligenceReport
-          lowConfidenceTrades={lowConfidenceTrades}
-          totalTrades={totalTrades}
-          disciplineScore={disciplineScore}
-          winRate={winRate}
-        />
-      </div>
-
-      <div
-        id="discipline"
-        className="print-hidden report-section mt-8"
-      >
-        <DisciplineIntelligenceReport
-          disciplineScore={disciplineScore}
-          behavioralRisk={behavioralRisk}
-          emotionalTrades={emotionalTrades}
-          totalTrades={totalTrades}
-        />
-      </div>
-
-      <div
-        id="emotion"
-        className="print-hidden report-section mt-8"
-      >
-        <EmotionalIntelligenceReport
-          emotionalTrades={emotionalTrades}
-          totalTrades={totalTrades}
-          behavioralRisk={behavioralRisk}
-          disciplineScore={disciplineScore}
-        />
-      </div>
-
-      <div
-        id="identity"
-        className="print-hidden report-section mt-8"
-      >
-        <TraderIdentityReport
-          disciplineScore={disciplineScore}
-          behavioralRisk={behavioralRisk}
-          winRate={winRate}
-          emotionalTrades={emotionalTrades}
-          totalTrades={totalTrades}
-        />
-      </div>
-
-      <div
-        id="cognitive"
-        className="print-hidden report-section mt-8"
-      >
-        <CognitivePerformanceReport
-          disciplineScore={disciplineScore}
-          behavioralRisk={behavioralRisk}
-          lowConfidenceTrades={lowConfidenceTrades}
-          weakExecutionTrades={weakExecutionTrades}
-          totalTrades={totalTrades}
-        />
-      </div>
-
-      <div
-        id="resilience"
-        className="print-hidden report-section mt-8"
-      >
-        <MentalResilienceReport
-          disciplineScore={disciplineScore}
-          behavioralRisk={behavioralRisk}
-          emotionalTrades={emotionalTrades}
-          losses={losses}
-          totalTrades={totalTrades}
-        />
-      </div>
-
-      <PDFReportFooter />
-
     </div>
   );
 }

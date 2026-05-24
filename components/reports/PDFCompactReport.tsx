@@ -1,0 +1,132 @@
+type Props = {
+    userName: string;
+
+    totalTrades: number;
+    totalPnl: number;
+    winRate: number;
+    wins: number;
+    losses: number;
+    averageWin: number;
+    averageLoss: number;
+    disciplineScore: number;
+    behavioralRisk: number;
+    emotionalTrades: number;
+    weakExecutionTrades: number;
+};
+
+export default function PDFCompactReport({
+    userName,
+
+    totalTrades,
+    totalPnl,
+    winRate,
+    wins,
+    losses,
+    averageWin,
+    averageLoss,
+    disciplineScore,
+    behavioralRisk,
+    emotionalTrades,
+    weakExecutionTrades,
+}: Props) {
+    return (
+        <div className="pdf-only text-[#111827]">
+            <section className="mb-6 border-b border-gray-300 pb-4">
+                <p className="text-xs uppercase tracking-[0.3em] text-gray-500">
+                    VOLTIS Intelligence Report
+                </p>
+
+                <h1 className="mt-2 text-3xl font-black">
+                    Trading Performance Report
+                </h1>
+
+                <p className="mt-2 text-sm text-gray-500">
+                    Institutional performance summary
+                </p>
+            </section>
+
+            <section className="mb-5 grid grid-cols-4 gap-3">
+                <div className="rounded-xl border border-gray-300 p-3">
+                    <p className="text-xs text-gray-500">Trades</p>
+                    <h2 className="text-2xl font-black">{totalTrades}</h2>
+                </div>
+
+                <div className="rounded-xl border border-gray-300 p-3">
+                    <p className="text-xs text-gray-500">PnL</p>
+                    <h2 className="text-2xl font-black">${totalPnl.toFixed(0)}</h2>
+                </div>
+
+                <div className="rounded-xl border border-gray-300 p-3">
+                    <p className="text-xs text-gray-500">Win Rate</p>
+                    <h2 className="text-2xl font-black">{winRate}%</h2>
+                </div>
+
+                <div className="rounded-xl border border-gray-300 p-3">
+                    <p className="text-xs text-gray-500">Discipline</p>
+                    <h2 className="text-2xl font-black">{disciplineScore}</h2>
+                </div>
+            </section>
+
+            <section className="mb-5 grid grid-cols-2 gap-4">
+                <div className="rounded-xl border border-gray-300 p-4">
+                    <h2 className="text-lg font-black">Executive Summary</h2>
+                    <p className="mt-3 text-sm leading-relaxed">
+                        {totalPnl >= 0
+                            ? "Il conto mostra una struttura positiva. La priorità è proteggere disciplina, rischio e ripetibilità."
+                            : "Il conto mostra una fase di pressione. La priorità è ridurre esposizione e migliorare qualità esecutiva."}
+                    </p>
+                </div>
+
+                <div className="rounded-xl border border-gray-300 p-4">
+                    <h2 className="text-lg font-black">Behavioral Risk</h2>
+                    <p className="mt-3 text-sm leading-relaxed">
+                        Rischio comportamentale: {behavioralRisk}%. Emotional trades:{" "}
+                        {emotionalTrades}. Weak executions: {weakExecutionTrades}.
+                    </p>
+                </div>
+            </section>
+
+            <section className="mb-5 grid grid-cols-2 gap-4">
+                <div className="rounded-xl border border-gray-300 p-4">
+                    <h2 className="text-lg font-black">Performance Breakdown</h2>
+                    <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
+                        <p>Wins: {wins}</p>
+                        <p>Losses: {losses}</p>
+                        <p>Avg Win: ${averageWin.toFixed(0)}</p>
+                        <p>Avg Loss: ${averageLoss.toFixed(0)}</p>
+                    </div>
+                </div>
+
+                <div className="rounded-xl border border-gray-300 p-4">
+                    <h2 className="text-lg font-black">AI Coaching Focus</h2>
+                    <p className="mt-3 text-sm leading-relaxed">
+                        {disciplineScore >= 80
+                            ? "Focus: scalare la consistenza senza perdere controllo operativo."
+                            : disciplineScore >= 60
+                                ? "Focus: consolidare disciplina, review e qualità media dei setup."
+                                : "Focus: costruire routine, ridurre impulsività e semplificare il processo."}
+                    </p>
+                </div>
+            </section>
+
+            <section className="rounded-xl border border-gray-300 p-4">
+                <h2 className="text-lg font-black">Risk Assessment</h2>
+                <p className="mt-3 text-sm leading-relaxed">
+                    {averageWin > Math.abs(averageLoss)
+                        ? "La struttura rischio/rendimento è favorevole. Il trader mostra un edge matematico positivo."
+                        : "La struttura rischio/rendimento richiede attenzione. Serve migliorare gestione trade e selezione setup."}
+                </p>
+            </section>
+
+            <footer className="mt-5 flex items-center justify-between border-t border-gray-300 pt-3 text-[10px] text-gray-500">
+                <span>
+                    Generated by VOLTIS · Trading Performance Operating System
+                </span>
+
+                <span>
+                    Prepared for {userName}
+                </span>
+            </footer>
+        </div>
+    );
+}

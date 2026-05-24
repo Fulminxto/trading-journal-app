@@ -91,16 +91,23 @@ input[type="number"] {
 }
 
 @media print {
+  @page {
+    size: A4;
+    margin: 8mm;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
 
   aside,
   nav,
   .print-hidden {
     display: none !important;
-  }
-
-  body {
-    background: #ffffff !important;
-    color: #000000 !important;
   }
 
   main {
@@ -109,37 +116,10 @@ input[type="number"] {
 
   * {
     box-shadow: none !important;
-  }
-}
-
-@media print {
-  .report-card {
-    break-inside: avoid;
-    page-break-inside: avoid;
+    text-shadow: none !important;
+    background-image: none !important;
   }
 
-  .report-section {
-    margin-top: 24px !important;
-  }
-
-  body {
-    zoom: 0.82;
-  }
-
-  h1,
-  h2,
-  h3 {
-    color: #000 !important;
-  }
-
-  p,
-  span,
-  div {
-    color: #222 !important;
-  }
-}
-
-@media print {
   .print-cover-page {
     page-break-after: always;
     break-after: page;
@@ -149,94 +129,123 @@ input[type="number"] {
     page-break-before: always;
     break-before: page;
   }
-}
-
-@media print {
-
-  html,
-  body {
-    background: white !important;
-  }
-
-  .report-card,
-  .report-section {
-    background: white !important;
-    border: 1px solid #e5e7eb !important;
-  }
-
-  .text-green-400 {
-    color: #16a34a !important;
-  }
-
-  .text-red-400 {
-    color: #dc2626 !important;
-  }
-
-  .text-yellow-400 {
-    color: #ca8a04 !important;
-  }
-
-  .text-cyan-400 {
-    color: #0891b2 !important;
-  }
-
-  .text-violet-400 {
-    color: #7c3aed !important;
-  }
-}
-
-@media print {
-  @page {
-    size: A4;
-    margin: 8mm;
-  }
-
-  .print-hidden {
-    display: none !important;
-  }
 
   .report-section {
-    padding-top: 12px !important;
+    display: inline-block !important;
+    width: 48.5% !important;
+    vertical-align: top !important;
+    margin: 0 1% 8px 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+  }
+
+  #executive,
+  #monthly {
+    display: block !important;
+    width: 100% !important;
   }
 
   .report-card {
-    margin-bottom: 18px !important;
-  }
-}
-
-@media print {
-  body {
-    zoom: 0.62 !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  .report-card {
-    padding: 18px !important;
-    margin-bottom: 10px !important;
+    background: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 10px !important;
+    padding: 10px !important;
+    margin-bottom: 8px !important;
     break-inside: avoid;
     page-break-inside: avoid;
   }
 
-  .report-section {
-    margin-top: 12px !important;
-    padding-top: 0 !important;
+  .report-card *,
+  .report-section * {
+    background-color: transparent !important;
+  }
+
+  .bg-black\/20,
+  .bg-black\/30,
+  .bg-black\/40,
+  .bg-white\/\[0\.04\] {
+    background: #f8fafc !important;
+  }
+
+  .border-white\/10,
+  .border-cyan-500\/20 {
+    border-color: #d1d5db !important;
+  }
+
+  .report-card .grid {
+    gap: 6px !important;
   }
 
   h1 {
     font-size: 28px !important;
+    line-height: 1.1 !important;
+    color: #111827 !important;
   }
 
   h2 {
-    font-size: 22px !important;
+    font-size: 18px !important;
+    line-height: 1.2 !important;
+    color: #111827 !important;
   }
 
   h3 {
-    font-size: 16px !important;
+    font-size: 14px !important;
+    line-height: 1.2 !important;
   }
 
   p,
-  span {
+  span,
+  div {
     font-size: 10px !important;
+    line-height: 1.35 !important;
   }
+
+  .text-white {
+    color: #111827 !important;
+  }
+
+  .text-gray-300,
+  .text-gray-400 {
+    color: #4b5563 !important;
+  }
+
+  .text-green-400 {
+    color: #15803d !important;
+  }
+
+  .text-red-400 {
+    color: #b91c1c !important;
+  }
+
+  .text-yellow-400 {
+    color: #a16207 !important;
+  }
+
+  .text-cyan-400 {
+    color: #0f766e !important;
+  }
+
+  .text-violet-400 {
+    color: #6d28d9 !important;
+  }
+
+  .rounded-3xl,
+  .rounded-\[40px\],
+  .rounded-\[36px\],
+  .rounded-\[32px\] {
+    border-radius: 10px !important;
+  }
+
+  .web-report-content {
+    display: none !important;
+  }
+
+  .pdf-only {
+    display: block !important;
+  }
+}
+
+.pdf-only {
+  display: none;
 }
