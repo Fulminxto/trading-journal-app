@@ -319,13 +319,15 @@ export default async function CopilotPage({
                 )
             );
 
-    const recentLosses = recentTrades.filter(
-        (trade) => trade.outcome === "loss"
-    ).length;
+    const recentLosses = recentTrades
+        .slice(0, 10)
+        .filter((trade) => trade.outcome === "loss")
+        .length;
 
-    const recentWins = recentTrades.filter(
-        (trade) => trade.outcome === "win"
-    ).length;
+    const recentWins = recentTrades
+        .slice(0, 10)
+        .filter((trade) => trade.outcome === "win")
+        .length;
 
     const recoveryDetected =
         recentLosses >= 2 &&
@@ -483,6 +485,31 @@ export default async function CopilotPage({
                 : emotionalInstabilityScore >= 40
                     ? "Moderate"
                     : "Stable";
+
+    const resilienceScore = Math.max(
+        0,
+        Math.min(
+            100,
+            Math.round(
+                consistencyScore * 0.35 +
+                disciplineScore * 0.35 +
+                recoveryScore * 0.2 -
+                behavioralRisk * 0.1
+            )
+        )
+    );
+
+    const resilienceLabel =
+        resilienceScore >= 85
+            ? "Elite"
+            : resilienceScore >= 70
+                ? "Strong"
+                : resilienceScore >= 50
+                    ? "Developing"
+                    : "Fragile";
+
+    const resilienceRisk =
+        resilienceScore < 50;
 
     if (emotionalVolatility) {
         intelligenceFeed.push(
