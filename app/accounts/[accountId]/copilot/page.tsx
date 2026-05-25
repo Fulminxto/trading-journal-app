@@ -22,6 +22,9 @@ import RiskEscalationCard from "@/components/copilot/RiskEscalationCard";
 import SessionLockCard from "@/components/copilot/SessionLockCard";
 import { buildCopilotSystem } from "@/lib/copilot";
 import AdaptiveCoachingCard from "@/components/copilot/AdaptiveCoachingCard";
+import MandatoryReviewCard from "@/components/copilot/MandatoryReviewCard";
+import RecoveryChecklistCard from "@/components/copilot/RecoveryChecklistCard";
+import RecoveryStatusCard from "@/components/copilot/RecoveryStatusCard";
 
 export default async function CopilotPage({
     params,
@@ -333,6 +336,20 @@ export default async function CopilotPage({
                 sessionLocked={sessionLock.sessionLocked}
                 reviewRequired={sessionLock.reviewRequired}
                 lockReason={sessionLock.lockReason}
+            />
+
+            <MandatoryReviewCard
+                sessionLocked={sessionLock.sessionLocked}
+                reviewRequired={sessionLock.reviewRequired}
+            />
+
+            <RecoveryChecklistCard
+                reviewRequired={sessionLock.reviewRequired}
+            />
+
+            <RecoveryStatusCard
+                sessionLocked={sessionLock.sessionLocked}
+                reviewRequired={sessionLock.reviewRequired}
             />
 
             <EmotionalStabilityCard
