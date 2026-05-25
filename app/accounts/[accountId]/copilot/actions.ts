@@ -364,6 +364,93 @@ export async function sendCopilotMessage(formData: FormData) {
         }
     }
 
+    if (behavioralRisk >= 50) {
+        await prisma.copilotMemory.upsert({
+            where: {
+                id: `behavioral-risk-${tradingAccountId}`,
+            },
+            update: {
+                description:
+                    "Rischio comportamentale elevato rilevato nel conto.",
+                severity: "high",
+                score: behavioralRisk,
+            },
+            create: {
+                id: `behavioral-risk-${tradingAccountId}`,
+                tradingAccountId,
+                memoryType: "behavior",
+                title: "Elevated Behavioral Risk",
+                description:
+                    "Rischio comportamentale elevato rilevato nel conto.",
+                severity: "high",
+                score: behavioralRisk,
+            },
+        });
+    }
+
+    if (revengeRiskTrades > 0) {
+        await prisma.copilotMemory.upsert({
+            where: {
+                id: `revenge-risk-${tradingAccountId}`,
+            },
+            update: {
+                description:
+                    "Pattern di revenge trading rilevato dopo operazioni negative.",
+                severity:
+                    revengeRiskTrades >= 3 ? "critical" : "high",
+                score: revengeRiskTrades,
+            },
+            create: {
+                id: `revenge-risk-${tradingAccountId}`,
+                tradingAccountId,
+                memoryType: "pattern",
+                title: "Revenge Trading Memory",
+                description:
+                    "Pattern di revenge trading rilevato dopo operazioni negative.",
+                severity:
+                    revengeRiskTrades >= 3 ? "critical" : "high",
+                score: revengeRiskTrades,
+            },
+        });
+    }
+
+    await prisma.copilotMemory.upsert({
+        where: {
+            id: `general-profile-${tradingAccountId}`,
+        },
+        update: {
+            description:
+                "Profilo operativo generale aggiornato dal Copilot.",
+            severity: "low",
+            score: totalTrades,
+        },
+        create: {
+            id: `general-profile-${tradingAccountId}`,
+            tradingAccountId,
+            memoryType: "profile",
+            title: "General Trading Profile",
+            description:
+                "Profilo operativo generale aggiornato dal Copilot.",
+            severity: "low",
+            score: totalTrades,
+        },
+    });
+
+    const activeMemories =
+        await prisma.copilotMemory.findMany({
+            where: {
+                tradingAccountId,
+            },
+            orderBy: {
+                lastDetectedAt: "desc",
+            },
+            take: 3,
+        });
+
+    if (activeMemories.length > 0) {
+        aiResponse += ` Memoria operativa attiva: VOLTIS riconosce ${activeMemories.length} pattern ricorrenti nel tuo storico. Pattern principale: "${activeMemories[0].title}".`;
+    }
+
     await prisma.copilotMessage.create({
         data: {
             tradingAccountId,
