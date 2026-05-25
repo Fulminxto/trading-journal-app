@@ -2,9 +2,27 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
-import { sendCopilotMessage } from "./actions";
 import CopilotHero from "@/components/copilot/CopilotHero";
 import CriticalAlertCard from "@/components/copilot/CriticalAlertCard";
+import DailyIntelligenceFeed from "@/components/copilot/DailyIntelligenceFeed";
+import ConsistencyEngineCard from "@/components/copilot/ConsistencyEngineCard";
+import AIReviewEngineCard from "@/components/copilot/AIReviewEngineCard";
+import TradeReviewCard from "@/components/copilot/TradeReviewCard";
+import PerformanceTimelineCard from "@/components/copilot/PerformanceTimelineCard";
+import BehavioralDriftCard from "@/components/copilot/BehavioralDriftCard";
+import RecoveryIntelligenceCard from "@/components/copilot/RecoveryIntelligenceCard";
+import ExecutionStabilityCard from "@/components/copilot/ExecutionStabilityCard";
+import ConfidenceStabilityCard from "@/components/copilot/ConfidenceStabilityCard";
+import AIRiskSupervisorCard from "@/components/copilot/AIRiskSupervisorCard";
+import EmotionalStabilityCard from "@/components/copilot/EmotionalStabilityCard";
+import PatternMemoryCard from "@/components/copilot/PatternMemoryCard";
+import CopilotConversationCard from "@/components/copilot/CopilotConversationCard";
+import { calculateCopilotAnalytics } from "@/lib/copilot/analytics";
+import { buildIntelligenceFeed } from "@/lib/copilot/intelligence";
+import { calculateStabilityMetrics } from "@/lib/copilot/stability";
+import ElevatedRiskCard from "@/components/copilot/ElevatedRiskCard";
+import { calculateReviewMetrics } from "@/lib/copilot/review";
+import { calculatePatternMetrics } from "@/lib/copilot/patterns";
 
 export default async function CopilotPage({
     params,
@@ -40,6 +58,24 @@ export default async function CopilotPage({
         },
     });
 
+    const {
+        totalTrades,
+        winRate,
+        behavioralRisk,
+        disciplineScore,
+        recentTrades,
+        lossStreak,
+        winStreak,
+    } = calculateCopilotAnalytics(trades);
+
+    const patternMetrics =
+        calculatePatternMetrics(recentTrades);
+
+    const {
+        revengeRiskTrades,
+        weakTimeTrades,
+    } = patternMetrics;
+
     const copilotMessages =
         await prisma.copilotMessage.findMany({
             where: {
@@ -49,8 +85,6 @@ export default async function CopilotPage({
                 createdAt: "asc",
             },
         });
-
-    const totalTrades = trades.length;
 
     const copilotPatterns =
         await prisma.copilotPattern.findMany({
@@ -72,6 +106,18 @@ export default async function CopilotPage({
             },
             take: 5,
         });
+
+    const criticalPatterns =
+        copilotPatterns.filter(
+            (pattern) =>
+                pattern.severity === "critical"
+        );
+
+    const highPatterns =
+        copilotPatterns.filter(
+            (pattern) =>
+                pattern.severity === "high"
+        );
 
     const performanceTimeline = trades
         .slice()
@@ -109,203 +155,6 @@ export default async function CopilotPage({
             };
         });
 
-    const recentQuality =
-        performanceTimeline.slice(-5);
-
-    const previousQuality =
-        performanceTimeline.slice(-10, -5);
-
-    const recentAverageQuality =
-        recentQuality.length > 0
-            ? Math.round(
-                recentQuality.reduce(
-                    (acc, item) => acc + item.qualityScore,
-                    0
-                ) / recentQuality.length
-            )
-            : 0;
-
-    const previousAverageQuality =
-        previousQuality.length > 0
-            ? Math.round(
-                previousQuality.reduce(
-                    (acc, item) => acc + item.qualityScore,
-                    0
-                ) / previousQuality.length
-            )
-            : 0;
-
-    const behavioralDrift =
-        previousAverageQuality > 0 &&
-        recentAverageQuality < previousAverageQuality - 15;
-
-    const criticalPatterns =
-        copilotPatterns.filter(
-            (pattern) =>
-                pattern.severity === "critical"
-        );
-
-    const highPatterns =
-        copilotPatterns.filter(
-            (pattern) =>
-                pattern.severity === "high"
-        );
-
-    const wins = trades.filter(
-        (trade) => trade.outcome === "win"
-    ).length;
-
-    const winRate =
-        totalTrades > 0
-            ? Math.round((wins / totalTrades) * 100)
-            : 0;
-
-    const weakExecutionTrades = trades.filter(
-        (trade) =>
-            (trade.executionRating || 0) > 0 &&
-            (trade.executionRating || 0) <= 4
-    ).length;
-
-    const emotionalTrades = trades.filter(
-        (trade) =>
-            trade.emotionalState &&
-            trade.emotionalState.length > 0
-    ).length;
-
-    const lowConfidenceTrades = trades.filter(
-        (trade) =>
-            (trade.confidence || 0) > 0 &&
-            (trade.confidence || 0) <= 4
-    ).length;
-
-    const behavioralRisk =
-        totalTrades > 0
-            ? Math.round(
-                ((weakExecutionTrades +
-                    emotionalTrades +
-                    lowConfidenceTrades) /
-                    totalTrades) *
-                100
-            )
-            : 0;
-
-    const disciplineScore = Math.max(
-        0,
-        Math.min(
-            100,
-            Math.round(
-                winRate -
-                behavioralRisk * 0.4 +
-                (totalTrades > 0 ? 20 : 0)
-            )
-        )
-    );
-
-    const recentTrades = trades
-        .slice()
-        .sort(
-            (a, b) =>
-                new Date(b.openDate).getTime() -
-                new Date(a.openDate).getTime()
-        );
-
-    let lossStreak = 0;
-
-    for (const trade of recentTrades) {
-        if (trade.outcome === "loss") {
-            lossStreak += 1;
-        } else {
-            break;
-        }
-    }
-
-    let winStreak = 0;
-
-    for (const trade of recentTrades) {
-        if (trade.outcome === "win") {
-            winStreak += 1;
-        } else {
-            break;
-        }
-    }
-
-    const revengeRiskTrades = recentTrades.filter(
-        (trade, index) => {
-            const previousTrade = recentTrades[index + 1];
-
-            if (!previousTrade) {
-                return false;
-            }
-
-            return (
-                previousTrade.outcome === "loss" &&
-                ((trade.executionRating || 0) <= 4 ||
-                    trade.emotionalState ||
-                    (trade.confidence || 0) <= 4)
-            );
-        }
-    ).length;
-
-    const weakTimeTrades = trades.filter((trade) => {
-        const hour = trade.openTime
-            ? Number(trade.openTime.split(":")[0])
-            : null;
-
-        if (hour === null) {
-            return false;
-        }
-
-        return (
-            hour >= 18 &&
-            ((trade.executionRating || 0) <= 4 ||
-                (trade.confidence || 0) <= 4 ||
-                trade.emotionalState)
-        );
-    }).length;
-
-    const intelligenceFeed: string[] = [];
-
-    if (disciplineScore >= 80) {
-        intelligenceFeed.push(
-            "La disciplina operativa rimane stabile nelle ultime sessioni."
-        );
-    }
-
-    if (behavioralRisk >= 50) {
-        intelligenceFeed.push(
-            "Rilevato aumento del rischio comportamentale operativo."
-        );
-    }
-
-    if (revengeRiskTrades > 0) {
-        intelligenceFeed.push(
-            "Possibili segnali di revenge trading dopo operazioni negative."
-        );
-    }
-
-    if (winStreak >= 3) {
-        intelligenceFeed.push(
-            `Momentum positivo rilevato: ${winStreak} win consecutivi.`
-        );
-    }
-
-    if (lossStreak >= 3) {
-        intelligenceFeed.push(
-            `Drawdown comportamentale rilevato: ${lossStreak} loss consecutivi.`
-        );
-    }
-
-    if (weakTimeTrades > 0) {
-        intelligenceFeed.push(
-            "Qualità execution ridotta nelle fasce orarie serali."
-        );
-    }
-    if (behavioralDrift) {
-        intelligenceFeed.push(
-            `Behavioral drift rilevato: qualità recente ${recentAverageQuality}% vs precedente ${previousAverageQuality}%.`
-        );
-    }
-
     const consistencyScore =
         totalTrades === 0
             ? 0
@@ -320,6 +169,32 @@ export default async function CopilotPage({
                     )
                 )
             );
+
+    const consistencyLabel =
+        consistencyScore >= 80
+            ? "Elite"
+            : consistencyScore >= 65
+                ? "Stable"
+                : consistencyScore >= 45
+                    ? "Developing"
+                    : "Fragile";
+
+    const review =
+        calculateReviewMetrics({
+            trades,
+            recentTrades,
+            totalTrades,
+            consistencyScore,
+        });
+
+    const {
+        averageExecution,
+        averageConfidence,
+        reviewScore,
+        reviewLabel,
+        latestTrade,
+        latestTradeReview,
+    } = review;
 
     const recentLosses = recentTrades
         .slice(0, 10)
@@ -356,271 +231,33 @@ export default async function CopilotPage({
                     ? "Weak Recovery"
                     : "No Recovery";
 
-    if (recoveryDetected) {
-        intelligenceFeed.push(
-            `Recovery intelligence rileva segnali di recupero operativo (${recoveryLabel}).`
-        );
-    }
+    const stability =
+        calculateStabilityMetrics({
+            performanceTimeline,
+            recentTrades,
+            behavioralRisk,
+            recoveryDetected,
+            recoveryScore,
+        });
 
-    const recentExecutionAverage =
-        recentQuality.length > 0
-            ? Math.round(
-                recentTrades
-                    .slice(0, 5)
-                    .reduce(
-                        (acc, trade) =>
-                            acc + (trade.executionRating || 0),
-                        0
-                    ) / recentQuality.length
-            )
-            : 0;
-
-    const previousExecutionAverage =
-        previousQuality.length > 0
-            ? Math.round(
-                recentTrades
-                    .slice(5, 10)
-                    .reduce(
-                        (acc, trade) =>
-                            acc + (trade.executionRating || 0),
-                        0
-                    ) / previousQuality.length
-            )
-            : 0;
-
-    const executionDecay =
-        previousExecutionAverage > 0 &&
-        recentExecutionAverage <
-        previousExecutionAverage - 2;
-
-
-    if (executionDecay) {
-        intelligenceFeed.push(
-            `Execution stability rileva deterioramento: execution recente ${recentExecutionAverage}/10 vs precedente ${previousExecutionAverage}/10.`
-        );
-    }
-
-    const recentConfidenceAverage =
-        recentQuality.length > 0
-            ? Math.round(
-                recentTrades
-                    .slice(0, 5)
-                    .reduce(
-                        (acc, trade) =>
-                            acc + (trade.confidence || 0),
-                        0
-                    ) / recentQuality.length
-            )
-            : 0;
-
-    const previousConfidenceAverage =
-        previousQuality.length > 0
-            ? Math.round(
-                recentTrades
-                    .slice(5, 10)
-                    .reduce(
-                        (acc, trade) =>
-                            acc + (trade.confidence || 0),
-                        0
-                    ) / previousQuality.length
-            )
-            : 0;
-
-    const confidenceDecay =
-        previousConfidenceAverage > 0 &&
-        recentConfidenceAverage <
-        previousConfidenceAverage - 2;
-
-    if (confidenceDecay) {
-        intelligenceFeed.push(
-            `Confidence stability rileva deterioramento: confidence recente ${recentConfidenceAverage}/10 vs precedente ${previousConfidenceAverage}/10.`
-        );
-    }
-
-    const riskSignals = [
+    const {
+        recentAverageQuality,
+        previousAverageQuality,
         behavioralDrift,
+        recentExecutionAverage,
+        previousExecutionAverage,
         executionDecay,
+        recentConfidenceAverage,
+        previousConfidenceAverage,
         confidenceDecay,
-        recoveryDetected && recoveryScore < 60,
-        behavioralRisk >= 50,
-    ].filter(Boolean).length;
-
-    const supervisorLevel =
-        riskSignals >= 4
-            ? "Critical"
-            : riskSignals >= 3
-                ? "High"
-                : riskSignals >= 2
-                    ? "Moderate"
-                    : "Controlled";
-
-    if (supervisorLevel === "Critical") {
-        intelligenceFeed.push(
-            "AI Risk Supervisor rileva rischio operativo critico: riduzione immediata della frequenza consigliata."
-        );
-    }
-
-    const emotionalRecentTrades =
-        recentTrades.slice(0, 10);
-
-    const emotionalInstabilityScore =
-        emotionalRecentTrades.length > 0
-            ? Math.round(
-                (emotionalRecentTrades.filter(
-                    (trade) =>
-                        trade.emotionalState &&
-                        trade.emotionalState.length > 0
-                ).length /
-                    emotionalRecentTrades.length) *
-                100
-            )
-            : 0;
-
-    const emotionalVolatility =
-        emotionalInstabilityScore >= 60;
-
-    const emotionalLabel =
-        emotionalInstabilityScore >= 80
-            ? "Critical"
-            : emotionalInstabilityScore >= 60
-                ? "High"
-                : emotionalInstabilityScore >= 40
-                    ? "Moderate"
-                    : "Stable";
-
-    const resilienceScore = Math.max(
-        0,
-        Math.min(
-            100,
-            Math.round(
-                consistencyScore * 0.35 +
-                disciplineScore * 0.35 +
-                recoveryScore * 0.2 -
-                behavioralRisk * 0.1
-            )
-        )
-    );
-
-    const resilienceLabel =
-        resilienceScore >= 85
-            ? "Elite"
-            : resilienceScore >= 70
-                ? "Strong"
-                : resilienceScore >= 50
-                    ? "Developing"
-                    : "Fragile";
-
-    const resilienceRisk =
-        resilienceScore < 50;
-
-    if (emotionalVolatility) {
-        intelligenceFeed.push(
-            `Emotional stability engine rileva instabilità emotiva elevata (${emotionalInstabilityScore}%).`
-        );
-    }
-
-    const consistencyLabel =
-        consistencyScore >= 80
-            ? "Elite"
-            : consistencyScore >= 65
-                ? "Stable"
-                : consistencyScore >= 45
-                    ? "Developing"
-                    : "Fragile";
-
-    if (consistencyScore >= 80) {
-        intelligenceFeed.push(
-            "Consistency engine rileva una struttura operativa altamente stabile."
-        );
-    }
-
-    if (consistencyScore <= 45 && totalTrades > 0) {
-        intelligenceFeed.push(
-            "Consistency engine rileva instabilità operativa e deterioramento decisionale."
-        );
-    }
-
-    const averageExecution =
-        totalTrades > 0
-            ? Math.round(
-                trades.reduce(
-                    (acc, trade) =>
-                        acc + (trade.executionRating || 0),
-                    0
-                ) / totalTrades
-            )
-            : 0;
-
-    const averageConfidence =
-        totalTrades > 0
-            ? Math.round(
-                trades.reduce(
-                    (acc, trade) =>
-                        acc + (trade.confidence || 0),
-                    0
-                ) / totalTrades
-            )
-            : 0;
-
-    const reviewScore = Math.max(
-        0,
-        Math.min(
-            100,
-            Math.round(
-                averageExecution * 10 * 0.5 +
-                averageConfidence * 10 * 0.3 +
-                consistencyScore * 0.2
-            )
-        )
-    );
-
-    const reviewLabel =
-        reviewScore >= 85
-            ? "Institutional"
-            : reviewScore >= 70
-                ? "Advanced"
-                : reviewScore >= 50
-                    ? "Developing"
-                    : "Unstable";
-
-    const latestTrade = recentTrades[0];
-
-    let latestTradeReview = "";
-
-    if (latestTrade) {
-        const execution =
-            latestTrade.executionRating || 0;
-
-        const confidence =
-            latestTrade.confidence || 0;
-
-        if (
-            latestTrade.outcome === "win" &&
-            execution >= 7 &&
-            confidence >= 7
-        ) {
-            latestTradeReview =
-                "Trade recente eseguito con buona qualità decisionale, execution stabile e confidence coerente.";
-        } else if (
-            latestTrade.outcome === "loss" &&
-            execution <= 4
-        ) {
-            latestTradeReview =
-                "La perdita recente mostra segnali di weak execution. Priorità: migliorare selezione setup ed evitare ingressi impulsivi.";
-        } else if (
-            latestTrade.outcome === "loss" &&
-            confidence <= 4
-        ) {
-            latestTradeReview =
-                "La perdita recente evidenzia bassa confidence operativa. Il focus è evitare trade presi senza piena convinzione.";
-        } else if (latestTrade.emotionalState) {
-            latestTradeReview =
-                "Componente emotiva rilevata nel trade recente. VOLTIS consiglia review comportamentale post-sessione.";
-        } else {
-            latestTradeReview =
-                "Il trade recente non mostra anomalie operative significative.";
-        }
-    }
+        emotionalRecentTrades,
+        emotionalTradesCount,
+        emotionalInstabilityScore,
+        emotionalVolatility,
+        emotionalLabel,
+        riskSignals,
+        supervisorLevel,
+    } = stability;
 
     const riskLabel =
         behavioralRisk >= 50
@@ -638,21 +275,32 @@ export default async function CopilotPage({
                     ? "VOLTIS rileva segnali di rischio comportamentale elevato. Serve ridurre impulsività, migliorare review e proteggere execution."
                     : "VOLTIS rileva una struttura in sviluppo. Il focus principale è migliorare consistenza, selezione setup e stabilità decisionale.";
 
-    if (reviewScore >= 85) {
-        intelligenceFeed.push(
-            "AI Review Engine rileva execution e decision making di livello avanzato."
-        );
-    }
-
-    if (reviewScore <= 50 && totalTrades > 0) {
-        intelligenceFeed.push(
-            "AI Review Engine rileva deterioramento nella qualità decisionale e execution."
-        );
-    }
-
-    if (latestTradeReview.length > 0) {
-        intelligenceFeed.push(latestTradeReview);
-    }
+    const intelligenceFeed = buildIntelligenceFeed({
+        disciplineScore,
+        behavioralRisk,
+        revengeRiskTrades,
+        winStreak,
+        lossStreak,
+        weakTimeTrades,
+        behavioralDrift,
+        recentAverageQuality,
+        previousAverageQuality,
+        recoveryDetected,
+        recoveryLabel,
+        executionDecay,
+        recentExecutionAverage,
+        previousExecutionAverage,
+        confidenceDecay,
+        recentConfidenceAverage,
+        previousConfidenceAverage,
+        supervisorLevel,
+        emotionalVolatility,
+        emotionalInstabilityScore,
+        consistencyScore,
+        totalTrades,
+        reviewScore,
+        latestTradeReview,
+    });
 
     return (
         <div className="space-y-8">
@@ -664,274 +312,37 @@ export default async function CopilotPage({
 
             {criticalPatterns.length === 0 &&
                 highPatterns.length > 0 && (
-                    <div className="rounded-[32px] border border-yellow-500/30 bg-yellow-500/10 p-6">
-                        <div className="flex items-start justify-between gap-6">
-                            <div>
-                                <p className="text-sm uppercase tracking-[0.2em] text-yellow-300">
-                                    Elevated Risk
-                                </p>
-
-                                <h2 className="mt-3 text-3xl font-black text-white">
-                                    Behavioral Warning
-                                </h2>
-
-                                <p className="mt-4 max-w-3xl text-sm leading-relaxed text-yellow-100">
-                                    VOLTIS rileva pattern ad alto rischio che
-                                    potrebbero ridurre qualità decisionale,
-                                    disciplina ed execution.
-                                </p>
-                            </div>
-
-                            <div className="rounded-full border border-yellow-400/20 bg-yellow-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.15em] text-yellow-300">
-                                {highPatterns.length} High Risk
-                            </div>
-                        </div>
-                    </div>
+                    <ElevatedRiskCard
+                        show={
+                            criticalPatterns.length === 0 &&
+                            highPatterns.length > 0
+                        }
+                        highPatternsCount={highPatterns.length}
+                    />
                 )}
 
-            <div className="rounded-[36px] border border-white/10 bg-black/30 p-8 backdrop-blur-xl">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
-                            Daily Intelligence Feed
-                        </p>
+            <DailyIntelligenceFeed
+                intelligenceFeed={intelligenceFeed}
+            />
 
-                        <h2 className="mt-3 text-3xl font-black text-white">
-                            Operational Highlights
-                        </h2>
-                    </div>
+            <ConsistencyEngineCard
+                consistencyScore={consistencyScore}
+                consistencyLabel={consistencyLabel}
+                disciplineScore={disciplineScore}
+                behavioralRisk={behavioralRisk}
+            />
 
-                    <div className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-cyan-300">
-                        {intelligenceFeed.length} Insights
-                    </div>
-                </div>
+            <AIReviewEngineCard
+                reviewScore={reviewScore}
+                reviewLabel={reviewLabel}
+                averageExecution={averageExecution}
+                averageConfidence={averageConfidence}
+            />
 
-                <div className="mt-8 space-y-4">
-                    {intelligenceFeed.length === 0 ? (
-                        <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
-                            <p className="text-sm leading-relaxed text-gray-400">
-                                Nessun insight operativo disponibile al momento.
-                            </p>
-                        </div>
-                    ) : (
-                        intelligenceFeed.map((item) => (
-                            <div
-                                key={item}
-                                className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5"
-                            >
-                                <p className="text-sm leading-relaxed text-gray-300">
-                                    {item}
-                                </p>
-                            </div>
-                        ))
-                    )}
-                </div>
-            </div>
-
-            <div className="rounded-[36px] border border-emerald-500/20 bg-emerald-500/10 p-8">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-sm uppercase tracking-[0.2em] text-emerald-400">
-                            Consistency Engine
-                        </p>
-
-                        <h2 className="mt-3 text-3xl font-black text-white">
-                            Operational Stability
-                        </h2>
-                    </div>
-
-                    <div
-                        className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${consistencyScore >= 80
-                            ? "bg-emerald-500/20 text-emerald-300"
-                            : consistencyScore >= 65
-                                ? "bg-cyan-500/20 text-cyan-300"
-                                : consistencyScore >= 45
-                                    ? "bg-yellow-500/20 text-yellow-300"
-                                    : "bg-red-500/20 text-red-300"
-                            }`}
-                    >
-                        {consistencyLabel}
-                    </div>
-                </div>
-
-                <div className="mt-8 grid gap-4 xl:grid-cols-3">
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Consistency Score
-                        </p>
-
-                        <h3 className="mt-3 text-4xl font-black text-white">
-                            {consistencyScore}%
-                        </h3>
-                    </div>
-
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Discipline
-                        </p>
-
-                        <h3 className="mt-3 text-4xl font-black text-white">
-                            {disciplineScore}%
-                        </h3>
-                    </div>
-
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Behavioral Risk
-                        </p>
-
-                        <h3 className="mt-3 text-4xl font-black text-white">
-                            {behavioralRisk}%
-                        </h3>
-                    </div>
-                </div>
-            </div>
-
-            <div className="rounded-[36px] border border-violet-500/20 bg-violet-500/10 p-8">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-sm uppercase tracking-[0.2em] text-violet-400">
-                            AI Review Engine
-                        </p>
-
-                        <h2 className="mt-3 text-3xl font-black text-white">
-                            Decision Quality Analysis
-                        </h2>
-                    </div>
-
-                    <div
-                        className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${reviewScore >= 85
-                            ? "bg-emerald-500/20 text-emerald-300"
-                            : reviewScore >= 70
-                                ? "bg-cyan-500/20 text-cyan-300"
-                                : reviewScore >= 50
-                                    ? "bg-yellow-500/20 text-yellow-300"
-                                    : "bg-red-500/20 text-red-300"
-                            }`}
-                    >
-                        {reviewLabel}
-                    </div>
-                </div>
-
-                <div className="mt-8 grid gap-4 xl:grid-cols-3">
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Review Score
-                        </p>
-
-                        <h3 className="mt-3 text-4xl font-black text-white">
-                            {reviewScore}%
-                        </h3>
-                    </div>
-
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Avg Execution
-                        </p>
-
-                        <h3 className="mt-3 text-4xl font-black text-white">
-                            {averageExecution}/10
-                        </h3>
-                    </div>
-
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Avg Confidence
-                        </p>
-
-                        <h3 className="mt-3 text-4xl font-black text-white">
-                            {averageConfidence}/10
-                        </h3>
-                    </div>
-                </div>
-            </div>
-
-            <div className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/10 p-8">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
-                            Trade-by-Trade Review
-                        </p>
-
-                        <h2 className="mt-3 text-3xl font-black text-white">
-                            Latest Trade Intelligence
-                        </h2>
-                    </div>
-
-                    <div className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.15em] text-cyan-300">
-                        AI Review
-                    </div>
-                </div>
-
-                <div className="mt-8 rounded-[28px] border border-white/10 bg-black/20 p-6">
-                    {latestTrade ? (
-                        <>
-                            <div className="flex items-center justify-between gap-4">
-                                <div>
-                                    <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                                        Latest Trade
-                                    </p>
-
-                                    <h3 className="mt-2 text-2xl font-black text-white">
-                                        {latestTrade.symbol}
-                                    </h3>
-                                </div>
-
-                                <div
-                                    className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${latestTrade.outcome === "win"
-                                        ? "bg-emerald-500/20 text-emerald-300"
-                                        : latestTrade.outcome === "loss"
-                                            ? "bg-red-500/20 text-red-300"
-                                            : "bg-yellow-500/20 text-yellow-300"
-                                        }`}
-                                >
-                                    {latestTrade.outcome}
-                                </div>
-                            </div>
-
-                            <p className="mt-6 text-sm leading-relaxed text-gray-300">
-                                {latestTradeReview}
-                            </p>
-
-                            <div className="mt-6 grid gap-4 xl:grid-cols-3">
-                                <div className="rounded-[24px] border border-white/10 bg-black/20 p-4">
-                                    <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                                        Execution
-                                    </p>
-
-                                    <h3 className="mt-2 text-3xl font-black text-white">
-                                        {latestTrade.executionRating || 0}/10
-                                    </h3>
-                                </div>
-
-                                <div className="rounded-[24px] border border-white/10 bg-black/20 p-4">
-                                    <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                                        Confidence
-                                    </p>
-
-                                    <h3 className="mt-2 text-3xl font-black text-white">
-                                        {latestTrade.confidence || 0}/10
-                                    </h3>
-                                </div>
-
-                                <div className="rounded-[24px] border border-white/10 bg-black/20 p-4">
-                                    <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                                        Emotional State
-                                    </p>
-
-                                    <h3 className="mt-2 text-lg font-black text-white">
-                                        {latestTrade.emotionalState || "Stable"}
-                                    </h3>
-                                </div>
-                            </div>
-                        </>
-                    ) : (
-                        <p className="text-sm text-gray-400">
-                            Nessun trade disponibile per la review AI.
-                        </p>
-                    )}
-                </div>
-            </div>
+            <TradeReviewCard
+                latestTrade={latestTrade}
+                latestTradeReview={latestTradeReview}
+            />
 
             <div className="rounded-[36px] border border-white/10 bg-black/30 p-8 backdrop-blur-xl">
                 <div className="flex items-center justify-between">
@@ -991,460 +402,55 @@ export default async function CopilotPage({
                 </div>
             </div>
 
-            <div className="rounded-[36px] border border-violet-500/20 bg-violet-500/10 p-8">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-sm uppercase tracking-[0.2em] text-violet-400">
-                            AI Performance Timeline
-                        </p>
+            <PerformanceTimelineCard
+                performanceTimeline={performanceTimeline}
+            />
 
-                        <h2 className="mt-3 text-3xl font-black text-white">
-                            Trader Evolution Tracking
-                        </h2>
-                    </div>
+            <BehavioralDriftCard
+                behavioralDrift={behavioralDrift}
+                recentAverageQuality={recentAverageQuality}
+                previousAverageQuality={previousAverageQuality}
+            />
 
-                    <div className="rounded-full border border-violet-500/20 bg-violet-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-violet-300">
-                        {performanceTimeline.length} Trades
-                    </div>
-                </div>
+            <RecoveryIntelligenceCard
+                recoveryScore={recoveryScore}
+                recoveryLabel={recoveryLabel}
+                recentWins={recentWins}
+                recentLosses={recentLosses}
+            />
 
-                <div className="mt-8 space-y-4">
-                    {performanceTimeline.length === 0 ? (
-                        <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
-                            <p className="text-sm text-gray-400">
-                                Nessun dato disponibile per costruire la timeline AI.
-                            </p>
-                        </div>
-                    ) : (
-                        performanceTimeline.slice(-8).map((item) => (
-                            <div
-                                key={item.id}
-                                className="rounded-[28px] border border-white/10 bg-black/20 p-5"
-                            >
-                                <div className="flex items-center justify-between gap-4">
-                                    <div>
-                                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                                            Trade #{item.index}
-                                        </p>
+            <ExecutionStabilityCard
+                executionDecay={executionDecay}
+                recentExecutionAverage={recentExecutionAverage}
+                previousExecutionAverage={previousExecutionAverage}
+            />
 
-                                        <h3 className="mt-2 text-xl font-black text-white">
-                                            {item.symbol}
-                                        </h3>
-                                    </div>
+            <ConfidenceStabilityCard
+                confidenceDecay={confidenceDecay}
+                recentConfidenceAverage={recentConfidenceAverage}
+                previousConfidenceAverage={previousConfidenceAverage}
+            />
 
-                                    <div className="text-right">
-                                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                                            Quality Score
-                                        </p>
+            <AIRiskSupervisorCard
+                supervisorLevel={supervisorLevel}
+                riskSignals={riskSignals}
+                behavioralDrift={behavioralDrift}
+                executionDecay={executionDecay}
+                confidenceDecay={confidenceDecay}
+            />
 
-                                        <h3
-                                            className={`mt-2 text-2xl font-black ${item.qualityScore >= 80
-                                                ? "text-emerald-400"
-                                                : item.qualityScore >= 60
-                                                    ? "text-cyan-400"
-                                                    : item.qualityScore >= 40
-                                                        ? "text-yellow-300"
-                                                        : "text-red-400"
-                                                }`}
-                                        >
-                                            {item.qualityScore}%
-                                        </h3>
-                                    </div>
-                                </div>
-
-                                <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/10">
-                                    <div
-                                        className="h-full rounded-full bg-violet-400"
-                                        style={{
-                                            width: `${item.qualityScore}%`,
-                                        }}
-                                    />
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </div>
-            </div>
-
-            <div className="rounded-[36px] border border-red-500/20 bg-red-500/10 p-8">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-sm uppercase tracking-[0.2em] text-red-400">
-                            Behavioral Drift Detection
-                        </p>
-
-                        <h2 className="mt-3 text-3xl font-black text-white">
-                            Quality Decay Monitor
-                        </h2>
-                    </div>
-
-                    <div
-                        className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${behavioralDrift
-                            ? "bg-red-500/20 text-red-300"
-                            : "bg-emerald-500/20 text-emerald-300"
-                            }`}
-                    >
-                        {behavioralDrift ? "Drift Detected" : "Stable"}
-                    </div>
-                </div>
-
-                <div className="mt-8 grid gap-4 xl:grid-cols-3">
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Recent Quality
-                        </p>
-
-                        <h3 className="mt-3 text-4xl font-black text-white">
-                            {recentAverageQuality}%
-                        </h3>
-                    </div>
-
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Previous Quality
-                        </p>
-
-                        <h3 className="mt-3 text-4xl font-black text-white">
-                            {previousAverageQuality}%
-                        </h3>
-                    </div>
-
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Status
-                        </p>
-
-                        <h3
-                            className={`mt-3 text-3xl font-black ${behavioralDrift
-                                ? "text-red-400"
-                                : "text-emerald-400"
-                                }`}
-                        >
-                            {behavioralDrift ? "Decay" : "Stable"}
-                        </h3>
-                    </div>
-                </div>
-            </div>
-
-            <div className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/10 p-8">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
-                            AI Recovery Intelligence
-                        </p>
-
-                        <h2 className="mt-3 text-3xl font-black text-white">
-                            Drawdown Recovery Analysis
-                        </h2>
-                    </div>
-
-                    <div
-                        className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${recoveryScore >= 80
-                            ? "bg-emerald-500/20 text-emerald-300"
-                            : recoveryScore >= 60
-                                ? "bg-cyan-500/20 text-cyan-300"
-                                : recoveryDetected
-                                    ? "bg-yellow-500/20 text-yellow-300"
-                                    : "bg-red-500/20 text-red-300"
-                            }`}
-                    >
-                        {recoveryLabel}
-                    </div>
-                </div>
-
-                <div className="mt-8 grid gap-4 xl:grid-cols-3">
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Recovery Score
-                        </p>
-
-                        <h3 className="mt-3 text-4xl font-black text-white">
-                            {recoveryScore}%
-                        </h3>
-                    </div>
-
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Recent Wins
-                        </p>
-
-                        <h3 className="mt-3 text-4xl font-black text-white">
-                            {recentWins}
-                        </h3>
-                    </div>
-
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Recent Losses
-                        </p>
-
-                        <h3 className="mt-3 text-4xl font-black text-white">
-                            {recentLosses}
-                        </h3>
-                    </div>
-                </div>
-            </div>
-
-            <div className="rounded-[36px] border border-orange-500/20 bg-orange-500/10 p-8">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-sm uppercase tracking-[0.2em] text-orange-400">
-                            Execution Stability
-                        </p>
-
-                        <h2 className="mt-3 text-3xl font-black text-white">
-                            Execution Quality Monitor
-                        </h2>
-                    </div>
-
-                    <div
-                        className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${executionDecay
-                            ? "bg-red-500/20 text-red-300"
-                            : "bg-emerald-500/20 text-emerald-300"
-                            }`}
-                    >
-                        {executionDecay ? "Decay" : "Stable"}
-                    </div>
-                </div>
-
-                <div className="mt-8 grid gap-4 xl:grid-cols-3">
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Recent Execution
-                        </p>
-
-                        <h3 className="mt-3 text-4xl font-black text-white">
-                            {recentExecutionAverage}/10
-                        </h3>
-                    </div>
-
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Previous Execution
-                        </p>
-
-                        <h3 className="mt-3 text-4xl font-black text-white">
-                            {previousExecutionAverage}/10
-                        </h3>
-                    </div>
-
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Status
-                        </p>
-
-                        <h3
-                            className={`mt-3 text-3xl font-black ${executionDecay
-                                ? "text-red-400"
-                                : "text-emerald-400"
-                                }`}
-                        >
-                            {executionDecay ? "Declining" : "Stable"}
-                        </h3>
-                    </div>
-                </div>
-            </div>
-
-            <div className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/10 p-8">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
-                            Confidence Stability
-                        </p>
-
-                        <h2 className="mt-3 text-3xl font-black text-white">
-                            Confidence Quality Monitor
-                        </h2>
-                    </div>
-
-                    <div
-                        className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${confidenceDecay
-                            ? "bg-red-500/20 text-red-300"
-                            : "bg-emerald-500/20 text-emerald-300"
-                            }`}
-                    >
-                        {confidenceDecay ? "Declining" : "Stable"}
-                    </div>
-                </div>
-
-                <div className="mt-8 grid gap-4 xl:grid-cols-3">
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Recent Confidence
-                        </p>
-
-                        <h3 className="mt-3 text-4xl font-black text-white">
-                            {recentConfidenceAverage}/10
-                        </h3>
-                    </div>
-
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Previous Confidence
-                        </p>
-
-                        <h3 className="mt-3 text-4xl font-black text-white">
-                            {previousConfidenceAverage}/10
-                        </h3>
-                    </div>
-
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Status
-                        </p>
-
-                        <h3
-                            className={`mt-3 text-3xl font-black ${confidenceDecay
-                                ? "text-red-400"
-                                : "text-emerald-400"
-                                }`}
-                        >
-                            {confidenceDecay ? "Declining" : "Stable"}
-                        </h3>
-                    </div>
-                </div>
-            </div>
-
-            <div className="rounded-[36px] border border-red-500/20 bg-red-500/10 p-8">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-sm uppercase tracking-[0.2em] text-red-400">
-                            AI Risk Supervisor
-                        </p>
-
-                        <h2 className="mt-3 text-3xl font-black text-white">
-                            Operational Risk Overview
-                        </h2>
-                    </div>
-
-                    <div
-                        className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${supervisorLevel === "Critical"
-                            ? "bg-red-600/20 text-red-300"
-                            : supervisorLevel === "High"
-                                ? "bg-red-500/20 text-red-300"
-                                : supervisorLevel === "Moderate"
-                                    ? "bg-yellow-500/20 text-yellow-300"
-                                    : "bg-emerald-500/20 text-emerald-300"
-                            }`}
-                    >
-                        {supervisorLevel}
-                    </div>
-                </div>
-
-                <div className="mt-8 grid gap-4 xl:grid-cols-4">
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Risk Signals
-                        </p>
-
-                        <h3 className="mt-3 text-4xl font-black text-white">
-                            {riskSignals}
-                        </h3>
-                    </div>
-
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Drift
-                        </p>
-
-                        <h3 className={`mt-3 text-2xl font-black ${behavioralDrift ? "text-red-400" : "text-emerald-400"}`}>
-                            {behavioralDrift ? "Detected" : "Stable"}
-                        </h3>
-                    </div>
-
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Execution
-                        </p>
-
-                        <h3 className={`mt-3 text-2xl font-black ${executionDecay ? "text-red-400" : "text-emerald-400"}`}>
-                            {executionDecay ? "Declining" : "Stable"}
-                        </h3>
-                    </div>
-
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Confidence
-                        </p>
-
-                        <h3 className={`mt-3 text-2xl font-black ${confidenceDecay ? "text-red-400" : "text-emerald-400"}`}>
-                            {confidenceDecay ? "Declining" : "Stable"}
-                        </h3>
-                    </div>
-                </div>
-            </div>
-
-            <div className="rounded-[36px] border border-pink-500/20 bg-pink-500/10 p-8">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-sm uppercase tracking-[0.2em] text-pink-400">
-                            Emotional Stability
-                        </p>
-
-                        <h2 className="mt-3 text-3xl font-black text-white">
-                            Emotional Volatility Monitor
-                        </h2>
-                    </div>
-
-                    <div
-                        className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${emotionalLabel === "Critical"
-                            ? "bg-red-600/20 text-red-300"
-                            : emotionalLabel === "High"
-                                ? "bg-red-500/20 text-red-300"
-                                : emotionalLabel === "Moderate"
-                                    ? "bg-yellow-500/20 text-yellow-300"
-                                    : "bg-emerald-500/20 text-emerald-300"
-                            }`}
-                    >
-                        {emotionalLabel}
-                    </div>
-                </div>
-
-                <div className="mt-8 grid gap-4 xl:grid-cols-3">
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Emotional Instability
-                        </p>
-
-                        <h3 className="mt-3 text-4xl font-black text-white">
-                            {emotionalInstabilityScore}%
-                        </h3>
-                    </div>
-
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Emotional Trades
-                        </p>
-
-                        <h3 className="mt-3 text-4xl font-black text-white">
-                            {
-                                emotionalRecentTrades.filter(
-                                    (trade) =>
-                                        trade.emotionalState &&
-                                        trade.emotionalState.length > 0
-                                ).length
-                            }
-                        </h3>
-                    </div>
-
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                            Status
-                        </p>
-
-                        <h3
-                            className={`mt-3 text-3xl font-black ${emotionalVolatility
-                                ? "text-red-400"
-                                : "text-emerald-400"
-                                }`}
-                        >
-                            {emotionalVolatility
-                                ? "Volatile"
-                                : "Stable"}
-                        </h3>
-                    </div>
-                </div>
-            </div>
+            <EmotionalStabilityCard
+                emotionalLabel={emotionalLabel}
+                emotionalInstabilityScore={emotionalInstabilityScore}
+                emotionalVolatility={emotionalVolatility}
+                emotionalTradesCount={
+                    emotionalRecentTrades.filter(
+                        (trade) =>
+                            trade.emotionalState &&
+                            trade.emotionalState.length > 0
+                    ).length
+                }
+            />
 
             <div className="rounded-[32px] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl">
                 <p className="text-sm uppercase tracking-[0.2em] text-violet-400">
@@ -1578,148 +584,12 @@ export default async function CopilotPage({
                 </div>
             </div>
 
-            <div className="rounded-[36px] border border-white/10 bg-black/30 p-8 backdrop-blur-xl">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-sm uppercase tracking-[0.2em] text-amber-400">
-                            Pattern Memory
-                        </p>
+            <PatternMemoryCard copilotPatterns={copilotPatterns} />
 
-                        <h2 className="mt-3 text-3xl font-black text-white">
-                            Behavioral Intelligence
-                        </h2>
-                    </div>
-
-                    <div className="rounded-full border border-amber-500/20 bg-amber-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-amber-300">
-                        {copilotPatterns.length} Patterns
-                    </div>
-                </div>
-
-                <div className="mt-8 space-y-4">
-                    {copilotPatterns.length === 0 ? (
-                        <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
-                            <p className="text-sm leading-relaxed text-gray-400">
-                                Nessun pattern comportamentale rilevato al momento.
-                            </p>
-                        </div>
-                    ) : (
-                        copilotPatterns.map((pattern) => (
-                            <div
-                                key={pattern.id}
-                                className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5"
-                            >
-                                <div className="flex items-start justify-between gap-4">
-                                    <div>
-                                        <p className="text-sm uppercase tracking-[0.15em] text-amber-400">
-                                            {pattern.type}
-                                        </p>
-
-                                        <h3 className="mt-2 text-xl font-black text-white">
-                                            {pattern.title}
-                                        </h3>
-
-                                        <p className="mt-3 text-sm leading-relaxed text-gray-400">
-                                            {pattern.description}
-                                        </p>
-                                    </div>
-
-                                    <div
-                                        className={`rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] ${pattern.severity === "critical"
-                                            ? "bg-red-600/20 text-red-300"
-                                            : pattern.severity === "high"
-                                                ? "bg-red-500/10 text-red-400"
-                                                : pattern.severity === "medium"
-                                                    ? "bg-yellow-500/10 text-yellow-300"
-                                                    : "bg-emerald-500/10 text-emerald-400"
-                                            }`}
-                                    >
-                                        {pattern.severity}
-                                    </div>
-                                </div>
-
-                                <div className="mt-5 flex items-center justify-between text-xs text-gray-500">
-                                    <span>
-                                        Occurrences: {pattern.occurrences}
-                                    </span>
-
-                                    <span>
-                                        Updated recently
-                                    </span>
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </div>
-            </div>
-
-            <div className="rounded-[36px] border border-white/10 bg-black/30 p-8 backdrop-blur-xl">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
-                            AI Conversation
-                        </p>
-
-                        <h2 className="mt-3 text-3xl font-black text-white">
-                            VOLTIS Assistant
-                        </h2>
-                    </div>
-
-                    <div className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-emerald-400">
-                        Online
-                    </div>
-                </div>
-
-                <div className="mt-8 space-y-6">
-                    {copilotMessages.length === 0 ? (
-                        <div className="max-w-2xl rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
-                            <p className="text-sm leading-relaxed text-gray-300">
-                                Ciao, sono VOLTIS Copilot. Scrivimi una domanda sul tuo account, sulla tua performance o sui tuoi pattern operativi.
-                            </p>
-                        </div>
-                    ) : (
-                        copilotMessages.map((message) => (
-                            <div
-                                key={message.id}
-                                className={`max-w-2xl rounded-[28px] border p-5 ${message.role === "user"
-                                    ? "ml-auto border-cyan-500/20 bg-cyan-500/10"
-                                    : "border-white/10 bg-white/[0.04]"
-                                    }`}
-                            >
-                                <p
-                                    className={`text-sm leading-relaxed ${message.role === "user"
-                                        ? "text-cyan-100"
-                                        : "text-gray-300"
-                                        }`}
-                                >
-                                    {message.content}
-                                </p>
-                            </div>
-                        ))
-                    )}
-                </div>
-
-                <form
-                    action={sendCopilotMessage}
-                    className="mt-8 flex items-center gap-4"
-                >
-                    <input
-                        type="hidden"
-                        name="tradingAccountId"
-                        value={accountId}
-                    />
-
-                    <input
-                        type="text"
-                        name="content"
-                        placeholder="Ask VOLTIS Copilot..."
-                        className="h-14 flex-1 rounded-2xl border border-white/10 bg-white/[0.04] px-5 text-sm text-white outline-none placeholder:text-gray-500"
-                    />
-
-                    <button className="h-14 rounded-2xl bg-cyan-500 px-6 text-sm font-black uppercase tracking-[0.15em] text-black transition hover:bg-cyan-400">
-                        Send
-                    </button>
-                </form>
-            </div>
+            <CopilotConversationCard
+                copilotMessages={copilotMessages}
+                accountId={accountId}
+            />
         </div>
     );
 }
