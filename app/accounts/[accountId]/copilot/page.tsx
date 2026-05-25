@@ -426,10 +426,33 @@ export default async function CopilotPage({
         previousConfidenceAverage > 0 &&
         recentConfidenceAverage <
         previousConfidenceAverage - 2;
-        
+
     if (confidenceDecay) {
         intelligenceFeed.push(
             `Confidence stability rileva deterioramento: confidence recente ${recentConfidenceAverage}/10 vs precedente ${previousConfidenceAverage}/10.`
+        );
+    }
+
+    const riskSignals = [
+        behavioralDrift,
+        executionDecay,
+        confidenceDecay,
+        recoveryDetected && recoveryScore < 60,
+        behavioralRisk >= 50,
+    ].filter(Boolean).length;
+
+    const supervisorLevel =
+        riskSignals >= 4
+            ? "Critical"
+            : riskSignals >= 3
+                ? "High"
+                : riskSignals >= 2
+                    ? "Moderate"
+                    : "Controlled";
+
+    if (supervisorLevel === "Critical") {
+        intelligenceFeed.push(
+            "AI Risk Supervisor rileva rischio operativo critico: riduzione immediata della frequenza consigliata."
         );
     }
 
@@ -1214,8 +1237,8 @@ export default async function CopilotPage({
 
                     <div
                         className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${confidenceDecay
-                                ? "bg-red-500/20 text-red-300"
-                                : "bg-emerald-500/20 text-emerald-300"
+                            ? "bg-red-500/20 text-red-300"
+                            : "bg-emerald-500/20 text-emerald-300"
                             }`}
                     >
                         {confidenceDecay ? "Declining" : "Stable"}
@@ -1250,10 +1273,79 @@ export default async function CopilotPage({
 
                         <h3
                             className={`mt-3 text-3xl font-black ${confidenceDecay
-                                    ? "text-red-400"
-                                    : "text-emerald-400"
+                                ? "text-red-400"
+                                : "text-emerald-400"
                                 }`}
                         >
+                            {confidenceDecay ? "Declining" : "Stable"}
+                        </h3>
+                    </div>
+                </div>
+            </div>
+
+            <div className="rounded-[36px] border border-red-500/20 bg-red-500/10 p-8">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <p className="text-sm uppercase tracking-[0.2em] text-red-400">
+                            AI Risk Supervisor
+                        </p>
+
+                        <h2 className="mt-3 text-3xl font-black text-white">
+                            Operational Risk Overview
+                        </h2>
+                    </div>
+
+                    <div
+                        className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${supervisorLevel === "Critical"
+                            ? "bg-red-600/20 text-red-300"
+                            : supervisorLevel === "High"
+                                ? "bg-red-500/20 text-red-300"
+                                : supervisorLevel === "Moderate"
+                                    ? "bg-yellow-500/20 text-yellow-300"
+                                    : "bg-emerald-500/20 text-emerald-300"
+                            }`}
+                    >
+                        {supervisorLevel}
+                    </div>
+                </div>
+
+                <div className="mt-8 grid gap-4 xl:grid-cols-4">
+                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+                            Risk Signals
+                        </p>
+
+                        <h3 className="mt-3 text-4xl font-black text-white">
+                            {riskSignals}
+                        </h3>
+                    </div>
+
+                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+                            Drift
+                        </p>
+
+                        <h3 className={`mt-3 text-2xl font-black ${behavioralDrift ? "text-red-400" : "text-emerald-400"}`}>
+                            {behavioralDrift ? "Detected" : "Stable"}
+                        </h3>
+                    </div>
+
+                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+                            Execution
+                        </p>
+
+                        <h3 className={`mt-3 text-2xl font-black ${executionDecay ? "text-red-400" : "text-emerald-400"}`}>
+                            {executionDecay ? "Declining" : "Stable"}
+                        </h3>
+                    </div>
+
+                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+                            Confidence
+                        </p>
+
+                        <h3 className={`mt-3 text-2xl font-black ${confidenceDecay ? "text-red-400" : "text-emerald-400"}`}>
                             {confidenceDecay ? "Declining" : "Stable"}
                         </h3>
                     </div>
