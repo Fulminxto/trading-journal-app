@@ -122,6 +122,106 @@ export default async function CopilotPage({
         )
     );
 
+    const recentTrades = trades
+        .slice()
+        .sort(
+            (a, b) =>
+                new Date(b.openDate).getTime() -
+                new Date(a.openDate).getTime()
+        );
+
+    let lossStreak = 0;
+
+    for (const trade of recentTrades) {
+        if (trade.outcome === "loss") {
+            lossStreak += 1;
+        } else {
+            break;
+        }
+    }
+
+    let winStreak = 0;
+
+    for (const trade of recentTrades) {
+        if (trade.outcome === "win") {
+            winStreak += 1;
+        } else {
+            break;
+        }
+    }
+
+    const revengeRiskTrades = recentTrades.filter(
+        (trade, index) => {
+            const previousTrade = recentTrades[index + 1];
+
+            if (!previousTrade) {
+                return false;
+            }
+
+            return (
+                previousTrade.outcome === "loss" &&
+                ((trade.executionRating || 0) <= 4 ||
+                    trade.emotionalState ||
+                    (trade.confidence || 0) <= 4)
+            );
+        }
+    ).length;
+
+    const weakTimeTrades = trades.filter((trade) => {
+        const hour = trade.openTime
+            ? Number(trade.openTime.split(":")[0])
+            : null;
+
+        if (hour === null) {
+            return false;
+        }
+
+        return (
+            hour >= 18 &&
+            ((trade.executionRating || 0) <= 4 ||
+                (trade.confidence || 0) <= 4 ||
+                trade.emotionalState)
+        );
+    }).length;
+
+    const intelligenceFeed: string[] = [];
+
+    if (disciplineScore >= 80) {
+        intelligenceFeed.push(
+            "La disciplina operativa rimane stabile nelle ultime sessioni."
+        );
+    }
+
+    if (behavioralRisk >= 50) {
+        intelligenceFeed.push(
+            "Rilevato aumento del rischio comportamentale operativo."
+        );
+    }
+
+    if (revengeRiskTrades > 0) {
+        intelligenceFeed.push(
+            "Possibili segnali di revenge trading dopo operazioni negative."
+        );
+    }
+
+    if (winStreak >= 3) {
+        intelligenceFeed.push(
+            `Momentum positivo rilevato: ${winStreak} win consecutivi.`
+        );
+    }
+
+    if (lossStreak >= 3) {
+        intelligenceFeed.push(
+            `Drawdown comportamentale rilevato: ${lossStreak} loss consecutivi.`
+        );
+    }
+
+    if (weakTimeTrades > 0) {
+        intelligenceFeed.push(
+            "Qualità execution ridotta nelle fasce orarie serali."
+        );
+    }
+
     const riskLabel =
         behavioralRisk >= 50
             ? "High"
@@ -213,6 +313,45 @@ export default async function CopilotPage({
                         </div>
                     </div>
                 )}
+
+            <div className="rounded-[36px] border border-white/10 bg-black/30 p-8 backdrop-blur-xl">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+                            Daily Intelligence Feed
+                        </p>
+
+                        <h2 className="mt-3 text-3xl font-black text-white">
+                            Operational Highlights
+                        </h2>
+                    </div>
+
+                    <div className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-cyan-300">
+                        {intelligenceFeed.length} Insights
+                    </div>
+                </div>
+
+                <div className="mt-8 space-y-4">
+                    {intelligenceFeed.length === 0 ? (
+                        <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
+                            <p className="text-sm leading-relaxed text-gray-400">
+                                Nessun insight operativo disponibile al momento.
+                            </p>
+                        </div>
+                    ) : (
+                        intelligenceFeed.map((item, index) => (
+                            <div
+                                key={index}
+                                className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5"
+                            >
+                                <p className="text-sm leading-relaxed text-gray-300">
+                                    {item}
+                                </p>
+                            </div>
+                        ))
+                    )}
+                </div>
+            </div>
 
             <div className="rounded-[32px] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl">
                 <p className="text-sm uppercase tracking-[0.2em] text-violet-400">
