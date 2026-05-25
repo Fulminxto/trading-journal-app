@@ -60,6 +60,18 @@ export default async function CopilotPage({
             },
         });
 
+    const criticalPatterns =
+        copilotPatterns.filter(
+            (pattern) =>
+                pattern.severity === "critical"
+        );
+
+    const highPatterns =
+        copilotPatterns.filter(
+            (pattern) =>
+                pattern.severity === "high"
+        );
+
     const wins = trades.filter(
         (trade) => trade.outcome === "win"
     ).length;
@@ -147,6 +159,60 @@ export default async function CopilotPage({
                     </p>
                 </div>
             </div>
+
+            {criticalPatterns.length > 0 && (
+                <div className="rounded-[32px] border border-red-500/30 bg-red-500/10 p-6">
+                    <div className="flex items-start justify-between gap-6">
+                        <div>
+                            <p className="text-sm uppercase tracking-[0.2em] text-red-300">
+                                Critical Alert
+                            </p>
+
+                            <h2 className="mt-3 text-3xl font-black text-white">
+                                Behavioral Risk Escalation
+                            </h2>
+
+                            <p className="mt-4 max-w-3xl text-sm leading-relaxed text-red-100">
+                                VOLTIS ha rilevato pattern comportamentali
+                                critici ricorrenti. È consigliata una review
+                                operativa immediata e riduzione della frequenza
+                                esecutiva.
+                            </p>
+                        </div>
+
+                        <div className="rounded-full border border-red-400/20 bg-red-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.15em] text-red-300">
+                            {criticalPatterns.length} Critical
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {criticalPatterns.length === 0 &&
+                highPatterns.length > 0 && (
+                    <div className="rounded-[32px] border border-yellow-500/30 bg-yellow-500/10 p-6">
+                        <div className="flex items-start justify-between gap-6">
+                            <div>
+                                <p className="text-sm uppercase tracking-[0.2em] text-yellow-300">
+                                    Elevated Risk
+                                </p>
+
+                                <h2 className="mt-3 text-3xl font-black text-white">
+                                    Behavioral Warning
+                                </h2>
+
+                                <p className="mt-4 max-w-3xl text-sm leading-relaxed text-yellow-100">
+                                    VOLTIS rileva pattern ad alto rischio che
+                                    potrebbero ridurre qualità decisionale,
+                                    disciplina ed execution.
+                                </p>
+                            </div>
+
+                            <div className="rounded-full border border-yellow-400/20 bg-yellow-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.15em] text-yellow-300">
+                                {highPatterns.length} High Risk
+                            </div>
+                        </div>
+                    </div>
+                )}
 
             <div className="rounded-[32px] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl">
                 <p className="text-sm uppercase tracking-[0.2em] text-violet-400">
