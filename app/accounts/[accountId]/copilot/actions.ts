@@ -288,7 +288,13 @@ export async function sendCopilotMessage(formData: FormData) {
                 description:
                     "Possibili segnali di revenge trading dopo una perdita.",
                 severity:
-                    revengeRiskTrades >= 3 ? "high" : "medium",
+                    revengeRiskTrades >= 5
+                        ? "critical"
+                        : revengeRiskTrades >= 3
+                            ? "high"
+                            : revengeRiskTrades >= 2
+                                ? "medium"
+                                : "low",
             },
             create: {
                 id: `revenge-${tradingAccountId}`,
@@ -298,10 +304,37 @@ export async function sendCopilotMessage(formData: FormData) {
                 description:
                     "Possibili segnali di revenge trading dopo una perdita.",
                 severity:
-                    revengeRiskTrades >= 3 ? "high" : "medium",
-                occurrences: 1,
+                    revengeRiskTrades >= 5
+                        ? "critical"
+                        : revengeRiskTrades >= 3
+                            ? "high"
+                            : revengeRiskTrades >= 2
+                                ? "medium"
+                                : "low",
             },
         });
+    }
+
+    const activePatterns =
+        await prisma.copilotPattern.findMany({
+            where: {
+                tradingAccountId,
+            },
+            orderBy: {
+                occurrences: "desc",
+            },
+        });
+
+    const mainPattern = activePatterns[0];
+
+    if (mainPattern) {
+        if (mainPattern.severity === "critical") {
+            aiResponse += ` ALERT CRITICO: il pattern "${mainPattern.title}" continua a ripetersi. VOLTIS consiglia riduzione immediata della frequenza operativa e review completa della disciplina decisionale.`;
+        } else if (mainPattern.severity === "high") {
+            aiResponse += ` Pattern ricorrente ad alto rischio rilevato: "${mainPattern.title}" è comparso ${mainPattern.occurrences} volte. Priorità operativa: proteggere execution e controllo emotivo.`;
+        } else if (mainPattern.occurrences >= 3) {
+            aiResponse += ` Pattern ricorrente rilevato: "${mainPattern.title}" è comparso ${mainPattern.occurrences} volte.`;
+        }
     }
 
     await prisma.copilotMessage.create({
