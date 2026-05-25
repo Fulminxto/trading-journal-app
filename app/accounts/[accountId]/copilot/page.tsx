@@ -21,6 +21,7 @@ import ElevatedRiskCard from "@/components/copilot/ElevatedRiskCard";
 import RiskEscalationCard from "@/components/copilot/RiskEscalationCard";
 import SessionLockCard from "@/components/copilot/SessionLockCard";
 import { buildCopilotSystem } from "@/lib/copilot";
+import AdaptiveCoachingCard from "@/components/copilot/AdaptiveCoachingCard";
 
 export default async function CopilotPage({
     params,
@@ -113,12 +114,13 @@ export default async function CopilotPage({
             trades,
             copilotMemories,
         });
-        
+
     const {
         performanceTimeline,
         consistencyScore,
         consistencyLabel,
         intelligenceFeed,
+        adaptiveCoaching,
         riskEscalation,
         sessionLock,
         recoveryScore,
@@ -198,6 +200,12 @@ export default async function CopilotPage({
 
             <DailyIntelligenceFeed
                 intelligenceFeed={intelligenceFeed}
+            />
+
+            <AdaptiveCoachingCard
+                mode={adaptiveCoaching.mode}
+                tone={adaptiveCoaching.tone}
+                message={adaptiveCoaching.message}
             />
 
             <ConsistencyEngineCard
