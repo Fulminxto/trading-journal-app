@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 import { sendCopilotMessage } from "./actions";
+import CopilotHero from "@/components/copilot/CopilotHero";
+import CriticalAlertCard from "@/components/copilot/CriticalAlertCard";
 
 export default async function CopilotPage({
     params,
@@ -654,52 +656,11 @@ export default async function CopilotPage({
 
     return (
         <div className="space-y-8">
-            <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#070b14] via-[#0f1726] to-black p-8">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.14),transparent_35%)]" />
+            <CopilotHero />
 
-                <div className="relative z-10">
-                    <p className="text-sm uppercase tracking-[0.25em] text-cyan-400">
-                        VOLTIS Copilot
-                    </p>
-
-                    <h1 className="mt-4 text-5xl font-black tracking-tight text-white xl:text-7xl">
-                        AI Trading Copilot
-                    </h1>
-
-                    <p className="mt-6 max-w-3xl text-base leading-relaxed text-gray-400 xl:text-lg">
-                        Assistant intelligente per analizzare performance,
-                        comportamento, execution, psicologia operativa e pattern
-                        ricorrenti.
-                    </p>
-                </div>
-            </div>
-
-            {criticalPatterns.length > 0 && (
-                <div className="rounded-[32px] border border-red-500/30 bg-red-500/10 p-6">
-                    <div className="flex items-start justify-between gap-6">
-                        <div>
-                            <p className="text-sm uppercase tracking-[0.2em] text-red-300">
-                                Critical Alert
-                            </p>
-
-                            <h2 className="mt-3 text-3xl font-black text-white">
-                                Behavioral Risk Escalation
-                            </h2>
-
-                            <p className="mt-4 max-w-3xl text-sm leading-relaxed text-red-100">
-                                VOLTIS ha rilevato pattern comportamentali
-                                critici ricorrenti. È consigliata una review
-                                operativa immediata e riduzione della frequenza
-                                esecutiva.
-                            </p>
-                        </div>
-
-                        <div className="rounded-full border border-red-400/20 bg-red-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.15em] text-red-300">
-                            {criticalPatterns.length} Critical
-                        </div>
-                    </div>
-                </div>
-            )}
+            <CriticalAlertCard
+                criticalPatterns={criticalPatterns}
+            />
 
             {criticalPatterns.length === 0 &&
                 highPatterns.length > 0 && (
