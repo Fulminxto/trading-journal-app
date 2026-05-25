@@ -337,6 +337,33 @@ export async function sendCopilotMessage(formData: FormData) {
         }
     }
 
+    if (trades.length > 0) {
+        const latestTrade = trades
+            .slice()
+            .sort(
+                (a, b) =>
+                    new Date(b.openDate).getTime() -
+                    new Date(a.openDate).getTime()
+            )[0];
+
+        if (latestTrade) {
+            await prisma.copilotReviewNote.create({
+                data: {
+                    tradingAccountId,
+                    tradeId: String(latestTrade.id),
+                    title: "Latest Trade AI Review",
+                    content: aiResponse,
+                    severity:
+                        behavioralRisk >= 50
+                            ? "high"
+                            : behavioralRisk >= 25
+                                ? "medium"
+                                : "low",
+                },
+            });
+        }
+    }
+
     await prisma.copilotMessage.create({
         data: {
             tradingAccountId,
