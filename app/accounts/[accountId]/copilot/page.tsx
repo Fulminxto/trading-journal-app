@@ -222,6 +222,85 @@ export default async function CopilotPage({
         );
     }
 
+    const consistencyScore =
+        totalTrades === 0
+            ? 0
+            : Math.max(
+                0,
+                Math.min(
+                    100,
+                    Math.round(
+                        winRate * 0.45 +
+                        disciplineScore * 0.35 -
+                        behavioralRisk * 0.2
+                    )
+                )
+            );
+
+    const consistencyLabel =
+        consistencyScore >= 80
+            ? "Elite"
+            : consistencyScore >= 65
+                ? "Stable"
+                : consistencyScore >= 45
+                    ? "Developing"
+                    : "Fragile";
+
+    if (consistencyScore >= 80) {
+        intelligenceFeed.push(
+            "Consistency engine rileva una struttura operativa altamente stabile."
+        );
+    }
+
+    if (consistencyScore <= 45 && totalTrades > 0) {
+        intelligenceFeed.push(
+            "Consistency engine rileva instabilità operativa e deterioramento decisionale."
+        );
+    }
+
+    const averageExecution =
+        totalTrades > 0
+            ? Math.round(
+                trades.reduce(
+                    (acc, trade) =>
+                        acc + (trade.executionRating || 0),
+                    0
+                ) / totalTrades
+            )
+            : 0;
+
+    const averageConfidence =
+        totalTrades > 0
+            ? Math.round(
+                trades.reduce(
+                    (acc, trade) =>
+                        acc + (trade.confidence || 0),
+                    0
+                ) / totalTrades
+            )
+            : 0;
+
+    const reviewScore = Math.max(
+        0,
+        Math.min(
+            100,
+            Math.round(
+                averageExecution * 10 * 0.5 +
+                averageConfidence * 10 * 0.3 +
+                consistencyScore * 0.2
+            )
+        )
+    );
+
+    const reviewLabel =
+        reviewScore >= 85
+            ? "Institutional"
+            : reviewScore >= 70
+                ? "Advanced"
+                : reviewScore >= 50
+                    ? "Developing"
+                    : "Unstable";
+
     const riskLabel =
         behavioralRisk >= 50
             ? "High"
@@ -237,6 +316,18 @@ export default async function CopilotPage({
                 : behavioralRisk >= 50
                     ? "VOLTIS rileva segnali di rischio comportamentale elevato. Serve ridurre impulsività, migliorare review e proteggere execution."
                     : "VOLTIS rileva una struttura in sviluppo. Il focus principale è migliorare consistenza, selezione setup e stabilità decisionale.";
+
+    if (reviewScore >= 85) {
+        intelligenceFeed.push(
+            "AI Review Engine rileva execution e decision making di livello avanzato."
+        );
+    }
+
+    if (reviewScore <= 50 && totalTrades > 0) {
+        intelligenceFeed.push(
+            "AI Review Engine rileva deterioramento nella qualità decisionale e execution."
+        );
+    }
 
     return (
         <div className="space-y-8">
@@ -339,9 +430,9 @@ export default async function CopilotPage({
                             </p>
                         </div>
                     ) : (
-                        intelligenceFeed.map((item, index) => (
+                        intelligenceFeed.map((item) => (
                             <div
-                                key={index}
+                                key={item}
                                 className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5"
                             >
                                 <p className="text-sm leading-relaxed text-gray-300">
@@ -350,6 +441,124 @@ export default async function CopilotPage({
                             </div>
                         ))
                     )}
+                </div>
+            </div>
+
+            <div className="rounded-[36px] border border-emerald-500/20 bg-emerald-500/10 p-8">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <p className="text-sm uppercase tracking-[0.2em] text-emerald-400">
+                            Consistency Engine
+                        </p>
+
+                        <h2 className="mt-3 text-3xl font-black text-white">
+                            Operational Stability
+                        </h2>
+                    </div>
+
+                    <div
+                        className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${consistencyScore >= 80
+                            ? "bg-emerald-500/20 text-emerald-300"
+                            : consistencyScore >= 65
+                                ? "bg-cyan-500/20 text-cyan-300"
+                                : consistencyScore >= 45
+                                    ? "bg-yellow-500/20 text-yellow-300"
+                                    : "bg-red-500/20 text-red-300"
+                            }`}
+                    >
+                        {consistencyLabel}
+                    </div>
+                </div>
+
+                <div className="mt-8 grid gap-4 xl:grid-cols-3">
+                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+                            Consistency Score
+                        </p>
+
+                        <h3 className="mt-3 text-4xl font-black text-white">
+                            {consistencyScore}%
+                        </h3>
+                    </div>
+
+                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+                            Discipline
+                        </p>
+
+                        <h3 className="mt-3 text-4xl font-black text-white">
+                            {disciplineScore}%
+                        </h3>
+                    </div>
+
+                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+                            Behavioral Risk
+                        </p>
+
+                        <h3 className="mt-3 text-4xl font-black text-white">
+                            {behavioralRisk}%
+                        </h3>
+                    </div>
+                </div>
+            </div>
+
+            <div className="rounded-[36px] border border-violet-500/20 bg-violet-500/10 p-8">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <p className="text-sm uppercase tracking-[0.2em] text-violet-400">
+                            AI Review Engine
+                        </p>
+
+                        <h2 className="mt-3 text-3xl font-black text-white">
+                            Decision Quality Analysis
+                        </h2>
+                    </div>
+
+                    <div
+                        className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${reviewScore >= 85
+                            ? "bg-emerald-500/20 text-emerald-300"
+                            : reviewScore >= 70
+                                ? "bg-cyan-500/20 text-cyan-300"
+                                : reviewScore >= 50
+                                    ? "bg-yellow-500/20 text-yellow-300"
+                                    : "bg-red-500/20 text-red-300"
+                            }`}
+                    >
+                        {reviewLabel}
+                    </div>
+                </div>
+
+                <div className="mt-8 grid gap-4 xl:grid-cols-3">
+                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+                            Review Score
+                        </p>
+
+                        <h3 className="mt-3 text-4xl font-black text-white">
+                            {reviewScore}%
+                        </h3>
+                    </div>
+
+                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+                            Avg Execution
+                        </p>
+
+                        <h3 className="mt-3 text-4xl font-black text-white">
+                            {averageExecution}/10
+                        </h3>
+                    </div>
+
+                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+                        <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+                            Avg Confidence
+                        </p>
+
+                        <h3 className="mt-3 text-4xl font-black text-white">
+                            {averageConfidence}/10
+                        </h3>
+                    </div>
                 </div>
             </div>
 
@@ -605,29 +814,27 @@ export default async function CopilotPage({
                     )}
                 </div>
 
-                <div className="mt-8 flex items-center gap-4">
-                    <form
-                        action={sendCopilotMessage}
-                        className="mt-8 flex items-center gap-4"
-                    >
-                        <input
-                            type="hidden"
-                            name="tradingAccountId"
-                            value={accountId}
-                        />
+                <form
+                    action={sendCopilotMessage}
+                    className="mt-8 flex items-center gap-4"
+                >
+                    <input
+                        type="hidden"
+                        name="tradingAccountId"
+                        value={accountId}
+                    />
 
-                        <input
-                            type="text"
-                            name="content"
-                            placeholder="Ask VOLTIS Copilot..."
-                            className="h-14 flex-1 rounded-2xl border border-white/10 bg-white/[0.04] px-5 text-sm text-white outline-none placeholder:text-gray-500"
-                        />
+                    <input
+                        type="text"
+                        name="content"
+                        placeholder="Ask VOLTIS Copilot..."
+                        className="h-14 flex-1 rounded-2xl border border-white/10 bg-white/[0.04] px-5 text-sm text-white outline-none placeholder:text-gray-500"
+                    />
 
-                        <button className="h-14 rounded-2xl bg-cyan-500 px-6 text-sm font-black uppercase tracking-[0.15em] text-black transition hover:bg-cyan-400">
-                            Send
-                        </button>
-                    </form>
-                </div>
+                    <button className="h-14 rounded-2xl bg-cyan-500 px-6 text-sm font-black uppercase tracking-[0.15em] text-black transition hover:bg-cyan-400">
+                        Send
+                    </button>
+                </form>
             </div>
         </div>
     );
