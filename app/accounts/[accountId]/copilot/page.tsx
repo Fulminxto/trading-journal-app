@@ -60,6 +60,17 @@ export default async function CopilotPage({
             },
         });
 
+    const reviewNotes =
+        await prisma.copilotReviewNote.findMany({
+            where: {
+                tradingAccountId: accountId,
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+            take: 5,
+        });
+
     const criticalPatterns =
         copilotPatterns.filter(
             (pattern) =>
@@ -638,10 +649,10 @@ export default async function CopilotPage({
 
                                 <div
                                     className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${latestTrade.outcome === "win"
-                                            ? "bg-emerald-500/20 text-emerald-300"
-                                            : latestTrade.outcome === "loss"
-                                                ? "bg-red-500/20 text-red-300"
-                                                : "bg-yellow-500/20 text-yellow-300"
+                                        ? "bg-emerald-500/20 text-emerald-300"
+                                        : latestTrade.outcome === "loss"
+                                            ? "bg-red-500/20 text-red-300"
+                                            : "bg-yellow-500/20 text-yellow-300"
                                         }`}
                                 >
                                     {latestTrade.outcome}
@@ -688,6 +699,64 @@ export default async function CopilotPage({
                         <p className="text-sm text-gray-400">
                             Nessun trade disponibile per la review AI.
                         </p>
+                    )}
+                </div>
+            </div>
+
+            <div className="rounded-[36px] border border-white/10 bg-black/30 p-8 backdrop-blur-xl">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+                            AI Review Timeline
+                        </p>
+
+                        <h2 className="mt-3 text-3xl font-black text-white">
+                            Persistent Review Memory
+                        </h2>
+                    </div>
+
+                    <div className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-cyan-300">
+                        {reviewNotes.length} Notes
+                    </div>
+                </div>
+
+                <div className="mt-8 space-y-4">
+                    {reviewNotes.length === 0 ? (
+                        <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
+                            <p className="text-sm leading-relaxed text-gray-400">
+                                Nessuna review AI salvata al momento.
+                            </p>
+                        </div>
+                    ) : (
+                        reviewNotes.map((note) => (
+                            <div
+                                key={note.id}
+                                className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5"
+                            >
+                                <div className="flex items-start justify-between gap-4">
+                                    <div>
+                                        <p className="text-sm uppercase tracking-[0.15em] text-cyan-400">
+                                            {note.title}
+                                        </p>
+
+                                        <p className="mt-3 text-sm leading-relaxed text-gray-300">
+                                            {note.content}
+                                        </p>
+                                    </div>
+
+                                    <div
+                                        className={`rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] ${note.severity === "high"
+                                                ? "bg-red-500/10 text-red-400"
+                                                : note.severity === "medium"
+                                                    ? "bg-yellow-500/10 text-yellow-300"
+                                                    : "bg-emerald-500/10 text-emerald-400"
+                                            }`}
+                                    >
+                                        {note.severity}
+                                    </div>
+                                </div>
+                            </div>
+                        ))
                     )}
                 </div>
             </div>
