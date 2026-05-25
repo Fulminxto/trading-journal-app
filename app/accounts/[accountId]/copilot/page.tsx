@@ -17,12 +17,10 @@ import AIRiskSupervisorCard from "@/components/copilot/AIRiskSupervisorCard";
 import EmotionalStabilityCard from "@/components/copilot/EmotionalStabilityCard";
 import PatternMemoryCard from "@/components/copilot/PatternMemoryCard";
 import CopilotConversationCard from "@/components/copilot/CopilotConversationCard";
-import { calculateCopilotAnalytics } from "@/lib/copilot/analytics";
-import { buildIntelligenceFeed } from "@/lib/copilot/intelligence";
-import { calculateStabilityMetrics } from "@/lib/copilot/stability";
 import ElevatedRiskCard from "@/components/copilot/ElevatedRiskCard";
-import { calculateReviewMetrics } from "@/lib/copilot/review";
-import { calculatePatternMetrics } from "@/lib/copilot/patterns";
+import RiskEscalationCard from "@/components/copilot/RiskEscalationCard";
+import SessionLockCard from "@/components/copilot/SessionLockCard";
+import { buildCopilotSystem } from "@/lib/copilot";
 
 export default async function CopilotPage({
     params,
@@ -58,24 +56,6 @@ export default async function CopilotPage({
         },
     });
 
-    const {
-        totalTrades,
-        winRate,
-        behavioralRisk,
-        disciplineScore,
-        recentTrades,
-        lossStreak,
-        winStreak,
-    } = calculateCopilotAnalytics(trades);
-
-    const patternMetrics =
-        calculatePatternMetrics(recentTrades);
-
-    const {
-        revengeRiskTrades,
-        weakTimeTrades,
-    } = patternMetrics;
-
     const copilotMessages =
         await prisma.copilotMessage.findMany({
             where: {
@@ -96,6 +76,17 @@ export default async function CopilotPage({
             },
         });
 
+    const copilotMemories =
+        await prisma.copilotMemory.findMany({
+            where: {
+                tradingAccountId: accountId,
+            },
+            orderBy: {
+                lastDetectedAt: "desc",
+            },
+            take: 6,
+        });
+
     const reviewNotes =
         await prisma.copilotReviewNote.findMany({
             where: {
@@ -109,83 +100,38 @@ export default async function CopilotPage({
 
     const criticalPatterns =
         copilotPatterns.filter(
-            (pattern) =>
-                pattern.severity === "critical"
+            (pattern) => pattern.severity === "critical"
         );
 
     const highPatterns =
         copilotPatterns.filter(
-            (pattern) =>
-                pattern.severity === "high"
+            (pattern) => pattern.severity === "high"
         );
 
-    const performanceTimeline = trades
-        .slice()
-        .sort(
-            (a, b) =>
-                new Date(a.openDate).getTime() -
-                new Date(b.openDate).getTime()
-        )
-        .map((trade, index) => {
-            const execution = trade.executionRating || 0;
-            const confidence = trade.confidence || 0;
-            const isEmotional =
-                trade.emotionalState &&
-                trade.emotionalState.length > 0;
-
-            const qualityScore = Math.max(
-                0,
-                Math.min(
-                    100,
-                    Math.round(
-                        execution * 5 +
-                        confidence * 3 +
-                        (trade.outcome === "win" ? 20 : 0) -
-                        (isEmotional ? 15 : 0)
-                    )
-                )
-            );
-
-            return {
-                id: trade.id,
-                index: index + 1,
-                symbol: trade.symbol,
-                outcome: trade.outcome,
-                qualityScore,
-            };
-        });
-
-    const consistencyScore =
-        totalTrades === 0
-            ? 0
-            : Math.max(
-                0,
-                Math.min(
-                    100,
-                    Math.round(
-                        winRate * 0.45 +
-                        disciplineScore * 0.35 -
-                        behavioralRisk * 0.2
-                    )
-                )
-            );
-
-    const consistencyLabel =
-        consistencyScore >= 80
-            ? "Elite"
-            : consistencyScore >= 65
-                ? "Stable"
-                : consistencyScore >= 45
-                    ? "Developing"
-                    : "Fragile";
-
-    const review =
-        calculateReviewMetrics({
+    const copilotSystem =
+        buildCopilotSystem({
             trades,
-            recentTrades,
-            totalTrades,
-            consistencyScore,
+            copilotMemories,
         });
+        
+    const {
+        performanceTimeline,
+        consistencyScore,
+        consistencyLabel,
+        intelligenceFeed,
+        riskEscalation,
+        sessionLock,
+        recoveryScore,
+        recoveryLabel,
+        recentWins,
+        recentLosses,
+    } = copilotSystem;
+
+    const {
+        totalTrades,
+        behavioralRisk,
+        disciplineScore,
+    } = copilotSystem.analytics;
 
     const {
         averageExecution,
@@ -194,51 +140,7 @@ export default async function CopilotPage({
         reviewLabel,
         latestTrade,
         latestTradeReview,
-    } = review;
-
-    const recentLosses = recentTrades
-        .slice(0, 10)
-        .filter((trade) => trade.outcome === "loss")
-        .length;
-
-    const recentWins = recentTrades
-        .slice(0, 10)
-        .filter((trade) => trade.outcome === "win")
-        .length;
-
-    const recoveryDetected =
-        recentLosses >= 2 &&
-        recentWins >= recentLosses;
-
-    const recoveryScore =
-        recoveryDetected
-            ? Math.min(
-                100,
-                Math.round(
-                    consistencyScore * 0.5 +
-                    disciplineScore * 0.3 +
-                    winRate * 0.2
-                )
-            )
-            : 0;
-
-    const recoveryLabel =
-        recoveryScore >= 80
-            ? "Strong Recovery"
-            : recoveryScore >= 60
-                ? "Stable Recovery"
-                : recoveryDetected
-                    ? "Weak Recovery"
-                    : "No Recovery";
-
-    const stability =
-        calculateStabilityMetrics({
-            performanceTimeline,
-            recentTrades,
-            behavioralRisk,
-            recoveryDetected,
-            recoveryScore,
-        });
+    } = copilotSystem.review;
 
     const {
         recentAverageQuality,
@@ -257,7 +159,7 @@ export default async function CopilotPage({
         emotionalLabel,
         riskSignals,
         supervisorLevel,
-    } = stability;
+    } = copilotSystem.stability;
 
     const riskLabel =
         behavioralRisk >= 50
@@ -274,33 +176,6 @@ export default async function CopilotPage({
                 : behavioralRisk >= 50
                     ? "VOLTIS rileva segnali di rischio comportamentale elevato. Serve ridurre impulsività, migliorare review e proteggere execution."
                     : "VOLTIS rileva una struttura in sviluppo. Il focus principale è migliorare consistenza, selezione setup e stabilità decisionale.";
-
-    const intelligenceFeed = buildIntelligenceFeed({
-        disciplineScore,
-        behavioralRisk,
-        revengeRiskTrades,
-        winStreak,
-        lossStreak,
-        weakTimeTrades,
-        behavioralDrift,
-        recentAverageQuality,
-        previousAverageQuality,
-        recoveryDetected,
-        recoveryLabel,
-        executionDecay,
-        recentExecutionAverage,
-        previousExecutionAverage,
-        confidenceDecay,
-        recentConfidenceAverage,
-        previousConfidenceAverage,
-        supervisorLevel,
-        emotionalVolatility,
-        emotionalInstabilityScore,
-        consistencyScore,
-        totalTrades,
-        reviewScore,
-        latestTradeReview,
-    });
 
     return (
         <div className="space-y-8">
@@ -437,6 +312,19 @@ export default async function CopilotPage({
                 behavioralDrift={behavioralDrift}
                 executionDecay={executionDecay}
                 confidenceDecay={confidenceDecay}
+            />
+
+            <RiskEscalationCard
+                escalationLevel={riskEscalation.escalationLevel}
+                protectionRequired={riskEscalation.protectionRequired}
+                cooldownRecommended={riskEscalation.cooldownRecommended}
+                message={riskEscalation.message}
+            />
+
+            <SessionLockCard
+                sessionLocked={sessionLock.sessionLocked}
+                reviewRequired={sessionLock.reviewRequired}
+                lockReason={sessionLock.lockReason}
             />
 
             <EmotionalStabilityCard
