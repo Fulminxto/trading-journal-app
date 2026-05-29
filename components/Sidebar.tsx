@@ -131,11 +131,18 @@ export default function Sidebar({
     ? adminLinks
     : accountId
       ? [
-        ...baseLinks.map((link) => ({
-          href: `/accounts/${accountId}/${link.path}`,
-          label: link.label,
-          icon: link.icon,
-        })),
+        ...baseLinks.map((link) => {
+          const href =
+            "href" in link && link.href
+              ? link.href
+              : `/accounts/${accountId}/${link.path}`;
+
+          return {
+            href,
+            label: link.label,
+            icon: link.icon,
+          };
+        }),
         {
           href: "/accounts",
           label: "Switch Account",
@@ -147,6 +154,11 @@ export default function Sidebar({
           href: "/accounts",
           label: "Accounts",
           icon: Users,
+        },
+        {
+          href: "/updates",
+          label: "Updates",
+          icon: Megaphone,
         },
       ];
 
