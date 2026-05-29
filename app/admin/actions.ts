@@ -6,6 +6,8 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 
+type AccountRole = "OWNER" | "MEMBER" | "VIEWER";
+
 async function requireOwner() {
   const session = await auth();
 
@@ -53,6 +55,29 @@ function getNumber(formData: FormData, key: string) {
   }
 
   return number;
+}
+
+function getAccountRole(value: string): AccountRole | null {
+  if (
+    value === "OWNER" ||
+    value === "MEMBER" ||
+    value === "VIEWER"
+  ) {
+    return value;
+  }
+
+  return null;
+}
+
+async function countAccountOwners(
+  tradingAccountId: string
+) {
+  return prisma.accountMember.count({
+    where: {
+      tradingAccountId,
+      role: "OWNER",
+    },
+  });
 }
 
 export async function createUser(formData: FormData) {
@@ -188,8 +213,13 @@ export async function addMemberToAccount(formData: FormData) {
     "tradingAccountId"
   );
 
-  const role =
-    getString(formData, "role") as any;
+  const role = getAccountRole(
+    getString(formData, "role")
+  );
+
+  if (!username || !tradingAccountId || !role) {
+    return;
+  }
 
   const user = await prisma.user.findUnique({
     where: {
@@ -223,13 +253,92 @@ export async function addMemberToAccount(formData: FormData) {
   redirect("/admin/accounts");
 }
 
-export async function removeMemberFromAccount(formData: FormData) {
+export async function updateMemberRole(formData: FormData) {
   await requireOwner();
 
-  const membershipId = getString(formData, "membershipId");
+  const membershipId = getString(
+    formData,
+    "membershipId"
+  );
+
+  const nextRole = getAccountRole(
+    getString(formData, "role")
+  );
+
+  if (!membershipId || !nextRole) {
+    return;
+  }
+
+  const membership =
+    await prisma.accountMember.findUnique({
+      where: {
+        id: membershipId,
+      },
+    });
+
+  if (!membership) {
+    return;
+  }
+
+  const isDowngradingOwner =
+    membership.role === "OWNER" &&
+    nextRole !== "OWNER";
+
+  if (isDowngradingOwner) {
+    const ownersCount = await countAccountOwners(
+      membership.tradingAccountId
+    );
+
+    if (ownersCount <= 1) {
+      return;
+    }
+  }
+
+  await prisma.accountMember.update({
+    where: {
+      id: membershipId,
+    },
+    data: {
+      role: nextRole,
+    },
+  });
+
+  redirect("/admin/accounts");
+}
+
+export async function removeMemberFromAccount(
+  formData: FormData
+) {
+  await requireOwner();
+
+  const membershipId = getString(
+    formData,
+    "membershipId"
+  );
 
   if (!membershipId) {
     return;
+  }
+
+  const membership =
+    await prisma.accountMember.findUnique({
+      where: {
+        id: membershipId,
+      },
+    });
+
+  if (!membership) {
+    return;
+  }
+
+  if (membership.role === "OWNER") {
+    const ownersCount = await countAccountOwners(
+      membership.tradingAccountId
+    );
+
+    if (ownersCount <= 1) {
+      return;
+    }
   }
 
   await prisma.accountMember.delete({
