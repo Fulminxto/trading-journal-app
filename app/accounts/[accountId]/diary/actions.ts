@@ -46,25 +46,38 @@ function getDate(formData: FormData, key: string) {
   return new Date(value);
 }
 
-async function getAccess(accountId: string) {
+async function getAccess(
+  accountId: string,
+  options?: {
+    allowViewer?: boolean;
+  }
+) {
   const session = await auth();
 
   if (!session?.user?.id) {
     redirect("/login");
   }
 
-  const membership = await prisma.accountMember.findFirst({
-    where: {
-      userId: session.user.id,
-      tradingAccountId: accountId,
-    },
+  const membership =
+    await prisma.accountMember.findFirst({
+      where: {
+        userId: session.user.id,
+        tradingAccountId: accountId,
+      },
 
-    include: {
-      tradingAccount: true,
-    },
-  });
+      include: {
+        tradingAccount: true,
+      },
+    });
 
   if (!membership) {
+    redirect("/accounts");
+  }
+
+  if (
+    String(membership.role) === "VIEWER" &&
+    !options?.allowViewer
+  ) {
     redirect("/accounts");
   }
 

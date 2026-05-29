@@ -256,11 +256,10 @@ export default async function AdminAccountsPage() {
                   </div>
 
                   <div
-                    className={`rounded-2xl px-4 py-2 text-sm font-semibold ${
-                      totalPnl >= 0
-                        ? "bg-green-500/10 text-green-400"
-                        : "bg-red-500/10 text-red-400"
-                    }`}
+                    className={`rounded-2xl px-4 py-2 text-sm font-semibold ${totalPnl >= 0
+                      ? "bg-green-500/10 text-green-400"
+                      : "bg-red-500/10 text-red-400"
+                      }`}
                   >
                     PnL:{" "}
                     {totalPnl.toFixed(2)}
@@ -291,6 +290,10 @@ export default async function AdminAccountsPage() {
                 >
                   <option value="MEMBER">
                     MEMBER
+                  </option>
+
+                  <option value="VIEWER">
+                    VIEWER
                   </option>
 
                   <option value="OWNER">
@@ -328,32 +331,30 @@ export default async function AdminAccountsPage() {
                           </p>
                         </div>
 
-                        <div className="flex items-center gap-3">
-                          <div className="rounded-xl bg-white/10 px-3 py-1 text-sm">
-                            {member.role}
-                          </div>
-
-                          <form
-                            action={
-                              removeMemberFromAccount
-                            }
-                          >
-                            <input
-                              type="hidden"
-                              name="membershipId"
-                              value={
-                                member.id
-                              }
-                            />
-
-                            <button
-                              type="submit"
-                              className="rounded-xl bg-red-500/10 px-3 py-1 text-sm text-red-400 hover:bg-red-500/20"
-                            >
-                              Remove
-                            </button>
-                          </form>
+                        <div className="rounded-lg bg-white/10 px-3 py-1 text-sm font-bold">
+                          {member.role}
                         </div>
+
+                        <form
+                          action={
+                            removeMemberFromAccount
+                          }
+                        >
+                          <input
+                            type="hidden"
+                            name="membershipId"
+                            value={
+                              member.id
+                            }
+                          />
+
+                          <button
+                            type="submit"
+                            className="rounded-xl bg-red-500/10 px-3 py-1 text-sm text-red-400 hover:bg-red-500/20"
+                          >
+                            Remove
+                          </button>
+                        </form>
                       </div>
                     </div>
                   )
@@ -363,6 +364,6 @@ export default async function AdminAccountsPage() {
           );
         })}
       </div>
-    </div>
+    </div >
   );
 }

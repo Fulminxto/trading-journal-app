@@ -1,0 +1,202 @@
+import {
+  ShieldAlert,
+  AlertTriangle,
+  Wrench,
+} from "lucide-react";
+
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
+
+import GlobalToast from "@/components/GlobalToast";
+import { updateMaintenanceMode } from "./actions";
+
+export default async function MaintenancePage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    toast?: string;
+  }>;
+}) {
+  const query = await searchParams;
+
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+  });
+
+  if (
+    !user ||
+    (user.role !== "OWNER" &&
+      user.role !== "ADMIN")
+  ) {
+    redirect("/");
+  }
+
+  const maintenance =
+    await prisma.maintenanceMode.findFirst();
+
+  return (
+    <>
+      <GlobalToast status={query.toast} />
+
+      <div className="space-y-8">
+        <div>
+          <p className="text-sm text-gray-400">
+            System Maintenance
+          </p>
+
+          <h1 className="mt-2 flex items-center gap-3 text-4xl font-black text-white">
+            <ShieldAlert className="text-cyan-400" />
+            Maintenance Mode
+          </h1>
+
+          <p className="mt-4 max-w-3xl text-sm leading-relaxed text-gray-400">
+            Gestisci manutenzioni, downtime programmati,
+            notifiche utenti e blocco login.
+          </p>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-3">
+          <div className="rounded-[32px] border border-yellow-500/20 bg-yellow-500/10 p-6">
+            <div className="flex items-center gap-3">
+              <AlertTriangle className="text-yellow-300" />
+
+              <h2 className="text-xl font-black text-white">
+                Warning Mode
+              </h2>
+            </div>
+
+            <p className="mt-4 text-sm leading-relaxed text-gray-300">
+              Mostra un avviso agli utenti senza bloccare
+              l’accesso all’app.
+            </p>
+          </div>
+
+          <div className="rounded-[32px] border border-red-500/20 bg-red-500/10 p-6">
+            <div className="flex items-center gap-3">
+              <ShieldAlert className="text-red-300" />
+
+              <h2 className="text-xl font-black text-white">
+                Hard Maintenance
+              </h2>
+            </div>
+
+            <p className="mt-4 text-sm leading-relaxed text-gray-300">
+              Blocca login e accesso all’applicazione.
+            </p>
+          </div>
+
+          <div className="rounded-[32px] border border-cyan-500/20 bg-cyan-500/10 p-6">
+            <div className="flex items-center gap-3">
+              <Wrench className="text-cyan-300" />
+
+              <h2 className="text-xl font-black text-white">
+                System Updates
+              </h2>
+            </div>
+
+            <p className="mt-4 text-sm leading-relaxed text-gray-300">
+              Comunica patch, fix e aggiornamenti server.
+            </p>
+          </div>
+        </div>
+
+        <form
+          action={updateMaintenanceMode}
+          className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/10 p-8"
+        >
+          <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+            Maintenance Configuration
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Configure Maintenance Mode
+          </h2>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-gray-300">
+              <input
+                type="checkbox"
+                name="enabled"
+                defaultChecked={
+                  maintenance?.enabled
+                }
+                className="h-5 w-5 rounded border-white/20 bg-black"
+              />
+
+              Enable Maintenance Mode
+            </label>
+
+            <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-gray-300">
+              <input
+                type="checkbox"
+                name="blockLogin"
+                defaultChecked={
+                  maintenance?.blockLogin
+                }
+                className="h-5 w-5 rounded border-white/20 bg-black"
+              />
+
+              Block User Login
+            </label>
+
+            <input
+              name="title"
+              defaultValue={
+                maintenance?.title || ""
+              }
+              placeholder="Maintenance title"
+              className="rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none placeholder:text-gray-500"
+            />
+
+            <select
+              name="type"
+              defaultValue={
+                maintenance?.type ||
+                "warning"
+              }
+              className="rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none"
+            >
+              <option value="info">
+                Info
+              </option>
+
+              <option value="warning">
+                Warning
+              </option>
+
+              <option value="critical">
+                Critical
+              </option>
+            </select>
+          </div>
+
+          <textarea
+            name="message"
+            rows={7}
+            defaultValue={
+              maintenance?.message || ""
+            }
+            placeholder="Describe the maintenance, expected downtime and other important information..."
+            className="mt-4 w-full rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none placeholder:text-gray-500"
+          />
+
+          <button
+            type="submit"
+            className="mt-6 rounded-2xl bg-cyan-500 px-6 py-4 text-sm font-black uppercase tracking-[0.15em] text-black transition hover:bg-cyan-400"
+          >
+            Save Maintenance Settings
+          </button>
+        </form>
+      </div>
+    </>
+  );
+}

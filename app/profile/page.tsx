@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 
 import { updateProfile } from "./actions";
-import ProfileToast from "@/components/ProfileToast";
+import GlobalToast from "@/components/GlobalToast";
 
 function formatCurrency(value: number) {
   return `$${value.toLocaleString("en-US", {
@@ -92,7 +92,7 @@ export default async function ProfilePage({
       label: "Risk Per Trade",
       value:
         user.riskPerTrade !== null &&
-        user.riskPerTrade !== undefined
+          user.riskPerTrade !== undefined
           ? `${user.riskPerTrade}%`
           : "Non impostato",
     },
@@ -169,7 +169,7 @@ export default async function ProfilePage({
     Math.ceil(
       (new Date().getTime() -
         new Date(journalStartDate).getTime()) /
-        (1000 * 60 * 60 * 24)
+      (1000 * 60 * 60 * 24)
     )
   );
 
@@ -214,7 +214,7 @@ export default async function ProfilePage({
 
   return (
     <div>
-      <ProfileToast status={query.toast} />
+      <GlobalToast status={query.toast} />
 
       <div className="mb-8">
         <p className="text-sm text-gray-400">
@@ -229,8 +229,19 @@ export default async function ProfilePage({
       <div className="mb-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6">
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-5">
-            <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-green-500/10 text-3xl font-bold text-green-400">
-              {initials}
+            <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-3xl border border-cyan-500/20 bg-cyan-500/10">
+              {user.image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={user.image}
+                  alt={displayName}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="text-3xl font-bold text-cyan-300">
+                  {initials}
+                </div>
+              )}
             </div>
 
             <div>
@@ -493,11 +504,10 @@ export default async function ProfilePage({
                       </span>
 
                       <span
-                        className={`rounded-xl px-3 py-1 text-sm font-semibold ${
-                          accountPnl >= 0
+                        className={`rounded-xl px-3 py-1 text-sm font-semibold ${accountPnl >= 0
                             ? "bg-green-500/10 text-green-400"
                             : "bg-red-500/10 text-red-400"
-                        }`}
+                          }`}
                       >
                         {formatCurrency(accountPnl)}
                       </span>

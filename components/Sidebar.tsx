@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { FileText } from "lucide-react";
 
 import {
   LayoutDashboard,
@@ -18,6 +17,9 @@ import {
   BarChart3,
   Zap,
   Bot,
+  FileText,
+  Megaphone,
+  ShieldAlert,
 } from "lucide-react";
 
 const baseLinks = [
@@ -66,6 +68,11 @@ const baseLinks = [
     label: "Rules & Goals",
     icon: Target,
   },
+  {
+    href: "/updates",
+    label: "Updates",
+    icon: Megaphone,
+  },
 ];
 
 type SidebarProps = {
@@ -79,65 +86,69 @@ export default function Sidebar({
 }: SidebarProps) {
   const pathname = usePathname();
 
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] =
+    useState(true);
 
-  const isCollapsed = open ? false : collapsed;
+  const isCollapsed = open
+    ? false
+    : collapsed;
 
-  const match = pathname.match(/^\/accounts\/([^/]+)/);
+  const match = pathname.match(
+    /^\/accounts\/([^/]+)/
+  );
 
   const accountId = match?.[1];
 
-  const links = accountId
-    ? [
-      ...baseLinks.map((link) => ({
-        href: `/accounts/${accountId}/${link.path}`,
-        label: link.label,
-        icon: link.icon,
-      })),
+  const adminLinks = [
+    {
+      href: "/admin",
+      label: "Admin Panel",
+      icon: Shield,
+    },
+    {
+      href: "/admin/accounts",
+      label: "Accounts Management",
+      icon: Users,
+    },
+    {
+      href: "/admin/support",
+      label: "Support Tickets",
+      icon: FileText,
+    },
+    {
+      href: "/admin/updates",
+      label: "App Updates",
+      icon: Megaphone,
+    },
+    {
+      href: "/admin/maintenance",
+      label: "Maintenance",
+      icon: ShieldAlert,
+    },
+  ];
 
-      {
-        href: "/accounts",
-        label: "Switch Account",
-        icon: ArrowLeftRight,
-      },
-
-      ...(pathname.includes("/admin")
-        ? [
-          {
-            href: "/admin",
-            label: "Admin Panel",
-            icon: Shield,
-          },
-          {
-            href: "/admin/accounts",
-            label: "Accounts Management",
-            icon: Users,
-          },
-        ]
-        : []),
-    ]
-    : [
-      {
-        href: "/accounts",
-        label: "Accounts",
-        icon: Users,
-      },
-
-      ...(pathname.includes("/admin")
-        ? [
-          {
-            href: "/admin",
-            label: "Admin Panel",
-            icon: Shield,
-          },
-          {
-            href: "/admin/accounts",
-            label: "Accounts Management",
-            icon: Users,
-          },
-        ]
-        : []),
-    ];
+  const links = pathname.includes("/admin")
+    ? adminLinks
+    : accountId
+      ? [
+        ...baseLinks.map((link) => ({
+          href: `/accounts/${accountId}/${link.path}`,
+          label: link.label,
+          icon: link.icon,
+        })),
+        {
+          href: "/accounts",
+          label: "Switch Account",
+          icon: ArrowLeftRight,
+        },
+      ]
+      : [
+        {
+          href: "/accounts",
+          label: "Accounts",
+          icon: Users,
+        },
+      ];
 
   return (
     <>
@@ -149,22 +160,32 @@ export default function Sidebar({
       )}
 
       <aside
-        onMouseEnter={() => setCollapsed(false)}
-        onMouseLeave={() => setCollapsed(true)}
-        className={`fixed left-0 top-0 z-50 h-screen overflow-y-auto border-r border-white/10 bg-[#071018] p-4 transition-all duration-500 ease-out lg:sticky lg:z-40 ${isCollapsed ? "w-[88px]" : "w-72 lg:w-64"
+        onMouseEnter={() =>
+          setCollapsed(false)
+        }
+        onMouseLeave={() =>
+          setCollapsed(true)
+        }
+        className={`fixed left-0 top-0 z-50 h-screen overflow-y-auto border-r border-white/10 bg-[#071018] p-4 transition-all duration-500 ease-out lg:sticky lg:z-40 ${isCollapsed
+          ? "w-[88px]"
+          : "w-72 lg:w-64"
           } ${open
             ? "translate-x-0"
             : "-translate-x-full lg:translate-x-0"
           }`}
       >
         <div
-          className={`flex items-center ${isCollapsed ? "justify-center" : "justify-between"
+          className={`flex items-center ${isCollapsed
+            ? "justify-center"
+            : "justify-between"
             }`}
         >
           <Link
             href="/accounts"
             onClick={onClose}
-            className={`group flex items-center transition-all duration-500 ${isCollapsed ? "justify-center" : "gap-3"
+            className={`group flex items-center transition-all duration-500 ${isCollapsed
+              ? "justify-center"
+              : "gap-3"
               }`}
           >
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/5 bg-white/[0.02] transition-all duration-300 group-hover:bg-white/[0.05]">
@@ -200,7 +221,8 @@ export default function Sidebar({
 
         <nav className="mt-10 flex flex-col gap-3 text-sm">
           {links.map((link) => {
-            const active = pathname === link.href;
+            const active =
+              pathname === link.href;
 
             const Icon = link.icon;
 
@@ -219,7 +241,9 @@ export default function Sidebar({
               >
                 <Icon size={18} />
 
-                {!isCollapsed && <span>{link.label}</span>}
+                {!isCollapsed && (
+                  <span>{link.label}</span>
+                )}
               </Link>
             );
           })}

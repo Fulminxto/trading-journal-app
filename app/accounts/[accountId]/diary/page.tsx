@@ -47,6 +47,7 @@ export default async function DiaryPage({
     trader?: string;
     from?: string;
     to?: string;
+    member?: string;
   }>;
 }) {
   const session = await auth();
@@ -56,7 +57,21 @@ export default async function DiaryPage({
   }
 
   const { accountId } = await params;
+  const { member: memberId } = await searchParams;
   const filters = await searchParams;
+
+  const selectedMember = memberId
+    ? await prisma.user.findUnique({
+      where: {
+        id: memberId,
+      },
+
+      select: {
+        username: true,
+        name: true,
+      },
+    })
+    : null;
 
   const membership = await prisma.accountMember.findFirst({
     where: {
@@ -67,6 +82,10 @@ export default async function DiaryPage({
       tradingAccount: true,
     },
   });
+
+  const isViewer =
+    membership &&
+    String(membership.role) === "VIEWER";
 
   if (!membership) {
     redirect("/accounts");
@@ -542,9 +561,54 @@ export default async function DiaryPage({
             Trading Diary
           </h1>
 
-          <p className="mt-2 text-sm text-gray-500">
-            Account: {account.name}
-          </p>
+          {selectedMember && (
+            <div className="mt-4 rounded-3xl border border-cyan-500/20 bg-cyan-500/10 p-5">
+              <p className="text-xs uppercase tracking-[0.2em] text-cyan-400">
+                Member Filter Active
+              </p>
+
+              <h2 className="mt-2 text-xl font-black text-white">
+                Stai visualizzando solo i trade di{" "}
+                {selectedMember.name ||
+                  selectedMember.username}
+              </h2>
+
+              <a
+                href={`/accounts/${accountId}/diary`}
+                className="mt-4 inline-flex rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm font-bold text-gray-300 transition hover:bg-white/[0.05]"
+              >
+                Clear Filter
+              </a>
+            </div>
+          )}
+
+          {isViewer && (
+            <div className="mt-4 rounded-3xl border border-yellow-500/20 bg-yellow-500/10 p-5">
+              <p className="text-xs uppercase tracking-[0.2em] text-yellow-300">
+                Read Only Mode
+              </p>
+
+              <h2 className="mt-2 text-xl font-black text-white">
+                Questo account è in modalità visualizzazione
+              </h2>
+
+              <p className="mt-3 text-sm text-gray-300">
+                Puoi consultare il diario, ma non puoi creare, modificare o eliminare trade.
+              </p>
+            </div>
+          )}
+
+          <div className="mt-2 flex flex-wrap items-center gap-3">
+            <p className="text-sm text-gray-500">
+              Account: {account.name}
+            </p>
+
+            {isViewer && (
+              <div className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-4 py-1 text-xs font-black uppercase tracking-[0.2em] text-yellow-300">
+                Read Only
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-gray-300">
@@ -693,222 +757,224 @@ export default async function DiaryPage({
         </div>
       </form>
 
-      <form
-        action={createAccountTrade.bind(null, accountId)}
-        className="mb-10 rounded-3xl border border-white/10 bg-white/[0.03] p-5"
-      >
-        <div className="mb-6">
-          <p className="text-sm text-gray-400">
-            Nuova operazione
-          </p>
+      {!isViewer && (
+        <form
+          action={createAccountTrade.bind(null, accountId)}
+          className="mb-10 rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+        >
+          <div className="mb-6">
+            <p className="text-sm text-gray-400">
+              Nuova operazione
+            </p>
 
-          <h2 className="mt-1 text-2xl font-bold">
-            Inserisci trade
-          </h2>
-        </div>
+            <h2 className="mt-1 text-2xl font-bold">
+              Inserisci trade
+            </h2>
+          </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <input
-            name="openDate"
-            type="date"
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            required
-          />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <input
+              name="openDate"
+              type="date"
+              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+              required
+            />
 
-          <input
-            name="openTime"
-            type="time"
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          />
+            <input
+              name="openTime"
+              type="time"
+              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            />
 
-          <input
-            name="reason"
-            placeholder="Motivo"
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          />
+            <input
+              name="reason"
+              placeholder="Motivo"
+              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            />
 
-          <input
-            name="strategy"
-            placeholder="Strategia"
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          />
+            <input
+              name="strategy"
+              placeholder="Strategia"
+              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            />
 
-          <select
-            name="symbol"
-            required
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          >
-            <option value="">Strumento</option>
+            <select
+              name="symbol"
+              required
+              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            >
+              <option value="">Strumento</option>
 
-            <optgroup label="Forex">
-              <option value="EURUSD">EURUSD</option>
-              <option value="GBPUSD">GBPUSD</option>
-              <option value="USDJPY">USDJPY</option>
-              <option value="AUDUSD">AUDUSD</option>
-              <option value="USDCAD">USDCAD</option>
-              <option value="USDCHF">USDCHF</option>
-              <option value="NZDUSD">NZDUSD</option>
-            </optgroup>
+              <optgroup label="Forex">
+                <option value="EURUSD">EURUSD</option>
+                <option value="GBPUSD">GBPUSD</option>
+                <option value="USDJPY">USDJPY</option>
+                <option value="AUDUSD">AUDUSD</option>
+                <option value="USDCAD">USDCAD</option>
+                <option value="USDCHF">USDCHF</option>
+                <option value="NZDUSD">NZDUSD</option>
+              </optgroup>
 
-            <optgroup label="Gold & Commodities">
-              <option value="XAUUSD">XAUUSD</option>
-              <option value="XAGUSD">XAGUSD</option>
-              <option value="USOIL">USOIL</option>
-              <option value="UKOIL">UKOIL</option>
-            </optgroup>
+              <optgroup label="Gold & Commodities">
+                <option value="XAUUSD">XAUUSD</option>
+                <option value="XAGUSD">XAGUSD</option>
+                <option value="USOIL">USOIL</option>
+                <option value="UKOIL">UKOIL</option>
+              </optgroup>
 
-            <optgroup label="Crypto">
-              <option value="BTCUSD">BTCUSD</option>
-              <option value="ETHUSD">ETHUSD</option>
-              <option value="SOLUSD">SOLUSD</option>
-              <option value="XRPUSD">XRPUSD</option>
-            </optgroup>
+              <optgroup label="Crypto">
+                <option value="BTCUSD">BTCUSD</option>
+                <option value="ETHUSD">ETHUSD</option>
+                <option value="SOLUSD">SOLUSD</option>
+                <option value="XRPUSD">XRPUSD</option>
+              </optgroup>
 
-            <optgroup label="Indices">
-              <option value="NASDAQ">NASDAQ</option>
-              <option value="S&P500">S&P500</option>
-              <option value="DAX40">DAX40</option>
-              <option value="DJI">DJI</option>
-            </optgroup>
-          </select>
+              <optgroup label="Indices">
+                <option value="NASDAQ">NASDAQ</option>
+                <option value="S&P500">S&P500</option>
+                <option value="DAX40">DAX40</option>
+                <option value="DJI">DJI</option>
+              </optgroup>
+            </select>
 
-          <select
-            name="direction"
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          >
-            <option value="LONG">LONG</option>
-            <option value="SHORT">SHORT</option>
-          </select>
+            <select
+              name="direction"
+              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            >
+              <option value="LONG">LONG</option>
+              <option value="SHORT">SHORT</option>
+            </select>
 
-          <input
-            name="amount"
-            placeholder="Amount / Lot"
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          />
+            <input
+              name="amount"
+              placeholder="Amount / Lot"
+              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            />
 
-          <input
-            name="openingPrice"
-            placeholder="Opening Price"
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          />
+            <input
+              name="openingPrice"
+              placeholder="Opening Price"
+              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            />
 
-          <input
-            name="stopLoss"
-            placeholder="Stop Loss"
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          />
+            <input
+              name="stopLoss"
+              placeholder="Stop Loss"
+              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            />
 
-          <input
-            name="takeProfit"
-            placeholder="Take Profit"
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          />
+            <input
+              name="takeProfit"
+              placeholder="Take Profit"
+              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            />
 
-          <input
-            name="riskReward"
-            placeholder="Risk Reward"
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          />
+            <input
+              name="riskReward"
+              placeholder="Risk Reward"
+              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            />
 
-          <input
-            name="closeDate"
-            type="date"
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          />
+            <input
+              name="closeDate"
+              type="date"
+              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            />
 
-          <input
-            name="closingPrice"
-            placeholder="Closing Price"
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          />
+            <input
+              name="closingPrice"
+              placeholder="Closing Price"
+              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            />
 
-          <select
-            name="outcome"
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          >
-            <option value="">Outcome</option>
-            <option value="win">Win</option>
-            <option value="loss">Loss</option>
-            <option value="be">BE</option>
-          </select>
+            <select
+              name="outcome"
+              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            >
+              <option value="">Outcome</option>
+              <option value="win">Win</option>
+              <option value="loss">Loss</option>
+              <option value="be">BE</option>
+            </select>
 
-          <input
-            name="resultUsd"
-            placeholder="Result $"
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          />
+            <input
+              name="resultUsd"
+              placeholder="Result $"
+              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            />
 
-          <select
-            name="session"
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          >
-            <option value="">Sessione</option>
-            <option value="ASIA">Asia</option>
-            <option value="LONDON">London</option>
-            <option value="NEW_YORK">New York</option>
-            <option value="OVERLAP">Overlap</option>
-          </select>
+            <select
+              name="session"
+              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            >
+              <option value="">Sessione</option>
+              <option value="ASIA">Asia</option>
+              <option value="LONDON">London</option>
+              <option value="NEW_YORK">New York</option>
+              <option value="OVERLAP">Overlap</option>
+            </select>
 
-          <select
-            name="emotionalState"
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          >
-            <option value="">Stato emotivo</option>
-            <option value="CALM">Calmo</option>
-            <option value="FOCUSED">Focused</option>
-            <option value="CONFIDENT">Confident</option>
-            <option value="TIRED">Stanco</option>
-            <option value="STRESSED">Stressato</option>
-            <option value="IMPULSIVE">Impulsivo</option>
-          </select>
+            <select
+              name="emotionalState"
+              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            >
+              <option value="">Stato emotivo</option>
+              <option value="CALM">Calmo</option>
+              <option value="FOCUSED">Focused</option>
+              <option value="CONFIDENT">Confident</option>
+              <option value="TIRED">Stanco</option>
+              <option value="STRESSED">Stressato</option>
+              <option value="IMPULSIVE">Impulsivo</option>
+            </select>
 
-          <input
-            name="setupQuality"
-            type="number"
-            min="1"
-            max="10"
-            placeholder="Setup Quality (1-10)"
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          />
+            <input
+              name="setupQuality"
+              type="number"
+              min="1"
+              max="10"
+              placeholder="Setup Quality (1-10)"
+              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            />
 
-          <input
-            name="executionRating"
-            type="number"
-            min="1"
-            max="10"
-            placeholder="Execution Rating (1-10)"
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          />
+            <input
+              name="executionRating"
+              type="number"
+              min="1"
+              max="10"
+              placeholder="Execution Rating (1-10)"
+              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            />
 
-          <input
-            name="confidence"
-            type="number"
-            min="1"
-            max="10"
-            placeholder="Confidence (1-10)"
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          />
+            <input
+              name="confidence"
+              type="number"
+              min="1"
+              max="10"
+              placeholder="Confidence (1-10)"
+              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            />
 
-          <textarea
-            name="mistakes"
-            placeholder="Errori commessi"
-            className="min-h-[110px] rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40 sm:col-span-2"
-          />
+            <textarea
+              name="mistakes"
+              placeholder="Errori commessi"
+              className="min-h-[110px] rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40 sm:col-span-2"
+            />
 
-          <textarea
-            name="lessonsLearned"
-            placeholder="Lessons learned"
-            className="min-h-[110px] rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40 sm:col-span-2"
-          />
+            <textarea
+              name="lessonsLearned"
+              placeholder="Lessons learned"
+              className="min-h-[110px] rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40 sm:col-span-2"
+            />
 
-          <button
-            type="submit"
-            className="rounded-2xl bg-green-500 p-4 font-bold text-black transition hover:bg-green-400 sm:col-span-2 xl:col-span-4"
-          >
-            Aggiungi trade
-          </button>
-        </div>
-      </form>
+            <button
+              type="submit"
+              className="rounded-2xl bg-green-500 p-4 font-bold text-black transition hover:bg-green-400 sm:col-span-2 xl:col-span-4"
+            >
+              Aggiungi trade
+            </button>
+          </div>
+        </form>
+      )}
 
       <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
@@ -1029,29 +1095,35 @@ export default async function DiaryPage({
                 </td>
 
                 <td className="p-4">
-                  <div className="flex gap-3">
-                    <Link
-                      href={`/accounts/${accountId}/diary/${trade.id}/edit`}
-                      className="rounded-xl bg-white/10 px-3 py-2 text-sm hover:bg-white/20"
-                    >
-                      Edit
-                    </Link>
-
-                    <form
-                      action={deleteAccountTrade.bind(
-                        null,
-                        accountId,
-                        trade.id
-                      )}
-                    >
-                      <button
-                        type="submit"
-                        className="rounded-xl bg-red-500/10 px-3 py-2 text-sm text-red-400 hover:bg-red-500/20"
+                  {!isViewer ? (
+                    <div className="flex gap-3">
+                      <Link
+                        href={`/accounts/${accountId}/diary/${trade.id}/edit`}
+                        className="rounded-xl bg-white/10 px-3 py-2 text-sm hover:bg-white/20"
                       >
-                        Delete
-                      </button>
-                    </form>
-                  </div>
+                        Edit
+                      </Link>
+
+                      <form
+                        action={deleteAccountTrade.bind(
+                          null,
+                          accountId,
+                          trade.id
+                        )}
+                      >
+                        <button
+                          type="submit"
+                          className="rounded-xl bg-red-500/10 px-3 py-2 text-sm text-red-400 hover:bg-red-500/20"
+                        >
+                          Delete
+                        </button>
+                      </form>
+                    </div>
+                  ) : (
+                    <span className="rounded-xl bg-yellow-500/10 px-3 py-2 text-xs font-semibold text-yellow-300">
+                      Read only
+                    </span>
+                  )}
                 </td>
               </tr>
             ))}
@@ -1269,30 +1341,32 @@ export default async function DiaryPage({
                     </div>
                   )}
 
-                <div className="mt-4 flex gap-3">
-                  <Link
-                    href={`/accounts/${accountId}/diary/${trade.id}/edit`}
-                    className="flex-1 rounded-xl bg-white/10 px-3 py-3 text-center text-sm hover:bg-white/20"
-                  >
-                    Edit
-                  </Link>
-
-                  <form
-                    action={deleteAccountTrade.bind(
-                      null,
-                      accountId,
-                      trade.id
-                    )}
-                    className="flex-1"
-                  >
-                    <button
-                      type="submit"
-                      className="w-full rounded-xl bg-red-500/10 px-3 py-3 text-sm text-red-400 hover:bg-red-500/20"
+                {!isViewer && (
+                  <div className="mt-4 flex gap-3">
+                    <Link
+                      href={`/accounts/${accountId}/diary/${trade.id}/edit`}
+                      className="flex-1 rounded-xl bg-white/10 px-3 py-3 text-center text-sm hover:bg-white/20"
                     >
-                      Delete
-                    </button>
-                  </form>
-                </div>
+                      Edit
+                    </Link>
+
+                    <form
+                      action={deleteAccountTrade.bind(
+                        null,
+                        accountId,
+                        trade.id
+                      )}
+                      className="flex-1"
+                    >
+                      <button
+                        type="submit"
+                        className="w-full rounded-xl bg-red-500/10 px-3 py-3 text-sm text-red-400 hover:bg-red-500/20"
+                      >
+                        Delete
+                      </button>
+                    </form>
+                  </div>
+                )}
               </div>
             </div>
           ))

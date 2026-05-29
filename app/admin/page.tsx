@@ -5,6 +5,9 @@ import { redirect } from "next/navigation";
 import {
   createUser,
   deleteUser,
+  freezeUser,
+  unfreezeUser,
+  resetUserPassword,
 } from "./actions";
 
 export default async function AdminPage() {
@@ -115,13 +118,21 @@ export default async function AdminPage() {
 
                 <div className="flex flex-wrap items-center gap-3">
                   <div
-                    className={`rounded-xl px-4 py-2 text-sm font-semibold ${
-                      user.role === "OWNER"
-                        ? "bg-green-500/10 text-green-400"
-                        : "bg-white/10 text-gray-300"
-                    }`}
+                    className={`rounded-xl px-4 py-2 text-sm font-semibold ${user.role === "OWNER"
+                      ? "bg-green-500/10 text-green-400"
+                      : "bg-white/10 text-gray-300"
+                      }`}
                   >
                     {user.role}
+                  </div>
+
+                  <div
+                    className={`rounded-xl px-4 py-2 text-sm font-semibold ${user.status === "FROZEN"
+                      ? "bg-yellow-500/10 text-yellow-300"
+                      : "bg-cyan-500/10 text-cyan-300"
+                      }`}
+                  >
+                    {user.status}
                   </div>
 
                   {isCurrentUser ? (
@@ -129,21 +140,82 @@ export default async function AdminPage() {
                       Utente attuale
                     </div>
                   ) : (
-                    <form action={deleteUser}>
-                      <input
-                        type="hidden"
-                        name="userId"
-                        value={user.id}
-                      />
+                    <div className="flex flex-wrap gap-3">
+                      {user.status === "FROZEN" ? (
+                        <form action={unfreezeUser}>
+                          <input
+                            type="hidden"
+                            name="userId"
+                            value={user.id}
+                          />
 
-                      <button
-                        type="submit"
-                        className="rounded-xl bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-400 hover:bg-red-500/20"
-                      >
-                        Elimina utente
-                      </button>
-                    </form>
+                          <button
+                            type="submit"
+                            className="rounded-xl bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-300 hover:bg-cyan-500/20"
+                          >
+                            Unfreeze
+                          </button>
+                        </form>
+                      ) : (
+                        <form action={freezeUser}>
+                          <input
+                            type="hidden"
+                            name="userId"
+                            value={user.id}
+                          />
+
+                          <button
+                            type="submit"
+                            className="rounded-xl bg-yellow-500/10 px-4 py-2 text-sm font-semibold text-yellow-300 hover:bg-yellow-500/20"
+                          >
+                            Freeze
+                          </button>
+                        </form>
+                      )}
+
+                      <form action={deleteUser}>
+                        <input
+                          type="hidden"
+                          name="userId"
+                          value={user.id}
+                        />
+
+                        <button
+                          type="submit"
+                          className="rounded-xl bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-400 hover:bg-red-500/20"
+                        >
+                          Elimina utente
+                        </button>
+                      </form>
+                    </div>
                   )}
+
+                  <form
+                    action={resetUserPassword}
+                    className="mt-4 flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/20 p-4"
+                  >
+                    <input
+                      type="hidden"
+                      name="userId"
+                      value={user.id}
+                    />
+
+                    <input
+                      type="password"
+                      name="password"
+                      placeholder="Nuova password"
+                      required
+                      className="rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white outline-none"
+                    />
+
+                    <button
+                      type="submit"
+                      className="rounded-xl bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-300 hover:bg-cyan-500/20"
+                    >
+                      Reset password
+                    </button>
+                  </form>
+                  
                 </div>
               </div>
 

@@ -1,5 +1,6 @@
 "use server";
 
+import { canManageUsers } from "@/lib/permissions";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
@@ -18,7 +19,10 @@ async function requireOwner() {
     },
   });
 
-  if (!currentUser || currentUser.role !== "OWNER") {
+  if (
+    !currentUser ||
+    !canManageUsers(currentUser.role)
+  ) {
     redirect("/accounts");
   }
 
@@ -79,11 +83,11 @@ export async function createUser(formData: FormData) {
       username,
       passwordHash,
       name: name || null,
-      role: "USER",
+      role: "MEMBER",
     },
   });
 
-  redirect("/admin");
+  redirect("/admin?toast=user-created");
 }
 
 export async function deleteUser(formData: FormData) {
@@ -105,7 +109,7 @@ export async function deleteUser(formData: FormData) {
     },
   });
 
-  redirect("/admin");
+  redirect("/admin?toast=user-deleted");
 }
 
 export async function createTradingAccount(formData: FormData) {
@@ -184,9 +188,8 @@ export async function addMemberToAccount(formData: FormData) {
     "tradingAccountId"
   );
 
-  const role = getString(formData, "role") as
-    | "OWNER"
-    | "MEMBER";
+  const role =
+    getString(formData, "role") as any;
 
   const user = await prisma.user.findUnique({
     where: {
@@ -236,4 +239,72 @@ export async function removeMemberFromAccount(formData: FormData) {
   });
 
   redirect("/admin/accounts");
+}
+
+export async function freezeUser(formData: FormData) {
+  await requireOwner();
+
+  const userId = getString(formData, "userId");
+
+  if (!userId) {
+    return;
+  }
+
+  await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      status: "FROZEN",
+      frozenAt: new Date(),
+    },
+  });
+
+  redirect("/admin?toast=frozen");
+}
+
+export async function unfreezeUser(formData: FormData) {
+  await requireOwner();
+
+  const userId = getString(formData, "userId");
+
+  if (!userId) {
+    return;
+  }
+
+  await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      status: "ACTIVE",
+      frozenAt: null,
+    },
+  });
+
+  redirect("/admin?toast=unfrozen");
+}
+
+export async function resetUserPassword(formData: FormData) {
+  await requireOwner();
+
+  const userId = getString(formData, "userId");
+  const password = getString(formData, "password");
+
+  if (!userId || !password) {
+    return;
+  }
+
+  const passwordHash = await bcrypt.hash(password, 10);
+
+  await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      passwordHash,
+    },
+  });
+
+  redirect("/admin?toast=password-reset");
 }

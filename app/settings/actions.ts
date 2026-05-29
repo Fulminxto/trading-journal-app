@@ -34,7 +34,10 @@ export async function updateSettings(
   }
 
   const defaultCurrency =
-    getString(formData, "defaultCurrency") || "USD";
+    getString(
+      formData,
+      "defaultCurrency"
+    ) || "USD";
 
   const compactMode = getBoolean(
     formData,
@@ -46,10 +49,29 @@ export async function updateSettings(
     "performanceBlur"
   );
 
-  const emailNotifications = getBoolean(
-    formData,
-    "emailNotifications"
-  );
+  const emailNotifications =
+    getBoolean(
+      formData,
+      "emailNotifications"
+    );
+
+  const reviewReminders =
+    getBoolean(
+      formData,
+      "reviewReminders"
+    );
+
+  const sessionLockAlerts =
+    getBoolean(
+      formData,
+      "sessionLockAlerts"
+    );
+
+  const dailyTradingReminder =
+    getBoolean(
+      formData,
+      "dailyTradingReminder"
+    );
 
   await prisma.user.update({
     where: {
@@ -61,6 +83,10 @@ export async function updateSettings(
       compactMode,
       performanceBlur,
       emailNotifications,
+
+      reviewReminders,
+      sessionLockAlerts,
+      dailyTradingReminder,
     },
   });
 

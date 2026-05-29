@@ -13,7 +13,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 import ReopenOnboardingButton from "@/components/ReopenOnboardingButton";
-import SettingsToast from "@/components/SettingsToast";
+import GlobalToast from "@/components/GlobalToast";
 
 import { updateSettings } from "./actions";
 
@@ -44,7 +44,7 @@ export default async function SettingsPage({
 
   return (
     <div>
-      <SettingsToast status={query.toast} />
+      <GlobalToast status={query.toast} />
 
       <div className="mb-8">
         <p className="text-sm text-gray-400">
@@ -167,6 +167,93 @@ export default async function SettingsPage({
                   <p className="text-sm text-gray-400">
                     Email Notifications
                   </p>
+
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                    <p className="text-sm text-gray-400">
+                      Review Reminders
+                    </p>
+
+                    <label className="mt-4 flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        name="reviewReminders"
+                        defaultChecked={user.reviewReminders}
+                        className="h-5 w-5 rounded border-white/20 bg-black"
+                      />
+
+                      <span className="text-sm text-gray-400">
+                        Enable reminders
+                      </span>
+                    </label>
+
+                    <h3 className="mt-2 text-lg font-bold">
+                      {user.reviewReminders
+                        ? "Enabled"
+                        : "Disabled"}
+                    </h3>
+
+                    <p className="mt-2 text-sm text-gray-500">
+                      Alert per review operative obbligatorie.
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                    <p className="text-sm text-gray-400">
+                      Session Lock Alerts
+                    </p>
+
+                    <label className="mt-4 flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        name="sessionLockAlerts"
+                        defaultChecked={user.sessionLockAlerts}
+                        className="h-5 w-5 rounded border-white/20 bg-black"
+                      />
+
+                      <span className="text-sm text-gray-400">
+                        Enable alerts
+                      </span>
+                    </label>
+
+                    <h3 className="mt-2 text-lg font-bold">
+                      {user.sessionLockAlerts
+                        ? "Enabled"
+                        : "Disabled"}
+                    </h3>
+
+                    <p className="mt-2 text-sm text-gray-500">
+                      Notifiche rischio operativo elevato.
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                    <p className="text-sm text-gray-400">
+                      Daily Reminder
+                    </p>
+
+                    <label className="mt-4 flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        name="dailyTradingReminder"
+                        defaultChecked={user.dailyTradingReminder}
+                        className="h-5 w-5 rounded border-white/20 bg-black"
+                      />
+
+                      <span className="text-sm text-gray-400">
+                        Enable daily reminder
+                      </span>
+                    </label>
+
+                    <h3 className="mt-2 text-lg font-bold">
+                      {user.dailyTradingReminder
+                        ? "Enabled"
+                        : "Disabled"}
+                    </h3>
+
+                    <p className="mt-2 text-sm text-gray-500">
+                      Reminder giornaliero compilazione trade.
+                    </p>
+                  </div>
 
                   <h3 className="mt-2 text-lg font-bold">
                     Performance alerts

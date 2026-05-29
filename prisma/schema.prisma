@@ -7,15 +7,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
 model User {
   id            String   @id @default(cuid())
   username      String   @unique
   passwordHash  String
 
-  role          String   @default("USER")
+  role Role @default(MEMBER)
+
+  status      String   @default("ACTIVE")
+  frozenAt    DateTime?
+
+  lastSeenAt DateTime?
 
   name              String?
+  image             String?
   bio               String?
+  workspaceName     String?
+  
   tradingStyle      String?
   favoriteMarket    String?
   timezone          String?
@@ -30,9 +45,15 @@ model User {
   performanceBlur    Boolean  @default(false)
   emailNotifications Boolean  @default(false)
 
+  reviewReminders       Boolean @default(true)
+  sessionLockAlerts     Boolean @default(true)
+  dailyTradingReminder  Boolean @default(false)
+
   memberships   AccountMember[]
   createdTrades Trade[]
   createdSessions TradingSession[]
+
+  supportTickets SupportTicket[]
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -173,6 +194,61 @@ model CopilotMemory {
   @@index([tradingAccountId])
 }
 
+model SupportTicket {
+  id          String   @id @default(cuid())
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type        String
+  subject     String
+  message     String
+
+  status      String   @default("open")
+  priority    String   @default("normal")
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  adminNote   String?
+  resolvedAt  DateTime?
+
+  @@index([userId])
+}
+
+model ReleaseNote {
+  id          String   @id @default(cuid())
+
+  title       String
+  content     String
+  type        String   @default("update")
+  priority    String   @default("normal")
+
+  published   Boolean  @default(false)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model MaintenanceMode {
+  id            String   @id @default(cuid())
+
+  enabled       Boolean  @default(false)
+
+  title         String
+  message       String
+
+  type          String   @default("warning")
+
+  startAt       DateTime?
+  expectedEndAt DateTime?
+
+  blockLogin    Boolean  @default(false)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
 model CopilotReviewNote {
   id               String   @id @default(cuid())
 
@@ -254,4 +330,5 @@ enum AccountStatus {
 enum MemberRole {
   OWNER
   MEMBER
+  VIEWER
 }
