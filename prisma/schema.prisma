@@ -19,7 +19,7 @@ model User {
   username      String   @unique
   passwordHash  String
 
-  role Role @default(MEMBER)
+  role String @default("MEMBER")
 
   status      String   @default("ACTIVE")
   frozenAt    DateTime?
