@@ -184,6 +184,7 @@ export async function createTradingAccount(formData: FormData) {
       type,
       initialBalance,
       currency,
+      createdById: currentUser.id,
       broker: broker || null,
       phase: phase || null,
       profitTarget,
@@ -300,6 +301,60 @@ export async function updateMemberRole(formData: FormData) {
     },
     data: {
       role: nextRole,
+    },
+  });
+
+  redirect("/admin/accounts");
+}
+
+export async function updateMemberPermissions(
+  formData: FormData
+) {
+  await requireOwner();
+
+  const membershipId = getString(
+    formData,
+    "membershipId"
+  );
+
+  if (!membershipId) {
+    return;
+  }
+
+  await prisma.accountMember.update({
+    where: {
+      id: membershipId,
+    },
+    data: {
+      canCreateTrades:
+        formData.get("canCreateTrades") === "on",
+
+      canEditTrades:
+        formData.get("canEditTrades") === "on",
+
+      canDeleteTrades:
+        formData.get("canDeleteTrades") === "on",
+
+      canViewAnalytics:
+        formData.get("canViewAnalytics") === "on",
+
+      canViewReports:
+        formData.get("canViewReports") === "on",
+
+      canViewCopilot:
+        formData.get("canViewCopilot") === "on",
+
+      canViewMembers:
+        formData.get("canViewMembers") === "on",
+
+      canManageMembers:
+        formData.get("canManageMembers") === "on",
+
+      canManageRoles:
+        formData.get("canManageRoles") === "on",
+
+      canManageAccount:
+        formData.get("canManageAccount") === "on",
     },
   });
 

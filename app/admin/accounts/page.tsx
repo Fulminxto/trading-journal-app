@@ -7,6 +7,7 @@ import {
   addMemberToAccount,
   removeMemberFromAccount,
   updateMemberRole,
+  updateMemberPermissions,
 } from "../actions";
 
 export default async function AdminAccountsPage() {
@@ -225,11 +226,10 @@ export default async function AdminAccountsPage() {
                   </div>
 
                   <div
-                    className={`rounded-2xl px-4 py-2 text-sm font-semibold ${
-                      totalPnl >= 0
-                        ? "bg-green-500/10 text-green-400"
-                        : "bg-red-500/10 text-red-400"
-                    }`}
+                    className={`rounded-2xl px-4 py-2 text-sm font-semibold ${totalPnl >= 0
+                      ? "bg-green-500/10 text-green-400"
+                      : "bg-red-500/10 text-red-400"
+                      }`}
                   >
                     PnL: {totalPnl.toFixed(2)}
                   </div>
@@ -319,6 +319,116 @@ export default async function AdminAccountsPage() {
                           className="rounded-xl bg-green-500/10 px-3 py-2 text-sm font-semibold text-green-400 hover:bg-green-500/20"
                         >
                           Update Role
+                        </button>
+                      </form>
+
+                      <form
+                        action={updateMemberPermissions}
+                        className="rounded-xl border border-white/10 p-3 text-sm"
+                      >
+                        <input
+                          type="hidden"
+                          name="membershipId"
+                          value={member.id}
+                        />
+
+                        <div className="grid grid-cols-2 gap-2">
+                          <label className="flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              name="canCreateTrades"
+                              defaultChecked={member.canCreateTrades}
+                            />
+                            Create Trades
+                          </label>
+
+                          <label className="flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              name="canEditTrades"
+                              defaultChecked={member.canEditTrades}
+                            />
+                            Edit Trades
+                          </label>
+
+                          <label className="flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              name="canDeleteTrades"
+                              defaultChecked={member.canDeleteTrades}
+                            />
+                            Delete Trades
+                          </label>
+
+                          <label className="flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              name="canViewAnalytics"
+                              defaultChecked={member.canViewAnalytics}
+                            />
+                            Analytics
+                          </label>
+
+                          <label className="flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              name="canViewReports"
+                              defaultChecked={member.canViewReports}
+                            />
+                            Reports
+                          </label>
+
+                          <label className="flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              name="canViewCopilot"
+                              defaultChecked={member.canViewCopilot}
+                            />
+                            Copilot
+                          </label>
+
+                          <label className="flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              name="canViewMembers"
+                              defaultChecked={member.canViewMembers}
+                            />
+                            Members
+                          </label>
+
+                          <label className="flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              name="canManageMembers"
+                              defaultChecked={member.canManageMembers}
+                            />
+                            Manage Members
+                          </label>
+
+                          <label className="flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              name="canManageRoles"
+                              defaultChecked={member.canManageRoles}
+                            />
+                            Manage Roles
+                          </label>
+
+                          <label className="flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              name="canManageAccount"
+                              defaultChecked={member.canManageAccount}
+                            />
+                            Manage Account
+                          </label>
+                        </div>
+
+                        <button
+                          type="submit"
+                          className="mt-3 w-full rounded-xl bg-blue-500/10 px-3 py-2 text-sm font-semibold text-blue-400 hover:bg-blue-500/20"
+                        >
+                          Save Permissions
                         </button>
                       </form>
 

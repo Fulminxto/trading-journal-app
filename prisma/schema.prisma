@@ -53,6 +53,8 @@ model User {
   createdTrades Trade[]
   createdSessions TradingSession[]
 
+  createdAccounts TradingAccount[] @relation("CreatedTradingAccounts")
+
   supportTickets SupportTicket[]
 
   createdAt     DateTime @default(now())
@@ -67,6 +69,9 @@ model TradingAccount {
 
   initialBalance Float
   currency       String   @default("USD")
+
+  createdById    String?
+  createdBy      User?    @relation("CreatedTradingAccounts", fields: [createdById], references: [id], onDelete: SetNull)
 
   broker          String?
   phase           String?
