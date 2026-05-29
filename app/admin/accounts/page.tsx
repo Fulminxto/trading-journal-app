@@ -6,6 +6,7 @@ import {
   createTradingAccount,
   addMemberToAccount,
   removeMemberFromAccount,
+  updateMemberRole,
 } from "../actions";
 
 export default async function AdminAccountsPage() {
@@ -15,36 +16,32 @@ export default async function AdminAccountsPage() {
     redirect("/login");
   }
 
-  const currentUser =
-    await prisma.user.findUnique({
-      where: {
-        id: session.user.id,
-      },
-    });
+  const currentUser = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+  });
 
-  if (
-    !currentUser ||
-    currentUser.role !== "OWNER"
-  ) {
+  if (!currentUser || currentUser.role !== "OWNER") {
     redirect("/accounts");
   }
 
-  const accounts =
-    await prisma.tradingAccount.findMany({
-      include: {
-        members: {
-          include: {
-            user: true,
-          },
+  const accounts = await prisma.tradingAccount.findMany({
+    include: {
+      members: {
+        include: {
+          user: true,
         },
-
-        trades: true,
+        orderBy: {
+          createdAt: "asc",
+        },
       },
-
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+      trades: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 
   return (
     <div>
@@ -74,29 +71,12 @@ export default async function AdminAccountsPage() {
           className="rounded-2xl bg-zinc-900 p-4"
           required
         >
-          <option value="LIVE">
-            LIVE
-          </option>
-
-          <option value="DEMO">
-            DEMO
-          </option>
-
-          <option value="PROP">
-            PROP
-          </option>
-
-          <option value="SHARED">
-            SHARED
-          </option>
-
-          <option value="CHALLENGE">
-            CHALLENGE
-          </option>
-
-          <option value="FUNDED">
-            FUNDED
-          </option>
+          <option value="LIVE">LIVE</option>
+          <option value="DEMO">DEMO</option>
+          <option value="PROP">PROP</option>
+          <option value="SHARED">SHARED</option>
+          <option value="CHALLENGE">CHALLENGE</option>
+          <option value="FUNDED">FUNDED</option>
         </select>
 
         <input
@@ -161,13 +141,10 @@ export default async function AdminAccountsPage() {
 
       <div className="space-y-8">
         {accounts.map((account) => {
-          const totalPnl =
-            account.trades.reduce(
-              (acc, trade) =>
-                acc +
-                (trade.resultUsd || 0),
-              0
-            );
+          const totalPnl = account.trades.reduce(
+            (acc, trade) => acc + (trade.resultUsd || 0),
+            0
+          );
 
           return (
             <div
@@ -189,10 +166,8 @@ export default async function AdminAccountsPage() {
                       <p className="text-xs text-gray-500">
                         Broker
                       </p>
-
                       <h3 className="mt-2 font-bold">
-                        {account.broker ||
-                          "-"}
+                        {account.broker || "-"}
                       </h3>
                     </div>
 
@@ -200,10 +175,8 @@ export default async function AdminAccountsPage() {
                       <p className="text-xs text-gray-500">
                         Phase
                       </p>
-
                       <h3 className="mt-2 font-bold">
-                        {account.phase ||
-                          "-"}
+                        {account.phase || "-"}
                       </h3>
                     </div>
 
@@ -211,7 +184,6 @@ export default async function AdminAccountsPage() {
                       <p className="text-xs text-gray-500">
                         Profit Target
                       </p>
-
                       <h3 className="mt-2 font-bold text-green-400">
                         {account.profitTarget
                           ? `${account.profitTarget}%`
@@ -223,7 +195,6 @@ export default async function AdminAccountsPage() {
                       <p className="text-xs text-gray-500">
                         Max DD
                       </p>
-
                       <h3 className="mt-2 font-bold text-red-400">
                         {account.maxDrawdown
                           ? `${account.maxDrawdown}%`
@@ -235,7 +206,6 @@ export default async function AdminAccountsPage() {
                       <p className="text-xs text-gray-500">
                         Daily DD
                       </p>
-
                       <h3 className="mt-2 font-bold text-red-400">
                         {account.dailyDrawdown
                           ? `${account.dailyDrawdown}%`
@@ -251,18 +221,17 @@ export default async function AdminAccountsPage() {
                   </div>
 
                   <div className="rounded-2xl bg-white/10 px-4 py-2 text-sm">
-                    Trades:{" "}
-                    {account.trades.length}
+                    Trades: {account.trades.length}
                   </div>
 
                   <div
-                    className={`rounded-2xl px-4 py-2 text-sm font-semibold ${totalPnl >= 0
-                      ? "bg-green-500/10 text-green-400"
-                      : "bg-red-500/10 text-red-400"
-                      }`}
+                    className={`rounded-2xl px-4 py-2 text-sm font-semibold ${
+                      totalPnl >= 0
+                        ? "bg-green-500/10 text-green-400"
+                        : "bg-red-500/10 text-red-400"
+                    }`}
                   >
-                    PnL:{" "}
-                    {totalPnl.toFixed(2)}
+                    PnL: {totalPnl.toFixed(2)}
                   </div>
                 </div>
               </div>
@@ -287,18 +256,11 @@ export default async function AdminAccountsPage() {
                 <select
                   name="role"
                   className="rounded-2xl bg-zinc-900 p-4"
+                  defaultValue="MEMBER"
                 >
-                  <option value="MEMBER">
-                    MEMBER
-                  </option>
-
-                  <option value="VIEWER">
-                    VIEWER
-                  </option>
-
-                  <option value="OWNER">
-                    OWNER
-                  </option>
+                  <option value="MEMBER">MEMBER</option>
+                  <option value="VIEWER">VIEWER</option>
+                  <option value="OWNER">OWNER</option>
                 </select>
 
                 <button
@@ -310,60 +272,78 @@ export default async function AdminAccountsPage() {
               </form>
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {account.members.map(
-                  (member) => (
-                    <div
-                      key={member.id}
-                      className="rounded-2xl border border-white/10 bg-black/20 p-5"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-lg font-bold">
-                            {
-                              member.user
-                                .username
-                            }
-                          </p>
+                {account.members.map((member) => (
+                  <div
+                    key={member.id}
+                    className="rounded-2xl border border-white/10 bg-black/20 p-5"
+                  >
+                    <div className="mb-5 flex items-start justify-between gap-4">
+                      <div>
+                        <p className="text-lg font-bold">
+                          {member.user.username}
+                        </p>
 
-                          <p className="mt-1 text-sm text-gray-400">
-                            {member.user
-                              .name || "-"}
-                          </p>
-                        </div>
+                        <p className="mt-1 text-sm text-gray-400">
+                          {member.user.name || "-"}
+                        </p>
+                      </div>
 
-                        <div className="rounded-lg bg-white/10 px-3 py-1 text-sm font-bold">
-                          {member.role}
-                        </div>
-
-                        <form
-                          action={
-                            removeMemberFromAccount
-                          }
-                        >
-                          <input
-                            type="hidden"
-                            name="membershipId"
-                            value={
-                              member.id
-                            }
-                          />
-
-                          <button
-                            type="submit"
-                            className="rounded-xl bg-red-500/10 px-3 py-1 text-sm text-red-400 hover:bg-red-500/20"
-                          >
-                            Remove
-                          </button>
-                        </form>
+                      <div className="rounded-lg bg-white/10 px-3 py-1 text-sm font-bold">
+                        {member.role}
                       </div>
                     </div>
-                  )
-                )}
+
+                    <div className="space-y-3">
+                      <form
+                        action={updateMemberRole}
+                        className="grid grid-cols-1 gap-3"
+                      >
+                        <input
+                          type="hidden"
+                          name="membershipId"
+                          value={member.id}
+                        />
+
+                        <select
+                          name="role"
+                          defaultValue={member.role}
+                          className="rounded-xl bg-zinc-900 p-3 text-sm"
+                        >
+                          <option value="OWNER">OWNER</option>
+                          <option value="MEMBER">MEMBER</option>
+                          <option value="VIEWER">VIEWER</option>
+                        </select>
+
+                        <button
+                          type="submit"
+                          className="rounded-xl bg-green-500/10 px-3 py-2 text-sm font-semibold text-green-400 hover:bg-green-500/20"
+                        >
+                          Update Role
+                        </button>
+                      </form>
+
+                      <form action={removeMemberFromAccount}>
+                        <input
+                          type="hidden"
+                          name="membershipId"
+                          value={member.id}
+                        />
+
+                        <button
+                          type="submit"
+                          className="w-full rounded-xl bg-red-500/10 px-3 py-2 text-sm text-red-400 hover:bg-red-500/20"
+                        >
+                          Remove
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           );
         })}
       </div>
-    </div >
+    </div>
   );
 }

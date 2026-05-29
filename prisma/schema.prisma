@@ -94,6 +94,19 @@ model AccountMember {
   tradingAccountId String
   role             MemberRole @default(MEMBER)
 
+  canCreateTrades   Boolean @default(true)
+  canEditTrades     Boolean @default(true)
+  canDeleteTrades   Boolean @default(true)
+
+  canViewAnalytics  Boolean @default(true)
+  canViewReports    Boolean @default(true)
+  canViewCopilot    Boolean @default(true)
+  canViewMembers    Boolean @default(true)
+
+  canManageMembers  Boolean @default(false)
+  canManageRoles    Boolean @default(false)
+  canManageAccount  Boolean @default(false)
+
   user             User @relation(fields: [userId], references: [id], onDelete: Cascade)
   tradingAccount   TradingAccount @relation(fields: [tradingAccountId], references: [id], onDelete: Cascade)
 
