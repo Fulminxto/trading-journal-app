@@ -8,6 +8,7 @@ import {
   freezeUser,
   unfreezeUser,
   resetUserPassword,
+  updateUserRole,
 } from "./actions";
 
 export default async function AdminPage() {
@@ -100,6 +101,9 @@ export default async function AdminPage() {
           const isCurrentUser =
             user.id === currentUser.id;
 
+          const isSelfOwner =
+            isCurrentUser && user.role === "OWNER";
+
           return (
             <div
               key={user.id}
@@ -117,14 +121,40 @@ export default async function AdminPage() {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3">
-                  <div
-                    className={`rounded-xl px-4 py-2 text-sm font-semibold ${user.role === "OWNER"
-                      ? "bg-green-500/10 text-green-400"
-                      : "bg-white/10 text-gray-300"
-                      }`}
-                  >
-                    {user.role}
-                  </div>
+                  {isSelfOwner ? (
+                    <div className="rounded-xl bg-green-500/10 px-4 py-2 text-sm font-semibold text-green-400">
+                      OWNER · System Owner
+                    </div>
+                  ) : (
+                    <form
+                      action={updateUserRole}
+                      className="flex items-center gap-2"
+                    >
+                      <input
+                        type="hidden"
+                        name="userId"
+                        value={user.id}
+                      />
+
+                      <select
+                        name="role"
+                        defaultValue={user.role}
+                        className="rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-sm"
+                      >
+                        <option value="OWNER">OWNER</option>
+                        <option value="ADMIN">ADMIN</option>
+                        <option value="MEMBER">MEMBER</option>
+                        <option value="VIEWER">VIEWER</option>
+                      </select>
+
+                      <button
+                        type="submit"
+                        className="rounded-xl bg-green-500/10 px-3 py-2 text-sm font-semibold text-green-400 hover:bg-green-500/20"
+                      >
+                        Save
+                      </button>
+                    </form>
+                  )}
 
                   <div
                     className={`rounded-xl px-4 py-2 text-sm font-semibold ${user.status === "FROZEN"
@@ -215,7 +245,7 @@ export default async function AdminPage() {
                       Reset password
                     </button>
                   </form>
-                  
+
                 </div>
               </div>
 

@@ -137,6 +137,63 @@ export async function deleteUser(formData: FormData) {
   redirect("/admin?toast=user-deleted");
 }
 
+export async function updateUserRole(formData: FormData) {
+  const currentUser = await requireOwner();
+
+  const userId = getString(formData, "userId");
+  const role = getString(formData, "role");
+
+  if (!userId || !role) {
+    return;
+  }
+
+  if (
+    role !== "OWNER" &&
+    role !== "ADMIN" &&
+    role !== "MEMBER" &&
+    role !== "VIEWER"
+  ) {
+    return;
+  }
+
+  if (userId === currentUser.id && role !== "OWNER") {
+    return;
+  }
+
+  const targetUser = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (!targetUser) {
+    return;
+  }
+
+  if (targetUser.role === "OWNER" && role !== "OWNER") {
+    const ownersCount = await prisma.user.count({
+      where: {
+        role: "OWNER",
+      },
+    });
+
+    if (ownersCount <= 1) {
+      return;
+    }
+  }
+
+  await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      role,
+    },
+  });
+
+  redirect("/admin?toast=role-updated");
+}
+
 export async function createTradingAccount(formData: FormData) {
   const currentUser = await requireOwner();
 
