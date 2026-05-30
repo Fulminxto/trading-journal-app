@@ -25,6 +25,12 @@ export default async function AccountsPage() {
       },
     });
 
+  const canCreateAccount =
+    currentUser?.role === "OWNER" ||
+    currentUser?.role === "ADMIN" ||
+    currentUser?.canCreatePersonalAccounts ||
+    currentUser?.canCreateSharedAccounts;
+
   const memberships =
     await prisma.accountMember.findMany({
       where: {
@@ -144,11 +150,10 @@ export default async function AccountsPage() {
           </p>
 
           <h2
-            className={`mt-2 text-3xl font-bold ${
-              totalPnl >= 0
-                ? "text-green-400"
-                : "text-red-400"
-            }`}
+            className={`mt-2 text-3xl font-bold ${totalPnl >= 0
+              ? "text-green-400"
+              : "text-red-400"
+              }`}
           >
             {totalPnl.toFixed(2)} $
           </h2>
@@ -187,113 +192,121 @@ export default async function AccountsPage() {
           const winRate =
             account.trades.length > 0
               ? (wins /
-                  account.trades.length) *
-                100
+                account.trades.length) *
+              100
               : 0;
 
           return (
-            <a
+            <div
               key={account.id}
-              href={`/accounts/${account.id}/dashboard`}
               className="card-hover group rounded-3xl border border-white/10 bg-white/[0.03] p-6"
             >
-              <div className="mb-6 flex items-center justify-between">
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4 text-white">
-                  <Wallet size={24} />
-                </div>
-
-                <span className="rounded-xl bg-white/10 px-3 py-1 text-xs font-semibold text-gray-300">
-                  {account.type}
-                </span>
-              </div>
-
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h2 className="text-2xl font-bold transition group-hover:text-green-400">
-                    {account.name}
-                  </h2>
-
-                  <p className="mt-2 text-sm text-gray-500">
-                    {account.status}
-                  </p>
-                </div>
-
-                <ArrowRight
-                  size={20}
-                  className="mt-1 text-gray-600 transition group-hover:translate-x-1 group-hover:text-green-400"
-                />
-              </div>
-
-              <div className="mt-6 grid grid-cols-2 gap-3 text-sm">
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <div className="mb-2 flex items-center gap-2 text-gray-500">
-                    <TrendingUp size={15} />
-                    Balance
+              <a href={`/accounts/${account.id}/dashboard`}>
+                <div className="mb-6 flex items-center justify-between">
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4 text-white">
+                    <Wallet size={24} />
                   </div>
 
-                  <p className="font-bold text-white">
-                    {account.initialBalance.toLocaleString()}{" "}
+                  <span className="rounded-xl bg-white/10 px-3 py-1 text-xs font-semibold text-gray-300">
+                    {account.type}
+                  </span>
+                </div>
+
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h2 className="text-2xl font-bold transition group-hover:text-green-400">
+                      {account.name}
+                    </h2>
+
+                    <p className="mt-2 text-sm text-gray-500">
+                      {account.status}
+                    </p>
+                  </div>
+
+                  <ArrowRight
+                    size={20}
+                    className="mt-1 text-gray-600 transition group-hover:translate-x-1 group-hover:text-green-400"
+                  />
+                </div>
+
+                <div className="mt-6 grid grid-cols-2 gap-3 text-sm">
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <div className="mb-2 flex items-center gap-2 text-gray-500">
+                      <TrendingUp size={15} />
+                      Balance
+                    </div>
+
+                    <p className="font-bold text-white">
+                      {account.initialBalance.toLocaleString()}{" "}
+                      {account.currency}
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <div className="mb-2 flex items-center gap-2 text-gray-500">
+                      <Users size={15} />
+                      Role
+                    </div>
+
+                    <p className="font-bold text-white">
+                      {membership.role}
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <div className="mb-2 flex items-center gap-2 text-gray-500">
+                      <Activity size={15} />
+                      Trades
+                    </div>
+
+                    <p className="font-bold text-white">
+                      {account.trades.length}
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <div className="mb-2 flex items-center gap-2 text-gray-500">
+                      <Shield size={15} />
+                      WR
+                    </div>
+
+                    <p
+                      className={`font-bold ${winRate >= 50
+                          ? "text-green-400"
+                          : "text-red-400"
+                        }`}
+                    >
+                      {winRate.toFixed(0)}%
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4">
+                  <p className="text-sm text-gray-500">
+                    Account PnL
+                  </p>
+
+                  <p
+                    className={`mt-1 text-2xl font-bold ${accountPnl >= 0
+                        ? "text-green-400"
+                        : "text-red-400"
+                      }`}
+                  >
+                    {accountPnl.toFixed(2)}{" "}
                     {account.currency}
                   </p>
                 </div>
+              </a>
 
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <div className="mb-2 flex items-center gap-2 text-gray-500">
-                    <Users size={15} />
-                    Role
-                  </div>
-
-                  <p className="font-bold text-white">
-                    {membership.role}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <div className="mb-2 flex items-center gap-2 text-gray-500">
-                    <Activity size={15} />
-                    Trades
-                  </div>
-
-                  <p className="font-bold text-white">
-                    {account.trades.length}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <div className="mb-2 flex items-center gap-2 text-gray-500">
-                    <Shield size={15} />
-                    WR
-                  </div>
-
-                  <p
-                    className={`font-bold ${
-                      winRate >= 50
-                        ? "text-green-400"
-                        : "text-red-400"
-                    }`}
-                  >
-                    {winRate.toFixed(0)}%
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4">
-                <p className="text-sm text-gray-500">
-                  Account PnL
-                </p>
-
-                <p
-                  className={`mt-1 text-2xl font-bold ${
-                    accountPnl >= 0
-                      ? "text-green-400"
-                      : "text-red-400"
-                  }`}
+              <div className="mt-5 flex gap-3">
+                <a
+                  href={`/accounts/${account.id}/dashboard`}
+                  className="flex-1 rounded-2xl bg-green-500 px-4 py-3 text-center text-sm font-bold text-black hover:bg-green-400"
                 >
-                  {accountPnl.toFixed(2)}{" "}
-                  {account.currency}
-                </p>
+                  Open Account
+                </a>
               </div>
-            </a>
+            </div>
           );
         })}
       </div>

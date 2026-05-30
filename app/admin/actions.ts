@@ -86,6 +86,7 @@ export async function createUser(formData: FormData) {
   const username = getString(formData, "username");
   const password = getString(formData, "password");
   const name = getString(formData, "name");
+  const role = getString(formData, "role");
 
   if (!username || !password) {
     return;
@@ -108,7 +109,13 @@ export async function createUser(formData: FormData) {
       username,
       passwordHash,
       name: name || null,
-      role: "MEMBER",
+      role:
+        role === "OWNER" ||
+          role === "ADMIN" ||
+          role === "MEMBER" ||
+          role === "VIEWER"
+          ? role
+          : "MEMBER",
     },
   });
 
@@ -192,6 +199,72 @@ export async function updateUserRole(formData: FormData) {
   });
 
   redirect("/admin?toast=role-updated");
+}
+
+export async function updateUserPermissions(
+  formData: FormData
+) {
+  await requireOwner();
+
+  const userId = getString(formData, "userId");
+
+  if (!userId) {
+    return;
+  }
+
+  await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      canCreatePersonalAccounts:
+        formData.get(
+          "canCreatePersonalAccounts"
+        ) === "on",
+
+      canCreateSharedAccounts:
+        formData.get(
+          "canCreateSharedAccounts"
+        ) === "on",
+
+      canArchiveOwnAccounts:
+        formData.get(
+          "canArchiveOwnAccounts"
+        ) === "on",
+
+      canDeleteOwnAccounts:
+        formData.get(
+          "canDeleteOwnAccounts"
+        ) === "on",
+
+      canUseCopilot:
+        formData.get(
+          "canUseCopilot"
+        ) === "on",
+
+      canViewAnalytics:
+        formData.get(
+          "canViewAnalytics"
+        ) === "on",
+
+      canViewReports:
+        formData.get(
+          "canViewReports"
+        ) === "on",
+
+      canManageUsers:
+        formData.get(
+          "canManageUsers"
+        ) === "on",
+
+      canManageSystem:
+        formData.get(
+          "canManageSystem"
+        ) === "on",
+    },
+  });
+
+  redirect("/admin?toast=permissions-updated");
 }
 
 export async function createTradingAccount(formData: FormData) {

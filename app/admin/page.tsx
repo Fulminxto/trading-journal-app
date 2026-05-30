@@ -9,6 +9,7 @@ import {
   unfreezeUser,
   resetUserPassword,
   updateUserRole,
+  updateUserPermissions,
 } from "./actions";
 
 export default async function AdminPage() {
@@ -88,6 +89,18 @@ export default async function AdminPage() {
           className="rounded-xl bg-zinc-900 p-3"
         />
 
+        <select
+          name="role"
+          defaultValue="MEMBER"
+          aria-label="New user role"
+          className="rounded-xl bg-zinc-900 p-3"
+        >
+          <option value="MEMBER">MEMBER</option>
+          <option value="VIEWER">VIEWER</option>
+          <option value="ADMIN">ADMIN</option>
+          <option value="OWNER">OWNER</option>
+        </select>
+
         <button
           type="submit"
           className="rounded-xl bg-green-500 p-3 font-bold text-black md:col-span-3"
@@ -139,6 +152,7 @@ export default async function AdminPage() {
                       <select
                         name="role"
                         defaultValue={user.role}
+                        aria-label="User role"
                         className="rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-sm"
                       >
                         <option value="OWNER">OWNER</option>
@@ -218,6 +232,113 @@ export default async function AdminPage() {
                         </button>
                       </form>
                     </div>
+                  )}
+
+                  {!isSelfOwner && (
+                    <form
+                      action={updateUserPermissions}
+                      className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4"
+                    >
+                      <input
+                        type="hidden"
+                        name="userId"
+                        value={user.id}
+                      />
+
+                      <p className="mb-3 text-sm font-semibold text-gray-300">
+                        Global Permissions
+                      </p>
+
+                      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+                        <label className="flex items-center gap-2 text-sm">
+                          <input
+                            type="checkbox"
+                            name="canCreatePersonalAccounts"
+                            defaultChecked={user.canCreatePersonalAccounts}
+                          />
+                          Create Personal Accounts
+                        </label>
+
+                        <label className="flex items-center gap-2 text-sm">
+                          <input
+                            type="checkbox"
+                            name="canCreateSharedAccounts"
+                            defaultChecked={user.canCreateSharedAccounts}
+                          />
+                          Create Shared Accounts
+                        </label>
+
+                        <label className="flex items-center gap-2 text-sm">
+                          <input
+                            type="checkbox"
+                            name="canArchiveOwnAccounts"
+                            defaultChecked={user.canArchiveOwnAccounts}
+                          />
+                          Archive Own Accounts
+                        </label>
+
+                        <label className="flex items-center gap-2 text-sm">
+                          <input
+                            type="checkbox"
+                            name="canDeleteOwnAccounts"
+                            defaultChecked={user.canDeleteOwnAccounts}
+                          />
+                          Delete Own Accounts
+                        </label>
+
+                        <label className="flex items-center gap-2 text-sm">
+                          <input
+                            type="checkbox"
+                            name="canUseCopilot"
+                            defaultChecked={user.canUseCopilot}
+                          />
+                          Use Copilot
+                        </label>
+
+                        <label className="flex items-center gap-2 text-sm">
+                          <input
+                            type="checkbox"
+                            name="canViewAnalytics"
+                            defaultChecked={user.canViewAnalytics}
+                          />
+                          View Analytics
+                        </label>
+
+                        <label className="flex items-center gap-2 text-sm">
+                          <input
+                            type="checkbox"
+                            name="canViewReports"
+                            defaultChecked={user.canViewReports}
+                          />
+                          View Reports
+                        </label>
+
+                        <label className="flex items-center gap-2 text-sm">
+                          <input
+                            type="checkbox"
+                            name="canManageUsers"
+                            defaultChecked={user.canManageUsers}
+                          />
+                          Manage Users
+                        </label>
+
+                        <label className="flex items-center gap-2 text-sm">
+                          <input
+                            type="checkbox"
+                            name="canManageSystem"
+                            defaultChecked={user.canManageSystem}
+                          />
+                          Manage System
+                        </label>
+                      </div>
+
+                      <button
+                        type="submit"
+                        className="mt-4 rounded-xl bg-blue-500/10 px-4 py-2 text-sm font-semibold text-blue-400 hover:bg-blue-500/20"
+                      >
+                        Save Permissions
+                      </button>
+                    </form>
                   )}
 
                   <form

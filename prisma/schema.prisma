@@ -21,6 +21,20 @@ model User {
 
   role String @default("MEMBER")
 
+  canCreatePersonalAccounts Boolean @default(true)
+  canCreateSharedAccounts   Boolean @default(false)
+
+  canArchiveOwnAccounts     Boolean @default(true)
+  canDeleteOwnAccounts      Boolean @default(false)
+
+  canUseCopilot             Boolean @default(true)
+
+  canViewAnalytics          Boolean @default(true)
+  canViewReports            Boolean @default(true)
+
+  canManageUsers            Boolean @default(false)
+  canManageSystem           Boolean @default(false)
+
   status      String   @default("ACTIVE")
   frozenAt    DateTime?
 
