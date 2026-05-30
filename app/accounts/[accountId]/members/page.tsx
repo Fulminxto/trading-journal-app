@@ -83,6 +83,13 @@ export default async function MembersPage({
         redirect("/accounts");
     }
 
+    if (
+        membership.role !== "OWNER" &&
+        !membership.canViewMembers
+    ) {
+        redirect(`/accounts/${accountId}/dashboard`);
+    }
+
     const members =
         await prisma.accountMember.findMany({
             where: {

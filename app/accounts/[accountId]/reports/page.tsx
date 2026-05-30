@@ -57,6 +57,13 @@ export default async function ReportsPage({
     redirect("/accounts");
   }
 
+  if (
+    membership.role !== "OWNER" &&
+    !membership.canViewReports
+  ) {
+    redirect(`/accounts/${accountId}/dashboard`);
+  }
+
   const trades = await prisma.trade.findMany({
     where: {
       tradingAccountId: accountId,

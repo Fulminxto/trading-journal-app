@@ -69,6 +69,13 @@ export default async function AnalyticsPage({
     redirect("/accounts");
   }
 
+  if (
+    membership.role !== "OWNER" &&
+    !membership.canViewAnalytics
+  ) {
+    redirect(`/accounts/${accountId}/dashboard`);
+  }
+
   const account = membership.tradingAccount;
 
   const accountMembers =

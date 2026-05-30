@@ -51,6 +51,13 @@ export default async function CopilotPage({
         redirect("/accounts");
     }
 
+    if (
+        membership.role !== "OWNER" &&
+        !membership.canViewCopilot
+    ) {
+        redirect(`/accounts/${accountId}/dashboard`);
+    }
+
     const trades = await prisma.trade.findMany({
         where: {
             tradingAccountId: accountId,
