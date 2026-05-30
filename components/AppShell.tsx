@@ -156,7 +156,7 @@ export default function AppShell({
                     Switch Account
                   </Link>
 
-                  {role === "OWNER" && (
+                  {role === "MANAGER" && (
                     <Link
                       href="/admin"
                       onClick={() => setProfileOpen(false)}

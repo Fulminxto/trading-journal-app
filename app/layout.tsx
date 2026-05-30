@@ -58,7 +58,7 @@ export default async function RootLayout({
     maintenance?.blockLogin;
 
   const canBypassMaintenance =
-    currentUser?.role === "OWNER" ||
+    currentUser?.role === "MANAGER" ||
     currentUser?.role === "ADMIN";
 
   const isFrozen =
@@ -99,7 +99,7 @@ export default async function RootLayout({
     );
   }
 
-  if (isFrozen && currentUser?.role !== "OWNER") {
+  if (isFrozen && currentUser?.role !== "MANAGER") {
     return (
       <html lang="it">
         <body className="bg-[#050b10] text-white">

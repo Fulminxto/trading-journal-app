@@ -8,7 +8,7 @@ datasource db {
 }
 
 enum Role {
-  OWNER
+  FOUNDER
   ADMIN
   MEMBER
   VIEWER
@@ -360,7 +360,7 @@ enum AccountStatus {
 }
 
 enum MemberRole {
-  OWNER
+  MANAGER
   MEMBER
   VIEWER
 }

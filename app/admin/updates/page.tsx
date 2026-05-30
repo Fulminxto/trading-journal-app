@@ -35,7 +35,7 @@ export default async function AdminUpdatesPage({
 
   if (
     !user ||
-    (user.role !== "OWNER" &&
+    (user.role !== "MANAGER" &&
       user.role !== "ADMIN")
   ) {
     redirect("/");

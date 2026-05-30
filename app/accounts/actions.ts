@@ -58,12 +58,16 @@ async function getCurrentUser() {
   return currentUser;
 }
 
-async function getManageContext(userId: string, accountId: string) {
-  const account = await prisma.tradingAccount.findUnique({
-    where: {
-      id: accountId,
-    },
-  });
+async function getManageContext(
+  userId: string,
+  accountId: string
+) {
+  const account =
+    await prisma.tradingAccount.findUnique({
+      where: {
+        id: accountId,
+      },
+    });
 
   if (!account) {
     return null;
@@ -94,54 +98,73 @@ export async function createAccount(formData: FormData) {
   const broker = getString(formData, "broker");
   const phase = getString(formData, "phase");
 
-  const profitTarget = getNumber(formData, "profitTarget");
-  const maxDrawdown = getNumber(formData, "maxDrawdown");
-  const dailyDrawdown = getNumber(formData, "dailyDrawdown");
+  const profitTarget = getNumber(
+    formData,
+    "profitTarget"
+  );
+
+  const maxDrawdown = getNumber(
+    formData,
+    "maxDrawdown"
+  );
+
+  const dailyDrawdown = getNumber(
+    formData,
+    "dailyDrawdown"
+  );
 
   if (!name || !type) {
     return;
   }
 
-  const isSharedAccount = type === "SHARED";
+  const isSharedAccount =
+    type === "SHARED";
 
   const canCreatePersonalAccount =
-    currentUser.role === "OWNER" ||
+    currentUser.role === "FOUNDER" ||
     currentUser.role === "ADMIN" ||
     currentUser.canCreatePersonalAccounts;
 
   const canCreateSharedAccount =
-    currentUser.role === "OWNER" ||
+    currentUser.role === "FOUNDER" ||
     currentUser.role === "ADMIN" ||
     currentUser.canCreateSharedAccounts;
 
-  if (isSharedAccount && !canCreateSharedAccount) {
+  if (
+    isSharedAccount &&
+    !canCreateSharedAccount
+  ) {
     return;
   }
 
-  if (!isSharedAccount && !canCreatePersonalAccount) {
+  if (
+    !isSharedAccount &&
+    !canCreatePersonalAccount
+  ) {
     return;
   }
 
-  const account = await prisma.tradingAccount.create({
-    data: {
-      name,
-      type,
-      initialBalance,
-      currency,
-      createdById: currentUser.id,
-      broker: broker || null,
-      phase: phase || null,
-      profitTarget,
-      maxDrawdown,
-      dailyDrawdown,
-    },
-  });
+  const account =
+    await prisma.tradingAccount.create({
+      data: {
+        name,
+        type,
+        initialBalance,
+        currency,
+        createdById: currentUser.id,
+        broker: broker || null,
+        phase: phase || null,
+        profitTarget,
+        maxDrawdown,
+        dailyDrawdown,
+      },
+    });
 
   await prisma.accountMember.create({
     data: {
       userId: currentUser.id,
       tradingAccountId: account.id,
-      role: "OWNER",
+      role: "MANAGER",
       canCreateTrades: true,
       canEditTrades: true,
       canDeleteTrades: true,
@@ -162,8 +185,10 @@ export async function archiveAccount(formData: FormData) {
   const currentUser = await getCurrentUser();
 
   const accountId = getString(formData, "accountId");
+
   const redirectTo =
-    getString(formData, "redirectTo") || "/admin/accounts";
+    getString(formData, "redirectTo") ||
+    "/admin/accounts";
 
   if (!accountId) {
     return;
@@ -179,9 +204,12 @@ export async function archiveAccount(formData: FormData) {
   }
 
   const canArchive =
-    currentUser.role === "OWNER" ||
+    currentUser.role === "FOUNDER" ||
     currentUser.role === "ADMIN" ||
-    (context.isCreator && currentUser.canArchiveOwnAccounts);
+    (
+      context.isCreator &&
+      currentUser.canArchiveOwnAccounts
+    );
 
   if (!canArchive) {
     return;
@@ -203,8 +231,10 @@ export async function restoreAccount(formData: FormData) {
   const currentUser = await getCurrentUser();
 
   const accountId = getString(formData, "accountId");
+
   const redirectTo =
-    getString(formData, "redirectTo") || "/admin/accounts";
+    getString(formData, "redirectTo") ||
+    "/admin/accounts";
 
   if (!accountId) {
     return;
@@ -220,9 +250,12 @@ export async function restoreAccount(formData: FormData) {
   }
 
   const canRestore =
-    currentUser.role === "OWNER" ||
+    currentUser.role === "FOUNDER" ||
     currentUser.role === "ADMIN" ||
-    (context.isCreator && currentUser.canArchiveOwnAccounts);
+    (
+      context.isCreator &&
+      currentUser.canArchiveOwnAccounts
+    );
 
   if (!canRestore) {
     return;
@@ -244,8 +277,10 @@ export async function deleteAccount(formData: FormData) {
   const currentUser = await getCurrentUser();
 
   const accountId = getString(formData, "accountId");
+
   const redirectTo =
-    getString(formData, "redirectTo") || "/admin/accounts";
+    getString(formData, "redirectTo") ||
+    "/admin/accounts";
 
   if (!accountId) {
     return;
@@ -261,9 +296,12 @@ export async function deleteAccount(formData: FormData) {
   }
 
   const canDelete =
-    currentUser.role === "OWNER" ||
+    currentUser.role === "FOUNDER" ||
     currentUser.role === "ADMIN" ||
-    (context.isCreator && currentUser.canDeleteOwnAccounts);
+    (
+      context.isCreator &&
+      currentUser.canDeleteOwnAccounts
+    );
 
   if (!canDelete) {
     return;

@@ -26,7 +26,7 @@ export default async function AccountsPage() {
     });
 
   const canCreateAccount =
-    currentUser?.role === "OWNER" ||
+    currentUser?.role === "MANAGER" ||
     currentUser?.role === "ADMIN" ||
     currentUser?.canCreatePersonalAccounts ||
     currentUser?.canCreateSharedAccounts;
@@ -93,7 +93,7 @@ export default async function AccountsPage() {
             </p>
           </div>
 
-          {currentUser?.role === "OWNER" && (
+          {currentUser?.role === "MANAGER" && (
             <div className="flex flex-wrap gap-3">
               <a
                 href="/admin"

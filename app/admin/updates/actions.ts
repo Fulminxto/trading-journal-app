@@ -29,7 +29,7 @@ export async function createReleaseNote(formData: FormData) {
 
   if (
     !user ||
-    (user.role !== "OWNER" && user.role !== "ADMIN")
+    (user.role !== "MANAGER" && user.role !== "ADMIN")
   ) {
     redirect("/");
   }

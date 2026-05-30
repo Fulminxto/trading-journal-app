@@ -58,7 +58,7 @@ export default async function ReportsPage({
   }
 
   if (
-    membership.role !== "OWNER" &&
+    membership.role !== "MANAGER" &&
     !membership.canViewReports
   ) {
     redirect(`/accounts/${accountId}/dashboard`);

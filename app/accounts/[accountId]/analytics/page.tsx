@@ -70,7 +70,7 @@ export default async function AnalyticsPage({
   }
 
   if (
-    membership.role !== "OWNER" &&
+    membership.role !== "MANAGER" &&
     !membership.canViewAnalytics
   ) {
     redirect(`/accounts/${accountId}/dashboard`);

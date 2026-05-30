@@ -22,12 +22,12 @@ export default async function CreateAccountPage() {
     }
 
     const canCreatePersonalAccount =
-        currentUser.role === "OWNER" ||
+        currentUser.role === "MANAGER" ||
         currentUser.role === "ADMIN" ||
         currentUser.canCreatePersonalAccounts;
 
     const canCreateSharedAccount =
-        currentUser.role === "OWNER" ||
+        currentUser.role === "MANAGER" ||
         currentUser.role === "ADMIN" ||
         currentUser.canCreateSharedAccounts;
 

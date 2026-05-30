@@ -1,25 +1,25 @@
-type Role = "OWNER" | "ADMIN" | "MEMBER" | "VIEWER" | string;
+type Role = "MANAGER" | "ADMIN" | "MEMBER" | "VIEWER" | string;
 
 export function isOwner(role?: Role | null) {
-  return role === "OWNER";
+  return role === "MANAGER";
 }
 
 export function isAdmin(role?: Role | null) {
-  return role === "OWNER" || role === "ADMIN";
+  return role === "MANAGER" || role === "ADMIN";
 }
 
 export function canManageUsers(role?: Role | null) {
-  return role === "OWNER" || role === "ADMIN";
+  return role === "MANAGER" || role === "ADMIN";
 }
 
 export function canManageSupport(role?: Role | null) {
-  return role === "OWNER" || role === "ADMIN";
+  return role === "MANAGER" || role === "ADMIN";
 }
 
 export function canManageSystem(role?: Role | null) {
-  return role === "OWNER";
+  return role === "MANAGER";
 }
 
 export function canViewAdmin(role?: Role | null) {
-  return role === "OWNER" || role === "ADMIN";
+  return role === "MANAGER" || role === "ADMIN";
 }

@@ -52,7 +52,7 @@ export default async function CopilotPage({
     }
 
     if (
-        membership.role !== "OWNER" &&
+        membership.role !== "MANAGER" &&
         !membership.canViewCopilot
     ) {
         redirect(`/accounts/${accountId}/dashboard`);

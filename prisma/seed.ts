@@ -35,7 +35,7 @@ async function main() {
       currency: "USD",
       members: {
         create: [
-          { userId: yarik.id, role: "OWNER" },
+          { userId: yarik.id, role: "MANAGER" },
           { userId: ivan.id, role: "MEMBER" },
         ],
       },

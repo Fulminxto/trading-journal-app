@@ -29,7 +29,7 @@ export default async function AdminAccountsPage() {
     },
   });
 
-  if (!currentUser || currentUser.role !== "OWNER") {
+  if (!currentUser || currentUser.role !== "FOUNDER") {
     redirect("/accounts");
   }
 
@@ -108,6 +108,7 @@ export default async function AdminAccountsPage() {
                 <p className="text-xs text-gray-500">
                   Broker
                 </p>
+
                 <h3 className="mt-2 font-bold">
                   {account.broker || "-"}
                 </h3>
@@ -117,6 +118,7 @@ export default async function AdminAccountsPage() {
                 <p className="text-xs text-gray-500">
                   Phase
                 </p>
+
                 <h3 className="mt-2 font-bold">
                   {account.phase || "-"}
                 </h3>
@@ -126,6 +128,7 @@ export default async function AdminAccountsPage() {
                 <p className="text-xs text-gray-500">
                   Profit Target
                 </p>
+
                 <h3 className="mt-2 font-bold text-green-400">
                   {account.profitTarget
                     ? `${account.profitTarget}%`
@@ -137,6 +140,7 @@ export default async function AdminAccountsPage() {
                 <p className="text-xs text-gray-500">
                   Max DD
                 </p>
+
                 <h3 className="mt-2 font-bold text-red-400">
                   {account.maxDrawdown
                     ? `${account.maxDrawdown}%`
@@ -148,6 +152,7 @@ export default async function AdminAccountsPage() {
                 <p className="text-xs text-gray-500">
                   Daily DD
                 </p>
+
                 <h3 className="mt-2 font-bold text-red-400">
                   {account.dailyDrawdown
                     ? `${account.dailyDrawdown}%`
@@ -260,9 +265,9 @@ export default async function AdminAccountsPage() {
             className="rounded-2xl bg-zinc-900 p-4"
             defaultValue="MEMBER"
           >
+            <option value="MANAGER">MANAGER</option>
             <option value="MEMBER">MEMBER</option>
             <option value="VIEWER">VIEWER</option>
-            <option value="OWNER">OWNER</option>
           </select>
 
           <button
@@ -275,8 +280,8 @@ export default async function AdminAccountsPage() {
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {account.members.map((member) => {
-            const isAccountOwner =
-              member.role === "OWNER";
+            const isAccountManager =
+              member.role === "MANAGER";
 
             return (
               <div
@@ -316,7 +321,7 @@ export default async function AdminAccountsPage() {
                       defaultValue={member.role}
                       className="rounded-xl bg-zinc-900 p-3 text-sm"
                     >
-                      <option value="OWNER">OWNER</option>
+                      <option value="MANAGER">MANAGER</option>
                       <option value="MEMBER">MEMBER</option>
                       <option value="VIEWER">VIEWER</option>
                     </select>
@@ -329,9 +334,9 @@ export default async function AdminAccountsPage() {
                     </button>
                   </form>
 
-                  {isAccountOwner ? (
+                  {isAccountManager ? (
                     <div className="rounded-xl border border-green-500/20 bg-green-500/10 p-3 text-sm text-green-300">
-                      Full account access. Account owners do not need custom permissions.
+                      Full account access. Managers do not need custom permissions.
                     </div>
                   ) : (
                     <form

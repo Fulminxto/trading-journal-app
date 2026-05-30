@@ -84,7 +84,7 @@ export default async function MembersPage({
     }
 
     if (
-        membership.role !== "OWNER" &&
+        membership.role !== "MANAGER" &&
         !membership.canViewMembers
     ) {
         redirect(`/accounts/${accountId}/dashboard`);

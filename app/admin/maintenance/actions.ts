@@ -34,7 +34,7 @@ export async function updateMaintenanceMode(
 
   if (
     !user ||
-    (user.role !== "OWNER" &&
+    (user.role !== "MANAGER" &&
       user.role !== "ADMIN")
   ) {
     redirect("/");

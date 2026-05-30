@@ -1,14 +1,14 @@
 "use server";
 
-import { canManageUsers } from "@/lib/permissions";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 
-type AccountRole = "OWNER" | "MEMBER" | "VIEWER";
+type UserRole = "FOUNDER" | "ADMIN" | "MEMBER" | "VIEWER";
+type AccountRole = "MANAGER" | "MEMBER" | "VIEWER";
 
-async function requireOwner() {
+async function requireFounder() {
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -21,10 +21,7 @@ async function requireOwner() {
     },
   });
 
-  if (
-    !currentUser ||
-    !canManageUsers(currentUser.role)
-  ) {
+  if (!currentUser || currentUser.role !== "FOUNDER") {
     redirect("/accounts");
   }
 
@@ -57,9 +54,10 @@ function getNumber(formData: FormData, key: string) {
   return number;
 }
 
-function getAccountRole(value: string): AccountRole | null {
+function getUserRole(value: string): UserRole | null {
   if (
-    value === "OWNER" ||
+    value === "FOUNDER" ||
+    value === "ADMIN" ||
     value === "MEMBER" ||
     value === "VIEWER"
   ) {
@@ -69,24 +67,38 @@ function getAccountRole(value: string): AccountRole | null {
   return null;
 }
 
-async function countAccountOwners(
+function getAccountRole(value: string): AccountRole | null {
+  if (
+    value === "MANAGER" ||
+    value === "MEMBER" ||
+    value === "VIEWER"
+  ) {
+    return value;
+  }
+
+  return null;
+}
+
+async function countAccountManagers(
   tradingAccountId: string
 ) {
   return prisma.accountMember.count({
     where: {
       tradingAccountId,
-      role: "OWNER",
+      role: "MANAGER",
     },
   });
 }
 
 export async function createUser(formData: FormData) {
-  await requireOwner();
+  await requireFounder();
 
   const username = getString(formData, "username");
   const password = getString(formData, "password");
   const name = getString(formData, "name");
-  const role = getString(formData, "role");
+
+  const role =
+    getUserRole(getString(formData, "role")) || "MEMBER";
 
   if (!username || !password) {
     return;
@@ -109,13 +121,7 @@ export async function createUser(formData: FormData) {
       username,
       passwordHash,
       name: name || null,
-      role:
-        role === "OWNER" ||
-          role === "ADMIN" ||
-          role === "MEMBER" ||
-          role === "VIEWER"
-          ? role
-          : "MEMBER",
+      role,
     },
   });
 
@@ -123,7 +129,7 @@ export async function createUser(formData: FormData) {
 }
 
 export async function deleteUser(formData: FormData) {
-  const currentUser = await requireOwner();
+  const currentUser = await requireFounder();
 
   const userId = getString(formData, "userId");
 
@@ -145,25 +151,22 @@ export async function deleteUser(formData: FormData) {
 }
 
 export async function updateUserRole(formData: FormData) {
-  const currentUser = await requireOwner();
+  const currentUser = await requireFounder();
 
   const userId = getString(formData, "userId");
-  const role = getString(formData, "role");
+
+  const role = getUserRole(
+    getString(formData, "role")
+  );
 
   if (!userId || !role) {
     return;
   }
 
   if (
-    role !== "OWNER" &&
-    role !== "ADMIN" &&
-    role !== "MEMBER" &&
-    role !== "VIEWER"
+    userId === currentUser.id &&
+    role !== "FOUNDER"
   ) {
-    return;
-  }
-
-  if (userId === currentUser.id && role !== "OWNER") {
     return;
   }
 
@@ -177,14 +180,17 @@ export async function updateUserRole(formData: FormData) {
     return;
   }
 
-  if (targetUser.role === "OWNER" && role !== "OWNER") {
-    const ownersCount = await prisma.user.count({
+  if (
+    targetUser.role === "FOUNDER" &&
+    role !== "FOUNDER"
+  ) {
+    const foundersCount = await prisma.user.count({
       where: {
-        role: "OWNER",
+        role: "FOUNDER",
       },
     });
 
-    if (ownersCount <= 1) {
+    if (foundersCount <= 1) {
       return;
     }
   }
@@ -204,7 +210,7 @@ export async function updateUserRole(formData: FormData) {
 export async function updateUserPermissions(
   formData: FormData
 ) {
-  await requireOwner();
+  await requireFounder();
 
   const userId = getString(formData, "userId");
 
@@ -218,49 +224,31 @@ export async function updateUserPermissions(
     },
     data: {
       canCreatePersonalAccounts:
-        formData.get(
-          "canCreatePersonalAccounts"
-        ) === "on",
+        formData.get("canCreatePersonalAccounts") === "on",
 
       canCreateSharedAccounts:
-        formData.get(
-          "canCreateSharedAccounts"
-        ) === "on",
+        formData.get("canCreateSharedAccounts") === "on",
 
       canArchiveOwnAccounts:
-        formData.get(
-          "canArchiveOwnAccounts"
-        ) === "on",
+        formData.get("canArchiveOwnAccounts") === "on",
 
       canDeleteOwnAccounts:
-        formData.get(
-          "canDeleteOwnAccounts"
-        ) === "on",
+        formData.get("canDeleteOwnAccounts") === "on",
 
       canUseCopilot:
-        formData.get(
-          "canUseCopilot"
-        ) === "on",
+        formData.get("canUseCopilot") === "on",
 
       canViewAnalytics:
-        formData.get(
-          "canViewAnalytics"
-        ) === "on",
+        formData.get("canViewAnalytics") === "on",
 
       canViewReports:
-        formData.get(
-          "canViewReports"
-        ) === "on",
+        formData.get("canViewReports") === "on",
 
       canManageUsers:
-        formData.get(
-          "canManageUsers"
-        ) === "on",
+        formData.get("canManageUsers") === "on",
 
       canManageSystem:
-        formData.get(
-          "canManageSystem"
-        ) === "on",
+        formData.get("canManageSystem") === "on",
     },
   });
 
@@ -268,7 +256,7 @@ export async function updateUserPermissions(
 }
 
 export async function createTradingAccount(formData: FormData) {
-  const currentUser = await requireOwner();
+  const currentUser = await requireFounder();
 
   const name = getString(formData, "name");
 
@@ -327,7 +315,17 @@ export async function createTradingAccount(formData: FormData) {
     data: {
       userId: currentUser.id,
       tradingAccountId: account.id,
-      role: "OWNER",
+      role: "MANAGER",
+      canCreateTrades: true,
+      canEditTrades: true,
+      canDeleteTrades: true,
+      canViewAnalytics: true,
+      canViewReports: true,
+      canViewCopilot: true,
+      canViewMembers: true,
+      canManageMembers: true,
+      canManageRoles: true,
+      canManageAccount: true,
     },
   });
 
@@ -335,7 +333,7 @@ export async function createTradingAccount(formData: FormData) {
 }
 
 export async function addMemberToAccount(formData: FormData) {
-  await requireOwner();
+  await requireFounder();
 
   const username = getString(formData, "username");
 
@@ -385,7 +383,7 @@ export async function addMemberToAccount(formData: FormData) {
 }
 
 export async function updateMemberRole(formData: FormData) {
-  await requireOwner();
+  await requireFounder();
 
   const membershipId = getString(
     formData,
@@ -411,16 +409,16 @@ export async function updateMemberRole(formData: FormData) {
     return;
   }
 
-  const isDowngradingOwner =
-    membership.role === "OWNER" &&
-    nextRole !== "OWNER";
+  const isDowngradingManager =
+    membership.role === "MANAGER" &&
+    nextRole !== "MANAGER";
 
-  if (isDowngradingOwner) {
-    const ownersCount = await countAccountOwners(
+  if (isDowngradingManager) {
+    const managersCount = await countAccountManagers(
       membership.tradingAccountId
     );
 
-    if (ownersCount <= 1) {
+    if (managersCount <= 1) {
       return;
     }
   }
@@ -440,7 +438,7 @@ export async function updateMemberRole(formData: FormData) {
 export async function updateMemberPermissions(
   formData: FormData
 ) {
-  await requireOwner();
+  await requireFounder();
 
   const membershipId = getString(
     formData,
@@ -494,7 +492,7 @@ export async function updateMemberPermissions(
 export async function removeMemberFromAccount(
   formData: FormData
 ) {
-  await requireOwner();
+  await requireFounder();
 
   const membershipId = getString(
     formData,
@@ -516,12 +514,12 @@ export async function removeMemberFromAccount(
     return;
   }
 
-  if (membership.role === "OWNER") {
-    const ownersCount = await countAccountOwners(
+  if (membership.role === "MANAGER") {
+    const managersCount = await countAccountManagers(
       membership.tradingAccountId
     );
 
-    if (ownersCount <= 1) {
+    if (managersCount <= 1) {
       return;
     }
   }
@@ -536,7 +534,7 @@ export async function removeMemberFromAccount(
 }
 
 export async function freezeUser(formData: FormData) {
-  await requireOwner();
+  await requireFounder();
 
   const userId = getString(formData, "userId");
 
@@ -558,7 +556,7 @@ export async function freezeUser(formData: FormData) {
 }
 
 export async function unfreezeUser(formData: FormData) {
-  await requireOwner();
+  await requireFounder();
 
   const userId = getString(formData, "userId");
 
@@ -580,7 +578,7 @@ export async function unfreezeUser(formData: FormData) {
 }
 
 export async function resetUserPassword(formData: FormData) {
-  await requireOwner();
+  await requireFounder();
 
   const userId = getString(formData, "userId");
   const password = getString(formData, "password");
