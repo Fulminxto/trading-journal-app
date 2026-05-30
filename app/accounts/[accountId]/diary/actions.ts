@@ -50,6 +50,9 @@ async function getAccess(
   accountId: string,
   options?: {
     allowViewer?: boolean;
+    requireCreateTrades?: boolean;
+    requireEditTrades?: boolean;
+    requireDeleteTrades?: boolean;
   }
 ) {
   const session = await auth();
@@ -74,11 +77,38 @@ async function getAccess(
     redirect("/accounts");
   }
 
+  const isOwner =
+    String(membership.role) === "OWNER";
+
   if (
     String(membership.role) === "VIEWER" &&
     !options?.allowViewer
   ) {
-    redirect("/accounts");
+    redirect(`/accounts/${accountId}/dashboard`);
+  }
+
+  if (
+    options?.requireCreateTrades &&
+    !isOwner &&
+    !membership.canCreateTrades
+  ) {
+    redirect(`/accounts/${accountId}/dashboard`);
+  }
+
+  if (
+    options?.requireEditTrades &&
+    !isOwner &&
+    !membership.canEditTrades
+  ) {
+    redirect(`/accounts/${accountId}/dashboard`);
+  }
+
+  if (
+    options?.requireDeleteTrades &&
+    !isOwner &&
+    !membership.canDeleteTrades
+  ) {
+    redirect(`/accounts/${accountId}/dashboard`);
   }
 
   return membership;
@@ -152,7 +182,9 @@ export async function createAccountTrade(
   accountId: string,
   formData: FormData
 ) {
-  const membership = await getAccess(accountId);
+  const membership = await getAccess(accountId, {
+    requireCreateTrades: true,
+  });
 
   const openDate = getDate(formData, "openDate");
 
@@ -207,7 +239,9 @@ export async function updateAccountTrade(
   tradeId: number,
   formData: FormData
 ) {
-  await getAccess(accountId);
+  await getAccess(accountId, {
+    requireEditTrades: true,
+  });
 
   const openDate = getDate(formData, "openDate");
 
@@ -262,7 +296,9 @@ export async function deleteAccountTrade(
   accountId: string,
   tradeId: number
 ) {
-  await getAccess(accountId);
+  await getAccess(accountId, {
+    requireDeleteTrades: true,
+  });
 
   await prisma.trade.delete({
     where: {
