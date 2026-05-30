@@ -83,9 +83,23 @@ export default async function DiaryPage({
     },
   });
 
-  const isViewer =
+  const isOwner =
     membership &&
-    String(membership.role) === "VIEWER";
+    String(membership.role) === "OWNER";
+
+  const canCreateTrades =
+    Boolean(isOwner || membership?.canCreateTrades);
+
+  const canEditTrades =
+    Boolean(isOwner || membership?.canEditTrades);
+
+  const canDeleteTrades =
+    Boolean(isOwner || membership?.canDeleteTrades);
+
+  const isReadOnly =
+    !canCreateTrades &&
+    !canEditTrades &&
+    !canDeleteTrades;
 
   if (!membership) {
     redirect("/accounts");
@@ -582,7 +596,7 @@ export default async function DiaryPage({
             </div>
           )}
 
-          {isViewer && (
+          {isReadOnly && (
             <div className="mt-4 rounded-3xl border border-yellow-500/20 bg-yellow-500/10 p-5">
               <p className="text-xs uppercase tracking-[0.2em] text-yellow-300">
                 Read Only Mode
@@ -603,7 +617,7 @@ export default async function DiaryPage({
               Account: {account.name}
             </p>
 
-            {isViewer && (
+            {isReadOnly && (
               <div className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-4 py-1 text-xs font-black uppercase tracking-[0.2em] text-yellow-300">
                 Read Only
               </div>
@@ -757,7 +771,7 @@ export default async function DiaryPage({
         </div>
       </form>
 
-      {!isViewer && (
+      {canCreateTrades && (
         <form
           action={createAccountTrade.bind(null, accountId)}
           className="mb-10 rounded-3xl border border-white/10 bg-white/[0.03] p-5"
@@ -1095,29 +1109,33 @@ export default async function DiaryPage({
                 </td>
 
                 <td className="p-4">
-                  {!isViewer ? (
+                  {canEditTrades || canDeleteTrades ? (
                     <div className="flex gap-3">
-                      <Link
-                        href={`/accounts/${accountId}/diary/${trade.id}/edit`}
-                        className="rounded-xl bg-white/10 px-3 py-2 text-sm hover:bg-white/20"
-                      >
-                        Edit
-                      </Link>
-
-                      <form
-                        action={deleteAccountTrade.bind(
-                          null,
-                          accountId,
-                          trade.id
-                        )}
-                      >
-                        <button
-                          type="submit"
-                          className="rounded-xl bg-red-500/10 px-3 py-2 text-sm text-red-400 hover:bg-red-500/20"
+                      {canEditTrades && (
+                        <Link
+                          href={`/accounts/${accountId}/diary/${trade.id}/edit`}
+                          className="rounded-xl bg-white/10 px-3 py-2 text-sm hover:bg-white/20"
                         >
-                          Delete
-                        </button>
-                      </form>
+                          Edit
+                        </Link>
+                      )}
+
+                      {canDeleteTrades && (
+                        <form
+                          action={deleteAccountTrade.bind(
+                            null,
+                            accountId,
+                            trade.id
+                          )}
+                        >
+                          <button
+                            type="submit"
+                            className="rounded-xl bg-red-500/10 px-3 py-2 text-sm text-red-400 hover:bg-red-500/20"
+                          >
+                            Delete
+                          </button>
+                        </form>
+                      )}
                     </div>
                   ) : (
                     <span className="rounded-xl bg-yellow-500/10 px-3 py-2 text-xs font-semibold text-yellow-300">
@@ -1341,30 +1359,34 @@ export default async function DiaryPage({
                     </div>
                   )}
 
-                {!isViewer && (
+                {(canEditTrades || canDeleteTrades) && (
                   <div className="mt-4 flex gap-3">
-                    <Link
-                      href={`/accounts/${accountId}/diary/${trade.id}/edit`}
-                      className="flex-1 rounded-xl bg-white/10 px-3 py-3 text-center text-sm hover:bg-white/20"
-                    >
-                      Edit
-                    </Link>
-
-                    <form
-                      action={deleteAccountTrade.bind(
-                        null,
-                        accountId,
-                        trade.id
-                      )}
-                      className="flex-1"
-                    >
-                      <button
-                        type="submit"
-                        className="w-full rounded-xl bg-red-500/10 px-3 py-3 text-sm text-red-400 hover:bg-red-500/20"
+                    {canEditTrades && (
+                      <Link
+                        href={`/accounts/${accountId}/diary/${trade.id}/edit`}
+                        className="flex-1 rounded-xl bg-white/10 px-3 py-3 text-center text-sm hover:bg-white/20"
                       >
-                        Delete
-                      </button>
-                    </form>
+                        Edit
+                      </Link>
+                    )}
+
+                    {canDeleteTrades && (
+                      <form
+                        action={deleteAccountTrade.bind(
+                          null,
+                          accountId,
+                          trade.id
+                        )}
+                        className="flex-1"
+                      >
+                        <button
+                          type="submit"
+                          className="w-full rounded-xl bg-red-500/10 px-3 py-3 text-sm text-red-400 hover:bg-red-500/20"
+                        >
+                          Delete
+                        </button>
+                      </form>
+                    )}
                   </div>
                 )}
               </div>

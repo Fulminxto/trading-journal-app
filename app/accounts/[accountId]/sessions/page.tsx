@@ -40,6 +40,15 @@ export default async function SessionsPage({
     redirect("/accounts");
   }
 
+  if (
+    String(membership.role) !== "OWNER" &&
+    !membership.canViewReports
+  ) {
+    redirect(
+      `/accounts/${accountId}/dashboard`
+    );
+  }
+
   const sessions =
     await prisma.tradingSession.findMany({
       where: {

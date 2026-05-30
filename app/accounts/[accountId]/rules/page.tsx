@@ -45,6 +45,15 @@ export default async function RulesPage({
     redirect("/accounts");
   }
 
+  if (
+    String(membership.role) !== "OWNER" &&
+    !membership.canManageAccount
+  ) {
+    redirect(
+      `/accounts/${accountId}/dashboard`
+    );
+  }
+
   const now = new Date();
   const month = now.getMonth();
   const year = now.getFullYear();
@@ -87,12 +96,12 @@ export default async function RulesPage({
   const maxDrawdown =
     trades.length > 0
       ? Math.abs(
-          Math.min(
-            ...trades.map(
-              (trade) => trade.drawdownPercent || 0
-            )
+        Math.min(
+          ...trades.map(
+            (trade) => trade.drawdownPercent || 0
           )
         )
+      )
       : 0;
 
   const profitProgress =
@@ -124,9 +133,8 @@ export default async function RulesPage({
           </p>
 
           <h2
-            className={`mt-2 text-3xl font-bold ${
-              totalPnl >= 0 ? "text-green-400" : "text-red-400"
-            }`}
+            className={`mt-2 text-3xl font-bold ${totalPnl >= 0 ? "text-green-400" : "text-red-400"
+              }`}
           >
             ${totalPnl.toFixed(2)}
           </h2>
