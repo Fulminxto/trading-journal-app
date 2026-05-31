@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { logActivity } from "@/lib/activity";
 import { redirect } from "next/navigation";
 
 function getString(formData: FormData, key: string) {
@@ -67,7 +68,6 @@ async function getAccess(
         userId: session.user.id,
         tradingAccountId: accountId,
       },
-
       include: {
         tradingAccount: true,
       },
@@ -77,8 +77,8 @@ async function getAccess(
     redirect("/accounts");
   }
 
-  const isOwner =
-    String(membership.role) === "OWNER";
+  const isManager =
+    String(membership.role) === "MANAGER";
 
   if (
     String(membership.role) === "VIEWER" &&
@@ -89,7 +89,7 @@ async function getAccess(
 
   if (
     options?.requireCreateTrades &&
-    !isOwner &&
+    !isManager &&
     !membership.canCreateTrades
   ) {
     redirect(`/accounts/${accountId}/dashboard`);
@@ -97,7 +97,7 @@ async function getAccess(
 
   if (
     options?.requireEditTrades &&
-    !isOwner &&
+    !isManager &&
     !membership.canEditTrades
   ) {
     redirect(`/accounts/${accountId}/dashboard`);
@@ -105,7 +105,7 @@ async function getAccess(
 
   if (
     options?.requireDeleteTrades &&
-    !isOwner &&
+    !isManager &&
     !membership.canDeleteTrades
   ) {
     redirect(`/accounts/${accountId}/dashboard`);
@@ -129,12 +129,10 @@ async function recalculateEquity(accountId: string) {
     where: {
       tradingAccountId: accountId,
     },
-
     orderBy: [
       {
         openDate: "asc",
       },
-
       {
         id: "asc",
       },
@@ -167,7 +165,6 @@ async function recalculateEquity(accountId: string) {
       where: {
         id: trade.id,
       },
-
       data: {
         equity,
         equityPeak,
@@ -192,7 +189,7 @@ export async function createAccountTrade(
     redirect(`/accounts/${accountId}/diary`);
   }
 
-  await prisma.trade.create({
+  const trade = await prisma.trade.create({
     data: {
       tradingAccountId: accountId,
       createdById: membership.userId,
@@ -229,6 +226,20 @@ export async function createAccountTrade(
     },
   });
 
+  await logActivity({
+    userId: membership.userId,
+    accountId,
+    type: "TRADE_CREATED",
+    title: "Trade created",
+    description: `${trade.symbol} ${trade.direction} trade created`,
+    metadata: {
+      tradeId: trade.id,
+      symbol: trade.symbol,
+      direction: trade.direction,
+      outcome: trade.outcome,
+    },
+  });
+
   await recalculateEquity(accountId);
 
   redirect(`/accounts/${accountId}/diary`);
@@ -239,7 +250,7 @@ export async function updateAccountTrade(
   tradeId: number,
   formData: FormData
 ) {
-  await getAccess(accountId, {
+  const membership = await getAccess(accountId, {
     requireEditTrades: true,
   });
 
@@ -249,11 +260,10 @@ export async function updateAccountTrade(
     redirect(`/accounts/${accountId}/diary`);
   }
 
-  await prisma.trade.update({
+  const trade = await prisma.trade.update({
     where: {
       id: tradeId,
     },
-
     data: {
       openDate,
       openTime: getString(formData, "openTime"),
@@ -287,6 +297,20 @@ export async function updateAccountTrade(
     },
   });
 
+  await logActivity({
+    userId: membership.userId,
+    accountId,
+    type: "TRADE_UPDATED",
+    title: "Trade updated",
+    description: `${trade.symbol} trade updated`,
+    metadata: {
+      tradeId: trade.id,
+      symbol: trade.symbol,
+      direction: trade.direction,
+      outcome: trade.outcome,
+    },
+  });
+
   await recalculateEquity(accountId);
 
   redirect(`/accounts/${accountId}/diary`);
@@ -296,9 +320,31 @@ export async function deleteAccountTrade(
   accountId: string,
   tradeId: number
 ) {
-  await getAccess(accountId, {
+  const membership = await getAccess(accountId, {
     requireDeleteTrades: true,
   });
+
+  const trade = await prisma.trade.findUnique({
+    where: {
+      id: tradeId,
+    },
+  });
+
+  if (trade) {
+    await logActivity({
+      userId: membership.userId,
+      accountId,
+      type: "TRADE_DELETED",
+      title: "Trade deleted",
+      description: `${trade.symbol} trade deleted`,
+      metadata: {
+        tradeId: trade.id,
+        symbol: trade.symbol,
+        direction: trade.direction,
+        outcome: trade.outcome,
+      },
+    });
+  }
 
   await prisma.trade.delete({
     where: {

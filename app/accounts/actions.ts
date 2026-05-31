@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { logActivity, } from "@/lib/activity";
 import { redirect } from "next/navigation";
 
 type AccountType =
@@ -178,6 +179,18 @@ export async function createAccount(formData: FormData) {
     },
   });
 
+  await logActivity({
+    userId: currentUser.id,
+    accountId: account.id,
+    type: "ACCOUNT_CREATED",
+    title: "Account created",
+    description: `${currentUser.username} created ${account.name}`,
+    metadata: {
+      accountName: account.name,
+      accountType: account.type,
+    },
+  });
+
   redirect(`/accounts/${account.id}/dashboard`);
 }
 
@@ -222,6 +235,14 @@ export async function archiveAccount(formData: FormData) {
     data: {
       status: "ARCHIVED",
     },
+  });
+
+  await logActivity({
+    userId: currentUser.id,
+    accountId,
+    type: "ACCOUNT_ARCHIVED",
+    title: "Account archived",
+    description: `${currentUser.username} archived ${context.account.name}`,
   });
 
   redirect(redirectTo);
@@ -270,6 +291,14 @@ export async function restoreAccount(formData: FormData) {
     },
   });
 
+  await logActivity({
+    userId: currentUser.id,
+    accountId,
+    type: "ACCOUNT_RESTORED",
+    title: "Account restored",
+    description: `${currentUser.username} restored ${context.account.name}`,
+  });
+
   redirect(redirectTo);
 }
 
@@ -306,6 +335,14 @@ export async function deleteAccount(formData: FormData) {
   if (!canDelete) {
     return;
   }
+
+  await logActivity({
+    userId: currentUser.id,
+    accountId,
+    type: "ACCOUNT_DELETED",
+    title: "Account deleted",
+    description: `${currentUser.username} deleted ${context.account.name}`,
+  });
 
   await prisma.tradingAccount.delete({
     where: {
