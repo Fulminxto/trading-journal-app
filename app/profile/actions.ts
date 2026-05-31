@@ -3,6 +3,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { logActivity } from "@/lib/activity";
 
 function getString(
   formData: FormData,
@@ -27,7 +28,7 @@ function getNumber(
     return null;
   }
 
-  const parsed = Number(value);
+  const parsed = Number(value.replace(",", "."));
 
   if (Number.isNaN(parsed)) {
     return null;
@@ -45,19 +46,35 @@ export async function updateProfile(
     redirect("/login");
   }
 
+  const currentUser = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+  });
+
+  if (!currentUser) {
+    redirect("/login");
+  }
+
   const name = getString(
     formData,
     "name"
   );
 
-  const username = getString(
-    formData,
-    "username"
-  );
+  const username =
+    getString(
+      formData,
+      "username"
+    ) || currentUser.username;
 
   const bio = getString(
     formData,
     "bio"
+  );
+
+  const workspaceName = getString(
+    formData,
+    "workspaceName"
   );
 
   const tradingStyle = getString(
@@ -120,13 +137,50 @@ export async function updateProfile(
       name: name || null,
       username,
       bio: bio || null,
-      tradingStyle: tradingStyle || null,
-      favoriteMarket: favoriteMarket || null,
-      timezone: timezone || null,
-      preferredSession: preferredSession || null,
+      workspaceName:
+        workspaceName || null,
+
+      tradingStyle:
+        tradingStyle || null,
+
+      favoriteMarket:
+        favoriteMarket || null,
+
+      timezone:
+        timezone || null,
+
+      preferredSession:
+        preferredSession || null,
+
       riskPerTrade,
-      preferredBroker: preferredBroker || null,
-      setupStyle: setupStyle || null,
+
+      preferredBroker:
+        preferredBroker || null,
+
+      setupStyle:
+        setupStyle || null,
+    },
+  });
+
+  await logActivity({
+    userId: session.user.id,
+    type: "PROFILE_UPDATED",
+    title: "Profile updated",
+    description: `${username} updated profile information`,
+    metadata: {
+      fields: [
+        "name",
+        "username",
+        "bio",
+        "workspaceName",
+        "tradingStyle",
+        "favoriteMarket",
+        "timezone",
+        "preferredSession",
+        "riskPerTrade",
+        "preferredBroker",
+        "setupStyle",
+      ],
     },
   });
 

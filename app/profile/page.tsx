@@ -1,3 +1,15 @@
+import {
+  User,
+  BadgeCheck,
+  Briefcase,
+  Clock3,
+  LineChart,
+  Shield,
+  Target,
+  TrendingUp,
+  Wallet,
+} from "lucide-react";
+
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
@@ -13,12 +25,29 @@ function formatCurrency(value: number) {
   })}`;
 }
 
-function formatDate(date: Date) {
-  return new Date(date).toLocaleDateString("it-IT", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
+function formatDate(date?: Date | null) {
+  if (!date) {
+    return "Never";
+  }
+
+  return new Date(date).toLocaleString("it-IT");
+}
+
+function getInitials(name: string) {
+  return name
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+}
+
+function isOnline(date?: Date | null) {
+  if (!date) {
+    return false;
+  }
+
+  return Date.now() - new Date(date).getTime() < 5 * 60 * 1000;
 }
 
 export default async function ProfilePage({
@@ -47,6 +76,7 @@ export default async function ProfilePage({
           tradingAccount: {
             include: {
               trades: true,
+              members: true,
             },
           },
         },
@@ -54,8 +84,9 @@ export default async function ProfilePage({
 
       createdTrades: {
         orderBy: {
-          openDate: "asc",
+          openDate: "desc",
         },
+        take: 10,
       },
     },
   });
@@ -65,68 +96,17 @@ export default async function ProfilePage({
   }
 
   const displayName = user.name || user.username;
-
-  const profileInfo = [
-    {
-      label: "Trading Style",
-      value: user.tradingStyle || "Non impostato",
-    },
-    {
-      label: "Favorite Market",
-      value: user.favoriteMarket || "Non impostato",
-    },
-    {
-      label: "Timezone",
-      value: user.timezone || "Non impostato",
-    },
-  ];
-
-  const traderPreferences = [
-    {
-      label: "Preferred Session",
-      value:
-        user.preferredSession ||
-        "Non impostata",
-    },
-    {
-      label: "Risk Per Trade",
-      value:
-        user.riskPerTrade !== null &&
-          user.riskPerTrade !== undefined
-          ? `${user.riskPerTrade}%`
-          : "Non impostato",
-    },
-    {
-      label: "Preferred Broker",
-      value:
-        user.preferredBroker ||
-        "Non impostato",
-    },
-    {
-      label: "Setup Style",
-      value:
-        user.setupStyle ||
-        "Non impostato",
-    },
-  ];
-
-  const initials = displayName
-    .split(" ")
-    .map((part) => part[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+  const initials = getInitials(displayName);
 
   const accounts = user.memberships.map(
     (membership) => membership.tradingAccount
   );
 
-  const totalAccounts = accounts.length;
-
   const allTrades = accounts.flatMap(
     (account) => account.trades
   );
 
+  const totalAccounts = accounts.length;
   const totalTrades = allTrades.length;
 
   const totalPnl = allTrades.reduce(
@@ -149,48 +129,51 @@ export default async function ProfilePage({
   const winRate =
     totalTrades > 0 ? (wins / totalTrades) * 100 : 0;
 
-  const firstTrade = [...allTrades].sort(
-    (a, b) =>
-      new Date(a.openDate).getTime() -
-      new Date(b.openDate).getTime()
-  )[0];
+  const online = isOnline(user.lastActivityAt);
 
-  const lastTrade = [...allTrades].sort(
-    (a, b) =>
-      new Date(b.openDate).getTime() -
-      new Date(a.openDate).getTime()
-  )[0];
+  const profileCompletionItems = [
+    user.name,
+    user.username,
+    user.bio,
+    user.workspaceName,
+    user.tradingStyle,
+    user.favoriteMarket,
+    user.timezone,
+    user.preferredSession,
+    user.riskPerTrade,
+    user.preferredBroker,
+    user.setupStyle,
+  ];
 
-  const journalStartDate =
-    firstTrade?.openDate || user.createdAt;
+  const completedProfileItems =
+    profileCompletionItems.filter(Boolean).length;
 
-  const daysActive = Math.max(
-    1,
-    Math.ceil(
-      (new Date().getTime() -
-        new Date(journalStartDate).getTime()) /
-      (1000 * 60 * 60 * 24)
-    )
+  const profileCompletion = Math.round(
+    (completedProfileItems / profileCompletionItems.length) *
+    100
   );
 
   const statCards = [
     {
-      label: "Account collegati",
+      label: "Accounts",
       value: totalAccounts,
       tone: "text-white",
+      icon: Wallet,
     },
     {
-      label: "Trade totali",
+      label: "Trades",
       value: totalTrades,
       tone: "text-white",
+      icon: LineChart,
     },
     {
-      label: "PnL totale",
+      label: "Total PnL",
       value: formatCurrency(totalPnl),
       tone:
         totalPnl >= 0
           ? "text-green-400"
           : "text-red-400",
+      icon: TrendingUp,
     },
     {
       label: "Win Rate",
@@ -199,16 +182,7 @@ export default async function ProfilePage({
         winRate >= 50
           ? "text-green-400"
           : "text-red-400",
-    },
-    {
-      label: "Giorni nel journal",
-      value: daysActive,
-      tone: "text-yellow-400",
-    },
-    {
-      label: "Break Even",
-      value: breakEven,
-      tone: "text-yellow-400",
+      icon: Target,
     },
   ];
 
@@ -217,19 +191,24 @@ export default async function ProfilePage({
       <GlobalToast status={query.toast} />
 
       <div className="mb-8">
-        <p className="text-sm text-gray-400">
-          Profilo trader
+        <p className="text-sm text-green-400">
+          Profile Center
         </p>
 
-        <h1 className="mt-2 text-3xl font-bold sm:text-4xl">
-          Profile
+        <h1 className="mt-2 flex items-center gap-3 text-3xl font-bold sm:text-4xl">
+          <User className="text-green-400" />
+          Trader Profile
         </h1>
+
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-400">
+          Gestisci identità, preferenze operative, stile di trading e informazioni personali usate da VOLTIS per personalizzare l’esperienza.
+        </p>
       </div>
 
-      <div className="mb-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+      <div className="mb-8 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] p-6">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-5">
-            <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-3xl border border-cyan-500/20 bg-cyan-500/10">
+            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-[2rem] border border-green-500/20 bg-green-500/10">
               {user.image ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -238,369 +217,529 @@ export default async function ProfilePage({
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="text-3xl font-bold text-cyan-300">
+                <div className="text-3xl font-black text-green-400">
                   {initials}
                 </div>
               )}
             </div>
 
             <div>
-              <h2 className="text-3xl font-bold">
-                {displayName}
-              </h2>
+              <div className="flex flex-wrap items-center gap-3">
+                <h2 className="text-3xl font-black text-white">
+                  {displayName}
+                </h2>
+
+                <span
+                  className={`rounded-xl px-3 py-1 text-xs font-black uppercase tracking-[0.16em] ${online
+                      ? "bg-green-500/10 text-green-400"
+                      : "bg-white/10 text-gray-400"
+                    }`}
+                >
+                  {online ? "Online" : "Offline"}
+                </span>
+              </div>
 
               <p className="mt-1 text-sm text-gray-400">
                 @{user.username}
               </p>
 
-              <div className="mt-3 inline-flex rounded-xl bg-white/10 px-3 py-1 text-sm text-gray-300">
-                {user.role}
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span className="rounded-xl bg-white/10 px-3 py-1 text-xs font-bold text-gray-300">
+                  {user.role}
+                </span>
+
+                <span className="rounded-xl bg-green-500/10 px-3 py-1 text-xs font-bold text-green-400">
+                  {profileCompletion}% Complete
+                </span>
               </div>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-gray-400">
-            <p>
-              Membro dal{" "}
-              <span className="font-semibold text-white">
-                {formatDate(user.createdAt)}
-              </span>
-            </p>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:w-[520px]">
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <p className="text-xs text-gray-500">
+                Last Login
+              </p>
 
-            <p className="mt-2">
-              Primo dato registrato{" "}
-              <span className="font-semibold text-white">
-                {formatDate(journalStartDate)}
-              </span>
-            </p>
+              <h3 className="mt-2 text-sm font-bold text-white">
+                {formatDate(user.lastLoginAt)}
+              </h3>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <p className="text-xs text-gray-500">
+                Last Activity
+              </p>
+
+              <h3 className="mt-2 text-sm font-bold text-white">
+                {formatDate(user.lastActivityAt)}
+              </h3>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <p className="text-xs text-gray-500">
+                Logins
+              </p>
+
+              <h3 className="mt-2 text-sm font-bold text-white">
+                {user.loginCount}
+              </h3>
+            </div>
           </div>
         </div>
       </div>
 
-      <form
-        action={updateProfile}
-        className="mb-8 grid grid-cols-1 gap-4 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:grid-cols-2"
-      >
-        <div className="md:col-span-2">
-          <p className="text-sm text-gray-400">
-            Modifica profilo
-          </p>
+      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {statCards.map((card) => {
+          const Icon = card.icon;
 
-          <h2 className="mt-1 text-2xl font-bold">
-            Informazioni personali
-          </h2>
-        </div>
+          return (
+            <div
+              key={card.label}
+              className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+            >
+              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-green-400">
+                <Icon size={20} />
+              </div>
 
-        <input
-          name="name"
-          defaultValue={user.name || ""}
-          placeholder="Nome"
-          className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-        />
+              <p className="text-sm text-gray-400">
+                {card.label}
+              </p>
 
-        <input
-          name="username"
-          defaultValue={user.username}
-          placeholder="Username"
-          className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          required
-        />
+              <h2 className={`mt-2 text-2xl font-black ${card.tone}`}>
+                {card.value}
+              </h2>
+            </div>
+          );
+        })}
+      </div>
 
-        <textarea
-          name="bio"
-          defaultValue={user.bio || ""}
-          placeholder="Bio trader"
-          className="min-h-[120px] rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40 md:col-span-2"
-        />
-
-        <input
-          name="tradingStyle"
-          defaultValue={user.tradingStyle || ""}
-          placeholder="Trading Style"
-          className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-        />
-
-        <input
-          name="favoriteMarket"
-          defaultValue={user.favoriteMarket || ""}
-          placeholder="Favorite Market"
-          className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-        />
-
-        <input
-          name="timezone"
-          defaultValue={user.timezone || ""}
-          placeholder="Timezone"
-          className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40 md:col-span-2"
-        />
-
-        <input
-          name="preferredSession"
-          defaultValue={user.preferredSession || ""}
-          placeholder="Preferred Session"
-          className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-        />
-
-        <input
-          name="riskPerTrade"
-          type="number"
-          step="0.1"
-          defaultValue={user.riskPerTrade || ""}
-          placeholder="Risk Per Trade (%)"
-          className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-        />
-
-        <input
-          name="preferredBroker"
-          defaultValue={user.preferredBroker || ""}
-          placeholder="Preferred Broker"
-          className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-        />
-
-        <input
-          name="setupStyle"
-          defaultValue={user.setupStyle || ""}
-          placeholder="Setup Style"
-          className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-        />
-
-        <button
-          type="submit"
-          className="rounded-2xl bg-green-500 p-4 font-bold text-black transition hover:bg-green-400 md:col-span-2"
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.3fr_0.7fr]">
+        <form
+          action={updateProfile}
+          className="rounded-3xl border border-white/10 bg-white/[0.03] p-6"
         >
-          Salva modifiche
-        </button>
-      </form>
-
-      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-6">
-        {statCards.map((stat) => (
-          <div
-            key={stat.label}
-            className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
-          >
-            <p className="text-sm text-gray-400">
-              {stat.label}
-            </p>
-
-            <h2 className={`mt-2 text-2xl font-bold ${stat.tone}`}>
-              {stat.value}
-            </h2>
-          </div>
-        ))}
-      </div>
-
-      <div className="mb-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-        <div className="mb-6">
-          <p className="text-sm text-gray-400">
-            Identità trader
-          </p>
-
-          <h2 className="mt-1 text-2xl font-bold">
-            Trading Profile
-          </h2>
-        </div>
-
-        {user.bio && (
-          <div className="mb-6 rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-sm text-gray-400">
-              Bio
-            </p>
-
-            <p className="mt-3 leading-relaxed text-gray-200">
-              {user.bio}
-            </p>
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          {profileInfo.map((item) => (
-            <div
-              key={item.label}
-              className="rounded-2xl border border-white/10 bg-black/20 p-5"
-            >
-              <p className="text-sm text-gray-400">
-                {item.label}
-              </p>
-
-              <h3 className="mt-2 text-lg font-bold text-white">
-                {item.value}
-              </h3>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="mb-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-        <div className="mb-6">
-          <p className="text-sm text-gray-400">
-            Trader preferences
-          </p>
-
-          <h2 className="mt-1 text-2xl font-bold">
-            Performance Setup
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {traderPreferences.map((item) => (
-            <div
-              key={item.label}
-              className="rounded-2xl border border-white/10 bg-black/20 p-5"
-            >
-              <p className="text-sm text-gray-400">
-                {item.label}
-              </p>
-
-              <h3 className="mt-2 text-lg font-bold text-white">
-                {item.value}
-              </h3>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_360px]">
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <div className="mb-6">
             <p className="text-sm text-gray-400">
-              Account collegati
+              Personal Information
             </p>
 
             <h2 className="mt-1 text-2xl font-bold">
-              Trading Accounts
+              Edit Profile
             </h2>
           </div>
 
-          <div className="space-y-4">
-            {user.memberships.map((membership) => {
-              const account = membership.tradingAccount;
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div>
+              <p className="mb-2 text-sm text-gray-400">
+                Display Name
+              </p>
 
-              const accountPnl = account.trades.reduce(
-                (acc, trade) =>
-                  acc + (trade.resultUsd || 0),
-                0
-              );
+              <input
+                name="name"
+                defaultValue={user.name || ""}
+                placeholder="Nome visualizzato"
+                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+              />
+            </div>
 
-              return (
-                <Link
-                  key={membership.id}
-                  href={`/accounts/${account.id}/dashboard`}
-                  className="block rounded-2xl border border-white/10 bg-black/20 p-5 transition hover:bg-white/[0.04]"
-                >
-                  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                    <div>
-                      <h3 className="text-xl font-bold">
-                        {account.name}
-                      </h3>
+            <div>
+              <p className="mb-2 text-sm text-gray-400">
+                Username
+              </p>
 
-                      <p className="mt-1 text-sm text-gray-500">
-                        {account.type} · {membership.role}
-                      </p>
-                    </div>
+              <input
+                name="username"
+                defaultValue={user.username}
+                placeholder="Username"
+                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+                required
+              />
+            </div>
 
-                    <div className="flex flex-wrap gap-3">
-                      <span className="rounded-xl bg-white/10 px-3 py-1 text-sm text-gray-300">
-                        {account.trades.length} trade
+            <div>
+              <p className="mb-2 text-sm text-gray-400">
+                Workspace Name
+              </p>
+
+              <input
+                name="workspaceName"
+                defaultValue={user.workspaceName || ""}
+                placeholder="Nome workspace"
+                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+              />
+            </div>
+
+            <div>
+              <p className="mb-2 text-sm text-gray-400">
+                Timezone
+              </p>
+
+              <input
+                name="timezone"
+                defaultValue={user.timezone || ""}
+                placeholder="Europe/Rome"
+                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <p className="mb-2 text-sm text-gray-400">
+                Bio
+              </p>
+
+              <textarea
+                name="bio"
+                defaultValue={user.bio || ""}
+                placeholder="Descrivi brevemente il tuo profilo da trader..."
+                className="min-h-[120px] w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+              />
+            </div>
+          </div>
+
+          <div className="mt-8">
+            <p className="text-sm text-gray-400">
+              Trading Identity
+            </p>
+
+            <h2 className="mt-1 text-2xl font-bold">
+              Trading Preferences
+            </h2>
+          </div>
+
+          <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div>
+              <p className="mb-2 text-sm text-gray-400">
+                Trading Style
+              </p>
+
+              <select
+                name="tradingStyle"
+                defaultValue={user.tradingStyle || ""}
+                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+              >
+                <option value="">
+                  Seleziona stile
+                </option>
+
+                <option value="Scalping">
+                  Scalping
+                </option>
+
+                <option value="Day Trading">
+                  Day Trading
+                </option>
+
+                <option value="Swing Trading">
+                  Swing Trading
+                </option>
+
+                <option value="Position Trading">
+                  Position Trading
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <p className="mb-2 text-sm text-gray-400">
+                Favorite Market
+              </p>
+
+              <select
+                name="favoriteMarket"
+                defaultValue={user.favoriteMarket || ""}
+                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+              >
+                <option value="">
+                  Seleziona mercato
+                </option>
+
+                <option value="Forex">
+                  Forex
+                </option>
+
+                <option value="Gold">
+                  Gold
+                </option>
+
+                <option value="Crypto">
+                  Crypto
+                </option>
+
+                <option value="Indices">
+                  Indices
+                </option>
+
+                <option value="Commodities">
+                  Commodities
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <p className="mb-2 text-sm text-gray-400">
+                Preferred Session
+              </p>
+
+              <select
+                name="preferredSession"
+                defaultValue={user.preferredSession || ""}
+                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+              >
+                <option value="">
+                  Seleziona sessione
+                </option>
+
+                <option value="Asia">
+                  Asia
+                </option>
+
+                <option value="London">
+                  London
+                </option>
+
+                <option value="New York">
+                  New York
+                </option>
+
+                <option value="Overlap">
+                  Overlap
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <p className="mb-2 text-sm text-gray-400">
+                Risk Per Trade %
+              </p>
+
+              <input
+                name="riskPerTrade"
+                type="number"
+                step="0.01"
+                defaultValue={user.riskPerTrade ?? ""}
+                placeholder="1"
+                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+              />
+            </div>
+
+            <div>
+              <p className="mb-2 text-sm text-gray-400">
+                Preferred Broker
+              </p>
+
+              <input
+                name="preferredBroker"
+                defaultValue={user.preferredBroker || ""}
+                placeholder="Broker / Prop Firm"
+                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+              />
+            </div>
+
+            <div>
+              <p className="mb-2 text-sm text-gray-400">
+                Setup Style
+              </p>
+
+              <input
+                name="setupStyle"
+                defaultValue={user.setupStyle || ""}
+                placeholder="Breakout, Pullback, SMC..."
+                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="mt-6 rounded-2xl bg-green-500 px-6 py-4 font-bold text-black transition hover:bg-green-400"
+          >
+            Save Profile
+          </button>
+        </form>
+
+        <div className="space-y-6">
+          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+            <div className="mb-5 flex items-center gap-3">
+              <BadgeCheck
+                size={22}
+                className="text-green-400"
+              />
+
+              <div>
+                <p className="text-sm text-gray-400">
+                  Completion
+                </p>
+
+                <h2 className="text-2xl font-bold">
+                  Profile Score
+                </h2>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+              <p className="text-sm text-gray-400">
+                Profile completed
+              </p>
+
+              <h3 className="mt-2 text-4xl font-black text-green-400">
+                {profileCompletion}%
+              </h3>
+
+              <div className="mt-4 h-2 rounded-full bg-white/10">
+                <div
+                  className="h-2 rounded-full bg-green-500"
+                  style={{
+                    width: `${profileCompletion}%`,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+            <div className="mb-5 flex items-center gap-3">
+              <Briefcase
+                size={22}
+                className="text-green-400"
+              />
+
+              <div>
+                <p className="text-sm text-gray-400">
+                  Workspace
+                </p>
+
+                <h2 className="text-2xl font-bold">
+                  Account Access
+                </h2>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {user.memberships.length > 0 ? (
+                user.memberships.map((membership) => (
+                  <Link
+                    key={membership.id}
+                    href={`/accounts/${membership.tradingAccount.id}/dashboard`}
+                    className="block rounded-2xl border border-white/10 bg-black/20 p-4 transition hover:bg-white/[0.04]"
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <p className="font-bold text-white">
+                          {membership.tradingAccount.name}
+                        </p>
+
+                        <p className="mt-1 text-xs text-gray-500">
+                          {membership.tradingAccount.type} · {membership.role}
+                        </p>
+                      </div>
+
+                      <span className="rounded-xl bg-white/10 px-3 py-1 text-xs font-bold text-gray-300">
+                        Open
                       </span>
+                    </div>
+                  </Link>
+                ))
+              ) : (
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-5 text-sm text-gray-400">
+                  Nessun account collegato.
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+            <div className="mb-5 flex items-center gap-3">
+              <Clock3
+                size={22}
+                className="text-green-400"
+              />
+
+              <div>
+                <p className="text-sm text-gray-400">
+                  Activity
+                </p>
+
+                <h2 className="text-2xl font-bold">
+                  Recent Trades
+                </h2>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {user.createdTrades.length > 0 ? (
+                user.createdTrades.map((trade) => (
+                  <div
+                    key={trade.id}
+                    className="rounded-2xl border border-white/10 bg-black/20 p-4"
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <p className="font-bold text-white">
+                          {trade.symbol}
+                        </p>
+
+                        <p className="mt-1 text-xs text-gray-500">
+                          {new Date(trade.openDate).toLocaleDateString("it-IT")}
+                        </p>
+                      </div>
 
                       <span
-                        className={`rounded-xl px-3 py-1 text-sm font-semibold ${accountPnl >= 0
+                        className={`rounded-xl px-3 py-1 text-xs font-bold ${(trade.resultUsd || 0) >= 0
                             ? "bg-green-500/10 text-green-400"
                             : "bg-red-500/10 text-red-400"
                           }`}
                       >
-                        {formatCurrency(accountPnl)}
+                        {formatCurrency(trade.resultUsd || 0)}
                       </span>
                     </div>
                   </div>
-                </Link>
-              );
-            })}
-
-            {user.memberships.length === 0 && (
-              <p className="text-sm text-gray-500">
-                Nessun account collegato.
-              </p>
-            )}
-          </div>
-        </div>
-
-        <div className="space-y-6">
-          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-            <p className="text-sm text-gray-400">
-              Performance summary
-            </p>
-
-            <h2 className="mt-2 text-2xl font-bold">
-              Risultati
-            </h2>
-
-            <div className="mt-5 space-y-3 text-sm">
-              <div className="flex justify-between rounded-2xl bg-black/20 p-3">
-                <span className="text-gray-400">Wins</span>
-                <span className="font-bold text-green-400">
-                  {wins}
-                </span>
-              </div>
-
-              <div className="flex justify-between rounded-2xl bg-black/20 p-3">
-                <span className="text-gray-400">Losses</span>
-                <span className="font-bold text-red-400">
-                  {losses}
-                </span>
-              </div>
-
-              <div className="flex justify-between rounded-2xl bg-black/20 p-3">
-                <span className="text-gray-400">Break Even</span>
-                <span className="font-bold text-yellow-400">
-                  {breakEven}
-                </span>
-              </div>
+                ))
+              ) : (
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-5 text-sm text-gray-400">
+                  Nessun trade recente.
+                </div>
+              )}
             </div>
           </div>
 
           <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-            <p className="text-sm text-gray-400">
-              Timeline
-            </p>
+            <div className="mb-5 flex items-center gap-3">
+              <Shield
+                size={22}
+                className="text-green-400"
+              />
 
-            <h2 className="mt-2 text-2xl font-bold">
-              Journal history
-            </h2>
-
-            <div className="mt-5 space-y-3 text-sm">
-              <div className="rounded-2xl bg-black/20 p-3">
-                <p className="text-gray-500">
-                  Primo trade
+              <div>
+                <p className="text-sm text-gray-400">
+                  Access
                 </p>
 
-                <p className="mt-1 font-semibold">
-                  {firstTrade
-                    ? formatDate(firstTrade.openDate)
-                    : "-"}
+                <h2 className="text-2xl font-bold">
+                  Security Status
+                </h2>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <p className="text-sm text-gray-400">
+                  Authentication
                 </p>
+
+                <h3 className="mt-1 font-bold text-white">
+                  Protected
+                </h3>
               </div>
 
-              <div className="rounded-2xl bg-black/20 p-3">
-                <p className="text-gray-500">
-                  Ultimo trade
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <p className="text-sm text-gray-400">
+                  Account Role
                 </p>
 
-                <p className="mt-1 font-semibold">
-                  {lastTrade
-                    ? formatDate(lastTrade.openDate)
-                    : "-"}
-                </p>
-              </div>
-
-              <div className="rounded-2xl bg-black/20 p-3">
-                <p className="text-gray-500">
-                  Inizio percorso
-                </p>
-
-                <p className="mt-1 font-semibold">
-                  {formatDate(journalStartDate)}
-                </p>
+                <h3 className="mt-1 font-bold text-white">
+                  {user.role}
+                </h3>
               </div>
             </div>
           </div>
