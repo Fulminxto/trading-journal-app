@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { logActivity } from "@/lib/activity";
+import { logActivity, notifyAccountMembers, } from "@/lib/activity";
 import { redirect } from "next/navigation";
 
 function getString(formData: FormData, key: string) {
@@ -240,6 +240,15 @@ export async function createAccountTrade(
     },
   });
 
+  await notifyAccountMembers({
+    accountId,
+    actorId: membership.userId,
+    type: "TRADE_CREATED",
+    title: "New trade created",
+    message: `${trade.symbol} ${trade.direction} trade added`,
+    link: `/accounts/${accountId}/diary`,
+  });
+
   await recalculateEquity(accountId);
 
   redirect(`/accounts/${accountId}/diary`);
@@ -311,6 +320,15 @@ export async function updateAccountTrade(
     },
   });
 
+  await notifyAccountMembers({
+    accountId,
+    actorId: membership.userId,
+    type: "TRADE_UPDATED",
+    title: "Trade updated",
+    message: `${trade.symbol} trade updated`,
+    link: `/accounts/${accountId}/diary`,
+  });
+
   await recalculateEquity(accountId);
 
   redirect(`/accounts/${accountId}/diary`);
@@ -343,6 +361,15 @@ export async function deleteAccountTrade(
         direction: trade.direction,
         outcome: trade.outcome,
       },
+    });
+
+    await notifyAccountMembers({
+      accountId,
+      actorId: membership.userId,
+      type: "TRADE_DELETED",
+      title: "Trade deleted",
+      message: `${trade.symbol} trade deleted`,
+      link: `/accounts/${accountId}/diary`,
     });
   }
 

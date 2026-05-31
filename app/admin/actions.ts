@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { logActivity } from "@/lib/activity";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 
@@ -91,7 +92,7 @@ async function countAccountManagers(
 }
 
 export async function createUser(formData: FormData) {
-  await requireFounder();
+  const currentUser = await requireFounder();
 
   const username = getString(formData, "username");
   const password = getString(formData, "password");
@@ -116,12 +117,24 @@ export async function createUser(formData: FormData) {
 
   const passwordHash = await bcrypt.hash(password, 10);
 
-  await prisma.user.create({
+  const user = await prisma.user.create({
     data: {
       username,
       passwordHash,
       name: name || null,
       role,
+    },
+  });
+
+  await logActivity({
+    userId: currentUser.id,
+    type: "USER_CREATED",
+    title: "User created",
+    description: `${currentUser.username} created ${user.username}`,
+    metadata: {
+      createdUserId: user.id,
+      createdUsername: user.username,
+      role: user.role,
     },
   });
 
@@ -139,6 +152,25 @@ export async function deleteUser(formData: FormData) {
 
   if (userId === currentUser.id) {
     return;
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (user) {
+    await logActivity({
+      userId: currentUser.id,
+      type: "USER_DELETED",
+      title: "User deleted",
+      description: `${currentUser.username} deleted ${user.username}`,
+      metadata: {
+        deletedUserId: user.id,
+        deletedUsername: user.username,
+      },
+    });
   }
 
   await prisma.user.delete({
@@ -195,12 +227,23 @@ export async function updateUserRole(formData: FormData) {
     }
   }
 
-  await prisma.user.update({
+  const updatedUser = await prisma.user.update({
     where: {
       id: userId,
     },
     data: {
       role,
+    },
+  });
+
+  await logActivity({
+    userId: currentUser.id,
+    type: "USER_ROLE_UPDATED",
+    title: "User role updated",
+    description: `${currentUser.username} changed role of ${updatedUser.username}`,
+    metadata: {
+      targetUserId: updatedUser.id,
+      newRole: updatedUser.role,
     },
   });
 
@@ -333,7 +376,7 @@ export async function createTradingAccount(formData: FormData) {
 }
 
 export async function addMemberToAccount(formData: FormData) {
-  await requireFounder();
+  const currentUser = await requireFounder();
 
   const username = getString(formData, "username");
 
@@ -379,11 +422,24 @@ export async function addMemberToAccount(formData: FormData) {
     },
   });
 
+  await logActivity({
+    userId: currentUser.id,
+    accountId: tradingAccountId,
+    type: "MEMBER_ADDED",
+    title: "Member added",
+    description: `${currentUser.username} added ${user.username}`,
+    metadata: {
+      memberId: user.id,
+      memberUsername: user.username,
+      role,
+    },
+  });
+
   redirect("/admin/accounts");
 }
 
 export async function updateMemberRole(formData: FormData) {
-  await requireFounder();
+  const currentUser = await requireFounder();
 
   const membershipId = getString(
     formData,
@@ -423,12 +479,25 @@ export async function updateMemberRole(formData: FormData) {
     }
   }
 
-  await prisma.accountMember.update({
-    where: {
-      id: membershipId,
-    },
-    data: {
-      role: nextRole,
+  const updatedMembership =
+    await prisma.accountMember.update({
+      where: {
+        id: membershipId,
+      },
+      data: {
+        role: nextRole,
+      },
+    });
+
+  await logActivity({
+    userId: currentUser.id,
+    accountId: updatedMembership.tradingAccountId,
+    type: "MEMBER_ROLE_UPDATED",
+    title: "Member role updated",
+    description: `${currentUser.username} updated member role`,
+    metadata: {
+      membershipId: updatedMembership.id,
+      role: updatedMembership.role,
     },
   });
 
@@ -438,7 +507,7 @@ export async function updateMemberRole(formData: FormData) {
 export async function updateMemberPermissions(
   formData: FormData
 ) {
-  await requireFounder();
+  const currentUser = await requireFounder();
 
   const membershipId = getString(
     formData,
@@ -449,40 +518,52 @@ export async function updateMemberPermissions(
     return;
   }
 
-  await prisma.accountMember.update({
-    where: {
-      id: membershipId,
-    },
-    data: {
-      canCreateTrades:
-        formData.get("canCreateTrades") === "on",
+  const updatedMembership =
+    await prisma.accountMember.update({
+      where: {
+        id: membershipId,
+      },
+      data: {
+        canCreateTrades:
+          formData.get("canCreateTrades") === "on",
 
-      canEditTrades:
-        formData.get("canEditTrades") === "on",
+        canEditTrades:
+          formData.get("canEditTrades") === "on",
 
-      canDeleteTrades:
-        formData.get("canDeleteTrades") === "on",
+        canDeleteTrades:
+          formData.get("canDeleteTrades") === "on",
 
-      canViewAnalytics:
-        formData.get("canViewAnalytics") === "on",
+        canViewAnalytics:
+          formData.get("canViewAnalytics") === "on",
 
-      canViewReports:
-        formData.get("canViewReports") === "on",
+        canViewReports:
+          formData.get("canViewReports") === "on",
 
-      canViewCopilot:
-        formData.get("canViewCopilot") === "on",
+        canViewCopilot:
+          formData.get("canViewCopilot") === "on",
 
-      canViewMembers:
-        formData.get("canViewMembers") === "on",
+        canViewMembers:
+          formData.get("canViewMembers") === "on",
 
-      canManageMembers:
-        formData.get("canManageMembers") === "on",
+        canManageMembers:
+          formData.get("canManageMembers") === "on",
 
-      canManageRoles:
-        formData.get("canManageRoles") === "on",
+        canManageRoles:
+          formData.get("canManageRoles") === "on",
 
-      canManageAccount:
-        formData.get("canManageAccount") === "on",
+        canManageAccount:
+          formData.get("canManageAccount") === "on",
+      },
+    });
+
+  await logActivity({
+    userId: currentUser.id,
+    accountId: updatedMembership.tradingAccountId,
+    type: "MEMBER_PERMISSIONS_UPDATED",
+    title: "Permissions updated",
+    description: `${currentUser.username} updated permissions`,
+    metadata: {
+      membershipId: updatedMembership.id,
     },
   });
 
@@ -492,7 +573,7 @@ export async function updateMemberPermissions(
 export async function removeMemberFromAccount(
   formData: FormData
 ) {
-  await requireFounder();
+  const currentUser = await requireFounder();
 
   const membershipId = getString(
     formData,
@@ -523,6 +604,18 @@ export async function removeMemberFromAccount(
       return;
     }
   }
+
+  await logActivity({
+    userId: currentUser.id,
+    accountId: membership.tradingAccountId,
+    type: "MEMBER_REMOVED",
+    title: "Member removed",
+    description: `${currentUser.username} removed a member`,
+    metadata: {
+      membershipId: membership.id,
+      userId: membership.userId,
+    },
+  });
 
   await prisma.accountMember.delete({
     where: {
