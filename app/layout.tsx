@@ -1,15 +1,47 @@
 import "./globals.css";
 
+import type {
+  Metadata,
+  Viewport,
+} from "next";
+
 import { Toaster } from "sonner";
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import AppShell from "@/components/AppShell";
+import PWARegister from "@/components/PWARegister";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "VOLTIS",
   description:
     "Performance Operating System for disciplined traders.",
+  applicationName: "VOLTIS",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "VOLTIS",
+    statusBarStyle: "black-translucent",
+  },
+  icons: {
+    icon: [
+      {
+        url: "/icons/voltis.svg",
+        type: "image/svg+xml",
+      },
+    ],
+    apple: [
+      {
+        url: "/icons/voltis.svg",
+        type: "image/svg+xml",
+      },
+    ],
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#050b10",
+  colorScheme: "dark",
 };
 
 export const dynamic = "force-dynamic";
@@ -23,10 +55,10 @@ export default async function RootLayout({
 
   const currentUser = session?.user?.id
     ? await prisma.user.findUnique({
-        where: {
-          id: session.user.id,
-        },
-      })
+      where: {
+        id: session.user.id,
+      },
+    })
     : null;
 
   if (currentUser) {
@@ -58,7 +90,7 @@ export default async function RootLayout({
     maintenance?.blockLogin;
 
   const canBypassMaintenance =
-    currentUser?.role === "MANAGER" ||
+    currentUser?.role === "FOUNDER" ||
     currentUser?.role === "ADMIN";
 
   const isFrozen =
@@ -73,6 +105,8 @@ export default async function RootLayout({
     return (
       <html lang="it">
         <body className="bg-[#050b10] text-white">
+          <PWARegister />
+
           <div className="flex min-h-screen items-center justify-center p-8">
             <div className="max-w-2xl rounded-[40px] border border-blue-500/20 bg-blue-500/10 p-10 text-center">
               <p className="text-sm uppercase tracking-[0.25em] text-blue-300">
@@ -99,10 +133,15 @@ export default async function RootLayout({
     );
   }
 
-  if (isFrozen && currentUser?.role !== "MANAGER") {
+  if (
+    isFrozen &&
+    currentUser?.role !== "FOUNDER"
+  ) {
     return (
       <html lang="it">
         <body className="bg-[#050b10] text-white">
+          <PWARegister />
+
           <div className="flex min-h-screen items-center justify-center p-8">
             <div className="max-w-2xl rounded-[40px] border border-yellow-500/20 bg-yellow-500/10 p-10 text-center">
               <p className="text-sm uppercase tracking-[0.25em] text-yellow-300">
@@ -139,6 +178,8 @@ export default async function RootLayout({
   return (
     <html lang="it">
       <body className="bg-[#050b10] text-white">
+        <PWARegister />
+
         <Toaster
           position="top-right"
           richColors

@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { logActivity } from "@/lib/activity";
+import { supabaseAdmin } from "@/lib/supabase";
 
 function getString(
   formData: FormData,
@@ -35,6 +36,64 @@ function getNumber(
   }
 
   return parsed;
+}
+
+async function uploadProfileImage(
+  userId: string,
+  formData: FormData
+) {
+  const file = formData.get("profileImage");
+
+  if (!(file instanceof File)) {
+    return null;
+  }
+
+  if (file.size === 0) {
+    return null;
+  }
+
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+  ];
+
+  if (!allowedTypes.includes(file.type)) {
+    redirect("/profile?toast=invalid-image");
+  }
+
+  const maxSize = 5 * 1024 * 1024;
+
+  if (file.size > maxSize) {
+    redirect("/profile?toast=image-too-large");
+  }
+
+  const fileExtension =
+    file.name.split(".").pop() || "jpg";
+
+  const filePath = `${userId}/avatar-${Date.now()}.${fileExtension}`;
+
+  const arrayBuffer = await file.arrayBuffer();
+
+  const { error } =
+    await supabaseAdmin.storage
+      .from("profile-images")
+      .upload(filePath, arrayBuffer, {
+        contentType: file.type,
+        upsert: true,
+      });
+
+  if (error) {
+    console.error(error);
+    redirect("/profile?toast=image-upload-error");
+  }
+
+  const { data } =
+    supabaseAdmin.storage
+      .from("profile-images")
+      .getPublicUrl(filePath);
+
+  return data.publicUrl;
 }
 
 export async function updateProfile(
@@ -128,6 +187,12 @@ export async function updateProfile(
     );
   }
 
+  const uploadedImageUrl =
+    await uploadProfileImage(
+      session.user.id,
+      formData
+    );
+
   await prisma.user.update({
     where: {
       id: session.user.id,
@@ -137,8 +202,13 @@ export async function updateProfile(
       name: name || null,
       username,
       bio: bio || null,
+
       workspaceName:
         workspaceName || null,
+
+      image:
+        uploadedImageUrl ||
+        currentUser.image,
 
       tradingStyle:
         tradingStyle || null,
@@ -168,11 +238,13 @@ export async function updateProfile(
     title: "Profile updated",
     description: `${username} updated profile information`,
     metadata: {
+      imageUpdated: Boolean(uploadedImageUrl),
       fields: [
         "name",
         "username",
         "bio",
         "workspaceName",
+        "image",
         "tradingStyle",
         "favoriteMarket",
         "timezone",

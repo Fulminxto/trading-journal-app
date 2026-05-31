@@ -231,8 +231,8 @@ export default async function ProfilePage({
 
                 <span
                   className={`rounded-xl px-3 py-1 text-xs font-black uppercase tracking-[0.16em] ${online
-                      ? "bg-green-500/10 text-green-400"
-                      : "bg-white/10 text-gray-400"
+                    ? "bg-green-500/10 text-green-400"
+                    : "bg-white/10 text-gray-400"
                     }`}
                 >
                   {online ? "Online" : "Offline"}
@@ -327,6 +327,27 @@ export default async function ProfilePage({
             <h2 className="mt-1 text-2xl font-bold">
               Edit Profile
             </h2>
+
+            <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-5">
+              <p className="text-sm text-gray-400">
+                Profile Image
+              </p>
+
+              <h3 className="mt-2 text-lg font-bold">
+                Upload avatar
+              </h3>
+
+              <p className="mt-2 text-sm text-gray-500">
+                Carica un’immagine profilo in formato JPG, PNG o WEBP. Dimensione massima: 5MB.
+              </p>
+
+              <input
+                type="file"
+                name="profileImage"
+                accept="image/jpeg,image/png,image/webp"
+                className="mt-4 w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 text-sm text-gray-300 outline-none file:mr-4 file:rounded-xl file:border-0 file:bg-green-500 file:px-4 file:py-2 file:font-bold file:text-black hover:file:bg-green-400"
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -686,8 +707,8 @@ export default async function ProfilePage({
 
                       <span
                         className={`rounded-xl px-3 py-1 text-xs font-bold ${(trade.resultUsd || 0) >= 0
-                            ? "bg-green-500/10 text-green-400"
-                            : "bg-red-500/10 text-red-400"
+                          ? "bg-green-500/10 text-green-400"
+                          : "bg-red-500/10 text-red-400"
                           }`}
                       >
                         {formatCurrency(trade.resultUsd || 0)}
