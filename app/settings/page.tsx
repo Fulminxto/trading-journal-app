@@ -60,131 +60,181 @@ export default async function SettingsPage({
       <div className="space-y-6">
         <form
           action={updateSettings}
-          className="rounded-3xl border border-white/10 bg-white/[0.03] p-6"
+          className="space-y-6"
         >
-          <div className="mb-6 flex items-center gap-3">
-            <Palette
-              size={22}
-              className="text-green-400"
-            />
+          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+            <div className="mb-6 flex items-center gap-3">
+              <Palette
+                size={22}
+                className="text-green-400"
+              />
 
-            <div>
-              <p className="text-sm text-gray-400">
-                Appearance
-              </p>
+              <div>
+                <p className="text-sm text-gray-400">
+                  Appearance
+                </p>
 
-              <h2 className="text-2xl font-bold">
-                Tema & UI
-              </h2>
+                <h2 className="text-2xl font-bold">
+                  Tema & UI
+                </h2>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+              <div className="rounded-2xl border border-green-500/30 bg-green-500/10 p-5">
+                <p className="text-sm text-gray-400">
+                  Theme
+                </p>
+
+                <h3 className="mt-2 text-lg font-bold">
+                  Dark Mode
+                </h3>
+
+                <p className="mt-2 text-sm text-gray-500">
+                  Tema principale attivo.
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                <p className="text-sm text-gray-400">
+                  Accent Color
+                </p>
+
+                <h3 className="mt-2 text-lg font-bold">
+                  VOLTIS Green
+                </h3>
+
+                <p className="mt-2 text-sm text-gray-500">
+                  Colore identità della piattaforma.
+                </p>
+              </div>
+
+              <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-sm text-gray-400">
+                      Compact Mode
+                    </p>
+
+                    <h3 className="mt-2 text-lg font-bold">
+                      Minimal layout
+                    </h3>
+
+                    <p className="mt-2 text-sm text-gray-500">
+                      Riduce la densità visiva dell’interfaccia.
+                    </p>
+                  </div>
+
+                  <input
+                    type="checkbox"
+                    name="compactMode"
+                    defaultChecked={user.compactMode}
+                    className="mt-1 h-5 w-5"
+                  />
+                </div>
+              </label>
+
+              <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-sm text-gray-400">
+                      Performance Blur
+                    </p>
+
+                    <h3 className="mt-2 text-lg font-bold">
+                      Hide balances
+                    </h3>
+
+                    <p className="mt-2 text-sm text-gray-500">
+                      Nasconde valori sensibili durante l’utilizzo.
+                    </p>
+                  </div>
+
+                  <input
+                    type="checkbox"
+                    name="performanceBlur"
+                    defaultChecked={user.performanceBlur}
+                    className="mt-1 h-5 w-5"
+                  />
+                </div>
+              </label>
+            </div>
+
+            <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div>
+                <p className="mb-2 text-sm text-gray-400">
+                  Default Currency
+                </p>
+
+                <select
+                  name="defaultCurrency"
+                  defaultValue={user.defaultCurrency}
+                  className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+                >
+                  <option value="USD">
+                    USD — US Dollar
+                  </option>
+                  <option value="EUR">
+                    EUR — Euro
+                  </option>
+                  <option value="JPY">
+                    JPY — Japanese Yen
+                  </option>
+                  <option value="GBP">
+                    GBP — British Pound
+                  </option>
+                </select>
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <div className="rounded-2xl border border-green-500/30 bg-green-500/10 p-5">
-              <p className="text-sm text-gray-400">
-                Theme
-              </p>
+          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+            <div className="mb-6 flex items-center gap-3">
+              <Bell
+                size={22}
+                className="text-green-400"
+              />
 
-              <h3 className="mt-2 text-lg font-bold">
-                Dark Mode
-              </h3>
-            </div>
+              <div>
+                <p className="text-sm text-gray-400">
+                  Notifications
+                </p>
 
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-              <p className="text-sm text-gray-400">
-                Accent Color
-              </p>
-
-              <h3 className="mt-2 text-lg font-bold">
-                VOLTIS Green
-              </h3>
-            </div>
-
-            <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-sm text-gray-400">
-                    Compact Mode
-                  </p>
-
-                  <h3 className="mt-2 text-lg font-bold">
-                    Minimal layout
-                  </h3>
-                </div>
-
-                <input
-                  type="checkbox"
-                  name="compactMode"
-                  defaultChecked={user.compactMode}
-                  className="mt-1 h-5 w-5"
-                />
+                <h2 className="text-2xl font-bold">
+                  Alerts & Activity
+                </h2>
               </div>
-            </label>
-
-            <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-sm text-gray-400">
-                    Performance Blur
-                  </p>
-
-                  <h3 className="mt-2 text-lg font-bold">
-                    Hide balances
-                  </h3>
-                </div>
-
-                <input
-                  type="checkbox"
-                  name="performanceBlur"
-                  defaultChecked={user.performanceBlur}
-                  className="mt-1 h-5 w-5"
-                />
-              </div>
-            </label>
-          </div>
-
-          <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div>
-              <p className="mb-2 text-sm text-gray-400">
-                Default Currency
-              </p>
-
-              <select
-                name="defaultCurrency"
-                defaultValue={user.defaultCurrency}
-                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-              >
-                <option value="USD">USD — US Dollar</option>
-                <option value="EUR">EUR — Euro</option>
-                <option value="JPY">JPY — Japanese Yen</option>
-                <option value="GBP">GBP — British Pound</option>
-              </select>
             </div>
 
-            <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-sm text-gray-400">
-                    Email Notifications
-                  </p>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+              <div className="rounded-2xl border border-green-500/20 bg-green-500/[0.04] p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-sm text-gray-400">
+                      In-app Notifications
+                    </p>
 
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                    <h3 className="mt-2 text-lg font-bold text-green-400">
+                      Enabled
+                    </h3>
+
+                    <p className="mt-2 text-sm text-gray-500">
+                      Tutte le notifiche importanti arrivano direttamente dentro VOLTIS tramite il Notification Center.
+                    </p>
+                  </div>
+
+                  <span className="rounded-xl bg-green-500/10 px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-green-400">
+                    Active
+                  </span>
+                </div>
+              </div>
+
+              <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
                     <p className="text-sm text-gray-400">
                       Review Reminders
                     </p>
-
-                    <label className="mt-4 flex items-center gap-3">
-                      <input
-                        type="checkbox"
-                        name="reviewReminders"
-                        defaultChecked={user.reviewReminders}
-                        className="h-5 w-5 rounded border-white/20 bg-black"
-                      />
-
-                      <span className="text-sm text-gray-400">
-                        Enable reminders
-                      </span>
-                    </label>
 
                     <h3 className="mt-2 text-lg font-bold">
                       {user.reviewReminders
@@ -197,23 +247,21 @@ export default async function SettingsPage({
                     </p>
                   </div>
 
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                  <input
+                    type="checkbox"
+                    name="reviewReminders"
+                    defaultChecked={user.reviewReminders}
+                    className="mt-1 h-5 w-5"
+                  />
+                </div>
+              </label>
+
+              <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
                     <p className="text-sm text-gray-400">
                       Session Lock Alerts
                     </p>
-
-                    <label className="mt-4 flex items-center gap-3">
-                      <input
-                        type="checkbox"
-                        name="sessionLockAlerts"
-                        defaultChecked={user.sessionLockAlerts}
-                        className="h-5 w-5 rounded border-white/20 bg-black"
-                      />
-
-                      <span className="text-sm text-gray-400">
-                        Enable alerts
-                      </span>
-                    </label>
 
                     <h3 className="mt-2 text-lg font-bold">
                       {user.sessionLockAlerts
@@ -226,23 +274,21 @@ export default async function SettingsPage({
                     </p>
                   </div>
 
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                  <input
+                    type="checkbox"
+                    name="sessionLockAlerts"
+                    defaultChecked={user.sessionLockAlerts}
+                    className="mt-1 h-5 w-5"
+                  />
+                </div>
+              </label>
+
+              <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
                     <p className="text-sm text-gray-400">
                       Daily Reminder
                     </p>
-
-                    <label className="mt-4 flex items-center gap-3">
-                      <input
-                        type="checkbox"
-                        name="dailyTradingReminder"
-                        defaultChecked={user.dailyTradingReminder}
-                        className="h-5 w-5 rounded border-white/20 bg-black"
-                      />
-
-                      <span className="text-sm text-gray-400">
-                        Enable daily reminder
-                      </span>
-                    </label>
 
                     <h3 className="mt-2 text-lg font-bold">
                       {user.dailyTradingReminder
@@ -255,69 +301,54 @@ export default async function SettingsPage({
                     </p>
                   </div>
 
-                  <h3 className="mt-2 text-lg font-bold">
-                    Performance alerts
-                  </h3>
+                  <input
+                    type="checkbox"
+                    name="dailyTradingReminder"
+                    defaultChecked={user.dailyTradingReminder}
+                    className="mt-1 h-5 w-5"
+                  />
                 </div>
+              </label>
+            </div>
 
-                <input
-                  type="checkbox"
-                  name="emailNotifications"
-                  defaultChecked={user.emailNotifications}
-                  className="mt-1 h-5 w-5"
-                />
+            <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                <p className="text-sm text-gray-400">
+                  Trading alerts
+                </p>
+
+                <h3 className="mt-2 text-lg font-bold">
+                  Enabled
+                </h3>
+
+                <p className="mt-2 text-sm text-gray-500">
+                  Notifiche interne per trade, account e membri.
+                </p>
               </div>
-            </label>
+
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                <p className="text-sm text-gray-400">
+                  Weekly reports
+                </p>
+
+                <h3 className="mt-2 text-lg font-bold">
+                  Coming soon
+                </h3>
+
+                <p className="mt-2 text-sm text-gray-500">
+                  Report automatici settimanali in una futura versione.
+                </p>
+              </div>
+            </div>
           </div>
 
           <button
             type="submit"
-            className="mt-6 rounded-2xl bg-green-500 px-6 py-4 font-bold text-black transition hover:bg-green-400"
+            className="rounded-2xl bg-green-500 px-6 py-4 font-bold text-black transition hover:bg-green-400"
           >
             Salva impostazioni
           </button>
         </form>
-
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <div className="mb-6 flex items-center gap-3">
-            <Bell
-              size={22}
-              className="text-green-400"
-            />
-
-            <div>
-              <p className="text-sm text-gray-400">
-                Notifications
-              </p>
-
-              <h2 className="text-2xl font-bold">
-                Alerts & Activity
-              </h2>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-              <p className="text-sm text-gray-400">
-                Trading alerts
-              </p>
-
-              <h3 className="mt-2 text-lg font-bold">
-                Enabled
-              </h3>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-              <p className="text-sm text-gray-400">
-                Weekly reports
-              </p>
-
-              <h3 className="mt-2 text-lg font-bold">
-                Coming soon
-              </h3>
-            </div>
-          </div>
-        </div>
 
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <div className="mb-6 flex items-center gap-3">
@@ -338,7 +369,10 @@ export default async function SettingsPage({
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <button className="rounded-2xl border border-white/10 bg-black/20 p-5 text-left transition hover:bg-white/[0.04]">
+            <button
+              type="button"
+              className="rounded-2xl border border-white/10 bg-black/20 p-5 text-left transition hover:bg-white/[0.04]"
+            >
               <p className="text-sm text-gray-400">
                 Export trades
               </p>
@@ -348,7 +382,10 @@ export default async function SettingsPage({
               </h3>
             </button>
 
-            <button className="rounded-2xl border border-white/10 bg-black/20 p-5 text-left transition hover:bg-white/[0.04]">
+            <button
+              type="button"
+              className="rounded-2xl border border-white/10 bg-black/20 p-5 text-left transition hover:bg-white/[0.04]"
+            >
               <p className="text-sm text-gray-400">
                 Cloud backup
               </p>
@@ -387,6 +424,10 @@ export default async function SettingsPage({
               <h3 className="mt-2 text-lg font-bold">
                 Protected
               </h3>
+
+              <p className="mt-2 text-sm text-gray-500">
+                Accesso protetto tramite credenziali.
+              </p>
             </div>
 
             <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
@@ -397,6 +438,10 @@ export default async function SettingsPage({
               <h3 className="mt-2 text-lg font-bold">
                 Active
               </h3>
+
+              <p className="mt-2 text-sm text-gray-500">
+                Sessione attiva sul dispositivo corrente.
+              </p>
             </div>
           </div>
         </div>
@@ -482,7 +527,10 @@ export default async function SettingsPage({
             </h2>
 
             <div className="mt-6 space-y-4">
-              <button className="w-full rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-left transition hover:bg-red-500/20">
+              <button
+                type="button"
+                className="w-full rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-left transition hover:bg-red-500/20"
+              >
                 <p className="text-sm text-red-200">
                   Reset preferences
                 </p>
@@ -492,7 +540,10 @@ export default async function SettingsPage({
                 </h3>
               </button>
 
-              <button className="w-full rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-left transition hover:bg-red-500/20">
+              <button
+                type="button"
+                className="w-full rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-left transition hover:bg-red-500/20"
+              >
                 <p className="text-sm text-red-200">
                   Delete account
                 </p>
