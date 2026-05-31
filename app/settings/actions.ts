@@ -24,6 +24,18 @@ function getBoolean(
   return formData.get(key) === "on";
 }
 
+function getAllowedValue(
+  value: string,
+  allowedValues: string[],
+  fallback: string
+) {
+  if (allowedValues.includes(value)) {
+    return value;
+  }
+
+  return fallback;
+}
+
 export async function updateSettings(
   formData: FormData
 ) {
@@ -34,25 +46,50 @@ export async function updateSettings(
   }
 
   const defaultCurrency =
-    getString(
-      formData,
-      "defaultCurrency"
-    ) || "USD";
+    getAllowedValue(
+      getString(formData, "defaultCurrency"),
+      ["USD", "EUR", "JPY", "GBP"],
+      "USD"
+    );
 
-  const compactMode = getBoolean(
-    formData,
-    "compactMode"
-  );
+  const appLanguage =
+    getAllowedValue(
+      getString(formData, "appLanguage"),
+      ["it", "en", "uk", "es", "fr", "de"],
+      "it"
+    );
 
-  const performanceBlur = getBoolean(
-    formData,
-    "performanceBlur"
-  );
+  const themePreference =
+    getAllowedValue(
+      getString(formData, "themePreference"),
+      ["dark", "light", "system"],
+      "dark"
+    );
 
-  const emailNotifications =
+  const accentColor =
+    getAllowedValue(
+      getString(formData, "accentColor"),
+      ["green", "blue", "purple", "amber", "red"],
+      "green"
+    );
+
+  const appIconVariant =
+    getAllowedValue(
+      getString(formData, "appIconVariant"),
+      ["classic", "dark", "premium", "minimal"],
+      "classic"
+    );
+
+  const compactMode =
     getBoolean(
       formData,
-      "emailNotifications"
+      "compactMode"
+    );
+
+  const performanceBlur =
+    getBoolean(
+      formData,
+      "performanceBlur"
     );
 
   const reviewReminders =
@@ -80,9 +117,13 @@ export async function updateSettings(
 
     data: {
       defaultCurrency,
+      appLanguage,
+      themePreference,
+      accentColor,
+      appIconVariant,
+
       compactMode,
       performanceBlur,
-      emailNotifications,
 
       reviewReminders,
       sessionLockAlerts,

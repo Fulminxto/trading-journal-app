@@ -6,6 +6,8 @@ import {
   ShieldAlert,
   LifeBuoy,
   BookOpen,
+  Globe,
+  Smartphone,
 } from "lucide-react";
 
 import { auth } from "@/lib/auth";
@@ -55,6 +57,10 @@ export default async function SettingsPage({
           <Settings className="text-green-400" />
           Settings
         </h1>
+
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-400">
+          Gestisci preferenze, notifiche interne, sicurezza, lingua, aspetto e configurazione dell’app.
+        </p>
       </div>
 
       <div className="space-y-6">
@@ -62,6 +68,95 @@ export default async function SettingsPage({
           action={updateSettings}
           className="space-y-6"
         >
+          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+            <div className="mb-6 flex items-center gap-3">
+              <Globe
+                size={22}
+                className="text-green-400"
+              />
+
+              <div>
+                <p className="text-sm text-gray-400">
+                  Language
+                </p>
+
+                <h2 className="text-2xl font-bold">
+                  Lingua & Localizzazione
+                </h2>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div>
+                <p className="mb-2 text-sm text-gray-400">
+                  App Language
+                </p>
+
+                <select
+                  name="appLanguage"
+                  defaultValue={user.appLanguage}
+                  className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+                >
+                  <option value="it">
+                    Italiano
+                  </option>
+
+                  <option value="en">
+                    English
+                  </option>
+
+                  <option value="uk">
+                    Українська
+                  </option>
+
+                  <option value="es">
+                    Español
+                  </option>
+
+                  <option value="fr">
+                    Français
+                  </option>
+
+                  <option value="de">
+                    Deutsch
+                  </option>
+                </select>
+
+                <p className="mt-2 text-xs text-gray-500">
+                  La traduzione completa verrà collegata nella fase finale del Settings Center.
+                </p>
+              </div>
+
+              <div>
+                <p className="mb-2 text-sm text-gray-400">
+                  Default Currency
+                </p>
+
+                <select
+                  name="defaultCurrency"
+                  defaultValue={user.defaultCurrency}
+                  className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+                >
+                  <option value="USD">
+                    USD — US Dollar
+                  </option>
+
+                  <option value="EUR">
+                    EUR — Euro
+                  </option>
+
+                  <option value="JPY">
+                    JPY — Japanese Yen
+                  </option>
+
+                  <option value="GBP">
+                    GBP — British Pound
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
           <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
             <div className="mb-6 flex items-center gap-3">
               <Palette
@@ -81,33 +176,77 @@ export default async function SettingsPage({
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-              <div className="rounded-2xl border border-green-500/30 bg-green-500/10 p-5">
+              <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
                 <p className="text-sm text-gray-400">
                   Theme
                 </p>
 
                 <h3 className="mt-2 text-lg font-bold">
-                  Dark Mode
+                  Interface mode
                 </h3>
 
                 <p className="mt-2 text-sm text-gray-500">
-                  Tema principale attivo.
+                  Scegli la modalità visiva dell’app.
                 </p>
-              </div>
 
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                <select
+                  name="themePreference"
+                  defaultValue={user.themePreference}
+                  className="mt-4 w-full rounded-xl border border-white/10 bg-zinc-900 p-3 text-sm outline-none focus:border-green-500/40"
+                >
+                  <option value="dark">
+                    Dark
+                  </option>
+
+                  <option value="light">
+                    Light
+                  </option>
+
+                  <option value="system">
+                    System
+                  </option>
+                </select>
+              </label>
+
+              <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
                 <p className="text-sm text-gray-400">
                   Accent Color
                 </p>
 
                 <h3 className="mt-2 text-lg font-bold">
-                  VOLTIS Green
+                  Visual identity
                 </h3>
 
                 <p className="mt-2 text-sm text-gray-500">
-                  Colore identità della piattaforma.
+                  Colore principale della piattaforma.
                 </p>
-              </div>
+
+                <select
+                  name="accentColor"
+                  defaultValue={user.accentColor}
+                  className="mt-4 w-full rounded-xl border border-white/10 bg-zinc-900 p-3 text-sm outline-none focus:border-green-500/40"
+                >
+                  <option value="green">
+                    VOLTIS Green
+                  </option>
+
+                  <option value="blue">
+                    Electric Blue
+                  </option>
+
+                  <option value="purple">
+                    Premium Purple
+                  </option>
+
+                  <option value="amber">
+                    Amber
+                  </option>
+
+                  <option value="red">
+                    Red
+                  </option>
+                </select>
+              </label>
 
               <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
                 <div className="flex items-start justify-between gap-4">
@@ -159,31 +298,75 @@ export default async function SettingsPage({
                 </div>
               </label>
             </div>
+          </div>
 
-            <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+            <div className="mb-6 flex items-center gap-3">
+              <Smartphone
+                size={22}
+                className="text-green-400"
+              />
+
               <div>
-                <p className="mb-2 text-sm text-gray-400">
-                  Default Currency
+                <p className="text-sm text-gray-400">
+                  App Experience
+                </p>
+
+                <h2 className="text-2xl font-bold">
+                  Icona & Installazione
+                </h2>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                <p className="text-sm text-gray-400">
+                  App Icon Variant
+                </p>
+
+                <h3 className="mt-2 text-lg font-bold">
+                  Home screen style
+                </h3>
+
+                <p className="mt-2 text-sm text-gray-500">
+                  Scegli la variante dell’icona dell’app. La PWA userà questa preferenza nella fase finale.
                 </p>
 
                 <select
-                  name="defaultCurrency"
-                  defaultValue={user.defaultCurrency}
-                  className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+                  name="appIconVariant"
+                  defaultValue={user.appIconVariant}
+                  className="mt-4 w-full rounded-xl border border-white/10 bg-zinc-900 p-3 text-sm outline-none focus:border-green-500/40"
                 >
-                  <option value="USD">
-                    USD — US Dollar
+                  <option value="classic">
+                    Classic
                   </option>
-                  <option value="EUR">
-                    EUR — Euro
+
+                  <option value="dark">
+                    Dark
                   </option>
-                  <option value="JPY">
-                    JPY — Japanese Yen
+
+                  <option value="premium">
+                    Premium
                   </option>
-                  <option value="GBP">
-                    GBP — British Pound
+
+                  <option value="minimal">
+                    Minimal
                   </option>
                 </select>
+              </label>
+
+              <div className="rounded-2xl border border-green-500/20 bg-green-500/[0.04] p-5">
+                <p className="text-sm text-gray-400">
+                  PWA Status
+                </p>
+
+                <h3 className="mt-2 text-lg font-bold text-green-400">
+                  Planned
+                </h3>
+
+                <p className="mt-2 text-sm text-gray-500">
+                  Installazione come app su desktop, mobile e tablet verrà completata nel blocco PWA.
+                </p>
               </div>
             </div>
           </div>
@@ -201,7 +384,7 @@ export default async function SettingsPage({
                 </p>
 
                 <h2 className="text-2xl font-bold">
-                  Alerts & Activity
+                  In-app Alerts
                 </h2>
               </div>
             </div>
@@ -309,36 +492,6 @@ export default async function SettingsPage({
                   />
                 </div>
               </label>
-            </div>
-
-            <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-                <p className="text-sm text-gray-400">
-                  Trading alerts
-                </p>
-
-                <h3 className="mt-2 text-lg font-bold">
-                  Enabled
-                </h3>
-
-                <p className="mt-2 text-sm text-gray-500">
-                  Notifiche interne per trade, account e membri.
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-                <p className="text-sm text-gray-400">
-                  Weekly reports
-                </p>
-
-                <h3 className="mt-2 text-lg font-bold">
-                  Coming soon
-                </h3>
-
-                <p className="mt-2 text-sm text-gray-500">
-                  Report automatici settimanali in una futura versione.
-                </p>
-              </div>
             </div>
           </div>
 

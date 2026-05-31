@@ -62,6 +62,12 @@ model User {
   setupStyle        String?
 
   defaultCurrency    String   @default("USD")
+
+  appLanguage     String @default("it")
+  themePreference String @default("dark")
+  accentColor     String @default("green")
+  appIconVariant  String @default("classic")
+
   compactMode        Boolean  @default(false)
   performanceBlur    Boolean  @default(false)
   emailNotifications Boolean  @default(false)
