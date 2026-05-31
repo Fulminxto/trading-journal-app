@@ -494,10 +494,12 @@ export async function updateMemberRole(formData: FormData) {
     accountId: updatedMembership.tradingAccountId,
     type: "MEMBER_ROLE_UPDATED",
     title: "Member role updated",
-    description: `${currentUser.username} updated member role`,
+    description: `${currentUser.username} changed role`,
     metadata: {
       membershipId: updatedMembership.id,
-      role: updatedMembership.role,
+      before: membership.role,
+      after: updatedMembership.role,
+      field: "role",
     },
   });
 
@@ -515,6 +517,17 @@ export async function updateMemberPermissions(
   );
 
   if (!membershipId) {
+    return;
+  }
+
+  const membership =
+    await prisma.accountMember.findUnique({
+      where: {
+        id: membershipId,
+      },
+    });
+
+  if (!membership) {
     return;
   }
 
@@ -564,6 +577,70 @@ export async function updateMemberPermissions(
     description: `${currentUser.username} updated permissions`,
     metadata: {
       membershipId: updatedMembership.id,
+
+      before: {
+        canCreateTrades:
+          membership.canCreateTrades,
+
+        canEditTrades:
+          membership.canEditTrades,
+
+        canDeleteTrades:
+          membership.canDeleteTrades,
+
+        canViewAnalytics:
+          membership.canViewAnalytics,
+
+        canViewReports:
+          membership.canViewReports,
+
+        canViewCopilot:
+          membership.canViewCopilot,
+
+        canViewMembers:
+          membership.canViewMembers,
+
+        canManageMembers:
+          membership.canManageMembers,
+
+        canManageRoles:
+          membership.canManageRoles,
+
+        canManageAccount:
+          membership.canManageAccount,
+      },
+
+      after: {
+        canCreateTrades:
+          updatedMembership.canCreateTrades,
+
+        canEditTrades:
+          updatedMembership.canEditTrades,
+
+        canDeleteTrades:
+          updatedMembership.canDeleteTrades,
+
+        canViewAnalytics:
+          updatedMembership.canViewAnalytics,
+
+        canViewReports:
+          updatedMembership.canViewReports,
+
+        canViewCopilot:
+          updatedMembership.canViewCopilot,
+
+        canViewMembers:
+          updatedMembership.canViewMembers,
+
+        canManageMembers:
+          updatedMembership.canManageMembers,
+
+        canManageRoles:
+          updatedMembership.canManageRoles,
+
+        canManageAccount:
+          updatedMembership.canManageAccount,
+      },
     },
   });
 

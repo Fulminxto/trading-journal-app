@@ -18,6 +18,22 @@ type CreateNotificationParams = {
   link?: string;
 };
 
+async function touchUserActivity(userId?: string | null) {
+  if (!userId) {
+    return;
+  }
+
+  await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      lastSeenAt: new Date(),
+      lastActivityAt: new Date(),
+    },
+  });
+}
+
 export async function logActivity({
   userId,
   accountId,
@@ -36,6 +52,8 @@ export async function logActivity({
       metadata: metadata ?? undefined,
     },
   });
+
+  await touchUserActivity(userId);
 }
 
 export async function createNotification({

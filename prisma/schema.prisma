@@ -39,6 +39,10 @@ model User {
   frozenAt    DateTime?
 
   lastSeenAt DateTime?
+  lastLoginAt    DateTime?
+  lastActivityAt DateTime?
+
+  loginCount     Int @default(0)
 
   activityLogs ActivityLog[]
   notifications Notification[]

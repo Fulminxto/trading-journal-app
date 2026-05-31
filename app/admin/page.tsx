@@ -110,6 +110,12 @@ export default async function AdminPage() {
           const isFrozen =
             user.status === "FROZEN";
 
+          const isOnline =
+            user.lastActivityAt &&
+            Date.now() -
+            new Date(user.lastActivityAt).getTime() <
+            5 * 60 * 1000;
+
           return (
             <div
               key={user.id}
@@ -121,6 +127,16 @@ export default async function AdminPage() {
                     <h2 className="text-2xl font-bold">
                       {user.username}
                     </h2>
+
+                    {isOnline ? (
+                      <span className="rounded-xl bg-green-500/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] text-green-400">
+                        Online
+                      </span>
+                    ) : (
+                      <span className="rounded-xl bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] text-gray-400">
+                        Offline
+                      </span>
+                    )}
 
                     {isFrozen && (
                       <span className="rounded-xl bg-yellow-500/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] text-yellow-300">
@@ -137,6 +153,26 @@ export default async function AdminPage() {
                     Created:{" "}
                     {new Date(user.createdAt).toLocaleDateString("it-IT")}
                   </p>
+
+                  {user.loginCount > 0 && (
+                    <p className="mt-1 text-xs text-gray-500">
+                      Logins: {user.loginCount}
+                    </p>
+                  )}
+
+                  {user.lastLoginAt && (
+                    <p className="mt-1 text-xs text-gray-500">
+                      Last login:{" "}
+                      {new Date(user.lastLoginAt).toLocaleString("it-IT")}
+                    </p>
+                  )}
+
+                  {user.lastActivityAt && (
+                    <p className="mt-1 text-xs text-gray-500">
+                      Last activity:{" "}
+                      {new Date(user.lastActivityAt).toLocaleString("it-IT")}
+                    </p>
+                  )}
 
                   {user.lastSeenAt && (
                     <p className="mt-1 text-xs text-gray-500">

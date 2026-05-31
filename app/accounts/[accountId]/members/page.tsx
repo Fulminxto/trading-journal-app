@@ -104,6 +104,9 @@ export default async function MembersPage({
                         name: true,
                         role: true,
                         lastSeenAt: true,
+                        lastLoginAt: true,
+                        lastActivityAt: true,
+                        loginCount: true,
                     },
                 },
             },
@@ -256,7 +259,7 @@ export default async function MembersPage({
                 {membersWithStats.map((member) => {
                     const activity =
                         getActivityStatus(
-                            member.user.lastSeenAt
+                            member.user.lastActivityAt
                         );
 
                     return (
@@ -281,6 +284,10 @@ export default async function MembersPage({
                                     <p className="mt-3 text-sm text-gray-500">
                                         Role: {member.role}
                                     </p>
+
+                                    <p className="mt-1 text-sm text-gray-500">
+                                        Logins: {member.user.loginCount}
+                                    </p>
                                 </div>
 
                                 <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/10 px-5 py-3 text-sm font-bold uppercase tracking-[0.15em] text-cyan-300">
@@ -299,6 +306,27 @@ export default async function MembersPage({
                                         <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
                                             Last Activity
                                         </p>
+
+                                        <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                                            <div className="flex items-center gap-3">
+                                                <Clock3
+                                                    size={18}
+                                                    className="text-cyan-400"
+                                                />
+
+                                                <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
+                                                    Last Login
+                                                </p>
+                                            </div>
+
+                                            <p className="mt-4 text-lg font-black text-white">
+                                                {member.user.lastLoginAt
+                                                    ? new Date(
+                                                        member.user.lastLoginAt
+                                                    ).toLocaleString("it-IT")
+                                                    : "Never"}
+                                            </p>
+                                        </div>
                                     </div>
 
                                     <p className="mt-4 text-lg font-black text-white">

@@ -59,6 +59,11 @@ const baseLinks = [
     icon: Bot,
   },
   {
+    path: "workspace",
+    label: "Workspace Intelligence",
+    icon: Users,
+  },
+  {
     path: "sessions",
     label: "Sessions",
     icon: BookOpen,
@@ -224,6 +229,8 @@ export default function Sidebar({
           {!isCollapsed && (
             <button
               onClick={onClose}
+              aria-label="Close sidebar"
+              title="Close sidebar"
               className="rounded-lg p-2 text-gray-400 hover:bg-white/10 lg:hidden"
             >
               <X size={20} />
