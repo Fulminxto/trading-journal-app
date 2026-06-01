@@ -190,7 +190,7 @@ export default async function AdminAccountsPage() {
 
           <div className="flex flex-wrap gap-3">
             <a
-              href={`/accounts/${account.id}/dashboard`}
+              href={`/accounts/${account.id}`}
               className="rounded-xl bg-green-500 px-4 py-3 text-sm font-bold text-black hover:bg-green-400"
             >
               Open Account
@@ -669,3 +669,4 @@ export default async function AdminAccountsPage() {
     </div>
   );
 }
+

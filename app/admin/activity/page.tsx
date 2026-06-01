@@ -95,7 +95,7 @@ export default async function AdminActivityPage() {
 
                 {activity.accountId && (
                   <Link
-                    href={`/accounts/${activity.accountId}/dashboard`}
+                    href={`/accounts/${activity.accountId}`}
                     className="rounded-xl bg-white/10 px-4 py-3 text-sm font-semibold hover:bg-white/20"
                   >
                     Open Account

@@ -175,7 +175,7 @@ export default async function ManageMyAccountsPage() {
                     </div>
 
                     <a
-                        href={`/accounts/${account.id}/dashboard`}
+                        href={`/accounts/${account.id}`}
                         className="rounded-2xl bg-green-500 px-4 py-3 text-center text-sm font-black text-black hover:bg-green-400"
                     >
                         Open Account

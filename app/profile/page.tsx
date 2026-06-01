@@ -641,7 +641,7 @@ export default async function ProfilePage({
                 user.memberships.map((membership) => (
                   <Link
                     key={membership.id}
-                    href={`/accounts/${membership.tradingAccount.id}/dashboard`}
+                    href={`/accounts/${membership.tradingAccount.id}`}
                     className="block rounded-2xl border border-white/10 bg-black/20 p-4 transition hover:bg-white/[0.04]"
                   >
                     <div className="flex items-center justify-between gap-4">

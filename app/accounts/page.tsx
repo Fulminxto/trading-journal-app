@@ -134,7 +134,7 @@ export default async function AccountsPage() {
         key={account.id}
         className="card-hover group rounded-3xl border border-white/10 bg-white/[0.03] p-6"
       >
-        <a href={`/accounts/${account.id}/dashboard`}>
+        <a href={`/accounts/${account.id}`}>
           <div className="mb-6 flex items-center justify-between">
             <div className="rounded-2xl border border-white/10 bg-black/20 p-4 text-white">
               <Wallet size={24} />
@@ -245,7 +245,7 @@ export default async function AccountsPage() {
 
         <div className="mt-5 flex gap-3">
           <a
-            href={`/accounts/${account.id}/dashboard`}
+            href={`/accounts/${account.id}`}
             className="flex-1 rounded-2xl bg-green-500 px-4 py-3 text-center text-sm font-bold text-black hover:bg-green-400"
           >
             Open Account

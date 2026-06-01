@@ -33,10 +33,7 @@ type HubCard = {
   accentClass: string;
 };
 
-function formatCurrency(
-  value: number,
-  currency: string
-) {
+function formatCurrency(value: number, currency: string) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
@@ -64,11 +61,7 @@ function getResultTone(value: number) {
   return "text-yellow-400";
 }
 
-function AccountHubCard({
-  card,
-}: {
-  card: HubCard;
-}) {
+function AccountHubCard({ card }: { card: HubCard }) {
   const Icon = card.icon;
 
   return (
@@ -239,6 +232,13 @@ export default async function AccountPage({
       initialBalance
       : initialBalance;
 
+  const currentProfitPercent =
+    initialBalance > 0
+      ? ((currentEquity - initialBalance) /
+        initialBalance) *
+      100
+      : 0;
+
   const winRate =
     closedTrades.length > 0
       ? (wins / closedTrades.length) * 100
@@ -254,10 +254,9 @@ export default async function AccountPage({
         0,
         Math.min(
           100,
-          ((currentEquity - initialBalance) /
-            initialBalance /
+          (currentProfitPercent /
             account.profitTarget) *
-          10000
+          100
         )
       )
       : 0;
@@ -476,18 +475,12 @@ export default async function AccountPage({
           <div className="grid gap-4 sm:grid-cols-2 xl:col-span-2">
             <StatCard
               label="Current Equity"
-              value={formatCurrency(
-                currentEquity,
-                currency
-              )}
+              value={formatCurrency(currentEquity, currency)}
             />
 
             <StatCard
               label="Total PnL"
-              value={formatCurrency(
-                totalPnl,
-                currency
-              )}
+              value={formatCurrency(totalPnl, currency)}
               tone={getResultTone(totalPnl)}
             />
 
@@ -520,10 +513,7 @@ export default async function AccountPage({
           </div>
 
           <p className="mt-4 text-3xl font-black text-white">
-            {formatCurrency(
-              initialBalance,
-              currency
-            )}
+            {formatCurrency(initialBalance, currency)}
           </p>
         </div>
 
