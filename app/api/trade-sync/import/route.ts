@@ -126,6 +126,45 @@ function isSourceAllowedForMode({
     return false;
 }
 
+async function markAccountSyncError({
+    tradingAccountId,
+    error,
+    source,
+    externalTradeId,
+}: {
+    tradingAccountId: string;
+    error: string;
+    source?: string | null;
+    externalTradeId?: string | null;
+}) {
+    try {
+        await prisma.tradingAccount.update({
+            where: {
+                id: tradingAccountId,
+            },
+            data: {
+                syncStatus: "error",
+            },
+        });
+
+        await prisma.activityLog.create({
+            data: {
+                accountId: tradingAccountId,
+                type: "TRADE_SYNC_ERROR",
+                title: "Trade sync error",
+                description: error,
+                metadata: {
+                    source,
+                    externalTradeId,
+                    error,
+                },
+            },
+        });
+    } catch {
+        // Non blocchiamo la risposta API se fallisce il logging dell'errore
+    }
+}
+
 async function validateAccountSyncAccess({
     tradingAccountId,
     source,
@@ -324,74 +363,9 @@ export async function POST(request: NextRequest) {
 
     const closeDate = getDate(payload.closeDate);
 
-    const result =
-        await importSyncedTrade({
-            tradingAccountId,
-            source,
-            externalTradeId,
-
-            externalAccountId: getOptionalString(
-                payload.externalAccountId
-            ),
-
-            externalOrderId: getOptionalString(
-                payload.externalOrderId
-            ),
-
-            platform: getOptionalString(
-                payload.platform
-            ),
-
-            brokerName: getOptionalString(
-                payload.brokerName
-            ),
-
-            symbol,
-            direction,
-
-            openDate,
-
-            openTime: getOptionalString(
-                payload.openTime
-            ),
-
-            amount: getNumber(payload.amount),
-
-            openingPrice: getNumber(
-                payload.openingPrice
-            ),
-
-            stopLoss: getNumber(payload.stopLoss),
-
-            takeProfit: getNumber(
-                payload.takeProfit
-            ),
-
-            riskReward: getNumber(
-                payload.riskReward
-            ),
-
-            closeDate,
-
-            closingPrice: getNumber(
-                payload.closingPrice
-            ),
-
-            outcome: getOutcome(payload.outcome),
-
-            resultUsd: getNumber(payload.resultUsd),
-
-            commission: getNumber(
-                payload.commission
-            ),
-
-            swap: getNumber(payload.swap),
-
-            fees: getNumber(payload.fees),
-
-            rawImportData: {
-                receivedAt: new Date().toISOString(),
-
+    try {
+        const result =
+            await importSyncedTrade({
                 tradingAccountId,
                 source,
                 externalTradeId,
@@ -415,7 +389,7 @@ export async function POST(request: NextRequest) {
                 symbol,
                 direction,
 
-                openDate: openDate.toISOString(),
+                openDate,
 
                 openTime: getOptionalString(
                     payload.openTime
@@ -437,8 +411,7 @@ export async function POST(request: NextRequest) {
                     payload.riskReward
                 ),
 
-                closeDate:
-                    closeDate?.toISOString() ?? null,
+                closeDate,
 
                 closingPrice: getNumber(
                     payload.closingPrice
@@ -455,24 +428,121 @@ export async function POST(request: NextRequest) {
                 swap: getNumber(payload.swap),
 
                 fees: getNumber(payload.fees),
-            },
+
+                rawImportData: {
+                    receivedAt: new Date().toISOString(),
+
+                    tradingAccountId,
+                    source,
+                    externalTradeId,
+
+                    externalAccountId: getOptionalString(
+                        payload.externalAccountId
+                    ),
+
+                    externalOrderId: getOptionalString(
+                        payload.externalOrderId
+                    ),
+
+                    platform: getOptionalString(
+                        payload.platform
+                    ),
+
+                    brokerName: getOptionalString(
+                        payload.brokerName
+                    ),
+
+                    symbol,
+                    direction,
+
+                    openDate: openDate.toISOString(),
+
+                    openTime: getOptionalString(
+                        payload.openTime
+                    ),
+
+                    amount: getNumber(payload.amount),
+
+                    openingPrice: getNumber(
+                        payload.openingPrice
+                    ),
+
+                    stopLoss: getNumber(payload.stopLoss),
+
+                    takeProfit: getNumber(
+                        payload.takeProfit
+                    ),
+
+                    riskReward: getNumber(
+                        payload.riskReward
+                    ),
+
+                    closeDate:
+                        closeDate?.toISOString() ?? null,
+
+                    closingPrice: getNumber(
+                        payload.closingPrice
+                    ),
+
+                    outcome: getOutcome(payload.outcome),
+
+                    resultUsd: getNumber(payload.resultUsd),
+
+                    commission: getNumber(
+                        payload.commission
+                    ),
+
+                    swap: getNumber(payload.swap),
+
+                    fees: getNumber(payload.fees),
+                },
+            });
+
+        if (result.status === "error") {
+            await markAccountSyncError({
+                tradingAccountId,
+                error: result.reason,
+                source,
+                externalTradeId,
+            });
+
+            return NextResponse.json(
+                {
+                    error: result.reason,
+                },
+                {
+                    status: 400,
+                }
+            );
+        }
+
+        return NextResponse.json({
+            status: result.status,
+            tradeId: result.trade.id,
+            needsReview: result.trade.needsReview,
+            syncStatus: result.trade.syncStatus,
+        });
+    } catch (error) {
+        const errorMessage =
+            error instanceof Error
+                ? error.message
+                : "Unknown trade sync error";
+
+        await markAccountSyncError({
+            tradingAccountId,
+            error: errorMessage,
+            source,
+            externalTradeId,
         });
 
-    if (result.status === "error") {
         return NextResponse.json(
             {
-                error: result.reason,
+                error: "Trade sync import failed",
+                details: errorMessage,
             },
             {
-                status: 400,
+                status: 500,
             }
         );
     }
-
-    return NextResponse.json({
-        status: result.status,
-        tradeId: result.trade.id,
-        needsReview: result.trade.needsReview,
-        syncStatus: result.trade.syncStatus,
-    });
 }
