@@ -141,8 +141,8 @@ export default async function ManageMyAccountsPage() {
             <div
                 key={account.id}
                 className={`rounded-3xl border p-6 ${isArchived
-                        ? "border-yellow-500/20 bg-yellow-500/[0.04]"
-                        : "border-white/10 bg-white/[0.03]"
+                    ? "border-yellow-500/20 bg-yellow-500/[0.04]"
+                    : "border-white/10 bg-white/[0.03]"
                     }`}
             >
                 <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
@@ -154,8 +154,8 @@ export default async function ManageMyAccountsPage() {
 
                             <span
                                 className={`rounded-xl px-3 py-1 text-xs font-bold ${isArchived
-                                        ? "bg-yellow-500/10 text-yellow-300"
-                                        : "bg-green-500/10 text-green-400"
+                                    ? "bg-yellow-500/10 text-yellow-300"
+                                    : "bg-green-500/10 text-green-400"
                                     }`}
                             >
                                 {account.status}
@@ -203,8 +203,8 @@ export default async function ManageMyAccountsPage() {
 
                         <h4
                             className={`mt-2 font-bold ${accountPnl >= 0
-                                    ? "text-green-400"
-                                    : "text-red-400"
+                                ? "text-green-400"
+                                : "text-red-400"
                                 }`}
                         >
                             {formatCurrency(
@@ -341,7 +341,7 @@ export default async function ManageMyAccountsPage() {
                     : "bg-white/10 text-gray-300";
 
         return (
-            <section>
+            <section key={`${title}-${tone}`}>
                 <div className="mb-5 flex items-end justify-between gap-4">
                     <div>
                         <p className="text-sm text-gray-400">
@@ -416,8 +416,8 @@ export default async function ManageMyAccountsPage() {
 
                     <h2
                         className={`mt-2 text-3xl font-black ${totalPnl >= 0
-                                ? "text-green-400"
-                                : "text-red-400"
+                            ? "text-green-400"
+                            : "text-red-400"
                             }`}
                     >
                         {totalPnl.toFixed(2)}

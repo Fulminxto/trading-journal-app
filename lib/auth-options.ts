@@ -44,24 +44,19 @@ export const authOptions: NextAuthOptions = {
       },
 
       async authorize(credentials) {
-        const username =
-          credentials?.username
-            ?.trim()
-            .toLowerCase();
+        const username = credentials?.username?.trim();
 
-        const password =
-          credentials?.password;
+        const password = credentials?.password;
 
         if (!username || !password) {
           return null;
         }
 
-        const user =
-          await prisma.user.findUnique({
-            where: {
-              username,
-            },
-          });
+        const user = await prisma.user.findUnique({
+          where: {
+            username,
+          },
+        });
 
         if (!user) {
           return null;
@@ -74,19 +69,17 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const isPasswordValid =
-          await bcrypt.compare(
-            password,
-            user.passwordHash
-          );
+        const isPasswordValid = await bcrypt.compare(
+          password,
+          user.passwordHash
+        );
 
         if (!isPasswordValid) {
           const failedLoginAttempts =
             user.failedLoginAttempts + 1;
 
           const shouldLock =
-            failedLoginAttempts >=
-            MAX_FAILED_ATTEMPTS;
+            failedLoginAttempts >= MAX_FAILED_ATTEMPTS;
 
           await prisma.user.update({
             where: {
@@ -97,9 +90,7 @@ export const authOptions: NextAuthOptions = {
               lockedUntil: shouldLock
                 ? new Date(
                   Date.now() +
-                  LOCK_TIME_MINUTES *
-                  60 *
-                  1000
+                  LOCK_TIME_MINUTES * 60 * 1000
                 )
                 : null,
             },
@@ -139,35 +130,26 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, user }) {
-      const typedUser =
-        user as AuthUser | undefined;
+      const typedUser = user as AuthUser | undefined;
 
       if (typedUser) {
         token.id = typedUser.id;
-        token.username =
-          typedUser.username;
-        token.role =
-          typedUser.role;
-        token.status =
-          typedUser.status;
+        token.username = typedUser.username;
+        token.role = typedUser.role;
+        token.status = typedUser.status;
       }
 
       return token;
     },
 
-    async session({
-      session,
-      token,
-    }) {
+    async session({ session, token }) {
       if (session.user) {
-        session.user.id =
-          token.id as string;
+        session.user.id = token.id as string;
 
         session.user.username =
           token.username as string;
 
-        session.user.role =
-          token.role as string;
+        session.user.role = token.role as string;
 
         session.user.status =
           token.status as string;
