@@ -2,7 +2,10 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { logActivity, notifyAccountMembers, } from "@/lib/activity";
+import {
+  logActivity,
+  notifyAccountMembers,
+} from "@/lib/activity";
 import { redirect } from "next/navigation";
 
 function getString(formData: FormData, key: string) {
@@ -21,6 +24,20 @@ function getString(formData: FormData, key: string) {
   return trimmedValue;
 }
 
+function getLimitedString(
+  formData: FormData,
+  key: string,
+  maxLength: number
+) {
+  const value = getString(formData, key);
+
+  if (!value) {
+    return null;
+  }
+
+  return value.slice(0, maxLength);
+}
+
 function getNumber(formData: FormData, key: string) {
   const value = getString(formData, key);
 
@@ -30,11 +47,32 @@ function getNumber(formData: FormData, key: string) {
 
   const number = Number(value.replace(",", "."));
 
-  if (Number.isNaN(number)) {
+  if (!Number.isFinite(number)) {
     return null;
   }
 
   return number;
+}
+
+function getIntInRange(
+  formData: FormData,
+  key: string,
+  min: number,
+  max: number
+) {
+  const number = getNumber(formData, key);
+
+  if (number === null) {
+    return null;
+  }
+
+  const integer = Math.round(number);
+
+  if (integer < min || integer > max) {
+    return null;
+  }
+
+  return integer;
 }
 
 function getDate(formData: FormData, key: string) {
@@ -44,7 +82,52 @@ function getDate(formData: FormData, key: string) {
     return null;
   }
 
-  return new Date(value);
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  return date;
+}
+
+function getDirection(formData: FormData) {
+  const value = getString(formData, "direction");
+
+  if (!value) {
+    return "LONG";
+  }
+
+  const normalizedValue = value.toUpperCase();
+
+  if (
+    normalizedValue === "LONG" ||
+    normalizedValue === "SHORT"
+  ) {
+    return normalizedValue;
+  }
+
+  return "LONG";
+}
+
+function getOutcome(formData: FormData) {
+  const value = getString(formData, "outcome");
+
+  if (!value) {
+    return null;
+  }
+
+  const normalizedValue = value.toLowerCase();
+
+  if (
+    normalizedValue === "win" ||
+    normalizedValue === "loss" ||
+    normalizedValue === "be"
+  ) {
+    return normalizedValue;
+  }
+
+  return null;
 }
 
 async function getAccess(
@@ -80,6 +163,18 @@ async function getAccess(
   const isManager =
     String(membership.role) === "MANAGER";
 
+  const isMutatingAction =
+    options?.requireCreateTrades ||
+    options?.requireEditTrades ||
+    options?.requireDeleteTrades;
+
+  if (
+    isMutatingAction &&
+    membership.tradingAccount.status === "ARCHIVED"
+  ) {
+    redirect(`/accounts/${accountId}/dashboard`);
+  }
+
   if (
     String(membership.role) === "VIEWER" &&
     !options?.allowViewer
@@ -112,6 +207,28 @@ async function getAccess(
   }
 
   return membership;
+}
+
+async function getTradeForAccount(
+  accountId: string,
+  tradeId: number
+) {
+  if (!Number.isInteger(tradeId)) {
+    redirect(`/accounts/${accountId}/diary`);
+  }
+
+  const trade = await prisma.trade.findFirst({
+    where: {
+      id: tradeId,
+      tradingAccountId: accountId,
+    },
+  });
+
+  if (!trade) {
+    redirect(`/accounts/${accountId}/diary`);
+  }
+
+  return trade;
 }
 
 async function recalculateEquity(accountId: string) {
@@ -175,6 +292,75 @@ async function recalculateEquity(accountId: string) {
   }
 }
 
+function getTradeFormData(formData: FormData) {
+  return {
+    openTime: getLimitedString(formData, "openTime", 20),
+    reason: getLimitedString(formData, "reason", 1000),
+    strategy: getLimitedString(formData, "strategy", 120),
+
+    symbol:
+      getLimitedString(formData, "symbol", 30) ||
+      "UNKNOWN",
+
+    direction: getDirection(formData),
+
+    amount: getNumber(formData, "amount"),
+    openingPrice: getNumber(
+      formData,
+      "openingPrice"
+    ),
+    stopLoss: getNumber(formData, "stopLoss"),
+    takeProfit: getNumber(formData, "takeProfit"),
+    riskReward: getNumber(formData, "riskReward"),
+
+    closeDate: getDate(formData, "closeDate"),
+    closingPrice: getNumber(
+      formData,
+      "closingPrice"
+    ),
+
+    outcome: getOutcome(formData),
+    resultUsd: getNumber(formData, "resultUsd"),
+
+    notes: getLimitedString(formData, "notes", 2000),
+
+    session: getLimitedString(formData, "session", 80),
+    emotionalState: getLimitedString(
+      formData,
+      "emotionalState",
+      120
+    ),
+    setupQuality: getIntInRange(
+      formData,
+      "setupQuality",
+      1,
+      10
+    ),
+    executionRating: getIntInRange(
+      formData,
+      "executionRating",
+      1,
+      10
+    ),
+    confidence: getIntInRange(
+      formData,
+      "confidence",
+      1,
+      10
+    ),
+    mistakes: getLimitedString(
+      formData,
+      "mistakes",
+      1500
+    ),
+    lessonsLearned: getLimitedString(
+      formData,
+      "lessonsLearned",
+      1500
+    ),
+  };
+}
+
 export async function createAccountTrade(
   accountId: string,
   formData: FormData
@@ -189,40 +375,15 @@ export async function createAccountTrade(
     redirect(`/accounts/${accountId}/diary`);
   }
 
+  const tradeData = getTradeFormData(formData);
+
   const trade = await prisma.trade.create({
     data: {
       tradingAccountId: accountId,
       createdById: membership.userId,
 
       openDate,
-      openTime: getString(formData, "openTime"),
-      reason: getString(formData, "reason"),
-      strategy: getString(formData, "strategy"),
-
-      symbol: getString(formData, "symbol") || "UNKNOWN",
-      direction: getString(formData, "direction") || "LONG",
-
-      amount: getNumber(formData, "amount"),
-      openingPrice: getNumber(formData, "openingPrice"),
-      stopLoss: getNumber(formData, "stopLoss"),
-      takeProfit: getNumber(formData, "takeProfit"),
-      riskReward: getNumber(formData, "riskReward"),
-
-      closeDate: getDate(formData, "closeDate"),
-      closingPrice: getNumber(formData, "closingPrice"),
-
-      outcome: getString(formData, "outcome"),
-      resultUsd: getNumber(formData, "resultUsd"),
-
-      notes: getString(formData, "notes"),
-
-      session: getString(formData, "session"),
-      emotionalState: getString(formData, "emotionalState"),
-      setupQuality: getNumber(formData, "setupQuality"),
-      executionRating: getNumber(formData, "executionRating"),
-      confidence: getNumber(formData, "confidence"),
-      mistakes: getString(formData, "mistakes"),
-      lessonsLearned: getString(formData, "lessonsLearned"),
+      ...tradeData,
     },
   });
 
@@ -237,6 +398,7 @@ export async function createAccountTrade(
       symbol: trade.symbol,
       direction: trade.direction,
       outcome: trade.outcome,
+      source: "manual",
     },
   });
 
@@ -263,46 +425,24 @@ export async function updateAccountTrade(
     requireEditTrades: true,
   });
 
+  const existingTrade =
+    await getTradeForAccount(accountId, tradeId);
+
   const openDate = getDate(formData, "openDate");
 
   if (!openDate) {
     redirect(`/accounts/${accountId}/diary`);
   }
 
+  const tradeData = getTradeFormData(formData);
+
   const trade = await prisma.trade.update({
     where: {
-      id: tradeId,
+      id: existingTrade.id,
     },
     data: {
       openDate,
-      openTime: getString(formData, "openTime"),
-      reason: getString(formData, "reason"),
-      strategy: getString(formData, "strategy"),
-
-      symbol: getString(formData, "symbol") || "UNKNOWN",
-      direction: getString(formData, "direction") || "LONG",
-
-      amount: getNumber(formData, "amount"),
-      openingPrice: getNumber(formData, "openingPrice"),
-      stopLoss: getNumber(formData, "stopLoss"),
-      takeProfit: getNumber(formData, "takeProfit"),
-      riskReward: getNumber(formData, "riskReward"),
-
-      closeDate: getDate(formData, "closeDate"),
-      closingPrice: getNumber(formData, "closingPrice"),
-
-      outcome: getString(formData, "outcome"),
-      resultUsd: getNumber(formData, "resultUsd"),
-
-      notes: getString(formData, "notes"),
-
-      session: getString(formData, "session"),
-      emotionalState: getString(formData, "emotionalState"),
-      setupQuality: getNumber(formData, "setupQuality"),
-      executionRating: getNumber(formData, "executionRating"),
-      confidence: getNumber(formData, "confidence"),
-      mistakes: getString(formData, "mistakes"),
-      lessonsLearned: getString(formData, "lessonsLearned"),
+      ...tradeData,
     },
   });
 
@@ -317,6 +457,18 @@ export async function updateAccountTrade(
       symbol: trade.symbol,
       direction: trade.direction,
       outcome: trade.outcome,
+      before: {
+        symbol: existingTrade.symbol,
+        direction: existingTrade.direction,
+        outcome: existingTrade.outcome,
+        resultUsd: existingTrade.resultUsd,
+      },
+      after: {
+        symbol: trade.symbol,
+        direction: trade.direction,
+        outcome: trade.outcome,
+        resultUsd: trade.resultUsd,
+      },
     },
   });
 
@@ -342,40 +494,38 @@ export async function deleteAccountTrade(
     requireDeleteTrades: true,
   });
 
-  const trade = await prisma.trade.findUnique({
-    where: {
-      id: tradeId,
+  const trade = await getTradeForAccount(
+    accountId,
+    tradeId
+  );
+
+  await logActivity({
+    userId: membership.userId,
+    accountId,
+    type: "TRADE_DELETED",
+    title: "Trade deleted",
+    description: `${trade.symbol} trade deleted`,
+    metadata: {
+      tradeId: trade.id,
+      symbol: trade.symbol,
+      direction: trade.direction,
+      outcome: trade.outcome,
+      resultUsd: trade.resultUsd,
     },
   });
 
-  if (trade) {
-    await logActivity({
-      userId: membership.userId,
-      accountId,
-      type: "TRADE_DELETED",
-      title: "Trade deleted",
-      description: `${trade.symbol} trade deleted`,
-      metadata: {
-        tradeId: trade.id,
-        symbol: trade.symbol,
-        direction: trade.direction,
-        outcome: trade.outcome,
-      },
-    });
-
-    await notifyAccountMembers({
-      accountId,
-      actorId: membership.userId,
-      type: "TRADE_DELETED",
-      title: "Trade deleted",
-      message: `${trade.symbol} trade deleted`,
-      link: `/accounts/${accountId}/diary`,
-    });
-  }
+  await notifyAccountMembers({
+    accountId,
+    actorId: membership.userId,
+    type: "TRADE_DELETED",
+    title: "Trade deleted",
+    message: `${trade.symbol} trade deleted`,
+    link: `/accounts/${accountId}/diary`,
+  });
 
   await prisma.trade.delete({
     where: {
-      id: tradeId,
+      id: trade.id,
     },
   });
 

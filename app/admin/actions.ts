@@ -9,6 +9,43 @@ import { redirect } from "next/navigation";
 type UserRole = "FOUNDER" | "ADMIN" | "MEMBER" | "VIEWER";
 type AccountRole = "MANAGER" | "MEMBER" | "VIEWER";
 
+type AccountType =
+  | "DEMO"
+  | "LIVE"
+  | "PROP"
+  | "SHARED"
+  | "CHALLENGE"
+  | "FUNDED";
+
+const USER_ROLES: UserRole[] = [
+  "FOUNDER",
+  "ADMIN",
+  "MEMBER",
+  "VIEWER",
+];
+
+const ACCOUNT_ROLES: AccountRole[] = [
+  "MANAGER",
+  "MEMBER",
+  "VIEWER",
+];
+
+const ACCOUNT_TYPES: AccountType[] = [
+  "DEMO",
+  "LIVE",
+  "PROP",
+  "SHARED",
+  "CHALLENGE",
+  "FUNDED",
+];
+
+const ALLOWED_CURRENCIES = [
+  "USD",
+  "EUR",
+  "GBP",
+  "JPY",
+];
+
 async function requireFounder() {
   const session = await auth();
 
@@ -16,20 +53,27 @@ async function requireFounder() {
     redirect("/login");
   }
 
-  const currentUser = await prisma.user.findUnique({
-    where: {
-      id: session.user.id,
-    },
-  });
+  const currentUser =
+    await prisma.user.findUnique({
+      where: {
+        id: session.user.id,
+      },
+    });
 
-  if (!currentUser || currentUser.role !== "FOUNDER") {
+  if (
+    !currentUser ||
+    currentUser.role !== "FOUNDER"
+  ) {
     redirect("/accounts");
   }
 
   return currentUser;
 }
 
-function getString(formData: FormData, key: string) {
+function getString(
+  formData: FormData,
+  key: string
+) {
   const value = formData.get(key);
 
   if (typeof value !== "string") {
@@ -39,45 +83,101 @@ function getString(formData: FormData, key: string) {
   return value.trim();
 }
 
-function getNumber(formData: FormData, key: string) {
+function getLimitedString(
+  formData: FormData,
+  key: string,
+  maxLength: number
+) {
+  return getString(formData, key).slice(
+    0,
+    maxLength
+  );
+}
+
+function getNumber(
+  formData: FormData,
+  key: string
+) {
   const value = getString(formData, key);
 
   if (!value) {
     return null;
   }
 
-  const number = Number(value);
+  const number = Number(
+    value.replace(",", ".")
+  );
 
-  if (Number.isNaN(number)) {
+  if (!Number.isFinite(number)) {
     return null;
   }
 
   return number;
 }
 
-function getUserRole(value: string): UserRole | null {
-  if (
-    value === "FOUNDER" ||
-    value === "ADMIN" ||
-    value === "MEMBER" ||
-    value === "VIEWER"
-  ) {
-    return value;
+function normalizeUsername(value: string) {
+  return value.trim().toLowerCase();
+}
+
+function getUserRole(
+  value: string
+): UserRole | null {
+  if (USER_ROLES.includes(value as UserRole)) {
+    return value as UserRole;
   }
 
   return null;
 }
 
-function getAccountRole(value: string): AccountRole | null {
+function getAccountRole(
+  value: string
+): AccountRole | null {
   if (
-    value === "MANAGER" ||
-    value === "MEMBER" ||
-    value === "VIEWER"
+    ACCOUNT_ROLES.includes(
+      value as AccountRole
+    )
   ) {
-    return value;
+    return value as AccountRole;
   }
 
   return null;
+}
+
+function getAccountType(
+  value: string
+): AccountType | null {
+  if (
+    ACCOUNT_TYPES.includes(
+      value as AccountType
+    )
+  ) {
+    return value as AccountType;
+  }
+
+  return null;
+}
+
+function getCurrency(value: string) {
+  const normalizedValue =
+    value.trim().toUpperCase();
+
+  if (
+    ALLOWED_CURRENCIES.includes(
+      normalizedValue
+    )
+  ) {
+    return normalizedValue;
+  }
+
+  return "USD";
+}
+
+async function countFounders() {
+  return prisma.user.count({
+    where: {
+      role: "FOUNDER",
+    },
+  });
 }
 
 async function countAccountManagers(
@@ -91,31 +191,134 @@ async function countAccountManagers(
   });
 }
 
-export async function createUser(formData: FormData) {
+async function isSoleManagerOnAnyAccount(
+  userId: string
+) {
+  const managerMemberships =
+    await prisma.accountMember.findMany({
+      where: {
+        userId,
+        role: "MANAGER",
+      },
+      select: {
+        tradingAccountId: true,
+      },
+    });
+
+  for (const membership of managerMemberships) {
+    const managersCount =
+      await countAccountManagers(
+        membership.tradingAccountId
+      );
+
+    if (managersCount <= 1) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function getPermissionSnapshot(
+  membership: {
+    canCreateTrades: boolean;
+    canEditTrades: boolean;
+    canDeleteTrades: boolean;
+    canViewAnalytics: boolean;
+    canViewReports: boolean;
+    canViewCopilot: boolean;
+    canViewMembers: boolean;
+    canManageMembers: boolean;
+    canManageRoles: boolean;
+    canManageAccount: boolean;
+  }
+) {
+  return {
+    canCreateTrades:
+      membership.canCreateTrades,
+
+    canEditTrades:
+      membership.canEditTrades,
+
+    canDeleteTrades:
+      membership.canDeleteTrades,
+
+    canViewAnalytics:
+      membership.canViewAnalytics,
+
+    canViewReports:
+      membership.canViewReports,
+
+    canViewCopilot:
+      membership.canViewCopilot,
+
+    canViewMembers:
+      membership.canViewMembers,
+
+    canManageMembers:
+      membership.canManageMembers,
+
+    canManageRoles:
+      membership.canManageRoles,
+
+    canManageAccount:
+      membership.canManageAccount,
+  };
+}
+
+export async function createUser(
+  formData: FormData
+) {
   const currentUser = await requireFounder();
 
-  const username = getString(formData, "username");
-  const password = getString(formData, "password");
-  const name = getString(formData, "name");
+  const username = normalizeUsername(
+    getString(formData, "username")
+  );
 
-  const role =
-    getUserRole(getString(formData, "role")) || "MEMBER";
+  const password = getString(
+    formData,
+    "password"
+  );
+
+  const name = getLimitedString(
+    formData,
+    "name",
+    80
+  );
+
+  const requestedRole =
+    getUserRole(
+      getString(formData, "role")
+    ) || "MEMBER";
+
+  const role: UserRole =
+    requestedRole === "FOUNDER"
+      ? "MEMBER"
+      : requestedRole;
 
   if (!username || !password) {
     return;
   }
 
-  const existingUser = await prisma.user.findUnique({
-    where: {
-      username,
-    },
-  });
+  if (password.length < 8) {
+    return;
+  }
+
+  const existingUser =
+    await prisma.user.findUnique({
+      where: {
+        username,
+      },
+    });
 
   if (existingUser) {
     return;
   }
 
-  const passwordHash = await bcrypt.hash(password, 10);
+  const passwordHash = await bcrypt.hash(
+    password,
+    12
+  );
 
   const user = await prisma.user.create({
     data: {
@@ -141,10 +344,15 @@ export async function createUser(formData: FormData) {
   redirect("/admin?toast=user-created");
 }
 
-export async function deleteUser(formData: FormData) {
+export async function deleteUser(
+  formData: FormData
+) {
   const currentUser = await requireFounder();
 
-  const userId = getString(formData, "userId");
+  const userId = getString(
+    formData,
+    "userId"
+  );
 
   if (!userId) {
     return;
@@ -160,18 +368,37 @@ export async function deleteUser(formData: FormData) {
     },
   });
 
-  if (user) {
-    await logActivity({
-      userId: currentUser.id,
-      type: "USER_DELETED",
-      title: "User deleted",
-      description: `${currentUser.username} deleted ${user.username}`,
-      metadata: {
-        deletedUserId: user.id,
-        deletedUsername: user.username,
-      },
-    });
+  if (!user) {
+    return;
   }
+
+  if (user.role === "FOUNDER") {
+    const foundersCount =
+      await countFounders();
+
+    if (foundersCount <= 1) {
+      return;
+    }
+  }
+
+  const isSoleManager =
+    await isSoleManagerOnAnyAccount(user.id);
+
+  if (isSoleManager) {
+    return;
+  }
+
+  await logActivity({
+    userId: currentUser.id,
+    type: "USER_DELETED",
+    title: "User deleted",
+    description: `${currentUser.username} deleted ${user.username}`,
+    metadata: {
+      deletedUserId: user.id,
+      deletedUsername: user.username,
+      deletedRole: user.role,
+    },
+  });
 
   await prisma.user.delete({
     where: {
@@ -182,10 +409,15 @@ export async function deleteUser(formData: FormData) {
   redirect("/admin?toast=user-deleted");
 }
 
-export async function updateUserRole(formData: FormData) {
+export async function updateUserRole(
+  formData: FormData
+) {
   const currentUser = await requireFounder();
 
-  const userId = getString(formData, "userId");
+  const userId = getString(
+    formData,
+    "userId"
+  );
 
   const role = getUserRole(
     getString(formData, "role")
@@ -202,13 +434,21 @@ export async function updateUserRole(formData: FormData) {
     return;
   }
 
-  const targetUser = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-  });
+  const targetUser =
+    await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
 
   if (!targetUser) {
+    return;
+  }
+
+  if (
+    role === "FOUNDER" &&
+    targetUser.role !== "FOUNDER"
+  ) {
     return;
   }
 
@@ -216,25 +456,23 @@ export async function updateUserRole(formData: FormData) {
     targetUser.role === "FOUNDER" &&
     role !== "FOUNDER"
   ) {
-    const foundersCount = await prisma.user.count({
-      where: {
-        role: "FOUNDER",
-      },
-    });
+    const foundersCount =
+      await countFounders();
 
     if (foundersCount <= 1) {
       return;
     }
   }
 
-  const updatedUser = await prisma.user.update({
-    where: {
-      id: userId,
-    },
-    data: {
-      role,
-    },
-  });
+  const updatedUser =
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        role,
+      },
+    });
 
   await logActivity({
     userId: currentUser.id,
@@ -243,7 +481,10 @@ export async function updateUserRole(formData: FormData) {
     description: `${currentUser.username} changed role of ${updatedUser.username}`,
     metadata: {
       targetUserId: updatedUser.id,
-      newRole: updatedUser.role,
+      targetUsername: updatedUser.username,
+      before: targetUser.role,
+      after: updatedUser.role,
+      field: "role",
     },
   });
 
@@ -253,72 +494,192 @@ export async function updateUserRole(formData: FormData) {
 export async function updateUserPermissions(
   formData: FormData
 ) {
-  await requireFounder();
+  const currentUser = await requireFounder();
 
-  const userId = getString(formData, "userId");
+  const userId = getString(
+    formData,
+    "userId"
+  );
 
   if (!userId) {
     return;
   }
 
-  await prisma.user.update({
-    where: {
-      id: userId,
-    },
-    data: {
-      canCreatePersonalAccounts:
-        formData.get("canCreatePersonalAccounts") === "on",
+  const targetUser =
+    await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
 
-      canCreateSharedAccounts:
-        formData.get("canCreateSharedAccounts") === "on",
+  if (!targetUser) {
+    return;
+  }
 
-      canArchiveOwnAccounts:
-        formData.get("canArchiveOwnAccounts") === "on",
+  if (targetUser.role === "FOUNDER") {
+    return;
+  }
 
-      canDeleteOwnAccounts:
-        formData.get("canDeleteOwnAccounts") === "on",
+  const before = {
+    canCreatePersonalAccounts:
+      targetUser.canCreatePersonalAccounts,
 
-      canUseCopilot:
-        formData.get("canUseCopilot") === "on",
+    canCreateSharedAccounts:
+      targetUser.canCreateSharedAccounts,
 
-      canViewAnalytics:
-        formData.get("canViewAnalytics") === "on",
+    canArchiveOwnAccounts:
+      targetUser.canArchiveOwnAccounts,
 
-      canViewReports:
-        formData.get("canViewReports") === "on",
+    canDeleteOwnAccounts:
+      targetUser.canDeleteOwnAccounts,
 
-      canManageUsers:
-        formData.get("canManageUsers") === "on",
+    canUseCopilot:
+      targetUser.canUseCopilot,
 
-      canManageSystem:
-        formData.get("canManageSystem") === "on",
+    canViewAnalytics:
+      targetUser.canViewAnalytics,
+
+    canViewReports:
+      targetUser.canViewReports,
+
+    canManageUsers:
+      targetUser.canManageUsers,
+
+    canManageSystem:
+      targetUser.canManageSystem,
+  };
+
+  const updatedUser =
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        canCreatePersonalAccounts:
+          formData.get(
+            "canCreatePersonalAccounts"
+          ) === "on",
+
+        canCreateSharedAccounts:
+          formData.get(
+            "canCreateSharedAccounts"
+          ) === "on",
+
+        canArchiveOwnAccounts:
+          formData.get(
+            "canArchiveOwnAccounts"
+          ) === "on",
+
+        canDeleteOwnAccounts:
+          formData.get(
+            "canDeleteOwnAccounts"
+          ) === "on",
+
+        canUseCopilot:
+          formData.get("canUseCopilot") ===
+          "on",
+
+        canViewAnalytics:
+          formData.get(
+            "canViewAnalytics"
+          ) === "on",
+
+        canViewReports:
+          formData.get("canViewReports") ===
+          "on",
+
+        canManageUsers:
+          formData.get("canManageUsers") ===
+          "on",
+
+        canManageSystem:
+          formData.get("canManageSystem") ===
+          "on",
+      },
+    });
+
+  const after = {
+    canCreatePersonalAccounts:
+      updatedUser.canCreatePersonalAccounts,
+
+    canCreateSharedAccounts:
+      updatedUser.canCreateSharedAccounts,
+
+    canArchiveOwnAccounts:
+      updatedUser.canArchiveOwnAccounts,
+
+    canDeleteOwnAccounts:
+      updatedUser.canDeleteOwnAccounts,
+
+    canUseCopilot:
+      updatedUser.canUseCopilot,
+
+    canViewAnalytics:
+      updatedUser.canViewAnalytics,
+
+    canViewReports:
+      updatedUser.canViewReports,
+
+    canManageUsers:
+      updatedUser.canManageUsers,
+
+    canManageSystem:
+      updatedUser.canManageSystem,
+  };
+
+  await logActivity({
+    userId: currentUser.id,
+    type: "USER_PERMISSIONS_UPDATED",
+    title: "User permissions updated",
+    description: `${currentUser.username} updated permissions for ${updatedUser.username}`,
+    metadata: {
+      targetUserId: updatedUser.id,
+      targetUsername: updatedUser.username,
+      before,
+      after,
     },
   });
 
   redirect("/admin?toast=permissions-updated");
 }
 
-export async function createTradingAccount(formData: FormData) {
+export async function createTradingAccount(
+  formData: FormData
+) {
   const currentUser = await requireFounder();
 
-  const name = getString(formData, "name");
+  const name = getLimitedString(
+    formData,
+    "name",
+    80
+  );
 
-  const type = getString(formData, "type") as
-    | "DEMO"
-    | "LIVE"
-    | "PROP"
-    | "SHARED"
-    | "CHALLENGE"
-    | "FUNDED";
+  const type = getAccountType(
+    getString(formData, "type")
+  );
 
   const initialBalance =
-    getNumber(formData, "initialBalance") || 0;
+    getNumber(
+      formData,
+      "initialBalance"
+    ) || 0;
 
-  const currency =
-    getString(formData, "currency") || "USD";
+  const currency = getCurrency(
+    getString(formData, "currency") ||
+    "USD"
+  );
 
-  const broker = getString(formData, "broker");
-  const phase = getString(formData, "phase");
+  const broker = getLimitedString(
+    formData,
+    "broker",
+    80
+  );
+
+  const phase = getLimitedString(
+    formData,
+    "phase",
+    80
+  );
 
   const profitTarget = getNumber(
     formData,
@@ -339,20 +700,21 @@ export async function createTradingAccount(formData: FormData) {
     return;
   }
 
-  const account = await prisma.tradingAccount.create({
-    data: {
-      name,
-      type,
-      initialBalance,
-      currency,
-      createdById: currentUser.id,
-      broker: broker || null,
-      phase: phase || null,
-      profitTarget,
-      maxDrawdown,
-      dailyDrawdown,
-    },
-  });
+  const account =
+    await prisma.tradingAccount.create({
+      data: {
+        name,
+        type,
+        initialBalance,
+        currency,
+        createdById: currentUser.id,
+        broker: broker || null,
+        phase: phase || null,
+        profitTarget,
+        maxDrawdown,
+        dailyDrawdown,
+      },
+    });
 
   await prisma.accountMember.create({
     data: {
@@ -372,13 +734,32 @@ export async function createTradingAccount(formData: FormData) {
     },
   });
 
+  await logActivity({
+    userId: currentUser.id,
+    accountId: account.id,
+    type: "ACCOUNT_CREATED",
+    title: "Account created",
+    description: `${currentUser.username} created ${account.name}`,
+    metadata: {
+      accountId: account.id,
+      accountName: account.name,
+      accountType: account.type,
+      initialBalance: account.initialBalance,
+      currency: account.currency,
+    },
+  });
+
   redirect("/admin/accounts");
 }
 
-export async function addMemberToAccount(formData: FormData) {
+export async function addMemberToAccount(
+  formData: FormData
+) {
   const currentUser = await requireFounder();
 
-  const username = getString(formData, "username");
+  const username = normalizeUsername(
+    getString(formData, "username")
+  );
 
   const tradingAccountId = getString(
     formData,
@@ -389,7 +770,22 @@ export async function addMemberToAccount(formData: FormData) {
     getString(formData, "role")
   );
 
-  if (!username || !tradingAccountId || !role) {
+  if (
+    !username ||
+    !tradingAccountId ||
+    !role
+  ) {
+    return;
+  }
+
+  const account =
+    await prisma.tradingAccount.findUnique({
+      where: {
+        id: tradingAccountId,
+      },
+    });
+
+  if (!account) {
     return;
   }
 
@@ -403,12 +799,13 @@ export async function addMemberToAccount(formData: FormData) {
     return;
   }
 
-  const existing = await prisma.accountMember.findFirst({
-    where: {
-      userId: user.id,
-      tradingAccountId,
-    },
-  });
+  const existing =
+    await prisma.accountMember.findFirst({
+      where: {
+        userId: user.id,
+        tradingAccountId,
+      },
+    });
 
   if (existing) {
     return;
@@ -429,6 +826,8 @@ export async function addMemberToAccount(formData: FormData) {
     title: "Member added",
     description: `${currentUser.username} added ${user.username}`,
     metadata: {
+      accountId: tradingAccountId,
+      accountName: account.name,
       memberId: user.id,
       memberUsername: user.username,
       role,
@@ -438,7 +837,9 @@ export async function addMemberToAccount(formData: FormData) {
   redirect("/admin/accounts");
 }
 
-export async function updateMemberRole(formData: FormData) {
+export async function updateMemberRole(
+  formData: FormData
+) {
   const currentUser = await requireFounder();
 
   const membershipId = getString(
@@ -459,6 +860,10 @@ export async function updateMemberRole(formData: FormData) {
       where: {
         id: membershipId,
       },
+      include: {
+        user: true,
+        tradingAccount: true,
+      },
     });
 
   if (!membership) {
@@ -470,9 +875,10 @@ export async function updateMemberRole(formData: FormData) {
     nextRole !== "MANAGER";
 
   if (isDowngradingManager) {
-    const managersCount = await countAccountManagers(
-      membership.tradingAccountId
-    );
+    const managersCount =
+      await countAccountManagers(
+        membership.tradingAccountId
+      );
 
     if (managersCount <= 1) {
       return;
@@ -491,12 +897,17 @@ export async function updateMemberRole(formData: FormData) {
 
   await logActivity({
     userId: currentUser.id,
-    accountId: updatedMembership.tradingAccountId,
+    accountId:
+      updatedMembership.tradingAccountId,
     type: "MEMBER_ROLE_UPDATED",
     title: "Member role updated",
-    description: `${currentUser.username} changed role`,
+    description: `${currentUser.username} changed role of ${membership.user.username}`,
     metadata: {
       membershipId: updatedMembership.id,
+      memberId: membership.userId,
+      memberUsername: membership.user.username,
+      accountName:
+        membership.tradingAccount.name,
       before: membership.role,
       after: updatedMembership.role,
       field: "role",
@@ -525,11 +936,18 @@ export async function updateMemberPermissions(
       where: {
         id: membershipId,
       },
+      include: {
+        user: true,
+        tradingAccount: true,
+      },
     });
 
   if (!membership) {
     return;
   }
+
+  const before =
+    getPermissionSnapshot(membership);
 
   const updatedMembership =
     await prisma.accountMember.update({
@@ -538,109 +956,76 @@ export async function updateMemberPermissions(
       },
       data: {
         canCreateTrades:
-          formData.get("canCreateTrades") === "on",
+          formData.get(
+            "canCreateTrades"
+          ) === "on",
 
         canEditTrades:
-          formData.get("canEditTrades") === "on",
+          formData.get("canEditTrades") ===
+          "on",
 
         canDeleteTrades:
-          formData.get("canDeleteTrades") === "on",
+          formData.get(
+            "canDeleteTrades"
+          ) === "on",
 
         canViewAnalytics:
-          formData.get("canViewAnalytics") === "on",
+          formData.get(
+            "canViewAnalytics"
+          ) === "on",
 
         canViewReports:
-          formData.get("canViewReports") === "on",
+          formData.get(
+            "canViewReports"
+          ) === "on",
 
         canViewCopilot:
-          formData.get("canViewCopilot") === "on",
+          formData.get(
+            "canViewCopilot"
+          ) === "on",
 
         canViewMembers:
-          formData.get("canViewMembers") === "on",
+          formData.get(
+            "canViewMembers"
+          ) === "on",
 
         canManageMembers:
-          formData.get("canManageMembers") === "on",
+          formData.get(
+            "canManageMembers"
+          ) === "on",
 
         canManageRoles:
-          formData.get("canManageRoles") === "on",
+          formData.get(
+            "canManageRoles"
+          ) === "on",
 
         canManageAccount:
-          formData.get("canManageAccount") === "on",
+          formData.get(
+            "canManageAccount"
+          ) === "on",
       },
     });
 
+  const after =
+    getPermissionSnapshot(
+      updatedMembership
+    );
+
   await logActivity({
     userId: currentUser.id,
-    accountId: updatedMembership.tradingAccountId,
+    accountId:
+      updatedMembership.tradingAccountId,
     type: "MEMBER_PERMISSIONS_UPDATED",
     title: "Permissions updated",
-    description: `${currentUser.username} updated permissions`,
+    description: `${currentUser.username} updated permissions for ${membership.user.username}`,
     metadata: {
       membershipId: updatedMembership.id,
-
-      before: {
-        canCreateTrades:
-          membership.canCreateTrades,
-
-        canEditTrades:
-          membership.canEditTrades,
-
-        canDeleteTrades:
-          membership.canDeleteTrades,
-
-        canViewAnalytics:
-          membership.canViewAnalytics,
-
-        canViewReports:
-          membership.canViewReports,
-
-        canViewCopilot:
-          membership.canViewCopilot,
-
-        canViewMembers:
-          membership.canViewMembers,
-
-        canManageMembers:
-          membership.canManageMembers,
-
-        canManageRoles:
-          membership.canManageRoles,
-
-        canManageAccount:
-          membership.canManageAccount,
-      },
-
-      after: {
-        canCreateTrades:
-          updatedMembership.canCreateTrades,
-
-        canEditTrades:
-          updatedMembership.canEditTrades,
-
-        canDeleteTrades:
-          updatedMembership.canDeleteTrades,
-
-        canViewAnalytics:
-          updatedMembership.canViewAnalytics,
-
-        canViewReports:
-          updatedMembership.canViewReports,
-
-        canViewCopilot:
-          updatedMembership.canViewCopilot,
-
-        canViewMembers:
-          updatedMembership.canViewMembers,
-
-        canManageMembers:
-          updatedMembership.canManageMembers,
-
-        canManageRoles:
-          updatedMembership.canManageRoles,
-
-        canManageAccount:
-          updatedMembership.canManageAccount,
-      },
+      memberId: membership.userId,
+      memberUsername: membership.user.username,
+      accountName:
+        membership.tradingAccount.name,
+      before,
+      after,
     },
   });
 
@@ -666,6 +1051,10 @@ export async function removeMemberFromAccount(
       where: {
         id: membershipId,
       },
+      include: {
+        user: true,
+        tradingAccount: true,
+      },
     });
 
   if (!membership) {
@@ -673,9 +1062,10 @@ export async function removeMemberFromAccount(
   }
 
   if (membership.role === "MANAGER") {
-    const managersCount = await countAccountManagers(
-      membership.tradingAccountId
-    );
+    const managersCount =
+      await countAccountManagers(
+        membership.tradingAccountId
+      );
 
     if (managersCount <= 1) {
       return;
@@ -684,13 +1074,18 @@ export async function removeMemberFromAccount(
 
   await logActivity({
     userId: currentUser.id,
-    accountId: membership.tradingAccountId,
+    accountId:
+      membership.tradingAccountId,
     type: "MEMBER_REMOVED",
     title: "Member removed",
-    description: `${currentUser.username} removed a member`,
+    description: `${currentUser.username} removed ${membership.user.username}`,
     metadata: {
       membershipId: membership.id,
       userId: membership.userId,
+      username: membership.user.username,
+      accountName:
+        membership.tradingAccount.name,
+      role: membership.role,
     },
   });
 
@@ -703,12 +1098,36 @@ export async function removeMemberFromAccount(
   redirect("/admin/accounts");
 }
 
-export async function freezeUser(formData: FormData) {
-  await requireFounder();
+export async function freezeUser(
+  formData: FormData
+) {
+  const currentUser = await requireFounder();
 
-  const userId = getString(formData, "userId");
+  const userId = getString(
+    formData,
+    "userId"
+  );
 
   if (!userId) {
+    return;
+  }
+
+  if (userId === currentUser.id) {
+    return;
+  }
+
+  const targetUser =
+    await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+  if (!targetUser) {
+    return;
+  }
+
+  if (targetUser.role === "FOUNDER") {
     return;
   }
 
@@ -722,15 +1141,45 @@ export async function freezeUser(formData: FormData) {
     },
   });
 
+  await logActivity({
+    userId: currentUser.id,
+    type: "USER_FROZEN",
+    title: "User frozen",
+    description: `${currentUser.username} froze ${targetUser.username}`,
+    metadata: {
+      targetUserId: targetUser.id,
+      targetUsername: targetUser.username,
+      before: targetUser.status,
+      after: "FROZEN",
+      field: "status",
+    },
+  });
+
   redirect("/admin?toast=frozen");
 }
 
-export async function unfreezeUser(formData: FormData) {
-  await requireFounder();
+export async function unfreezeUser(
+  formData: FormData
+) {
+  const currentUser = await requireFounder();
 
-  const userId = getString(formData, "userId");
+  const userId = getString(
+    formData,
+    "userId"
+  );
 
   if (!userId) {
+    return;
+  }
+
+  const targetUser =
+    await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+  if (!targetUser) {
     return;
   }
 
@@ -744,20 +1193,68 @@ export async function unfreezeUser(formData: FormData) {
     },
   });
 
+  await logActivity({
+    userId: currentUser.id,
+    type: "USER_UNFROZEN",
+    title: "User unfrozen",
+    description: `${currentUser.username} unfroze ${targetUser.username}`,
+    metadata: {
+      targetUserId: targetUser.id,
+      targetUsername: targetUser.username,
+      before: targetUser.status,
+      after: "ACTIVE",
+      field: "status",
+    },
+  });
+
   redirect("/admin?toast=unfrozen");
 }
 
-export async function resetUserPassword(formData: FormData) {
-  await requireFounder();
+export async function resetUserPassword(
+  formData: FormData
+) {
+  const currentUser = await requireFounder();
 
-  const userId = getString(formData, "userId");
-  const password = getString(formData, "password");
+  const userId = getString(
+    formData,
+    "userId"
+  );
+
+  const password = getString(
+    formData,
+    "password"
+  );
 
   if (!userId || !password) {
     return;
   }
 
-  const passwordHash = await bcrypt.hash(password, 10);
+  if (password.length < 8) {
+    return;
+  }
+
+  const targetUser =
+    await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+  if (!targetUser) {
+    return;
+  }
+
+  if (
+    targetUser.role === "FOUNDER" &&
+    targetUser.id !== currentUser.id
+  ) {
+    return;
+  }
+
+  const passwordHash = await bcrypt.hash(
+    password,
+    12
+  );
 
   await prisma.user.update({
     where: {
@@ -765,6 +1262,19 @@ export async function resetUserPassword(formData: FormData) {
     },
     data: {
       passwordHash,
+      failedLoginAttempts: 0,
+      lockedUntil: null,
+    },
+  });
+
+  await logActivity({
+    userId: currentUser.id,
+    type: "PASSWORD_RESET",
+    title: "Password reset",
+    description: `${currentUser.username} reset password for ${targetUser.username}`,
+    metadata: {
+      targetUserId: targetUser.id,
+      targetUsername: targetUser.username,
     },
   });
 

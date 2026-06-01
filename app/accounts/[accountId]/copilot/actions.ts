@@ -1,18 +1,103 @@
 "use server";
 
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { logActivity } from "@/lib/activity";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
-export async function sendCopilotMessage(formData: FormData) {
-    const tradingAccountId = String(
-        formData.get("tradingAccountId")
+const MAX_COPILOT_MESSAGE_LENGTH = 1200;
+
+function getString(
+    formData: FormData,
+    key: string
+) {
+    const value = formData.get(key);
+
+    if (typeof value !== "string") {
+        return "";
+    }
+
+    return value.trim();
+}
+
+function getLimitedString(
+    formData: FormData,
+    key: string,
+    maxLength: number
+) {
+    return getString(formData, key).slice(
+        0,
+        maxLength
+    );
+}
+
+async function getCopilotAccess(
+    tradingAccountId: string
+) {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+        redirect("/login");
+    }
+
+    const membership =
+        await prisma.accountMember.findFirst({
+            where: {
+                userId: session.user.id,
+                tradingAccountId,
+            },
+            include: {
+                tradingAccount: true,
+            },
+        });
+
+    if (!membership) {
+        redirect("/accounts");
+    }
+
+    const canUseCopilot =
+        membership.role === "MANAGER" ||
+        membership.canViewCopilot;
+
+    if (!canUseCopilot) {
+        redirect(
+            `/accounts/${tradingAccountId}/dashboard`
+        );
+    }
+
+    if (
+        membership.tradingAccount.status ===
+        "ARCHIVED"
+    ) {
+        redirect(
+            `/accounts/${tradingAccountId}/copilot`
+        );
+    }
+
+    return membership;
+}
+
+export async function sendCopilotMessage(
+    formData: FormData
+) {
+    const tradingAccountId = getString(
+        formData,
+        "tradingAccountId"
     );
 
-    const content = String(formData.get("content") || "");
+    const content = getLimitedString(
+        formData,
+        "content",
+        MAX_COPILOT_MESSAGE_LENGTH
+    );
 
-    if (!tradingAccountId || !content.trim()) {
+    if (!tradingAccountId || !content) {
         return;
     }
+
+    const membership =
+        await getCopilotAccess(tradingAccountId);
 
     await prisma.copilotMessage.create({
         data: {
@@ -108,9 +193,10 @@ export async function sendCopilotMessage(formData: FormData) {
         }
     }
 
-    const revengeRiskTrades = recentTrades.filter(
-        (trade, index) => {
-            const previousTrade = recentTrades[index + 1];
+    const revengeRiskTrades =
+        recentTrades.filter((trade, index) => {
+            const previousTrade =
+                recentTrades[index + 1];
 
             if (!previousTrade) {
                 return false;
@@ -122,8 +208,7 @@ export async function sendCopilotMessage(formData: FormData) {
                     trade.emotionalState ||
                     (trade.confidence || 0) <= 4)
             );
-        }
-    ).length;
+        }).length;
 
     const sessionStats = trades.reduce(
         (acc, trade) => {
@@ -148,7 +233,8 @@ export async function sendCopilotMessage(formData: FormData) {
             }
 
             acc[session].trades += 1;
-            acc[session].pnl += trade.resultUsd || 0;
+            acc[session].pnl +=
+                trade.resultUsd || 0;
 
             return acc;
         },
@@ -161,7 +247,9 @@ export async function sendCopilotMessage(formData: FormData) {
         >
     );
 
-    const sessionEntries = Object.entries(sessionStats);
+    const sessionEntries = Object.entries(
+        sessionStats
+    );
 
     const bestSession =
         sessionEntries.length >= 2
@@ -179,22 +267,24 @@ export async function sendCopilotMessage(formData: FormData) {
 
     const lowerContent = content.toLowerCase();
 
-    const weakTimeTrades = trades.filter((trade) => {
-        const hour = trade.openTime
-            ? Number(trade.openTime.split(":")[0])
-            : null;
+    const weakTimeTrades = trades.filter(
+        (trade) => {
+            const hour = trade.openTime
+                ? Number(trade.openTime.split(":")[0])
+                : null;
 
-        if (hour === null) {
-            return false;
+            if (hour === null) {
+                return false;
+            }
+
+            return (
+                hour >= 18 &&
+                ((trade.executionRating || 0) <= 4 ||
+                    (trade.confidence || 0) <= 4 ||
+                    trade.emotionalState)
+            );
         }
-
-        return (
-            hour >= 18 &&
-            ((trade.executionRating || 0) <= 4 ||
-                (trade.confidence || 0) <= 4 ||
-                trade.emotionalState)
-        );
-    }).length;
+    ).length;
 
     let aiResponse = "";
 
@@ -215,7 +305,6 @@ export async function sendCopilotMessage(formData: FormData) {
             emotionalTrades > 0
                 ? `Ho rilevato ${emotionalTrades} trade con componente emotiva. Il focus è ridurre revenge trading e decisioni prese sotto pressione emotiva.`
                 : "Non rilevo segnali importanti di emotional trading. La struttura emotiva appare stabile.";
-
     } else if (
         lowerContent.includes("revenge") ||
         lowerContent.includes("impuls") ||
@@ -225,7 +314,6 @@ export async function sendCopilotMessage(formData: FormData) {
             revengeRiskTrades > 0
                 ? `Ho rilevato ${revengeRiskTrades} possibili segnali di revenge trading: dopo una perdita compaiono execution debole, bassa confidence o componente emotiva. Il focus è fermarti dopo una loss e fare review prima del trade successivo.`
                 : "Non rilevo segnali forti di revenge trading nei dati attuali. Continua comunque a monitorare le operazioni successive a una perdita.";
-
     } else if (
         lowerContent.includes("risk") ||
         lowerContent.includes("rischio")
@@ -243,7 +331,6 @@ export async function sendCopilotMessage(formData: FormData) {
             winRate >= 60
                 ? `La performance operativa è positiva. Win rate attuale: ${winRate}%. La priorità ora è scalare mantenendo disciplina e qualità setup.`
                 : `Il win rate attuale (${winRate}%) suggerisce necessità di migliorare selezione setup e qualità execution.`;
-
     } else if (
         lowerContent.includes("orari") ||
         lowerContent.includes("fascia") ||
@@ -254,7 +341,6 @@ export async function sendCopilotMessage(formData: FormData) {
             weakTimeTrades > 0
                 ? `Ho rilevato ${weakTimeTrades} trade potenzialmente deboli nelle fasce orarie serali. Questo può indicare calo di lucidità, stanchezza o decisioni meno selettive.`
                 : "Non rilevo un peggioramento evidente della qualità operativa nelle fasce orarie serali.";
-
     } else if (
         lowerContent.includes("session") ||
         lowerContent.includes("londra") ||
@@ -268,12 +354,16 @@ export async function sendCopilotMessage(formData: FormData) {
                 : sessionEntries.length < 2
                     ? "Per ora i dati sono concentrati in una sola sessione, quindi non posso confrontare in modo affidabile sessione migliore e peggiore. Inserisci trade in più fasce orarie per attivare un confronto reale."
                     : `La sessione migliore risulta essere ${bestSession}, mentre quella più debole è ${worstSession}. Usa questa informazione per capire dove il tuo edge operativo è più forte e dove invece rischi di perdere qualità.`;
-
     } else {
         aiResponse =
             totalTrades === 0
                 ? "Non ho ancora abbastanza dati per analizzare il tuo conto. Inserisci trade nel Diary per attivare il motore intelligence."
-                : `Ho analizzato ${totalTrades} trade. Win rate: ${winRate}%, disciplina: ${disciplineScore}%, rischio comportamentale: ${behavioralRisk}%. Streak attuale: ${winStreak > 0 ? `${winStreak} win consecutivi` : lossStreak > 0 ? `${lossStreak} loss consecutivi` : "neutrale"}.`;
+                : `Ho analizzato ${totalTrades} trade. Win rate: ${winRate}%, disciplina: ${disciplineScore}%, rischio comportamentale: ${behavioralRisk}%. Streak attuale: ${winStreak > 0
+                    ? `${winStreak} win consecutivi`
+                    : lossStreak > 0
+                        ? `${lossStreak} loss consecutivi`
+                        : "neutrale"
+                }.`;
     }
 
     if (revengeRiskTrades > 0) {
@@ -397,7 +487,9 @@ export async function sendCopilotMessage(formData: FormData) {
                 description:
                     "Pattern di revenge trading rilevato dopo operazioni negative.",
                 severity:
-                    revengeRiskTrades >= 3 ? "critical" : "high",
+                    revengeRiskTrades >= 3
+                        ? "critical"
+                        : "high",
                 score: revengeRiskTrades,
             },
             create: {
@@ -408,7 +500,9 @@ export async function sendCopilotMessage(formData: FormData) {
                 description:
                     "Pattern di revenge trading rilevato dopo operazioni negative.",
                 severity:
-                    revengeRiskTrades >= 3 ? "critical" : "high",
+                    revengeRiskTrades >= 3
+                        ? "critical"
+                        : "high",
                 score: revengeRiskTrades,
             },
         });
@@ -456,6 +550,21 @@ export async function sendCopilotMessage(formData: FormData) {
             tradingAccountId,
             role: "assistant",
             content: aiResponse,
+        },
+    });
+
+    await logActivity({
+        userId: membership.userId,
+        accountId: tradingAccountId,
+        type: "COPILOT_MESSAGE_SENT",
+        title: "Copilot message sent",
+        description: `${membership.userId} used Copilot`,
+        metadata: {
+            messageLength: content.length,
+            totalTrades,
+            winRate,
+            behavioralRisk,
+            disciplineScore,
         },
     });
 

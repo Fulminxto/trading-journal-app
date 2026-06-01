@@ -38,6 +38,9 @@ model User {
   status      String   @default("ACTIVE")
   frozenAt    DateTime?
 
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
+
   lastSeenAt DateTime?
   lastLoginAt    DateTime?
   lastActivityAt DateTime?

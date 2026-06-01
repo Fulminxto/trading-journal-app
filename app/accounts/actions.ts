@@ -2,16 +2,26 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { logActivity, } from "@/lib/activity";
+import { logActivity } from "@/lib/activity";
 import { redirect } from "next/navigation";
 
-type AccountType =
-  | "DEMO"
-  | "LIVE"
-  | "PROP"
-  | "SHARED"
-  | "CHALLENGE"
-  | "FUNDED";
+const ACCOUNT_TYPES = [
+  "DEMO",
+  "LIVE",
+  "PROP",
+  "SHARED",
+  "CHALLENGE",
+  "FUNDED",
+] as const;
+
+type AccountType = (typeof ACCOUNT_TYPES)[number];
+
+const ALLOWED_CURRENCIES = [
+  "USD",
+  "EUR",
+  "GBP",
+  "JPY",
+] as const;
 
 function getString(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -23,6 +33,14 @@ function getString(formData: FormData, key: string) {
   return value.trim();
 }
 
+function getLimitedString(
+  formData: FormData,
+  key: string,
+  maxLength: number
+) {
+  return getString(formData, key).slice(0, maxLength);
+}
+
 function getNumber(formData: FormData, key: string) {
   const value = getString(formData, key);
 
@@ -30,13 +48,51 @@ function getNumber(formData: FormData, key: string) {
     return null;
   }
 
-  const number = Number(value);
+  const number = Number(value.replace(",", "."));
 
-  if (Number.isNaN(number)) {
+  if (!Number.isFinite(number)) {
     return null;
   }
 
   return number;
+}
+
+function getAccountType(value: string): AccountType | null {
+  if (ACCOUNT_TYPES.includes(value as AccountType)) {
+    return value as AccountType;
+  }
+
+  return null;
+}
+
+function getCurrency(value: string) {
+  const normalizedValue = value.toUpperCase();
+
+  if (
+    ALLOWED_CURRENCIES.includes(
+      normalizedValue as (typeof ALLOWED_CURRENCIES)[number]
+    )
+  ) {
+    return normalizedValue;
+  }
+
+  return "USD";
+}
+
+function getSafeRedirectPath(value: string) {
+  if (!value || !value.startsWith("/")) {
+    return "/accounts";
+  }
+
+  if (value.startsWith("//")) {
+    return "/accounts";
+  }
+
+  if (value.includes("://")) {
+    return "/accounts";
+  }
+
+  return value;
 }
 
 async function getCurrentUser() {
@@ -87,17 +143,30 @@ export async function createAccount(formData: FormData) {
     return;
   }
 
-  const name = getString(formData, "name");
-  const type = getString(formData, "type") as AccountType;
+  const name = getLimitedString(formData, "name", 80);
+
+  const type = getAccountType(
+    getString(formData, "type")
+  );
 
   const initialBalance =
     getNumber(formData, "initialBalance") || 0;
 
-  const currency =
-    getString(formData, "currency") || "USD";
+  const currency = getCurrency(
+    getString(formData, "currency") || "USD"
+  );
 
-  const broker = getString(formData, "broker");
-  const phase = getString(formData, "phase");
+  const broker = getLimitedString(
+    formData,
+    "broker",
+    80
+  );
+
+  const phase = getLimitedString(
+    formData,
+    "phase",
+    80
+  );
 
   const profitTarget = getNumber(
     formData,
@@ -186,8 +255,11 @@ export async function createAccount(formData: FormData) {
     title: "Account created",
     description: `${currentUser.username} created ${account.name}`,
     metadata: {
+      accountId: account.id,
       accountName: account.name,
       accountType: account.type,
+      initialBalance: account.initialBalance,
+      currency: account.currency,
     },
   });
 
@@ -199,9 +271,10 @@ export async function archiveAccount(formData: FormData) {
 
   const accountId = getString(formData, "accountId");
 
-  const redirectTo =
+  const redirectTo = getSafeRedirectPath(
     getString(formData, "redirectTo") ||
-    "/admin/accounts";
+    "/admin/accounts"
+  );
 
   if (!accountId) {
     return;
@@ -243,6 +316,13 @@ export async function archiveAccount(formData: FormData) {
     type: "ACCOUNT_ARCHIVED",
     title: "Account archived",
     description: `${currentUser.username} archived ${context.account.name}`,
+    metadata: {
+      accountId,
+      accountName: context.account.name,
+      before: "ACTIVE",
+      after: "ARCHIVED",
+      field: "status",
+    },
   });
 
   redirect(redirectTo);
@@ -253,9 +333,10 @@ export async function restoreAccount(formData: FormData) {
 
   const accountId = getString(formData, "accountId");
 
-  const redirectTo =
+  const redirectTo = getSafeRedirectPath(
     getString(formData, "redirectTo") ||
-    "/admin/accounts";
+    "/admin/accounts"
+  );
 
   if (!accountId) {
     return;
@@ -297,6 +378,13 @@ export async function restoreAccount(formData: FormData) {
     type: "ACCOUNT_RESTORED",
     title: "Account restored",
     description: `${currentUser.username} restored ${context.account.name}`,
+    metadata: {
+      accountId,
+      accountName: context.account.name,
+      before: "ARCHIVED",
+      after: "ACTIVE",
+      field: "status",
+    },
   });
 
   redirect(redirectTo);
@@ -307,9 +395,10 @@ export async function deleteAccount(formData: FormData) {
 
   const accountId = getString(formData, "accountId");
 
-  const redirectTo =
+  const redirectTo = getSafeRedirectPath(
     getString(formData, "redirectTo") ||
-    "/admin/accounts";
+    "/admin/accounts"
+  );
 
   if (!accountId) {
     return;
@@ -338,10 +427,16 @@ export async function deleteAccount(formData: FormData) {
 
   await logActivity({
     userId: currentUser.id,
-    accountId,
+    accountId: null,
     type: "ACCOUNT_DELETED",
     title: "Account deleted",
     description: `${currentUser.username} deleted ${context.account.name}`,
+    metadata: {
+      deletedAccountId: accountId,
+      deletedAccountName: context.account.name,
+      deletedAccountType: context.account.type,
+      deletedAccountStatus: context.account.status,
+    },
   });
 
   await prisma.tradingAccount.delete({

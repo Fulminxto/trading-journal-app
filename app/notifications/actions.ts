@@ -4,6 +4,19 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
+function getString(
+    formData: FormData,
+    key: string
+) {
+    const value = formData.get(key);
+
+    if (typeof value !== "string") {
+        return "";
+    }
+
+    return value.trim();
+}
+
 export async function markNotificationAsRead(
     formData: FormData
 ) {
@@ -13,17 +26,20 @@ export async function markNotificationAsRead(
         redirect("/login");
     }
 
-    const notificationId =
-        formData.get("notificationId");
+    const notificationId = getString(
+        formData,
+        "notificationId"
+    );
 
-    if (typeof notificationId !== "string") {
-        return;
+    if (!notificationId) {
+        redirect("/notifications");
     }
 
     await prisma.notification.updateMany({
         where: {
             id: notificationId,
             userId: session.user.id,
+            read: false,
         },
         data: {
             read: true,

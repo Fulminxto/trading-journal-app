@@ -8,10 +8,15 @@ type AuthUser = {
   id: string;
   name: string | null;
   username: string;
+  role: string;
+  status: string;
 };
 
+const MAX_FAILED_ATTEMPTS = 5;
+const LOCK_TIME_MINUTES = 15;
+
 export const authOptions: NextAuthOptions = {
-  debug: true,
+  debug: process.env.NODE_ENV === "development",
 
   pages: {
     signIn: "/login",
@@ -39,18 +44,22 @@ export const authOptions: NextAuthOptions = {
       },
 
       async authorize(credentials) {
-        if (
-          !credentials?.username ||
-          !credentials?.password
-        ) {
+        const username =
+          credentials?.username
+            ?.trim()
+            .toLowerCase();
+
+        const password =
+          credentials?.password;
+
+        if (!username || !password) {
           return null;
         }
 
         const user =
           await prisma.user.findUnique({
             where: {
-              username:
-                credentials.username,
+              username,
             },
           });
 
@@ -58,13 +67,44 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
+        if (
+          user.lockedUntil &&
+          user.lockedUntil > new Date()
+        ) {
+          return null;
+        }
+
         const isPasswordValid =
           await bcrypt.compare(
-            credentials.password,
+            password,
             user.passwordHash
           );
 
         if (!isPasswordValid) {
+          const failedLoginAttempts =
+            user.failedLoginAttempts + 1;
+
+          const shouldLock =
+            failedLoginAttempts >=
+            MAX_FAILED_ATTEMPTS;
+
+          await prisma.user.update({
+            where: {
+              id: user.id,
+            },
+            data: {
+              failedLoginAttempts,
+              lockedUntil: shouldLock
+                ? new Date(
+                  Date.now() +
+                  LOCK_TIME_MINUTES *
+                  60 *
+                  1000
+                )
+                : null,
+            },
+          });
+
           return null;
         }
 
@@ -79,6 +119,8 @@ export const authOptions: NextAuthOptions = {
             loginCount: {
               increment: 1,
             },
+            failedLoginAttempts: 0,
+            lockedUntil: null,
           },
         });
 
@@ -86,6 +128,8 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           name: user.name,
           username: user.username,
+          role: user.role,
+          status: user.status,
         };
       },
     }),
@@ -102,6 +146,10 @@ export const authOptions: NextAuthOptions = {
         token.id = typedUser.id;
         token.username =
           typedUser.username;
+        token.role =
+          typedUser.role;
+        token.status =
+          typedUser.status;
       }
 
       return token;
@@ -117,6 +165,12 @@ export const authOptions: NextAuthOptions = {
 
         session.user.username =
           token.username as string;
+
+        session.user.role =
+          token.role as string;
+
+        session.user.status =
+          token.status as string;
       }
 
       return session;

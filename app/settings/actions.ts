@@ -3,6 +3,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { logActivity } from "@/lib/activity";
 
 function getString(
   formData: FormData,
@@ -42,6 +43,17 @@ export async function updateSettings(
   const session = await auth();
 
   if (!session?.user?.id) {
+    redirect("/login");
+  }
+
+  const currentUser =
+    await prisma.user.findUnique({
+      where: {
+        id: session.user.id,
+      },
+    });
+
+  if (!currentUser) {
     redirect("/login");
   }
 
@@ -110,24 +122,100 @@ export async function updateSettings(
       "dailyTradingReminder"
     );
 
-  await prisma.user.update({
-    where: {
-      id: session.user.id,
-    },
+  const before = {
+    defaultCurrency:
+      currentUser.defaultCurrency,
 
-    data: {
-      defaultCurrency,
-      appLanguage,
-      themePreference,
-      accentColor,
-      appIconVariant,
+    appLanguage:
+      currentUser.appLanguage,
 
-      compactMode,
-      performanceBlur,
+    themePreference:
+      currentUser.themePreference,
 
-      reviewReminders,
-      sessionLockAlerts,
-      dailyTradingReminder,
+    accentColor:
+      currentUser.accentColor,
+
+    appIconVariant:
+      currentUser.appIconVariant,
+
+    compactMode:
+      currentUser.compactMode,
+
+    performanceBlur:
+      currentUser.performanceBlur,
+
+    reviewReminders:
+      currentUser.reviewReminders,
+
+    sessionLockAlerts:
+      currentUser.sessionLockAlerts,
+
+    dailyTradingReminder:
+      currentUser.dailyTradingReminder,
+  };
+
+  const updatedUser =
+    await prisma.user.update({
+      where: {
+        id: session.user.id,
+      },
+
+      data: {
+        defaultCurrency,
+        appLanguage,
+        themePreference,
+        accentColor,
+        appIconVariant,
+
+        compactMode,
+        performanceBlur,
+
+        reviewReminders,
+        sessionLockAlerts,
+        dailyTradingReminder,
+      },
+    });
+
+  const after = {
+    defaultCurrency:
+      updatedUser.defaultCurrency,
+
+    appLanguage:
+      updatedUser.appLanguage,
+
+    themePreference:
+      updatedUser.themePreference,
+
+    accentColor:
+      updatedUser.accentColor,
+
+    appIconVariant:
+      updatedUser.appIconVariant,
+
+    compactMode:
+      updatedUser.compactMode,
+
+    performanceBlur:
+      updatedUser.performanceBlur,
+
+    reviewReminders:
+      updatedUser.reviewReminders,
+
+    sessionLockAlerts:
+      updatedUser.sessionLockAlerts,
+
+    dailyTradingReminder:
+      updatedUser.dailyTradingReminder,
+  };
+
+  await logActivity({
+    userId: session.user.id,
+    type: "SETTINGS_UPDATED",
+    title: "Settings updated",
+    description: `${updatedUser.username} updated settings`,
+    metadata: {
+      before,
+      after,
     },
   });
 

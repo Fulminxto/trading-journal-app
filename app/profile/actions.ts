@@ -1,10 +1,20 @@
 "use server";
 
+import { randomUUID } from "crypto";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { logActivity } from "@/lib/activity";
 import { supabaseAdmin } from "@/lib/supabase";
+
+const PROFILE_IMAGE_BUCKET = "profile-images";
+const MAX_PROFILE_IMAGE_SIZE = 5 * 1024 * 1024;
+
+const ALLOWED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+];
 
 function getString(
   formData: FormData,
@@ -38,10 +48,119 @@ function getNumber(
   return parsed;
 }
 
-async function uploadProfileImage(
-  userId: string,
-  formData: FormData
+function getExtensionFromMimeType(
+  mimeType: string
 ) {
+  if (mimeType === "image/jpeg") {
+    return "jpg";
+  }
+
+  if (mimeType === "image/png") {
+    return "png";
+  }
+
+  if (mimeType === "image/webp") {
+    return "webp";
+  }
+
+  return null;
+}
+
+function hasValidImageSignature(
+  bytes: Uint8Array,
+  mimeType: string
+) {
+  if (mimeType === "image/jpeg") {
+    return (
+      bytes[0] === 0xff &&
+      bytes[1] === 0xd8 &&
+      bytes[2] === 0xff
+    );
+  }
+
+  if (mimeType === "image/png") {
+    return (
+      bytes[0] === 0x89 &&
+      bytes[1] === 0x50 &&
+      bytes[2] === 0x4e &&
+      bytes[3] === 0x47
+    );
+  }
+
+  if (mimeType === "image/webp") {
+    const riff =
+      String.fromCharCode(
+        bytes[0],
+        bytes[1],
+        bytes[2],
+        bytes[3]
+      ) === "RIFF";
+
+    const webp =
+      String.fromCharCode(
+        bytes[8],
+        bytes[9],
+        bytes[10],
+        bytes[11]
+      ) === "WEBP";
+
+    return riff && webp;
+  }
+
+  return false;
+}
+
+function getStoragePathFromPublicUrl(
+  publicUrl?: string | null
+) {
+  if (!publicUrl) {
+    return null;
+  }
+
+  try {
+    const url = new URL(publicUrl);
+    const marker = `/${PROFILE_IMAGE_BUCKET}/`;
+    const markerIndex =
+      url.pathname.indexOf(marker);
+
+    if (markerIndex === -1) {
+      return null;
+    }
+
+    return decodeURIComponent(
+      url.pathname.slice(
+        markerIndex + marker.length
+      )
+    );
+  } catch {
+    return null;
+  }
+}
+
+async function removePreviousProfileImage(
+  publicUrl?: string | null
+) {
+  const storagePath =
+    getStoragePathFromPublicUrl(publicUrl);
+
+  if (!storagePath) {
+    return;
+  }
+
+  await supabaseAdmin.storage
+    .from(PROFILE_IMAGE_BUCKET)
+    .remove([storagePath]);
+}
+
+async function uploadProfileImage({
+  userId,
+  currentImage,
+  formData,
+}: {
+  userId: string;
+  currentImage?: string | null;
+  formData: FormData;
+}) {
   const file = formData.get("profileImage");
 
   if (!(file instanceof File)) {
@@ -52,35 +171,39 @@ async function uploadProfileImage(
     return null;
   }
 
-  const allowedTypes = [
-    "image/jpeg",
-    "image/png",
-    "image/webp",
-  ];
-
-  if (!allowedTypes.includes(file.type)) {
-    redirect("/profile?toast=invalid-image");
-  }
-
-  const maxSize = 5 * 1024 * 1024;
-
-  if (file.size > maxSize) {
+  if (file.size > MAX_PROFILE_IMAGE_SIZE) {
     redirect("/profile?toast=image-too-large");
   }
 
-  const fileExtension =
-    file.name.split(".").pop() || "jpg";
+  if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+    redirect("/profile?toast=invalid-image");
+  }
 
-  const filePath = `${userId}/avatar-${Date.now()}.${fileExtension}`;
+  const extension =
+    getExtensionFromMimeType(file.type);
+
+  if (!extension) {
+    redirect("/profile?toast=invalid-image");
+  }
 
   const arrayBuffer = await file.arrayBuffer();
+  const bytes = new Uint8Array(arrayBuffer);
+
+  if (
+    !hasValidImageSignature(bytes, file.type)
+  ) {
+    redirect("/profile?toast=invalid-image");
+  }
+
+  const filePath = `${userId}/avatar-${randomUUID()}.${extension}`;
 
   const { error } =
     await supabaseAdmin.storage
-      .from("profile-images")
+      .from(PROFILE_IMAGE_BUCKET)
       .upload(filePath, arrayBuffer, {
         contentType: file.type,
-        upsert: true,
+        cacheControl: "31536000",
+        upsert: false,
       });
 
   if (error) {
@@ -90,8 +213,12 @@ async function uploadProfileImage(
 
   const { data } =
     supabaseAdmin.storage
-      .from("profile-images")
+      .from(PROFILE_IMAGE_BUCKET)
       .getPublicUrl(filePath);
+
+  await removePreviousProfileImage(
+    currentImage
+  );
 
   return data.publicUrl;
 }
@@ -105,11 +232,12 @@ export async function updateProfile(
     redirect("/login");
   }
 
-  const currentUser = await prisma.user.findUnique({
-    where: {
-      id: session.user.id,
-    },
-  });
+  const currentUser =
+    await prisma.user.findUnique({
+      where: {
+        id: session.user.id,
+      },
+    });
 
   if (!currentUser) {
     redirect("/login");
@@ -188,10 +316,11 @@ export async function updateProfile(
   }
 
   const uploadedImageUrl =
-    await uploadProfileImage(
-      session.user.id,
-      formData
-    );
+    await uploadProfileImage({
+      userId: session.user.id,
+      currentImage: currentUser.image,
+      formData,
+    });
 
   await prisma.user.update({
     where: {
@@ -238,7 +367,9 @@ export async function updateProfile(
     title: "Profile updated",
     description: `${username} updated profile information`,
     metadata: {
-      imageUpdated: Boolean(uploadedImageUrl),
+      imageUpdated: Boolean(
+        uploadedImageUrl
+      ),
       fields: [
         "name",
         "username",
