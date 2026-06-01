@@ -73,6 +73,18 @@ function formatDate(date?: Date | null) {
     );
 }
 
+function getAppBaseUrl() {
+    if (process.env.NEXT_PUBLIC_APP_URL) {
+        return process.env.NEXT_PUBLIC_APP_URL;
+    }
+
+    if (process.env.VERCEL_URL) {
+        return `https://${process.env.VERCEL_URL}`;
+    }
+
+    return "http://localhost:3000";
+}
+
 export default async function IntegrationsPage({
     params,
     searchParams,
@@ -122,6 +134,14 @@ export default async function IntegrationsPage({
     }
 
     const account = membership.tradingAccount;
+
+    const appBaseUrl = getAppBaseUrl();
+
+    const healthEndpoint =
+        `${appBaseUrl}/api/trade-sync/health`;
+
+    const importEndpoint =
+        `${appBaseUrl}/api/trade-sync/import`;
 
     const updateIntegrationsAction =
         updateAccountIntegrations.bind(
@@ -332,6 +352,82 @@ export default async function IntegrationsPage({
                                 className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
                             />
                         </div>
+                    </div>
+                </div>
+
+                <div className="rounded-3xl border border-green-500/20 bg-green-500/[0.05] p-6">
+                    <div className="mb-6 flex items-center gap-3">
+                        <Cable className="text-green-400" />
+
+                        <div>
+                            <p className="text-sm text-green-400">
+                                MT5 Connector Setup
+                            </p>
+
+                            <h2 className="text-2xl font-bold">
+                                Connection details for future connector
+                            </h2>
+                        </div>
+                    </div>
+
+                    <p className="max-w-3xl text-sm leading-6 text-gray-400">
+                        Questi dati serviranno quando costruiremo l’Expert Advisor MT5. Per ora sono solo informazioni di configurazione: non viene ancora collegato nessun conto reale.
+                    </p>
+
+                    <div className="mt-6 grid grid-cols-1 gap-4 xl:grid-cols-2">
+                        <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                            <p className="text-xs uppercase tracking-[0.16em] text-gray-500">
+                                Trading Account ID
+                            </p>
+
+                            <p className="mt-3 break-all font-mono text-sm font-bold text-white">
+                                {account.id}
+                            </p>
+                        </div>
+
+                        <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                            <p className="text-xs uppercase tracking-[0.16em] text-gray-500">
+                                Sync Secret
+                            </p>
+
+                            <p className="mt-3 text-sm font-bold text-yellow-300">
+                                Stored only on server environment
+                            </p>
+
+                            <p className="mt-2 text-xs leading-5 text-gray-500">
+                                Non viene mostrata in app. Verrà copiata manualmente nel connettore MT5 solo quando costruiremo la connessione reale.
+                            </p>
+                        </div>
+
+                        <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                            <p className="text-xs uppercase tracking-[0.16em] text-gray-500">
+                                Health Check Endpoint
+                            </p>
+
+                            <p className="mt-3 break-all font-mono text-sm font-bold text-white">
+                                {healthEndpoint}
+                            </p>
+                        </div>
+
+                        <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                            <p className="text-xs uppercase tracking-[0.16em] text-gray-500">
+                                Import Endpoint
+                            </p>
+
+                            <p className="mt-3 break-all font-mono text-sm font-bold text-white">
+                                {importEndpoint}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-5">
+                        <p className="text-sm font-bold text-white">
+                            Future MT5 flow
+                        </p>
+
+                        <p className="mt-3 text-sm leading-6 text-gray-400">
+                            MT5 controllerà prima l’Health Check. Se VOLTIS risponde che la sync è pronta, il connettore invierà il trade chiuso all’Import Endpoint. Il trade entrerà nel Diary come MT5 + Needs Review.
+                        </p>
                     </div>
                 </div>
 
