@@ -9,7 +9,10 @@ input string VOLTIS_ACCOUNT_ID = "paste_voltis_account_id_here";
 input string VOLTIS_SYNC_SECRET = "paste_trade_sync_secret_here";
 
 input bool ENABLE_SYNC = false;
+input bool DRY_RUN = true;
+
 input int CHECK_INTERVAL_SECONDS = 30;
+input int HISTORY_LOOKBACK_DAYS = 30;
 
 datetime lastCheckTime = 0;
 
@@ -20,6 +23,7 @@ int OnInit()
 {
    Print("VOLTIS MT5 Connector initialized.");
    Print("Sync enabled: ", ENABLE_SYNC);
+   Print("Dry run: ", DRY_RUN);
    Print("Base URL: ", VOLTIS_BASE_URL);
    Print("VOLTIS Account ID: ", VOLTIS_ACCOUNT_ID);
 
@@ -70,12 +74,77 @@ void CheckClosedTrades()
    }
 
    Print("VOLTIS: health check passed.");
+   Print("VOLTIS: scanning MT5 closed deals...");
 
-   // Future implementation:
-   // 1. Read MT5 closed deals from account history
-   // 2. Detect only new closed trades
-   // 3. Send valid closed trades to /api/trade-sync/import
-   // 4. Store synced trade IDs locally to avoid duplicates
+   datetime toTime = TimeCurrent();
+   datetime fromTime = toTime - HISTORY_LOOKBACK_DAYS * 24 * 60 * 60;
+
+   if(!HistorySelect(fromTime, toTime))
+   {
+      Print("VOLTIS: HistorySelect failed. Error: ", GetLastError());
+      return;
+   }
+
+   int totalDeals = HistoryDealsTotal();
+
+   Print("VOLTIS: total deals found in history: ", totalDeals);
+
+   for(int index = 0; index < totalDeals; index++)
+   {
+      ulong dealTicket = HistoryDealGetTicket(index);
+
+      if(dealTicket == 0)
+      {
+         continue;
+      }
+
+      if(IsDealAlreadyProcessed(dealTicket))
+      {
+         continue;
+      }
+
+      long entryType = HistoryDealGetInteger(dealTicket, DEAL_ENTRY);
+
+      if(entryType != DEAL_ENTRY_OUT && entryType != DEAL_ENTRY_INOUT)
+      {
+         continue;
+      }
+
+      string symbol = HistoryDealGetString(dealTicket, DEAL_SYMBOL);
+      double volume = HistoryDealGetDouble(dealTicket, DEAL_VOLUME);
+      double price = HistoryDealGetDouble(dealTicket, DEAL_PRICE);
+      double profit = HistoryDealGetDouble(dealTicket, DEAL_PROFIT);
+      double commission = HistoryDealGetDouble(dealTicket, DEAL_COMMISSION);
+      double swap = HistoryDealGetDouble(dealTicket, DEAL_SWAP);
+      datetime dealTime = (datetime)HistoryDealGetInteger(dealTicket, DEAL_TIME);
+      long dealType = HistoryDealGetInteger(dealTicket, DEAL_TYPE);
+      ulong positionId = (ulong)HistoryDealGetInteger(dealTicket, DEAL_POSITION_ID);
+
+      string direction = GetDirectionFromDealType(dealType);
+
+      Print("VOLTIS: new closed deal detected.");
+      Print("Deal ticket: ", dealTicket);
+      Print("Position ID: ", positionId);
+      Print("Symbol: ", symbol);
+      Print("Direction: ", direction);
+      Print("Volume: ", volume);
+      Print("Close price: ", price);
+      Print("Profit: ", profit);
+      Print("Commission: ", commission);
+      Print("Swap: ", swap);
+      Print("Close time: ", TimeToString(dealTime, TIME_DATE | TIME_SECONDS));
+
+      if(DRY_RUN)
+      {
+         Print("VOLTIS DRY RUN: deal not sent to VOLTIS.");
+         MarkDealAsProcessed(dealTicket);
+         continue;
+      }
+
+      // Future implementation:
+      // SendClosedDealToVoltIs(...)
+      // MarkDealAsProcessed(dealTicket) only after successful import.
+   }
 }
 
 //+------------------------------------------------------------------+
@@ -162,6 +231,48 @@ bool SendPostRequest(string endpoint, string jsonBody, string &response)
    Print("VOLTIS response: ", response);
 
    return statusCode >= 200 && statusCode < 300;
+}
+
+//+------------------------------------------------------------------+
+//| Get direction from MT5 deal type                                 |
+//+------------------------------------------------------------------+
+string GetDirectionFromDealType(long dealType)
+{
+   if(dealType == DEAL_TYPE_BUY)
+   {
+      return "BUY";
+   }
+
+   if(dealType == DEAL_TYPE_SELL)
+   {
+      return "SELL";
+   }
+
+   return "UNKNOWN";
+}
+
+//+------------------------------------------------------------------+
+//| Local duplicate protection                                       |
+//+------------------------------------------------------------------+
+bool IsDealAlreadyProcessed(ulong dealTicket)
+{
+   string key = GetProcessedDealKey(dealTicket);
+
+   return GlobalVariableCheck(key);
+}
+
+void MarkDealAsProcessed(ulong dealTicket)
+{
+   string key = GetProcessedDealKey(dealTicket);
+
+   GlobalVariableSet(key, TimeCurrent());
+
+   Print("VOLTIS: deal marked as processed locally: ", dealTicket);
+}
+
+string GetProcessedDealKey(ulong dealTicket)
+{
+   return "VOLTIS_SYNCED_" + VOLTIS_ACCOUNT_ID + "_" + IntegerToString((long)dealTicket);
 }
 
 //+------------------------------------------------------------------+
