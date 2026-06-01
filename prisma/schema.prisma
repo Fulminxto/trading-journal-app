@@ -109,6 +109,20 @@ model TradingAccount {
   maxDrawdown     Float?
   dailyDrawdown   Float?
 
+  integrationMode  String   @default("manual")
+  autoSyncEnabled  Boolean  @default(false)
+
+  mt5Enabled       Boolean  @default(false)
+  mt5AccountLogin  String?
+  mt5ServerName    String?
+
+  brokerSyncEnabled Boolean @default(false)
+  brokerProvider    String?
+  brokerAccountId   String?
+
+  syncStatus       String   @default("inactive")
+  lastSyncedAt     DateTime?
+
   members        AccountMember[]
   trades         Trade[]
   sessions       TradingSession[]
