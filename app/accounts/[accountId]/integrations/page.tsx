@@ -271,6 +271,14 @@ export default async function IntegrationsPage({
         );
     }
 
+    if (
+        membership.tradingAccount.status === "ARCHIVED"
+    ) {
+        redirect(
+            `/accounts/${accountId}/dashboard`
+        );
+    }
+
     const account = membership.tradingAccount;
 
     const recentSyncLogs =

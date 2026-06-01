@@ -121,7 +121,7 @@ const baseLinks: AccountLink[] = [
     icon: Users,
     canShow: (permissions) =>
       isManager(permissions) ||
-      permissions.canViewAnalytics,
+      permissions.canViewMembers,
   },
   {
     path: "sessions",
@@ -335,8 +335,8 @@ export default function Sidebar({
           setCollapsed(true)
         }
         className={`fixed left-0 top-0 z-50 h-screen overflow-y-auto border-r border-white/10 bg-[#071018] p-4 transition-all duration-500 ease-out lg:sticky lg:z-40 ${isCollapsed
-            ? "w-[88px]"
-            : "w-72 lg:w-64"
+          ? "w-[88px]"
+          : "w-72 lg:w-64"
           } ${open
             ? "translate-x-0"
             : "-translate-x-full lg:translate-x-0"
@@ -344,16 +344,16 @@ export default function Sidebar({
       >
         <div
           className={`flex items-center ${isCollapsed
-              ? "justify-center"
-              : "justify-between"
+            ? "justify-center"
+            : "justify-between"
             }`}
         >
           <Link
             href="/accounts"
             onClick={onClose}
             className={`group flex items-center transition-all duration-500 ${isCollapsed
-                ? "justify-center"
-                : "gap-3"
+              ? "justify-center"
+              : "gap-3"
               }`}
           >
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/5 bg-white/[0.02] transition-all duration-300 group-hover:bg-white/[0.05]">
@@ -414,8 +414,8 @@ export default function Sidebar({
                 href={link.href}
                 onClick={onClose}
                 className={`group flex items-center rounded-xl transition ${isCollapsed
-                    ? "justify-center px-3 py-3"
-                    : "gap-3 px-4 py-3"
+                  ? "justify-center px-3 py-3"
+                  : "gap-3 px-4 py-3"
                   } ${active
                     ? "bg-green-400/10 text-green-400"
                     : "text-gray-300 hover:bg-white/5 hover:text-white"

@@ -21,14 +21,16 @@ export default async function CreateAccountPage() {
         redirect("/login");
     }
 
+    const isGlobalAdmin =
+        currentUser.role === "FOUNDER" ||
+        currentUser.role === "ADMIN";
+
     const canCreatePersonalAccount =
-        currentUser.role === "MANAGER" ||
-        currentUser.role === "ADMIN" ||
+        isGlobalAdmin ||
         currentUser.canCreatePersonalAccounts;
 
     const canCreateSharedAccount =
-        currentUser.role === "MANAGER" ||
-        currentUser.role === "ADMIN" ||
+        isGlobalAdmin ||
         currentUser.canCreateSharedAccounts;
 
     if (

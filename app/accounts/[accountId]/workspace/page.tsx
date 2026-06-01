@@ -49,6 +49,12 @@ export default async function WorkspacePage({
         redirect(`/accounts/${accountId}/dashboard`);
     }
 
+    if (
+        membership.tradingAccount.status === "ARCHIVED"
+    ) {
+        redirect(`/accounts/${accountId}/dashboard`);
+    }
+
     const members = await prisma.accountMember.findMany({
         where: {
             tradingAccountId: accountId,

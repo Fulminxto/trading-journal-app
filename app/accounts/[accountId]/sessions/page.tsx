@@ -41,13 +41,26 @@ export default async function SessionsPage({
   }
 
   if (
-    String(membership.role) !== "OWNER" &&
+    membership.role !== "MANAGER" &&
     !membership.canViewReports
   ) {
     redirect(
       `/accounts/${accountId}/dashboard`
     );
   }
+
+  if (
+    membership.tradingAccount.status ===
+    "ARCHIVED"
+  ) {
+    redirect(
+      `/accounts/${accountId}/dashboard`
+    );
+  }
+
+  const canCreateSessions =
+    membership.role === "MANAGER" ||
+    membership.role === "MEMBER";
 
   const sessions =
     await prisma.tradingSession.findMany({
@@ -168,156 +181,159 @@ export default async function SessionsPage({
         </p>
       </div>
 
-      <form
-        action={createTradingSession.bind(
-          null,
-          accountId
-        )}
-        className="relative mb-10 overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl"
-      >
+      {canCreateSessions && (
 
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.08),transparent_35%)]" />
+        <form
+          action={createTradingSession.bind(
+            null,
+            accountId
+          )}
+          className="relative mb-10 overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl"
+        >
 
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.06),transparent_35%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.08),transparent_35%)]" />
 
-        <div className="relative z-10">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.06),transparent_35%)]" />
 
-          <div className="mb-6">
-            <p className="text-sm text-gray-400">
-              Nuova sessione
-            </p>
+          <div className="relative z-10">
 
-            <h2 className="mt-1 text-2xl font-bold">
-              Pre Market Planning
-            </h2>
+            <div className="mb-6">
+              <p className="text-sm text-gray-400">
+                Nuova sessione
+              </p>
+
+              <h2 className="mt-1 text-2xl font-bold">
+                Pre Market Planning
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              <input
+                name="date"
+                type="date"
+                required
+                className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
+              />
+
+              <input
+                name="title"
+                placeholder="Titolo sessione"
+                className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
+              />
+
+              <select
+                name="sessionType"
+                className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
+              >
+                <option value="">
+                  Session Type
+                </option>
+
+                <option value="ASIA">
+                  Asia
+                </option>
+
+                <option value="LONDON">
+                  London
+                </option>
+
+                <option value="NEW_YORK">
+                  New York
+                </option>
+
+                <option value="OVERLAP">
+                  Overlap
+                </option>
+              </select>
+
+              <input
+                name="marketBias"
+                placeholder="Market Bias"
+                className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
+              />
+
+              <input
+                name="focus"
+                placeholder="Focus del giorno"
+                className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
+              />
+
+              <select
+                name="emotionalState"
+                className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
+              >
+                <option value="">
+                  Emotional State
+                </option>
+
+                <option value="CALM">
+                  Calm
+                </option>
+
+                <option value="FOCUSED">
+                  Focused
+                </option>
+
+                <option value="CONFIDENT">
+                  Confident
+                </option>
+
+                <option value="TIRED">
+                  Tired
+                </option>
+
+                <option value="STRESSED">
+                  Stressed
+                </option>
+
+                <option value="IMPULSIVE">
+                  Impulsive
+                </option>
+              </select>
+
+              <textarea
+                name="checklist"
+                placeholder="Checklist"
+                className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
+              />
+
+              <textarea
+                name="goals"
+                placeholder="Goals"
+                className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
+              />
+
+              <textarea
+                name="mistakesToAvoid"
+                placeholder="Errori da evitare"
+                className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
+              />
+
+              <textarea
+                name="sessionReview"
+                placeholder="Review finale"
+                className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
+              />
+
+              <input
+                name="finalScore"
+                type="number"
+                min="1"
+                max="10"
+                placeholder="Final Score (1-10)"
+                className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
+              />
+
+              <button
+                type="submit"
+                className="rounded-2xl bg-green-500 p-4 font-bold text-black transition hover:bg-green-400 sm:col-span-2 xl:col-span-3"
+              >
+                Salva sessione
+              </button>
+            </div>
           </div>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            <input
-              name="date"
-              type="date"
-              required
-              className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
-            />
-
-            <input
-              name="title"
-              placeholder="Titolo sessione"
-              className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
-            />
-
-            <select
-              name="sessionType"
-              className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
-            >
-              <option value="">
-                Session Type
-              </option>
-
-              <option value="ASIA">
-                Asia
-              </option>
-
-              <option value="LONDON">
-                London
-              </option>
-
-              <option value="NEW_YORK">
-                New York
-              </option>
-
-              <option value="OVERLAP">
-                Overlap
-              </option>
-            </select>
-
-            <input
-              name="marketBias"
-              placeholder="Market Bias"
-              className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
-            />
-
-            <input
-              name="focus"
-              placeholder="Focus del giorno"
-              className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
-            />
-
-            <select
-              name="emotionalState"
-              className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
-            >
-              <option value="">
-                Emotional State
-              </option>
-
-              <option value="CALM">
-                Calm
-              </option>
-
-              <option value="FOCUSED">
-                Focused
-              </option>
-
-              <option value="CONFIDENT">
-                Confident
-              </option>
-
-              <option value="TIRED">
-                Tired
-              </option>
-
-              <option value="STRESSED">
-                Stressed
-              </option>
-
-              <option value="IMPULSIVE">
-                Impulsive
-              </option>
-            </select>
-
-            <textarea
-              name="checklist"
-              placeholder="Checklist"
-              className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
-            />
-
-            <textarea
-              name="goals"
-              placeholder="Goals"
-              className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
-            />
-
-            <textarea
-              name="mistakesToAvoid"
-              placeholder="Errori da evitare"
-              className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
-            />
-
-            <textarea
-              name="sessionReview"
-              placeholder="Review finale"
-              className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
-            />
-
-            <input
-              name="finalScore"
-              type="number"
-              min="1"
-              max="10"
-              placeholder="Final Score (1-10)"
-              className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10"
-            />
-
-            <button
-              type="submit"
-              className="rounded-2xl bg-green-500 p-4 font-bold text-black transition hover:bg-green-400 sm:col-span-2 xl:col-span-3"
-            >
-              Salva sessione
-            </button>
-          </div>
-        </div>
-      </form>
+        </form>
+      )}
 
       <div className="space-y-5">
         {sessions.length === 0 ? (

@@ -39,6 +39,9 @@ export default async function RulesPage({
         userId: session.user.id,
         tradingAccountId: accountId,
       },
+      include: {
+        tradingAccount: true,
+      },
     });
 
   if (!membership) {
@@ -46,8 +49,17 @@ export default async function RulesPage({
   }
 
   if (
-    String(membership.role) !== "OWNER" &&
+    membership.role !== "MANAGER" &&
     !membership.canManageAccount
+  ) {
+    redirect(
+      `/accounts/${accountId}/dashboard`
+    );
+  }
+
+  if (
+    membership.tradingAccount.status ===
+    "ARCHIVED"
   ) {
     redirect(
       `/accounts/${accountId}/dashboard`
@@ -61,15 +73,16 @@ export default async function RulesPage({
   const monthStart = new Date(year, month, 1);
   const monthEnd = new Date(year, month + 1, 1);
 
-  const goal = await prisma.tradingGoal.findUnique({
-    where: {
-      tradingAccountId_month_year: {
-        tradingAccountId: accountId,
-        month,
-        year,
+  const goal =
+    await prisma.tradingGoal.findUnique({
+      where: {
+        tradingAccountId_month_year: {
+          tradingAccountId: accountId,
+          month,
+          year,
+        },
       },
-    },
-  });
+    });
 
   const trades = await prisma.trade.findMany({
     where: {
@@ -82,7 +95,8 @@ export default async function RulesPage({
   });
 
   const totalPnl = trades.reduce(
-    (acc, trade) => acc + (trade.resultUsd || 0),
+    (acc, trade) =>
+      acc + (trade.resultUsd || 0),
     0
   );
 
@@ -91,27 +105,34 @@ export default async function RulesPage({
   ).length;
 
   const winRate =
-    trades.length > 0 ? (wins / trades.length) * 100 : 0;
+    trades.length > 0
+      ? (wins / trades.length) * 100
+      : 0;
 
   const maxDrawdown =
     trades.length > 0
       ? Math.abs(
         Math.min(
           ...trades.map(
-            (trade) => trade.drawdownPercent || 0
+            (trade) =>
+              trade.drawdownPercent || 0
           )
         )
       )
       : 0;
 
   const profitProgress =
-    goal?.monthlyProfitGoal && goal.monthlyProfitGoal > 0
-      ? (totalPnl / goal.monthlyProfitGoal) * 100
+    goal?.monthlyProfitGoal &&
+      goal.monthlyProfitGoal > 0
+      ? (totalPnl / goal.monthlyProfitGoal) *
+      100
       : 0;
 
   const winRateProgress =
-    goal?.monthlyWinRateGoal && goal.monthlyWinRateGoal > 0
-      ? (winRate / goal.monthlyWinRateGoal) * 100
+    goal?.monthlyWinRateGoal &&
+      goal.monthlyWinRateGoal > 0
+      ? (winRate / goal.monthlyWinRateGoal) *
+      100
       : 0;
 
   return (
@@ -133,7 +154,9 @@ export default async function RulesPage({
           </p>
 
           <h2
-            className={`mt-2 text-3xl font-bold ${totalPnl >= 0 ? "text-green-400" : "text-red-400"
+            className={`mt-2 text-3xl font-bold ${totalPnl >= 0
+                ? "text-green-400"
+                : "text-red-400"
               }`}
           >
             ${totalPnl.toFixed(2)}
@@ -177,7 +200,10 @@ export default async function RulesPage({
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <form
-          action={saveTradingGoals.bind(null, accountId)}
+          action={saveTradingGoals.bind(
+            null,
+            accountId
+          )}
           className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6"
         >
           <p className="text-sm text-gray-400">
@@ -194,7 +220,9 @@ export default async function RulesPage({
               type="number"
               step="0.01"
               placeholder="Monthly Profit Goal"
-              defaultValue={goal?.monthlyProfitGoal || ""}
+              defaultValue={
+                goal?.monthlyProfitGoal || ""
+              }
               className="w-full rounded-2xl border border-white/10 bg-black/20 p-4 outline-none"
             />
 
@@ -203,7 +231,9 @@ export default async function RulesPage({
               type="number"
               step="0.01"
               placeholder="Monthly Win Rate Goal %"
-              defaultValue={goal?.monthlyWinRateGoal || ""}
+              defaultValue={
+                goal?.monthlyWinRateGoal || ""
+              }
               className="w-full rounded-2xl border border-white/10 bg-black/20 p-4 outline-none"
             />
 
@@ -212,7 +242,9 @@ export default async function RulesPage({
               type="number"
               step="0.01"
               placeholder="Max Drawdown Limit %"
-              defaultValue={goal?.maxDrawdownLimit || ""}
+              defaultValue={
+                goal?.maxDrawdownLimit || ""
+              }
               className="w-full rounded-2xl border border-white/10 bg-black/20 p-4 outline-none"
             />
 
@@ -220,7 +252,9 @@ export default async function RulesPage({
               name="maxTradesPerDay"
               type="number"
               placeholder="Max Trades Per Day"
-              defaultValue={goal?.maxTradesPerDay || ""}
+              defaultValue={
+                goal?.maxTradesPerDay || ""
+              }
               className="w-full rounded-2xl border border-white/10 bg-black/20 p-4 outline-none"
             />
 

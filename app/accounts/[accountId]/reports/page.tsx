@@ -51,6 +51,9 @@ export default async function ReportsPage({
         userId: session.user.id,
         tradingAccountId: accountId,
       },
+      include: {
+        tradingAccount: true,
+      },
     });
 
   if (!membership) {
@@ -60,6 +63,12 @@ export default async function ReportsPage({
   if (
     membership.role !== "MANAGER" &&
     !membership.canViewReports
+  ) {
+    redirect(`/accounts/${accountId}/dashboard`);
+  }
+
+  if (
+    membership.tradingAccount.status === "ARCHIVED"
   ) {
     redirect(`/accounts/${accountId}/dashboard`);
   }

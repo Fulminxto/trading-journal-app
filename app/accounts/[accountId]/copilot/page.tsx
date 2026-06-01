@@ -46,6 +46,9 @@ export default async function CopilotPage({
                 userId: session.user.id,
                 tradingAccountId: accountId,
             },
+            include: {
+                tradingAccount: true,
+            },
         });
 
     if (!membership) {
@@ -55,6 +58,12 @@ export default async function CopilotPage({
     if (
         membership.role !== "MANAGER" &&
         !membership.canViewCopilot
+    ) {
+        redirect(`/accounts/${accountId}/dashboard`);
+    }
+
+    if (
+        membership.tradingAccount.status === "ARCHIVED"
     ) {
         redirect(`/accounts/${accountId}/dashboard`);
     }
