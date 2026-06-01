@@ -280,6 +280,7 @@ export default async function IntegrationsPage({
                 type: {
                     in: [
                         "TRADE_IMPORTED",
+                        "TRADE_SYNC_UPDATED",
                         "INTEGRATION_SETTINGS_UPDATED",
                     ],
                 },
@@ -672,6 +673,12 @@ export default async function IntegrationsPage({
                                                 {log.type === "TRADE_IMPORTED" && (
                                                     <span className="rounded-xl border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-cyan-300">
                                                         Import
+                                                    </span>
+                                                )}
+
+                                                {log.type === "TRADE_SYNC_UPDATED" && (
+                                                    <span className="rounded-xl border border-blue-500/20 bg-blue-500/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-blue-300">
+                                                        Updated
                                                     </span>
                                                 )}
 
