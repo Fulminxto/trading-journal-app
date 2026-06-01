@@ -18,6 +18,29 @@ function formatCurrency(
   }).format(value);
 }
 
+function formatPercent(value: number) {
+  return `${value.toFixed(2)}%`;
+}
+
+function getResultTone(value: number) {
+  if (value > 0) {
+    return "text-green-400";
+  }
+
+  if (value < 0) {
+    return "text-red-400";
+  }
+
+  return "text-yellow-400";
+}
+
+function getDateLabel(date: Date) {
+  return new Date(date).toLocaleDateString("it-IT", {
+    day: "2-digit",
+    month: "2-digit",
+  });
+}
+
 export default async function DashboardPage({
   params,
 }: {
@@ -62,10 +85,10 @@ export default async function DashboardPage({
     ],
   });
 
-  const account =
-    membership.tradingAccount;
+  const account = membership.tradingAccount;
 
   const currency = account.currency;
+  const initialBalance = account.initialBalance || 0;
 
   const totalTrades = trades.length;
 
@@ -81,73 +104,103 @@ export default async function DashboardPage({
     (trade) => trade.outcome === "be"
   ).length;
 
+  const closedTrades = trades.filter(
+    (trade) =>
+      trade.outcome === "win" ||
+      trade.outcome === "loss" ||
+      trade.outcome === "be"
+  ).length;
+
+  const winningTrades = trades.filter(
+    (trade) => trade.outcome === "win"
+  );
+
+  const losingTrades = trades.filter(
+    (trade) => trade.outcome === "loss"
+  );
+
+  const grossProfit = winningTrades.reduce(
+    (acc, trade) => acc + (trade.resultUsd || 0),
+    0
+  );
+
+  const grossLoss = losingTrades.reduce(
+    (acc, trade) => acc + (trade.resultUsd || 0),
+    0
+  );
+
   const totalPnl = trades.reduce(
-    (acc, trade) =>
-      acc + (trade.resultUsd || 0),
+    (acc, trade) => acc + (trade.resultUsd || 0),
     0
   );
 
   const currentEquity =
     trades.length > 0
       ? trades[trades.length - 1].equity ||
-      account.initialBalance
-      : account.initialBalance;
+      initialBalance
+      : initialBalance;
 
   const currentProfitPercent =
-    ((currentEquity -
-      account.initialBalance) /
-      account.initialBalance) *
-    100;
+    initialBalance > 0
+      ? ((currentEquity - initialBalance) /
+        initialBalance) *
+      100
+      : 0;
 
   const remainingToTarget =
     account.profitTarget
-      ? account.profitTarget -
-      currentProfitPercent
+      ? account.profitTarget - currentProfitPercent
       : null;
 
+  const targetProgress =
+    account.profitTarget && account.profitTarget > 0
+      ? Math.max(
+        0,
+        Math.min(
+          100,
+          (currentProfitPercent /
+            account.profitTarget) *
+          100
+        )
+      )
+      : 0;
+
   const winRate =
-    totalTrades > 0
-      ? (wins / totalTrades) * 100
+    closedTrades > 0
+      ? (wins / closedTrades) * 100
+      : 0;
+
+  const lossRate =
+    closedTrades > 0
+      ? (losses / closedTrades) * 100
+      : 0;
+
+  const beRate =
+    closedTrades > 0
+      ? (be / closedTrades) * 100
       : 0;
 
   const averageWin =
-    wins > 0
-      ? trades
-        .filter(
-          (trade) =>
-            trade.outcome ===
-            "win"
-        )
-        .reduce(
-          (acc, trade) =>
-            acc +
-            (trade.resultUsd || 0),
-          0
-        ) / wins
-      : 0;
+    wins > 0 ? grossProfit / wins : 0;
 
   const averageLoss =
-    losses > 0
-      ? trades
-        .filter(
-          (trade) =>
-            trade.outcome ===
-            "loss"
-        )
-        .reduce(
-          (acc, trade) =>
-            acc +
-            (trade.resultUsd || 0),
-          0
-        ) / losses
-      : 0;
+    losses > 0 ? grossLoss / losses : 0;
+
+  const averageResult =
+    totalTrades > 0 ? totalPnl / totalTrades : 0;
+
+  const profitFactor =
+    Math.abs(grossLoss) > 0
+      ? grossProfit / Math.abs(grossLoss)
+      : grossProfit > 0
+        ? grossProfit
+        : 0;
 
   const bestTrade =
     trades.length > 0
       ? Math.max(
         ...trades.map(
-          (trade) =>
-            trade.resultUsd || 0
+          (trade) => trade.resultUsd || 0
         )
       )
       : 0;
@@ -156,8 +209,7 @@ export default async function DashboardPage({
     trades.length > 0
       ? Math.min(
         ...trades.map(
-          (trade) =>
-            trade.resultUsd || 0
+          (trade) => trade.resultUsd || 0
         )
       )
       : 0;
@@ -167,23 +219,34 @@ export default async function DashboardPage({
       ? Math.min(
         ...trades.map(
           (trade) =>
-            trade.drawdownPercent ||
-            0
+            trade.drawdownPercent || 0
         )
       )
       : 0;
 
+  const recentTrades = [...trades]
+    .reverse()
+    .slice(0, 5);
+
+  const lastFivePnl = recentTrades.reduce(
+    (acc, trade) => acc + (trade.resultUsd || 0),
+    0
+  );
+
+  const lastFiveWins = recentTrades.filter(
+    (trade) => trade.outcome === "win"
+  ).length;
+
+  const lastFiveLosses = recentTrades.filter(
+    (trade) => trade.outcome === "loss"
+  ).length;
+
   const chartData = trades.map((trade) => ({
-    date: new Date(
-      trade.openDate
-    ).toLocaleDateString("it-IT", {
-      day: "2-digit",
-      month: "2-digit",
-    }),
+    date: getDateLabel(trade.openDate),
 
     equity:
       trade.equity ||
-      account.initialBalance,
+      initialBalance,
   }));
 
   const consistencyScore = Math.max(
@@ -195,12 +258,20 @@ export default async function DashboardPage({
         (averageWin > Math.abs(averageLoss)
           ? 20
           : 10) +
-        (maxDrawdown > -5
-          ? 20
-          : 10)
+        (maxDrawdown > -5 ? 20 : 10)
       )
     )
   );
+
+  const accountHealth =
+    totalTrades === 0
+      ? "Waiting for data"
+      : currentProfitPercent >= 0 &&
+        maxDrawdown > -5
+        ? "Stable"
+        : currentProfitPercent >= 0
+          ? "Positive but monitor risk"
+          : "Needs review";
 
   const stats = [
     {
@@ -214,9 +285,28 @@ export default async function DashboardPage({
 
     {
       label: "Current Profit",
-      value: `${currentProfitPercent.toFixed(2)}%`,
+      value: formatPercent(
+        currentProfitPercent
+      ),
+      tone: getResultTone(
+        currentProfitPercent
+      ),
+    },
+
+    {
+      label: "Total PnL",
+      value: formatCurrency(
+        totalPnl,
+        currency
+      ),
+      tone: getResultTone(totalPnl),
+    },
+
+    {
+      label: "Win Rate",
+      value: formatPercent(winRate),
       tone:
-        currentProfitPercent >= 0
+        winRate >= 50
           ? "text-green-400"
           : "text-red-400",
     },
@@ -225,15 +315,6 @@ export default async function DashboardPage({
       label: "Trades",
       value: totalTrades,
       tone: "text-white",
-    },
-
-    {
-      label: "Win Rate",
-      value: `${winRate.toFixed(2)}%`,
-      tone:
-        winRate >= 50
-          ? "text-green-400"
-          : "text-red-400",
     },
 
     {
@@ -255,15 +336,14 @@ export default async function DashboardPage({
     },
 
     {
-      label: "Total PnL",
+      label: "Average Result",
       value: formatCurrency(
-        totalPnl,
+        averageResult,
         currency
       ),
-      tone:
-        totalPnl >= 0
-          ? "text-green-400"
-          : "text-red-400",
+      tone: getResultTone(
+        averageResult
+      ),
     },
 
     {
@@ -282,6 +362,15 @@ export default async function DashboardPage({
         currency
       ),
       tone: "text-red-400",
+    },
+
+    {
+      label: "Profit Factor",
+      value: profitFactor.toFixed(2),
+      tone:
+        profitFactor >= 1
+          ? "text-green-400"
+          : "text-red-400",
     },
 
     {
@@ -304,7 +393,7 @@ export default async function DashboardPage({
 
     {
       label: "Max Drawdown",
-      value: `${maxDrawdown.toFixed(2)}%`,
+      value: formatPercent(maxDrawdown),
       tone: "text-red-400",
     },
 
@@ -312,9 +401,7 @@ export default async function DashboardPage({
       label: "Remaining Target",
       value:
         remainingToTarget !== null
-          ? `${remainingToTarget.toFixed(
-            2
-          )}%`
+          ? formatPercent(remainingToTarget)
           : "-",
       tone:
         remainingToTarget !== null &&
@@ -336,17 +423,34 @@ export default async function DashboardPage({
           totalPnl,
           currency
         )}
-        winRate={`${winRate.toFixed(2)}%`}
+        winRate={formatPercent(winRate)}
         totalTrades={totalTrades}
       />
 
-      <div className="mt-8">
-        <ConsistencyScoreCard
-          score={consistencyScore}
-        />
+      <div className="mt-8 grid grid-cols-1 gap-4 xl:grid-cols-3">
+        <div className="xl:col-span-2">
+          <ConsistencyScoreCard
+            score={consistencyScore}
+          />
+        </div>
+
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+          <p className="text-sm text-gray-400">
+            Account Status
+          </p>
+
+          <h2 className="mt-2 text-2xl font-black text-white">
+            {accountHealth}
+          </h2>
+
+          <p className="mt-3 text-sm leading-6 text-gray-400">
+            Snapshot based on profit, drawdown and
+            recent account behavior.
+          </p>
+        </div>
       </div>
 
-      <div className="mb-8">
+      <div className="mb-8 mt-10">
         <p className="text-sm text-gray-400">
           Dashboard account
         </p>
@@ -373,8 +477,10 @@ export default async function DashboardPage({
           </p>
 
           <h2 className="mt-2 text-3xl font-bold">
-            $
-            {account.initialBalance.toLocaleString()}
+            {formatCurrency(
+              initialBalance,
+              currency
+            )}
           </h2>
         </div>
 
@@ -384,7 +490,7 @@ export default async function DashboardPage({
           </p>
 
           <h2 className="mt-2 text-3xl font-bold">
-            {account.currency}
+            {currency}
           </h2>
         </div>
 
@@ -415,48 +521,368 @@ export default async function DashboardPage({
 
           <h2 className="mt-2 text-3xl font-bold text-green-400">
             {account.profitTarget
-              ? `${account.profitTarget}%`
+              ? formatPercent(
+                account.profitTarget
+              )
               : "-"}
           </h2>
         </div>
 
         <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
-            Max Drawdown
+            Max Drawdown Limit
           </p>
 
           <h2 className="mt-2 text-3xl font-bold text-red-400">
             {account.maxDrawdown
-              ? `${account.maxDrawdown}%`
+              ? formatPercent(
+                account.maxDrawdown
+              )
               : "-"}
           </h2>
         </div>
 
         <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
-            Daily Drawdown
+            Daily Drawdown Limit
           </p>
 
           <h2 className="mt-2 text-3xl font-bold text-red-400">
             {account.dailyDrawdown
-              ? `${account.dailyDrawdown}%`
+              ? formatPercent(
+                account.dailyDrawdown
+              )
               : "-"}
           </h2>
         </div>
       </div>
 
-      <div className="card-hover mb-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-        <div className="mb-6">
-          <p className="text-sm text-gray-400">
-            Account Growth
-          </p>
+      <div className="mb-8 grid grid-cols-1 gap-4 xl:grid-cols-3">
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
+          <div className="mb-6">
+            <p className="text-sm text-gray-400">
+              Account Growth
+            </p>
 
-          <h2 className="mt-1 text-2xl font-bold">
-            Equity Curve
-          </h2>
+            <h2 className="mt-1 text-2xl font-bold">
+              Equity Curve
+            </h2>
+          </div>
+
+          {chartData.length > 0 ? (
+            <EquityChart data={chartData} />
+          ) : (
+            <div className="flex min-h-[260px] items-center justify-center rounded-2xl border border-dashed border-white/10 bg-black/10 p-8 text-center text-sm text-gray-400">
+              No trades yet. Once trades are added,
+              the equity curve will appear here.
+            </div>
+          )}
         </div>
 
-        <EquityChart data={chartData} />
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+          <p className="text-sm text-gray-400">
+            Target Progress
+          </p>
+
+          <h2 className="mt-2 text-3xl font-black text-white">
+            {account.profitTarget
+              ? `${targetProgress.toFixed(0)}%`
+              : "-"}
+          </h2>
+
+          <div className="mt-5 h-3 overflow-hidden rounded-full bg-white/10">
+            <div
+              className="h-full rounded-full bg-green-400"
+              style={{
+                width: `${targetProgress}%`,
+              }}
+            />
+          </div>
+
+          <div className="mt-5 space-y-3 text-sm text-gray-400">
+            <div className="flex items-center justify-between gap-4">
+              <span>Current profit</span>
+              <span
+                className={getResultTone(
+                  currentProfitPercent
+                )}
+              >
+                {formatPercent(
+                  currentProfitPercent
+                )}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between gap-4">
+              <span>Target</span>
+              <span className="text-green-400">
+                {account.profitTarget
+                  ? formatPercent(
+                    account.profitTarget
+                  )
+                  : "-"}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between gap-4">
+              <span>Remaining</span>
+              <span
+                className={
+                  remainingToTarget !== null &&
+                    remainingToTarget <= 0
+                    ? "text-green-400"
+                    : "text-yellow-400"
+                }
+              >
+                {remainingToTarget !== null
+                  ? formatPercent(
+                    remainingToTarget
+                  )
+                  : "-"}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mb-8 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+          <p className="text-sm text-gray-400">
+            Recent Momentum
+          </p>
+
+          <h2
+            className={`mt-2 text-3xl font-black ${getResultTone(
+              lastFivePnl
+            )}`}
+          >
+            {formatCurrency(
+              lastFivePnl,
+              currency
+            )}
+          </h2>
+
+          <p className="mt-3 text-sm text-gray-400">
+            Last {recentTrades.length} trades ·{" "}
+            <span className="text-green-400">
+              {lastFiveWins}W
+            </span>{" "}
+            /{" "}
+            <span className="text-red-400">
+              {lastFiveLosses}L
+            </span>
+          </p>
+        </div>
+
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+          <p className="text-sm text-gray-400">
+            Profit Factor
+          </p>
+
+          <h2
+            className={`mt-2 text-3xl font-black ${profitFactor >= 1
+                ? "text-green-400"
+                : "text-red-400"
+              }`}
+          >
+            {profitFactor.toFixed(2)}
+          </h2>
+
+          <p className="mt-3 text-sm text-gray-400">
+            Gross profit compared to gross loss.
+          </p>
+        </div>
+
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+          <p className="text-sm text-gray-400">
+            Outcome Split
+          </p>
+
+          <div className="mt-4 space-y-3 text-sm">
+            <div>
+              <div className="mb-1 flex justify-between text-gray-400">
+                <span>Wins</span>
+                <span className="text-green-400">
+                  {formatPercent(winRate)}
+                </span>
+              </div>
+              <div className="h-2 overflow-hidden rounded-full bg-white/10">
+                <div
+                  className="h-full rounded-full bg-green-400"
+                  style={{
+                    width: `${Math.min(
+                      100,
+                      winRate
+                    )}%`,
+                  }}
+                />
+              </div>
+            </div>
+
+            <div>
+              <div className="mb-1 flex justify-between text-gray-400">
+                <span>Losses</span>
+                <span className="text-red-400">
+                  {formatPercent(lossRate)}
+                </span>
+              </div>
+              <div className="h-2 overflow-hidden rounded-full bg-white/10">
+                <div
+                  className="h-full rounded-full bg-red-400"
+                  style={{
+                    width: `${Math.min(
+                      100,
+                      lossRate
+                    )}%`,
+                  }}
+                />
+              </div>
+            </div>
+
+            <div>
+              <div className="mb-1 flex justify-between text-gray-400">
+                <span>Break Even</span>
+                <span className="text-yellow-400">
+                  {formatPercent(beRate)}
+                </span>
+              </div>
+              <div className="h-2 overflow-hidden rounded-full bg-white/10">
+                <div
+                  className="h-full rounded-full bg-yellow-400"
+                  style={{
+                    width: `${Math.min(
+                      100,
+                      beRate
+                    )}%`,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mb-8 grid grid-cols-1 gap-4 xl:grid-cols-5">
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-3">
+          <div className="mb-5">
+            <p className="text-sm text-gray-400">
+              Latest Activity
+            </p>
+
+            <h2 className="text-2xl font-bold">
+              Recent Trades
+            </h2>
+          </div>
+
+          {recentTrades.length > 0 ? (
+            <div className="space-y-3">
+              {recentTrades.map((trade) => (
+                <div
+                  key={trade.id}
+                  className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/10 p-4"
+                >
+                  <div>
+                    <p className="font-bold text-white">
+                      {trade.symbol || "Unknown Symbol"}
+                    </p>
+
+                    <p className="mt-1 text-xs text-gray-400">
+                      {getDateLabel(trade.openDate)} ·{" "}
+                      {trade.direction || "-"} ·{" "}
+                      {trade.outcome || "-"}
+                    </p>
+                  </div>
+
+                  <div className="text-right">
+                    <p
+                      className={`font-bold ${getResultTone(
+                        trade.resultUsd || 0
+                      )}`}
+                    >
+                      {formatCurrency(
+                        trade.resultUsd || 0,
+                        currency
+                      )}
+                    </p>
+
+                    <p className="mt-1 text-xs text-gray-500">
+                      Equity{" "}
+                      {formatCurrency(
+                        trade.equity ||
+                        initialBalance,
+                        currency
+                      )}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-dashed border-white/10 bg-black/10 p-6 text-sm text-gray-400">
+              No recent trades yet.
+            </div>
+          )}
+        </div>
+
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
+          <div className="mb-5">
+            <p className="text-sm text-gray-400">
+              Review Notes
+            </p>
+
+            <h2 className="text-2xl font-bold">
+              What to watch
+            </h2>
+          </div>
+
+          <div className="space-y-4 text-sm leading-6 text-gray-400">
+            <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
+              <p className="font-bold text-white">
+                Risk
+              </p>
+              <p className="mt-1">
+                Current max drawdown is{" "}
+                <span className="text-red-400">
+                  {formatPercent(maxDrawdown)}
+                </span>
+                .
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
+              <p className="font-bold text-white">
+                Execution
+              </p>
+              <p className="mt-1">
+                Average result per trade is{" "}
+                <span
+                  className={getResultTone(
+                    averageResult
+                  )}
+                >
+                  {formatCurrency(
+                    averageResult,
+                    currency
+                  )}
+                </span>
+                .
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
+              <p className="font-bold text-white">
+                Consistency
+              </p>
+              <p className="mt-1">
+                Score currently at{" "}
+                <span className="text-green-400">
+                  {consistencyScore}/100
+                </span>
+                .
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
