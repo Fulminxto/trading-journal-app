@@ -30,6 +30,54 @@ import PDFReportHeader from "@/components/reports/PDFReportHeader";
 import PDFReportFooter from "@/components/reports/PDFReportFooter";
 import PDFCompactReport from "@/components/reports/PDFCompactReport";
 
+function formatCurrency(
+  value: number,
+  currency: string
+) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(value);
+}
+
+function getResultTone(value: number) {
+  if (value > 0) {
+    return "text-green-400";
+  }
+
+  if (value < 0) {
+    return "text-red-400";
+  }
+
+  return "text-yellow-400";
+}
+
+function getRiskTone(value: number) {
+  if (value >= 60) {
+    return "text-red-400";
+  }
+
+  if (value >= 35) {
+    return "text-yellow-400";
+  }
+
+  return "text-green-400";
+}
+
+function getScoreTone(value: number) {
+  if (value >= 70) {
+    return "text-green-400";
+  }
+
+  if (value >= 45) {
+    return "text-yellow-400";
+  }
+
+  return "text-red-400";
+}
+
 export default async function ReportsPage({
   params,
 }: {
@@ -73,6 +121,9 @@ export default async function ReportsPage({
     redirect(`/accounts/${accountId}/dashboard`);
   }
 
+  const account = membership.tradingAccount;
+  const currency = account.currency || "USD";
+
   const trades = await prisma.trade.findMany({
     where: {
       tradingAccountId: accountId,
@@ -85,12 +136,6 @@ export default async function ReportsPage({
 
   const totalTrades = trades.length;
 
-  const totalPnl = trades.reduce(
-    (acc, trade) =>
-      acc + (trade.resultUsd || 0),
-    0
-  );
-
   const wins = trades.filter(
     (trade) => trade.outcome === "win"
   ).length;
@@ -99,30 +144,72 @@ export default async function ReportsPage({
     (trade) => trade.outcome === "loss"
   ).length;
 
+  const breakEven = trades.filter(
+    (trade) => trade.outcome === "be"
+  ).length;
+
+  const closedTrades =
+    wins + losses + breakEven;
+
+  const totalPnl = trades.reduce(
+    (acc, trade) =>
+      acc + (trade.resultUsd || 0),
+    0
+  );
+
+  const winningTrades = trades.filter(
+    (trade) => trade.outcome === "win"
+  );
+
+  const losingTrades = trades.filter(
+    (trade) => trade.outcome === "loss"
+  );
+
+  const grossProfit = winningTrades.reduce(
+    (acc, trade) =>
+      acc + (trade.resultUsd || 0),
+    0
+  );
+
+  const grossLoss = losingTrades.reduce(
+    (acc, trade) =>
+      acc + (trade.resultUsd || 0),
+    0
+  );
+
   const winRate =
-    totalTrades > 0
-      ? Math.round((wins / totalTrades) * 100)
+    closedTrades > 0
+      ? Math.round((wins / closedTrades) * 100)
       : 0;
+
+  const lossRate =
+    closedTrades > 0
+      ? Math.round((losses / closedTrades) * 100)
+      : 0;
+
+  const averageWin =
+    wins > 0 ? grossProfit / wins : 0;
+
+  const averageLoss =
+    losses > 0 ? grossLoss / losses : 0;
+
+  const averageResult =
+    closedTrades > 0
+      ? totalPnl / closedTrades
+      : 0;
+
+  const profitFactor =
+    Math.abs(grossLoss) > 0
+      ? grossProfit / Math.abs(grossLoss)
+      : grossProfit > 0
+        ? grossProfit
+        : 0;
 
   const emotionalTrades = trades.filter(
     (trade) =>
       trade.emotionalState &&
       trade.emotionalState.length > 0
   ).length;
-
-  const disciplineScore =
-    totalTrades > 0
-      ? Math.max(
-        0,
-        Math.min(
-          100,
-          Math.round(
-            winRate +
-            (totalPnl > 0 ? 10 : -10)
-          )
-        )
-      )
-      : 0;
 
   const lowConfidenceTrades = trades.filter(
     (trade) =>
@@ -136,55 +223,64 @@ export default async function ReportsPage({
       (trade.executionRating || 0) <= 4
   ).length;
 
-  const breakEven = trades.filter(
-    (trade) => trade.outcome === "be"
-  ).length;
-
-  const averageWin =
-    wins > 0
-      ? trades
-        .filter(
-          (trade) =>
-            trade.outcome === "win"
+  const disciplineScore =
+    closedTrades > 0
+      ? Math.max(
+        0,
+        Math.min(
+          100,
+          Math.round(
+            winRate +
+            (totalPnl > 0 ? 10 : -10)
+          )
         )
-        .reduce(
-          (acc, trade) =>
-            acc + (trade.resultUsd || 0),
-          0
-        ) / wins
-      : 0;
-
-  const averageLoss =
-    losses > 0
-      ? trades
-        .filter(
-          (trade) =>
-            trade.outcome === "loss"
-        )
-        .reduce(
-          (acc, trade) =>
-            acc + (trade.resultUsd || 0),
-          0
-        ) / losses
+      )
       : 0;
 
   const behavioralRisk =
     totalTrades > 0
-      ? Math.round(
-        ((emotionalTrades +
-          lowConfidenceTrades +
-          weakExecutionTrades) /
-          totalTrades) *
-        100
+      ? Math.min(
+        100,
+        Math.round(
+          ((emotionalTrades +
+            lowConfidenceTrades +
+            weakExecutionTrades) /
+            totalTrades) *
+          100
+        )
       )
       : 0;
 
+  const reportReadiness =
+    totalTrades >= 30
+      ? "Strong sample"
+      : totalTrades >= 10
+        ? "Growing sample"
+        : "Early sample";
+
+  const accountStatus =
+    totalTrades === 0
+      ? "Waiting for data"
+      : totalPnl >= 0 &&
+        behavioralRisk < 35
+        ? "Healthy"
+        : totalPnl >= 0
+          ? "Profitable, monitor behavior"
+          : "Needs review";
+
+  const primaryFocus =
+    behavioralRisk >= 50
+      ? "Reduce behavioral risk before scaling volume."
+      : profitFactor < 1
+        ? "Improve risk/reward balance and loss control."
+        : winRate < 45
+          ? "Review setups and entry quality."
+          : "Protect the current edge with consistent execution.";
+
   return (
     <div className="space-y-8 print:space-y-0 print:bg-[#050b10]">
-
       <PDFCompactReport
         userName={session.user.name ?? "Trader"}
-
         totalTrades={totalTrades}
         totalPnl={totalPnl}
         winRate={winRate}
@@ -199,13 +295,130 @@ export default async function ReportsPage({
       />
 
       <div className="web-report-content space-y-8">
-
         <div className="print-hidden">
           <PDFReportHeader
             totalTrades={totalTrades}
             totalPnl={totalPnl}
             winRate={winRate}
           />
+        </div>
+
+        <div className="print-hidden relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#070b14] via-[#0f1726] to-black p-8 shadow-2xl shadow-cyan-500/5">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.12),transparent_35%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.10),transparent_35%)]" />
+
+          <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
+            <div>
+              <p className="text-sm uppercase tracking-[0.25em] text-cyan-400">
+                VOLTIS AI Reports
+              </p>
+
+              <h1 className="mt-4 text-5xl font-black tracking-tight text-white xl:text-7xl">
+                Intelligence Reports
+              </h1>
+
+              <p className="mt-6 max-w-3xl text-base leading-relaxed text-gray-400 xl:text-lg">
+                Un riepilogo operativo per leggere
+                performance, comportamento, rischio,
+                disciplina ed evoluzione del trader.
+              </p>
+            </div>
+
+            <div className="shrink-0">
+              <PrintReportButton />
+            </div>
+          </div>
+        </div>
+
+        <ReportsNavigation />
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
+            <p className="text-sm text-gray-400">
+              Total Trades
+            </p>
+
+            <h2 className="mt-4 text-4xl font-black text-cyan-400">
+              {totalTrades}
+            </h2>
+
+            <p className="mt-3 text-sm text-gray-500">
+              {reportReadiness}
+            </p>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
+            <p className="text-sm text-gray-400">
+              Total PnL
+            </p>
+
+            <h2 className={`mt-4 text-4xl font-black ${getResultTone(totalPnl)}`}>
+              {formatCurrency(totalPnl, currency)}
+            </h2>
+
+            <p className="mt-3 text-sm text-gray-500">
+              Average {formatCurrency(averageResult, currency)}
+            </p>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
+            <p className="text-sm text-gray-400">
+              Win Rate
+            </p>
+
+            <h2 className={`mt-4 text-4xl font-black ${getScoreTone(winRate)}`}>
+              {winRate}%
+            </h2>
+
+            <p className="mt-3 text-sm text-gray-500">
+              {wins}W / {losses}L / {breakEven}BE
+            </p>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
+            <p className="text-sm text-gray-400">
+              Behavioral Risk
+            </p>
+
+            <h2 className={`mt-4 text-4xl font-black ${getRiskTone(behavioralRisk)}`}>
+              {behavioralRisk}%
+            </h2>
+
+            <p className="mt-3 text-sm text-gray-500">
+              Emotion, confidence, execution
+            </p>
+          </div>
+        </div>
+
+        <div className="print-hidden grid grid-cols-1 gap-6 xl:grid-cols-3">
+          <div className="rounded-[32px] border border-white/10 bg-white/[0.04] p-6 xl:col-span-2">
+            <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+              Executive focus
+            </p>
+
+            <h2 className="mt-3 text-3xl font-black text-white">
+              {accountStatus}
+            </h2>
+
+            <p className="mt-4 max-w-3xl text-sm leading-6 text-gray-400">
+              {primaryFocus}
+            </p>
+          </div>
+
+          <div className="rounded-[32px] border border-white/10 bg-white/[0.04] p-6">
+            <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+              Edge quality
+            </p>
+
+            <h2 className="mt-3 text-3xl font-black text-white">
+              {profitFactor.toFixed(2)}
+            </h2>
+
+            <p className="mt-4 text-sm leading-6 text-gray-400">
+              Profit factor based on gross profit and
+              gross loss. Loss rate is {lossRate}%.
+            </p>
+          </div>
         </div>
 
         <div id="executive">
@@ -215,77 +428,6 @@ export default async function ReportsPage({
             disciplineScore={disciplineScore}
             behavioralRisk={behavioralRisk}
           />
-        </div>
-
-        <div className="print-hidden relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#070b14] via-[#0f1726] to-black p-8 shadow-2xl shadow-cyan-500/5">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.12),transparent_35%)]" />
-
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.10),transparent_35%)]" />
-
-          <div className="relative z-10">
-            <p className="text-sm uppercase tracking-[0.25em] text-cyan-400">
-              VOLTIS AI Reports
-            </p>
-
-            <h1 className="mt-4 text-5xl font-black tracking-tight text-white xl:text-7xl">
-              Intelligence Reports
-            </h1>
-
-            <p className="mt-6 max-w-3xl text-base leading-relaxed text-gray-400 xl:text-lg">
-              Report automatici su
-              performance, comportamento,
-              disciplina, execution e
-              psicologia operativa del trader.
-            </p>
-
-            <div className="mt-8">
-              <PrintReportButton />
-            </div>
-          </div>
-        </div>
-
-        <ReportsNavigation />
-
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
-          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
-            <p className="text-sm text-gray-400">
-              Total Trades
-            </p>
-
-            <h2 className="mt-4 text-4xl font-black text-cyan-400">
-              {totalTrades}
-            </h2>
-          </div>
-
-          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
-            <p className="text-sm text-gray-400">
-              Total PnL
-            </p>
-
-            <h2 className="mt-4 text-4xl font-black text-green-400">
-              ${totalPnl.toFixed(0)}
-            </h2>
-          </div>
-
-          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
-            <p className="text-sm text-gray-400">
-              Win Rate
-            </p>
-
-            <h2 className="mt-4 text-4xl font-black text-violet-400">
-              {winRate}%
-            </h2>
-          </div>
-
-          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
-            <p className="text-sm text-gray-400">
-              Losses
-            </p>
-
-            <h2 className="mt-4 text-4xl font-black text-red-400">
-              {losses}
-            </h2>
-          </div>
         </div>
 
         <div
@@ -301,7 +443,7 @@ export default async function ReportsPage({
 
         <div
           id="monthly"
-          className="report-section mt-8"
+          className="report-section"
         >
           <MonthlyReportCard
             totalTrades={totalTrades}
@@ -314,7 +456,7 @@ export default async function ReportsPage({
 
         <div
           id="behavior"
-          className="report-section mt-8"
+          className="report-section"
         >
           <BehavioralReportCard
             emotionalTrades={emotionalTrades}
@@ -326,7 +468,7 @@ export default async function ReportsPage({
 
         <div
           id="performance"
-          className="report-section mt-8"
+          className="report-section"
         >
           <PerformanceBreakdownCard
             wins={wins}
@@ -337,10 +479,9 @@ export default async function ReportsPage({
           />
         </div>
 
-
         <div
           id="evolution"
-          className="print-hidden report-section mt-8"
+          className="print-hidden report-section"
         >
           <TraderEvolutionReport
             disciplineScore={disciplineScore}
@@ -352,7 +493,7 @@ export default async function ReportsPage({
 
         <div
           id="coaching"
-          className="report-section mt-8"
+          className="report-section"
         >
           <AICoachingReport
             disciplineScore={disciplineScore}
@@ -364,7 +505,7 @@ export default async function ReportsPage({
 
         <div
           id="risk"
-          className="report-section mt-8"
+          className="report-section"
         >
           <RiskManagementReport
             averageLoss={averageLoss}
@@ -376,7 +517,7 @@ export default async function ReportsPage({
 
         <div
           id="consistency"
-          className="print-hidden report-section mt-8"
+          className="print-hidden report-section"
         >
           <ConsistencyIntelligenceReport
             disciplineScore={disciplineScore}
@@ -388,7 +529,7 @@ export default async function ReportsPage({
 
         <div
           id="psychology"
-          className="print-hidden report-section mt-8"
+          className="print-hidden report-section"
         >
           <PsychologicalStabilityReport
             emotionalTrades={emotionalTrades}
@@ -400,7 +541,7 @@ export default async function ReportsPage({
 
         <div
           id="forecast"
-          className="print-hidden report-section mt-8"
+          className="print-hidden report-section"
         >
           <PerformanceForecastReport
             winRate={winRate}
@@ -412,7 +553,7 @@ export default async function ReportsPage({
 
         <div
           id="growth"
-          className="print-hidden report-section mt-8"
+          className="print-hidden report-section"
         >
           <GrowthRoadmapReport
             disciplineScore={disciplineScore}
@@ -423,7 +564,7 @@ export default async function ReportsPage({
 
         <div
           id="edge"
-          className="print-hidden report-section mt-8"
+          className="print-hidden report-section"
         >
           <EdgeAnalysisReport
             averageWin={averageWin}
@@ -435,7 +576,7 @@ export default async function ReportsPage({
 
         <div
           id="decision"
-          className="print-hidden report-section mt-8"
+          className="print-hidden report-section"
         >
           <DecisionQualityReport
             disciplineScore={disciplineScore}
@@ -447,7 +588,7 @@ export default async function ReportsPage({
 
         <div
           id="execution"
-          className="print-hidden report-section mt-8"
+          className="print-hidden report-section"
         >
           <ExecutionIntelligenceReport
             weakExecutionTrades={weakExecutionTrades}
@@ -460,7 +601,7 @@ export default async function ReportsPage({
 
         <div
           id="setup"
-          className="print-hidden report-section mt-8"
+          className="print-hidden report-section"
         >
           <SetupIntelligenceReport
             totalTrades={totalTrades}
@@ -473,7 +614,7 @@ export default async function ReportsPage({
 
         <div
           id="confidence"
-          className="print-hidden report-section mt-8"
+          className="print-hidden report-section"
         >
           <ConfidenceIntelligenceReport
             lowConfidenceTrades={lowConfidenceTrades}
@@ -485,7 +626,7 @@ export default async function ReportsPage({
 
         <div
           id="discipline"
-          className="print-hidden report-section mt-8"
+          className="print-hidden report-section"
         >
           <DisciplineIntelligenceReport
             disciplineScore={disciplineScore}
@@ -497,7 +638,7 @@ export default async function ReportsPage({
 
         <div
           id="emotion"
-          className="print-hidden report-section mt-8"
+          className="print-hidden report-section"
         >
           <EmotionalIntelligenceReport
             emotionalTrades={emotionalTrades}
@@ -509,7 +650,7 @@ export default async function ReportsPage({
 
         <div
           id="identity"
-          className="print-hidden report-section mt-8"
+          className="print-hidden report-section"
         >
           <TraderIdentityReport
             disciplineScore={disciplineScore}
@@ -522,7 +663,7 @@ export default async function ReportsPage({
 
         <div
           id="cognitive"
-          className="print-hidden report-section mt-8"
+          className="print-hidden report-section"
         >
           <CognitivePerformanceReport
             disciplineScore={disciplineScore}
@@ -535,7 +676,7 @@ export default async function ReportsPage({
 
         <div
           id="resilience"
-          className="print-hidden report-section mt-8"
+          className="print-hidden report-section"
         >
           <MentalResilienceReport
             disciplineScore={disciplineScore}
@@ -549,7 +690,6 @@ export default async function ReportsPage({
         <div className="print-hidden">
           <PDFReportFooter />
         </div>
-
       </div>
     </div>
   );
