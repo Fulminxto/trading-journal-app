@@ -25,7 +25,7 @@ import AdaptiveCoachingCard from "@/components/copilot/AdaptiveCoachingCard";
 import MandatoryReviewCard from "@/components/copilot/MandatoryReviewCard";
 import RecoveryChecklistCard from "@/components/copilot/RecoveryChecklistCard";
 import RecoveryStatusCard from "@/components/copilot/RecoveryStatusCard";
-import { getCopilotMemorySnapshot } from "@/lib/copilot/copilot-memory";
+import { analyzeCopilotMemory } from "@/lib/copilot/copilot-memory";
 
 export default async function CopilotPage({
     params,
@@ -79,7 +79,7 @@ export default async function CopilotPage({
         });
 
     const memorySnapshot =
-        await getCopilotMemorySnapshot(accountId);
+        await analyzeCopilotMemory(accountId);
 
     const copilotPatterns =
         memorySnapshot.patterns;
@@ -532,12 +532,12 @@ export default async function CopilotPage({
 
                                     <span
                                         className={`rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] ${memory.severity === "critical"
-                                                ? "bg-red-500/10 text-red-400"
-                                                : memory.severity === "high"
-                                                    ? "bg-orange-500/10 text-orange-300"
-                                                    : memory.severity === "medium"
-                                                        ? "bg-yellow-500/10 text-yellow-300"
-                                                        : "bg-emerald-500/10 text-emerald-400"
+                                            ? "bg-red-500/10 text-red-400"
+                                            : memory.severity === "high"
+                                                ? "bg-orange-500/10 text-orange-300"
+                                                : memory.severity === "medium"
+                                                    ? "bg-yellow-500/10 text-yellow-300"
+                                                    : "bg-emerald-500/10 text-emerald-400"
                                             }`}
                                     >
                                         {memory.severity}

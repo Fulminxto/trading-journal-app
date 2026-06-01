@@ -190,8 +190,32 @@ model Trade {
   mistakes         String?
   lessonsLearned   String?
 
+  source            String   @default("manual")
+  syncStatus        String   @default("manual")
+  needsReview       Boolean  @default(false)
+
+  externalTradeId   String?
+  externalAccountId String?
+  externalOrderId   String?
+
+  platform          String?
+  brokerName        String?
+
+  commission        Float?
+  swap              Float?
+  fees              Float?
+
+  importedAt        DateTime?
+  rawImportData     Json?
+
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+  
+  @@index([tradingAccountId])
+  @@index([source])
+  @@index([syncStatus])
+  @@index([needsReview])
+  @@index([externalTradeId])
 }
 
 model CopilotMessage {
