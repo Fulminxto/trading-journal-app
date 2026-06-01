@@ -185,7 +185,7 @@ export default async function AdminPage() {
                 <div className="flex flex-col gap-3">
                   {isSelfFounder ? (
                     <div className="rounded-xl bg-green-500/10 px-4 py-2 text-sm font-semibold text-green-400">
-                      FOUNDER · System Owner
+                      FOUNDER · System Admin
                     </div>
                   ) : (
                     <form
