@@ -34,11 +34,42 @@ function formatCurrency(
   }).format(value);
 }
 
+function getTradeSourceLabel(
+  source?: string | null
+) {
+  if (source === "mt5") {
+    return "MT5";
+  }
+
+  if (source === "broker") {
+    return "Broker";
+  }
+
+  return "Manual";
+}
+
+function getTradeSourceClass(
+  source?: string | null
+) {
+  if (source === "mt5") {
+    return "border-cyan-500/20 bg-cyan-500/10 text-cyan-300";
+  }
+
+  if (source === "broker") {
+    return "border-blue-500/20 bg-blue-500/10 text-blue-300";
+  }
+
+  return "border-white/10 bg-white/10 text-gray-300";
+}
+
 export default async function DiaryPage({
   params,
   searchParams,
 }: {
-  params: Promise<{ accountId: string }>;
+  params: Promise<{
+    accountId: string;
+  }>;
+
   searchParams: Promise<{
     symbol?: string;
     outcome?: string;
@@ -48,6 +79,8 @@ export default async function DiaryPage({
     from?: string;
     to?: string;
     member?: string;
+    source?: string;
+    needsReview?: string;
   }>;
 }) {
   const session = await auth();
@@ -83,18 +116,18 @@ export default async function DiaryPage({
     },
   });
 
-  const isOwner =
+  const isManager =
     membership &&
-    String(membership.role) === "OWNER";
+    String(membership.role) === "MANAGER";
 
   const canCreateTrades =
-    Boolean(isOwner || membership?.canCreateTrades);
+    Boolean(isManager || membership?.canCreateTrades);
 
   const canEditTrades =
-    Boolean(isOwner || membership?.canEditTrades);
+    Boolean(isManager || membership?.canEditTrades);
 
   const canDeleteTrades =
-    Boolean(isOwner || membership?.canDeleteTrades);
+    Boolean(isManager || membership?.canDeleteTrades);
 
   const isReadOnly =
     !canCreateTrades &&
@@ -133,6 +166,17 @@ export default async function DiaryPage({
 
   if (filters.direction) {
     where.direction = filters.direction;
+  }
+
+  if (
+    filters.source &&
+    ["manual", "mt5", "broker"].includes(filters.source)
+  ) {
+    where.source = filters.source;
+  }
+
+  if (filters.needsReview === "true") {
+    where.needsReview = true;
   }
 
   if (filters.trader) {
@@ -205,6 +249,14 @@ export default async function DiaryPage({
 
   const totalTrades = trades.length;
 
+  const importedTrades = trades.filter(
+    (trade) => trade.source !== "manual"
+  ).length;
+
+  const needsReviewTrades = trades.filter(
+    (trade) => trade.needsReview
+  ).length;
+
   const wins = trades.filter(
     (trade) => trade.outcome === "win"
   ).length;
@@ -249,6 +301,8 @@ export default async function DiaryPage({
     Boolean(filters.symbol) ||
     Boolean(filters.outcome) ||
     Boolean(filters.direction) ||
+    Boolean(filters.source) ||
+    Boolean(filters.needsReview) ||
     Boolean(filters.trader) ||
     Boolean(filters.strategy) ||
     Boolean(filters.from) ||
@@ -277,6 +331,16 @@ export default async function DiaryPage({
       label: "Filtered Trades",
       value: totalTrades,
       tone: "text-white",
+    },
+    {
+      label: "Imported",
+      value: importedTrades,
+      tone: "text-cyan-400",
+    },
+    {
+      label: "Needs Review",
+      value: needsReviewTrades,
+      tone: "text-yellow-300",
     },
     {
       label: "Best Trade",
@@ -630,7 +694,7 @@ export default async function DiaryPage({
         </div>
       </div>
 
-      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-6">
+      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-8">
         {statCards.map((stat) => (
           <div
             key={stat.label}
@@ -672,7 +736,7 @@ export default async function DiaryPage({
           )}
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-7">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-9">
           <select
             name="symbol"
             defaultValue={filters.symbol || ""}
@@ -706,6 +770,26 @@ export default async function DiaryPage({
             <option value="">Tutte le direzioni</option>
             <option value="LONG">LONG</option>
             <option value="SHORT">SHORT</option>
+          </select>
+
+          <select
+            name="source"
+            defaultValue={filters.source || ""}
+            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+          >
+            <option value="">Tutte le sorgenti</option>
+            <option value="manual">Manual</option>
+            <option value="mt5">MT5</option>
+            <option value="broker">Broker</option>
+          </select>
+
+          <select
+            name="needsReview"
+            defaultValue={filters.needsReview || ""}
+            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+          >
+            <option value="">Tutti gli stati</option>
+            <option value="true">Needs Review</option>
           </select>
 
           {isSharedAccount && (
@@ -764,7 +848,7 @@ export default async function DiaryPage({
 
           <button
             type="submit"
-            className="rounded-2xl bg-green-500 p-4 font-bold text-black transition hover:bg-green-400 sm:col-span-2 xl:col-span-7"
+            className="rounded-2xl bg-green-500 p-4 font-bold text-black transition hover:bg-green-400 sm:col-span-2 xl:col-span-9"
           >
             Applica filtri
           </button>
@@ -1017,6 +1101,7 @@ export default async function DiaryPage({
                 </th>
               )}
               <th className="p-4">Symbol</th>
+              <th className="p-4">Sync</th>
               <th className="p-4">Direction</th>
               <th className="p-4">Outcome</th>
               <th className="p-4">Result</th>
@@ -1055,6 +1140,24 @@ export default async function DiaryPage({
 
                 <td className="p-4 font-semibold">
                   {trade.symbol}
+                </td>
+
+                <td className="p-4">
+                  <div className="flex flex-col gap-2">
+                    <span
+                      className={`w-fit rounded-xl border px-3 py-1 text-xs font-bold ${getTradeSourceClass(
+                        trade.source
+                      )}`}
+                    >
+                      {getTradeSourceLabel(trade.source)}
+                    </span>
+
+                    {trade.needsReview && (
+                      <span className="w-fit rounded-xl border border-yellow-500/20 bg-yellow-500/10 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-yellow-300">
+                        Needs Review
+                      </span>
+                    )}
+                  </div>
                 </td>
 
                 <td
@@ -1149,7 +1252,7 @@ export default async function DiaryPage({
             {trades.length === 0 && (
               <tr>
                 <td
-                  colSpan={10}
+                  colSpan={isSharedAccount ? 11 : 10}
                   className="p-8 text-center text-gray-500"
                 >
                   Nessun trade trovato con questi filtri.
@@ -1204,6 +1307,22 @@ export default async function DiaryPage({
                   >
                     {trade.direction}
                   </span>
+                </div>
+
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <span
+                    className={`rounded-xl border px-3 py-1 text-xs font-bold ${getTradeSourceClass(
+                      trade.source
+                    )}`}
+                  >
+                    {getTradeSourceLabel(trade.source)}
+                  </span>
+
+                  {trade.needsReview && (
+                    <span className="rounded-xl border border-yellow-500/20 bg-yellow-500/10 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-yellow-300">
+                      Needs Review
+                    </span>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 text-sm">
