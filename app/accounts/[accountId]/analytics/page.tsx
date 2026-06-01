@@ -35,7 +35,39 @@ function formatCurrency(
   value: number,
   currency: string
 ) {
-  return `${value.toFixed(2)} ${currency}`;
+  try {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+  } catch {
+    return `${value.toFixed(2)} ${currency}`;
+  }
+}
+
+function getBestWinStreak(
+  trades: {
+    outcome?: string | null;
+  }[]
+) {
+  let currentStreak = 0;
+  let bestStreak = 0;
+
+  for (const trade of trades) {
+    if (trade.outcome === "win") {
+      currentStreak += 1;
+      bestStreak = Math.max(
+        bestStreak,
+        currentStreak
+      );
+    } else if (trade.outcome === "loss") {
+      currentStreak = 0;
+    }
+  }
+
+  return bestStreak;
 }
 
 export default async function AnalyticsPage({
@@ -139,6 +171,38 @@ export default async function AnalyticsPage({
       acc + (trade.resultUsd || 0),
     0
   );
+
+  const grossProfit = wins.reduce(
+    (acc, trade) =>
+      acc + (trade.resultUsd || 0),
+    0
+  );
+
+  const grossLoss = losses.reduce(
+    (acc, trade) =>
+      acc + (trade.resultUsd || 0),
+    0
+  );
+
+  const averageWin =
+    wins.length > 0
+      ? grossProfit / wins.length
+      : 0;
+
+  const averageLoss =
+    losses.length > 0
+      ? grossLoss / losses.length
+      : 0;
+
+  const profitFactor =
+    Math.abs(grossLoss) > 0
+      ? grossProfit / Math.abs(grossLoss)
+      : grossProfit > 0
+        ? grossProfit
+        : 0;
+
+  const bestWinStreak =
+    getBestWinStreak(trades);
 
   const averageRR =
     trades.length > 0
@@ -620,6 +684,7 @@ export default async function AnalyticsPage({
     Wed: 0,
     Thu: 0,
     Fri: 0,
+    Sat: 0,
   };
 
   trades.forEach((trade) => {
@@ -1122,7 +1187,7 @@ export default async function AnalyticsPage({
   });
 
   return (
-    <div>
+    <div className="space-y-8">
 
       <AnalyticsHero
         accountName={account.name}
@@ -1134,7 +1199,58 @@ export default async function AnalyticsPage({
         totalTrades={trades.length}
       />
 
-      <div className="mb-8">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+          <p className="text-sm text-gray-400">
+            Gross Profit
+          </p>
+
+          <h2 className="mt-2 text-2xl font-black text-green-400">
+            {formatCurrency(
+              grossProfit,
+              account.currency
+            )}
+          </h2>
+        </div>
+
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+          <p className="text-sm text-gray-400">
+            Gross Loss
+          </p>
+
+          <h2 className="mt-2 text-2xl font-black text-red-400">
+            {formatCurrency(
+              grossLoss,
+              account.currency
+            )}
+          </h2>
+        </div>
+
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+          <p className="text-sm text-gray-400">
+            Profit Factor
+          </p>
+
+          <h2 className={`mt-2 text-2xl font-black ${profitFactor >= 1
+            ? "text-green-400"
+            : "text-red-400"
+            }`}>
+            {profitFactor.toFixed(2)}
+          </h2>
+        </div>
+
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+          <p className="text-sm text-gray-400">
+            Best Win Streak
+          </p>
+
+          <h2 className="mt-2 text-2xl font-black text-white">
+            {bestWinStreak}
+          </h2>
+        </div>
+      </div>
+
+      <div>
         <p className="text-sm text-gray-400">
           Statistiche avanzate
         </p>
@@ -1145,7 +1261,7 @@ export default async function AnalyticsPage({
         </h1>
       </div>
 
-      <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         {cards.map((card) => (
           <AnalyticsStatCard
             key={card.label}
@@ -1159,28 +1275,15 @@ export default async function AnalyticsPage({
 
       <PerformanceIntelligence
         averageWin={formatCurrency(
-          wins.reduce(
-            (acc, trade) =>
-              acc + (trade.resultUsd || 0),
-            0
-          ) / Math.max(wins.length, 1),
+          averageWin,
           account.currency
         )}
         averageLoss={formatCurrency(
-          Math.abs(
-            losses.reduce(
-              (acc, trade) =>
-                acc + (trade.resultUsd || 0),
-              0
-            ) / Math.max(losses.length, 1)
-          ),
+          Math.abs(averageLoss),
           account.currency
         )}
-        profitFactor={(
-          Math.abs(totalPnl) /
-          Math.max(losses.length, 1)
-        ).toFixed(2)}
-        bestWinStreak={wins.length}
+        profitFactor={profitFactor.toFixed(2)}
+        bestWinStreak={bestWinStreak}
       />
 
       <PerformanceInsights
@@ -1300,7 +1403,7 @@ export default async function AnalyticsPage({
         }
       />
 
-      <div className="grid grid-cols-1 gap-8 xl:grid-cols-2">
+      <div className="grid grid-cols-1 gap-8">
         <SymbolPerformance
           bestSymbol={bestSymbol}
           worstSymbol={worstSymbol}

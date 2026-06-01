@@ -35,7 +35,7 @@ export default function ExecutionTrendChart({
       </div>
 
       <div className="relative z-10 h-[240px]">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height={260} minWidth={0}>
           <LineChart data={data}>
             <CartesianGrid
               strokeDasharray="4 10"
@@ -85,3 +85,5 @@ export default function ExecutionTrendChart({
     </div>
   );
 }
+
+
