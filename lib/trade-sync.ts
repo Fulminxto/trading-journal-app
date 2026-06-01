@@ -1,7 +1,10 @@
 import { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
-import { logActivity, notifyAccountMembers, } from "@/lib/activity";
+import {
+    logActivity,
+    notifyAccountMembers,
+} from "@/lib/activity";
 
 type TradeSyncSource = "mt5" | "broker";
 
@@ -58,7 +61,10 @@ function normalizeDirection(value: string) {
 function normalizeOutcome(
     resultUsd?: number | null
 ) {
-    if (resultUsd === null || resultUsd === undefined) {
+    if (
+        resultUsd === null ||
+        resultUsd === undefined
+    ) {
         return null;
     }
 
@@ -166,12 +172,14 @@ async function recalculateAccountEquity(
 
         const drawdownPercent =
             equityPeak > 0
-                ? ((equity - equityPeak) / equityPeak) * 100
+                ? ((equity - equityPeak) / equityPeak) *
+                100
                 : 0;
 
         const resultPercent =
             account.initialBalance > 0
-                ? (resultUsd / account.initialBalance) * 100
+                ? (resultUsd / account.initialBalance) *
+                100
                 : 0;
 
         await prisma.trade.update({
@@ -246,12 +254,16 @@ export async function importSyncedTrade(
                         input.closingPrice ?? null,
 
                     outcome,
-                    resultUsd: input.resultUsd ?? null,
+                    resultUsd:
+                        input.resultUsd ?? null,
 
                     source: input.source,
-                    syncStatus: existingTrade.needsReview
-                        ? "imported"
-                        : existingTrade.syncStatus,
+
+                    syncStatus:
+                        existingTrade.needsReview
+                            ? "imported"
+                            : existingTrade.syncStatus,
+
                     needsReview:
                         existingTrade.needsReview,
 
@@ -287,6 +299,38 @@ export async function importSyncedTrade(
             input.tradingAccountId
         );
 
+        await logActivity({
+            userId: importerUserId,
+            accountId: input.tradingAccountId,
+            type: "TRADE_SYNC_UPDATED",
+            title: "Imported trade updated",
+            description: `${input.symbol} ${normalizeDirection(
+                input.direction
+            )} imported trade updated from ${input.source
+                }`,
+            metadata: {
+                tradeId: updatedTrade.id,
+                source: input.source,
+                externalTradeId:
+                    input.externalTradeId,
+                platform: input.platform,
+                brokerName: input.brokerName,
+                needsReview:
+                    updatedTrade.needsReview,
+            },
+        });
+
+        await notifyAccountMembers({
+            accountId: input.tradingAccountId,
+            actorId: importerUserId,
+            type: "TRADE_SYNC_UPDATED",
+            title: "Imported trade updated",
+            message: `${input.symbol} ${normalizeDirection(
+                input.direction
+            )} updated from ${input.source.toUpperCase()}`,
+            link: `/accounts/${input.tradingAccountId}/diary?source=${input.source}`,
+        });
+
         return {
             status: "updated" as const,
             trade: updatedTrade,
@@ -321,7 +365,8 @@ export async function importSyncedTrade(
                 input.closingPrice ?? null,
 
             outcome,
-            resultUsd: input.resultUsd ?? null,
+            resultUsd:
+                input.resultUsd ?? null,
 
             source: input.source,
             syncStatus: "imported",
