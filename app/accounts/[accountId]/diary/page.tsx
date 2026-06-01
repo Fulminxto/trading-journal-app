@@ -90,8 +90,12 @@ export default async function DiaryPage({
   }
 
   const { accountId } = await params;
-  const { member: memberId } = await searchParams;
   const filters = await searchParams;
+
+  const selectedTraderId =
+    filters.trader || filters.member;
+
+  const memberId = selectedTraderId;
 
   const selectedMember = memberId
     ? await prisma.user.findUnique({
@@ -179,8 +183,8 @@ export default async function DiaryPage({
     where.needsReview = true;
   }
 
-  if (filters.trader) {
-    where.createdById = filters.trader;
+  if (selectedTraderId) {
+    where.createdById = selectedTraderId;
   }
 
   if (filters.strategy) {
@@ -303,7 +307,7 @@ export default async function DiaryPage({
     Boolean(filters.direction) ||
     Boolean(filters.source) ||
     Boolean(filters.needsReview) ||
-    Boolean(filters.trader) ||
+    Boolean(selectedTraderId) ||
     Boolean(filters.strategy) ||
     Boolean(filters.from) ||
     Boolean(filters.to);
@@ -795,7 +799,7 @@ export default async function DiaryPage({
           {isSharedAccount && (
             <select
               name="trader"
-              defaultValue={filters.trader || ""}
+              defaultValue={selectedTraderId || ""}
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             >
               <option value="">
