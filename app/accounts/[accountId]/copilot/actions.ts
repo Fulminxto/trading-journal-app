@@ -6,6 +6,8 @@ import { logActivity } from "@/lib/activity";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import { analyzeCopilotMemory } from "@/lib/copilot/copilot-memory";
+
 const MAX_COPILOT_MESSAGE_LENGTH = 1200;
 
 function getString(
@@ -112,6 +114,11 @@ export async function sendCopilotMessage(
             tradingAccountId,
         },
     });
+
+    const memorySnapshot =
+        await analyzeCopilotMemory(
+            tradingAccountId
+        );
 
     const totalTrades = trades.length;
 
@@ -531,15 +538,7 @@ export async function sendCopilotMessage(
     });
 
     const activeMemories =
-        await prisma.copilotMemory.findMany({
-            where: {
-                tradingAccountId,
-            },
-            orderBy: {
-                lastDetectedAt: "desc",
-            },
-            take: 3,
-        });
+        memorySnapshot.memories.slice(0, 3);
 
     if (activeMemories.length > 0) {
         aiResponse += ` Memoria operativa attiva: VOLTIS riconosce ${activeMemories.length} pattern ricorrenti nel tuo storico. Pattern principale: "${activeMemories[0].title}".`;

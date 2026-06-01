@@ -25,6 +25,7 @@ import AdaptiveCoachingCard from "@/components/copilot/AdaptiveCoachingCard";
 import MandatoryReviewCard from "@/components/copilot/MandatoryReviewCard";
 import RecoveryChecklistCard from "@/components/copilot/RecoveryChecklistCard";
 import RecoveryStatusCard from "@/components/copilot/RecoveryStatusCard";
+import { getCopilotMemorySnapshot } from "@/lib/copilot/copilot-memory";
 
 export default async function CopilotPage({
     params,
@@ -77,37 +78,17 @@ export default async function CopilotPage({
             },
         });
 
+    const memorySnapshot =
+        await getCopilotMemorySnapshot(accountId);
+
     const copilotPatterns =
-        await prisma.copilotPattern.findMany({
-            where: {
-                tradingAccountId: accountId,
-            },
-            orderBy: {
-                updatedAt: "desc",
-            },
-        });
+        memorySnapshot.patterns;
 
     const copilotMemories =
-        await prisma.copilotMemory.findMany({
-            where: {
-                tradingAccountId: accountId,
-            },
-            orderBy: {
-                lastDetectedAt: "desc",
-            },
-            take: 6,
-        });
+        memorySnapshot.memories;
 
     const reviewNotes =
-        await prisma.copilotReviewNote.findMany({
-            where: {
-                tradingAccountId: accountId,
-            },
-            orderBy: {
-                createdAt: "desc",
-            },
-            take: 5,
-        });
+        memorySnapshot.reviewNotes;
 
     const criticalPatterns =
         copilotPatterns.filter(
@@ -501,6 +482,84 @@ export default async function CopilotPage({
                             </p>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div className="rounded-[36px] border border-emerald-500/20 bg-emerald-500/[0.06] p-8 backdrop-blur-xl">
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                    <div>
+                        <p className="text-sm uppercase tracking-[0.2em] text-emerald-400">
+                            Copilot Memory System
+                        </p>
+
+                        <h2 className="mt-3 text-3xl font-black text-white">
+                            Active Operational Memory
+                        </h2>
+
+                        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-gray-400">
+                            VOLTIS conserva pattern, rischi e punti di forza ricorrenti del tuo account per rendere il Copilot sempre più contestuale.
+                        </p>
+                    </div>
+
+                    <div className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-emerald-300">
+                        {copilotMemories.length} Memories
+                    </div>
+                </div>
+
+                <div className="mt-8 grid gap-4 xl:grid-cols-3">
+                    {copilotMemories.length === 0 ? (
+                        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5 xl:col-span-3">
+                            <p className="text-sm leading-relaxed text-gray-400">
+                                Nessuna memoria operativa attiva. Usa il Copilot dopo aver inserito trade, sessioni e review per generare pattern persistenti.
+                            </p>
+                        </div>
+                    ) : (
+                        copilotMemories.slice(0, 6).map((memory) => (
+                            <div
+                                key={memory.id}
+                                className="rounded-[28px] border border-white/10 bg-black/20 p-5"
+                            >
+                                <div className="flex items-start justify-between gap-4">
+                                    <div>
+                                        <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
+                                            {memory.memoryType}
+                                        </p>
+
+                                        <h3 className="mt-3 text-lg font-black text-white">
+                                            {memory.title}
+                                        </h3>
+                                    </div>
+
+                                    <span
+                                        className={`rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] ${memory.severity === "critical"
+                                                ? "bg-red-500/10 text-red-400"
+                                                : memory.severity === "high"
+                                                    ? "bg-orange-500/10 text-orange-300"
+                                                    : memory.severity === "medium"
+                                                        ? "bg-yellow-500/10 text-yellow-300"
+                                                        : "bg-emerald-500/10 text-emerald-400"
+                                            }`}
+                                    >
+                                        {memory.severity}
+                                    </span>
+                                </div>
+
+                                <p className="mt-4 text-sm leading-relaxed text-gray-400">
+                                    {memory.description}
+                                </p>
+
+                                <div className="mt-5 flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3">
+                                    <span className="text-xs uppercase tracking-[0.15em] text-gray-500">
+                                        Score
+                                    </span>
+
+                                    <span className="text-sm font-black text-white">
+                                        {memory.score}
+                                    </span>
+                                </div>
+                            </div>
+                        ))
+                    )}
                 </div>
             </div>
 
