@@ -294,3 +294,51 @@ export async function updateAccountIntegrations(
         `/accounts/${accountId}/integrations?toast=updated`
     );
 }
+
+export async function resetAccountSyncStatus(
+    accountId: string
+) {
+    const membership =
+        await getIntegrationAccess(accountId);
+
+    const nextStatus =
+        membership.tradingAccount.integrationMode === "manual"
+            ? "inactive"
+            : "pending";
+
+    const updatedAccount =
+        await prisma.tradingAccount.update({
+            where: {
+                id: accountId,
+            },
+            data: {
+                syncStatus: nextStatus,
+            },
+        });
+
+    await logActivity({
+        userId: membership.userId,
+        accountId,
+        type: "INTEGRATION_SYNC_RESET",
+        title: "Sync status reset",
+        description: `${membership.user.username} reset integration sync status`,
+        metadata: {
+            before: {
+                syncStatus:
+                    membership.tradingAccount.syncStatus,
+            },
+            after: {
+                syncStatus:
+                    updatedAccount.syncStatus,
+            },
+        },
+    });
+
+    revalidatePath(
+        `/accounts/${accountId}/integrations`
+    );
+
+    redirect(
+        `/accounts/${accountId}/integrations?toast=updated`
+    );
+}

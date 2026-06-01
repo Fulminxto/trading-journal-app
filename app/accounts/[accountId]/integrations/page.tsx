@@ -13,7 +13,7 @@ import { redirect } from "next/navigation";
 
 import GlobalToast from "@/components/GlobalToast";
 
-import { updateAccountIntegrations } from "./actions";
+import { resetAccountSyncStatus, updateAccountIntegrations, } from "./actions";
 
 function getModeLabel(mode?: string | null) {
     if (mode === "mt5") {
@@ -314,6 +314,12 @@ export default async function IntegrationsPage({
             accountId
         );
 
+    const resetSyncStatusAction =
+        resetAccountSyncStatus.bind(
+            null,
+            accountId
+        );
+
     return (
         <div>
             <GlobalToast status={query.toast} />
@@ -478,6 +484,14 @@ export default async function IntegrationsPage({
                         <span className="w-fit rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-red-400">
                             Error
                         </span>
+                        <form action={resetSyncStatusAction}>
+                            <button
+                                type="submit"
+                                className="mt-3 rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-white transition hover:bg-white/15"
+                            >
+                                Reset Sync
+                            </button>
+                        </form>
                     </div>
                 </div>
             )}
