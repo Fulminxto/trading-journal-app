@@ -283,6 +283,7 @@ export default async function IntegrationsPage({
                         "TRADE_SYNC_UPDATED",
                         "TRADE_SYNC_ERROR",
                         "INTEGRATION_SETTINGS_UPDATED",
+                        "INTEGRATION_SYNC_RESET",
                     ],
                 },
             },
@@ -741,6 +742,12 @@ export default async function IntegrationsPage({
                                                 {log.type === "TRADE_SYNC_ERROR" && (
                                                     <span className="rounded-xl border border-red-500/20 bg-red-500/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-red-400">
                                                         Error
+                                                    </span>
+                                                )}
+
+                                                {log.type === "INTEGRATION_SYNC_RESET" && (
+                                                    <span className="rounded-xl border border-yellow-500/20 bg-yellow-500/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-yellow-300">
+                                                        Reset
                                                     </span>
                                                 )}
 
