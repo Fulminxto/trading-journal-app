@@ -273,6 +273,23 @@ export default async function IntegrationsPage({
 
     const account = membership.tradingAccount;
 
+    const recentSyncLogs =
+        await prisma.activityLog.findMany({
+            where: {
+                accountId,
+                type: {
+                    in: [
+                        "TRADE_IMPORTED",
+                        "INTEGRATION_SETTINGS_UPDATED",
+                    ],
+                },
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+            take: 8,
+        });
+
     const syncReadiness =
         getSyncReadiness(account);
 
@@ -615,6 +632,75 @@ export default async function IntegrationsPage({
                             MT5 controllerà prima l’Health Check. Se VOLTIS risponde che la sync è pronta, il connettore invierà il trade chiuso all’Import Endpoint. Il trade entrerà nel Diary come MT5 + Needs Review.
                         </p>
                     </div>
+                </div>
+
+                <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+                    <div className="mb-6">
+                        <p className="text-sm text-gray-400">
+                            Sync Logs
+                        </p>
+
+                        <h2 className="mt-1 text-2xl font-bold">
+                            Recent Import Activity
+                        </h2>
+
+                        <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-500">
+                            Qui vedrai gli ultimi eventi collegati alla sincronizzazione automatica: trade importati, impostazioni aggiornate e attività future di MT5/Broker.
+                        </p>
+                    </div>
+
+                    {recentSyncLogs.length === 0 ? (
+                        <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                            <p className="text-sm leading-6 text-gray-400">
+                                Nessuna attività sync registrata per ora. Quando un trade verrà importato da MT5 o Broker, apparirà qui.
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="space-y-3">
+                            {recentSyncLogs.map((log) => (
+                                <div
+                                    key={log.id}
+                                    className="rounded-2xl border border-white/10 bg-black/20 p-5"
+                                >
+                                    <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                                        <div>
+                                            <div className="mb-3 flex flex-wrap gap-2">
+                                                <span className="rounded-xl border border-white/10 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-gray-300">
+                                                    {log.type}
+                                                </span>
+
+                                                {log.type === "TRADE_IMPORTED" && (
+                                                    <span className="rounded-xl border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-cyan-300">
+                                                        Import
+                                                    </span>
+                                                )}
+
+                                                {log.type === "INTEGRATION_SETTINGS_UPDATED" && (
+                                                    <span className="rounded-xl border border-green-500/20 bg-green-500/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-green-400">
+                                                        Settings
+                                                    </span>
+                                                )}
+                                            </div>
+
+                                            <h3 className="text-base font-black text-white">
+                                                {log.title}
+                                            </h3>
+
+                                            {log.description && (
+                                                <p className="mt-2 text-sm leading-6 text-gray-400">
+                                                    {log.description}
+                                                </p>
+                                            )}
+                                        </div>
+
+                                        <p className="text-xs text-gray-500">
+                                            {formatDate(log.createdAt)}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
