@@ -74,6 +74,11 @@ const baseLinks = [
     icon: Target,
   },
   {
+    path: "integrations",
+    label: "Integrations",
+    icon: ArrowLeftRight,
+  },
+  {
     href: "/updates",
     label: "Updates",
     icon: Megaphone,
