@@ -1,10 +1,19 @@
+import Link from "next/link";
 import {
+    AlertTriangle,
+    ArrowLeft,
     Cable,
     CheckCircle2,
     DatabaseZap,
+    KeyRound,
     Lock,
     RefreshCw,
+    Server,
+    Settings2,
     ShieldCheck,
+    UploadCloud,
+    Zap,
+    type LucideIcon,
 } from "lucide-react";
 
 import { auth } from "@/lib/auth";
@@ -13,7 +22,18 @@ import { redirect } from "next/navigation";
 
 import GlobalToast from "@/components/GlobalToast";
 
-import { resetAccountSyncStatus, updateAccountIntegrations, } from "./actions";
+import {
+    resetAccountSyncStatus,
+    updateAccountIntegrations,
+} from "./actions";
+
+type StatusCardProps = {
+    label: string;
+    value: string;
+    description: string;
+    icon: LucideIcon;
+    tone?: string;
+};
 
 function getModeLabel(mode?: string | null) {
     if (mode === "mt5") {
@@ -68,9 +88,7 @@ function formatDate(date?: Date | null) {
         return "Never";
     }
 
-    return new Date(date).toLocaleString(
-        "it-IT"
-    );
+    return new Date(date).toLocaleString("it-IT");
 }
 
 function getSyncReadiness(account: {
@@ -80,12 +98,15 @@ function getSyncReadiness(account: {
     brokerSyncEnabled: boolean;
     syncStatus: string | null;
 }) {
-    if (account.integrationMode === "manual") {
+    if (
+        !account.integrationMode ||
+        account.integrationMode === "manual"
+    ) {
         return {
-            label: "Not Ready",
+            label: "Manual Mode",
             tone: "border-white/10 bg-white/[0.04] text-gray-300",
             description:
-                "Questo account è impostato su Manual Only. Può usare solo inserimento manuale dei trade.",
+                "Questo account è impostato su Manual Only. I trade vengono gestiti manualmente dal Diary.",
             checklist: [
                 {
                     label: "Manual mode active",
@@ -93,7 +114,7 @@ function getSyncReadiness(account: {
                 },
                 {
                     label: "Automatic sync disabled",
-                    ok: false,
+                    ok: !account.autoSyncEnabled,
                 },
             ],
         };
@@ -193,19 +214,27 @@ function getSyncReadiness(account: {
         checklist: [
             {
                 label: "Integration mode selected",
-                ok: account.integrationMode !== "manual",
+                ok:
+                    Boolean(account.integrationMode) &&
+                    account.integrationMode !== "manual",
             },
             {
                 label: "Auto sync enabled",
                 ok: account.autoSyncEnabled,
             },
             {
-                label: "MT5 enabled",
-                ok: account.mt5Enabled,
+                label: "MT5 source enabled",
+                ok:
+                    account.integrationMode === "broker"
+                        ? true
+                        : account.mt5Enabled,
             },
             {
-                label: "Broker enabled",
-                ok: account.brokerSyncEnabled,
+                label: "Broker source enabled",
+                ok:
+                    account.integrationMode === "mt5"
+                        ? true
+                        : account.brokerSyncEnabled,
             },
         ],
     };
@@ -221,6 +250,71 @@ function getAppBaseUrl() {
     }
 
     return "http://localhost:3000";
+}
+
+function StatusCard({
+    label,
+    value,
+    description,
+    icon: Icon,
+    tone = "text-white",
+}: StatusCardProps) {
+    return (
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+            <div className="flex items-start justify-between gap-4">
+                <div>
+                    <p className="text-sm text-gray-400">
+                        {label}
+                    </p>
+
+                    <h2 className={`mt-3 text-2xl font-black ${tone}`}>
+                        {value}
+                    </h2>
+                </div>
+
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-cyan-300">
+                    <Icon size={20} />
+                </div>
+            </div>
+
+            <p className="mt-4 text-sm leading-6 text-gray-500">
+                {description}
+            </p>
+        </div>
+    );
+}
+
+function ToggleRow({
+    name,
+    title,
+    description,
+    defaultChecked,
+}: {
+    name: string;
+    title: string;
+    description: string;
+    defaultChecked: boolean;
+}) {
+    return (
+        <label className="flex cursor-pointer items-start gap-4 rounded-2xl border border-white/10 bg-black/20 p-4 transition hover:bg-white/[0.04]">
+            <input
+                name={name}
+                type="checkbox"
+                defaultChecked={defaultChecked}
+                className="mt-1 h-5 w-5 accent-green-500"
+            />
+
+            <div>
+                <p className="font-bold text-white">
+                    {title}
+                </p>
+
+                <p className="mt-1 text-sm leading-6 text-gray-500">
+                    {description}
+                </p>
+            </div>
+        </label>
+    );
 }
 
 export default async function IntegrationsPage({
@@ -266,18 +360,24 @@ export default async function IntegrationsPage({
         isManager || membership.canManageAccount;
 
     if (!canManageIntegrations) {
-        redirect(
-            `/accounts/${accountId}/dashboard`
-        );
+        redirect(`/accounts/${accountId}`);
     }
 
     if (
         membership.tradingAccount.status === "ARCHIVED"
     ) {
-        redirect(
-            `/accounts/${accountId}/dashboard`
-        );
+        redirect(`/accounts/${accountId}`);
     }
+
+    await prisma.user.update({
+        where: {
+            id: session.user.id,
+        },
+        data: {
+            lastSeenAt: new Date(),
+            lastActivityAt: new Date(),
+        },
+    });
 
     const account = membership.tradingAccount;
 
@@ -329,95 +429,114 @@ export default async function IntegrationsPage({
             accountId
         );
 
+    const mt5Configured =
+        Boolean(account.mt5AccountLogin) &&
+        Boolean(account.mt5ServerName);
+
+    const brokerConfigured =
+        Boolean(account.brokerProvider) &&
+        Boolean(account.brokerAccountId);
+
     return (
-        <div>
+        <div className="space-y-8">
             <GlobalToast status={query.toast} />
 
-            <div className="mb-8">
-                <p className="text-sm text-green-400">
-                    Account Integrations
-                </p>
+            <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.14),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(34,197,94,0.08),transparent_35%)]" />
 
-                <h1 className="mt-2 flex items-center gap-3 text-3xl font-bold sm:text-4xl">
-                    <Cable className="text-green-400" />
-                    Trade Sync Settings
-                </h1>
+                <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
+                    <div>
+                        <div className="mb-6 flex flex-wrap items-center gap-3">
+                            <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-300">
+                                Trade Sync
+                            </span>
 
-                <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-400">
-                    Configura la base delle integrazioni automatiche del conto. Per ora VOLTIS non salva password, token o API key: questa pagina prepara solo la struttura per MT5 Connector e Broker Integration.
-                </p>
-            </div>
+                            <span className={`rounded-full border px-4 py-2 text-xs font-black uppercase tracking-[0.18em] ${getStatusClass(account.syncStatus)}`}>
+                                {getStatusLabel(account.syncStatus)}
+                            </span>
 
-            <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-                <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5">
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-green-400">
-                        <DatabaseZap size={20} />
+                            <span className="rounded-full border border-white/10 bg-black/20 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-gray-300">
+                                {getModeLabel(account.integrationMode)}
+                            </span>
+                        </div>
+
+                        <p className="text-sm text-gray-400">
+                            Account integrations
+                        </p>
+
+                        <h1 className="mt-3 flex items-center gap-4 text-5xl font-black tracking-tight text-white sm:text-6xl">
+                            <Cable className="hidden text-cyan-300 sm:block" />
+                            Integrations
+                        </h1>
+
+                        <p className="mt-6 max-w-3xl text-base leading-7 text-gray-400">
+                            Configura la base per Manual, MT5, Broker
+                            e Hybrid Sync. In questa fase VOLTIS non
+                            salva password, token o API key: prepara
+                            solo la struttura sicura per la sincronizzazione.
+                        </p>
                     </div>
 
-                    <p className="text-sm text-gray-400">
-                        Integration Mode
-                    </p>
-
-                    <h2 className="mt-2 text-2xl font-black text-white">
-                        {getModeLabel(
-                            account.integrationMode
-                        )}
-                    </h2>
-                </div>
-
-                <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5">
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-green-400">
-                        <RefreshCw size={20} />
-                    </div>
-
-                    <p className="text-sm text-gray-400">
-                        Auto Sync
-                    </p>
-
-                    <h2 className="mt-2 text-2xl font-black text-white">
-                        {account.autoSyncEnabled
-                            ? "Enabled"
-                            : "Disabled"}
-                    </h2>
-                </div>
-
-                <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5">
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-green-400">
-                        <CheckCircle2 size={20} />
-                    </div>
-
-                    <p className="text-sm text-gray-400">
-                        Sync Status
-                    </p>
-
-                    <span
-                        className={`mt-3 inline-flex rounded-xl border px-3 py-1 text-xs font-black uppercase tracking-[0.14em] ${getStatusClass(
-                            account.syncStatus
-                        )}`}
+                    <Link
+                        href={`/accounts/${accountId}`}
+                        className="inline-flex w-fit items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-bold text-white transition hover:bg-white/[0.08]"
                     >
-                        {getStatusLabel(
-                            account.syncStatus
-                        )}
-                    </span>
+                        <ArrowLeft size={16} />
+                        Back to Account Hub
+                    </Link>
                 </div>
+            </section>
 
-                <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5">
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-green-400">
-                        <ShieldCheck size={20} />
-                    </div>
+            <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <StatusCard
+                    label="Integration Mode"
+                    value={getModeLabel(account.integrationMode)}
+                    description="Strategia di gestione dei trade per questo account."
+                    icon={DatabaseZap}
+                />
 
-                    <p className="text-sm text-gray-400">
-                        Last Sync
-                    </p>
+                <StatusCard
+                    label="Auto Sync"
+                    value={
+                        account.autoSyncEnabled
+                            ? "Enabled"
+                            : "Disabled"
+                    }
+                    description="Controlla se l’account accetta import automatici."
+                    icon={RefreshCw}
+                    tone={
+                        account.autoSyncEnabled
+                            ? "text-green-400"
+                            : "text-gray-300"
+                    }
+                />
 
-                    <h2 className="mt-2 text-sm font-black text-white">
-                        {formatDate(account.lastSyncedAt)}
-                    </h2>
-                </div>
-            </div>
+                <StatusCard
+                    label="MT5 Setup"
+                    value={
+                        mt5Configured
+                            ? "Configured"
+                            : "Missing"
+                    }
+                    description="Login e server MT5 identificativi, senza credenziali sensibili."
+                    icon={Server}
+                    tone={
+                        mt5Configured
+                            ? "text-green-400"
+                            : "text-yellow-300"
+                    }
+                />
 
-            <div className={`mb-8 rounded-3xl border p-6 ${syncReadiness.tone}`}>
-                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <StatusCard
+                    label="Last Sync"
+                    value={formatDate(account.lastSyncedAt)}
+                    description="Ultima sincronizzazione registrata dall’account."
+                    icon={CheckCircle2}
+                />
+            </section>
+
+            <section className={`rounded-3xl border p-6 ${syncReadiness.tone}`}>
+                <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
                     <div>
                         <p className="text-sm uppercase tracking-[0.18em] opacity-80">
                             Trade Sync Readiness
@@ -441,7 +560,7 @@ export default async function IntegrationsPage({
                     {syncReadiness.checklist.map((item) => (
                         <div
                             key={item.label}
-                            className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-4 py-3"
+                            className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/20 px-4 py-3"
                         >
                             <span className="text-sm text-gray-300">
                                 {item.label}
@@ -459,11 +578,11 @@ export default async function IntegrationsPage({
                         </div>
                     ))}
                 </div>
-            </div>
+            </section>
 
             {account.syncStatus === "error" && (
-                <div className="mb-8 rounded-3xl border border-red-500/20 bg-red-500/[0.08] p-6">
-                    <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                <section className="rounded-3xl border border-red-500/20 bg-red-500/[0.08] p-6">
+                    <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                         <div>
                             <p className="text-sm uppercase tracking-[0.18em] text-red-400">
                                 Sync Error Detected
@@ -474,7 +593,10 @@ export default async function IntegrationsPage({
                             </h2>
 
                             <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-300">
-                                VOLTIS ha rilevato un errore durante l’importazione automatica dei trade. Controlla la configurazione MT5/Broker, il secret, l’Account ID e i Sync Logs qui sotto.
+                                VOLTIS ha rilevato un errore durante
+                                l’importazione automatica dei trade.
+                                Controlla configurazione, Account ID,
+                                secret e Sync Logs.
                             </p>
 
                             {latestSyncError?.description && (
@@ -490,80 +612,134 @@ export default async function IntegrationsPage({
                             )}
                         </div>
 
-                        <span className="w-fit rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-red-400">
-                            Error
-                        </span>
                         <form action={resetSyncStatusAction}>
                             <button
                                 type="submit"
-                                className="mt-3 rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-white transition hover:bg-white/15"
+                                className="rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-white transition hover:bg-white/15"
                             >
                                 Reset Sync
                             </button>
                         </form>
                     </div>
-                </div>
+                </section>
             )}
 
             <form
                 action={updateIntegrationsAction}
-                className="space-y-6"
+                className="space-y-8"
             >
-                <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-                    <div className="mb-6">
-                        <p className="text-sm text-gray-400">
-                            Sync Mode
-                        </p>
+                <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+                    <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
+                        <div className="mb-6 flex items-start justify-between gap-4">
+                            <div>
+                                <p className="text-sm text-gray-400">
+                                    Sync mode
+                                </p>
 
-                        <h2 className="mt-1 text-2xl font-bold">
-                            Integration Strategy
-                        </h2>
+                                <h2 className="mt-1 text-2xl font-black text-white">
+                                    Integration Strategy
+                                </h2>
 
-                        <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-500">
-                            Scegli come questo account dovrà gestire i trade in futuro. Manual Only mantiene solo l’inserimento manuale. MT5, Broker e Hybrid preparano il conto alla sincronizzazione automatica.
-                        </p>
+                                <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-500">
+                                    Scegli come questo account dovrà
+                                    gestire i trade. Manual Only mantiene
+                                    solo l’inserimento manuale. MT5,
+                                    Broker e Hybrid preparano il conto
+                                    alla sincronizzazione automatica.
+                                </p>
+                            </div>
+
+                            <Settings2 className="text-cyan-300" />
+                        </div>
+
+                        <select
+                            name="integrationMode"
+                            defaultValue={
+                                account.integrationMode ||
+                                "manual"
+                            }
+                            className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 text-white outline-none transition focus:border-green-500/40"
+                        >
+                            <option value="manual">
+                                Manual Only
+                            </option>
+
+                            <option value="mt5">
+                                MT5 Connector
+                            </option>
+
+                            <option value="broker">
+                                Broker Integration
+                            </option>
+
+                            <option value="hybrid">
+                                MT5 + Broker Integration
+                            </option>
+                        </select>
                     </div>
 
-                    <select
-                        name="integrationMode"
-                        defaultValue={
-                            account.integrationMode ||
-                            "manual"
-                        }
-                        className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-                    >
-                        <option value="manual">
-                            Manual Only
-                        </option>
-
-                        <option value="mt5">
-                            MT5 Connector
-                        </option>
-
-                        <option value="broker">
-                            Broker Integration
-                        </option>
-
-                        <option value="hybrid">
-                            MT5 + Broker Integration
-                        </option>
-                    </select>
-                </div>
-
-                <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
                     <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
                         <div className="mb-6">
                             <p className="text-sm text-gray-400">
-                                MT5 Connector
+                                Activation
                             </p>
 
-                            <h2 className="mt-1 text-2xl font-bold">
-                                MetaTrader 5 Details
+                            <h2 className="mt-1 text-2xl font-black text-white">
+                                Sources
                             </h2>
+                        </div>
 
-                            <p className="mt-3 text-sm leading-6 text-gray-500">
-                                Inserisci solo dati identificativi non sensibili. Password e token non vengono ancora gestiti da VOLTIS.
-                            </p>
+                        <div className="space-y-3">
+                            <ToggleRow
+                                name="autoSyncEnabled"
+                                title="Auto Sync"
+                                description="Permette all’account di accettare import automatici."
+                                defaultChecked={
+                                    account.autoSyncEnabled
+                                }
+                            />
+
+                            <ToggleRow
+                                name="mt5Enabled"
+                                title="MT5"
+                                description="Abilita la sorgente MT5 per il futuro connettore."
+                                defaultChecked={
+                                    account.mt5Enabled
+                                }
+                            />
+
+                            <ToggleRow
+                                name="brokerSyncEnabled"
+                                title="Broker"
+                                description="Abilita la sorgente Broker Integration."
+                                defaultChecked={
+                                    account.brokerSyncEnabled
+                                }
+                            />
+                        </div>
+                    </div>
+                </section>
+
+                <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+                    <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+                        <div className="mb-6 flex items-start justify-between gap-4">
+                            <div>
+                                <p className="text-sm text-gray-400">
+                                    MT5 Connector
+                                </p>
+
+                                <h2 className="mt-1 text-2xl font-black text-white">
+                                    MetaTrader 5 Details
+                                </h2>
+
+                                <p className="mt-3 text-sm leading-6 text-gray-500">
+                                    Inserisci solo dati identificativi non
+                                    sensibili. Password e token non vengono
+                                    gestiti da VOLTIS.
+                                </p>
+                            </div>
+
+                            <Cable className="text-green-400" />
                         </div>
 
                         <div className="space-y-4">
@@ -573,7 +749,7 @@ export default async function IntegrationsPage({
                                     account.mt5AccountLogin || ""
                                 }
                                 placeholder="MT5 account login"
-                                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+                                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 text-white outline-none transition placeholder:text-gray-600 focus:border-green-500/40"
                             />
 
                             <input
@@ -582,24 +758,30 @@ export default async function IntegrationsPage({
                                     account.mt5ServerName || ""
                                 }
                                 placeholder="MT5 server name"
-                                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+                                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 text-white outline-none transition placeholder:text-gray-600 focus:border-green-500/40"
                             />
                         </div>
                     </div>
 
                     <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-                        <div className="mb-6">
-                            <p className="text-sm text-gray-400">
-                                Broker Integration
-                            </p>
+                        <div className="mb-6 flex items-start justify-between gap-4">
+                            <div>
+                                <p className="text-sm text-gray-400">
+                                    Broker Integration
+                                </p>
 
-                            <h2 className="mt-1 text-2xl font-bold">
-                                Broker Details
-                            </h2>
+                                <h2 className="mt-1 text-2xl font-black text-white">
+                                    Broker Details
+                                </h2>
 
-                            <p className="mt-3 text-sm leading-6 text-gray-500">
-                                Salviamo solo provider e identificativo account. Le credenziali reali verranno aggiunte più avanti con storage sicuro.
-                            </p>
+                                <p className="mt-3 text-sm leading-6 text-gray-500">
+                                    Salviamo solo provider e identificativo
+                                    account. Le credenziali reali verranno
+                                    aggiunte più avanti con storage sicuro.
+                                </p>
+                            </div>
+
+                            <UploadCloud className="text-blue-300" />
                         </div>
 
                         <div className="space-y-4">
@@ -609,7 +791,7 @@ export default async function IntegrationsPage({
                                     account.brokerProvider || ""
                                 }
                                 placeholder="Broker provider"
-                                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+                                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 text-white outline-none transition placeholder:text-gray-600 focus:border-green-500/40"
                             />
 
                             <input
@@ -618,32 +800,37 @@ export default async function IntegrationsPage({
                                     account.brokerAccountId || ""
                                 }
                                 placeholder="Broker account ID"
-                                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+                                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 text-white outline-none transition placeholder:text-gray-600 focus:border-green-500/40"
                             />
                         </div>
                     </div>
-                </div>
+                </section>
 
-                <div className="rounded-3xl border border-green-500/20 bg-green-500/[0.05] p-6">
-                    <div className="mb-6 flex items-center gap-3">
-                        <Cable className="text-green-400" />
+                <section className="rounded-3xl border border-green-500/20 bg-green-500/[0.05] p-6">
+                    <div className="mb-6 flex items-start gap-4">
+                        <div className="rounded-2xl border border-green-500/20 bg-green-500/10 p-3 text-green-400">
+                            <KeyRound size={20} />
+                        </div>
 
                         <div>
                             <p className="text-sm text-green-400">
-                                MT5 Connector Setup
+                                Connector setup
                             </p>
 
-                            <h2 className="text-2xl font-bold">
-                                Connection details for future connector
+                            <h2 className="mt-1 text-2xl font-black text-white">
+                                Connection Details
                             </h2>
+
+                            <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-400">
+                                Questi dati serviranno per testare il
+                                futuro Expert Advisor MT5 o una futura
+                                integrazione Broker. Per ora sono informazioni
+                                di configurazione, non una connessione reale.
+                            </p>
                         </div>
                     </div>
 
-                    <p className="max-w-3xl text-sm leading-6 text-gray-400">
-                        Questi dati serviranno quando costruiremo l’Expert Advisor MT5. Per ora sono solo informazioni di configurazione: non viene ancora collegato nessun conto reale.
-                    </p>
-
-                    <div className="mt-6 grid grid-cols-1 gap-4 xl:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
                         <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                             <p className="text-xs uppercase tracking-[0.16em] text-gray-500">
                                 Trading Account ID
@@ -664,7 +851,8 @@ export default async function IntegrationsPage({
                             </p>
 
                             <p className="mt-2 text-xs leading-5 text-gray-500">
-                                Non viene mostrata in app. Verrà copiata manualmente nel connettore MT5 solo quando costruiremo la connessione reale.
+                                Non viene mostrata in app. Verrà inserita
+                                manualmente nel connettore solo in fase di test controllato.
                             </p>
                         </div>
 
@@ -691,34 +879,47 @@ export default async function IntegrationsPage({
 
                     <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-5">
                         <p className="text-sm font-bold text-white">
-                            Future MT5 flow
+                            Future sync flow
                         </p>
 
                         <p className="mt-3 text-sm leading-6 text-gray-400">
-                            MT5 controllerà prima l’Health Check. Se VOLTIS risponde che la sync è pronta, il connettore invierà il trade chiuso all’Import Endpoint. Il trade entrerà nel Diary come MT5 + Needs Review.
+                            Il connettore controllerà prima l’Health Check.
+                            Se VOLTIS risponde che la sync è pronta,
+                            invierà i trade chiusi all’Import Endpoint.
+                            I trade entreranno nel Diary come importati e,
+                            se necessario, in stato Needs Review.
                         </p>
                     </div>
-                </div>
+                </section>
 
-                <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-                    <div className="mb-6">
-                        <p className="text-sm text-gray-400">
-                            Sync Logs
-                        </p>
+                <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+                    <div className="mb-6 flex items-start justify-between gap-4">
+                        <div>
+                            <p className="text-sm text-gray-400">
+                                Sync Logs
+                            </p>
 
-                        <h2 className="mt-1 text-2xl font-bold">
-                            Recent Import Activity
-                        </h2>
+                            <h2 className="mt-1 text-2xl font-black text-white">
+                                Recent Import Activity
+                            </h2>
 
-                        <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-500">
-                            Qui vedrai gli ultimi eventi collegati alla sincronizzazione automatica: trade importati, impostazioni aggiornate e attività future di MT5/Broker.
-                        </p>
+                            <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-500">
+                                Qui vedrai gli ultimi eventi collegati alla
+                                sincronizzazione automatica: trade importati,
+                                impostazioni aggiornate, reset e futuri errori
+                                MT5/Broker.
+                            </p>
+                        </div>
+
+                        <Zap className="text-cyan-300" />
                     </div>
 
                     {recentSyncLogs.length === 0 ? (
                         <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
                             <p className="text-sm leading-6 text-gray-400">
-                                Nessuna attività sync registrata per ora. Quando un trade verrà importato da MT5 o Broker, apparirà qui.
+                                Nessuna attività sync registrata per ora.
+                                Quando un trade verrà importato da MT5 o
+                                Broker, apparirà qui.
                             </p>
                         </div>
                     ) : (
@@ -785,9 +986,9 @@ export default async function IntegrationsPage({
                             ))}
                         </div>
                     )}
-                </div>
+                </section>
 
-                <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+                <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
                     <div className="mb-6 flex items-center gap-3">
                         <Lock className="text-green-400" />
 
@@ -796,16 +997,19 @@ export default async function IntegrationsPage({
                                 Security Notice
                             </p>
 
-                            <h2 className="text-2xl font-bold">
+                            <h2 className="text-2xl font-black text-white">
                                 No sensitive credentials stored
                             </h2>
                         </div>
                     </div>
 
                     <p className="max-w-3xl text-sm leading-6 text-gray-400">
-                        In questa fase VOLTIS non memorizza password MT5, API key broker, token o dati sensibili. La connessione reale verrà costruita più avanti con un sistema dedicato e protetto.
+                        In questa fase VOLTIS non memorizza password MT5,
+                        API key broker, token o dati sensibili. La connessione
+                        reale verrà costruita più avanti con un sistema
+                        dedicato e protetto.
                     </p>
-                </div>
+                </section>
 
                 <input
                     type="hidden"
@@ -813,12 +1017,19 @@ export default async function IntegrationsPage({
                     value={account.syncStatus || "inactive"}
                 />
 
-                <button
-                    type="submit"
-                    className="rounded-2xl bg-green-500 px-6 py-4 font-bold text-black transition hover:bg-green-400"
-                >
-                    Save Integration Settings
-                </button>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <p className="text-sm leading-6 text-gray-500">
+                        Salva solo impostazioni non sensibili. La sync reale
+                        verrà testata più avanti in ambiente controllato.
+                    </p>
+
+                    <button
+                        type="submit"
+                        className="rounded-2xl bg-green-500 px-6 py-4 font-black text-black transition hover:bg-green-400"
+                    >
+                        Save Integration Settings
+                    </button>
+                </div>
             </form>
         </div>
     );
