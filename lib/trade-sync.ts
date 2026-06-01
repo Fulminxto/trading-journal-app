@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
-import { logActivity } from "@/lib/activity";
+import { logActivity, notifyAccountMembers, } from "@/lib/activity";
 
 type TradeSyncSource = "mt5" | "broker";
 
@@ -367,6 +367,17 @@ export async function importSyncedTrade(
             brokerName: input.brokerName,
             needsReview: true,
         },
+    });
+
+    await notifyAccountMembers({
+        accountId: input.tradingAccountId,
+        actorId: importerUserId,
+        type: "TRADE_IMPORTED",
+        title: "Trade imported",
+        message: `${input.symbol} ${normalizeDirection(
+            input.direction
+        )} imported from ${input.source.toUpperCase()}`,
+        link: `/accounts/${input.tradingAccountId}/diary?source=${input.source}&needsReview=true`,
     });
 
     await markAccountSyncConnected(
