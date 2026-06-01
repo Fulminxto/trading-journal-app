@@ -281,6 +281,7 @@ export default async function IntegrationsPage({
                     in: [
                         "TRADE_IMPORTED",
                         "TRADE_SYNC_UPDATED",
+                        "TRADE_SYNC_ERROR",
                         "INTEGRATION_SETTINGS_UPDATED",
                     ],
                 },
@@ -290,6 +291,11 @@ export default async function IntegrationsPage({
             },
             take: 8,
         });
+
+    const latestSyncError =
+        recentSyncLogs.find(
+            (log) => log.type === "TRADE_SYNC_ERROR"
+        );
 
     const syncReadiness =
         getSyncReadiness(account);
@@ -439,6 +445,42 @@ export default async function IntegrationsPage({
                     ))}
                 </div>
             </div>
+
+            {account.syncStatus === "error" && (
+                <div className="mb-8 rounded-3xl border border-red-500/20 bg-red-500/[0.08] p-6">
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                        <div>
+                            <p className="text-sm uppercase tracking-[0.18em] text-red-400">
+                                Sync Error Detected
+                            </p>
+
+                            <h2 className="mt-2 text-3xl font-black text-white">
+                                Ultima sincronizzazione fallita
+                            </h2>
+
+                            <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-300">
+                                VOLTIS ha rilevato un errore durante l’importazione automatica dei trade. Controlla la configurazione MT5/Broker, il secret, l’Account ID e i Sync Logs qui sotto.
+                            </p>
+
+                            {latestSyncError?.description && (
+                                <div className="mt-5 rounded-2xl border border-red-500/20 bg-black/20 p-4">
+                                    <p className="text-xs uppercase tracking-[0.16em] text-red-300">
+                                        Latest Error
+                                    </p>
+
+                                    <p className="mt-2 text-sm leading-6 text-gray-300">
+                                        {latestSyncError.description}
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+
+                        <span className="w-fit rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-red-400">
+                            Error
+                        </span>
+                    </div>
+                </div>
+            )}
 
             <form
                 action={updateIntegrationsAction}
@@ -679,6 +721,12 @@ export default async function IntegrationsPage({
                                                 {log.type === "TRADE_SYNC_UPDATED" && (
                                                     <span className="rounded-xl border border-blue-500/20 bg-blue-500/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-blue-300">
                                                         Updated
+                                                    </span>
+                                                )}
+
+                                                {log.type === "TRADE_SYNC_ERROR" && (
+                                                    <span className="rounded-xl border border-red-500/20 bg-red-500/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-red-400">
+                                                        Error
                                                     </span>
                                                 )}
 
