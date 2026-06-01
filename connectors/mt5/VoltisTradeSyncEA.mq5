@@ -110,41 +110,178 @@ void CheckClosedTrades()
          continue;
       }
 
-      string symbol = HistoryDealGetString(dealTicket, DEAL_SYMBOL);
-      double volume = HistoryDealGetDouble(dealTicket, DEAL_VOLUME);
-      double price = HistoryDealGetDouble(dealTicket, DEAL_PRICE);
-      double profit = HistoryDealGetDouble(dealTicket, DEAL_PROFIT);
-      double commission = HistoryDealGetDouble(dealTicket, DEAL_COMMISSION);
-      double swap = HistoryDealGetDouble(dealTicket, DEAL_SWAP);
-      datetime dealTime = (datetime)HistoryDealGetInteger(dealTicket, DEAL_TIME);
-      long dealType = HistoryDealGetInteger(dealTicket, DEAL_TYPE);
-      ulong positionId = (ulong)HistoryDealGetInteger(dealTicket, DEAL_POSITION_ID);
+      bool sent = HandleClosedDeal(dealTicket);
 
-      string direction = GetDirectionFromDealType(dealType);
-
-      Print("VOLTIS: new closed deal detected.");
-      Print("Deal ticket: ", dealTicket);
-      Print("Position ID: ", positionId);
-      Print("Symbol: ", symbol);
-      Print("Direction: ", direction);
-      Print("Volume: ", volume);
-      Print("Close price: ", price);
-      Print("Profit: ", profit);
-      Print("Commission: ", commission);
-      Print("Swap: ", swap);
-      Print("Close time: ", TimeToString(dealTime, TIME_DATE | TIME_SECONDS));
-
-      if(DRY_RUN)
+      if(sent)
       {
-         Print("VOLTIS DRY RUN: deal not sent to VOLTIS.");
          MarkDealAsProcessed(dealTicket);
+      }
+   }
+}
+
+//+------------------------------------------------------------------+
+//| Handle one closed deal                                           |
+//+------------------------------------------------------------------+
+bool HandleClosedDeal(ulong dealTicket)
+{
+   string symbol = HistoryDealGetString(dealTicket, DEAL_SYMBOL);
+   double volume = HistoryDealGetDouble(dealTicket, DEAL_VOLUME);
+   double closePrice = HistoryDealGetDouble(dealTicket, DEAL_PRICE);
+   double profit = HistoryDealGetDouble(dealTicket, DEAL_PROFIT);
+   double commission = HistoryDealGetDouble(dealTicket, DEAL_COMMISSION);
+   double swap = HistoryDealGetDouble(dealTicket, DEAL_SWAP);
+   datetime closeTime = (datetime)HistoryDealGetInteger(dealTicket, DEAL_TIME);
+   long dealType = HistoryDealGetInteger(dealTicket, DEAL_TYPE);
+   ulong positionId = (ulong)HistoryDealGetInteger(dealTicket, DEAL_POSITION_ID);
+
+   string direction = GetDirectionFromDealType(dealType);
+
+   datetime openTime = closeTime;
+   double openPrice = 0.0;
+
+   FindOpeningDealByPosition(positionId, openTime, openPrice);
+
+   string payload = BuildTradePayload(
+      dealTicket,
+      positionId,
+      symbol,
+      direction,
+      volume,
+      openTime,
+      openPrice,
+      closeTime,
+      closePrice,
+      profit,
+      commission,
+      swap
+   );
+
+   Print("VOLTIS: closed deal prepared.");
+   Print("Deal ticket: ", dealTicket);
+   Print("Position ID: ", positionId);
+   Print("Symbol: ", symbol);
+   Print("Direction: ", direction);
+   Print("Volume: ", volume);
+   Print("Open price: ", openPrice);
+   Print("Close price: ", closePrice);
+   Print("Profit: ", profit);
+   Print("Commission: ", commission);
+   Print("Swap: ", swap);
+   Print("Open time: ", TimeToString(openTime, TIME_DATE | TIME_SECONDS));
+   Print("Close time: ", TimeToString(closeTime, TIME_DATE | TIME_SECONDS));
+
+   if(DRY_RUN)
+   {
+      Print("VOLTIS DRY RUN: payload prepared but not sent.");
+      Print(payload);
+      return true;
+   }
+
+   string response = "";
+
+   bool success = SendPostRequest(
+      "/api/trade-sync/import",
+      payload,
+      response
+   );
+
+   if(!success)
+   {
+      Print("VOLTIS: import failed for deal ticket: ", dealTicket);
+      return false;
+   }
+
+   Print("VOLTIS: import successful for deal ticket: ", dealTicket);
+
+   return true;
+}
+
+//+------------------------------------------------------------------+
+//| Build VOLTIS trade payload                                       |
+//+------------------------------------------------------------------+
+string BuildTradePayload(
+   ulong dealTicket,
+   ulong positionId,
+   string symbol,
+   string direction,
+   double volume,
+   datetime openTime,
+   double openPrice,
+   datetime closeTime,
+   double closePrice,
+   double profit,
+   double commission,
+   double swap
+)
+{
+   double fees = commission + swap;
+
+   string payload =
+      "{"
+      "\"tradingAccountId\":\"" + EscapeJson(VOLTIS_ACCOUNT_ID) + "\","
+      "\"source\":\"mt5\","
+      "\"externalTradeId\":\"" + IntegerToString((long)dealTicket) + "\","
+      "\"externalAccountId\":\"" + IntegerToString((long)AccountInfoInteger(ACCOUNT_LOGIN)) + "\","
+      "\"externalOrderId\":\"" + IntegerToString((long)positionId) + "\","
+      "\"platform\":\"MT5\","
+      "\"brokerName\":\"" + EscapeJson(AccountInfoString(ACCOUNT_COMPANY)) + "\","
+      "\"symbol\":\"" + EscapeJson(symbol) + "\","
+      "\"direction\":\"" + EscapeJson(direction) + "\","
+      "\"openDate\":\"" + FormatIsoTime(openTime) + "\","
+      "\"openTime\":\"" + FormatClockTime(openTime) + "\","
+      "\"amount\":" + JsonNumber(volume) + ","
+      "\"openingPrice\":" + JsonNumber(openPrice) + ","
+      "\"closeDate\":\"" + FormatIsoTime(closeTime) + "\","
+      "\"closingPrice\":" + JsonNumber(closePrice) + ","
+      "\"resultUsd\":" + JsonNumber(profit) + ","
+      "\"commission\":" + JsonNumber(commission) + ","
+      "\"swap\":" + JsonNumber(swap) + ","
+      "\"fees\":" + JsonNumber(fees) +
+      "}";
+
+   return payload;
+}
+
+//+------------------------------------------------------------------+
+//| Find opening deal by position ID                                 |
+//+------------------------------------------------------------------+
+bool FindOpeningDealByPosition(
+   ulong positionId,
+   datetime &openTime,
+   double &openPrice
+)
+{
+   int totalDeals = HistoryDealsTotal();
+
+   for(int index = 0; index < totalDeals; index++)
+   {
+      ulong ticket = HistoryDealGetTicket(index);
+
+      if(ticket == 0)
+      {
          continue;
       }
 
-      // Future implementation:
-      // SendClosedDealToVoltIs(...)
-      // MarkDealAsProcessed(dealTicket) only after successful import.
+      ulong currentPositionId =
+         (ulong)HistoryDealGetInteger(ticket, DEAL_POSITION_ID);
+
+      if(currentPositionId != positionId)
+      {
+         continue;
+      }
+
+      long entryType = HistoryDealGetInteger(ticket, DEAL_ENTRY);
+
+      if(entryType == DEAL_ENTRY_IN || entryType == DEAL_ENTRY_INOUT)
+      {
+         openTime = (datetime)HistoryDealGetInteger(ticket, DEAL_TIME);
+         openPrice = HistoryDealGetDouble(ticket, DEAL_PRICE);
+
+         return true;
+      }
    }
+
+   return false;
 }
 
 //+------------------------------------------------------------------+
@@ -273,6 +410,59 @@ void MarkDealAsProcessed(ulong dealTicket)
 string GetProcessedDealKey(ulong dealTicket)
 {
    return "VOLTIS_SYNCED_" + VOLTIS_ACCOUNT_ID + "_" + IntegerToString((long)dealTicket);
+}
+
+//+------------------------------------------------------------------+
+//| Formatting helpers                                               |
+//+------------------------------------------------------------------+
+string FormatIsoTime(datetime value)
+{
+   MqlDateTime dt;
+   TimeToStruct(value, dt);
+
+   return StringFormat(
+      "%04d-%02d-%02dT%02d:%02d:%02d.000Z",
+      dt.year,
+      dt.mon,
+      dt.day,
+      dt.hour,
+      dt.min,
+      dt.sec
+   );
+}
+
+string FormatClockTime(datetime value)
+{
+   MqlDateTime dt;
+   TimeToStruct(value, dt);
+
+   return StringFormat(
+      "%02d:%02d",
+      dt.hour,
+      dt.min
+   );
+}
+
+string JsonNumber(double value)
+{
+   string result = DoubleToString(value, 8);
+
+   while(StringLen(result) > 0 && StringSubstr(result, StringLen(result) - 1, 1) == "0")
+   {
+      result = StringSubstr(result, 0, StringLen(result) - 1);
+   }
+
+   if(StringLen(result) > 0 && StringSubstr(result, StringLen(result) - 1, 1) == ".")
+   {
+      result = result + "0";
+   }
+
+   if(result == "-0.0")
+   {
+      result = "0.0";
+   }
+
+   return result;
 }
 
 //+------------------------------------------------------------------+
