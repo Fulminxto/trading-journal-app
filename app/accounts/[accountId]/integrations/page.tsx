@@ -73,6 +73,144 @@ function formatDate(date?: Date | null) {
     );
 }
 
+function getSyncReadiness(account: {
+    integrationMode: string | null;
+    autoSyncEnabled: boolean;
+    mt5Enabled: boolean;
+    brokerSyncEnabled: boolean;
+    syncStatus: string | null;
+}) {
+    if (account.integrationMode === "manual") {
+        return {
+            label: "Not Ready",
+            tone: "border-white/10 bg-white/[0.04] text-gray-300",
+            description:
+                "Questo account è impostato su Manual Only. Può usare solo inserimento manuale dei trade.",
+            checklist: [
+                {
+                    label: "Manual mode active",
+                    ok: true,
+                },
+                {
+                    label: "Automatic sync disabled",
+                    ok: false,
+                },
+            ],
+        };
+    }
+
+    if (
+        account.integrationMode === "mt5" &&
+        account.autoSyncEnabled &&
+        account.mt5Enabled
+    ) {
+        return {
+            label: "Ready for MT5",
+            tone: "border-cyan-500/20 bg-cyan-500/[0.08] text-cyan-300",
+            description:
+                "Questo account è pronto per ricevere trade da un futuro MT5 Connector.",
+            checklist: [
+                {
+                    label: "MT5 mode active",
+                    ok: true,
+                },
+                {
+                    label: "Auto sync enabled",
+                    ok: true,
+                },
+                {
+                    label: "MT5 source enabled",
+                    ok: true,
+                },
+            ],
+        };
+    }
+
+    if (
+        account.integrationMode === "broker" &&
+        account.autoSyncEnabled &&
+        account.brokerSyncEnabled
+    ) {
+        return {
+            label: "Ready for Broker",
+            tone: "border-blue-500/20 bg-blue-500/[0.08] text-blue-300",
+            description:
+                "Questo account è pronto per ricevere trade da una futura Broker Integration.",
+            checklist: [
+                {
+                    label: "Broker mode active",
+                    ok: true,
+                },
+                {
+                    label: "Auto sync enabled",
+                    ok: true,
+                },
+                {
+                    label: "Broker source enabled",
+                    ok: true,
+                },
+            ],
+        };
+    }
+
+    if (
+        account.integrationMode === "hybrid" &&
+        account.autoSyncEnabled &&
+        account.mt5Enabled &&
+        account.brokerSyncEnabled
+    ) {
+        return {
+            label: "Ready for MT5 + Broker",
+            tone: "border-green-500/20 bg-green-500/[0.08] text-green-400",
+            description:
+                "Questo account è pronto per ricevere trade sia da MT5 sia da Broker Integration.",
+            checklist: [
+                {
+                    label: "Hybrid mode active",
+                    ok: true,
+                },
+                {
+                    label: "Auto sync enabled",
+                    ok: true,
+                },
+                {
+                    label: "MT5 source enabled",
+                    ok: true,
+                },
+                {
+                    label: "Broker source enabled",
+                    ok: true,
+                },
+            ],
+        };
+    }
+
+    return {
+        label: "Configuration Needed",
+        tone: "border-yellow-500/20 bg-yellow-500/[0.08] text-yellow-300",
+        description:
+            "Questo account ha una modalità sync selezionata, ma la configurazione non è ancora completa.",
+        checklist: [
+            {
+                label: "Integration mode selected",
+                ok: account.integrationMode !== "manual",
+            },
+            {
+                label: "Auto sync enabled",
+                ok: account.autoSyncEnabled,
+            },
+            {
+                label: "MT5 enabled",
+                ok: account.mt5Enabled,
+            },
+            {
+                label: "Broker enabled",
+                ok: account.brokerSyncEnabled,
+            },
+        ],
+    };
+}
+
 function getAppBaseUrl() {
     if (process.env.NEXT_PUBLIC_APP_URL) {
         return process.env.NEXT_PUBLIC_APP_URL;
@@ -134,6 +272,9 @@ export default async function IntegrationsPage({
     }
 
     const account = membership.tradingAccount;
+
+    const syncReadiness =
+        getSyncReadiness(account);
 
     const appBaseUrl = getAppBaseUrl();
 
@@ -233,6 +374,51 @@ export default async function IntegrationsPage({
                     <h2 className="mt-2 text-sm font-black text-white">
                         {formatDate(account.lastSyncedAt)}
                     </h2>
+                </div>
+            </div>
+
+            <div className={`mb-8 rounded-3xl border p-6 ${syncReadiness.tone}`}>
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                    <div>
+                        <p className="text-sm uppercase tracking-[0.18em] opacity-80">
+                            Trade Sync Readiness
+                        </p>
+
+                        <h2 className="mt-2 text-3xl font-black">
+                            {syncReadiness.label}
+                        </h2>
+
+                        <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-300">
+                            {syncReadiness.description}
+                        </p>
+                    </div>
+
+                    <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm font-bold text-white">
+                        {getModeLabel(account.integrationMode)}
+                    </div>
+                </div>
+
+                <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
+                    {syncReadiness.checklist.map((item) => (
+                        <div
+                            key={item.label}
+                            className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-4 py-3"
+                        >
+                            <span className="text-sm text-gray-300">
+                                {item.label}
+                            </span>
+
+                            <span
+                                className={
+                                    item.ok
+                                        ? "text-sm font-black text-green-400"
+                                        : "text-sm font-black text-red-400"
+                                }
+                            >
+                                {item.ok ? "OK" : "Missing"}
+                            </span>
+                        </div>
+                    ))}
                 </div>
             </div>
 
