@@ -1,4 +1,10 @@
-import { ArrowLeft, BarChart3, Trophy, Activity, Target } from "lucide-react";
+import {
+  ArrowLeft,
+  BarChart3,
+  Trophy,
+  Activity,
+  Target,
+} from "lucide-react";
 import Link from "next/link";
 
 import { auth } from "@/lib/auth";
@@ -15,24 +21,57 @@ export default async function MemberPerformancePage({
 }) {
   const session = await auth();
 
-  if (!session?.user?.id) redirect("/login");
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
 
   const { accountId, memberId } = await params;
 
-  const membership = await prisma.accountMember.findFirst({
-    where: {
-      userId: session.user.id,
-      tradingAccountId: accountId,
-    },
-  });
+  const membership =
+    await prisma.accountMember.findFirst({
+      where: {
+        userId: session.user.id,
+        tradingAccountId: accountId,
+      },
+      include: {
+        tradingAccount: true,
+      },
+    });
 
-  if (!membership) redirect("/accounts");
+  if (!membership) {
+    redirect("/accounts");
+  }
 
-  const member = await prisma.user.findUnique({
-    where: { id: memberId },
-  });
+  if (
+    membership.tradingAccount.status ===
+    "ARCHIVED"
+  ) {
+    redirect(`/accounts/${accountId}/dashboard`);
+  }
 
-  if (!member) redirect(`/accounts/${accountId}/members`);
+  if (
+    membership.role !== "MANAGER" &&
+    !membership.canViewMembers
+  ) {
+    redirect(`/accounts/${accountId}/dashboard`);
+  }
+
+  const targetMembership =
+    await prisma.accountMember.findFirst({
+      where: {
+        userId: memberId,
+        tradingAccountId: accountId,
+      },
+      include: {
+        user: true,
+      },
+    });
+
+  if (!targetMembership) {
+    redirect(`/accounts/${accountId}/members`);
+  }
+
+  const member = targetMembership.user;
 
   const trades = await prisma.trade.findMany({
     where: {
@@ -40,42 +79,69 @@ export default async function MemberPerformancePage({
       createdById: memberId,
     },
     orderBy: [
-      { openDate: "desc" },
-      { openTime: "desc" },
-      { createdAt: "desc" },
+      {
+        openDate: "desc",
+      },
+      {
+        openTime: "desc",
+      },
+      {
+        createdAt: "desc",
+      },
     ],
   });
 
   const totalTrades = trades.length;
-  const wins = trades.filter((trade) => trade.outcome === "win").length;
-  const losses = trades.filter((trade) => trade.outcome === "loss").length;
+
+  const wins = trades.filter(
+    (trade) => trade.outcome === "win"
+  ).length;
+
+  const losses = trades.filter(
+    (trade) => trade.outcome === "loss"
+  ).length;
 
   const winRate =
-    totalTrades > 0 ? Math.round((wins / totalTrades) * 100) : 0;
+    totalTrades > 0
+      ? Math.round((wins / totalTrades) * 100)
+      : 0;
 
   const totalPnl = trades.reduce(
-    (sum, trade) => sum + (trade.resultUsd || 0),
+    (sum, trade) =>
+      sum + (trade.resultUsd || 0),
     0
   );
 
   const bestTrade =
     trades.length > 0
-      ? Math.max(...trades.map((trade) => trade.resultUsd || 0))
+      ? Math.max(
+        ...trades.map(
+          (trade) => trade.resultUsd || 0
+        )
+      )
       : 0;
 
-  const symbols = trades.reduce<Record<string, number>>((acc, trade) => {
-    acc[trade.symbol] = (acc[trade.symbol] || 0) + 1;
+  const symbols = trades.reduce<
+    Record<string, number>
+  >((acc, trade) => {
+    acc[trade.symbol] =
+      (acc[trade.symbol] || 0) + 1;
+
     return acc;
   }, {});
 
   const bestSymbol =
-    Object.entries(symbols).sort((a, b) => b[1] - a[1])[0]?.[0] || "N/A";
+    Object.entries(symbols).sort(
+      (a, b) => b[1] - a[1]
+    )[0]?.[0] || "N/A";
 
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between gap-6">
         <div>
-          <p className="text-sm text-gray-400">Member Performance</p>
+          <p className="text-sm text-gray-400">
+            Member Performance
+          </p>
 
           <h1 className="mt-2 flex items-center gap-3 text-4xl font-black text-white">
             <BarChart3 className="text-cyan-400" />
@@ -101,24 +167,32 @@ export default async function MemberPerformancePage({
           <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
             Total Trades
           </p>
-          <p className="mt-4 text-3xl font-black text-white">{totalTrades}</p>
+
+          <p className="mt-4 text-3xl font-black text-white">
+            {totalTrades}
+          </p>
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
           <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
             Win Rate
           </p>
-          <p className="mt-4 text-3xl font-black text-white">{winRate}%</p>
+
+          <p className="mt-4 text-3xl font-black text-white">
+            {winRate}%
+          </p>
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
           <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
             Total PnL
           </p>
+
           <p
-            className={`mt-4 text-3xl font-black ${
-              totalPnl >= 0 ? "text-cyan-300" : "text-red-300"
-            }`}
+            className={`mt-4 text-3xl font-black ${totalPnl >= 0
+                ? "text-cyan-300"
+                : "text-red-300"
+              }`}
           >
             ${totalPnl.toFixed(2)}
           </p>
@@ -128,7 +202,10 @@ export default async function MemberPerformancePage({
           <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
             Best Symbol
           </p>
-          <p className="mt-4 text-3xl font-black text-white">{bestSymbol}</p>
+
+          <p className="mt-4 text-3xl font-black text-white">
+            {bestSymbol}
+          </p>
         </div>
       </div>
 
@@ -165,7 +242,8 @@ export default async function MemberPerformancePage({
           </h2>
 
           <p className="mt-4 text-sm text-gray-300">
-            Strumento più utilizzato: {bestSymbol}
+            Strumento più utilizzato:{" "}
+            {bestSymbol}
           </p>
         </div>
       </div>
