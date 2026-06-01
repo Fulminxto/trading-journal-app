@@ -27,6 +27,46 @@ import RecoveryChecklistCard from "@/components/copilot/RecoveryChecklistCard";
 import RecoveryStatusCard from "@/components/copilot/RecoveryStatusCard";
 import { analyzeCopilotMemory } from "@/lib/copilot/copilot-memory";
 
+function getRiskLabel(behavioralRisk: number) {
+    if (behavioralRisk >= 50) {
+        return "High";
+    }
+
+    if (behavioralRisk >= 25) {
+        return "Medium";
+    }
+
+    return "Low";
+}
+
+function getRiskTone(behavioralRisk: number) {
+    if (behavioralRisk >= 50) {
+        return "text-red-400";
+    }
+
+    if (behavioralRisk >= 25) {
+        return "text-yellow-300";
+    }
+
+    return "text-emerald-400";
+}
+
+function getMemoryTone(severity: string) {
+    if (severity === "critical") {
+        return "bg-red-500/10 text-red-400";
+    }
+
+    if (severity === "high") {
+        return "bg-orange-500/10 text-orange-300";
+    }
+
+    if (severity === "medium") {
+        return "bg-yellow-500/10 text-yellow-300";
+    }
+
+    return "bg-emerald-500/10 text-emerald-400";
+}
+
 export default async function CopilotPage({
     params,
 }: {
@@ -163,12 +203,9 @@ export default async function CopilotPage({
         supervisorLevel,
     } = copilotSystem.stability;
 
-    const riskLabel =
-        behavioralRisk >= 50
-            ? "High"
-            : behavioralRisk >= 25
-                ? "Medium"
-                : "Low";
+    const riskLabel = getRiskLabel(behavioralRisk);
+
+    const riskTone = getRiskTone(behavioralRisk);
 
     const summaryText =
         totalTrades === 0
@@ -180,55 +217,130 @@ export default async function CopilotPage({
                     : "VOLTIS rileva una struttura in sviluppo. Il focus principale è migliorare consistenza, selezione setup e stabilità decisionale.";
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-10">
             <CopilotHero />
 
-            <CriticalAlertCard
-                criticalPatterns={criticalPatterns}
-            />
+            <section className="space-y-4">
+                <CriticalAlertCard
+                    criticalPatterns={criticalPatterns}
+                />
 
-            {criticalPatterns.length === 0 &&
-                highPatterns.length > 0 && (
-                    <ElevatedRiskCard
-                        show={
-                            criticalPatterns.length === 0 &&
-                            highPatterns.length > 0
-                        }
-                        highPatternsCount={highPatterns.length}
+                {criticalPatterns.length === 0 &&
+                    highPatterns.length > 0 && (
+                        <ElevatedRiskCard
+                            show={
+                                criticalPatterns.length === 0 &&
+                                highPatterns.length > 0
+                            }
+                            highPatternsCount={highPatterns.length}
+                        />
+                    )}
+            </section>
+
+            <section className="rounded-[36px] border border-white/10 bg-white/[0.035] p-6 backdrop-blur-xl sm:p-8">
+                <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+                    <div>
+                        <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+                            Copilot Control Room
+                        </p>
+
+                        <h2 className="mt-3 text-3xl font-black text-white">
+                            Account Intelligence Snapshot
+                        </h2>
+
+                        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-gray-400">
+                            Una lettura rapida dello stato operativo del conto:
+                            disciplina, rischio comportamentale, review e memoria attiva.
+                        </p>
+                    </div>
+
+                    <div className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-cyan-300">
+                        {membership.tradingAccount.name}
+                    </div>
+                </div>
+
+                <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+                        <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
+                            Total Trades
+                        </p>
+
+                        <h3 className="mt-3 text-3xl font-black text-white">
+                            {totalTrades}
+                        </h3>
+                    </div>
+
+                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+                        <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
+                            Discipline
+                        </p>
+
+                        <h3 className="mt-3 text-3xl font-black text-white">
+                            {disciplineScore}%
+                        </h3>
+                    </div>
+
+                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+                        <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
+                            Behavioral Risk
+                        </p>
+
+                        <h3 className={`mt-3 text-3xl font-black ${riskTone}`}>
+                            {riskLabel}
+                        </h3>
+                    </div>
+
+                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+                        <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
+                            Active Memories
+                        </p>
+
+                        <h3 className="mt-3 text-3xl font-black text-emerald-400">
+                            {copilotMemories.length}
+                        </h3>
+                    </div>
+                </div>
+            </section>
+
+            <section className="grid items-stretch gap-6 xl:grid-cols-5">
+                <div className="flex xl:col-span-3 [&>*]:h-full [&>*]:w-full">
+                    <DailyIntelligenceFeed
+                        intelligenceFeed={intelligenceFeed}
                     />
-                )}
+                </div>
 
-            <DailyIntelligenceFeed
-                intelligenceFeed={intelligenceFeed}
-            />
+                <div className="flex xl:col-span-2 [&>*]:h-full [&>*]:w-full">
+                    <AdaptiveCoachingCard
+                        mode={adaptiveCoaching.mode}
+                        tone={adaptiveCoaching.tone}
+                        message={adaptiveCoaching.message}
+                    />
+                </div>
+            </section>
 
-            <AdaptiveCoachingCard
-                mode={adaptiveCoaching.mode}
-                tone={adaptiveCoaching.tone}
-                message={adaptiveCoaching.message}
-            />
+            <section className="grid gap-6 xl:grid-cols-2">
+                <ConsistencyEngineCard
+                    consistencyScore={consistencyScore}
+                    consistencyLabel={consistencyLabel}
+                    disciplineScore={disciplineScore}
+                    behavioralRisk={behavioralRisk}
+                />
 
-            <ConsistencyEngineCard
-                consistencyScore={consistencyScore}
-                consistencyLabel={consistencyLabel}
-                disciplineScore={disciplineScore}
-                behavioralRisk={behavioralRisk}
-            />
-
-            <AIReviewEngineCard
-                reviewScore={reviewScore}
-                reviewLabel={reviewLabel}
-                averageExecution={averageExecution}
-                averageConfidence={averageConfidence}
-            />
+                <AIReviewEngineCard
+                    reviewScore={reviewScore}
+                    reviewLabel={reviewLabel}
+                    averageExecution={averageExecution}
+                    averageConfidence={averageConfidence}
+                />
+            </section>
 
             <TradeReviewCard
                 latestTrade={latestTrade}
                 latestTradeReview={latestTradeReview}
             />
 
-            <div className="rounded-[36px] border border-white/10 bg-black/30 p-8 backdrop-blur-xl">
-                <div className="flex items-center justify-between">
+            <section className="rounded-[36px] border border-white/10 bg-black/30 p-6 backdrop-blur-xl sm:p-8">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
                             AI Review Timeline
@@ -239,7 +351,7 @@ export default async function CopilotPage({
                         </h2>
                     </div>
 
-                    <div className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-cyan-300">
+                    <div className="w-fit rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-cyan-300">
                         {reviewNotes.length} Notes
                     </div>
                 </div>
@@ -257,7 +369,7 @@ export default async function CopilotPage({
                                 key={note.id}
                                 className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5"
                             >
-                                <div className="flex items-start justify-between gap-4">
+                                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                                     <div>
                                         <p className="text-sm uppercase tracking-[0.15em] text-cyan-400">
                                             {note.title}
@@ -269,7 +381,7 @@ export default async function CopilotPage({
                                     </div>
 
                                     <div
-                                        className={`rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] ${note.severity === "high"
+                                        className={`w-fit rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] ${note.severity === "high"
                                             ? "bg-red-500/10 text-red-400"
                                             : note.severity === "medium"
                                                 ? "bg-yellow-500/10 text-yellow-300"
@@ -283,218 +395,164 @@ export default async function CopilotPage({
                         ))
                     )}
                 </div>
-            </div>
+            </section>
 
-            <PerformanceTimelineCard
-                performanceTimeline={performanceTimeline}
-            />
-
-            <BehavioralDriftCard
-                behavioralDrift={behavioralDrift}
-                recentAverageQuality={recentAverageQuality}
-                previousAverageQuality={previousAverageQuality}
-            />
-
-            <RecoveryIntelligenceCard
-                recoveryScore={recoveryScore}
-                recoveryLabel={recoveryLabel}
-                recentWins={recentWins}
-                recentLosses={recentLosses}
-            />
-
-            <ExecutionStabilityCard
-                executionDecay={executionDecay}
-                recentExecutionAverage={recentExecutionAverage}
-                previousExecutionAverage={previousExecutionAverage}
-            />
-
-            <ConfidenceStabilityCard
-                confidenceDecay={confidenceDecay}
-                recentConfidenceAverage={recentConfidenceAverage}
-                previousConfidenceAverage={previousConfidenceAverage}
-            />
-
-            <AIRiskSupervisorCard
-                supervisorLevel={supervisorLevel}
-                riskSignals={riskSignals}
-                behavioralDrift={behavioralDrift}
-                executionDecay={executionDecay}
-                confidenceDecay={confidenceDecay}
-            />
-
-            <RiskEscalationCard
-                escalationLevel={riskEscalation.escalationLevel}
-                protectionRequired={riskEscalation.protectionRequired}
-                cooldownRecommended={riskEscalation.cooldownRecommended}
-                message={riskEscalation.message}
-            />
-
-            <SessionLockCard
-                sessionLocked={sessionLock.sessionLocked}
-                reviewRequired={sessionLock.reviewRequired}
-                lockReason={sessionLock.lockReason}
-            />
-
-            <MandatoryReviewCard
-                sessionLocked={sessionLock.sessionLocked}
-                reviewRequired={sessionLock.reviewRequired}
-            />
-
-            <RecoveryChecklistCard
-                reviewRequired={sessionLock.reviewRequired}
-            />
-
-            <RecoveryStatusCard
-                sessionLocked={sessionLock.sessionLocked}
-                reviewRequired={sessionLock.reviewRequired}
-            />
-
-            <EmotionalStabilityCard
-                emotionalLabel={emotionalLabel}
-                emotionalInstabilityScore={emotionalInstabilityScore}
-                emotionalVolatility={emotionalVolatility}
-                emotionalTradesCount={
-                    emotionalRecentTrades.filter(
-                        (trade) =>
-                            trade.emotionalState &&
-                            trade.emotionalState.length > 0
-                    ).length
-                }
-            />
-
-            <div className="rounded-[32px] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl">
-                <p className="text-sm uppercase tracking-[0.2em] text-violet-400">
-                    Coming Intelligence Layer
-                </p>
-
-                <h2 className="mt-3 text-3xl font-black text-white">
-                    Copilot Engine
-                </h2>
-
-                <p className="mt-5 max-w-3xl text-sm leading-relaxed text-gray-400">
-                    In questa sezione costruiremo il layer AI di VOLTIS:
-                    analisi automatica dei trade, coaching dinamico,
-                    pattern detection, warning comportamentali e suggerimenti
-                    operativi contestuali.
-                </p>
-            </div>
-
-            <div className="grid gap-6 xl:grid-cols-3">
-                <div className="rounded-[32px] border border-white/10 bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 p-6">
-                    <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
-                        Behavioral Detection
-                    </p>
-
-                    <h3 className="mt-4 text-2xl font-black text-white">
-                        Emotional Trading
-                    </h3>
-
-                    <p className="mt-4 text-sm leading-relaxed text-gray-400">
-                        VOLTIS analizzerà pattern emotivi, overtrading, revenge
-                        trading e instabilità decisionale.
-                    </p>
+            <section className="grid items-stretch gap-6 xl:grid-cols-3">
+                <div className="flex xl:col-span-2 [&>*]:h-full [&>*]:w-full">
+                    <PerformanceTimelineCard
+                        performanceTimeline={performanceTimeline}
+                    />
                 </div>
 
-                <div className="rounded-[32px] border border-white/10 bg-gradient-to-br from-violet-500/10 to-violet-500/5 p-6">
-                    <p className="text-sm uppercase tracking-[0.2em] text-violet-400">
-                        AI Coaching
-                    </p>
-
-                    <h3 className="mt-4 text-2xl font-black text-white">
-                        Dynamic Coaching
-                    </h3>
-
-                    <p className="mt-4 text-sm leading-relaxed text-gray-400">
-                        Coaching operativo dinamico basato sui tuoi dati reali e
-                        comportamento.
-                    </p>
+                <div className="flex [&>*]:h-full [&>*]:w-full">
+                    <RecoveryIntelligenceCard
+                        recoveryScore={recoveryScore}
+                        recoveryLabel={recoveryLabel}
+                        recentWins={recentWins}
+                        recentLosses={recentLosses}
+                    />
                 </div>
+            </section>
 
-                <div className="rounded-[32px] border border-white/10 bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 p-6">
-                    <p className="text-sm uppercase tracking-[0.2em] text-emerald-400">
-                        Pattern Intelligence
-                    </p>
+            <section className="grid gap-6 xl:grid-cols-2">
+                <BehavioralDriftCard
+                    behavioralDrift={behavioralDrift}
+                    recentAverageQuality={recentAverageQuality}
+                    previousAverageQuality={previousAverageQuality}
+                />
 
-                    <h3 className="mt-4 text-2xl font-black text-white">
-                        Pattern Recognition
-                    </h3>
+                <EmotionalStabilityCard
+                    emotionalLabel={emotionalLabel}
+                    emotionalInstabilityScore={emotionalInstabilityScore}
+                    emotionalVolatility={emotionalVolatility}
+                    emotionalTradesCount={
+                        emotionalRecentTrades.filter(
+                            (trade) =>
+                                trade.emotionalState &&
+                                trade.emotionalState.length > 0
+                        ).length
+                    }
+                />
+            </section>
 
-                    <p className="mt-4 text-sm leading-relaxed text-gray-400">
-                        Riconoscimento automatico di pattern profittevoli e
-                        comportamenti ricorrenti.
-                    </p>
-                </div>
-            </div>
+            <section className="grid gap-6 xl:grid-cols-2">
+                <ExecutionStabilityCard
+                    executionDecay={executionDecay}
+                    recentExecutionAverage={recentExecutionAverage}
+                    previousExecutionAverage={previousExecutionAverage}
+                />
 
-            <div className="grid gap-6 xl:grid-cols-2">
-                <div className="rounded-[32px] border border-cyan-500/20 bg-cyan-500/10 p-7">
-                    <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
-                        AI Summary
-                    </p>
+                <ConfidenceStabilityCard
+                    confidenceDecay={confidenceDecay}
+                    recentConfidenceAverage={recentConfidenceAverage}
+                    previousConfidenceAverage={previousConfidenceAverage}
+                />
+            </section>
 
-                    <h2 className="mt-4 text-3xl font-black text-white">
-                        Operational Intelligence
-                    </h2>
+            <section className="rounded-[36px] border border-red-500/20 bg-red-500/[0.04] p-6 backdrop-blur-xl sm:p-8">
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                    <div>
+                        <p className="text-sm uppercase tracking-[0.2em] text-red-400">
+                            Protection Layer
+                        </p>
 
-                    <p className="mt-5 text-sm leading-relaxed text-cyan-100">
-                        {summaryText}
-                    </p>
+                        <h2 className="mt-3 text-3xl font-black text-white">
+                            Risk Supervision
+                        </h2>
 
-                    <div className="mt-6 grid grid-cols-2 gap-4">
-                        <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                            <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                                Discipline
-                            </p>
+                        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-gray-400">
+                            Controlli dedicati a rischio, escalation, blocco sessione e recupero operativo.
+                        </p>
+                    </div>
 
-                            <h3 className="mt-2 text-2xl font-black text-white">
-                                {disciplineScore}%
-                            </h3>
-                        </div>
-
-                        <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                            <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                                Behavioral Risk
-                            </p>
-
-                            <h3 className="mt-2 text-2xl font-black text-emerald-400">
-                                {riskLabel}
-                            </h3>
-                        </div>
+                    <div className="rounded-full border border-red-500/20 bg-red-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-red-300">
+                        {riskSignals} Signals
                     </div>
                 </div>
 
-                <div className="rounded-[32px] border border-violet-500/20 bg-violet-500/10 p-7">
-                    <p className="text-sm uppercase tracking-[0.2em] text-violet-400">
-                        AI Recommendations
-                    </p>
+                <div className="mt-8 grid gap-6 xl:grid-cols-2">
+                    <AIRiskSupervisorCard
+                        supervisorLevel={supervisorLevel}
+                        riskSignals={riskSignals}
+                        behavioralDrift={behavioralDrift}
+                        executionDecay={executionDecay}
+                        confidenceDecay={confidenceDecay}
+                    />
 
-                    <h2 className="mt-4 text-3xl font-black text-white">
-                        Strategic Focus
-                    </h2>
+                    <RiskEscalationCard
+                        escalationLevel={riskEscalation.escalationLevel}
+                        protectionRequired={riskEscalation.protectionRequired}
+                        cooldownRecommended={riskEscalation.cooldownRecommended}
+                        message={riskEscalation.message}
+                    />
 
-                    <div className="mt-6 space-y-4">
-                        <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                            <p className="text-sm leading-relaxed text-gray-300">
-                                Ridurre frequenza operativa dopo una perdita consecutiva.
-                            </p>
-                        </div>
+                    <SessionLockCard
+                        sessionLocked={sessionLock.sessionLocked}
+                        reviewRequired={sessionLock.reviewRequired}
+                        lockReason={sessionLock.lockReason}
+                    />
 
-                        <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                            <p className="text-sm leading-relaxed text-gray-300">
-                                Proteggere qualità execution durante alta volatilità.
-                            </p>
-                        </div>
+                    <MandatoryReviewCard
+                        sessionLocked={sessionLock.sessionLocked}
+                        reviewRequired={sessionLock.reviewRequired}
+                    />
 
-                        <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                            <p className="text-sm leading-relaxed text-gray-300">
-                                Mantenere focus su setup ad alta probabilità.
-                            </p>
+                    <RecoveryChecklistCard
+                        reviewRequired={sessionLock.reviewRequired}
+                    />
+
+                    <RecoveryStatusCard
+                        sessionLocked={sessionLock.sessionLocked}
+                        reviewRequired={sessionLock.reviewRequired}
+                    />
+                </div>
+            </section>
+
+            <section className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/[0.05] p-6 backdrop-blur-xl sm:p-8">
+                <div className="grid gap-6 xl:grid-cols-2">
+                    <div>
+                        <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+                            AI Summary
+                        </p>
+
+                        <h2 className="mt-4 text-3xl font-black text-white">
+                            Operational Intelligence
+                        </h2>
+
+                        <p className="mt-5 text-sm leading-relaxed text-cyan-100">
+                            {summaryText}
+                        </p>
+                    </div>
+
+                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+                        <p className="text-sm uppercase tracking-[0.2em] text-violet-400">
+                            Strategic Focus
+                        </p>
+
+                        <div className="mt-6 space-y-4">
+                            <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                                <p className="text-sm leading-relaxed text-gray-300">
+                                    Ridurre frequenza operativa dopo una perdita consecutiva.
+                                </p>
+                            </div>
+
+                            <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                                <p className="text-sm leading-relaxed text-gray-300">
+                                    Proteggere qualità execution durante alta volatilità.
+                                </p>
+                            </div>
+
+                            <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                                <p className="text-sm leading-relaxed text-gray-300">
+                                    Mantenere focus su setup ad alta probabilità.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div className="rounded-[36px] border border-emerald-500/20 bg-emerald-500/[0.06] p-8 backdrop-blur-xl">
+            <section className="rounded-[36px] border border-emerald-500/20 bg-emerald-500/[0.06] p-6 backdrop-blur-xl sm:p-8">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div>
                         <p className="text-sm uppercase tracking-[0.2em] text-emerald-400">
@@ -510,7 +568,7 @@ export default async function CopilotPage({
                         </p>
                     </div>
 
-                    <div className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-emerald-300">
+                    <div className="w-fit rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-emerald-300">
                         {copilotMemories.length} Memories
                     </div>
                 </div>
@@ -528,7 +586,7 @@ export default async function CopilotPage({
                                 key={memory.id}
                                 className="rounded-[28px] border border-white/10 bg-black/20 p-5"
                             >
-                                <div className="flex items-start justify-between gap-4">
+                                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                                     <div>
                                         <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
                                             {memory.memoryType}
@@ -540,14 +598,7 @@ export default async function CopilotPage({
                                     </div>
 
                                     <span
-                                        className={`rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] ${memory.severity === "critical"
-                                            ? "bg-red-500/10 text-red-400"
-                                            : memory.severity === "high"
-                                                ? "bg-orange-500/10 text-orange-300"
-                                                : memory.severity === "medium"
-                                                    ? "bg-yellow-500/10 text-yellow-300"
-                                                    : "bg-emerald-500/10 text-emerald-400"
-                                            }`}
+                                        className={`w-fit rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] ${getMemoryTone(memory.severity)}`}
                                     >
                                         {memory.severity}
                                     </span>
@@ -570,7 +621,7 @@ export default async function CopilotPage({
                         ))
                     )}
                 </div>
-            </div>
+            </section>
 
             <PatternMemoryCard copilotPatterns={copilotPatterns} />
 
