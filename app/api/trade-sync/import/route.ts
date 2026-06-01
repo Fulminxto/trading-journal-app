@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { prisma } from "@/lib/prisma";
 import { importSyncedTrade } from "@/lib/trade-sync";
 
 type TradeSyncPayload = {
@@ -103,6 +104,130 @@ function getOutcome(value: unknown) {
     return null;
 }
 
+function isSourceAllowedForMode({
+    integrationMode,
+    source,
+}: {
+    integrationMode: string | null;
+    source: "mt5" | "broker";
+}) {
+    if (integrationMode === "mt5") {
+        return source === "mt5";
+    }
+
+    if (integrationMode === "broker") {
+        return source === "broker";
+    }
+
+    if (integrationMode === "hybrid") {
+        return source === "mt5" || source === "broker";
+    }
+
+    return false;
+}
+
+async function validateAccountSyncAccess({
+    tradingAccountId,
+    source,
+}: {
+    tradingAccountId: string;
+    source: "mt5" | "broker";
+}) {
+    const account =
+        await prisma.tradingAccount.findUnique({
+            where: {
+                id: tradingAccountId,
+            },
+            select: {
+                id: true,
+                status: true,
+
+                integrationMode: true,
+                autoSyncEnabled: true,
+
+                mt5Enabled: true,
+                brokerSyncEnabled: true,
+
+                syncStatus: true,
+            },
+        });
+
+    if (!account) {
+        return {
+            allowed: false as const,
+            status: 404,
+            error: "Trading account not found",
+        };
+    }
+
+    if (account.status === "ARCHIVED") {
+        return {
+            allowed: false as const,
+            status: 403,
+            error:
+                "Trade sync is disabled for archived accounts",
+        };
+    }
+
+    if (account.integrationMode === "manual") {
+        return {
+            allowed: false as const,
+            status: 403,
+            error:
+                "Trade sync is disabled because this account is set to Manual Only",
+        };
+    }
+
+    const sourceAllowedByMode =
+        isSourceAllowedForMode({
+            integrationMode: account.integrationMode,
+            source,
+        });
+
+    if (!sourceAllowedByMode) {
+        return {
+            allowed: false as const,
+            status: 403,
+            error: `Source "${source}" is not allowed for integration mode "${account.integrationMode}"`,
+        };
+    }
+
+    if (source === "mt5" && !account.mt5Enabled) {
+        return {
+            allowed: false as const,
+            status: 403,
+            error:
+                "MT5 sync is not enabled for this account",
+        };
+    }
+
+    if (
+        source === "broker" &&
+        !account.brokerSyncEnabled
+    ) {
+        return {
+            allowed: false as const,
+            status: 403,
+            error:
+                "Broker sync is not enabled for this account",
+        };
+    }
+
+    if (!account.autoSyncEnabled) {
+        return {
+            allowed: false as const,
+            status: 403,
+            error:
+                "Auto sync is not enabled for this account",
+        };
+    }
+
+    return {
+        allowed: true as const,
+        account,
+    };
+}
+
 export async function POST(request: NextRequest) {
     const expectedSecret =
         process.env.TRADE_SYNC_SECRET;
@@ -180,6 +305,25 @@ export async function POST(request: NextRequest) {
         );
     }
 
+    const accessCheck =
+        await validateAccountSyncAccess({
+            tradingAccountId,
+            source,
+        });
+
+    if (!accessCheck.allowed) {
+        return NextResponse.json(
+            {
+                error: accessCheck.error,
+            },
+            {
+                status: accessCheck.status,
+            }
+        );
+    }
+
+    const closeDate = getDate(payload.closeDate);
+
     const result =
         await importSyncedTrade({
             tradingAccountId,
@@ -227,7 +371,7 @@ export async function POST(request: NextRequest) {
                 payload.riskReward
             ),
 
-            closeDate: getDate(payload.closeDate),
+            closeDate,
 
             closingPrice: getNumber(
                 payload.closingPrice
@@ -293,8 +437,8 @@ export async function POST(request: NextRequest) {
                     payload.riskReward
                 ),
 
-                closeDate: getDate(payload.closeDate)
-                    ?.toISOString() ?? null,
+                closeDate:
+                    closeDate?.toISOString() ?? null,
 
                 closingPrice: getNumber(
                     payload.closingPrice

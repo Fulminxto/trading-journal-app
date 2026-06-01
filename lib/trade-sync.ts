@@ -109,6 +109,21 @@ async function getImporterUserId(
     return account.members[0]?.userId || null;
 }
 
+async function markAccountSyncConnected(
+    tradingAccountId: string
+) {
+    await prisma.tradingAccount.update({
+        where: {
+            id: tradingAccountId,
+        },
+        data: {
+            syncStatus: "connected",
+            lastSyncedAt: new Date(),
+            autoSyncEnabled: true,
+        },
+    });
+}
+
 async function recalculateAccountEquity(
     tradingAccountId: string
 ) {
@@ -234,7 +249,9 @@ export async function importSyncedTrade(
                     resultUsd: input.resultUsd ?? null,
 
                     source: input.source,
-                    syncStatus: "imported",
+                    syncStatus: existingTrade.needsReview
+                        ? "imported"
+                        : existingTrade.syncStatus,
                     needsReview:
                         existingTrade.needsReview,
 
@@ -261,6 +278,10 @@ export async function importSyncedTrade(
                         Prisma.JsonNull,
                 },
             });
+
+        await markAccountSyncConnected(
+            input.tradingAccountId
+        );
 
         await recalculateAccountEquity(
             input.tradingAccountId
@@ -347,6 +368,10 @@ export async function importSyncedTrade(
             needsReview: true,
         },
     });
+
+    await markAccountSyncConnected(
+        input.tradingAccountId
+    );
 
     await recalculateAccountEquity(
         input.tradingAccountId
