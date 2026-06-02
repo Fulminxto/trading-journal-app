@@ -27,6 +27,11 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+import {
+  normalizeAppLanguage,
+  type AppLanguage,
+} from "@/lib/i18n";
+
 type AccountPermissions = {
   role: string;
 
@@ -62,6 +67,7 @@ type SidebarLink = {
 type SidebarProps = {
   open?: boolean;
   onClose?: () => void;
+  appLanguage?: string | null;
 };
 
 function isManager(
@@ -69,6 +75,93 @@ function isManager(
 ) {
   return permissions.role === "MANAGER";
 }
+
+const sidebarLabels: Record<
+  AppLanguage,
+  {
+    performanceSystem: string;
+    closeSidebar: string;
+    loadingPermissions: string;
+
+    dashboard: string;
+    diary: string;
+    calendar: string;
+    equity: string;
+    analytics: string;
+    reports: string;
+    copilot: string;
+    workspace: string;
+    sessions: string;
+    rules: string;
+    integrations: string;
+
+    updates: string;
+    switchAccount: string;
+    accounts: string;
+
+    adminPanel: string;
+    accountsManagement: string;
+    supportTickets: string;
+    appUpdates: string;
+    maintenance: string;
+  }
+> = {
+  it: {
+    performanceSystem: "Sistema Performance",
+    closeSidebar: "Chiudi menu",
+    loadingPermissions: "Caricamento permessi...",
+
+    dashboard: "Dashboard",
+    diary: "Trading Diary",
+    calendar: "Calendario",
+    equity: "Equity",
+    analytics: "Analytics",
+    reports: "Reports",
+    copilot: "Copilot",
+    workspace: "Workspace Intelligence",
+    sessions: "Sessions",
+    rules: "Rules & Goals",
+    integrations: "Integrazioni",
+
+    updates: "Aggiornamenti",
+    switchAccount: "Cambia account",
+    accounts: "Account",
+
+    adminPanel: "Pannello Admin",
+    accountsManagement: "Gestione Account",
+    supportTickets: "Ticket Supporto",
+    appUpdates: "Aggiornamenti App",
+    maintenance: "Manutenzione",
+  },
+
+  en: {
+    performanceSystem: "Performance System",
+    closeSidebar: "Close sidebar",
+    loadingPermissions: "Loading permissions...",
+
+    dashboard: "Dashboard",
+    diary: "Trading Diary",
+    calendar: "Calendar",
+    equity: "Equity",
+    analytics: "Analytics",
+    reports: "Reports",
+    copilot: "Copilot",
+    workspace: "Workspace Intelligence",
+    sessions: "Sessions",
+    rules: "Rules & Goals",
+    integrations: "Integrations",
+
+    updates: "Updates",
+    switchAccount: "Switch Account",
+    accounts: "Accounts",
+
+    adminPanel: "Admin Panel",
+    accountsManagement: "Accounts Management",
+    supportTickets: "Support Tickets",
+    appUpdates: "App Updates",
+    maintenance: "Maintenance",
+  },
+};
 
 const baseLinks: AccountLink[] = [
   {
@@ -149,8 +242,11 @@ const baseLinks: AccountLink[] = [
 export default function Sidebar({
   open = false,
   onClose,
+  appLanguage,
 }: SidebarProps) {
   const pathname = usePathname();
+  const language = normalizeAppLanguage(appLanguage);
+  const t = sidebarLabels[language];
 
   const [collapsed, setCollapsed] =
     useState(true);
@@ -235,27 +331,27 @@ export default function Sidebar({
   const adminLinks: SidebarLink[] = [
     {
       href: "/admin",
-      label: "Admin Panel",
+      label: t.adminPanel,
       icon: Shield,
     },
     {
       href: "/admin/accounts",
-      label: "Accounts Management",
+      label: t.accountsManagement,
       icon: Users,
     },
     {
       href: "/admin/support",
-      label: "Support Tickets",
+      label: t.supportTickets,
       icon: FileText,
     },
     {
       href: "/admin/updates",
-      label: "App Updates",
+      label: t.appUpdates,
       icon: Megaphone,
     },
     {
       href: "/admin/maintenance",
-      label: "Maintenance",
+      label: t.maintenance,
       icon: ShieldAlert,
     },
   ];
@@ -284,17 +380,40 @@ export default function Sidebar({
       return [
         ...visibleAccountLinks.map((link) => ({
           href: `/accounts/${accountId}/${link.path}`,
-          label: link.label,
+          label:
+            link.path === "dashboard"
+              ? t.dashboard
+              : link.path === "diary"
+                ? t.diary
+                : link.path === "calendar"
+                  ? t.calendar
+                  : link.path === "equity"
+                    ? t.equity
+                    : link.path === "analytics"
+                      ? t.analytics
+                      : link.path === "reports"
+                        ? t.reports
+                        : link.path === "copilot"
+                          ? t.copilot
+                          : link.path === "workspace"
+                            ? t.workspace
+                            : link.path === "sessions"
+                              ? t.sessions
+                              : link.path === "rules"
+                                ? t.rules
+                                : link.path === "integrations"
+                                  ? t.integrations
+                                  : link.label,
           icon: link.icon,
         })),
         {
           href: "/updates",
-          label: "Updates",
+          label: t.updates,
           icon: Megaphone,
         },
         {
           href: "/accounts",
-          label: "Switch Account",
+          label: t.switchAccount,
           icon: ArrowLeftRight,
         },
       ];
@@ -303,7 +422,7 @@ export default function Sidebar({
     return [
       {
         href: "/accounts",
-        label: "Accounts",
+        label: t.accounts,
         icon: Users,
       },
       {
@@ -316,6 +435,7 @@ export default function Sidebar({
     accountId,
     accountPermissions,
     isAdminArea,
+    t,
   ]);
 
   return (
@@ -367,7 +487,7 @@ export default function Sidebar({
             {!isCollapsed && (
               <div>
                 <p className="text-[10px] uppercase tracking-[0.42em] text-gray-600">
-                  Performance System
+                  {t.performanceSystem}
                 </p>
 
                 <h1 className="mt-[2px] text-[24px] font-semibold leading-none tracking-tight text-white">
@@ -380,8 +500,8 @@ export default function Sidebar({
           {!isCollapsed && (
             <button
               onClick={onClose}
-              aria-label="Close sidebar"
-              title="Close sidebar"
+              aria-label={t.closeSidebar}
+              title={t.closeSidebar}
               className="rounded-lg p-2 text-gray-400 hover:bg-white/10 lg:hidden"
             >
               <X size={20} />
@@ -395,7 +515,7 @@ export default function Sidebar({
             !isAdminArea &&
             !isCollapsed && (
               <div className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs text-gray-500">
-                Loading permissions...
+                {t.loadingPermissions}
               </div>
             )}
 

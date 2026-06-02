@@ -11,18 +11,67 @@ import {
   Shield,
   ArrowLeftRight,
   LifeBuoy,
-  Bell,
 } from "lucide-react";
 
 import Sidebar from "@/components/Sidebar";
 import OnboardingModal from "@/components/OnboardingModal";
 import NotificationBell from "@/components/NotificationBell";
 
+import {
+  normalizeAppLanguage,
+  type AppLanguage,
+} from "@/lib/i18n";
+
 type AppShellUser = {
   name: string | null;
   username: string;
   role: string;
+  appLanguage?: string | null;
 } | null;
+
+const labels: Record<
+  AppLanguage,
+  {
+    profileFallback: string;
+    userFallback: string;
+    openProfileMenu: string;
+    profile: string;
+    settings: string;
+    support: string;
+    switchAccount: string;
+    admin: string;
+    logout: string;
+    openSidebar: string;
+    supportSubject: string;
+  }
+> = {
+  it: {
+    profileFallback: "Profilo",
+    userFallback: "utente",
+    openProfileMenu: "Apri menu profilo",
+    profile: "Profilo",
+    settings: "Impostazioni",
+    support: "Supporto",
+    switchAccount: "Cambia account",
+    admin: "Admin",
+    logout: "Esci",
+    openSidebar: "Apri menu",
+    supportSubject: "Richiesta supporto - VOLTIS",
+  },
+  en: {
+    profileFallback: "Profile",
+    userFallback: "user",
+    openProfileMenu: "Open profile menu",
+    profile: "Profile",
+    settings: "Settings",
+    support: "Support",
+    switchAccount: "Switch account",
+    admin: "Admin",
+    logout: "Logout",
+    openSidebar: "Open sidebar",
+    supportSubject: "Support request - VOLTIS",
+  },
+};
 
 export default function AppShell({
   children,
@@ -36,8 +85,16 @@ export default function AppShell({
 
   const profileRef = useRef<HTMLDivElement | null>(null);
 
-  const displayName = user?.name || user?.username || "Profile";
-  const username = user?.username || "user";
+  const appLanguage = normalizeAppLanguage(
+    user?.appLanguage
+  );
+
+  const t = labels[appLanguage];
+
+  const displayName =
+    user?.name || user?.username || t.profileFallback;
+
+  const username = user?.username || t.userFallback;
   const role = user?.role || "USER";
 
   const initials = displayName
@@ -47,8 +104,9 @@ export default function AppShell({
     .slice(0, 2)
     .toUpperCase();
 
-  const supportHref =
-    "mailto:yarikdziuban@gmail.com?subject=Support%20request%20-%20Trading%20Journal";
+  const supportHref = `mailto:yarikdziuban@gmail.com?subject=${encodeURIComponent(
+    t.supportSubject
+  )}`;
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -60,10 +118,16 @@ export default function AppShell({
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener(
+      "mousedown",
+      handleClickOutside
+    );
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
     };
   }, []);
 
@@ -74,6 +138,7 @@ export default function AppShell({
       <Sidebar
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
+        appLanguage={user?.appLanguage}
       />
 
       <main className="relative min-h-screen flex-1 overflow-x-hidden">
@@ -86,9 +151,11 @@ export default function AppShell({
               className="relative"
             >
               <button
-                onClick={() => setProfileOpen(!profileOpen)}
-                aria-label="Open profile menu"
-                title="Open profile menu"
+                onClick={() =>
+                  setProfileOpen(!profileOpen)
+                }
+                aria-label={t.openProfileMenu}
+                title={t.openProfileMenu}
                 className="flex items-center gap-2 rounded-2xl border border-white/10 bg-[#071018]/80 px-3 py-2 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:bg-[#071018]"
               >
                 <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-green-500/10 text-[11px] font-bold text-green-400">
@@ -129,50 +196,61 @@ export default function AppShell({
                   <div className="p-2">
                     <Link
                       href="/profile"
-                      onClick={() => setProfileOpen(false)}
+                      onClick={() =>
+                        setProfileOpen(false)
+                      }
                       className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white"
                     >
                       <User size={17} />
-                      Profilo
+                      {t.profile}
                     </Link>
 
                     <Link
                       href="/settings"
-                      onClick={() => setProfileOpen(false)}
+                      onClick={() =>
+                        setProfileOpen(false)
+                      }
                       className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white"
                     >
                       <Settings size={17} />
-                      Settings
+                      {t.settings}
                     </Link>
 
                     <Link
                       href="/support"
-                      onClick={() => setProfileOpen(false)}
+                      onClick={() =>
+                        setProfileOpen(false)
+                      }
                       className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white"
                     >
                       <LifeBuoy size={17} />
-                      Support
+                      {t.support}
                     </Link>
 
                     <Link
                       href="/accounts"
-                      onClick={() => setProfileOpen(false)}
+                      onClick={() =>
+                        setProfileOpen(false)
+                      }
                       className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white"
                     >
                       <ArrowLeftRight size={17} />
-                      Switch Account
+                      {t.switchAccount}
                     </Link>
 
-                    {(role === "FOUNDER" || role === "ADMIN") && (
-                      <Link
-                        href="/admin"
-                        onClick={() => setProfileOpen(false)}
-                        className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white"
-                      >
-                        <Shield size={17} />
-                        Admin
-                      </Link>
-                    )}
+                    {(role === "FOUNDER" ||
+                      role === "ADMIN") && (
+                        <Link
+                          href="/admin"
+                          onClick={() =>
+                            setProfileOpen(false)
+                          }
+                          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white"
+                        >
+                          <Shield size={17} />
+                          {t.admin}
+                        </Link>
+                      )}
 
                     <button
                       onClick={() =>
@@ -183,7 +261,7 @@ export default function AppShell({
                       className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm text-red-400 hover:bg-red-500/10"
                     >
                       <LogOut size={17} />
-                      Logout
+                      {t.logout}
                     </button>
                   </div>
                 </div>
@@ -195,8 +273,8 @@ export default function AppShell({
         <div className="sticky top-0 z-30 flex items-center px-4 pt-4 lg:hidden">
           <button
             onClick={() => setSidebarOpen(true)}
-            aria-label="Open sidebar"
-            title="Open sidebar"
+            aria-label={t.openSidebar}
+            title={t.openSidebar}
             className="rounded-2xl border border-white/10 bg-white/5 p-2"
           >
             <Menu size={20} />
@@ -216,6 +294,6 @@ export default function AppShell({
           </footer>
         </div>
       </main>
-    </div >
+    </div>
   );
 }

@@ -219,5 +219,5 @@ export async function updateSettings(
     },
   });
 
-  redirect("/settings?toast=success");
+  redirect(`/settings?toast=success&refresh=${Date.now()}`);
 }

@@ -195,6 +195,7 @@ export default async function RootLayout({
               name: currentUser.name,
               username: currentUser.username,
               role: currentUser.role,
+              appLanguage: currentUser.appLanguage,
             }}
           >
             <div className="flex min-h-screen flex-col">
