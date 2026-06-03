@@ -321,7 +321,7 @@ export default async function RootLayout({
               name: currentUser.name,
               username: currentUser.username,
               role: currentUser.role,
-              appLanguage: currentUser.appLanguage,
+              appLanguage: language,
             }}
           >
             <div className="flex min-h-screen flex-col">
@@ -335,3 +335,4 @@ export default async function RootLayout({
     </html>
   );
 }
+
