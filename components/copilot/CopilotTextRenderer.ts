@@ -294,5 +294,27 @@ export function renderCopilotText(
     }
   }
 
+
+  // COPILOT_FINAL_VISIBLE_TEXT_PATCH
+  if (target === "en") {
+    text = text
+      .replace(
+        /AI Review Engine rileva deterioramento nella qualit\S*\s+decisionale e execution\./g,
+        "AI Review Engine detects deterioration in decision quality and execution."
+      )
+      .replace(
+        /Memoria operativa attiva:\s*VOLTIS riconosce\s*(\d+)\s*pattern ricorrenti nel tuo storico\.\s*Pattern principale:/g,
+        "Active operating memory: VOLTIS recognizes $1 recurring patterns in your history. Main pattern:"
+      )
+      .replace(
+        /VOLTIS riconosce\s*(\d+)\s*pattern ricorrenti nel tuo storico\./g,
+        "VOLTIS recognizes $1 recurring patterns in your history."
+      )
+      .replace(
+        /Pattern principale:/g,
+        "Main pattern:"
+      );
+  }
   return cleanupEncoding(text);
 }
+
