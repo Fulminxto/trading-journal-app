@@ -1,4 +1,4 @@
-import "./globals.css";
+﻿import "./globals.css";
 
 import type {
   Metadata,
@@ -11,6 +11,10 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import AppShell from "@/components/AppShell";
 import PWARegister from "@/components/PWARegister";
+import {
+  normalizeAppLanguage,
+  type AppLanguage,
+} from "@/lib/i18n";
 
 export const metadata: Metadata = {
   title: "VOLTIS",
@@ -46,6 +50,126 @@ export const viewport: Viewport = {
 
 export const dynamic = "force-dynamic";
 
+type RootLayoutLabels = {
+  maintenanceEyebrow: string;
+  maintenanceTitle: string;
+  maintenanceDescription: string;
+  maintenanceRetry: string;
+  frozenEyebrow: string;
+  frozenTitle: string;
+  frozenDescription: string;
+  frozenHelp: string;
+  reviewAccount: string;
+};
+
+const rootLabels: Record<AppLanguage, RootLayoutLabels> = {
+  it: {
+    maintenanceEyebrow: "Manutenzione",
+    maintenanceTitle: "VOLTIS è temporaneamente in manutenzione",
+    maintenanceDescription:
+      "L’accesso alla piattaforma è temporaneamente sospeso per aggiornamenti o verifiche interne.",
+    maintenanceRetry:
+      "Riprova più tardi. Gli account autorizzati possono continuare ad accedere normalmente.",
+    frozenEyebrow: "Account Frozen",
+    frozenTitle: "Accesso temporaneamente sospeso",
+    frozenDescription:
+      "Il tuo accesso a VOLTIS è stato temporaneamente sospeso dall’amministratore.",
+    frozenHelp:
+      "Se pensi che si tratti di un errore o hai bisogno di assistenza, puoi contattare il supporto.",
+    reviewAccount: "Richiedi revisione account",
+  },
+  en: {
+    maintenanceEyebrow: "Maintenance",
+    maintenanceTitle: "VOLTIS is temporarily under maintenance",
+    maintenanceDescription:
+      "Access to the platform is temporarily suspended for updates or internal checks.",
+    maintenanceRetry:
+      "Try again later. Authorized accounts can continue accessing normally.",
+    frozenEyebrow: "Account Frozen",
+    frozenTitle: "Access temporarily suspended",
+    frozenDescription:
+      "Your access to VOLTIS has been temporarily suspended by the administrator.",
+    frozenHelp:
+      "If you think this is a mistake or need assistance, you can contact support.",
+    reviewAccount: "Request account review",
+  },
+  uk: {
+    maintenanceEyebrow: "Технічне обслуговування",
+    maintenanceTitle: "VOLTIS тимчасово на обслуговуванні",
+    maintenanceDescription:
+      "Доступ до платформи тимчасово призупинено для оновлень або внутрішніх перевірок.",
+    maintenanceRetry:
+      "Спробуйте пізніше. Авторизовані акаунти можуть продовжувати доступ у звичайному режимі.",
+    frozenEyebrow: "Account Frozen",
+    frozenTitle: "Доступ тимчасово призупинено",
+    frozenDescription:
+      "Ваш доступ до VOLTIS тимчасово призупинено адміністратором.",
+    frozenHelp:
+      "Якщо ви вважаєте це помилкою або потребуєте допомоги, зверніться до support.",
+    reviewAccount: "Запросити перегляд акаунта",
+  },
+  ru: {
+    maintenanceEyebrow: "Обслуживание",
+    maintenanceTitle: "VOLTIS временно на обслуживании",
+    maintenanceDescription:
+      "Доступ к платформе временно приостановлен для обновлений или внутренних проверок.",
+    maintenanceRetry:
+      "Попробуйте позже. Авторизованные аккаунты могут продолжать входить как обычно.",
+    frozenEyebrow: "Account Frozen",
+    frozenTitle: "Доступ временно приостановлен",
+    frozenDescription:
+      "Ваш доступ к VOLTIS временно приостановлен администратором.",
+    frozenHelp:
+      "Если вы считаете это ошибкой или нужна помощь, обратитесь в support.",
+    reviewAccount: "Запросить проверку аккаунта",
+  },
+  es: {
+    maintenanceEyebrow: "Mantenimiento",
+    maintenanceTitle: "VOLTIS está temporalmente en mantenimiento",
+    maintenanceDescription:
+      "El acceso a la plataforma está temporalmente suspendido por actualizaciones o controles internos.",
+    maintenanceRetry:
+      "Inténtalo más tarde. Las cuentas autorizadas pueden seguir accediendo normalmente.",
+    frozenEyebrow: "Account Frozen",
+    frozenTitle: "Acceso temporalmente suspendido",
+    frozenDescription:
+      "Tu acceso a VOLTIS ha sido suspendido temporalmente por el administrador.",
+    frozenHelp:
+      "Si crees que es un error o necesitas asistencia, puedes contactar soporte.",
+    reviewAccount: "Solicitar revisión de cuenta",
+  },
+  fr: {
+    maintenanceEyebrow: "Maintenance",
+    maintenanceTitle: "VOLTIS est temporairement en maintenance",
+    maintenanceDescription:
+      "L’accès à la plateforme est temporairement suspendu pour des mises à jour ou des vérifications internes.",
+    maintenanceRetry:
+      "Réessayez plus tard. Les comptes autorisés peuvent continuer à accéder normalement.",
+    frozenEyebrow: "Account Frozen",
+    frozenTitle: "Accès temporairement suspendu",
+    frozenDescription:
+      "Votre accès à VOLTIS a été temporairement suspendu par l’administrateur.",
+    frozenHelp:
+      "Si vous pensez qu’il s’agit d’une erreur ou avez besoin d’aide, contactez le support.",
+    reviewAccount: "Demander une révision du compte",
+  },
+  de: {
+    maintenanceEyebrow: "Wartung",
+    maintenanceTitle: "VOLTIS befindet sich vorübergehend in Wartung",
+    maintenanceDescription:
+      "Der Zugriff auf die Plattform ist vorübergehend für Updates oder interne Prüfungen ausgesetzt.",
+    maintenanceRetry:
+      "Versuche es später erneut. Autorisierte Konten können weiterhin normal zugreifen.",
+    frozenEyebrow: "Account Frozen",
+    frozenTitle: "Zugriff vorübergehend gesperrt",
+    frozenDescription:
+      "Dein Zugriff auf VOLTIS wurde vorübergehend vom Administrator gesperrt.",
+    frozenHelp:
+      "Wenn du denkst, dass dies ein Fehler ist oder Hilfe brauchst, kontaktiere den Support.",
+    reviewAccount: "Account-Review anfordern",
+  },
+};
+
 export default async function RootLayout({
   children,
 }: {
@@ -61,6 +185,12 @@ export default async function RootLayout({
     })
     : null;
 
+  const language = normalizeAppLanguage(
+    currentUser?.appLanguage
+  );
+
+  const t = rootLabels[language] ?? rootLabels.en;
+
   if (currentUser) {
     try {
       await prisma.user.update({
@@ -72,7 +202,7 @@ export default async function RootLayout({
         },
       });
     } catch {
-      // Non blocchiamo l'app se l'update fallisce
+      // Do not block the app if this update fails.
     }
   }
 
@@ -103,28 +233,26 @@ export default async function RootLayout({
 
   if (shouldShowMaintenance) {
     return (
-      <html lang="it">
+      <html lang={language}>
         <body className="bg-[#050b10] text-white">
           <PWARegister />
 
           <div className="flex min-h-screen items-center justify-center p-8">
             <div className="max-w-2xl rounded-[40px] border border-blue-500/20 bg-blue-500/10 p-10 text-center">
               <p className="text-sm uppercase tracking-[0.25em] text-blue-300">
-                Manutenzione
+                {t.maintenanceEyebrow}
               </p>
 
               <h1 className="mt-4 text-5xl font-black">
-                VOLTIS è temporaneamente in manutenzione
+                {t.maintenanceTitle}
               </h1>
 
               <p className="mt-6 text-sm leading-relaxed text-gray-300">
-                L’accesso alla piattaforma è temporaneamente sospeso per
-                aggiornamenti o verifiche interne.
+                {t.maintenanceDescription}
               </p>
 
               <p className="mt-4 text-sm leading-relaxed text-gray-400">
-                Riprova più tardi. Gli account autorizzati possono continuare ad
-                accedere normalmente.
+                {t.maintenanceRetry}
               </p>
             </div>
           </div>
@@ -138,35 +266,33 @@ export default async function RootLayout({
     currentUser?.role !== "FOUNDER"
   ) {
     return (
-      <html lang="it">
+      <html lang={language}>
         <body className="bg-[#050b10] text-white">
           <PWARegister />
 
           <div className="flex min-h-screen items-center justify-center p-8">
             <div className="max-w-2xl rounded-[40px] border border-yellow-500/20 bg-yellow-500/10 p-10 text-center">
               <p className="text-sm uppercase tracking-[0.25em] text-yellow-300">
-                Account Frozen
+                {t.frozenEyebrow}
               </p>
 
               <h1 className="mt-4 text-5xl font-black">
-                Accesso temporaneamente sospeso
+                {t.frozenTitle}
               </h1>
 
               <p className="mt-6 text-sm leading-relaxed text-gray-300">
-                Il tuo accesso a VOLTIS è stato temporaneamente sospeso
-                dall’amministratore.
+                {t.frozenDescription}
               </p>
 
               <p className="mt-4 text-sm leading-relaxed text-gray-400">
-                Se pensi che si tratti di un errore o hai bisogno di assistenza,
-                puoi contattare il supporto.
+                {t.frozenHelp}
               </p>
 
               <a
                 href="/account-review"
                 className="mt-8 inline-flex rounded-2xl bg-yellow-400 px-6 py-4 text-sm font-black uppercase tracking-[0.15em] text-black transition hover:bg-yellow-300"
               >
-                Richiedi revisione account
+                {t.reviewAccount}
               </a>
             </div>
           </div>
@@ -176,7 +302,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="it">
+    <html lang={language}>
       <body className="bg-[#050b10] text-white">
         <PWARegister />
 

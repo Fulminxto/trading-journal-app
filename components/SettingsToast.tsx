@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
@@ -18,11 +18,7 @@ export default function SettingsToast({
     }
 
     if (status === "success") {
-      toast.success(
-        "Impostazioni salvate correttamente."
-      );
-
-      shown.current = true;
+      toast.success("Settings saved successfully.");
     }
 
     shown.current = true;

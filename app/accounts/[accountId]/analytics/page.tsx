@@ -1952,7 +1952,8 @@ export default async function AnalyticsPage({
       <div className="mt-8">
         <ConfidencePerformanceHeatmap
           data={confidenceHeatmapData}
-        />
+        appLanguage={language}
+      />
       </div>
 
       <div className="mt-8">
@@ -2728,6 +2729,7 @@ export default async function AnalyticsPage({
     </div>
   );
 }
+
 
 
 

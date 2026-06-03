@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
@@ -16,51 +16,51 @@ const messages: Record<
 > = {
   success: {
     type: "success",
-    message: "Operazione completata correttamente.",
+    message: "Operation completed successfully.",
   },
   created: {
     type: "success",
-    message: "Elemento creato correttamente.",
+    message: "Item created successfully.",
   },
   updated: {
     type: "success",
-    message: "Modifica salvata correttamente.",
+    message: "Changes saved successfully.",
   },
   deleted: {
     type: "success",
-    message: "Elemento eliminato correttamente.",
+    message: "Item deleted successfully.",
   },
   archived: {
     type: "info",
-    message: "Elemento archiviato correttamente.",
+    message: "Item archived successfully.",
   },
   error: {
     type: "error",
-    message: "Si è verificato un errore. Riprova.",
+    message: "Something went wrong. Try again.",
   },
   "username-taken": {
     type: "error",
-    message: "Questo username è già in uso.",
+    message: "This username is already in use.",
   },
   frozen: {
     type: "warning",
-    message: "Utente sospeso correttamente.",
+    message: "User suspended successfully.",
   },
   unfrozen: {
     type: "success",
-    message: "Utente riattivato correttamente.",
+    message: "User reactivated successfully.",
   },
   "password-reset": {
     type: "success",
-    message: "Password aggiornata correttamente.",
+    message: "Password updated successfully.",
   },
   "user-created": {
     type: "success",
-    message: "Utente creato correttamente.",
+    message: "User created successfully.",
   },
   "user-deleted": {
     type: "success",
-    message: "Utente eliminato correttamente.",
+    message: "User deleted successfully.",
   },
 };
 

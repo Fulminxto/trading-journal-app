@@ -1,6 +1,11 @@
-"use client";
+﻿"use client";
 
-import { CheckCircle2, AlertTriangle, Info, XCircle } from "lucide-react";
+import {
+  CheckCircle2,
+  AlertTriangle,
+  Info,
+  XCircle,
+} from "lucide-react";
 
 const toastMessages: Record<
   string,
@@ -11,28 +16,28 @@ const toastMessages: Record<
   }
 > = {
   created: {
-    title: "Creato correttamente",
-    description: "L’elemento è stato creato con successo.",
+    title: "Created successfully",
+    description: "The item was created successfully.",
     icon: "success",
   },
   updated: {
-    title: "Modifica salvata",
-    description: "Le modifiche sono state applicate correttamente.",
+    title: "Changes saved",
+    description: "Your changes were applied successfully.",
     icon: "success",
   },
   deleted: {
-    title: "Eliminato correttamente",
-    description: "L’elemento è stato eliminato con successo.",
+    title: "Deleted successfully",
+    description: "The item was deleted successfully.",
     icon: "success",
   },
   archived: {
-    title: "Archiviato correttamente",
-    description: "L’elemento è stato spostato nell’archivio.",
+    title: "Archived successfully",
+    description: "The item was moved to the archive.",
     icon: "info",
   },
   error: {
-    title: "Operazione non riuscita",
-    description: "Si è verificato un errore. Riprova.",
+    title: "Operation failed",
+    description: "Something went wrong. Try again.",
     icon: "error",
   },
 };
@@ -52,10 +57,10 @@ export default function Toast({ status }: Props) {
     toast.icon === "success"
       ? CheckCircle2
       : toast.icon === "error"
-      ? XCircle
-      : toast.icon === "warning"
-      ? AlertTriangle
-      : Info;
+        ? XCircle
+        : toast.icon === "warning"
+          ? AlertTriangle
+          : Info;
 
   return (
     <div className="fixed right-6 top-6 z-[9999] w-[360px] rounded-3xl border border-white/10 bg-[#071018]/95 p-5 text-white shadow-2xl backdrop-blur-xl">
