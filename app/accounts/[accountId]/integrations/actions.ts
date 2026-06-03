@@ -1,4 +1,4 @@
-"use server";
+﻿"use server";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -49,13 +49,6 @@ function getLimitedString(
         0,
         maxLength
     );
-}
-
-function getBoolean(
-    formData: FormData,
-    key: string
-) {
-    return formData.get(key) === "on";
 }
 
 function getIntegrationMode(

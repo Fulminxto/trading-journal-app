@@ -38,22 +38,6 @@ import {
   type AppLanguage,
 } from "@/lib/i18n";
 
-function formatCurrency(
-  value: number,
-  currency: string
-) {
-  try {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency,
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(value);
-  } catch {
-    return `${value.toFixed(2)} ${currency}`;
-  }
-}
-
 function getBestWinStreak(
   trades: {
     outcome?: string | null;
@@ -1273,12 +1257,12 @@ export default async function AnalyticsPage({
 
   const greenMonths =
     monthlyEntries.filter(
-      ([_, stats]) => stats.pnl >= 0
+      ([, stats]) => stats.pnl >= 0
     ).length;
 
   const redMonths =
     monthlyEntries.filter(
-      ([_, stats]) => stats.pnl < 0
+      ([, stats]) => stats.pnl < 0
     ).length;
 
   const bestMonth =
@@ -2734,3 +2718,5 @@ export default async function AnalyticsPage({
     </div>
   );
 }
+
+

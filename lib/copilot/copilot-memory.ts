@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+﻿import { prisma } from "@/lib/prisma";
 
 type Severity =
     | "low"
@@ -229,12 +229,7 @@ export async function analyzeCopilotMemory(
     const wins = trades.filter(
         (trade) => trade.outcome === "win"
     ).length;
-
-    const losses = trades.filter(
-        (trade) => trade.outcome === "loss"
-    ).length;
-
-    const winRate = percentage(
+const winRate = percentage(
         wins,
         totalTrades
     );
@@ -480,7 +475,7 @@ export async function analyzeCopilotMemory(
             title: "Discipline Profile",
             description:
                 disciplineScore >= 70
-                    ? `La disciplina operativa è stabile. Score attuale: ${disciplineScore}/100.`
+                    ? `La disciplina operativa Ã¨ stabile. Score attuale: ${disciplineScore}/100.`
                     : `La disciplina operativa richiede attenzione. Score attuale: ${disciplineScore}/100.`,
             severity:
                 getPositiveSeverityFromScore(
@@ -615,7 +610,7 @@ export async function analyzeCopilotMemory(
             id: `${accountId}:strength:best-market`,
             memoryType: "strength",
             title: "Best Market",
-            description: `${bestMarket[0]} è il mercato più forte nei dati attuali. PnL: ${bestMarket[1].pnl.toFixed(
+            description: `${bestMarket[0]} Ã¨ il mercato piÃ¹ forte nei dati attuali. PnL: ${bestMarket[1].pnl.toFixed(
                 2
             )}.`,
             severity: "low",
@@ -628,7 +623,7 @@ export async function analyzeCopilotMemory(
             id: `${accountId}:risk:worst-market`,
             memoryType: "risk",
             title: "Weakest Market",
-            description: `${worstMarket[0]} è il mercato più debole nei dati attuali. PnL: ${worstMarket[1].pnl.toFixed(
+            description: `${worstMarket[0]} Ã¨ il mercato piÃ¹ debole nei dati attuali. PnL: ${worstMarket[1].pnl.toFixed(
                 2
             )}.`,
             severity:
@@ -646,7 +641,7 @@ export async function analyzeCopilotMemory(
             id: `${accountId}:strength:best-session`,
             memoryType: "strength",
             title: "Best Session",
-            description: `${bestSession[0]} è la sessione più forte nei dati attuali. PnL: ${bestSession[1].pnl.toFixed(
+            description: `${bestSession[0]} Ã¨ la sessione piÃ¹ forte nei dati attuali. PnL: ${bestSession[1].pnl.toFixed(
                 2
             )}.`,
             severity: "low",
@@ -659,7 +654,7 @@ export async function analyzeCopilotMemory(
             id: `${accountId}:risk:worst-session`,
             memoryType: "risk",
             title: "Weakest Session",
-            description: `${worstSession[0]} è la sessione più debole nei dati attuali. PnL: ${worstSession[1].pnl.toFixed(
+            description: `${worstSession[0]} Ã¨ la sessione piÃ¹ debole nei dati attuali. PnL: ${worstSession[1].pnl.toFixed(
                 2
             )}.`,
             severity:
@@ -694,7 +689,7 @@ export async function analyzeCopilotMemory(
             memoryType: "rules",
             title: "Active Trading Goals",
             description:
-                "Sono presenti obiettivi di trading attivi per il mese corrente o recente. VOLTIS li userà come riferimento nelle analisi future.",
+                "Sono presenti obiettivi di trading attivi per il mese corrente o recente. VOLTIS li userÃ  come riferimento nelle analisi future.",
             severity: "low",
             score: 1,
         });
@@ -754,7 +749,7 @@ export async function analyzeCopilotMemory(
         type: "execution",
         title: "Weak Execution",
         description:
-            "Execution rating debole rilevato in più trade.",
+            "Execution rating debole rilevato in piÃ¹ trade.",
         severity:
             getSeverityFromScore(
                 percentage(
@@ -771,7 +766,7 @@ export async function analyzeCopilotMemory(
         type: "psychology",
         title: "Low Confidence",
         description:
-            "Confidence bassa rilevata in più trade.",
+            "Confidence bassa rilevata in piÃ¹ trade.",
         severity:
             getSeverityFromScore(
                 percentage(
@@ -788,7 +783,7 @@ export async function analyzeCopilotMemory(
         type: "psychology",
         title: "Emotional Trading",
         description:
-            "Componente emotiva rilevata in più trade.",
+            "Componente emotiva rilevata in piÃ¹ trade.",
         severity:
             getSeverityFromScore(
                 percentage(

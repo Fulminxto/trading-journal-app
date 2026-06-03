@@ -124,11 +124,7 @@ export function buildCopilotSystem({
     });
 
   const {
-    averageExecution,
-    averageConfidence,
     reviewScore,
-    reviewLabel,
-    latestTrade,
     latestTradeReview,
   } = review;
 
@@ -181,11 +177,8 @@ export function buildCopilotSystem({
     recentConfidenceAverage,
     previousConfidenceAverage,
     confidenceDecay,
-    emotionalRecentTrades,
-    emotionalTradesCount,
     emotionalInstabilityScore,
     emotionalVolatility,
-    emotionalLabel,
     riskSignals,
     supervisorLevel,
   } = stability;
@@ -268,5 +261,6 @@ export function buildCopilotSystem({
     sessionLock,
   };
 }
+
 
 

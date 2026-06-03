@@ -1,6 +1,5 @@
-import {
+﻿import {
   getCopilotLabels,
-  getCopilotStatusLabel,
   type CopilotI18nProps,
 } from "@/components/copilot/CopilotI18n";
 
@@ -17,3 +16,4 @@ export default function BehavioralDriftCard({ behavioralDrift, recentAverageQual
 }
 function Badge({ active, activeText, inactiveText }: { active: boolean; activeText: string; inactiveText: string }) { return <div className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${active ? "bg-red-500/20 text-red-300" : "bg-emerald-500/20 text-emerald-300"}`}>{active ? activeText : inactiveText}</div> }
 function Metric({ label, value, tone = "text-white" }: { label: string; value: string; tone?: string }) { return <div className="rounded-[28px] border border-white/10 bg-black/20 p-5"><p className="text-xs uppercase tracking-[0.15em] text-gray-400">{label}</p><h3 className={`mt-3 text-4xl font-black ${tone}`}>{value}</h3></div> }
+
