@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+﻿import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
@@ -32,6 +32,7 @@ import {
     getCopilotLabels,
     getCopilotStatusLabel,
 } from "@/components/copilot/CopilotI18n";
+import { renderCopilotText } from "@/components/copilot/CopilotTextRenderer";
 
 function getRiskLabel(behavioralRisk: number) {
     if (behavioralRisk >= 50) {
@@ -214,7 +215,60 @@ export default async function CopilotPage({
     const riskTone = getRiskTone(behavioralRisk);
     const riskSignalsCount = getArrayCount(riskSignals);
 
-    const summaryText =
+    
+    const translatedIntelligenceFeed = intelligenceFeed.map((item) =>
+        renderCopilotText(item, appLanguage)
+    );
+
+    const translatedAdaptiveCoachingMessage =
+        renderCopilotText(
+            adaptiveCoaching.message,
+            appLanguage
+        );
+
+    const translatedRiskEscalationMessage =
+        renderCopilotText(
+            riskEscalation.message,
+            appLanguage
+        );
+
+    const translatedSessionLockReason =
+        renderCopilotText(
+            sessionLock.lockReason,
+            appLanguage
+        );
+
+    const translatedLatestTradeReview =
+        renderCopilotText(
+            latestTradeReview,
+            appLanguage
+        );
+
+    const translatedReviewNotes = reviewNotes.map((note) => ({
+        ...note,
+        title: renderCopilotText(note.title, appLanguage),
+        content: renderCopilotText(note.content, appLanguage),
+    }));
+
+    const translatedCopilotMemories = copilotMemories.map((memory) => ({
+        ...memory,
+        memoryType: renderCopilotText(memory.memoryType, appLanguage),
+        title: renderCopilotText(memory.title, appLanguage),
+        description: renderCopilotText(memory.description, appLanguage),
+    }));
+
+    const translatedCopilotPatterns = copilotPatterns.map((pattern) => ({
+        ...pattern,
+        type: renderCopilotText(pattern.type, appLanguage),
+        title: renderCopilotText(pattern.title, appLanguage),
+        description: renderCopilotText(pattern.description, appLanguage),
+    }));
+
+    const translatedCopilotMessages = copilotMessages.map((message) => ({
+        ...message,
+        content: renderCopilotText(message.content, appLanguage),
+    }));
+const summaryText =
         totalTrades === 0
             ? t.page.summaryNoData
             : disciplineScore >= 75 && behavioralRisk < 25
@@ -229,7 +283,9 @@ export default async function CopilotPage({
 
             <section className="space-y-4">
                 <CriticalAlertCard
-                    criticalPatterns={criticalPatterns}
+                    criticalPatterns={translatedCopilotPatterns.filter(
+                        (pattern) => pattern.severity === "critical"
+                    )}
                     appLanguage={appLanguage}
                 />
 
@@ -278,7 +334,7 @@ export default async function CopilotPage({
             <section className="grid gap-6 xl:grid-cols-5">
                 <div className="xl:col-span-3">
                     <DailyIntelligenceFeed
-                        intelligenceFeed={intelligenceFeed}
+                        intelligenceFeed={translatedIntelligenceFeed}
                         appLanguage={appLanguage}
                     />
                 </div>
@@ -287,7 +343,7 @@ export default async function CopilotPage({
                     <AdaptiveCoachingCard
                         mode={adaptiveCoaching.mode}
                         tone={adaptiveCoaching.tone}
-                        message={adaptiveCoaching.message}
+                        message={translatedAdaptiveCoachingMessage}
                         appLanguage={appLanguage}
                     />
                 </div>
@@ -313,7 +369,7 @@ export default async function CopilotPage({
 
             <TradeReviewCard
                 latestTrade={latestTrade}
-                latestTradeReview={latestTradeReview}
+                latestTradeReview={translatedLatestTradeReview}
                 appLanguage={appLanguage}
             />
 
@@ -330,19 +386,19 @@ export default async function CopilotPage({
                     </div>
 
                     <div className="w-fit rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-cyan-300">
-                        {reviewNotes.length} {t.common.notes}
+                        {translatedReviewNotes.length} {t.common.notes}
                     </div>
                 </div>
 
                 <div className="mt-8 space-y-4">
-                    {reviewNotes.length === 0 ? (
+                    {translatedReviewNotes.length === 0 ? (
                         <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
                             <p className="text-sm leading-relaxed text-gray-400">
                                 {t.page.noReviewNotes}
                             </p>
                         </div>
                     ) : (
-                        reviewNotes.map((note) => (
+                        translatedReviewNotes.map((note) => (
                             <div
                                 key={note.id}
                                 className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5"
@@ -466,14 +522,14 @@ export default async function CopilotPage({
                         escalationLevel={riskEscalation.escalationLevel}
                         protectionRequired={riskEscalation.protectionRequired}
                         cooldownRecommended={riskEscalation.cooldownRecommended}
-                        message={riskEscalation.message}
+                        message={translatedRiskEscalationMessage}
                         appLanguage={appLanguage}
                     />
 
                     <SessionLockCard
                         sessionLocked={sessionLock.sessionLocked}
                         reviewRequired={sessionLock.reviewRequired}
-                        lockReason={sessionLock.lockReason}
+                        lockReason={translatedSessionLockReason}
                         appLanguage={appLanguage}
                     />
 
@@ -550,19 +606,19 @@ export default async function CopilotPage({
                     </div>
 
                     <div className="w-fit rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-emerald-300">
-                        {copilotMemories.length} {t.common.memories}
+                        {translatedCopilotMemories.length} {t.common.memories}
                     </div>
                 </div>
 
                 <div className="mt-8 grid gap-4 xl:grid-cols-3">
-                    {copilotMemories.length === 0 ? (
+                    {translatedCopilotMemories.length === 0 ? (
                         <div className="rounded-[28px] border border-white/10 bg-black/20 p-5 xl:col-span-3">
                             <p className="text-sm leading-relaxed text-gray-400">
                                 {t.page.noMemories}
                             </p>
                         </div>
                     ) : (
-                        copilotMemories.slice(0, 6).map((memory) => (
+                        translatedCopilotMemories.slice(0, 6).map((memory) => (
                             <div
                                 key={memory.id}
                                 className="rounded-[28px] border border-white/10 bg-black/20 p-5"
@@ -607,12 +663,12 @@ export default async function CopilotPage({
             </section>
 
             <PatternMemoryCard
-                copilotPatterns={copilotPatterns}
+                copilotPatterns={translatedCopilotPatterns}
                 appLanguage={appLanguage}
             />
 
             <CopilotConversationCard
-                copilotMessages={copilotMessages}
+                copilotMessages={translatedCopilotMessages}
                 accountId={accountId}
                 appLanguage={appLanguage}
             />
@@ -641,3 +697,6 @@ function SnapshotCard({
         </div>
     );
 }
+
+
+
