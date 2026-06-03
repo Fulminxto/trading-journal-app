@@ -1,6 +1,7 @@
-import { auth } from "@/lib/auth";
+﻿import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 import { createAccount } from "../actions";
 
@@ -144,12 +145,12 @@ export default async function CreateAccountPage() {
                 />
 
                 <div className="flex gap-3 md:col-span-2">
-                    <a
+                    <Link
                         href="/accounts"
                         className="rounded-2xl bg-white/10 px-6 py-4 text-sm font-bold text-white hover:bg-white/20"
                     >
                         Cancel
-                    </a>
+                    </Link>
 
                     <button
                         type="submit"
@@ -162,3 +163,4 @@ export default async function CreateAccountPage() {
         </div>
     );
 }
+

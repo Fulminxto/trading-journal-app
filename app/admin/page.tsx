@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+﻿import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
@@ -17,6 +17,10 @@ import {
   formatAdminDateTime,
   getAdminI18n,
 } from "./AdminI18n";
+
+function getServerTimestamp() {
+  return Date.now();
+}
 
 export default async function AdminPage() {
   const session = await auth();
@@ -51,6 +55,8 @@ export default async function AdminPage() {
       createdAt: "desc",
     },
   });
+
+  const now = await getServerTimestamp();
 
   return (
     <div>
@@ -122,7 +128,7 @@ export default async function AdminPage() {
 
           const isOnline =
             user.lastActivityAt &&
-            Date.now() -
+            now -
             new Date(user.lastActivityAt).getTime() <
             5 * 60 * 1000;
 
@@ -441,7 +447,7 @@ export default async function AdminPage() {
                         key={membership.id}
                         className="rounded-xl bg-white/10 px-3 py-2 text-xs text-gray-300"
                       >
-                        {membership.tradingAccount.name} ·{" "}
+                        {membership.tradingAccount.name} Â·{" "}
                         {membership.role}
                       </div>
                     ))}
@@ -455,3 +461,6 @@ export default async function AdminPage() {
     </div>
   );
 }
+
+
+

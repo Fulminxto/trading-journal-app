@@ -1,4 +1,4 @@
-import { calculateCopilotAnalytics } from "@/lib/copilot/analytics";
+﻿import { calculateCopilotAnalytics } from "@/lib/copilot/analytics";
 import { calculatePatternMetrics } from "@/lib/copilot/patterns";
 import { calculateReviewMetrics } from "@/lib/copilot/review";
 import { calculateStabilityMetrics } from "@/lib/copilot/stability";
@@ -7,12 +7,26 @@ import { buildAdaptiveCoachingMode } from "@/lib/copilot/coaching";
 import { buildRiskEscalation } from "@/lib/copilot/escalation";
 import { buildSessionLock } from "@/lib/copilot/sessionLock";
 
+type CopilotTrade =
+  Parameters<
+    typeof calculateCopilotAnalytics
+  >[0][number];
+
+type CopilotMemory =
+  Parameters<
+    typeof buildAdaptiveCoachingMode
+  >[0] extends {
+    memories: Array<infer Memory>;
+  }
+    ? Memory
+    : Record<string, unknown>;
+
 export function buildCopilotSystem({
   trades,
   copilotMemories,
 }: {
-  trades: any[];
-  copilotMemories: any[];
+  trades: CopilotTrade[];
+  copilotMemories: CopilotMemory[];
 }) {
   const analytics =
     calculateCopilotAnalytics(trades);
@@ -254,3 +268,5 @@ export function buildCopilotSystem({
     sessionLock,
   };
 }
+
+
