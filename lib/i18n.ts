@@ -1,4 +1,4 @@
-export const SUPPORTED_APP_LANGUAGES = [
+﻿export const SUPPORTED_APP_LANGUAGES = [
     "it",
     "en",
     "uk",
