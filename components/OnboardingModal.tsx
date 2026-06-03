@@ -257,58 +257,58 @@ const onboardingText: Record<
         phase: "Visione",
         eyebrow: "Private access",
         title:
-          "VOLTIS non Ã¨ una normale app di trading",
+          "VOLTIS non è una normale app di trading",
         description:
-          "VOLTIS Ã¨ un private trading operating system creato per trader selezionati che vogliono misurare, proteggere e migliorare il proprio comportamento operativo.",
+          "VOLTIS è un private trading operating system creato per trader selezionati che vogliono misurare, proteggere e migliorare il proprio comportamento operativo.",
         spotlight:
-          "Non Ã¨ aperto a tutti. Non Ã¨ pensato per il mercato di massa. Ãˆ uno strumento serio per chi vuole trattare il trading seriamente.",
+          "Non è aperto a tutti. Non è pensato per il mercato di massa. È uno strumento serio per chi vuole trattare il trading seriamente.",
         cards: [
           {
             title: "Accesso selezionato",
             description:
-              "VOLTIS non nasce per essere usato da chiunque. Lâ€™accesso Ã¨ controllato, privato e intenzionale.",
+              "VOLTIS non nasce per essere usato da chiunque. L’accesso è controllato, privato e intenzionale.",
           },
           {
-            title: "Non Ã¨ solo gratuito",
+            title: "Non è solo gratuito",
             description:
-              "Non lo usi perchÃ© costa poco. Lo usi perchÃ© sei dentro qualcosa che non Ã¨ in vendita a tutti.",
+              "Non lo usi perché costa poco. Lo usi perché sei dentro qualcosa che non è in vendita a tutti.",
           },
         ],
       },
       {
         phase: "Filosofia",
         eyebrow: "Measure. Protect. Improve.",
-        title: "La missione Ã¨ renderti piÃ¹ lucido",
+        title: "La missione è renderti più lucido",
         description:
           "VOLTIS non serve solo a mostrarti numeri. Serve a farti capire come tradi, quali pattern ripeti, dove perdi disciplina e cosa devi proteggere.",
         spotlight:
-          "Il vero obiettivo non Ã¨ sapere solo quanto hai guadagnato o perso. Ãˆ capire che tipo di trader stai diventando.",
+          "Il vero obiettivo non è sapere solo quanto hai guadagnato o perso. È capire che tipo di trader stai diventando.",
         cards: [
           {
             title: "Measure",
             description:
-              "Misura performance, equity, win rate, drawdown, sessioni e qualitÃ  operativa.",
+              "Misura performance, equity, win rate, drawdown, sessioni e qualità operativa.",
           },
           {
             title: "Protect",
             description:
-              "Proteggi capitale, disciplina, luciditÃ  e rispetto delle regole operative.",
+              "Proteggi capitale, disciplina, lucidità e rispetto delle regole operative.",
           },
           {
             title: "Improve",
             description:
-              "Migliora esecuzione, review, comportamento e capacitÃ  decisionale nel tempo.",
+              "Migliora esecuzione, review, comportamento e capacità decisionale nel tempo.",
           },
         ],
       },
       {
         phase: "Metodo",
         eyebrow: "Operating flow",
-        title: "Il flusso corretto non Ã¨ casuale",
+        title: "Il flusso corretto non è casuale",
         description:
           "VOLTIS funziona al meglio quando lo usi come un sistema operativo: prepari, esegui, registri, analizzi, proteggi e migliori.",
         spotlight:
-          "Plan â†’ Execute â†’ Journal â†’ Review â†’ Detect Patterns â†’ Protect Discipline â†’ Improve Behavior",
+          "Plan → Execute → Journal → Review → Detect Patterns → Protect Discipline → Improve Behavior",
         cards: [
           {
             title: "Prima della sessione",
@@ -316,9 +316,9 @@ const onboardingText: Record<
               "Definisci focus, rischio, scenario, regole e condizioni operative.",
           },
           {
-            title: "Durante lâ€™operativitÃ ",
+            title: "Durante l’operatività",
             description:
-              "Rispetta il piano, evita impulsivitÃ  e mantieni controllo sul rischio.",
+              "Rispetta il piano, evita impulsività e mantieni controllo sul rischio.",
           },
           {
             title: "Dopo la sessione",
@@ -331,14 +331,14 @@ const onboardingText: Record<
         phase: "Account",
         eyebrow: "Account Hub & Dashboard",
         title:
-          "Parti dal centro operativo dellâ€™account",
+          "Parti dal centro operativo dell’account",
         description:
-          "Quando entri in un account, parti dallâ€™Account Hub. Da lÃ¬ puoi raggiungere Dashboard, Diary, Calendar, Equity, Analytics, Reports, Copilot e gestione.",
+          "Quando entri in un account, parti dall’Account Hub. Da lì puoi raggiungere Dashboard, Diary, Calendar, Equity, Analytics, Reports, Copilot e gestione.",
         cards: [
           {
             title: "Account Hub",
             description:
-              "La prima schermata dellâ€™account. Ti orienta e ti porta nelle sezioni giuste.",
+              "La prima schermata dell’account. Ti orienta e ti porta nelle sezioni giuste.",
           },
           {
             title: "Dashboard",
@@ -352,7 +352,7 @@ const onboardingText: Record<
         eyebrow: "Diary, Calendar, Equity",
         title: "Costruisci memoria operativa",
         description:
-          "Le pagine core raccolgono la base del tuo trading: operazioni, calendario, crescita dellâ€™equity e andamento del conto.",
+          "Le pagine core raccolgono la base del tuo trading: operazioni, calendario, crescita dell’equity e andamento del conto.",
         cards: [
           {
             title: "Trading Diary",
@@ -398,11 +398,11 @@ const onboardingText: Record<
       {
         phase: "Protection",
         eyebrow: "Sessions & Copilot",
-        title: "Proteggi luciditÃ  e disciplina",
+        title: "Proteggi lucidità e disciplina",
         description:
-          "VOLTIS non deve solo mostrarti risultati. Deve aiutarti a capire quando stai perdendo luciditÃ , disciplina o controllo operativo.",
+          "VOLTIS non deve solo mostrarti risultati. Deve aiutarti a capire quando stai perdendo lucidità, disciplina o controllo operativo.",
         spotlight:
-          "Il valore piÃ¹ grande arriva quando VOLTIS inizia a riconoscere ciÃ² che tu rischi di non vedere.",
+          "Il valore più grande arriva quando VOLTIS inizia a riconoscere ciò che tu rischi di non vedere.",
         cards: [
           {
             title: "Sessions",
@@ -421,17 +421,17 @@ const onboardingText: Record<
         eyebrow: "Workspace, Members, Integrations",
         title: "Gestisci struttura, team e sistema",
         description:
-          "VOLTIS puÃ² essere anche un ambiente privato di lavoro: membri, workspace, permessi, integrazioni, impostazioni e backup.",
+          "VOLTIS può essere anche un ambiente privato di lavoro: membri, workspace, permessi, integrazioni, impostazioni e backup.",
         cards: [
           {
             title: "Workspace & Members",
             description:
-              "Gestisci membri, presenza, attivitÃ , performance individuali e accessi.",
+              "Gestisci membri, presenza, attività, performance individuali e accessi.",
           },
           {
             title: "Integrations",
             description:
-              "Prepara MT5, broker sync e modalitÃ  manuale, automatica o ibrida.",
+              "Prepara MT5, broker sync e modalità manuale, automatica o ibrida.",
           },
           {
             title: "Settings",
@@ -446,17 +446,17 @@ const onboardingText: Record<
         title:
           "VOLTIS vale quanto il modo in cui lo usi",
         description:
-          "Non serve riempire lâ€™app di dati casuali. Serve usarla con costanza, precisione e rispetto del processo.",
+          "Non serve riempire l’app di dati casuali. Serve usarla con costanza, precisione e rispetto del processo.",
         spotlight:
           "Se hai accesso a VOLTIS, sei dentro qualcosa di serio.",
         cards: [
           {
             title: "Inserisci dati veri",
             description:
-              "Ogni trade registrato bene rende piÃ¹ utile ogni report, grafico e analisi futura.",
+              "Ogni trade registrato bene rende più utile ogni report, grafico e analisi futura.",
           },
           {
-            title: "Rivedi con luciditÃ ",
+            title: "Rivedi con lucidità",
             description:
               "Non usare VOLTIS solo quando vinci. Usalo soprattutto quando devi correggere qualcosa.",
           },
@@ -532,7 +532,7 @@ const onboardingText: Record<
         description:
           "VOLTIS works best when you use it as an operating system: plan, execute, journal, review, protect and improve.",
         spotlight:
-          "Plan â†’ Execute â†’ Journal â†’ Review â†’ Detect Patterns â†’ Protect Discipline â†’ Improve Behavior",
+          "Plan → Execute → Journal → Review → Detect Patterns → Protect Discipline → Improve Behavior",
         cards: [
           {
             title: "Before the session",
@@ -695,219 +695,219 @@ const onboardingText: Record<
   uk: {
     privateAccess: "VOLTIS Private Access",
     stepCounter: (current, total) => `${current}/${total}`,
-    back: "ÐÐ°Ð·Ð°Ð´",
-    continue: "ÐŸÑ€Ð¾Ð´Ð¾Ð²Ð¶Ð¸Ñ‚Ð¸",
-    enterVoltis: "Ð£Ð²Ñ–Ð¹Ñ‚Ð¸ Ñƒ VOLTIS",
-    close: "Ð—Ð°ÐºÑ€Ð¸Ñ‚Ð¸ Ð¾Ð½Ð±Ð¾Ñ€Ð´Ð¸Ð½Ð³",
+    back: "Назад",
+    continue: "Продовжити",
+    enterVoltis: "Увійти у VOLTIS",
+    close: "Закрити онбординг",
     steps: [
       {
-        phase: "Ð‘Ð°Ñ‡ÐµÐ½Ð½Ñ",
+        phase: "Бачення",
         eyebrow: "Private access",
-        title: "VOLTIS â€” Ñ†Ðµ Ð½Ðµ Ð·Ð²Ð¸Ñ‡Ð°Ð¹Ð½Ð¸Ð¹ Ñ‚Ð¾Ñ€Ð³Ð¾Ð²Ð¸Ð¹ Ð·Ð°ÑÑ‚Ð¾ÑÑƒÐ½Ð¾Ðº",
+        title: "VOLTIS — це не звичайний торговий застосунок",
         description:
-          "VOLTIS â€” Ñ†Ðµ Ð¿Ñ€Ð¸Ð²Ð°Ñ‚Ð½Ð° Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð° ÑÐ¸ÑÑ‚ÐµÐ¼Ð° Ð´Ð»Ñ Ñ‚Ñ€ÐµÐ¹Ð´Ð¸Ð½Ð³Ñƒ, ÑÑ‚Ð²Ð¾Ñ€ÐµÐ½Ð° Ð´Ð»Ñ Ð¾Ð±Ñ€Ð°Ð½Ð¸Ñ… Ñ‚Ñ€ÐµÐ¹Ð´ÐµÑ€Ñ–Ð², ÑÐºÑ– Ñ…Ð¾Ñ‡ÑƒÑ‚ÑŒ Ð²Ð¸Ð¼Ñ–Ñ€ÑŽÐ²Ð°Ñ‚Ð¸, Ð·Ð°Ñ…Ð¸Ñ‰Ð°Ñ‚Ð¸ Ñ‚Ð° Ð¿Ð¾ÐºÑ€Ð°Ñ‰ÑƒÐ²Ð°Ñ‚Ð¸ ÑÐ²Ð¾ÑŽ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ñƒ Ð¿Ð¾Ð²ÐµÐ´Ñ–Ð½ÐºÑƒ.",
+          "VOLTIS — це приватна операційна система для трейдингу, створена для обраних трейдерів, які хочуть вимірювати, захищати та покращувати свою операційну поведінку.",
         spotlight:
-          "Ð’Ñ–Ð½ Ð½Ðµ Ð²Ñ–Ð´ÐºÑ€Ð¸Ñ‚Ð¸Ð¹ Ð´Ð»Ñ Ð²ÑÑ–Ñ…. Ð’Ñ–Ð½ Ð½Ðµ ÑÑ‚Ð²Ð¾Ñ€ÐµÐ½Ð¸Ð¹ Ð´Ð»Ñ Ð¼Ð°ÑÐ¾Ð²Ð¾Ð³Ð¾ Ñ€Ð¸Ð½ÐºÑƒ. Ð¦Ðµ ÑÐµÑ€Ð¹Ð¾Ð·Ð½Ð¸Ð¹ Ñ–Ð½ÑÑ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚ Ð´Ð»Ñ Ñ‚Ð¸Ñ…, Ñ…Ñ‚Ð¾ Ñ…Ð¾Ñ‡Ðµ ÑÑ‚Ð°Ð²Ð¸Ñ‚Ð¸ÑÑ Ð´Ð¾ Ñ‚Ñ€ÐµÐ¹Ð´Ð¸Ð½Ð³Ñƒ ÑÐµÑ€Ð¹Ð¾Ð·Ð½Ð¾.",
+          "Він не відкритий для всіх. Він не створений для масового ринку. Це серйозний інструмент для тих, хто хоче ставитися до трейдингу серйозно.",
         cards: [
           {
-            title: "Ð’Ð¸Ð±Ñ–Ñ€ÐºÐ¾Ð²Ð¸Ð¹ Ð´Ð¾ÑÑ‚ÑƒÐ¿",
+            title: "Вибірковий доступ",
             description:
-              "VOLTIS Ð½Ðµ ÑÑ‚Ð²Ð¾Ñ€ÐµÐ½Ð¸Ð¹ Ð´Ð»Ñ Ð±ÑƒÐ´ÑŒ-ÐºÐ¾Ð³Ð¾. Ð”Ð¾ÑÑ‚ÑƒÐ¿ ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»ÑŒÐ¾Ð²Ð°Ð½Ð¸Ð¹, Ð¿Ñ€Ð¸Ð²Ð°Ñ‚Ð½Ð¸Ð¹ Ñ– ÑÐ²Ñ–Ð´Ð¾Ð¼Ð¸Ð¹.",
+              "VOLTIS не створений для будь-кого. Доступ контрольований, приватний і свідомий.",
           },
           {
-            title: "Ð¦Ðµ Ð½Ðµ Ð¿Ñ€Ð¾ÑÑ‚Ð¾ Ð±ÐµÐ·ÐºÐ¾ÑˆÑ‚Ð¾Ð²Ð½Ð¾",
+            title: "Це не просто безкоштовно",
             description:
-              "Ð¢Ð¸ ÐºÐ¾Ñ€Ð¸ÑÑ‚ÑƒÑ”ÑˆÑÑ Ð½Ð¸Ð¼ Ð½Ðµ Ñ‚Ð¾Ð¼Ñƒ, Ñ‰Ð¾ Ð²Ñ–Ð½ Ð´ÐµÑˆÐµÐ²Ð¸Ð¹. Ð¢Ð¸ Ð²ÑÐµÑ€ÐµÐ´Ð¸Ð½Ñ– Ñ‚Ð¾Ð³Ð¾, Ñ‰Ð¾ Ð½Ðµ Ð¿Ñ€Ð¾Ð´Ð°Ñ”Ñ‚ÑŒÑÑ Ð²ÑÑ–Ð¼.",
+              "Ти користуєшся ним не тому, що він дешевий. Ти всередині того, що не продається всім.",
           },
         ],
       },
       {
-        phase: "Ð¤Ñ–Ð»Ð¾ÑÐ¾Ñ„Ñ–Ñ",
+        phase: "Філософія",
         eyebrow: "Measure. Protect. Improve.",
-        title: "ÐœÑ–ÑÑ–Ñ â€” Ð·Ñ€Ð¾Ð±Ð¸Ñ‚Ð¸ Ñ‚ÐµÐ±Ðµ Ð±Ñ–Ð»ÑŒÑˆ ÑÑÐ½Ð¸Ð¼",
+        title: "Місія — зробити тебе більш ясним",
         description:
-          "VOLTIS Ð½Ðµ Ð¿Ñ€Ð¾ÑÑ‚Ð¾ Ð¿Ð¾ÐºÐ°Ð·ÑƒÑ” Ñ†Ð¸Ñ„Ñ€Ð¸. Ð’Ñ–Ð½ Ð´Ð¾Ð¿Ð¾Ð¼Ð°Ð³Ð°Ñ” Ð·Ñ€Ð¾Ð·ÑƒÐ¼Ñ–Ñ‚Ð¸, ÑÐº Ñ‚Ð¸ Ñ‚Ð¾Ñ€Ð³ÑƒÑ”Ñˆ, ÑÐºÑ– Ð¿Ð°Ñ‚ÐµÑ€Ð½Ð¸ Ð¿Ð¾Ð²Ñ‚Ð¾Ñ€ÑŽÑ”Ñˆ, Ð´Ðµ Ð²Ñ‚Ñ€Ð°Ñ‡Ð°Ñ”Ñˆ Ð´Ð¸ÑÑ†Ð¸Ð¿Ð»Ñ–Ð½Ñƒ Ñ– Ñ‰Ð¾ Ð¿Ð¾Ñ‚Ñ€Ñ–Ð±Ð½Ð¾ Ð·Ð°Ñ…Ð¸Ñ‰Ð°Ñ‚Ð¸.",
+          "VOLTIS не просто показує цифри. Він допомагає зрозуміти, як ти торгуєш, які патерни повторюєш, де втрачаєш дисципліну і що потрібно захищати.",
         spotlight:
-          "Ð¡Ð¿Ñ€Ð°Ð²Ð¶Ð½Ñ Ð¼ÐµÑ‚Ð° â€” Ð½Ðµ Ð»Ð¸ÑˆÐµ Ð·Ð½Ð°Ñ‚Ð¸, ÑÐºÑ–Ð»ÑŒÐºÐ¸ Ñ‚Ð¸ Ð·Ð°Ñ€Ð¾Ð±Ð¸Ð² Ð°Ð±Ð¾ Ð²Ñ‚Ñ€Ð°Ñ‚Ð¸Ð². ÐœÐµÑ‚Ð° â€” Ð·Ñ€Ð¾Ð·ÑƒÐ¼Ñ–Ñ‚Ð¸, ÑÐºÐ¸Ð¼ Ñ‚Ñ€ÐµÐ¹Ð´ÐµÑ€Ð¾Ð¼ Ñ‚Ð¸ ÑÑ‚Ð°Ñ”Ñˆ.",
+          "Справжня мета — не лише знати, скільки ти заробив або втратив. Мета — зрозуміти, яким трейдером ти стаєш.",
         cards: [
           {
             title: "Measure",
             description:
-              "Ð’Ð¸Ð¼Ñ–Ñ€ÑŽÐ¹ performance, equity, win rate, drawdown, ÑÐµÑÑ–Ñ— Ñ‚Ð° ÑÐºÑ–ÑÑ‚ÑŒ Ð²Ð¸ÐºÐ¾Ð½Ð°Ð½Ð½Ñ.",
+              "Вимірюй performance, equity, win rate, drawdown, сесії та якість виконання.",
           },
           {
             title: "Protect",
             description:
-              "Ð—Ð°Ñ…Ð¸Ñ‰Ð°Ð¹ ÐºÐ°Ð¿Ñ–Ñ‚Ð°Ð», Ð´Ð¸ÑÑ†Ð¸Ð¿Ð»Ñ–Ð½Ñƒ, ÑÑÐ½Ñ–ÑÑ‚ÑŒ Ñ– Ð´Ð¾Ñ‚Ñ€Ð¸Ð¼Ð°Ð½Ð½Ñ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð¸Ñ… Ð¿Ñ€Ð°Ð²Ð¸Ð».",
+              "Захищай капітал, дисципліну, ясність і дотримання операційних правил.",
           },
           {
             title: "Improve",
             description:
-              "ÐŸÐ¾ÐºÑ€Ð°Ñ‰ÑƒÐ¹ Ð²Ð¸ÐºÐ¾Ð½Ð°Ð½Ð½Ñ, review, Ð¿Ð¾Ð²ÐµÐ´Ñ–Ð½ÐºÑƒ Ñ‚Ð° ÑÐºÑ–ÑÑ‚ÑŒ Ñ€Ñ–ÑˆÐµÐ½ÑŒ Ð· Ñ‡Ð°ÑÐ¾Ð¼.",
+              "Покращуй виконання, review, поведінку та якість рішень з часом.",
           },
         ],
       },
       {
-        phase: "ÐœÐµÑ‚Ð¾Ð´",
+        phase: "Метод",
         eyebrow: "Operating flow",
-        title: "ÐŸÑ€Ð°Ð²Ð¸Ð»ÑŒÐ½Ð¸Ð¹ Ð¿Ð¾Ñ‚Ñ–Ðº Ð½Ðµ Ñ” Ð²Ð¸Ð¿Ð°Ð´ÐºÐ¾Ð²Ð¸Ð¼",
+        title: "Правильний потік не є випадковим",
         description:
-          "VOLTIS Ð¿Ñ€Ð°Ñ†ÑŽÑ” Ð½Ð°Ð¹ÐºÑ€Ð°Ñ‰Ðµ, ÐºÐ¾Ð»Ð¸ Ñ‚Ð¸ Ð²Ð¸ÐºÐ¾Ñ€Ð¸ÑÑ‚Ð¾Ð²ÑƒÑ”Ñˆ Ð¹Ð¾Ð³Ð¾ ÑÐº Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ñƒ ÑÐ¸ÑÑ‚ÐµÐ¼Ñƒ: Ð¿Ð»Ð°Ð½ÑƒÑ”Ñˆ, Ð²Ð¸ÐºÐ¾Ð½ÑƒÑ”Ñˆ, Ð·Ð°Ð¿Ð¸ÑÑƒÑ”Ñˆ, Ð°Ð½Ð°Ð»Ñ–Ð·ÑƒÑ”Ñˆ, Ð·Ð°Ñ…Ð¸Ñ‰Ð°Ñ”Ñˆ Ñ– Ð¿Ð¾ÐºÑ€Ð°Ñ‰ÑƒÑ”Ñˆ.",
+          "VOLTIS працює найкраще, коли ти використовуєш його як операційну систему: плануєш, виконуєш, записуєш, аналізуєш, захищаєш і покращуєш.",
         spotlight:
-          "Plan â†’ Execute â†’ Journal â†’ Review â†’ Detect Patterns â†’ Protect Discipline â†’ Improve Behavior",
+          "Plan → Execute → Journal → Review → Detect Patterns → Protect Discipline → Improve Behavior",
         cards: [
           {
-            title: "ÐŸÐµÑ€ÐµÐ´ ÑÐµÑÑ–Ñ”ÑŽ",
+            title: "Перед сесією",
             description:
-              "Ð’Ð¸Ð·Ð½Ð°Ñ‡ focus, risk, scenario, Ð¿Ñ€Ð°Ð²Ð¸Ð»Ð° Ñ‚Ð° Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ñ– ÑƒÐ¼Ð¾Ð²Ð¸.",
+              "Визнач focus, risk, scenario, правила та операційні умови.",
           },
           {
-            title: "ÐŸÑ–Ð´ Ñ‡Ð°Ñ Ñ‚Ð¾Ñ€Ð³Ñ–Ð²Ð»Ñ–",
+            title: "Під час торгівлі",
             description:
-              "Ð”Ð¾Ñ‚Ñ€Ð¸Ð¼ÑƒÐ¹ÑÑ Ð¿Ð»Ð°Ð½Ñƒ, ÑƒÐ½Ð¸ÐºÐ°Ð¹ Ñ–Ð¼Ð¿ÑƒÐ»ÑŒÑÐ¸Ð²Ð½Ð¾ÑÑ‚Ñ– Ñ‚Ð° Ñ‚Ñ€Ð¸Ð¼Ð°Ð¹ Ñ€Ð¸Ð·Ð¸Ðº Ð¿Ñ–Ð´ ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»ÐµÐ¼.",
+              "Дотримуйся плану, уникай імпульсивності та тримай ризик під контролем.",
           },
           {
-            title: "ÐŸÑ–ÑÐ»Ñ ÑÐµÑÑ–Ñ—",
+            title: "Після сесії",
             description:
-              "Ð—Ð°Ð¿Ð¸ÑˆÐ¸, Ð¿ÐµÑ€ÐµÐ³Ð»ÑÐ½ÑŒ, Ð·Ð½Ð°Ð¹Ð´Ð¸ Ð¿Ð¾Ð¼Ð¸Ð»ÐºÐ¸, ÑƒÑ€Ð¾ÐºÐ¸ Ñ‚Ð° Ð¿Ð¾Ð²Ñ‚Ð¾Ñ€ÑŽÐ²Ð°Ð½Ñ– Ð¿Ð°Ñ‚ÐµÑ€Ð½Ð¸.",
+              "Запиши, переглянь, знайди помилки, уроки та повторювані патерни.",
           },
         ],
       },
       {
-        phase: "ÐÐºÐ°ÑƒÐ½Ñ‚",
+        phase: "Акаунт",
         eyebrow: "Account Hub & Dashboard",
-        title: "ÐŸÐ¾Ñ‡Ð¸Ð½Ð°Ð¹ Ð· Ñ†ÐµÐ½Ñ‚Ñ€Ñƒ ÐºÐµÑ€ÑƒÐ²Ð°Ð½Ð½Ñ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð¾Ð¼",
+        title: "Починай з центру керування акаунтом",
         description:
-          "ÐšÐ¾Ð»Ð¸ Ð²Ñ…Ð¾Ð´Ð¸Ñˆ Ð² Ð°ÐºÐ°ÑƒÐ½Ñ‚, Ð¿Ð¾Ñ‡Ð¸Ð½Ð°Ð¹ Ð· Account Hub. Ð—Ð²Ñ–Ð´Ñ‚Ð¸ Ñ‚Ð¸ Ð¿ÐµÑ€ÐµÑ…Ð¾Ð´Ð¸Ñˆ Ð´Ð¾ Dashboard, Diary, Calendar, Equity, Analytics, Reports, Copilot Ñ– ÐºÐµÑ€ÑƒÐ²Ð°Ð½Ð½Ñ.",
+          "Коли входиш в акаунт, починай з Account Hub. Звідти ти переходиш до Dashboard, Diary, Calendar, Equity, Analytics, Reports, Copilot і керування.",
         cards: [
           {
             title: "Account Hub",
             description:
-              "ÐŸÐµÑ€ÑˆÐ° ÑÑ‚Ð¾Ñ€Ñ–Ð½ÐºÐ° Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°. Ð’Ð¾Ð½Ð° Ð¾Ñ€Ñ–Ñ”Ð½Ñ‚ÑƒÑ” Ñ‚ÐµÐ±Ðµ Ñ– Ð²ÐµÐ´Ðµ Ð² Ð¿Ð¾Ñ‚Ñ€Ñ–Ð±Ð½Ñ– Ñ€Ð¾Ð·Ð´Ñ–Ð»Ð¸.",
+              "Перша сторінка акаунта. Вона орієнтує тебе і веде в потрібні розділи.",
           },
           {
             title: "Dashboard",
             description:
-              "ÐžÐ´Ñ€Ð°Ð·Ñƒ Ð¿Ð¾ÐºÐ°Ð·ÑƒÑ” equity, PnL, win rate, target, drawdown Ñ– Ð·Ð°Ð³Ð°Ð»ÑŒÐ½Ð¸Ð¹ ÑÑ‚Ð°Ð½.",
+              "Одразу показує equity, PnL, win rate, target, drawdown і загальний стан.",
           },
         ],
       },
       {
         phase: "Execution",
         eyebrow: "Diary, Calendar, Equity",
-        title: "Ð‘ÑƒÐ´ÑƒÐ¹ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ñƒ Ð¿Ð°Ð¼Ê¼ÑÑ‚ÑŒ",
+        title: "Будуй операційну памʼять",
         description:
-          "Core-ÑÑ‚Ð¾Ñ€Ñ–Ð½ÐºÐ¸ Ð·Ð±Ð¸Ñ€Ð°ÑŽÑ‚ÑŒ Ð¾ÑÐ½Ð¾Ð²Ñƒ Ñ‚Ð²Ð¾Ð³Ð¾ Ñ‚Ñ€ÐµÐ¹Ð´Ð¸Ð½Ð³Ñƒ: ÑƒÐ³Ð¾Ð´Ð¸, ÐºÐ°Ð»ÐµÐ½Ð´Ð°Ñ€, Ð·Ñ€Ð¾ÑÑ‚Ð°Ð½Ð½Ñ equity Ñ– Ð¿Ñ€Ð¾Ð³Ñ€ÐµÑ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°.",
+          "Core-сторінки збирають основу твого трейдингу: угоди, календар, зростання equity і прогрес акаунта.",
         cards: [
           {
             title: "Trading Diary",
             description:
-              "Ð—Ð°Ð¿Ð¸ÑÑƒÐ¹ ÑƒÐ³Ð¾Ð´Ð¸, setup, ÐµÐ¼Ð¾Ñ†Ñ–Ñ—, Ð²Ð¸ÐºÐ¾Ð½Ð°Ð½Ð½Ñ, Ð¿Ð¾Ð¼Ð¸Ð»ÐºÐ¸, Ð½Ð¾Ñ‚Ð°Ñ‚ÐºÐ¸ Ñ‚Ð° ÑƒÑ€Ð¾ÐºÐ¸.",
+              "Записуй угоди, setup, емоції, виконання, помилки, нотатки та уроки.",
           },
           {
             title: "Calendar",
             description:
-              "Ð”Ð¸Ð²Ð¸ÑÑŒ performance Ð¿Ð¾ Ð´Ð½ÑÑ… Ñ– Ð²Ð¸Ð·Ð½Ð°Ñ‡Ð°Ð¹ Ð¿Ð¾Ð·Ð¸Ñ‚Ð¸Ð²Ð½Ñ–, Ð½ÐµÐ³Ð°Ñ‚Ð¸Ð²Ð½Ñ– Ð°Ð±Ð¾ flat-Ð´Ð½Ñ–.",
+              "Дивись performance по днях і визначай позитивні, негативні або flat-дні.",
           },
           {
             title: "Equity",
             description:
-              "Ð’Ñ–Ð´ÑÑ‚ÐµÐ¶ÑƒÐ¹ Ð·Ñ€Ð¾ÑÑ‚Ð°Ð½Ð½Ñ ÐºÐ°Ð¿Ñ–Ñ‚Ð°Ð»Ñƒ, equity curve, drawdown, best trade Ñ– worst trade.",
+              "Відстежуй зростання капіталу, equity curve, drawdown, best trade і worst trade.",
           },
         ],
       },
       {
         phase: "Intelligence",
         eyebrow: "Analytics, Reports, Rules",
-        title: "Ð—Ñ€Ð¾Ð·ÑƒÐ¼Ñ–Ð¹, Ñ‰Ð¾ ÑÐ¿Ñ€Ð°Ð²Ð´Ñ– Ð¿Ñ€Ð°Ñ†ÑŽÑ”",
+        title: "Зрозумій, що справді працює",
         description:
-          "Analytics, Reports Ñ– Rules Ð¿ÐµÑ€ÐµÑ‚Ð²Ð¾Ñ€ÑŽÑŽÑ‚ÑŒ Ð´Ð°Ð½Ñ– Ð½Ð° Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ðµ Ñ‡Ð¸Ñ‚Ð°Ð½Ð½Ñ: Ð½Ð°Ð¹ÐºÑ€Ð°Ñ‰Ñ– ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¸, ÑÐµÑÑ–Ñ—, Ð¿Ð¾Ð¼Ð¸Ð»ÐºÐ¸, Ð¿ÑÐ¸Ñ…Ð¾Ð»Ð¾Ð³Ñ–Ñ, Ñ†Ñ–Ð»Ñ– Ñ‚Ð° Ð»Ñ–Ð¼Ñ–Ñ‚Ð¸.",
+          "Analytics, Reports і Rules перетворюють дані на операційне читання: найкращі символи, сесії, помилки, психологія, цілі та ліміти.",
         cards: [
           {
             title: "Analytics",
             description:
-              "ÐÐ½Ð°Ð»Ñ–Ð·ÑƒÐ¹ symbols, direction, sessions, emotions, execution quality Ñ– patterns.",
+              "Аналізуй symbols, direction, sessions, emotions, execution quality і patterns.",
           },
           {
             title: "Reports",
             description:
-              "Ð§Ð¸Ñ‚Ð°Ð¹ Ð¿Ñ€Ð¾Ñ„ÐµÑÑ–Ð¹Ð½Ñ– Ð¿Ñ–Ð´ÑÑƒÐ¼ÐºÐ¸ Ð¿Ñ€Ð¾ performance, Ñ€Ð¸Ð·Ð¸ÐºÐ¸, ÑÐ¸Ð»ÑŒÐ½Ñ– Ñ‚Ð° ÑÐ»Ð°Ð±ÐºÑ– ÑÑ‚Ð¾Ñ€Ð¾Ð½Ð¸.",
+              "Читай професійні підсумки про performance, ризики, сильні та слабкі сторони.",
           },
           {
             title: "Rules & Goals",
             description:
-              "Ð’ÑÑ‚Ð°Ð½Ð¾Ð²Ð»ÑŽÐ¹ targets, limits, Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ñ– Ð¿Ñ€Ð°Ð²Ð¸Ð»Ð° Ñ‚Ð° ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»ÑŒÐ½Ñ– ÑÐ¸Ð³Ð½Ð°Ð»Ð¸.",
+              "Встановлюй targets, limits, операційні правила та контрольні сигнали.",
           },
         ],
       },
       {
         phase: "Protection",
         eyebrow: "Sessions & Copilot",
-        title: "Ð—Ð°Ñ…Ð¸Ñ‰Ð°Ð¹ ÑÑÐ½Ñ–ÑÑ‚ÑŒ Ñ– Ð´Ð¸ÑÑ†Ð¸Ð¿Ð»Ñ–Ð½Ñƒ",
+        title: "Захищай ясність і дисципліну",
         description:
-          "VOLTIS Ð¼Ð°Ñ” Ð½Ðµ Ð»Ð¸ÑˆÐµ Ð¿Ð¾ÐºÐ°Ð·ÑƒÐ²Ð°Ñ‚Ð¸ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ð¸. Ð’Ñ–Ð½ Ð¼Ð°Ñ” Ð´Ð¾Ð¿Ð¾Ð¼Ð°Ð³Ð°Ñ‚Ð¸ Ñ‚Ð¾Ð±Ñ– Ð·Ñ€Ð¾Ð·ÑƒÐ¼Ñ–Ñ‚Ð¸, ÐºÐ¾Ð»Ð¸ Ñ‚Ð¸ Ð²Ñ‚Ñ€Ð°Ñ‡Ð°Ñ”Ñˆ ÑÑÐ½Ñ–ÑÑ‚ÑŒ, Ð´Ð¸ÑÑ†Ð¸Ð¿Ð»Ñ–Ð½Ñƒ Ð°Ð±Ð¾ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð¸Ð¹ ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»ÑŒ.",
+          "VOLTIS має не лише показувати результати. Він має допомагати тобі зрозуміти, коли ти втрачаєш ясність, дисципліну або операційний контроль.",
         spotlight:
-          "ÐÐ°Ð¹Ð±Ñ–Ð»ÑŒÑˆÐ° Ñ†Ñ–Ð½Ð½Ñ–ÑÑ‚ÑŒ Ð·â€™ÑÐ²Ð»ÑÑ”Ñ‚ÑŒÑÑ Ñ‚Ð¾Ð´Ñ–, ÐºÐ¾Ð»Ð¸ VOLTIS Ð¿Ð¾Ñ‡Ð¸Ð½Ð°Ñ” Ñ€Ð¾Ð·Ð¿Ñ–Ð·Ð½Ð°Ð²Ð°Ñ‚Ð¸ Ñ‚Ðµ, Ñ‰Ð¾ Ñ‚Ð¸ Ñ€Ð¸Ð·Ð¸ÐºÑƒÑ”Ñˆ Ð½Ðµ Ð¿Ð¾Ð±Ð°Ñ‡Ð¸Ñ‚Ð¸.",
+          "Найбільша цінність з’являється тоді, коли VOLTIS починає розпізнавати те, що ти ризикуєш не побачити.",
         cards: [
           {
             title: "Sessions",
             description:
-              "Ð“Ð¾Ñ‚ÑƒÐ¹ ÑÐµÑÑ–ÑŽ Ð¿ÐµÑ€ÐµÐ´ Ñ‚Ð¾Ñ€Ð³Ñ–Ð²Ð»ÐµÑŽ Ñ– Ð¿ÐµÑ€ÐµÐ³Ð»ÑÐ´Ð°Ð¹ Ñ—Ñ— Ð¿Ñ–ÑÐ»Ñ Ð· focus, bias Ñ– review.",
+              "Готуй сесію перед торгівлею і переглядай її після з focus, bias і review.",
           },
           {
             title: "Copilot",
             description:
-              "Ð¡Ð¿Ð¾ÑÑ‚ÐµÑ€Ñ–Ð³Ð°Ð¹ Ð·Ð° Ð¿Ð°Ð¼Ê¼ÑÑ‚Ñ‚ÑŽ, Ð¿Ð°Ñ‚ÐµÑ€Ð½Ð°Ð¼Ð¸, ÑÐ¸Ð³Ð½Ð°Ð»Ð°Ð¼Ð¸ Ñ€Ð¸Ð·Ð¸ÐºÑƒ Ñ‚Ð° Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð¾ÑŽ Ð¿Ð¾Ð²ÐµÐ´Ñ–Ð½ÐºÐ¾ÑŽ.",
+              "Спостерігай за памʼяттю, патернами, сигналами ризику та операційною поведінкою.",
           },
         ],
       },
       {
         phase: "Management",
         eyebrow: "Workspace, Members, Integrations",
-        title: "ÐšÐµÑ€ÑƒÐ¹ ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ð¾ÑŽ, ÐºÐ¾Ð¼Ð°Ð½Ð´Ð¾ÑŽ Ñ– ÑÐ¸ÑÑ‚ÐµÐ¼Ð¾ÑŽ",
+        title: "Керуй структурою, командою і системою",
         description:
-          "VOLTIS Ð¼Ð¾Ð¶Ðµ Ð±ÑƒÑ‚Ð¸ Ñ‚Ð°ÐºÐ¾Ð¶ Ð¿Ñ€Ð¸Ð²Ð°Ñ‚Ð½Ð¸Ð¼ Ñ€Ð¾Ð±Ð¾Ñ‡Ð¸Ð¼ ÑÐµÑ€ÐµÐ´Ð¾Ð²Ð¸Ñ‰ÐµÐ¼: members, workspace, permissions, integrations, settings Ñ– backup.",
+          "VOLTIS може бути також приватним робочим середовищем: members, workspace, permissions, integrations, settings і backup.",
         cards: [
           {
             title: "Workspace & Members",
             description:
-              "ÐšÐµÑ€ÑƒÐ¹ members, presence, activity, Ñ–Ð½Ð´Ð¸Ð²Ñ–Ð´ÑƒÐ°Ð»ÑŒÐ½Ð¾ÑŽ performance Ñ– access.",
+              "Керуй members, presence, activity, індивідуальною performance і access.",
           },
           {
             title: "Integrations",
             description:
-              "Ð“Ð¾Ñ‚ÑƒÐ¹ MT5, broker sync Ñ– manual, automatic Ð°Ð±Ð¾ hybrid mode.",
+              "Готуй MT5, broker sync і manual, automatic або hybrid mode.",
           },
           {
             title: "Settings",
             description:
-              "ÐšÐµÑ€ÑƒÐ¹ Ð¼Ð¾Ð²Ð¾ÑŽ, Ð²Ð°Ð»ÑŽÑ‚Ð¾ÑŽ, onboarding, backup Ñ– Ð·Ð°Ð³Ð°Ð»ÑŒÐ½Ð¸Ð¼Ð¸ Ð½Ð°Ð»Ð°ÑˆÑ‚ÑƒÐ²Ð°Ð½Ð½ÑÐ¼Ð¸.",
+              "Керуй мовою, валютою, onboarding, backup і загальними налаштуваннями.",
           },
         ],
       },
       {
-        phase: "Ð¤Ñ–Ð½Ð°Ð»ÑŒÐ½Ð¸Ð¹ Ð¿Ñ€Ð¸Ð½Ñ†Ð¸Ð¿",
+        phase: "Фінальний принцип",
         eyebrow: "Use it seriously",
-        title: "VOLTIS Ð²Ð°Ñ€Ñ‚Ð¸Ð¹ Ñ‚Ð¾Ð³Ð¾, ÑÐº Ñ‚Ð¸ Ð¹Ð¾Ð³Ð¾ Ð²Ð¸ÐºÐ¾Ñ€Ð¸ÑÑ‚Ð¾Ð²ÑƒÑ”Ñˆ",
+        title: "VOLTIS вартий того, як ти його використовуєш",
         description:
-          "ÐœÐµÑ‚Ð° Ð½Ðµ Ð² Ñ‚Ð¾Ð¼Ñƒ, Ñ‰Ð¾Ð± Ð·Ð°Ð¿Ð¾Ð²Ð½ÑŽÐ²Ð°Ñ‚Ð¸ Ð·Ð°ÑÑ‚Ð¾ÑÑƒÐ½Ð¾Ðº Ð²Ð¸Ð¿Ð°Ð´ÐºÐ¾Ð²Ð¸Ð¼Ð¸ Ð´Ð°Ð½Ð¸Ð¼Ð¸. ÐœÐµÑ‚Ð° â€” Ð²Ð¸ÐºÐ¾Ñ€Ð¸ÑÑ‚Ð¾Ð²ÑƒÐ²Ð°Ñ‚Ð¸ Ð¹Ð¾Ð³Ð¾ ÑÑ‚Ð°Ð±Ñ–Ð»ÑŒÐ½Ð¾, Ñ‚Ð¾Ñ‡Ð½Ð¾ Ñ– Ð· Ð¿Ð¾Ð²Ð°Ð³Ð¾ÑŽ Ð´Ð¾ Ð¿Ñ€Ð¾Ñ†ÐµÑÑƒ.",
+          "Мета не в тому, щоб заповнювати застосунок випадковими даними. Мета — використовувати його стабільно, точно і з повагою до процесу.",
         spotlight:
-          "Ð¯ÐºÑ‰Ð¾ Ñ‚Ð¸ Ð¼Ð°Ñ”Ñˆ Ð´Ð¾ÑÑ‚ÑƒÐ¿ Ð´Ð¾ VOLTIS, Ñ‚Ð¸ Ð²ÑÐµÑ€ÐµÐ´Ð¸Ð½Ñ– Ñ‡Ð¾Ð³Ð¾ÑÑŒ ÑÐµÑ€Ð¹Ð¾Ð·Ð½Ð¾Ð³Ð¾.",
+          "Якщо ти маєш доступ до VOLTIS, ти всередині чогось серйозного.",
         cards: [
           {
-            title: "Ð’Ð½Ð¾ÑÑŒ ÑÐ¿Ñ€Ð°Ð²Ð¶Ð½Ñ– Ð´Ð°Ð½Ñ–",
+            title: "Внось справжні дані",
             description:
-              "ÐšÐ¾Ð¶Ð½Ð° Ð´Ð¾Ð±Ñ€Ðµ Ð·Ð°Ð¿Ð¸ÑÐ°Ð½Ð° ÑƒÐ³Ð¾Ð´Ð° Ñ€Ð¾Ð±Ð¸Ñ‚ÑŒ Ð¼Ð°Ð¹Ð±ÑƒÑ‚Ð½Ñ– reports, charts Ñ– analysis ÐºÐ¾Ñ€Ð¸ÑÐ½Ñ–ÑˆÐ¸Ð¼Ð¸.",
+              "Кожна добре записана угода робить майбутні reports, charts і analysis кориснішими.",
           },
           {
-            title: "ÐŸÐµÑ€ÐµÐ³Ð»ÑÐ´Ð°Ð¹ Ð· ÑÑÐ½Ñ–ÑÑ‚ÑŽ",
+            title: "Переглядай з ясністю",
             description:
-              "ÐÐµ Ð²Ð¸ÐºÐ¾Ñ€Ð¸ÑÑ‚Ð¾Ð²ÑƒÐ¹ VOLTIS Ð»Ð¸ÑˆÐµ ÐºÐ¾Ð»Ð¸ Ð¿ÐµÑ€ÐµÐ¼Ð°Ð³Ð°Ñ”Ñˆ. Ð’Ð¸ÐºÐ¾Ñ€Ð¸ÑÑ‚Ð¾Ð²ÑƒÐ¹ Ð¹Ð¾Ð³Ð¾ Ð¾ÑÐ¾Ð±Ð»Ð¸Ð²Ð¾ Ñ‚Ð¾Ð´Ñ–, ÐºÐ¾Ð»Ð¸ Ð¿Ð¾Ñ‚Ñ€Ñ–Ð±Ð½Ð¾ Ñ‰Ð¾ÑÑŒ Ð²Ð¸Ð¿Ñ€Ð°Ð²Ð¸Ñ‚Ð¸.",
+              "Не використовуй VOLTIS лише коли перемагаєш. Використовуй його особливо тоді, коли потрібно щось виправити.",
           },
           {
-            title: "Ð—Ð°Ñ…Ð¸Ñ‰Ð°Ð¹ Ð¿Ñ€Ð¾Ñ†ÐµÑ",
+            title: "Захищай процес",
             description:
-              "Profit Ñ– discipline Ð½Ðµ Ð¼Ð°ÑŽÑ‚ÑŒ Ð±ÑƒÑ‚Ð¸ Ñ€Ð¾Ð·Ð´Ñ–Ð»ÐµÐ½Ñ–. VOLTIS Ñ–ÑÐ½ÑƒÑ”, Ñ‰Ð¾Ð± Ñ—Ñ… Ð¿Ð¾Ñ”Ð´Ð½Ð°Ñ‚Ð¸.",
+              "Profit і discipline не мають бути розділені. VOLTIS існує, щоб їх поєднати.",
           },
         ],
       },
@@ -917,219 +917,219 @@ const onboardingText: Record<
   ru: {
     privateAccess: "VOLTIS Private Access",
     stepCounter: (current, total) => `${current}/${total}`,
-    back: "ÐÐ°Ð·Ð°Ð´",
-    continue: "ÐŸÑ€Ð¾Ð´Ð¾Ð»Ð¶Ð¸Ñ‚ÑŒ",
-    enterVoltis: "Ð’Ð¾Ð¹Ñ‚Ð¸ Ð² VOLTIS",
-    close: "Ð—Ð°ÐºÑ€Ñ‹Ñ‚ÑŒ Ð¾Ð½Ð±Ð¾Ñ€Ð´Ð¸Ð½Ð³",
+    back: "Назад",
+    continue: "Продолжить",
+    enterVoltis: "Войти в VOLTIS",
+    close: "Закрыть онбординг",
     steps: [
       {
-        phase: "Ð’Ð¸Ð´ÐµÐ½Ð¸Ðµ",
+        phase: "Видение",
         eyebrow: "Private access",
-        title: "VOLTIS â€” ÑÑ‚Ð¾ Ð½Ðµ Ð¾Ð±Ñ‹Ñ‡Ð½Ð¾Ðµ Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ Ð´Ð»Ñ Ñ‚Ñ€ÐµÐ¹Ð´Ð¸Ð½Ð³Ð°",
+        title: "VOLTIS — это не обычное приложение для трейдинга",
         description:
-          "VOLTIS â€” ÑÑ‚Ð¾ Ð¿Ñ€Ð¸Ð²Ð°Ñ‚Ð½Ð°Ñ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ð°Ñ ÑÐ¸ÑÑ‚ÐµÐ¼Ð° Ð´Ð»Ñ Ñ‚Ñ€ÐµÐ¹Ð´Ð¸Ð½Ð³Ð°, ÑÐ¾Ð·Ð´Ð°Ð½Ð½Ð°Ñ Ð´Ð»Ñ Ð²Ñ‹Ð±Ñ€Ð°Ð½Ð½Ñ‹Ñ… Ñ‚Ñ€ÐµÐ¹Ð´ÐµÑ€Ð¾Ð², ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ðµ Ñ…Ð¾Ñ‚ÑÑ‚ Ð¸Ð·Ð¼ÐµÑ€ÑÑ‚ÑŒ, Ð·Ð°Ñ‰Ð¸Ñ‰Ð°Ñ‚ÑŒ Ð¸ ÑƒÐ»ÑƒÑ‡ÑˆÐ°Ñ‚ÑŒ ÑÐ²Ð¾Ðµ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ð¾Ðµ Ð¿Ð¾Ð²ÐµÐ´ÐµÐ½Ð¸Ðµ.",
+          "VOLTIS — это приватная операционная система для трейдинга, созданная для выбранных трейдеров, которые хотят измерять, защищать и улучшать свое операционное поведение.",
         spotlight:
-          "ÐžÐ½Ð° Ð½Ðµ Ð¾Ñ‚ÐºÑ€Ñ‹Ñ‚Ð° Ð´Ð»Ñ Ð²ÑÐµÑ…. ÐžÐ½Ð° Ð½Ðµ ÑÐ¾Ð·Ð´Ð°Ð½Ð° Ð´Ð»Ñ Ð¼Ð°ÑÑÐ¾Ð²Ð¾Ð³Ð¾ Ñ€Ñ‹Ð½ÐºÐ°. Ð­Ñ‚Ð¾ ÑÐµÑ€ÑŒÐµÐ·Ð½Ñ‹Ð¹ Ð¸Ð½ÑÑ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚ Ð´Ð»Ñ Ñ‚ÐµÑ…, ÐºÑ‚Ð¾ Ñ…Ð¾Ñ‡ÐµÑ‚ Ð¾Ñ‚Ð½Ð¾ÑÐ¸Ñ‚ÑŒÑÑ Ðº Ñ‚Ñ€ÐµÐ¹Ð´Ð¸Ð½Ð³Ñƒ ÑÐµÑ€ÑŒÐµÐ·Ð½Ð¾.",
+          "Она не открыта для всех. Она не создана для массового рынка. Это серьезный инструмент для тех, кто хочет относиться к трейдингу серьезно.",
         cards: [
           {
-            title: "Ð’Ñ‹Ð±Ð¾Ñ€Ð¾Ñ‡Ð½Ñ‹Ð¹ Ð´Ð¾ÑÑ‚ÑƒÐ¿",
+            title: "Выборочный доступ",
             description:
-              "VOLTIS Ð½Ðµ ÑÐ¾Ð·Ð´Ð°Ð½ Ð´Ð»Ñ ÐºÐ°Ð¶Ð´Ð¾Ð³Ð¾. Ð”Ð¾ÑÑ‚ÑƒÐ¿ ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»Ð¸Ñ€ÑƒÐµÐ¼Ñ‹Ð¹, Ð¿Ñ€Ð¸Ð²Ð°Ñ‚Ð½Ñ‹Ð¹ Ð¸ Ð¾ÑÐ¾Ð·Ð½Ð°Ð½Ð½Ñ‹Ð¹.",
+              "VOLTIS не создан для каждого. Доступ контролируемый, приватный и осознанный.",
           },
           {
-            title: "Ð­Ñ‚Ð¾ Ð½Ðµ Ð¿Ñ€Ð¾ÑÑ‚Ð¾ Ð±ÐµÑÐ¿Ð»Ð°Ñ‚Ð½Ð¾",
+            title: "Это не просто бесплатно",
             description:
-              "Ð¢Ñ‹ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÑˆÑŒ ÐµÐ³Ð¾ Ð½Ðµ Ð¿Ð¾Ñ‚Ð¾Ð¼Ñƒ, Ñ‡Ñ‚Ð¾ Ð¾Ð½ Ð´ÐµÑˆÐµÐ²Ñ‹Ð¹. Ð¢Ñ‹ Ð²Ð½ÑƒÑ‚Ñ€Ð¸ Ñ‚Ð¾Ð³Ð¾, Ñ‡Ñ‚Ð¾ Ð½Ðµ Ð¿Ñ€Ð¾Ð´Ð°ÐµÑ‚ÑÑ Ð²ÑÐµÐ¼.",
+              "Ты используешь его не потому, что он дешевый. Ты внутри того, что не продается всем.",
           },
         ],
       },
       {
-        phase: "Ð¤Ð¸Ð»Ð¾ÑÐ¾Ñ„Ð¸Ñ",
+        phase: "Философия",
         eyebrow: "Measure. Protect. Improve.",
-        title: "ÐœÐ¸ÑÑÐ¸Ñ â€” ÑÐ´ÐµÐ»Ð°Ñ‚ÑŒ Ñ‚ÐµÐ±Ñ Ð±Ð¾Ð»ÐµÐµ ÑÑÐ½Ñ‹Ð¼",
+        title: "Миссия — сделать тебя более ясным",
         description:
-          "VOLTIS Ð½Ðµ Ð¿Ñ€Ð¾ÑÑ‚Ð¾ Ð¿Ð¾ÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÑ‚ Ñ†Ð¸Ñ„Ñ€Ñ‹. ÐžÐ½ Ð¿Ð¾Ð¼Ð¾Ð³Ð°ÐµÑ‚ Ð¿Ð¾Ð½ÑÑ‚ÑŒ, ÐºÐ°Ðº Ñ‚Ñ‹ Ñ‚Ð¾Ñ€Ð³ÑƒÐµÑˆÑŒ, ÐºÐ°ÐºÐ¸Ðµ Ð¿Ð°Ñ‚Ñ‚ÐµÑ€Ð½Ñ‹ Ð¿Ð¾Ð²Ñ‚Ð¾Ñ€ÑÐµÑˆÑŒ, Ð³Ð´Ðµ Ñ‚ÐµÑ€ÑÐµÑˆÑŒ Ð´Ð¸ÑÑ†Ð¸Ð¿Ð»Ð¸Ð½Ñƒ Ð¸ Ñ‡Ñ‚Ð¾ Ð½ÑƒÐ¶Ð½Ð¾ Ð·Ð°Ñ‰Ð¸Ñ‰Ð°Ñ‚ÑŒ.",
+          "VOLTIS не просто показывает цифры. Он помогает понять, как ты торгуешь, какие паттерны повторяешь, где теряешь дисциплину и что нужно защищать.",
         spotlight:
-          "ÐÐ°ÑÑ‚Ð¾ÑÑ‰Ð°Ñ Ñ†ÐµÐ»ÑŒ â€” Ð½Ðµ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ð·Ð½Ð°Ñ‚ÑŒ, ÑÐºÐ¾Ð»ÑŒÐºÐ¾ Ñ‚Ñ‹ Ð·Ð°Ñ€Ð°Ð±Ð¾Ñ‚Ð°Ð» Ð¸Ð»Ð¸ Ð¿Ð¾Ñ‚ÐµÑ€ÑÐ». Ð¦ÐµÐ»ÑŒ â€” Ð¿Ð¾Ð½ÑÑ‚ÑŒ, ÐºÐ°ÐºÐ¸Ð¼ Ñ‚Ñ€ÐµÐ¹Ð´ÐµÑ€Ð¾Ð¼ Ñ‚Ñ‹ ÑÑ‚Ð°Ð½Ð¾Ð²Ð¸ÑˆÑŒÑÑ.",
+          "Настоящая цель — не только знать, сколько ты заработал или потерял. Цель — понять, каким трейдером ты становишься.",
         cards: [
           {
             title: "Measure",
             description:
-              "Ð˜Ð·Ð¼ÐµÑ€ÑÐ¹ performance, equity, win rate, drawdown, ÑÐµÑÑÐ¸Ð¸ Ð¸ ÐºÐ°Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð¸ÑÐ¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ.",
+              "Измеряй performance, equity, win rate, drawdown, сессии и качество исполнения.",
           },
           {
             title: "Protect",
             description:
-              "Ð—Ð°Ñ‰Ð¸Ñ‰Ð°Ð¹ ÐºÐ°Ð¿Ð¸Ñ‚Ð°Ð», Ð´Ð¸ÑÑ†Ð¸Ð¿Ð»Ð¸Ð½Ñƒ, ÑÑÐ½Ð¾ÑÑ‚ÑŒ Ð¸ ÑÐ¾Ð±Ð»ÑŽÐ´ÐµÐ½Ð¸Ðµ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ñ‹Ñ… Ð¿Ñ€Ð°Ð²Ð¸Ð».",
+              "Защищай капитал, дисциплину, ясность и соблюдение операционных правил.",
           },
           {
             title: "Improve",
             description:
-              "Ð£Ð»ÑƒÑ‡ÑˆÐ°Ð¹ Ð¸ÑÐ¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ, review, Ð¿Ð¾Ð²ÐµÐ´ÐµÐ½Ð¸Ðµ Ð¸ ÐºÐ°Ñ‡ÐµÑÑ‚Ð²Ð¾ Ñ€ÐµÑˆÐµÐ½Ð¸Ð¹ ÑÐ¾ Ð²Ñ€ÐµÐ¼ÐµÐ½ÐµÐ¼.",
+              "Улучшай исполнение, review, поведение и качество решений со временем.",
           },
         ],
       },
       {
-        phase: "ÐœÐµÑ‚Ð¾Ð´",
+        phase: "Метод",
         eyebrow: "Operating flow",
-        title: "ÐŸÑ€Ð°Ð²Ð¸Ð»ÑŒÐ½Ñ‹Ð¹ Ð¿Ð¾Ñ‚Ð¾Ðº Ð½Ðµ ÑÐ»ÑƒÑ‡Ð°ÐµÐ½",
+        title: "Правильный поток не случаен",
         description:
-          "VOLTIS Ñ€Ð°Ð±Ð¾Ñ‚Ð°ÐµÑ‚ Ð»ÑƒÑ‡ÑˆÐµ Ð²ÑÐµÐ³Ð¾, ÐºÐ¾Ð³Ð´Ð° Ñ‚Ñ‹ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÑˆÑŒ ÐµÐ³Ð¾ ÐºÐ°Ðº Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½ÑƒÑŽ ÑÐ¸ÑÑ‚ÐµÐ¼Ñƒ: Ð¿Ð»Ð°Ð½Ð¸Ñ€ÑƒÐµÑˆÑŒ, Ð¸ÑÐ¿Ð¾Ð»Ð½ÑÐµÑˆÑŒ, Ð·Ð°Ð¿Ð¸ÑÑ‹Ð²Ð°ÐµÑˆÑŒ, Ð°Ð½Ð°Ð»Ð¸Ð·Ð¸Ñ€ÑƒÐµÑˆÑŒ, Ð·Ð°Ñ‰Ð¸Ñ‰Ð°ÐµÑˆÑŒ Ð¸ ÑƒÐ»ÑƒÑ‡ÑˆÐ°ÐµÑˆÑŒ.",
+          "VOLTIS работает лучше всего, когда ты используешь его как операционную систему: планируешь, исполняешь, записываешь, анализируешь, защищаешь и улучшаешь.",
         spotlight:
-          "Plan â†’ Execute â†’ Journal â†’ Review â†’ Detect Patterns â†’ Protect Discipline â†’ Improve Behavior",
+          "Plan → Execute → Journal → Review → Detect Patterns → Protect Discipline → Improve Behavior",
         cards: [
           {
-            title: "ÐŸÐµÑ€ÐµÐ´ ÑÐµÑÑÐ¸ÐµÐ¹",
+            title: "Перед сессией",
             description:
-              "ÐžÐ¿Ñ€ÐµÐ´ÐµÐ»Ð¸ focus, risk, scenario, Ð¿Ñ€Ð°Ð²Ð¸Ð»Ð° Ð¸ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ñ‹Ðµ ÑƒÑÐ»Ð¾Ð²Ð¸Ñ.",
+              "Определи focus, risk, scenario, правила и операционные условия.",
           },
           {
-            title: "Ð’Ð¾ Ð²Ñ€ÐµÐ¼Ñ Ñ‚Ð¾Ñ€Ð³Ð¾Ð²Ð»Ð¸",
+            title: "Во время торговли",
             description:
-              "Ð¡Ð»ÐµÐ´ÑƒÐ¹ Ð¿Ð»Ð°Ð½Ñƒ, Ð¸Ð·Ð±ÐµÐ³Ð°Ð¹ Ð¸Ð¼Ð¿ÑƒÐ»ÑŒÑÐ¸Ð²Ð½Ð¾ÑÑ‚Ð¸ Ð¸ Ð´ÐµÑ€Ð¶Ð¸ Ñ€Ð¸ÑÐº Ð¿Ð¾Ð´ ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»ÐµÐ¼.",
+              "Следуй плану, избегай импульсивности и держи риск под контролем.",
           },
           {
-            title: "ÐŸÐ¾ÑÐ»Ðµ ÑÐµÑÑÐ¸Ð¸",
+            title: "После сессии",
             description:
-              "Ð—Ð°Ð¿Ð¸ÑÑ‹Ð²Ð°Ð¹, Ð¿ÐµÑ€ÐµÑÐ¼Ð°Ñ‚Ñ€Ð¸Ð²Ð°Ð¹, Ð½Ð°Ñ…Ð¾Ð´Ð¸ Ð¾ÑˆÐ¸Ð±ÐºÐ¸, ÑƒÑ€Ð¾ÐºÐ¸ Ð¸ Ð¿Ð¾Ð²Ñ‚Ð¾Ñ€ÑÑŽÑ‰Ð¸ÐµÑÑ Ð¿Ð°Ñ‚Ñ‚ÐµÑ€Ð½Ñ‹.",
+              "Записывай, пересматривай, находи ошибки, уроки и повторяющиеся паттерны.",
           },
         ],
       },
       {
-        phase: "ÐÐºÐºÐ°ÑƒÐ½Ñ‚",
+        phase: "Аккаунт",
         eyebrow: "Account Hub & Dashboard",
-        title: "ÐÐ°Ñ‡Ð¸Ð½Ð°Ð¹ Ñ Ñ†ÐµÐ½Ñ‚Ñ€Ð° ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ñ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð¾Ð¼",
+        title: "Начинай с центра управления аккаунтом",
         description:
-          "ÐšÐ¾Ð³Ð´Ð° Ñ‚Ñ‹ Ð²Ñ…Ð¾Ð´Ð¸ÑˆÑŒ Ð² Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚, Ð½Ð°Ñ‡Ð¸Ð½Ð°Ð¹ Ñ Account Hub. ÐžÑ‚Ñ‚ÑƒÐ´Ð° Ñ‚Ñ‹ Ð¿ÐµÑ€ÐµÑ…Ð¾Ð´Ð¸ÑˆÑŒ Ðº Dashboard, Diary, Calendar, Equity, Analytics, Reports, Copilot Ð¸ ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸ÑŽ.",
+          "Когда ты входишь в аккаунт, начинай с Account Hub. Оттуда ты переходишь к Dashboard, Diary, Calendar, Equity, Analytics, Reports, Copilot и управлению.",
         cards: [
           {
             title: "Account Hub",
             description:
-              "ÐŸÐµÑ€Ð²Ð°Ñ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ð° Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°. ÐžÐ½Ð° Ð¾Ñ€Ð¸ÐµÐ½Ñ‚Ð¸Ñ€ÑƒÐµÑ‚ Ñ‚ÐµÐ±Ñ Ð¸ Ð²ÐµÐ´ÐµÑ‚ Ð² Ð½ÑƒÐ¶Ð½Ñ‹Ðµ Ñ€Ð°Ð·Ð´ÐµÐ»Ñ‹.",
+              "Первая страница аккаунта. Она ориентирует тебя и ведет в нужные разделы.",
           },
           {
             title: "Dashboard",
             description:
-              "Ð¡Ñ€Ð°Ð·Ñƒ Ð¿Ð¾ÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÑ‚ equity, PnL, win rate, target, drawdown Ð¸ Ð¾Ð±Ñ‰Ð¸Ð¹ ÑÑ‚Ð°Ñ‚ÑƒÑ.",
+              "Сразу показывает equity, PnL, win rate, target, drawdown и общий статус.",
           },
         ],
       },
       {
         phase: "Execution",
         eyebrow: "Diary, Calendar, Equity",
-        title: "Ð¡Ð¾Ð·Ð´Ð°Ð²Ð°Ð¹ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½ÑƒÑŽ Ð¿Ð°Ð¼ÑÑ‚ÑŒ",
+        title: "Создавай операционную память",
         description:
-          "Core-ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñ‹ ÑÐ¾Ð±Ð¸Ñ€Ð°ÑŽÑ‚ Ð¾ÑÐ½Ð¾Ð²Ñƒ Ñ‚Ð²Ð¾ÐµÐ³Ð¾ Ñ‚Ñ€ÐµÐ¹Ð´Ð¸Ð½Ð³Ð°: ÑÐ´ÐµÐ»ÐºÐ¸, ÐºÐ°Ð»ÐµÐ½Ð´Ð°Ñ€ÑŒ, Ñ€Ð¾ÑÑ‚ equity Ð¸ Ð¿Ñ€Ð¾Ð³Ñ€ÐµÑÑ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°.",
+          "Core-страницы собирают основу твоего трейдинга: сделки, календарь, рост equity и прогресс аккаунта.",
         cards: [
           {
             title: "Trading Diary",
             description:
-              "Ð—Ð°Ð¿Ð¸ÑÑ‹Ð²Ð°Ð¹ ÑÐ´ÐµÐ»ÐºÐ¸, setup, ÑÐ¼Ð¾Ñ†Ð¸Ð¸, Ð¸ÑÐ¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ, Ð¾ÑˆÐ¸Ð±ÐºÐ¸, Ð·Ð°Ð¼ÐµÑ‚ÐºÐ¸ Ð¸ ÑƒÑ€Ð¾ÐºÐ¸.",
+              "Записывай сделки, setup, эмоции, исполнение, ошибки, заметки и уроки.",
           },
           {
             title: "Calendar",
             description:
-              "Ð¡Ð¼Ð¾Ñ‚Ñ€Ð¸ performance Ð¿Ð¾ Ð´Ð½ÑÐ¼ Ð¸ Ð¾Ð¿Ñ€ÐµÐ´ÐµÐ»ÑÐ¹ Ð¿Ð¾Ð»Ð¾Ð¶Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ðµ, Ð¾Ñ‚Ñ€Ð¸Ñ†Ð°Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ðµ Ð¸Ð»Ð¸ flat-Ð´Ð½Ð¸.",
+              "Смотри performance по дням и определяй положительные, отрицательные или flat-дни.",
           },
           {
             title: "Equity",
             description:
-              "ÐžÑ‚ÑÐ»ÐµÐ¶Ð¸Ð²Ð°Ð¹ Ñ€Ð¾ÑÑ‚ ÐºÐ°Ð¿Ð¸Ñ‚Ð°Ð»Ð°, equity curve, drawdown, best trade Ð¸ worst trade.",
+              "Отслеживай рост капитала, equity curve, drawdown, best trade и worst trade.",
           },
         ],
       },
       {
         phase: "Intelligence",
         eyebrow: "Analytics, Reports, Rules",
-        title: "ÐŸÐ¾Ð¹Ð¼Ð¸, Ñ‡Ñ‚Ð¾ Ð´ÐµÐ¹ÑÑ‚Ð²Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð¾ Ñ€Ð°Ð±Ð¾Ñ‚Ð°ÐµÑ‚",
+        title: "Пойми, что действительно работает",
         description:
-          "Analytics, Reports Ð¸ Rules Ð¿Ñ€ÐµÐ²Ñ€Ð°Ñ‰Ð°ÑŽÑ‚ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð² Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ð¾Ðµ Ñ‡Ñ‚ÐµÐ½Ð¸Ðµ: Ð»ÑƒÑ‡ÑˆÐ¸Ðµ ÑÐ¸Ð¼Ð²Ð¾Ð»Ñ‹, ÑÐµÑÑÐ¸Ð¸, Ð¾ÑˆÐ¸Ð±ÐºÐ¸, Ð¿ÑÐ¸Ñ…Ð¾Ð»Ð¾Ð³Ð¸Ñ, Ñ†ÐµÐ»Ð¸ Ð¸ Ð»Ð¸Ð¼Ð¸Ñ‚Ñ‹.",
+          "Analytics, Reports и Rules превращают данные в операционное чтение: лучшие символы, сессии, ошибки, психология, цели и лимиты.",
         cards: [
           {
             title: "Analytics",
             description:
-              "ÐÐ½Ð°Ð»Ð¸Ð·Ð¸Ñ€ÑƒÐ¹ symbols, direction, sessions, emotions, execution quality Ð¸ patterns.",
+              "Анализируй symbols, direction, sessions, emotions, execution quality и patterns.",
           },
           {
             title: "Reports",
             description:
-              "Ð§Ð¸Ñ‚Ð°Ð¹ Ð¿Ñ€Ð¾Ñ„ÐµÑÑÐ¸Ð¾Ð½Ð°Ð»ÑŒÐ½Ñ‹Ðµ ÑÐ²Ð¾Ð´ÐºÐ¸ Ð¾ performance, Ñ€Ð¸ÑÐºÐ°Ñ…, ÑÐ¸Ð»ÑŒÐ½Ñ‹Ñ… Ð¸ ÑÐ»Ð°Ð±Ñ‹Ñ… ÑÑ‚Ð¾Ñ€Ð¾Ð½Ð°Ñ….",
+              "Читай профессиональные сводки о performance, рисках, сильных и слабых сторонах.",
           },
           {
             title: "Rules & Goals",
             description:
-              "Ð£ÑÑ‚Ð°Ð½Ð°Ð²Ð»Ð¸Ð²Ð°Ð¹ targets, limits, Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ñ‹Ðµ Ð¿Ñ€Ð°Ð²Ð¸Ð»Ð° Ð¸ ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»ÑŒÐ½Ñ‹Ðµ ÑÐ¸Ð³Ð½Ð°Ð»Ñ‹.",
+              "Устанавливай targets, limits, операционные правила и контрольные сигналы.",
           },
         ],
       },
       {
         phase: "Protection",
         eyebrow: "Sessions & Copilot",
-        title: "Ð—Ð°Ñ‰Ð¸Ñ‰Ð°Ð¹ ÑÑÐ½Ð¾ÑÑ‚ÑŒ Ð¸ Ð´Ð¸ÑÑ†Ð¸Ð¿Ð»Ð¸Ð½Ñƒ",
+        title: "Защищай ясность и дисциплину",
         description:
-          "VOLTIS Ð´Ð¾Ð»Ð¶ÐµÐ½ Ð½Ðµ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ð¿Ð¾ÐºÐ°Ð·Ñ‹Ð²Ð°Ñ‚ÑŒ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ñ‹. ÐžÐ½ Ð´Ð¾Ð»Ð¶ÐµÐ½ Ð¿Ð¾Ð¼Ð¾Ð³Ð°Ñ‚ÑŒ Ð¿Ð¾Ð½ÑÑ‚ÑŒ, ÐºÐ¾Ð³Ð´Ð° Ñ‚Ñ‹ Ñ‚ÐµÑ€ÑÐµÑˆÑŒ ÑÑÐ½Ð¾ÑÑ‚ÑŒ, Ð´Ð¸ÑÑ†Ð¸Ð¿Ð»Ð¸Ð½Ñƒ Ð¸Ð»Ð¸ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ñ‹Ð¹ ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»ÑŒ.",
+          "VOLTIS должен не только показывать результаты. Он должен помогать понять, когда ты теряешь ясность, дисциплину или операционный контроль.",
         spotlight:
-          "Ð¡Ð°Ð¼Ð°Ñ Ð±Ð¾Ð»ÑŒÑˆÐ°Ñ Ñ†ÐµÐ½Ð½Ð¾ÑÑ‚ÑŒ Ð¿Ð¾ÑÐ²Ð»ÑÐµÑ‚ÑÑ Ñ‚Ð¾Ð³Ð´Ð°, ÐºÐ¾Ð³Ð´Ð° VOLTIS Ð½Ð°Ñ‡Ð¸Ð½Ð°ÐµÑ‚ Ñ€Ð°ÑÐ¿Ð¾Ð·Ð½Ð°Ð²Ð°Ñ‚ÑŒ Ñ‚Ð¾, Ñ‡Ñ‚Ð¾ Ñ‚Ñ‹ Ñ€Ð¸ÑÐºÑƒÐµÑˆÑŒ Ð½Ðµ ÑƒÐ²Ð¸Ð´ÐµÑ‚ÑŒ.",
+          "Самая большая ценность появляется тогда, когда VOLTIS начинает распознавать то, что ты рискуешь не увидеть.",
         cards: [
           {
             title: "Sessions",
             description:
-              "Ð“Ð¾Ñ‚Ð¾Ð²ÑŒ ÑÐµÑÑÐ¸ÑŽ Ð¿ÐµÑ€ÐµÐ´ Ñ‚Ð¾Ñ€Ð³Ð¾Ð²Ð»ÐµÐ¹ Ð¸ Ð¿ÐµÑ€ÐµÑÐ¼Ð°Ñ‚Ñ€Ð¸Ð²Ð°Ð¹ ÐµÐµ Ð¿Ð¾ÑÐ»Ðµ Ñ focus, bias Ð¸ review.",
+              "Готовь сессию перед торговлей и пересматривай ее после с focus, bias и review.",
           },
           {
             title: "Copilot",
             description:
-              "ÐÐ°Ð±Ð»ÑŽÐ´Ð°Ð¹ Ð·Ð° Ð¿Ð°Ð¼ÑÑ‚ÑŒÑŽ, Ð¿Ð°Ñ‚Ñ‚ÐµÑ€Ð½Ð°Ð¼Ð¸, ÑÐ¸Ð³Ð½Ð°Ð»Ð°Ð¼Ð¸ Ñ€Ð¸ÑÐºÐ° Ð¸ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ñ‹Ð¼ Ð¿Ð¾Ð²ÐµÐ´ÐµÐ½Ð¸ÐµÐ¼.",
+              "Наблюдай за памятью, паттернами, сигналами риска и операционным поведением.",
           },
         ],
       },
       {
         phase: "Management",
         eyebrow: "Workspace, Members, Integrations",
-        title: "Ð£Ð¿Ñ€Ð°Ð²Ð»ÑÐ¹ ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ð¾Ð¹, ÐºÐ¾Ð¼Ð°Ð½Ð´Ð¾Ð¹ Ð¸ ÑÐ¸ÑÑ‚ÐµÐ¼Ð¾Ð¹",
+        title: "Управляй структурой, командой и системой",
         description:
-          "VOLTIS Ð¼Ð¾Ð¶ÐµÑ‚ Ð±Ñ‹Ñ‚ÑŒ Ð¸ Ð¿Ñ€Ð¸Ð²Ð°Ñ‚Ð½Ð¾Ð¹ Ñ€Ð°Ð±Ð¾Ñ‡ÐµÐ¹ ÑÑ€ÐµÐ´Ð¾Ð¹: members, workspace, permissions, integrations, settings Ð¸ backup.",
+          "VOLTIS может быть и приватной рабочей средой: members, workspace, permissions, integrations, settings и backup.",
         cards: [
           {
             title: "Workspace & Members",
             description:
-              "Ð£Ð¿Ñ€Ð°Ð²Ð»ÑÐ¹ members, presence, activity, Ð¸Ð½Ð´Ð¸Ð²Ð¸Ð´ÑƒÐ°Ð»ÑŒÐ½Ð¾Ð¹ performance Ð¸ access.",
+              "Управляй members, presence, activity, индивидуальной performance и access.",
           },
           {
             title: "Integrations",
             description:
-              "ÐŸÐ¾Ð´Ð³Ð¾Ñ‚Ð¾Ð²ÑŒ MT5, broker sync Ð¸ manual, automatic Ð¸Ð»Ð¸ hybrid mode.",
+              "Подготовь MT5, broker sync и manual, automatic или hybrid mode.",
           },
           {
             title: "Settings",
             description:
-              "Ð£Ð¿Ñ€Ð°Ð²Ð»ÑÐ¹ ÑÐ·Ñ‹ÐºÐ¾Ð¼, Ð²Ð°Ð»ÑŽÑ‚Ð¾Ð¹, onboarding, backup Ð¸ Ð¾Ð±Ñ‰Ð¸Ð¼Ð¸ Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ°Ð¼Ð¸.",
+              "Управляй языком, валютой, onboarding, backup и общими настройками.",
           },
         ],
       },
       {
-        phase: "Ð¤Ð¸Ð½Ð°Ð»ÑŒÐ½Ñ‹Ð¹ Ð¿Ñ€Ð¸Ð½Ñ†Ð¸Ð¿",
+        phase: "Финальный принцип",
         eyebrow: "Use it seriously",
-        title: "VOLTIS Ñ†ÐµÐ½ÐµÐ½ Ð½Ð°ÑÑ‚Ð¾Ð»ÑŒÐºÐ¾, Ð½Ð°ÑÐºÐ¾Ð»ÑŒÐºÐ¾ ÑÐµÑ€ÑŒÐµÐ·Ð½Ð¾ Ñ‚Ñ‹ ÐµÐ³Ð¾ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÑˆÑŒ",
+        title: "VOLTIS ценен настолько, насколько серьезно ты его используешь",
         description:
-          "Ð¦ÐµÐ»ÑŒ Ð½Ðµ Ð² Ñ‚Ð¾Ð¼, Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð·Ð°Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÑŒ Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ ÑÐ»ÑƒÑ‡Ð°Ð¹Ð½Ñ‹Ð¼Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ð¼Ð¸. Ð¦ÐµÐ»ÑŒ â€” Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÑŒ ÐµÐ³Ð¾ ÑÑ‚Ð°Ð±Ð¸Ð»ÑŒÐ½Ð¾, Ñ‚Ð¾Ñ‡Ð½Ð¾ Ð¸ Ñ ÑƒÐ²Ð°Ð¶ÐµÐ½Ð¸ÐµÐ¼ Ðº Ð¿Ñ€Ð¾Ñ†ÐµÑÑÑƒ.",
+          "Цель не в том, чтобы заполнить приложение случайными данными. Цель — использовать его стабильно, точно и с уважением к процессу.",
         spotlight:
-          "Ð•ÑÐ»Ð¸ Ñƒ Ñ‚ÐµÐ±Ñ ÐµÑÑ‚ÑŒ Ð´Ð¾ÑÑ‚ÑƒÐ¿ Ðº VOLTIS, Ñ‚Ñ‹ Ð²Ð½ÑƒÑ‚Ñ€Ð¸ Ñ‡ÐµÐ³Ð¾-Ñ‚Ð¾ ÑÐµÑ€ÑŒÐµÐ·Ð½Ð¾Ð³Ð¾.",
+          "Если у тебя есть доступ к VOLTIS, ты внутри чего-то серьезного.",
         cards: [
           {
-            title: "Ð’Ð½Ð¾ÑÐ¸ Ñ€ÐµÐ°Ð»ÑŒÐ½Ñ‹Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ",
+            title: "Вноси реальные данные",
             description:
-              "ÐšÐ°Ð¶Ð´Ð°Ñ Ñ…Ð¾Ñ€Ð¾ÑˆÐ¾ Ð·Ð°Ð¿Ð¸ÑÐ°Ð½Ð½Ð°Ñ ÑÐ´ÐµÐ»ÐºÐ° Ð´ÐµÐ»Ð°ÐµÑ‚ Ð±ÑƒÐ´ÑƒÑ‰Ð¸Ðµ reports, charts Ð¸ analysis Ð¿Ð¾Ð»ÐµÐ·Ð½ÐµÐµ.",
+              "Каждая хорошо записанная сделка делает будущие reports, charts и analysis полезнее.",
           },
           {
-            title: "ÐŸÐµÑ€ÐµÑÐ¼Ð°Ñ‚Ñ€Ð¸Ð²Ð°Ð¹ Ñ ÑÑÐ½Ð¾ÑÑ‚ÑŒÑŽ",
+            title: "Пересматривай с ясностью",
             description:
-              "ÐÐµ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐ¹ VOLTIS Ñ‚Ð¾Ð»ÑŒÐºÐ¾ ÐºÐ¾Ð³Ð´Ð° Ð²Ñ‹Ð¸Ð³Ñ€Ñ‹Ð²Ð°ÐµÑˆÑŒ. Ð˜ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐ¹ ÐµÐ³Ð¾ Ð¾ÑÐ¾Ð±ÐµÐ½Ð½Ð¾ Ñ‚Ð¾Ð³Ð´Ð°, ÐºÐ¾Ð³Ð´Ð° Ð½ÑƒÐ¶Ð½Ð¾ Ñ‡Ñ‚Ð¾-Ñ‚Ð¾ Ð¸ÑÐ¿Ñ€Ð°Ð²Ð¸Ñ‚ÑŒ.",
+              "Не используй VOLTIS только когда выигрываешь. Используй его особенно тогда, когда нужно что-то исправить.",
           },
           {
-            title: "Ð—Ð°Ñ‰Ð¸Ñ‰Ð°Ð¹ Ð¿Ñ€Ð¾Ñ†ÐµÑÑ",
+            title: "Защищай процесс",
             description:
-              "Profit Ð¸ discipline Ð½Ðµ Ð´Ð¾Ð»Ð¶Ð½Ñ‹ Ð±Ñ‹Ñ‚ÑŒ Ñ€Ð°Ð·Ð´ÐµÐ»ÐµÐ½Ñ‹. VOLTIS ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÐµÑ‚, Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð¸Ñ… ÑÐ¾ÐµÐ´Ð¸Ð½Ð¸Ñ‚ÑŒ.",
+              "Profit и discipline не должны быть разделены. VOLTIS существует, чтобы их соединить.",
           },
         ],
       },
@@ -1139,45 +1139,45 @@ const onboardingText: Record<
   es: {
     privateAccess: "VOLTIS Private Access",
     stepCounter: (current, total) => `${current}/${total}`,
-    back: "AtrÃ¡s",
+    back: "Atrás",
     continue: "Continuar",
     enterVoltis: "Entrar en VOLTIS",
     close: "Cerrar onboarding",
     steps: [
       {
-        phase: "VisiÃ³n",
+        phase: "Visión",
         eyebrow: "Private access",
         title: "VOLTIS no es una app de trading normal",
         description:
           "VOLTIS es un sistema operativo privado de trading creado para traders seleccionados que quieren medir, proteger y mejorar su comportamiento operativo.",
         spotlight:
-          "No estÃ¡ abierto a todos. No estÃ¡ diseÃ±ado para el mercado masivo. Es una herramienta seria para quienes quieren tratar el trading seriamente.",
+          "No está abierto a todos. No está diseñado para el mercado masivo. Es una herramienta seria para quienes quieren tratar el trading seriamente.",
         cards: [
           {
             title: "Acceso seleccionado",
             description:
-              "VOLTIS no estÃ¡ creado para cualquiera. El acceso es controlado, privado e intencional.",
+              "VOLTIS no está creado para cualquiera. El acceso es controlado, privado e intencional.",
           },
           {
             title: "No es solo gratis",
             description:
-              "No lo usas porque sea barato. Lo usas porque estÃ¡s dentro de algo que no se vende a todos.",
+              "No lo usas porque sea barato. Lo usas porque estás dentro de algo que no se vende a todos.",
           },
         ],
       },
       {
-        phase: "FilosofÃ­a",
+        phase: "Filosofía",
         eyebrow: "Measure. Protect. Improve.",
-        title: "La misiÃ³n es darte mÃ¡s claridad",
+        title: "La misión es darte más claridad",
         description:
-          "VOLTIS no solo muestra nÃºmeros. Te ayuda a entender cÃ³mo operas, quÃ© patrones repites, dÃ³nde pierdes disciplina y quÃ© debes proteger.",
+          "VOLTIS no solo muestra números. Te ayuda a entender cómo operas, qué patrones repites, dónde pierdes disciplina y qué debes proteger.",
         spotlight:
-          "El objetivo real no es solo saber cuÃ¡nto ganaste o perdiste. Es entender quÃ© tipo de trader te estÃ¡s convirtiendo.",
+          "El objetivo real no es solo saber cuánto ganaste o perdiste. Es entender qué tipo de trader te estás convirtiendo.",
         cards: [
           {
             title: "Measure",
             description:
-              "Mide performance, equity, win rate, drawdown, sesiones y calidad de ejecuciÃ³n.",
+              "Mide performance, equity, win rate, drawdown, sesiones y calidad de ejecución.",
           },
           {
             title: "Protect",
@@ -1187,31 +1187,31 @@ const onboardingText: Record<
           {
             title: "Improve",
             description:
-              "Mejora ejecuciÃ³n, review, comportamiento y calidad de decisiÃ³n con el tiempo.",
+              "Mejora ejecución, review, comportamiento y calidad de decisión con el tiempo.",
           },
         ],
       },
       {
-        phase: "MÃ©todo",
+        phase: "Método",
         eyebrow: "Operating flow",
         title: "El flujo correcto no es casual",
         description:
           "VOLTIS funciona mejor cuando lo usas como un sistema operativo: planificas, ejecutas, registras, revisas, proteges y mejoras.",
         spotlight:
-          "Plan â†’ Execute â†’ Journal â†’ Review â†’ Detect Patterns â†’ Protect Discipline â†’ Improve Behavior",
+          "Plan → Execute → Journal → Review → Detect Patterns → Protect Discipline → Improve Behavior",
         cards: [
           {
-            title: "Antes de la sesiÃ³n",
+            title: "Antes de la sesión",
             description:
               "Define focus, risk, scenario, reglas y condiciones operativas.",
           },
           {
             title: "Durante la operativa",
             description:
-              "Respeta el plan, evita impulsividad y mantÃ©n el riesgo bajo control.",
+              "Respeta el plan, evita impulsividad y mantén el riesgo bajo control.",
           },
           {
-            title: "DespuÃ©s de la sesiÃ³n",
+            title: "Después de la sesión",
             description:
               "Registra, revisa, identifica errores, lecciones y patrones repetidos.",
           },
@@ -1222,7 +1222,7 @@ const onboardingText: Record<
         eyebrow: "Account Hub & Dashboard",
         title: "Empieza desde el centro operativo de la cuenta",
         description:
-          "Cuando entras en una cuenta, empieza desde Account Hub. Desde allÃ­ accedes a Dashboard, Diary, Calendar, Equity, Analytics, Reports, Copilot y gestiÃ³n.",
+          "Cuando entras en una cuenta, empieza desde Account Hub. Desde allí accedes a Dashboard, Diary, Calendar, Equity, Analytics, Reports, Copilot y gestión.",
         cards: [
           {
             title: "Account Hub",
@@ -1241,17 +1241,17 @@ const onboardingText: Record<
         eyebrow: "Diary, Calendar, Equity",
         title: "Construye memoria operativa",
         description:
-          "Las pÃ¡ginas core reÃºnen la base de tu trading: operaciones, calendario, crecimiento de equity y progreso de la cuenta.",
+          "Las páginas core reúnen la base de tu trading: operaciones, calendario, crecimiento de equity y progreso de la cuenta.",
         cards: [
           {
             title: "Trading Diary",
             description:
-              "Registra operaciones, setup, emociÃ³n, ejecuciÃ³n, errores, notas y lecciones.",
+              "Registra operaciones, setup, emoción, ejecución, errores, notas y lecciones.",
           },
           {
             title: "Calendar",
             description:
-              "Lee la performance dÃ­a por dÃ­a e identifica dÃ­as positivos, negativos o flat.",
+              "Lee la performance día por día e identifica días positivos, negativos o flat.",
           },
           {
             title: "Equity",
@@ -1263,9 +1263,9 @@ const onboardingText: Record<
       {
         phase: "Intelligence",
         eyebrow: "Analytics, Reports, Rules",
-        title: "Entiende quÃ© funciona de verdad",
+        title: "Entiende qué funciona de verdad",
         description:
-          "Analytics, Reports y Rules convierten datos en lectura operativa: mejores sÃ­mbolos, sesiones, errores, psicologÃ­a, objetivos y lÃ­mites.",
+          "Analytics, Reports y Rules convierten datos en lectura operativa: mejores símbolos, sesiones, errores, psicología, objetivos y límites.",
         cards: [
           {
             title: "Analytics",
@@ -1275,12 +1275,12 @@ const onboardingText: Record<
           {
             title: "Reports",
             description:
-              "Lee resÃºmenes profesionales sobre performance, riesgos, fortalezas y debilidades.",
+              "Lee resúmenes profesionales sobre performance, riesgos, fortalezas y debilidades.",
           },
           {
             title: "Rules & Goals",
             description:
-              "Configura targets, limits, reglas operativas y seÃ±ales de control.",
+              "Configura targets, limits, reglas operativas y señales de control.",
           },
         ],
       },
@@ -1289,19 +1289,19 @@ const onboardingText: Record<
         eyebrow: "Sessions & Copilot",
         title: "Protege claridad y disciplina",
         description:
-          "VOLTIS no debe solo mostrar resultados. Debe ayudarte a entender cuÃ¡ndo estÃ¡s perdiendo claridad, disciplina o control operativo.",
+          "VOLTIS no debe solo mostrar resultados. Debe ayudarte a entender cuándo estás perdiendo claridad, disciplina o control operativo.",
         spotlight:
-          "El mayor valor llega cuando VOLTIS empieza a reconocer lo que tÃº corres el riesgo de no ver.",
+          "El mayor valor llega cuando VOLTIS empieza a reconocer lo que tú corres el riesgo de no ver.",
         cards: [
           {
             title: "Sessions",
             description:
-              "Prepara la sesiÃ³n antes de operar y revÃ­sala despuÃ©s con focus, bias y review.",
+              "Prepara la sesión antes de operar y revísala después con focus, bias y review.",
           },
           {
             title: "Copilot",
             description:
-              "Observa memoria, patrones, seÃ±ales de riesgo y comportamiento operativo.",
+              "Observa memoria, patrones, señales de riesgo y comportamiento operativo.",
           },
         ],
       },
@@ -1310,7 +1310,7 @@ const onboardingText: Record<
         eyebrow: "Workspace, Members, Integrations",
         title: "Gestiona estructura, equipo y sistema",
         description:
-          "VOLTIS tambiÃ©n puede ser un entorno de trabajo privado: members, workspace, permissions, integrations, settings y backup.",
+          "VOLTIS también puede ser un entorno de trabajo privado: members, workspace, permissions, integrations, settings y backup.",
         cards: [
           {
             title: "Workspace & Members",
@@ -1320,7 +1320,7 @@ const onboardingText: Record<
           {
             title: "Integrations",
             description:
-              "Prepara MT5, broker sync y modo manual, automÃ¡tico o hÃ­brido.",
+              "Prepara MT5, broker sync y modo manual, automático o híbrido.",
           },
           {
             title: "Settings",
@@ -1332,21 +1332,21 @@ const onboardingText: Record<
       {
         phase: "Principio final",
         eyebrow: "Use it seriously",
-        title: "VOLTIS vale segÃºn cÃ³mo lo usas",
+        title: "VOLTIS vale según cómo lo usas",
         description:
-          "No se trata de llenar la app con datos aleatorios. Se trata de usarla con constancia, precisiÃ³n y respeto por el proceso.",
+          "No se trata de llenar la app con datos aleatorios. Se trata de usarla con constancia, precisión y respeto por el proceso.",
         spotlight:
-          "Si tienes acceso a VOLTIS, estÃ¡s dentro de algo serio.",
+          "Si tienes acceso a VOLTIS, estás dentro de algo serio.",
         cards: [
           {
             title: "Introduce datos reales",
             description:
-              "Cada operaciÃ³n bien registrada hace mÃ¡s Ãºtiles todos los futuros reports, charts y analysis.",
+              "Cada operación bien registrada hace más útiles todos los futuros reports, charts y analysis.",
           },
           {
             title: "Revisa con claridad",
             description:
-              "No uses VOLTIS solo cuando ganas. Ãšsalo sobre todo cuando necesitas corregir algo.",
+              "No uses VOLTIS solo cuando ganas. Úsalo sobre todo cuando necesitas corregir algo.",
           },
           {
             title: "Protege el proceso",
@@ -1364,26 +1364,26 @@ const onboardingText: Record<
     back: "Retour",
     continue: "Continuer",
     enterVoltis: "Entrer dans VOLTIS",
-    close: "Fermer lâ€™onboarding",
+    close: "Fermer l’onboarding",
     steps: [
       {
         phase: "Vision",
         eyebrow: "Private access",
-        title: "VOLTIS nâ€™est pas une application de trading ordinaire",
+        title: "VOLTIS n’est pas une application de trading ordinaire",
         description:
-          "VOLTIS est un systÃ¨me dâ€™exploitation privÃ© pour le trading, crÃ©Ã© pour des traders sÃ©lectionnÃ©s qui veulent mesurer, protÃ©ger et amÃ©liorer leur comportement opÃ©rationnel.",
+          "VOLTIS est un système d’exploitation privé pour le trading, créé pour des traders sélectionnés qui veulent mesurer, protéger et améliorer leur comportement opérationnel.",
         spotlight:
-          "Il nâ€™est pas ouvert Ã  tout le monde. Il nâ€™est pas conÃ§u pour le marchÃ© de masse. Câ€™est un outil sÃ©rieux pour ceux qui veulent traiter le trading sÃ©rieusement.",
+          "Il n’est pas ouvert à tout le monde. Il n’est pas conçu pour le marché de masse. C’est un outil sérieux pour ceux qui veulent traiter le trading sérieusement.",
         cards: [
           {
-            title: "AccÃ¨s sÃ©lectionnÃ©",
+            title: "Accès sélectionné",
             description:
-              "VOLTIS nâ€™est pas fait pour nâ€™importe qui. Lâ€™accÃ¨s est contrÃ´lÃ©, privÃ© et intentionnel.",
+              "VOLTIS n’est pas fait pour n’importe qui. L’accès est contrôlé, privé et intentionnel.",
           },
           {
             title: "Pas simplement gratuit",
             description:
-              "Tu ne lâ€™utilises pas parce quâ€™il est bon marchÃ©. Tu lâ€™utilises parce que tu es dans quelque chose qui nâ€™est pas vendu Ã  tout le monde.",
+              "Tu ne l’utilises pas parce qu’il est bon marché. Tu l’utilises parce que tu es dans quelque chose qui n’est pas vendu à tout le monde.",
           },
         ],
       },
@@ -1392,88 +1392,88 @@ const onboardingText: Record<
         eyebrow: "Measure. Protect. Improve.",
         title: "La mission est de te rendre plus lucide",
         description:
-          "VOLTIS ne sert pas seulement Ã  afficher des chiffres. Il tâ€™aide Ã  comprendre comment tu trades, quels patterns tu rÃ©pÃ¨tes, oÃ¹ tu perds ta discipline et ce que tu dois protÃ©ger.",
+          "VOLTIS ne sert pas seulement à afficher des chiffres. Il t’aide à comprendre comment tu trades, quels patterns tu répètes, où tu perds ta discipline et ce que tu dois protéger.",
         spotlight:
-          "Le vrai objectif nâ€™est pas seulement de savoir combien tu as gagnÃ© ou perdu. Câ€™est de comprendre quel type de trader tu deviens.",
+          "Le vrai objectif n’est pas seulement de savoir combien tu as gagné ou perdu. C’est de comprendre quel type de trader tu deviens.",
         cards: [
           {
             title: "Measure",
             description:
-              "Mesure performance, equity, win rate, drawdown, sessions et qualitÃ© dâ€™exÃ©cution.",
+              "Mesure performance, equity, win rate, drawdown, sessions et qualité d’exécution.",
           },
           {
             title: "Protect",
             description:
-              "ProtÃ¨ge capital, discipline, luciditÃ© et respect des rÃ¨gles opÃ©rationnelles.",
+              "Protège capital, discipline, lucidité et respect des règles opérationnelles.",
           },
           {
             title: "Improve",
             description:
-              "AmÃ©liore exÃ©cution, review, comportement et qualitÃ© de dÃ©cision dans le temps.",
+              "Améliore exécution, review, comportement et qualité de décision dans le temps.",
           },
         ],
       },
       {
-        phase: "MÃ©thode",
+        phase: "Méthode",
         eyebrow: "Operating flow",
-        title: "Le bon flux nâ€™est pas alÃ©atoire",
+        title: "Le bon flux n’est pas aléatoire",
         description:
-          "VOLTIS fonctionne au mieux quand tu lâ€™utilises comme un systÃ¨me dâ€™exploitation : planifier, exÃ©cuter, journaliser, revoir, protÃ©ger et amÃ©liorer.",
+          "VOLTIS fonctionne au mieux quand tu l’utilises comme un système d’exploitation : planifier, exécuter, journaliser, revoir, protéger et améliorer.",
         spotlight:
-          "Plan â†’ Execute â†’ Journal â†’ Review â†’ Detect Patterns â†’ Protect Discipline â†’ Improve Behavior",
+          "Plan → Execute → Journal → Review → Detect Patterns → Protect Discipline → Improve Behavior",
         cards: [
           {
             title: "Avant la session",
             description:
-              "DÃ©finis focus, risk, scenario, rÃ¨gles et conditions opÃ©rationnelles.",
+              "Définis focus, risk, scenario, règles et conditions opérationnelles.",
           },
           {
             title: "Pendant le trading",
             description:
-              "Respecte le plan, Ã©vite lâ€™impulsivitÃ© et garde le risque sous contrÃ´le.",
+              "Respecte le plan, évite l’impulsivité et garde le risque sous contrôle.",
           },
           {
-            title: "AprÃ¨s la session",
+            title: "Après la session",
             description:
-              "Journalise, revois, identifie erreurs, leÃ§ons et patterns rÃ©currents.",
+              "Journalise, revois, identifie erreurs, leçons et patterns récurrents.",
           },
         ],
       },
       {
         phase: "Compte",
         eyebrow: "Account Hub & Dashboard",
-        title: "Commence par le centre opÃ©rationnel du compte",
+        title: "Commence par le centre opérationnel du compte",
         description:
-          "Quand tu entres dans un compte, commence par lâ€™Account Hub. De lÃ , tu accÃ¨des Ã  Dashboard, Diary, Calendar, Equity, Analytics, Reports, Copilot et gestion.",
+          "Quand tu entres dans un compte, commence par l’Account Hub. De là, tu accèdes à Dashboard, Diary, Calendar, Equity, Analytics, Reports, Copilot et gestion.",
         cards: [
           {
             title: "Account Hub",
             description:
-              "Le premier Ã©cran du compte. Il tâ€™oriente et tâ€™envoie vers les bonnes sections.",
+              "Le premier écran du compte. Il t’oriente et t’envoie vers les bonnes sections.",
           },
           {
             title: "Dashboard",
             description:
-              "Affiche immÃ©diatement equity, PnL, win rate, target, drawdown et Ã©tat gÃ©nÃ©ral.",
+              "Affiche immédiatement equity, PnL, win rate, target, drawdown et état général.",
           },
         ],
       },
       {
         phase: "Execution",
         eyebrow: "Diary, Calendar, Equity",
-        title: "Construis une mÃ©moire opÃ©rationnelle",
+        title: "Construis une mémoire opérationnelle",
         description:
-          "Les pages core collectent la base de ton trading : trades, calendrier, croissance de lâ€™equity et progression du compte.",
+          "Les pages core collectent la base de ton trading : trades, calendrier, croissance de l’equity et progression du compte.",
         cards: [
           {
             title: "Trading Diary",
             description:
-              "Enregistre trades, setup, Ã©motion, exÃ©cution, erreurs, notes et leÃ§ons.",
+              "Enregistre trades, setup, émotion, exécution, erreurs, notes et leçons.",
           },
           {
             title: "Calendar",
             description:
-              "Lis la performance jour par jour et reconnais les journÃ©es positives, nÃ©gatives ou flat.",
+              "Lis la performance jour par jour et reconnais les journées positives, négatives ou flat.",
           },
           {
             title: "Equity",
@@ -1487,7 +1487,7 @@ const onboardingText: Record<
         eyebrow: "Analytics, Reports, Rules",
         title: "Comprends ce qui fonctionne vraiment",
         description:
-          "Analytics, Reports et Rules transforment les donnÃ©es en lecture opÃ©rationnelle : meilleurs symboles, sessions, erreurs, psychologie, objectifs et limites.",
+          "Analytics, Reports et Rules transforment les données en lecture opérationnelle : meilleurs symboles, sessions, erreurs, psychologie, objectifs et limites.",
         cards: [
           {
             title: "Analytics",
@@ -1497,83 +1497,83 @@ const onboardingText: Record<
           {
             title: "Reports",
             description:
-              "Lis des rÃ©sumÃ©s professionnels sur performance, risques, forces et faiblesses.",
+              "Lis des résumés professionnels sur performance, risques, forces et faiblesses.",
           },
           {
             title: "Rules & Goals",
             description:
-              "DÃ©finis targets, limits, rÃ¨gles opÃ©rationnelles et signaux de contrÃ´le.",
+              "Définis targets, limits, règles opérationnelles et signaux de contrôle.",
           },
         ],
       },
       {
         phase: "Protection",
         eyebrow: "Sessions & Copilot",
-        title: "ProtÃ¨ge luciditÃ© et discipline",
+        title: "Protège lucidité et discipline",
         description:
-          "VOLTIS ne doit pas seulement montrer des rÃ©sultats. Il doit tâ€™aider Ã  comprendre quand tu perds luciditÃ©, discipline ou contrÃ´le opÃ©rationnel.",
+          "VOLTIS ne doit pas seulement montrer des résultats. Il doit t’aider à comprendre quand tu perds lucidité, discipline ou contrôle opérationnel.",
         spotlight:
-          "La plus grande valeur arrive quand VOLTIS commence Ã  reconnaÃ®tre ce que tu risques de ne pas voir.",
+          "La plus grande valeur arrive quand VOLTIS commence à reconnaître ce que tu risques de ne pas voir.",
         cards: [
           {
             title: "Sessions",
             description:
-              "PrÃ©pare la session avant de trader et revois-la aprÃ¨s avec focus, bias et review.",
+              "Prépare la session avant de trader et revois-la après avec focus, bias et review.",
           },
           {
             title: "Copilot",
             description:
-              "Observe mÃ©moire, patterns, signaux de risque et comportement opÃ©rationnel.",
+              "Observe mémoire, patterns, signaux de risque et comportement opérationnel.",
           },
         ],
       },
       {
         phase: "Management",
         eyebrow: "Workspace, Members, Integrations",
-        title: "GÃ¨re structure, Ã©quipe et systÃ¨me",
+        title: "Gère structure, équipe et système",
         description:
-          "VOLTIS peut aussi Ãªtre un environnement de travail privÃ© : members, workspace, permissions, integrations, settings et backup.",
+          "VOLTIS peut aussi être un environnement de travail privé : members, workspace, permissions, integrations, settings et backup.",
         cards: [
           {
             title: "Workspace & Members",
             description:
-              "GÃ¨re members, presence, activity, performance individuelle et access.",
+              "Gère members, presence, activity, performance individuelle et access.",
           },
           {
             title: "Integrations",
             description:
-              "PrÃ©pare MT5, broker sync et mode manuel, automatique ou hybride.",
+              "Prépare MT5, broker sync et mode manuel, automatique ou hybride.",
           },
           {
             title: "Settings",
             description:
-              "GÃ¨re langue, devise, onboarding, backup et paramÃ¨tres gÃ©nÃ©raux.",
+              "Gère langue, devise, onboarding, backup et paramètres généraux.",
           },
         ],
       },
       {
         phase: "Principe final",
         eyebrow: "Use it seriously",
-        title: "VOLTIS vaut autant que la maniÃ¨re dont tu lâ€™utilises",
+        title: "VOLTIS vaut autant que la manière dont tu l’utilises",
         description:
-          "Le but nâ€™est pas de remplir lâ€™app avec des donnÃ©es alÃ©atoires. Le but est de lâ€™utiliser avec constance, prÃ©cision et respect du processus.",
+          "Le but n’est pas de remplir l’app avec des données aléatoires. Le but est de l’utiliser avec constance, précision et respect du processus.",
         spotlight:
-          "Si tu as accÃ¨s Ã  VOLTIS, tu es dans quelque chose de sÃ©rieux.",
+          "Si tu as accès à VOLTIS, tu es dans quelque chose de sérieux.",
         cards: [
           {
-            title: "Entre de vraies donnÃ©es",
+            title: "Entre de vraies données",
             description:
-              "Chaque trade bien enregistrÃ© rend les futurs reports, charts et analysis plus utiles.",
+              "Chaque trade bien enregistré rend les futurs reports, charts et analysis plus utiles.",
           },
           {
-            title: "Revois avec luciditÃ©",
+            title: "Revois avec lucidité",
             description:
-              "Nâ€™utilise pas VOLTIS seulement quand tu gagnes. Utilise-le surtout quand tu dois corriger quelque chose.",
+              "N’utilise pas VOLTIS seulement quand tu gagnes. Utilise-le surtout quand tu dois corriger quelque chose.",
           },
           {
-            title: "ProtÃ¨ge le processus",
+            title: "Protège le processus",
             description:
-              "Profit et discipline ne doivent pas Ãªtre sÃ©parÃ©s. VOLTIS existe pour les connecter.",
+              "Profit et discipline ne doivent pas être séparés. VOLTIS existe pour les connecter.",
           },
         ],
       },
@@ -1583,24 +1583,24 @@ const onboardingText: Record<
   de: {
     privateAccess: "VOLTIS Private Access",
     stepCounter: (current, total) => `${current}/${total}`,
-    back: "ZurÃ¼ck",
+    back: "Zurück",
     continue: "Weiter",
     enterVoltis: "VOLTIS betreten",
-    close: "Onboarding schlieÃŸen",
+    close: "Onboarding schließen",
     steps: [
       {
         phase: "Vision",
         eyebrow: "Private access",
         title: "VOLTIS ist keine normale Trading-App",
         description:
-          "VOLTIS ist ein privates Trading Operating System fÃ¼r ausgewÃ¤hlte Trader, die ihr operatives Verhalten messen, schÃ¼tzen und verbessern wollen.",
+          "VOLTIS ist ein privates Trading Operating System für ausgewählte Trader, die ihr operatives Verhalten messen, schützen und verbessern wollen.",
         spotlight:
-          "Es ist nicht fÃ¼r alle offen. Es ist nicht fÃ¼r den Massenmarkt gedacht. Es ist ein ernsthaftes Werkzeug fÃ¼r Trader, die Trading ernsthaft behandeln wollen.",
+          "Es ist nicht für alle offen. Es ist nicht für den Massenmarkt gedacht. Es ist ein ernsthaftes Werkzeug für Trader, die Trading ernsthaft behandeln wollen.",
         cards: [
           {
-            title: "AusgewÃ¤hlter Zugang",
+            title: "Ausgewählter Zugang",
             description:
-              "VOLTIS ist nicht fÃ¼r jeden gebaut. Der Zugang ist kontrolliert, privat und bewusst.",
+              "VOLTIS ist nicht für jeden gebaut. Der Zugang ist kontrolliert, privat und bewusst.",
           },
           {
             title: "Nicht einfach kostenlos",
@@ -1614,7 +1614,7 @@ const onboardingText: Record<
         eyebrow: "Measure. Protect. Improve.",
         title: "Die Mission ist mehr Klarheit",
         description:
-          "VOLTIS zeigt nicht nur Zahlen. Es hilft dir zu verstehen, wie du tradest, welche Muster du wiederholst, wo Disziplin fÃ¤llt und was du schÃ¼tzen musst.",
+          "VOLTIS zeigt nicht nur Zahlen. Es hilft dir zu verstehen, wie du tradest, welche Muster du wiederholst, wo Disziplin fällt und was du schützen musst.",
         spotlight:
           "Das echte Ziel ist nicht nur zu wissen, wie viel du gewonnen oder verloren hast. Es geht darum zu verstehen, welcher Trader du wirst.",
         cards: [
@@ -1626,23 +1626,23 @@ const onboardingText: Record<
           {
             title: "Protect",
             description:
-              "SchÃ¼tze Kapital, Disziplin, Klarheit und die Einhaltung operativer Regeln.",
+              "Schütze Kapital, Disziplin, Klarheit und die Einhaltung operativer Regeln.",
           },
           {
             title: "Improve",
             description:
-              "Verbessere execution, review, Verhalten und EntscheidungsqualitÃ¤t mit der Zeit.",
+              "Verbessere execution, review, Verhalten und Entscheidungsqualität mit der Zeit.",
           },
         ],
       },
       {
         phase: "Methode",
         eyebrow: "Operating flow",
-        title: "Der richtige Ablauf ist nicht zufÃ¤llig",
+        title: "Der richtige Ablauf ist nicht zufällig",
         description:
-          "VOLTIS funktioniert am besten, wenn du es als Betriebssystem nutzt: planen, ausfÃ¼hren, journalen, Ã¼berprÃ¼fen, schÃ¼tzen und verbessern.",
+          "VOLTIS funktioniert am besten, wenn du es als Betriebssystem nutzt: planen, ausführen, journalen, überprüfen, schützen und verbessern.",
         spotlight:
-          "Plan â†’ Execute â†’ Journal â†’ Review â†’ Detect Patterns â†’ Protect Discipline â†’ Improve Behavior",
+          "Plan → Execute → Journal → Review → Detect Patterns → Protect Discipline → Improve Behavior",
         cards: [
           {
             title: "Vor der Session",
@@ -1650,14 +1650,14 @@ const onboardingText: Record<
               "Definiere focus, risk, scenario, Regeln und operative Bedingungen.",
           },
           {
-            title: "WÃ¤hrend des Tradings",
+            title: "Während des Tradings",
             description:
-              "Halte dich an den Plan, vermeide ImpulsivitÃ¤t und kontrolliere das Risiko.",
+              "Halte dich an den Plan, vermeide Impulsivität und kontrolliere das Risiko.",
           },
           {
             title: "Nach der Session",
             description:
-              "Journale, Ã¼berprÃ¼fe, erkenne Fehler, Lektionen und wiederkehrende Muster.",
+              "Journale, überprüfe, erkenne Fehler, Lektionen und wiederkehrende Muster.",
           },
         ],
       },
@@ -1666,12 +1666,12 @@ const onboardingText: Record<
         eyebrow: "Account Hub & Dashboard",
         title: "Starte im operativen Zentrum des Accounts",
         description:
-          "Wenn du einen Account Ã¶ffnest, starte im Account Hub. Von dort erreichst du Dashboard, Diary, Calendar, Equity, Analytics, Reports, Copilot und Management.",
+          "Wenn du einen Account öffnest, starte im Account Hub. Von dort erreichst du Dashboard, Diary, Calendar, Equity, Analytics, Reports, Copilot und Management.",
         cards: [
           {
             title: "Account Hub",
             description:
-              "Der erste Account-Bildschirm. Er orientiert dich und fÃ¼hrt dich zu den richtigen Bereichen.",
+              "Der erste Account-Bildschirm. Er orientiert dich und führt dich zu den richtigen Bereichen.",
           },
           {
             title: "Dashboard",
@@ -1695,7 +1695,7 @@ const onboardingText: Record<
           {
             title: "Calendar",
             description:
-              "Lies die Performance Tag fÃ¼r Tag und erkenne positive, negative oder flat Tage.",
+              "Lies die Performance Tag für Tag und erkenne positive, negative oder flat Tage.",
           },
           {
             title: "Equity",
@@ -1719,7 +1719,7 @@ const onboardingText: Record<
           {
             title: "Reports",
             description:
-              "Lies professionelle Zusammenfassungen zu performance, Risiken, StÃ¤rken und SchwÃ¤chen.",
+              "Lies professionelle Zusammenfassungen zu performance, Risiken, Stärken und Schwächen.",
           },
           {
             title: "Rules & Goals",
@@ -1731,16 +1731,16 @@ const onboardingText: Record<
       {
         phase: "Protection",
         eyebrow: "Sessions & Copilot",
-        title: "SchÃ¼tze Klarheit und Disziplin",
+        title: "Schütze Klarheit und Disziplin",
         description:
           "VOLTIS soll nicht nur Ergebnisse zeigen. Es soll dir helfen zu erkennen, wann du Klarheit, Disziplin oder operative Kontrolle verlierst.",
         spotlight:
-          "Der grÃ¶ÃŸte Wert entsteht, wenn VOLTIS erkennt, was du selbst zu Ã¼bersehen riskierst.",
+          "Der größte Wert entsteht, wenn VOLTIS erkennt, was du selbst zu übersehen riskierst.",
         cards: [
           {
             title: "Sessions",
             description:
-              "Bereite die Session vor dem Trading vor und Ã¼berprÃ¼fe sie danach mit focus, bias und review.",
+              "Bereite die Session vor dem Trading vor und überprüfe sie danach mit focus, bias und review.",
           },
           {
             title: "Copilot",
@@ -1769,7 +1769,7 @@ const onboardingText: Record<
           {
             title: "Settings",
             description:
-              "Verwalte Sprache, WÃ¤hrung, onboarding, backup und allgemeine Einstellungen.",
+              "Verwalte Sprache, Währung, onboarding, backup und allgemeine Einstellungen.",
           },
         ],
       },
@@ -1778,24 +1778,24 @@ const onboardingText: Record<
         eyebrow: "Use it seriously",
         title: "VOLTIS ist so wertvoll, wie du es nutzt",
         description:
-          "Es geht nicht darum, die App mit zufÃ¤lligen Daten zu fÃ¼llen. Es geht darum, sie konstant, prÃ¤zise und mit Respekt fÃ¼r den Prozess zu nutzen.",
+          "Es geht nicht darum, die App mit zufälligen Daten zu füllen. Es geht darum, sie konstant, präzise und mit Respekt für den Prozess zu nutzen.",
         spotlight:
           "Wenn du Zugang zu VOLTIS hast, bist du in etwas Ernsthaftem.",
         cards: [
           {
             title: "Gib echte Daten ein",
             description:
-              "Jeder gut erfasste Trade macht zukÃ¼nftige reports, charts und analysis nÃ¼tzlicher.",
+              "Jeder gut erfasste Trade macht zukünftige reports, charts und analysis nützlicher.",
           },
           {
-            title: "ÃœberprÃ¼fe mit Klarheit",
+            title: "Überprüfe mit Klarheit",
             description:
               "Nutze VOLTIS nicht nur, wenn du gewinnst. Nutze es besonders, wenn du etwas korrigieren musst.",
           },
           {
-            title: "SchÃ¼tze den Prozess",
+            title: "Schütze den Prozess",
             description:
-              "Profit und discipline dÃ¼rfen nicht getrennt sein. VOLTIS existiert, um sie zu verbinden.",
+              "Profit und discipline dürfen nicht getrennt sein. VOLTIS existiert, um sie zu verbinden.",
           },
         ],
       },
@@ -2037,5 +2037,6 @@ function closeOnboarding() {
     </div>
   );
 }
+
 
 

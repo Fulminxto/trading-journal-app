@@ -21,7 +21,7 @@ const labels: Record<string, Labels> = {
     eyebrow: "VOLTIS Trade Quality",
     title: "Execution Journal",
     description:
-      "Analizza qualitÃ  esecuzione, disciplina operativa, confidence e comportamento decisionale trade per trade.",
+      "Analizza qualità esecuzione, disciplina operativa, confidence e comportamento decisionale trade per trade.",
     totalTrades: "Trade totali",
     execution: "Execution",
     confidence: "Confidence",
@@ -39,8 +39,8 @@ const labels: Record<string, Labels> = {
     eyebrow: "VOLTIS Trade Quality",
     title: "Execution Journal",
     description:
-      "ÐÐ½Ð°Ð»Ñ–Ð·ÑƒÐ¹ ÑÐºÑ–ÑÑ‚ÑŒ execution, Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ñƒ Ð´Ð¸ÑÑ†Ð¸Ð¿Ð»Ñ–Ð½Ñƒ, confidence Ñ‚Ð° decision behavior Ð¿Ð¾ ÐºÐ¾Ð¶Ð½Ð¾Ð¼Ñƒ trade.",
-    totalTrades: "Ð£ÑÑŒÐ¾Ð³Ð¾ ÑƒÐ³Ð¾Ð´",
+      "Аналізуй якість execution, операційну дисципліну, confidence та decision behavior по кожному trade.",
+    totalTrades: "Усього угод",
     execution: "Execution",
     confidence: "Confidence",
   },
@@ -48,8 +48,8 @@ const labels: Record<string, Labels> = {
     eyebrow: "VOLTIS Trade Quality",
     title: "Execution Journal",
     description:
-      "ÐÐ½Ð°Ð»Ð¸Ð·Ð¸Ñ€ÑƒÐ¹ ÐºÐ°Ñ‡ÐµÑÑ‚Ð²Ð¾ execution, Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½ÑƒÑŽ Ð´Ð¸ÑÑ†Ð¸Ð¿Ð»Ð¸Ð½Ñƒ, confidence Ð¸ decision behavior Ð¿Ð¾ ÐºÐ°Ð¶Ð´Ð¾Ð¼Ñƒ trade.",
-    totalTrades: "Ð’ÑÐµÐ³Ð¾ ÑÐ´ÐµÐ»Ð¾Ðº",
+      "Анализируй качество execution, операционную дисциплину, confidence и decision behavior по каждому trade.",
+    totalTrades: "Всего сделок",
     execution: "Execution",
     confidence: "Confidence",
   },
@@ -57,7 +57,7 @@ const labels: Record<string, Labels> = {
     eyebrow: "VOLTIS Trade Quality",
     title: "Execution Journal",
     description:
-      "Analiza calidad de ejecuciÃ³n, disciplina operativa, confidence y comportamiento decisional trade por trade.",
+      "Analiza calidad de ejecución, disciplina operativa, confidence y comportamiento decisional trade por trade.",
     totalTrades: "Trades totales",
     execution: "Execution",
     confidence: "Confidence",
@@ -66,7 +66,7 @@ const labels: Record<string, Labels> = {
     eyebrow: "VOLTIS Trade Quality",
     title: "Execution Journal",
     description:
-      "Analyse la qualitÃ© dâ€™exÃ©cution, la discipline opÃ©rationnelle, la confidence et le comportement dÃ©cisionnel trade par trade.",
+      "Analyse la qualité d’exécution, la discipline opérationnelle, la confidence et le comportement décisionnel trade par trade.",
     totalTrades: "Trades totaux",
     execution: "Execution",
     confidence: "Confidence",
@@ -75,7 +75,7 @@ const labels: Record<string, Labels> = {
     eyebrow: "VOLTIS Trade Quality",
     title: "Execution Journal",
     description:
-      "Analysiere Execution-QualitÃ¤t, operative Disziplin, Confidence und Entscheidungsverhalten Trade fÃ¼r Trade.",
+      "Analysiere Execution-Qualität, operative Disziplin, Confidence und Entscheidungsverhalten Trade für Trade.",
     totalTrades: "Trades gesamt",
     execution: "Execution",
     confidence: "Confidence",
@@ -151,3 +151,4 @@ export default function TradeQualityHero({
     </div>
   );
 }
+

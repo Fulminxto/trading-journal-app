@@ -24,7 +24,7 @@ const labels: Record<string, Labels> = {
     averageTrades: "Trade medi",
     weakTrades: "Trade deboli",
     description:
-      "VOLTIS raggruppa i trade per qualitÃ  operativa per individuare pattern di edge, debolezza e consistenza.",
+      "VOLTIS raggruppa i trade per qualità operativa per individuare pattern di edge, debolezza e consistenza.",
   },
   en: {
     eyebrow: "Performance Clusters",
@@ -38,27 +38,27 @@ const labels: Record<string, Labels> = {
   uk: {
     eyebrow: "Performance Clusters",
     title: "Trade Clustering",
-    strongTrades: "Ð¡Ð¸Ð»ÑŒÐ½Ñ– trade",
-    averageTrades: "Ð¡ÐµÑ€ÐµÐ´Ð½Ñ– trade",
-    weakTrades: "Ð¡Ð»Ð°Ð±ÐºÑ– trade",
+    strongTrades: "Сильні trade",
+    averageTrades: "Середні trade",
+    weakTrades: "Слабкі trade",
     description:
-      "VOLTIS Ð³Ñ€ÑƒÐ¿ÑƒÑ” trade Ð·Ð° Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð¾ÑŽ ÑÐºÑ–ÑÑ‚ÑŽ, Ñ‰Ð¾Ð± Ð·Ð½Ð°Ñ…Ð¾Ð´Ð¸Ñ‚Ð¸ patterns edge, ÑÐ»Ð°Ð±ÐºÐ¾ÑÑ‚Ñ– Ñ‚Ð° ÑÑ‚Ð°Ð±Ñ–Ð»ÑŒÐ½Ð¾ÑÑ‚Ñ–.",
+      "VOLTIS групує trade за операційною якістю, щоб знаходити patterns edge, слабкості та стабільності.",
   },
   ru: {
     eyebrow: "Performance Clusters",
     title: "Trade Clustering",
-    strongTrades: "Ð¡Ð¸Ð»ÑŒÐ½Ñ‹Ðµ trade",
-    averageTrades: "Ð¡Ñ€ÐµÐ´Ð½Ð¸Ðµ trade",
-    weakTrades: "Ð¡Ð»Ð°Ð±Ñ‹Ðµ trade",
+    strongTrades: "Сильные trade",
+    averageTrades: "Средние trade",
+    weakTrades: "Слабые trade",
     description:
-      "VOLTIS Ð³Ñ€ÑƒÐ¿Ð¿Ð¸Ñ€ÑƒÐµÑ‚ trade Ð¿Ð¾ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ð¾Ð¼Ñƒ ÐºÐ°Ñ‡ÐµÑÑ‚Ð²Ñƒ, Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð½Ð°Ñ…Ð¾Ð´Ð¸Ñ‚ÑŒ patterns edge, ÑÐ»Ð°Ð±Ð¾ÑÑ‚Ð¸ Ð¸ ÑÑ‚Ð°Ð±Ð¸Ð»ÑŒÐ½Ð¾ÑÑ‚Ð¸.",
+      "VOLTIS группирует trade по операционному качеству, чтобы находить patterns edge, слабости и стабильности.",
   },
   es: {
     eyebrow: "Performance Clusters",
     title: "Trade Clustering",
     strongTrades: "Trades fuertes",
     averageTrades: "Trades medios",
-    weakTrades: "Trades dÃ©biles",
+    weakTrades: "Trades débiles",
     description:
       "VOLTIS agrupa trades por calidad operativa para identificar patrones de edge, debilidad y consistencia.",
   },
@@ -69,7 +69,7 @@ const labels: Record<string, Labels> = {
     averageTrades: "Trades moyens",
     weakTrades: "Trades faibles",
     description:
-      "VOLTIS regroupe les trades par qualitÃ© opÃ©rationnelle pour identifier les patterns dâ€™edge, de faiblesse et de consistance.",
+      "VOLTIS regroupe les trades par qualité opérationnelle pour identifier les patterns d’edge, de faiblesse et de consistance.",
   },
   de: {
     eyebrow: "Performance Clusters",
@@ -78,7 +78,7 @@ const labels: Record<string, Labels> = {
     averageTrades: "Durchschnittliche Trades",
     weakTrades: "Schwache Trades",
     description:
-      "VOLTIS gruppiert Trades nach operativer QualitÃ¤t, um Edge-, SchwÃ¤che- und Konstanzmuster zu erkennen.",
+      "VOLTIS gruppiert Trades nach operativer Qualität, um Edge-, Schwäche- und Konstanzmuster zu erkennen.",
   },
 };
 
@@ -185,3 +185,4 @@ export default function TradePerformanceClusters({
     </div>
   );
 }
+

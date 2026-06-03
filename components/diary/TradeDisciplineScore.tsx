@@ -30,7 +30,7 @@ const labels: Record<string, Labels> = {
     eyebrow: "Trade Discipline",
     title: "Discipline Score",
     description:
-      "Score based on execution, setup quality, confidence and the traderâ€™s emotional discipline.",
+      "Score based on execution, setup quality, confidence and the trader’s emotional discipline.",
     elite: "Elite",
     consistent: "Consistent",
     developing: "Developing",
@@ -40,21 +40,21 @@ const labels: Record<string, Labels> = {
     eyebrow: "Trade Discipline",
     title: "Discipline Score",
     description:
-      "Score Ð½Ð° Ð¾ÑÐ½Ð¾Ð²Ñ– execution, setup quality, confidence Ñ‚Ð° ÐµÐ¼Ð¾Ñ†Ñ–Ð¹Ð½Ð¾Ñ— Ð´Ð¸ÑÑ†Ð¸Ð¿Ð»Ñ–Ð½Ð¸ Ñ‚Ñ€ÐµÐ¹Ð´ÐµÑ€Ð°.",
+      "Score на основі execution, setup quality, confidence та емоційної дисципліни трейдера.",
     elite: "Elite",
-    consistent: "Ð¡Ñ‚Ð°Ð±Ñ–Ð»ÑŒÐ½Ð¸Ð¹",
-    developing: "Ð£ Ñ€Ð¾Ð·Ð²Ð¸Ñ‚ÐºÑƒ",
-    unstable: "ÐÐµÑÑ‚Ð°Ð±Ñ–Ð»ÑŒÐ½Ð¸Ð¹",
+    consistent: "Стабільний",
+    developing: "У розвитку",
+    unstable: "Нестабільний",
   },
   ru: {
     eyebrow: "Trade Discipline",
     title: "Discipline Score",
     description:
-      "Score Ð½Ð° Ð¾ÑÐ½Ð¾Ð²Ðµ execution, setup quality, confidence Ð¸ ÑÐ¼Ð¾Ñ†Ð¸Ð¾Ð½Ð°Ð»ÑŒÐ½Ð¾Ð¹ Ð´Ð¸ÑÑ†Ð¸Ð¿Ð»Ð¸Ð½Ñ‹ Ñ‚Ñ€ÐµÐ¹Ð´ÐµÑ€Ð°.",
+      "Score на основе execution, setup quality, confidence и эмоциональной дисциплины трейдера.",
     elite: "Elite",
-    consistent: "Ð¡Ñ‚Ð°Ð±Ð¸Ð»ÑŒÐ½Ñ‹Ð¹",
-    developing: "Ð’ Ñ€Ð°Ð·Ð²Ð¸Ñ‚Ð¸Ð¸",
-    unstable: "ÐÐµÑÑ‚Ð°Ð±Ð¸Ð»ÑŒÐ½Ñ‹Ð¹",
+    consistent: "Стабильный",
+    developing: "В развитии",
+    unstable: "Нестабильный",
   },
   es: {
     eyebrow: "Trade Discipline",
@@ -70,10 +70,10 @@ const labels: Record<string, Labels> = {
     eyebrow: "Trade Discipline",
     title: "Discipline Score",
     description:
-      "Score basÃ© sur execution, setup quality, confidence et discipline Ã©motionnelle du trader.",
+      "Score basé sur execution, setup quality, confidence et discipline émotionnelle du trader.",
     elite: "Elite",
     consistent: "Consistant",
-    developing: "En dÃ©veloppement",
+    developing: "En développement",
     unstable: "Instable",
   },
   de: {
@@ -179,3 +179,4 @@ export default function TradeDisciplineScore({
     </div>
   );
 }
+

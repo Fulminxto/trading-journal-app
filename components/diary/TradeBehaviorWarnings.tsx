@@ -26,9 +26,9 @@ const labels: Record<string, Labels> = {
     stable: "Stabile",
     weakExecution: "Execution debole",
     emotionalTrades: "Trade emotivi",
-    highQuality: "Alta qualitÃ ",
+    highQuality: "Alta qualità",
     description:
-      "VOLTIS monitora trade emotivi, esecuzioni deboli e qualitÃ  dei setup per individuare pattern comportamentali che possono compromettere la performance.",
+      "VOLTIS monitora trade emotivi, esecuzioni deboli e qualità dei setup per individuare pattern comportamentali che possono compromettere la performance.",
   },
   en: {
     eyebrow: "Behavior Intelligence",
@@ -44,35 +44,35 @@ const labels: Record<string, Labels> = {
   uk: {
     eyebrow: "Behavior Intelligence",
     title: "Trade Behavior Warnings",
-    warningsActive: "ÐÐºÑ‚Ð¸Ð²Ð½Ñ– warning",
-    stable: "Ð¡Ñ‚Ð°Ð±Ñ–Ð»ÑŒÐ½Ð¾",
-    weakExecution: "Ð¡Ð»Ð°Ð±ÐºÐµ execution",
-    emotionalTrades: "Ð•Ð¼Ð¾Ñ†Ñ–Ð¹Ð½Ñ– trade",
-    highQuality: "Ð’Ð¸ÑÐ¾ÐºÐ° ÑÐºÑ–ÑÑ‚ÑŒ",
+    warningsActive: "Активні warning",
+    stable: "Стабільно",
+    weakExecution: "Слабке execution",
+    emotionalTrades: "Емоційні trade",
+    highQuality: "Висока якість",
     description:
-      "VOLTIS Ð²Ñ–Ð´ÑÑ‚ÐµÐ¶ÑƒÑ” ÐµÐ¼Ð¾Ñ†Ñ–Ð¹Ð½Ñ– trade, ÑÐ»Ð°Ð±ÐºÐµ execution Ñ‚Ð° ÑÐºÑ–ÑÑ‚ÑŒ setup, Ñ‰Ð¾Ð± Ð·Ð½Ð°Ñ…Ð¾Ð´Ð¸Ñ‚Ð¸ behavioral patterns, ÑÐºÑ– Ð¼Ð¾Ð¶ÑƒÑ‚ÑŒ Ð¿Ð¾Ð³Ñ–Ñ€ÑˆÐ¸Ñ‚Ð¸ performance.",
+      "VOLTIS відстежує емоційні trade, слабке execution та якість setup, щоб знаходити behavioral patterns, які можуть погіршити performance.",
   },
   ru: {
     eyebrow: "Behavior Intelligence",
     title: "Trade Behavior Warnings",
-    warningsActive: "ÐÐºÑ‚Ð¸Ð²Ð½Ñ‹Ðµ warning",
-    stable: "Ð¡Ñ‚Ð°Ð±Ð¸Ð»ÑŒÐ½Ð¾",
-    weakExecution: "Ð¡Ð»Ð°Ð±Ð¾Ðµ execution",
-    emotionalTrades: "Ð­Ð¼Ð¾Ñ†Ð¸Ð¾Ð½Ð°Ð»ÑŒÐ½Ñ‹Ðµ trade",
-    highQuality: "Ð’Ñ‹ÑÐ¾ÐºÐ¾Ðµ ÐºÐ°Ñ‡ÐµÑÑ‚Ð²Ð¾",
+    warningsActive: "Активные warning",
+    stable: "Стабильно",
+    weakExecution: "Слабое execution",
+    emotionalTrades: "Эмоциональные trade",
+    highQuality: "Высокое качество",
     description:
-      "VOLTIS Ð¾Ñ‚ÑÐ»ÐµÐ¶Ð¸Ð²Ð°ÐµÑ‚ ÑÐ¼Ð¾Ñ†Ð¸Ð¾Ð½Ð°Ð»ÑŒÐ½Ñ‹Ðµ trade, ÑÐ»Ð°Ð±Ð¾Ðµ execution Ð¸ ÐºÐ°Ñ‡ÐµÑÑ‚Ð²Ð¾ setup, Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð½Ð°Ñ…Ð¾Ð´Ð¸Ñ‚ÑŒ behavioral patterns, ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ðµ Ð¼Ð¾Ð³ÑƒÑ‚ ÑƒÑ…ÑƒÐ´ÑˆÐ¸Ñ‚ÑŒ performance.",
+      "VOLTIS отслеживает эмоциональные trade, слабое execution и качество setup, чтобы находить behavioral patterns, которые могут ухудшить performance.",
   },
   es: {
     eyebrow: "Behavior Intelligence",
     title: "Trade Behavior Warnings",
     warningsActive: "Warnings activos",
     stable: "Estable",
-    weakExecution: "Execution dÃ©bil",
+    weakExecution: "Execution débil",
     emotionalTrades: "Trades emocionales",
     highQuality: "Alta calidad",
     description:
-      "VOLTIS monitoriza trades emocionales, ejecuciones dÃ©biles y calidad de setup para identificar patrones conductuales que pueden comprometer la performance.",
+      "VOLTIS monitoriza trades emocionales, ejecuciones débiles y calidad de setup para identificar patrones conductuales que pueden comprometer la performance.",
   },
   fr: {
     eyebrow: "Behavior Intelligence",
@@ -80,10 +80,10 @@ const labels: Record<string, Labels> = {
     warningsActive: "Warnings actifs",
     stable: "Stable",
     weakExecution: "Execution faible",
-    emotionalTrades: "Trades Ã©motionnels",
-    highQuality: "Haute qualitÃ©",
+    emotionalTrades: "Trades émotionnels",
+    highQuality: "Haute qualité",
     description:
-      "VOLTIS surveille les trades Ã©motionnels, les exÃ©cutions faibles et la qualitÃ© des setups pour identifier les patterns comportementaux qui peuvent compromettre la performance.",
+      "VOLTIS surveille les trades émotionnels, les exécutions faibles et la qualité des setups pour identifier les patterns comportementaux qui peuvent compromettre la performance.",
   },
   de: {
     eyebrow: "Behavior Intelligence",
@@ -92,9 +92,9 @@ const labels: Record<string, Labels> = {
     stable: "Stabil",
     weakExecution: "Schwache Execution",
     emotionalTrades: "Emotionale Trades",
-    highQuality: "Hohe QualitÃ¤t",
+    highQuality: "Hohe Qualität",
     description:
-      "VOLTIS Ã¼berwacht emotionale Trades, schwache Executions und Setup-QualitÃ¤t, um Verhaltensmuster zu erkennen, die die Performance gefÃ¤hrden kÃ¶nnen.",
+      "VOLTIS überwacht emotionale Trades, schwache Executions und Setup-Qualität, um Verhaltensmuster zu erkennen, die die Performance gefährden können.",
   },
 };
 
@@ -177,3 +177,4 @@ export default function TradeBehaviorWarnings({
     </div>
   );
 }
+

@@ -210,7 +210,7 @@ export type CopilotLabels = {
 const labels: Record<AppLanguage, CopilotLabels> = {
     it: {
         common: {
-            yes: "SÃ¬",
+            yes: "Sì",
             no: "No",
             stable: "Stabile",
             detected: "Rilevato",
@@ -264,7 +264,7 @@ const labels: Record<AppLanguage, CopilotLabels> = {
         },
         page: {
             controlRoom: "Copilot Control Room",
-            snapshotTitle: "Snapshot intelligente dellâ€™account",
+            snapshotTitle: "Snapshot intelligente dell’account",
             snapshotDescription:
                 "Una lettura rapida dello stato operativo del conto: disciplina, rischio comportamentale, review e memoria attiva.",
             reviewTimeline: "Timeline review AI",
@@ -280,7 +280,7 @@ const labels: Record<AppLanguage, CopilotLabels> = {
             memorySystem: "Sistema memoria Copilot",
             activeOperationalMemory: "Memoria operativa attiva",
             memoryDescription:
-                "VOLTIS conserva pattern, rischi e punti di forza ricorrenti del tuo account per rendere il Copilot sempre piÃ¹ contestuale.",
+                "VOLTIS conserva pattern, rischi e punti di forza ricorrenti del tuo account per rendere il Copilot sempre più contestuale.",
             noMemories:
                 "Nessuna memoria operativa attiva. Usa il Copilot dopo aver inserito trade, sessioni e review per generare pattern persistenti.",
             memoryType: "Tipo memoria",
@@ -289,20 +289,20 @@ const labels: Record<AppLanguage, CopilotLabels> = {
             summaryStable:
                 "VOLTIS ha rilevato una struttura operativa stabile. La disciplina rimane elevata e il rischio comportamentale appare controllato.",
             summaryHighRisk:
-                "VOLTIS rileva segnali di rischio comportamentale elevato. Serve ridurre impulsivitÃ , migliorare review e proteggere execution.",
+                "VOLTIS rileva segnali di rischio comportamentale elevato. Serve ridurre impulsività, migliorare review e proteggere execution.",
             summaryDeveloping:
-                "VOLTIS rileva una struttura in sviluppo. Il focus principale Ã¨ migliorare consistenza, selezione setup e stabilitÃ  decisionale.",
+                "VOLTIS rileva una struttura in sviluppo. Il focus principale è migliorare consistenza, selezione setup e stabilità decisionale.",
             strategicItems: [
                 "Ridurre frequenza operativa dopo una perdita consecutiva.",
-                "Proteggere qualitÃ  execution durante alta volatilitÃ .",
-                "Mantenere focus su setup ad alta probabilitÃ .",
+                "Proteggere qualità execution durante alta volatilità.",
+                "Mantenere focus su setup ad alta probabilità.",
             ],
         },
         components: {
             adaptiveCoaching: { eyebrow: "Adaptive Coaching" },
             aiReviewEngine: {
                 eyebrow: "AI Review Engine",
-                title: "Analisi qualitÃ  decisionale",
+                title: "Analisi qualità decisionale",
                 reviewScore: "Review Score",
                 averageExecution: "Execution media",
                 averageConfidence: "Confidence media",
@@ -317,20 +317,20 @@ const labels: Record<AppLanguage, CopilotLabels> = {
             },
             behavioralDrift: {
                 eyebrow: "Rilevamento drift comportamentale",
-                title: "Monitor decadimento qualitÃ ",
-                recentQuality: "QualitÃ  recente",
-                previousQuality: "QualitÃ  precedente",
+                title: "Monitor decadimento qualità",
+                recentQuality: "Qualità recente",
+                previousQuality: "Qualità precedente",
                 driftDetected: "Drift rilevato",
             },
             confidenceStability: {
-                eyebrow: "StabilitÃ  confidence",
-                title: "Monitor qualitÃ  confidence",
+                eyebrow: "Stabilità confidence",
+                title: "Monitor qualità confidence",
                 recentConfidence: "Confidence recente",
                 previousConfidence: "Confidence precedente",
             },
             consistencyEngine: {
                 eyebrow: "Consistency Engine",
-                title: "StabilitÃ  operativa",
+                title: "Stabilità operativa",
                 consistencyScore: "Consistency Score",
             },
             conversation: {
@@ -351,7 +351,7 @@ const labels: Record<AppLanguage, CopilotLabels> = {
                 eyebrow: "Allarme critico",
                 title: "Escalation rischio comportamentale",
                 description:
-                    "VOLTIS AI ha rilevato pattern comportamentali ad alto rischio che potrebbero compromettere la stabilitÃ  operativa.",
+                    "VOLTIS AI ha rilevato pattern comportamentali ad alto rischio che potrebbero compromettere la stabilità operativa.",
             },
             dailyFeed: {
                 eyebrow: "Daily Intelligence Feed",
@@ -362,17 +362,17 @@ const labels: Record<AppLanguage, CopilotLabels> = {
                 eyebrow: "Rischio elevato",
                 title: "Avviso comportamentale",
                 description:
-                    "VOLTIS rileva pattern ad alto rischio che potrebbero ridurre qualitÃ  decisionale, disciplina ed execution.",
+                    "VOLTIS rileva pattern ad alto rischio che potrebbero ridurre qualità decisionale, disciplina ed execution.",
             },
             emotionalStability: {
-                eyebrow: "StabilitÃ  emotiva",
-                title: "Monitor volatilitÃ  emotiva",
-                emotionalInstability: "InstabilitÃ  emotiva",
+                eyebrow: "Stabilità emotiva",
+                title: "Monitor volatilità emotiva",
+                emotionalInstability: "Instabilità emotiva",
                 emotionalTrades: "Trade emotivi",
             },
             executionStability: {
-                eyebrow: "StabilitÃ  execution",
-                title: "Monitor qualitÃ  execution",
+                eyebrow: "Stabilità execution",
+                title: "Monitor qualità execution",
                 recentExecution: "Execution recente",
                 previousExecution: "Execution precedente",
             },
@@ -380,7 +380,7 @@ const labels: Record<AppLanguage, CopilotLabels> = {
                 eyebrow: "Review obbligatoria",
                 title: "Protocollo recovery richiesto",
                 description:
-                    "VOLTIS consiglia una review mentale e operativa prima di continuare. Lâ€™obiettivo Ã¨ ridurre impulsivitÃ , ripristinare luciditÃ  e proteggere qualitÃ  decisionale.",
+                    "VOLTIS consiglia una review mentale e operativa prima di continuare. L’obiettivo è ridurre impulsività, ripristinare lucidità e proteggere qualità decisionale.",
                 steps: [
                     {
                         eyebrow: "Step 1",
@@ -392,13 +392,13 @@ const labels: Record<AppLanguage, CopilotLabels> = {
                         eyebrow: "Step 2",
                         title: "Review mentale",
                         description:
-                            "Identifica stato emotivo, trigger e qualitÃ  della decisione.",
+                            "Identifica stato emotivo, trigger e qualità della decisione.",
                     },
                     {
                         eyebrow: "Step 3",
                         title: "Reset execution",
                         description:
-                            "Torna solo su setup chiari, pianificati e ad alta qualitÃ .",
+                            "Torna solo su setup chiari, pianificati e ad alta qualità.",
                     },
                 ],
             },
@@ -417,7 +417,7 @@ const labels: Record<AppLanguage, CopilotLabels> = {
                 eyebrow: "Recovery Checklist",
                 title: "Reset pre-execution",
                 items: [
-                    "Ho interrotto lâ€™operativitÃ  per almeno qualche minuto.",
+                    "Ho interrotto l’operatività per almeno qualche minuto.",
                     "Ho identificato se sto operando per paura, fretta o recupero.",
                     "Ho controllato se il prossimo trade rispetta il piano.",
                     "Ho accettato che non devo recuperare subito una perdita.",
@@ -435,7 +435,7 @@ const labels: Record<AppLanguage, CopilotLabels> = {
                 lockedMessage:
                     "La sessione richiede protezione massima prima di continuare.",
                 reviewMessage: "Completa il reset operativo prima di riprendere.",
-                clearedMessage: "La sessione Ã¨ stabile e non richiede recovery immediata.",
+                clearedMessage: "La sessione è stabile e non richiede recovery immediata.",
             },
             riskEscalation: {
                 eyebrow: "Risk Escalation",
@@ -470,7 +470,7 @@ const labels: Record<AppLanguage, CopilotLabels> = {
         page: {
             controlRoom: "Copilot Control Room",
             snapshotTitle: "Account Intelligence Snapshot",
-            snapshotDescription: "A fast reading of the accountâ€™s operational state: discipline, behavioral risk, review and active memory.",
+            snapshotDescription: "A fast reading of the account’s operational state: discipline, behavioral risk, review and active memory.",
             reviewTimeline: "AI Review Timeline",
             persistentReviewMemory: "Persistent Review Memory",
             noReviewNotes: "No AI reviews saved yet.",
@@ -548,29 +548,29 @@ function makeCopy(base: CopilotLabels, overrides: Partial<CopilotLabels>): Copil
 }
 
 labels.uk = makeCopy(labels.en, {
-    common: { yes: "Ð¢Ð°Ðº", no: "ÐÑ–", stable: "Ð¡Ñ‚Ð°Ð±Ñ–Ð»ÑŒÐ½Ð¾", detected: "Ð’Ð¸ÑÐ²Ð»ÐµÐ½Ð¾", declining: "ÐŸÐ¾Ð³Ñ–Ñ€ÑˆÑƒÑ”Ñ‚ÑŒÑÑ", decay: "ÐŸÐ°Ð´Ñ–Ð½Ð½Ñ", volatile: "Ð’Ð¾Ð»Ð°Ñ‚Ð¸Ð»ÑŒÐ½Ð¾", online: "ÐžÐ½Ð»Ð°Ð¹Ð½", required: "ÐŸÐ¾Ñ‚Ñ€Ñ–Ð±Ð½Ð¾", locked: "Ð—Ð°Ð±Ð»Ð¾ÐºÐ¾Ð²Ð°Ð½Ð¾", review: "Review", open: "Ð’Ñ–Ð´ÐºÑ€Ð¸Ñ‚Ð¾", notes: "ÐÐ¾Ñ‚Ð°Ñ‚ÐºÐ¸", signals: "Ð¡Ð¸Ð³Ð½Ð°Ð»Ð¸", memories: "ÐŸÐ°Ð¼â€™ÑÑ‚ÑŒ", patterns: "ÐŸÐ°Ñ‚ÐµÑ€Ð½Ð¸", insights: "Ð†Ð½ÑÐ°Ð¹Ñ‚Ð¸", trades: "Ð£Ð³Ð¾Ð´Ð¸", score: "Score", status: "Ð¡Ñ‚Ð°Ñ‚ÑƒÑ", confidence: "Confidence", execution: "Execution", discipline: "Ð”Ð¸ÑÑ†Ð¸Ð¿Ð»Ñ–Ð½Ð°", behavioralRisk: "ÐŸÐ¾Ð²ÐµÐ´Ñ–Ð½ÐºÐ¾Ð²Ð¸Ð¹ Ñ€Ð¸Ð·Ð¸Ðº", totalTrades: "Ð£ÑÑŒÐ¾Ð³Ð¾ ÑƒÐ³Ð¾Ð´", activeMemories: "ÐÐºÑ‚Ð¸Ð²Ð½Ð° Ð¿Ð°Ð¼â€™ÑÑ‚ÑŒ", highRisk: "Ð’Ð¸ÑÐ¾ÐºÐ¸Ð¹ Ñ€Ð¸Ð·Ð¸Ðº", tone: "Ð¢Ð¾Ð½", occurrences: "ÐŸÐ¾Ð²Ñ‚Ð¾Ñ€ÐµÐ½Ð½Ñ", updatedRecently: "ÐžÐ½Ð¾Ð²Ð»ÐµÐ½Ð¾ Ð½ÐµÑ‰Ð¾Ð´Ð°Ð²Ð½Ð¾", qualityScore: "Quality Score" },
-    statuses: { critical: "ÐšÑ€Ð¸Ñ‚Ð¸Ñ‡Ð½Ð¾", high: "Ð’Ð¸ÑÐ¾ÐºÐ¸Ð¹", medium: "Ð¡ÐµÑ€ÐµÐ´Ð½Ñ–Ð¹", moderate: "ÐŸÐ¾Ð¼Ñ–Ñ€Ð½Ð¸Ð¹", low: "ÐÐ¸Ð·ÑŒÐºÐ¸Ð¹", stable: "Ð¡Ñ‚Ð°Ð±Ñ–Ð»ÑŒÐ½Ð¾", detected: "Ð’Ð¸ÑÐ²Ð»ÐµÐ½Ð¾", declining: "ÐŸÐ¾Ð³Ñ–Ñ€ÑˆÑƒÑ”Ñ‚ÑŒÑÑ", decay: "ÐŸÐ°Ð´Ñ–Ð½Ð½Ñ", volatile: "Ð’Ð¾Ð»Ð°Ñ‚Ð¸Ð»ÑŒÐ½Ð¾", protection: "Ð—Ð°Ñ…Ð¸ÑÑ‚", cooldown: "ÐŸÐ°ÑƒÐ·Ð°", monitor: "ÐœÐ¾Ð½Ñ–Ñ‚Ð¾Ñ€Ð¸Ð½Ð³", locked: "Ð—Ð°Ð±Ð»Ð¾ÐºÐ¾Ð²Ð°Ð½Ð¾", review: "Review", open: "Ð’Ñ–Ð´ÐºÑ€Ð¸Ñ‚Ð¾", cleared: "ÐžÑ‡Ð¸Ñ‰ÐµÐ½Ð¾", required: "ÐŸÐ¾Ñ‚Ñ€Ñ–Ð±Ð½Ð¾" },
-    page: { ...labels.en.page, snapshotTitle: "Ð†Ð½Ñ‚ÐµÐ»ÐµÐºÑ‚ÑƒÐ°Ð»ÑŒÐ½Ð¸Ð¹ Ð·Ð½Ñ–Ð¼Ð¾Ðº Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°", snapshotDescription: "Ð¨Ð²Ð¸Ð´ÐºÐµ Ñ‡Ð¸Ñ‚Ð°Ð½Ð½Ñ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð¾Ð³Ð¾ ÑÑ‚Ð°Ð½Ñƒ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°: Ð´Ð¸ÑÑ†Ð¸Ð¿Ð»Ñ–Ð½Ð°, Ð¿Ð¾Ð²ÐµÐ´Ñ–Ð½ÐºÐ¾Ð²Ð¸Ð¹ Ñ€Ð¸Ð·Ð¸Ðº, review Ñ– Ð°ÐºÑ‚Ð¸Ð²Ð½Ð° Ð¿Ð°Ð¼â€™ÑÑ‚ÑŒ.", noReviewNotes: "ÐŸÐ¾ÐºÐ¸ Ð½ÐµÐ¼Ð°Ñ” Ð·Ð±ÐµÑ€ÐµÐ¶ÐµÐ½Ð¸Ñ… AI review.", riskSupervision: "ÐÐ°Ð³Ð»ÑÐ´ Ð·Ð° Ñ€Ð¸Ð·Ð¸ÐºÐ¾Ð¼", operationalIntelligence: "ÐžÐ¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð° Ð°Ð½Ð°Ð»Ñ–Ñ‚Ð¸ÐºÐ°", strategicFocus: "Ð¡Ñ‚Ñ€Ð°Ñ‚ÐµÐ³Ñ–Ñ‡Ð½Ð¸Ð¹ Ñ„Ð¾ÐºÑƒÑ", activeOperationalMemory: "ÐÐºÑ‚Ð¸Ð²Ð½Ð° Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð° Ð¿Ð°Ð¼â€™ÑÑ‚ÑŒ", noMemories: "ÐŸÐ¾ÐºÐ¸ Ð½ÐµÐ¼Ð°Ñ” Ð°ÐºÑ‚Ð¸Ð²Ð½Ð¾Ñ— Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð¾Ñ— Ð¿Ð°Ð¼â€™ÑÑ‚Ñ–.", summaryNoData: "ÐŸÐ¾ÐºÐ¸ Ð½ÐµÐ´Ð¾ÑÑ‚Ð°Ñ‚Ð½ÑŒÐ¾ Ð´Ð°Ð½Ð¸Ñ… Ð´Ð»Ñ Ñ–Ð½Ñ‚ÐµÐ»ÐµÐºÑ‚ÑƒÐ°Ð»ÑŒÐ½Ð¾Ð³Ð¾ Ð°Ð½Ð°Ð»Ñ–Ð·Ñƒ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°.", summaryStable: "VOLTIS Ð²Ð¸ÑÐ²Ð¸Ð² ÑÑ‚Ð°Ð±Ñ–Ð»ÑŒÐ½Ñƒ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ñƒ ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ñƒ.", summaryHighRisk: "VOLTIS Ð²Ð¸ÑÐ²Ð»ÑÑ” Ð²Ð¸ÑÐ¾ÐºÑ– ÑÐ¸Ð³Ð½Ð°Ð»Ð¸ Ð¿Ð¾Ð²ÐµÐ´Ñ–Ð½ÐºÐ¾Ð²Ð¾Ð³Ð¾ Ñ€Ð¸Ð·Ð¸ÐºÑƒ.", summaryDeveloping: "VOLTIS Ð±Ð°Ñ‡Ð¸Ñ‚ÑŒ ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ñƒ Ð² Ñ€Ð¾Ð·Ð²Ð¸Ñ‚ÐºÑƒ.", strategicItems: ["Ð—Ð¼ÐµÐ½ÑˆÐ¸Ñ‚Ð¸ Ñ‡Ð°ÑÑ‚Ð¾Ñ‚Ñƒ Ñ‚Ð¾Ñ€Ð³Ñ–Ð²Ð»Ñ– Ð¿Ñ–ÑÐ»Ñ ÑÐµÑ€Ñ–Ñ— Ð²Ñ‚Ñ€Ð°Ñ‚.", "Ð—Ð°Ñ…Ð¸Ñ‰Ð°Ñ‚Ð¸ ÑÐºÑ–ÑÑ‚ÑŒ execution Ð¿Ñ–Ð´ Ñ‡Ð°Ñ Ð²Ð¸ÑÐ¾ÐºÐ¾Ñ— Ð²Ð¾Ð»Ð°Ñ‚Ð¸Ð»ÑŒÐ½Ð¾ÑÑ‚Ñ–.", "Ð¢Ñ€Ð¸Ð¼Ð°Ñ‚Ð¸ Ñ„Ð¾ÐºÑƒÑ Ð½Ð° ÑÐµÑ‚Ð°Ð¿Ð°Ñ… Ð· Ð²Ð¸ÑÐ¾ÐºÐ¾ÑŽ Ð¹Ð¼Ð¾Ð²Ñ–Ñ€Ð½Ñ–ÑÑ‚ÑŽ."] },
+    common: { yes: "Так", no: "Ні", stable: "Стабільно", detected: "Виявлено", declining: "Погіршується", decay: "Падіння", volatile: "Волатильно", online: "Онлайн", required: "Потрібно", locked: "Заблоковано", review: "Review", open: "Відкрито", notes: "Нотатки", signals: "Сигнали", memories: "Пам’ять", patterns: "Патерни", insights: "Інсайти", trades: "Угоди", score: "Score", status: "Статус", confidence: "Confidence", execution: "Execution", discipline: "Дисципліна", behavioralRisk: "Поведінковий ризик", totalTrades: "Усього угод", activeMemories: "Активна пам’ять", highRisk: "Високий ризик", tone: "Тон", occurrences: "Повторення", updatedRecently: "Оновлено нещодавно", qualityScore: "Quality Score" },
+    statuses: { critical: "Критично", high: "Високий", medium: "Середній", moderate: "Помірний", low: "Низький", stable: "Стабільно", detected: "Виявлено", declining: "Погіршується", decay: "Падіння", volatile: "Волатильно", protection: "Захист", cooldown: "Пауза", monitor: "Моніторинг", locked: "Заблоковано", review: "Review", open: "Відкрито", cleared: "Очищено", required: "Потрібно" },
+    page: { ...labels.en.page, snapshotTitle: "Інтелектуальний знімок акаунта", snapshotDescription: "Швидке читання операційного стану акаунта: дисципліна, поведінковий ризик, review і активна пам’ять.", noReviewNotes: "Поки немає збережених AI review.", riskSupervision: "Нагляд за ризиком", operationalIntelligence: "Операційна аналітика", strategicFocus: "Стратегічний фокус", activeOperationalMemory: "Активна операційна пам’ять", noMemories: "Поки немає активної операційної пам’яті.", summaryNoData: "Поки недостатньо даних для інтелектуального аналізу акаунта.", summaryStable: "VOLTIS виявив стабільну операційну структуру.", summaryHighRisk: "VOLTIS виявляє високі сигнали поведінкового ризику.", summaryDeveloping: "VOLTIS бачить структуру в розвитку.", strategicItems: ["Зменшити частоту торгівлі після серії втрат.", "Захищати якість execution під час високої волатильності.", "Тримати фокус на сетапах з високою ймовірністю."] },
 });
 labels.ru = makeCopy(labels.en, {
-    common: { yes: "Ð”Ð°", no: "ÐÐµÑ‚", stable: "Ð¡Ñ‚Ð°Ð±Ð¸Ð»ÑŒÐ½Ð¾", detected: "ÐžÐ±Ð½Ð°Ñ€ÑƒÐ¶ÐµÐ½Ð¾", declining: "Ð¡Ð½Ð¸Ð¶Ð°ÐµÑ‚ÑÑ", decay: "ÐŸÐ°Ð´ÐµÐ½Ð¸Ðµ", volatile: "Ð’Ð¾Ð»Ð°Ñ‚Ð¸Ð»ÑŒÐ½Ð¾", online: "ÐžÐ½Ð»Ð°Ð¹Ð½", required: "Ð¢Ñ€ÐµÐ±ÑƒÐµÑ‚ÑÑ", locked: "Ð—Ð°Ð±Ð»Ð¾ÐºÐ¸Ñ€Ð¾Ð²Ð°Ð½Ð¾", review: "Review", open: "ÐžÑ‚ÐºÑ€Ñ‹Ñ‚Ð¾", notes: "Ð—Ð°Ð¼ÐµÑ‚ÐºÐ¸", signals: "Ð¡Ð¸Ð³Ð½Ð°Ð»Ñ‹", memories: "ÐŸÐ°Ð¼ÑÑ‚ÑŒ", patterns: "ÐŸÐ°Ñ‚Ñ‚ÐµÑ€Ð½Ñ‹", insights: "Ð˜Ð½ÑÐ°Ð¹Ñ‚Ñ‹", trades: "Ð¡Ð´ÐµÐ»ÐºÐ¸", score: "Score", status: "Ð¡Ñ‚Ð°Ñ‚ÑƒÑ", confidence: "Confidence", execution: "Execution", discipline: "Ð”Ð¸ÑÑ†Ð¸Ð¿Ð»Ð¸Ð½Ð°", behavioralRisk: "ÐŸÐ¾Ð²ÐµÐ´ÐµÐ½Ñ‡ÐµÑÐºÐ¸Ð¹ Ñ€Ð¸ÑÐº", totalTrades: "Ð’ÑÐµÐ³Ð¾ ÑÐ´ÐµÐ»Ð¾Ðº", activeMemories: "ÐÐºÑ‚Ð¸Ð²Ð½Ð°Ñ Ð¿Ð°Ð¼ÑÑ‚ÑŒ", highRisk: "Ð’Ñ‹ÑÐ¾ÐºÐ¸Ð¹ Ñ€Ð¸ÑÐº", tone: "Ð¢Ð¾Ð½", occurrences: "ÐŸÐ¾Ð²Ñ‚Ð¾Ñ€ÐµÐ½Ð¸Ñ", updatedRecently: "ÐžÐ±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¾ Ð½ÐµÐ´Ð°Ð²Ð½Ð¾", qualityScore: "Quality Score" },
-    statuses: { critical: "ÐšÑ€Ð¸Ñ‚Ð¸Ñ‡Ð½Ð¾", high: "Ð’Ñ‹ÑÐ¾ÐºÐ¸Ð¹", medium: "Ð¡Ñ€ÐµÐ´Ð½Ð¸Ð¹", moderate: "Ð£Ð¼ÐµÑ€ÐµÐ½Ð½Ñ‹Ð¹", low: "ÐÐ¸Ð·ÐºÐ¸Ð¹", stable: "Ð¡Ñ‚Ð°Ð±Ð¸Ð»ÑŒÐ½Ð¾", detected: "ÐžÐ±Ð½Ð°Ñ€ÑƒÐ¶ÐµÐ½Ð¾", declining: "Ð¡Ð½Ð¸Ð¶Ð°ÐµÑ‚ÑÑ", decay: "ÐŸÐ°Ð´ÐµÐ½Ð¸Ðµ", volatile: "Ð’Ð¾Ð»Ð°Ñ‚Ð¸Ð»ÑŒÐ½Ð¾", protection: "Ð—Ð°Ñ‰Ð¸Ñ‚Ð°", cooldown: "ÐŸÐ°ÑƒÐ·Ð°", monitor: "ÐœÐ¾Ð½Ð¸Ñ‚Ð¾Ñ€Ð¸Ð½Ð³", locked: "Ð—Ð°Ð±Ð»Ð¾ÐºÐ¸Ñ€Ð¾Ð²Ð°Ð½Ð¾", review: "Review", open: "ÐžÑ‚ÐºÑ€Ñ‹Ñ‚Ð¾", cleared: "ÐžÑ‡Ð¸Ñ‰ÐµÐ½Ð¾", required: "Ð¢Ñ€ÐµÐ±ÑƒÐµÑ‚ÑÑ" },
-    page: { ...labels.en.page, snapshotTitle: "Ð˜Ð½Ñ‚ÐµÐ»Ð»ÐµÐºÑ‚ÑƒÐ°Ð»ÑŒÐ½Ñ‹Ð¹ ÑÐ½Ð¸Ð¼Ð¾Ðº Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°", snapshotDescription: "Ð‘Ñ‹ÑÑ‚Ñ€Ð¾Ðµ Ñ‡Ñ‚ÐµÐ½Ð¸Ðµ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ð¾Ð³Ð¾ ÑÐ¾ÑÑ‚Ð¾ÑÐ½Ð¸Ñ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°: Ð´Ð¸ÑÑ†Ð¸Ð¿Ð»Ð¸Ð½Ð°, Ð¿Ð¾Ð²ÐµÐ´ÐµÐ½Ñ‡ÐµÑÐºÐ¸Ð¹ Ñ€Ð¸ÑÐº, review Ð¸ Ð°ÐºÑ‚Ð¸Ð²Ð½Ð°Ñ Ð¿Ð°Ð¼ÑÑ‚ÑŒ.", noReviewNotes: "ÐŸÐ¾ÐºÐ° Ð½ÐµÑ‚ ÑÐ¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð½Ñ‹Ñ… AI review.", riskSupervision: "ÐÐ°Ð´Ð·Ð¾Ñ€ Ð·Ð° Ñ€Ð¸ÑÐºÐ¾Ð¼", operationalIntelligence: "ÐžÐ¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ð°Ñ Ð°Ð½Ð°Ð»Ð¸Ñ‚Ð¸ÐºÐ°", strategicFocus: "Ð¡Ñ‚Ñ€Ð°Ñ‚ÐµÐ³Ð¸Ñ‡ÐµÑÐºÐ¸Ð¹ Ñ„Ð¾ÐºÑƒÑ", activeOperationalMemory: "ÐÐºÑ‚Ð¸Ð²Ð½Ð°Ñ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ð°Ñ Ð¿Ð°Ð¼ÑÑ‚ÑŒ", noMemories: "ÐŸÐ¾ÐºÐ° Ð½ÐµÑ‚ Ð°ÐºÑ‚Ð¸Ð²Ð½Ð¾Ð¹ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ð¾Ð¹ Ð¿Ð°Ð¼ÑÑ‚Ð¸.", summaryNoData: "ÐŸÐ¾ÐºÐ° Ð½ÐµÐ´Ð¾ÑÑ‚Ð°Ñ‚Ð¾Ñ‡Ð½Ð¾ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð´Ð»Ñ Ð¸Ð½Ñ‚ÐµÐ»Ð»ÐµÐºÑ‚ÑƒÐ°Ð»ÑŒÐ½Ð¾Ð³Ð¾ Ð°Ð½Ð°Ð»Ð¸Ð·Ð° Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°.", summaryStable: "VOLTIS Ð²Ñ‹ÑÐ²Ð¸Ð» ÑÑ‚Ð°Ð±Ð¸Ð»ÑŒÐ½ÑƒÑŽ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½ÑƒÑŽ ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ñƒ.", summaryHighRisk: "VOLTIS Ð²Ñ‹ÑÐ²Ð»ÑÐµÑ‚ Ð²Ñ‹ÑÐ¾ÐºÐ¸Ðµ ÑÐ¸Ð³Ð½Ð°Ð»Ñ‹ Ð¿Ð¾Ð²ÐµÐ´ÐµÐ½Ñ‡ÐµÑÐºÐ¾Ð³Ð¾ Ñ€Ð¸ÑÐºÐ°.", summaryDeveloping: "VOLTIS Ð²Ð¸Ð´Ð¸Ñ‚ ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ñƒ Ð² Ñ€Ð°Ð·Ð²Ð¸Ñ‚Ð¸Ð¸.", strategicItems: ["Ð¡Ð½Ð¸Ð·Ð¸Ñ‚ÑŒ Ñ‡Ð°ÑÑ‚Ð¾Ñ‚Ñƒ Ñ‚Ð¾Ñ€Ð³Ð¾Ð²Ð»Ð¸ Ð¿Ð¾ÑÐ»Ðµ ÑÐµÑ€Ð¸Ð¸ ÑƒÐ±Ñ‹Ñ‚ÐºÐ¾Ð².", "Ð—Ð°Ñ‰Ð¸Ñ‰Ð°Ñ‚ÑŒ ÐºÐ°Ñ‡ÐµÑÑ‚Ð²Ð¾ execution Ð¿Ñ€Ð¸ Ð²Ñ‹ÑÐ¾ÐºÐ¾Ð¹ Ð²Ð¾Ð»Ð°Ñ‚Ð¸Ð»ÑŒÐ½Ð¾ÑÑ‚Ð¸.", "Ð”ÐµÑ€Ð¶Ð°Ñ‚ÑŒ Ñ„Ð¾ÐºÑƒÑ Ð½Ð° ÑÐµÑ‚Ð°Ð¿Ð°Ñ… Ñ Ð²Ñ‹ÑÐ¾ÐºÐ¾Ð¹ Ð²ÐµÑ€Ð¾ÑÑ‚Ð½Ð¾ÑÑ‚ÑŒÑŽ."] },
+    common: { yes: "Да", no: "Нет", stable: "Стабильно", detected: "Обнаружено", declining: "Снижается", decay: "Падение", volatile: "Волатильно", online: "Онлайн", required: "Требуется", locked: "Заблокировано", review: "Review", open: "Открыто", notes: "Заметки", signals: "Сигналы", memories: "Память", patterns: "Паттерны", insights: "Инсайты", trades: "Сделки", score: "Score", status: "Статус", confidence: "Confidence", execution: "Execution", discipline: "Дисциплина", behavioralRisk: "Поведенческий риск", totalTrades: "Всего сделок", activeMemories: "Активная память", highRisk: "Высокий риск", tone: "Тон", occurrences: "Повторения", updatedRecently: "Обновлено недавно", qualityScore: "Quality Score" },
+    statuses: { critical: "Критично", high: "Высокий", medium: "Средний", moderate: "Умеренный", low: "Низкий", stable: "Стабильно", detected: "Обнаружено", declining: "Снижается", decay: "Падение", volatile: "Волатильно", protection: "Защита", cooldown: "Пауза", monitor: "Мониторинг", locked: "Заблокировано", review: "Review", open: "Открыто", cleared: "Очищено", required: "Требуется" },
+    page: { ...labels.en.page, snapshotTitle: "Интеллектуальный снимок аккаунта", snapshotDescription: "Быстрое чтение операционного состояния аккаунта: дисциплина, поведенческий риск, review и активная память.", noReviewNotes: "Пока нет сохраненных AI review.", riskSupervision: "Надзор за риском", operationalIntelligence: "Операционная аналитика", strategicFocus: "Стратегический фокус", activeOperationalMemory: "Активная операционная память", noMemories: "Пока нет активной операционной памяти.", summaryNoData: "Пока недостаточно данных для интеллектуального анализа аккаунта.", summaryStable: "VOLTIS выявил стабильную операционную структуру.", summaryHighRisk: "VOLTIS выявляет высокие сигналы поведенческого риска.", summaryDeveloping: "VOLTIS видит структуру в развитии.", strategicItems: ["Снизить частоту торговли после серии убытков.", "Защищать качество execution при высокой волатильности.", "Держать фокус на сетапах с высокой вероятностью."] },
 });
 labels.es = makeCopy(labels.en, {
-    common: { yes: "SÃ­", no: "No", stable: "Estable", detected: "Detectado", declining: "En descenso", decay: "Deterioro", volatile: "VolÃ¡til", online: "Online", required: "Requerido", locked: "Bloqueado", review: "Review", open: "Abierto", notes: "Notas", signals: "SeÃ±ales", memories: "Memorias", patterns: "Patrones", insights: "Insights", trades: "Trades", score: "Score", status: "Estado", confidence: "Confidence", execution: "Execution", discipline: "Disciplina", behavioralRisk: "Riesgo conductual", totalTrades: "Trades totales", activeMemories: "Memorias activas", highRisk: "Alto riesgo", tone: "Tono", occurrences: "Ocurrencias", updatedRecently: "Actualizado recientemente", qualityScore: "Quality Score" },
-    statuses: { critical: "CrÃ­tico", high: "Alto", medium: "Medio", moderate: "Moderado", low: "Bajo", stable: "Estable", detected: "Detectado", declining: "En descenso", decay: "Deterioro", volatile: "VolÃ¡til", protection: "ProtecciÃ³n", cooldown: "Pausa", monitor: "Monitor", locked: "Bloqueado", review: "Review", open: "Abierto", cleared: "Libre", required: "Requerido" },
-    page: { ...labels.en.page, snapshotTitle: "Snapshot inteligente de la cuenta", snapshotDescription: "Lectura rÃ¡pida del estado operativo: disciplina, riesgo conductual, review y memoria activa.", noReviewNotes: "AÃºn no hay reviews AI guardadas.", riskSupervision: "SupervisiÃ³n del riesgo", operationalIntelligence: "Inteligencia operativa", strategicFocus: "Foco estratÃ©gico", activeOperationalMemory: "Memoria operativa activa", noMemories: "AÃºn no hay memoria operativa activa.", summaryNoData: "TodavÃ­a no hay suficientes datos para generar una lectura inteligente.", summaryStable: "VOLTIS detectÃ³ una estructura operativa estable.", summaryHighRisk: "VOLTIS detecta seÃ±ales de alto riesgo conductual.", summaryDeveloping: "VOLTIS detecta una estructura en desarrollo.", strategicItems: ["Reducir la frecuencia operativa tras pÃ©rdidas consecutivas.", "Proteger la calidad de execution durante alta volatilidad.", "Mantener foco en setups de alta probabilidad."] },
+    common: { yes: "Sí", no: "No", stable: "Estable", detected: "Detectado", declining: "En descenso", decay: "Deterioro", volatile: "Volátil", online: "Online", required: "Requerido", locked: "Bloqueado", review: "Review", open: "Abierto", notes: "Notas", signals: "Señales", memories: "Memorias", patterns: "Patrones", insights: "Insights", trades: "Trades", score: "Score", status: "Estado", confidence: "Confidence", execution: "Execution", discipline: "Disciplina", behavioralRisk: "Riesgo conductual", totalTrades: "Trades totales", activeMemories: "Memorias activas", highRisk: "Alto riesgo", tone: "Tono", occurrences: "Ocurrencias", updatedRecently: "Actualizado recientemente", qualityScore: "Quality Score" },
+    statuses: { critical: "Crítico", high: "Alto", medium: "Medio", moderate: "Moderado", low: "Bajo", stable: "Estable", detected: "Detectado", declining: "En descenso", decay: "Deterioro", volatile: "Volátil", protection: "Protección", cooldown: "Pausa", monitor: "Monitor", locked: "Bloqueado", review: "Review", open: "Abierto", cleared: "Libre", required: "Requerido" },
+    page: { ...labels.en.page, snapshotTitle: "Snapshot inteligente de la cuenta", snapshotDescription: "Lectura rápida del estado operativo: disciplina, riesgo conductual, review y memoria activa.", noReviewNotes: "Aún no hay reviews AI guardadas.", riskSupervision: "Supervisión del riesgo", operationalIntelligence: "Inteligencia operativa", strategicFocus: "Foco estratégico", activeOperationalMemory: "Memoria operativa activa", noMemories: "Aún no hay memoria operativa activa.", summaryNoData: "Todavía no hay suficientes datos para generar una lectura inteligente.", summaryStable: "VOLTIS detectó una estructura operativa estable.", summaryHighRisk: "VOLTIS detecta señales de alto riesgo conductual.", summaryDeveloping: "VOLTIS detecta una estructura en desarrollo.", strategicItems: ["Reducir la frecuencia operativa tras pérdidas consecutivas.", "Proteger la calidad de execution durante alta volatilidad.", "Mantener foco en setups de alta probabilidad."] },
 });
 labels.fr = makeCopy(labels.en, {
-    common: { yes: "Oui", no: "Non", stable: "Stable", detected: "DÃ©tectÃ©", declining: "En baisse", decay: "DÃ©gradation", volatile: "Volatile", online: "En ligne", required: "Requis", locked: "BloquÃ©", review: "Review", open: "Ouvert", notes: "Notes", signals: "Signaux", memories: "MÃ©moires", patterns: "Patterns", insights: "Insights", trades: "Trades", score: "Score", status: "Statut", confidence: "Confidence", execution: "Execution", discipline: "Discipline", behavioralRisk: "Risque comportemental", totalTrades: "Trades totaux", activeMemories: "MÃ©moires actives", highRisk: "Risque Ã©levÃ©", tone: "Ton", occurrences: "Occurrences", updatedRecently: "Mis Ã  jour rÃ©cemment", qualityScore: "Quality Score" },
-    statuses: { critical: "Critique", high: "Ã‰levÃ©", medium: "Moyen", moderate: "ModÃ©rÃ©", low: "Faible", stable: "Stable", detected: "DÃ©tectÃ©", declining: "En baisse", decay: "DÃ©gradation", volatile: "Volatile", protection: "Protection", cooldown: "Pause", monitor: "Surveillance", locked: "BloquÃ©", review: "Review", open: "Ouvert", cleared: "Libre", required: "Requis" },
-    page: { ...labels.en.page, snapshotTitle: "Snapshot intelligent du compte", snapshotDescription: "Lecture rapide de lâ€™Ã©tat opÃ©rationnel: discipline, risque comportemental, review et mÃ©moire active.", noReviewNotes: "Aucune review AI enregistrÃ©e pour le moment.", riskSupervision: "Supervision du risque", operationalIntelligence: "Intelligence opÃ©rationnelle", strategicFocus: "Focus stratÃ©gique", activeOperationalMemory: "MÃ©moire opÃ©rationnelle active", noMemories: "Aucune mÃ©moire opÃ©rationnelle active pour le moment.", summaryNoData: "Il nâ€™y a pas encore assez de donnÃ©es pour gÃ©nÃ©rer une lecture intelligente.", summaryStable: "VOLTIS a dÃ©tectÃ© une structure opÃ©rationnelle stable.", summaryHighRisk: "VOLTIS dÃ©tecte des signaux de risque comportemental Ã©levÃ©.", summaryDeveloping: "VOLTIS dÃ©tecte une structure en dÃ©veloppement.", strategicItems: ["RÃ©duire la frÃ©quence aprÃ¨s des pertes consÃ©cutives.", "ProtÃ©ger la qualitÃ© dâ€™execution pendant forte volatilitÃ©.", "Rester concentrÃ© sur les setups Ã  forte probabilitÃ©."] },
+    common: { yes: "Oui", no: "Non", stable: "Stable", detected: "Détecté", declining: "En baisse", decay: "Dégradation", volatile: "Volatile", online: "En ligne", required: "Requis", locked: "Bloqué", review: "Review", open: "Ouvert", notes: "Notes", signals: "Signaux", memories: "Mémoires", patterns: "Patterns", insights: "Insights", trades: "Trades", score: "Score", status: "Statut", confidence: "Confidence", execution: "Execution", discipline: "Discipline", behavioralRisk: "Risque comportemental", totalTrades: "Trades totaux", activeMemories: "Mémoires actives", highRisk: "Risque élevé", tone: "Ton", occurrences: "Occurrences", updatedRecently: "Mis à jour récemment", qualityScore: "Quality Score" },
+    statuses: { critical: "Critique", high: "Élevé", medium: "Moyen", moderate: "Modéré", low: "Faible", stable: "Stable", detected: "Détecté", declining: "En baisse", decay: "Dégradation", volatile: "Volatile", protection: "Protection", cooldown: "Pause", monitor: "Surveillance", locked: "Bloqué", review: "Review", open: "Ouvert", cleared: "Libre", required: "Requis" },
+    page: { ...labels.en.page, snapshotTitle: "Snapshot intelligent du compte", snapshotDescription: "Lecture rapide de l’état opérationnel: discipline, risque comportemental, review et mémoire active.", noReviewNotes: "Aucune review AI enregistrée pour le moment.", riskSupervision: "Supervision du risque", operationalIntelligence: "Intelligence opérationnelle", strategicFocus: "Focus stratégique", activeOperationalMemory: "Mémoire opérationnelle active", noMemories: "Aucune mémoire opérationnelle active pour le moment.", summaryNoData: "Il n’y a pas encore assez de données pour générer une lecture intelligente.", summaryStable: "VOLTIS a détecté une structure opérationnelle stable.", summaryHighRisk: "VOLTIS détecte des signaux de risque comportemental élevé.", summaryDeveloping: "VOLTIS détecte une structure en développement.", strategicItems: ["Réduire la fréquence après des pertes consécutives.", "Protéger la qualité d’execution pendant forte volatilité.", "Rester concentré sur les setups à forte probabilité."] },
 });
 labels.de = makeCopy(labels.en, {
-    common: { yes: "Ja", no: "Nein", stable: "Stabil", detected: "Erkannt", declining: "RÃ¼cklÃ¤ufig", decay: "Abfall", volatile: "Volatil", online: "Online", required: "Erforderlich", locked: "Gesperrt", review: "Review", open: "Offen", notes: "Notizen", signals: "Signale", memories: "Speicher", patterns: "Muster", insights: "Insights", trades: "Trades", score: "Score", status: "Status", confidence: "Confidence", execution: "Execution", discipline: "Disziplin", behavioralRisk: "Verhaltensrisiko", totalTrades: "Trades gesamt", activeMemories: "Aktive Speicher", highRisk: "Hohes Risiko", tone: "Ton", occurrences: "Vorkommen", updatedRecently: "KÃ¼rzlich aktualisiert", qualityScore: "Quality Score" },
-    statuses: { critical: "Kritisch", high: "Hoch", medium: "Mittel", moderate: "Moderat", low: "Niedrig", stable: "Stabil", detected: "Erkannt", declining: "RÃ¼cklÃ¤ufig", decay: "Abfall", volatile: "Volatil", protection: "Schutz", cooldown: "Cooldown", monitor: "Monitor", locked: "Gesperrt", review: "Review", open: "Offen", cleared: "Freigegeben", required: "Erforderlich" },
-    page: { ...labels.en.page, snapshotTitle: "Intelligenter Account-Snapshot", snapshotDescription: "Schnelle Analyse des operativen Zustands: Disziplin, Verhaltensrisiko, Review und aktiver Speicher.", noReviewNotes: "Noch keine AI Reviews gespeichert.", riskSupervision: "RisikoÃ¼berwachung", operationalIntelligence: "Operative Intelligenz", strategicFocus: "Strategischer Fokus", activeOperationalMemory: "Aktiver operativer Speicher", noMemories: "Noch kein aktiver operativer Speicher vorhanden.", summaryNoData: "Es gibt noch nicht genug Daten fÃ¼r eine intelligente Account-Analyse.", summaryStable: "VOLTIS hat eine stabile operative Struktur erkannt.", summaryHighRisk: "VOLTIS erkennt hohe Verhaltensrisiko-Signale.", summaryDeveloping: "VOLTIS erkennt eine Struktur in Entwicklung.", strategicItems: ["Handelsfrequenz nach aufeinanderfolgenden Verlusten reduzieren.", "Execution-QualitÃ¤t bei hoher VolatilitÃ¤t schÃ¼tzen.", "Fokus auf Setups mit hoher Wahrscheinlichkeit halten."] },
+    common: { yes: "Ja", no: "Nein", stable: "Stabil", detected: "Erkannt", declining: "Rückläufig", decay: "Abfall", volatile: "Volatil", online: "Online", required: "Erforderlich", locked: "Gesperrt", review: "Review", open: "Offen", notes: "Notizen", signals: "Signale", memories: "Speicher", patterns: "Muster", insights: "Insights", trades: "Trades", score: "Score", status: "Status", confidence: "Confidence", execution: "Execution", discipline: "Disziplin", behavioralRisk: "Verhaltensrisiko", totalTrades: "Trades gesamt", activeMemories: "Aktive Speicher", highRisk: "Hohes Risiko", tone: "Ton", occurrences: "Vorkommen", updatedRecently: "Kürzlich aktualisiert", qualityScore: "Quality Score" },
+    statuses: { critical: "Kritisch", high: "Hoch", medium: "Mittel", moderate: "Moderat", low: "Niedrig", stable: "Stabil", detected: "Erkannt", declining: "Rückläufig", decay: "Abfall", volatile: "Volatil", protection: "Schutz", cooldown: "Cooldown", monitor: "Monitor", locked: "Gesperrt", review: "Review", open: "Offen", cleared: "Freigegeben", required: "Erforderlich" },
+    page: { ...labels.en.page, snapshotTitle: "Intelligenter Account-Snapshot", snapshotDescription: "Schnelle Analyse des operativen Zustands: Disziplin, Verhaltensrisiko, Review und aktiver Speicher.", noReviewNotes: "Noch keine AI Reviews gespeichert.", riskSupervision: "Risikoüberwachung", operationalIntelligence: "Operative Intelligenz", strategicFocus: "Strategischer Fokus", activeOperationalMemory: "Aktiver operativer Speicher", noMemories: "Noch kein aktiver operativer Speicher vorhanden.", summaryNoData: "Es gibt noch nicht genug Daten für eine intelligente Account-Analyse.", summaryStable: "VOLTIS hat eine stabile operative Struktur erkannt.", summaryHighRisk: "VOLTIS erkennt hohe Verhaltensrisiko-Signale.", summaryDeveloping: "VOLTIS erkennt eine Struktur in Entwicklung.", strategicItems: ["Handelsfrequenz nach aufeinanderfolgenden Verlusten reduzieren.", "Execution-Qualität bei hoher Volatilität schützen.", "Fokus auf Setups mit hoher Wahrscheinlichkeit halten."] },
 });
 
 export function getCopilotLabels(language?: string | null) {
@@ -637,4 +637,5 @@ export function getArrayCount(value: unknown) {
 
     return 0;
 }
+
 

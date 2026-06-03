@@ -447,7 +447,7 @@ export default async function AdminPage() {
                         key={membership.id}
                         className="rounded-xl bg-white/10 px-3 py-2 text-xs text-gray-300"
                       >
-                        {membership.tradingAccount.name} Â·{" "}
+                        {membership.tradingAccount.name} ·{" "}
                         {membership.role}
                       </div>
                     ))}
@@ -461,6 +461,7 @@ export default async function AdminPage() {
     </div>
   );
 }
+
 
 
 

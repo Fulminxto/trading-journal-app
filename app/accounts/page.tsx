@@ -124,78 +124,78 @@ const accountsCopy: Record<AppLanguage, AccountsCopy> = {
   },
 
   uk: {
-    overviewEyebrow: "ÐžÐ³Ð»ÑÐ´ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ñ–Ð²",
-    welcomeBack: "Ð— Ð¿Ð¾Ð²ÐµÑ€Ð½ÐµÐ½Ð½ÑÐ¼",
+    overviewEyebrow: "Огляд акаунтів",
+    welcomeBack: "З поверненням",
     heroDescription:
-      "Ð§Ð¸ÑÑ‚Ð¸Ð¹ Ð¾Ð³Ð»ÑÐ´ Ð²Ð°ÑˆÐ¸Ñ… Ñ€Ð¾Ð±Ð¾Ñ‡Ð¸Ñ… Ð°ÐºÐ°ÑƒÐ½Ñ‚Ñ–Ð². Ð¢ÑƒÑ‚ Ð²Ð¸ Ð²Ñ–Ð´ÐºÑ€Ð¸Ð²Ð°Ñ”Ñ‚Ðµ Ñ‚Ð° Ð°Ð½Ð°Ð»Ñ–Ð·ÑƒÑ”Ñ‚Ðµ; Ð¿Ð¾Ð²Ð½Ðµ ÐºÐµÑ€ÑƒÐ²Ð°Ð½Ð½Ñ Ð·Ð°Ð»Ð¸ÑˆÐ°Ñ”Ñ‚ÑŒÑÑ Ð² Ñ€Ð¾Ð·Ð´Ñ–Ð»Ñ– ÐºÐµÑ€ÑƒÐ²Ð°Ð½Ð½Ñ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°Ð¼Ð¸.",
+      "Чистий огляд ваших робочих акаунтів. Тут ви відкриваєте та аналізуєте; повне керування залишається в розділі керування акаунтами.",
 
-    manageAccounts: "ÐšÐµÑ€ÑƒÐ²Ð°Ñ‚Ð¸ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°Ð¼Ð¸",
-    createAccount: "Ð¡Ñ‚Ð²Ð¾Ñ€Ð¸Ñ‚Ð¸ Ð°ÐºÐ°ÑƒÐ½Ñ‚",
-    admin: "ÐÐ´Ð¼Ñ–Ð½",
-    platformAccounts: "ÐÐºÐ°ÑƒÐ½Ñ‚Ð¸ Ð¿Ð»Ð°Ñ‚Ñ„Ð¾Ñ€Ð¼Ð¸",
+    manageAccounts: "Керувати акаунтами",
+    createAccount: "Створити акаунт",
+    admin: "Адмін",
+    platformAccounts: "Акаунти платформи",
 
-    accessibleAccounts: "Ð”Ð¾ÑÑ‚ÑƒÐ¿Ð½Ñ– Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð¸",
-    active: "ÐÐºÑ‚Ð¸Ð²Ð½Ñ–",
-    totalTrades: "Ð£ÑÑŒÐ¾Ð³Ð¾ ÑƒÐ³Ð¾Ð´",
-    totalPnl: "Ð—Ð°Ð³Ð°Ð»ÑŒÐ½Ð¸Ð¹ PnL",
-    personalAccounts: "ÐžÑÐ¾Ð±Ð¸ÑÑ‚Ñ– Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð¸",
-    sharedAccounts: "Ð¡Ð¿Ñ–Ð»ÑŒÐ½Ñ– Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð¸",
-    archived: "ÐÑ€Ñ…Ñ–Ð²Ð½Ñ–",
+    accessibleAccounts: "Доступні акаунти",
+    active: "Активні",
+    totalTrades: "Усього угод",
+    totalPnl: "Загальний PnL",
+    personalAccounts: "Особисті акаунти",
+    sharedAccounts: "Спільні акаунти",
+    archived: "Архівні",
 
     workspaceEyebrow: "Workspace",
-    activeAccounts: "ÐÐºÑ‚Ð¸Ð²Ð½Ñ– Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð¸",
-    noActiveAccounts: "ÐÐµÐ¼Ð°Ñ” Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ð¸Ñ… Ð°ÐºÑ‚Ð¸Ð²Ð½Ð¸Ñ… Ð°ÐºÐ°ÑƒÐ½Ñ‚Ñ–Ð².",
-    inactiveWorkspace: "ÐÐµÐ°ÐºÑ‚Ð¸Ð²Ð½Ð¸Ð¹ workspace",
-    archivedAccounts: "ÐÑ€Ñ…Ñ–Ð²Ð½Ñ– Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð¸",
+    activeAccounts: "Активні акаунти",
+    noActiveAccounts: "Немає доступних активних акаунтів.",
+    inactiveWorkspace: "Неактивний workspace",
+    archivedAccounts: "Архівні акаунти",
 
-    role: "Ð Ð¾Ð»ÑŒ",
-    balance: "Ð‘Ð°Ð»Ð°Ð½Ñ",
-    trades: "Ð£Ð³Ð¾Ð´Ð¸",
+    role: "Роль",
+    balance: "Баланс",
+    trades: "Угоди",
     winRateShort: "WR",
-    members: "Ð£Ñ‡Ð°ÑÐ½Ð¸ÐºÐ¸",
-    accountPnl: "PnL Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°",
-    openAccount: "Ð’Ñ–Ð´ÐºÑ€Ð¸Ñ‚Ð¸ Ð°ÐºÐ°ÑƒÐ½Ñ‚",
+    members: "Учасники",
+    accountPnl: "PnL акаунта",
+    openAccount: "Відкрити акаунт",
   },
 
   ru: {
-    overviewEyebrow: "ÐžÐ±Ð·Ð¾Ñ€ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð¾Ð²",
-    welcomeBack: "Ð¡ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰ÐµÐ½Ð¸ÐµÐ¼",
+    overviewEyebrow: "Обзор аккаунтов",
+    welcomeBack: "С возвращением",
     heroDescription:
-      "Ð§Ð¸ÑÑ‚Ñ‹Ð¹ Ð¾Ð±Ð·Ð¾Ñ€ Ð²Ð°ÑˆÐ¸Ñ… Ñ€Ð°Ð±Ð¾Ñ‡Ð¸Ñ… Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð¾Ð². Ð—Ð´ÐµÑÑŒ Ð²Ñ‹ Ð¾Ñ‚ÐºÑ€Ñ‹Ð²Ð°ÐµÑ‚Ðµ Ð¸ Ð°Ð½Ð°Ð»Ð¸Ð·Ð¸Ñ€ÑƒÐµÑ‚Ðµ; Ð¿Ð¾Ð»Ð½Ð¾Ðµ ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð¾ÑÑ‚Ð°ÐµÑ‚ÑÑ Ð² Ñ€Ð°Ð·Ð´ÐµÐ»Ðµ ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ñ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°Ð¼Ð¸.",
+      "Чистый обзор ваших рабочих аккаунтов. Здесь вы открываете и анализируете; полное управление остается в разделе управления аккаунтами.",
 
-    manageAccounts: "Ð£Ð¿Ñ€Ð°Ð²Ð»ÑÑ‚ÑŒ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°Ð¼Ð¸",
-    createAccount: "Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚",
-    admin: "ÐÐ´Ð¼Ð¸Ð½",
-    platformAccounts: "ÐÐºÐºÐ°ÑƒÐ½Ñ‚Ñ‹ Ð¿Ð»Ð°Ñ‚Ñ„Ð¾Ñ€Ð¼Ñ‹",
+    manageAccounts: "Управлять аккаунтами",
+    createAccount: "Создать аккаунт",
+    admin: "Админ",
+    platformAccounts: "Аккаунты платформы",
 
-    accessibleAccounts: "Ð”Ð¾ÑÑ‚ÑƒÐ¿Ð½Ñ‹Ðµ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ñ‹",
-    active: "ÐÐºÑ‚Ð¸Ð²Ð½Ñ‹Ðµ",
-    totalTrades: "Ð’ÑÐµÐ³Ð¾ ÑÐ´ÐµÐ»Ð¾Ðº",
-    totalPnl: "ÐžÐ±Ñ‰Ð¸Ð¹ PnL",
-    personalAccounts: "Ð›Ð¸Ñ‡Ð½Ñ‹Ðµ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ñ‹",
-    sharedAccounts: "ÐžÐ±Ñ‰Ð¸Ðµ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ñ‹",
-    archived: "ÐÑ€Ñ…Ð¸Ð²Ð½Ñ‹Ðµ",
+    accessibleAccounts: "Доступные аккаунты",
+    active: "Активные",
+    totalTrades: "Всего сделок",
+    totalPnl: "Общий PnL",
+    personalAccounts: "Личные аккаунты",
+    sharedAccounts: "Общие аккаунты",
+    archived: "Архивные",
 
     workspaceEyebrow: "Workspace",
-    activeAccounts: "ÐÐºÑ‚Ð¸Ð²Ð½Ñ‹Ðµ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ñ‹",
-    noActiveAccounts: "ÐÐµÑ‚ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ñ‹Ñ… Ð°ÐºÑ‚Ð¸Ð²Ð½Ñ‹Ñ… Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð¾Ð².",
-    inactiveWorkspace: "ÐÐµÐ°ÐºÑ‚Ð¸Ð²Ð½Ñ‹Ð¹ workspace",
-    archivedAccounts: "ÐÑ€Ñ…Ð¸Ð²Ð½Ñ‹Ðµ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ñ‹",
+    activeAccounts: "Активные аккаунты",
+    noActiveAccounts: "Нет доступных активных аккаунтов.",
+    inactiveWorkspace: "Неактивный workspace",
+    archivedAccounts: "Архивные аккаунты",
 
-    role: "Ð Ð¾Ð»ÑŒ",
-    balance: "Ð‘Ð°Ð»Ð°Ð½Ñ",
-    trades: "Ð¡Ð´ÐµÐ»ÐºÐ¸",
+    role: "Роль",
+    balance: "Баланс",
+    trades: "Сделки",
     winRateShort: "WR",
-    members: "Ð£Ñ‡Ð°ÑÑ‚Ð½Ð¸ÐºÐ¸",
-    accountPnl: "PnL Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°",
-    openAccount: "ÐžÑ‚ÐºÑ€Ñ‹Ñ‚ÑŒ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚",
+    members: "Участники",
+    accountPnl: "PnL аккаунта",
+    openAccount: "Открыть аккаунт",
   },
 
   es: {
     overviewEyebrow: "Resumen de cuentas",
     welcomeBack: "Bienvenido de nuevo",
     heroDescription:
-      "Una vista limpia de tus cuentas operativas. Desde aquÃ­ abres y analizas; la gestiÃ³n completa queda dentro de Manage My Accounts.",
+      "Una vista limpia de tus cuentas operativas. Desde aquí abres y analizas; la gestión completa queda dentro de Manage My Accounts.",
 
     manageAccounts: "Gestionar cuentas",
     createAccount: "Crear cuenta",
@@ -226,13 +226,13 @@ const accountsCopy: Record<AppLanguage, AccountsCopy> = {
   },
 
   fr: {
-    overviewEyebrow: "Vue dâ€™ensemble des comptes",
+    overviewEyebrow: "Vue d’ensemble des comptes",
     welcomeBack: "Bon retour",
     heroDescription:
-      "Une vue claire de vos comptes opÃ©rationnels. Ouvrez et analysez ici; la gestion complÃ¨te reste dans Manage My Accounts.",
+      "Une vue claire de vos comptes opérationnels. Ouvrez et analysez ici; la gestion complète reste dans Manage My Accounts.",
 
-    manageAccounts: "GÃ©rer mes comptes",
-    createAccount: "CrÃ©er un compte",
+    manageAccounts: "Gérer mes comptes",
+    createAccount: "Créer un compte",
     admin: "Admin",
     platformAccounts: "Comptes plateforme",
 
@@ -241,16 +241,16 @@ const accountsCopy: Record<AppLanguage, AccountsCopy> = {
     totalTrades: "Trades totaux",
     totalPnl: "PnL total",
     personalAccounts: "Comptes personnels",
-    sharedAccounts: "Comptes partagÃ©s",
-    archived: "ArchivÃ©s",
+    sharedAccounts: "Comptes partagés",
+    archived: "Archivés",
 
     workspaceEyebrow: "Workspace",
     activeAccounts: "Comptes actifs",
     noActiveAccounts: "Aucun compte actif disponible.",
     inactiveWorkspace: "Workspace inactif",
-    archivedAccounts: "Comptes archivÃ©s",
+    archivedAccounts: "Comptes archivés",
 
-    role: "RÃ´le",
+    role: "Rôle",
     balance: "Solde",
     trades: "Trades",
     winRateShort: "WR",
@@ -260,27 +260,27 @@ const accountsCopy: Record<AppLanguage, AccountsCopy> = {
   },
 
   de: {
-    overviewEyebrow: "KontenÃ¼bersicht",
-    welcomeBack: "Willkommen zurÃ¼ck",
+    overviewEyebrow: "Kontenübersicht",
+    welcomeBack: "Willkommen zurück",
     heroDescription:
-      "Eine klare Ãœbersicht deiner operativen Konten. Hier Ã¶ffnest und analysierst du; die vollstÃ¤ndige Verwaltung bleibt in Manage My Accounts.",
+      "Eine klare Übersicht deiner operativen Konten. Hier öffnest und analysierst du; die vollständige Verwaltung bleibt in Manage My Accounts.",
 
     manageAccounts: "Konten verwalten",
     createAccount: "Konto erstellen",
     admin: "Admin",
     platformAccounts: "Plattformkonten",
 
-    accessibleAccounts: "ZugÃ¤ngliche Konten",
+    accessibleAccounts: "Zugängliche Konten",
     active: "Aktiv",
     totalTrades: "Trades gesamt",
     totalPnl: "Gesamt-PnL",
-    personalAccounts: "PersÃ¶nliche Konten",
+    personalAccounts: "Persönliche Konten",
     sharedAccounts: "Geteilte Konten",
     archived: "Archiviert",
 
     workspaceEyebrow: "Workspace",
     activeAccounts: "Aktive Konten",
-    noActiveAccounts: "Keine aktiven Konten verfÃ¼gbar.",
+    noActiveAccounts: "Keine aktiven Konten verfügbar.",
     inactiveWorkspace: "Inaktiver Workspace",
     archivedAccounts: "Archivierte Konten",
 
@@ -290,7 +290,7 @@ const accountsCopy: Record<AppLanguage, AccountsCopy> = {
     winRateShort: "WR",
     members: "Mitglieder",
     accountPnl: "Konto-PnL",
-    openAccount: "Konto Ã¶ffnen",
+    openAccount: "Konto öffnen",
   },
 };
 
@@ -752,4 +752,5 @@ export default async function AccountsPage() {
     </div>
   );
 }
+
 

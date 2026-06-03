@@ -20,7 +20,7 @@ const labels: Record<string, Labels> = {
     eyebrow: "VOLTIS Score",
     title: "Consistency Engine",
     description:
-      "Score calcolato usando performance, win rate, qualitÃ  esecuzione e consistenza operativa.",
+      "Score calcolato usando performance, win rate, qualità esecuzione e consistenza operativa.",
     elite: "Elite",
     consistent: "Consistente",
     developing: "In sviluppo",
@@ -40,27 +40,27 @@ const labels: Record<string, Labels> = {
     eyebrow: "VOLTIS Score",
     title: "Consistency Engine",
     description:
-      "Score Ñ€Ð¾Ð·Ñ€Ð°Ñ…Ð¾Ð²Ð°Ð½Ð¸Ð¹ Ð½Ð° Ð¾ÑÐ½Ð¾Ð²Ñ– performance, win rate, ÑÐºÐ¾ÑÑ‚Ñ– execution Ñ‚Ð° Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð¾Ñ— ÑÑ‚Ð°Ð±Ñ–Ð»ÑŒÐ½Ð¾ÑÑ‚Ñ–.",
+      "Score розрахований на основі performance, win rate, якості execution та операційної стабільності.",
     elite: "Elite",
-    consistent: "Ð¡Ñ‚Ð°Ð±Ñ–Ð»ÑŒÐ½Ð¸Ð¹",
-    developing: "Ð£ Ñ€Ð¾Ð·Ð²Ð¸Ñ‚ÐºÑƒ",
-    unstable: "ÐÐµÑÑ‚Ð°Ð±Ñ–Ð»ÑŒÐ½Ð¸Ð¹",
+    consistent: "Стабільний",
+    developing: "У розвитку",
+    unstable: "Нестабільний",
   },
   ru: {
     eyebrow: "VOLTIS Score",
     title: "Consistency Engine",
     description:
-      "Score Ñ€Ð°ÑÑÑ‡Ð¸Ñ‚Ð°Ð½ Ð½Ð° Ð¾ÑÐ½Ð¾Ð²Ðµ performance, win rate, ÐºÐ°Ñ‡ÐµÑÑ‚Ð²Ð° execution Ð¸ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ð¾Ð¹ ÑÑ‚Ð°Ð±Ð¸Ð»ÑŒÐ½Ð¾ÑÑ‚Ð¸.",
+      "Score рассчитан на основе performance, win rate, качества execution и операционной стабильности.",
     elite: "Elite",
-    consistent: "Ð¡Ñ‚Ð°Ð±Ð¸Ð»ÑŒÐ½Ñ‹Ð¹",
-    developing: "Ð’ Ñ€Ð°Ð·Ð²Ð¸Ñ‚Ð¸Ð¸",
-    unstable: "ÐÐµÑÑ‚Ð°Ð±Ð¸Ð»ÑŒÐ½Ñ‹Ð¹",
+    consistent: "Стабильный",
+    developing: "В развитии",
+    unstable: "Нестабильный",
   },
   es: {
     eyebrow: "VOLTIS Score",
     title: "Consistency Engine",
     description:
-      "Score calculado usando performance, win rate, calidad de ejecuciÃ³n y consistencia operativa.",
+      "Score calculado usando performance, win rate, calidad de ejecución y consistencia operativa.",
     elite: "Elite",
     consistent: "Consistente",
     developing: "En desarrollo",
@@ -70,17 +70,17 @@ const labels: Record<string, Labels> = {
     eyebrow: "VOLTIS Score",
     title: "Consistency Engine",
     description:
-      "Score calculÃ© avec la performance, le win rate, la qualitÃ© dâ€™exÃ©cution et la consistance opÃ©rationnelle.",
+      "Score calculé avec la performance, le win rate, la qualité d’exécution et la consistance opérationnelle.",
     elite: "Elite",
     consistent: "Consistant",
-    developing: "En dÃ©veloppement",
+    developing: "En développement",
     unstable: "Instable",
   },
   de: {
     eyebrow: "VOLTIS Score",
     title: "Consistency Engine",
     description:
-      "Score berechnet aus Performance, Win Rate, Execution-QualitÃ¤t und operativer Konstanz.",
+      "Score berechnet aus Performance, Win Rate, Execution-Qualität und operativer Konstanz.",
     elite: "Elite",
     consistent: "Konstant",
     developing: "In Entwicklung",
@@ -179,3 +179,4 @@ export default function ConsistencyScoreCard({
     </div>
   );
 }
+

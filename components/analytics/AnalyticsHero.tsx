@@ -42,22 +42,22 @@ const labels: Record<string, Labels> = {
   uk: {
     eyebrow: "VOLTIS Analytics",
     description:
-      "Performance intelligence, psychology tracking, Ñ€Ð¾Ð·ÑˆÐ¸Ñ€ÐµÐ½Ð° Ð°Ð½Ð°Ð»Ñ–Ñ‚Ð¸ÐºÐ° Ñ‚Ð° behavioral insights Ð´Ð»Ñ Ð¿Ð¾Ð±ÑƒÐ´Ð¾Ð²Ð¸ Ð¿Ñ€Ð¾Ñ„ÐµÑÑ–Ð¹Ð½Ð¾Ñ— Ñ‚Ð¾Ñ€Ð³Ð¾Ð²Ð¾Ñ— ÑÐ¸ÑÑ‚ÐµÐ¼Ð¸.",
-    totalPnl: "Ð—Ð°Ð³Ð°Ð»ÑŒÐ½Ð¸Ð¹ PnL",
+      "Performance intelligence, psychology tracking, розширена аналітика та behavioral insights для побудови професійної торгової системи.",
+    totalPnl: "Загальний PnL",
     winRate: "Win Rate",
-    totalTrades: "Ð£ÑÑŒÐ¾Ð³Ð¾ ÑƒÐ³Ð¾Ð´",
-    accountStatus: "Ð¡Ñ‚Ð°Ñ‚ÑƒÑ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°",
-    active: "ÐÐºÑ‚Ð¸Ð²Ð½Ð¸Ð¹",
+    totalTrades: "Усього угод",
+    accountStatus: "Статус акаунта",
+    active: "Активний",
   },
   ru: {
     eyebrow: "VOLTIS Analytics",
     description:
-      "Performance intelligence, psychology tracking, Ñ€Ð°ÑÑˆÐ¸Ñ€ÐµÐ½Ð½Ð°Ñ Ð°Ð½Ð°Ð»Ð¸Ñ‚Ð¸ÐºÐ° Ð¸ behavioral insights Ð´Ð»Ñ Ð¿Ð¾ÑÑ‚Ñ€Ð¾ÐµÐ½Ð¸Ñ Ð¿Ñ€Ð¾Ñ„ÐµÑÑÐ¸Ð¾Ð½Ð°Ð»ÑŒÐ½Ð¾Ð¹ Ñ‚Ð¾Ñ€Ð³Ð¾Ð²Ð¾Ð¹ ÑÐ¸ÑÑ‚ÐµÐ¼Ñ‹.",
-    totalPnl: "ÐžÐ±Ñ‰Ð¸Ð¹ PnL",
+      "Performance intelligence, psychology tracking, расширенная аналитика и behavioral insights для построения профессиональной торговой системы.",
+    totalPnl: "Общий PnL",
     winRate: "Win Rate",
-    totalTrades: "Ð’ÑÐµÐ³Ð¾ ÑÐ´ÐµÐ»Ð¾Ðº",
-    accountStatus: "Ð¡Ñ‚Ð°Ñ‚ÑƒÑ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°",
-    active: "ÐÐºÑ‚Ð¸Ð²ÐµÐ½",
+    totalTrades: "Всего сделок",
+    accountStatus: "Статус аккаунта",
+    active: "Активен",
   },
   es: {
     eyebrow: "VOLTIS Analytics",
@@ -72,11 +72,11 @@ const labels: Record<string, Labels> = {
   fr: {
     eyebrow: "VOLTIS Analytics",
     description:
-      "Performance intelligence, psychology tracking, analytics avancÃ©s et behavioral insights pour construire un systÃ¨me de trading professionnel.",
+      "Performance intelligence, psychology tracking, analytics avancés et behavioral insights pour construire un système de trading professionnel.",
     totalPnl: "PnL total",
     winRate: "Win Rate",
     totalTrades: "Trades totaux",
-    accountStatus: "Ã‰tat du compte",
+    accountStatus: "État du compte",
     active: "Actif",
   },
   de: {
@@ -175,3 +175,4 @@ export default function AnalyticsHero({
     </div>
   );
 }
+

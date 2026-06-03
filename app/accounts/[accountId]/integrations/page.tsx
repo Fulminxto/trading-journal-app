@@ -207,31 +207,31 @@ const labels: Record<AppLanguage, IntegrationsLabels> = {
 
             manualLabel: "Manual Mode",
             manualDescription:
-                "Questo account Ã¨ impostato su Manual Only. I trade vengono gestiti manualmente dal Diary.",
+                "Questo account è impostato su Manual Only. I trade vengono gestiti manualmente dal Diary.",
             manualModeActive: "Manual mode active",
             automaticSyncDisabled: "Automatic sync disabled",
 
             mt5Label: "Pronto per MT5",
             mt5Description:
-                "Questo account Ã¨ pronto per ricevere trade da un futuro MT5 Connector.",
+                "Questo account è pronto per ricevere trade da un futuro MT5 Connector.",
             mt5ModeActive: "MT5 mode active",
             autoSyncEnabled: "Auto sync enabled",
             mt5SourceEnabled: "MT5 source enabled",
 
             brokerLabel: "Pronto per Broker",
             brokerDescription:
-                "Questo account Ã¨ pronto per ricevere trade da una futura Broker Integration.",
+                "Questo account è pronto per ricevere trade da una futura Broker Integration.",
             brokerModeActive: "Broker mode active",
             brokerSourceEnabled: "Broker source enabled",
 
             hybridLabel: "Pronto per MT5 + Broker",
             hybridDescription:
-                "Questo account Ã¨ pronto per ricevere trade sia da MT5 sia da Broker Integration.",
+                "Questo account è pronto per ricevere trade sia da MT5 sia da Broker Integration.",
             hybridModeActive: "Hybrid mode active",
 
             neededLabel: "Configurazione richiesta",
             neededDescription:
-                "Questo account ha una modalitÃ  sync selezionata, ma la configurazione non Ã¨ ancora completa.",
+                "Questo account ha una modalità sync selezionata, ma la configurazione non è ancora completa.",
             integrationModeSelected: "Integration mode selected",
         },
         hero: {
@@ -240,7 +240,7 @@ const labels: Record<AppLanguage, IntegrationsLabels> = {
             title: "Integrazioni",
             description:
                 "Configura la base per Manual, MT5, Broker e Hybrid Sync. In questa fase VOLTIS non salva password, token o API key: prepara solo la struttura sicura per la sincronizzazione.",
-            back: "Torna allâ€™Account Hub",
+            back: "Torna all’Account Hub",
         },
         cards: {
             integrationMode: "Integration Mode",
@@ -248,19 +248,19 @@ const labels: Record<AppLanguage, IntegrationsLabels> = {
                 "Strategia di gestione dei trade per questo account.",
             autoSync: "Auto Sync",
             autoSyncDescription:
-                "Controlla se lâ€™account accetta import automatici.",
+                "Controlla se l’account accetta import automatici.",
             mt5Setup: "MT5 Setup",
             mt5SetupDescription:
                 "Login e server MT5 identificativi, senza credenziali sensibili.",
             lastSync: "Ultima Sync",
             lastSyncDescription:
-                "Ultima sincronizzazione registrata dallâ€™account.",
+                "Ultima sincronizzazione registrata dall’account.",
         },
         syncError: {
             eyebrow: "Errore sync rilevato",
             title: "Ultima sincronizzazione fallita",
             description:
-                "VOLTIS ha rilevato un errore durante lâ€™importazione automatica dei trade. Controlla configurazione, Account ID, secret e Sync Logs.",
+                "VOLTIS ha rilevato un errore durante l’importazione automatica dei trade. Controlla configurazione, Account ID, secret e Sync Logs.",
             latestError: "Ultimo errore",
             resetButton: "Reset Sync",
         },
@@ -268,12 +268,12 @@ const labels: Record<AppLanguage, IntegrationsLabels> = {
             syncMode: "Sync mode",
             integrationStrategy: "Strategia di integrazione",
             integrationStrategyDescription:
-                "Scegli come questo account dovrÃ  gestire i trade. Manual Only mantiene solo lâ€™inserimento manuale. MT5, Broker e Hybrid preparano il conto alla sincronizzazione automatica.",
+                "Scegli come questo account dovrà gestire i trade. Manual Only mantiene solo l’inserimento manuale. MT5, Broker e Hybrid preparano il conto alla sincronizzazione automatica.",
 
             activation: "Attivazione",
             sources: "Sorgenti",
             autoSyncDescription:
-                "Permette allâ€™account di accettare import automatici.",
+                "Permette all’account di accettare import automatici.",
             mt5Description:
                 "Abilita la sorgente MT5 per il futuro connettore.",
             brokerDescription: "Abilita la sorgente Broker Integration.",
@@ -288,7 +288,7 @@ const labels: Record<AppLanguage, IntegrationsLabels> = {
             brokerIntegration: "Broker Integration",
             brokerDetails: "Dettagli Broker",
             brokerDetailsDescription:
-                "Salviamo solo provider e identificativo account. Le credenziali reali verranno aggiunte piÃ¹ avanti con storage sicuro.",
+                "Salviamo solo provider e identificativo account. Le credenziali reali verranno aggiunte più avanti con storage sicuro.",
             brokerProviderPlaceholder: "Broker provider",
             brokerAccountIdPlaceholder: "Broker account ID",
 
@@ -298,29 +298,29 @@ const labels: Record<AppLanguage, IntegrationsLabels> = {
                 "Questi dati serviranno per testare il futuro Expert Advisor MT5 o una futura integrazione Broker. Per ora sono informazioni di configurazione, non una connessione reale.",
             tradingAccountId: "Trading Account ID",
             syncSecret: "Sync Secret",
-            syncSecretStored: "Salvato solo nellâ€™ambiente server",
+            syncSecretStored: "Salvato solo nell’ambiente server",
             syncSecretDescription:
-                "Non viene mostrata in app. VerrÃ  inserita manualmente nel connettore solo in fase di test controllato.",
+                "Non viene mostrata in app. Verrà inserita manualmente nel connettore solo in fase di test controllato.",
             healthEndpoint: "Health Check Endpoint",
             importEndpoint: "Import Endpoint",
             futureSyncFlow: "Future sync flow",
             futureSyncDescription:
-                "Il connettore controllerÃ  prima lâ€™Health Check. Se VOLTIS risponde che la sync Ã¨ pronta, invierÃ  i trade chiusi allâ€™Import Endpoint. I trade entreranno nel Diary come importati e, se necessario, in stato Needs Review.",
+                "Il connettore controllerà prima l’Health Check. Se VOLTIS risponde che la sync è pronta, invierà i trade chiusi all’Import Endpoint. I trade entreranno nel Diary come importati e, se necessario, in stato Needs Review.",
 
             syncLogs: "Sync Logs",
-            recentImportActivity: "AttivitÃ  import recenti",
+            recentImportActivity: "Attività import recenti",
             syncLogsDescription:
                 "Qui vedrai gli ultimi eventi collegati alla sincronizzazione automatica: trade importati, impostazioni aggiornate, reset e futuri errori MT5/Broker.",
             noSyncActivity:
-                "Nessuna attivitÃ  sync registrata per ora. Quando un trade verrÃ  importato da MT5 o Broker, apparirÃ  qui.",
+                "Nessuna attività sync registrata per ora. Quando un trade verrà importato da MT5 o Broker, apparirà qui.",
 
             securityNotice: "Avviso sicurezza",
             noSensitiveCredentials: "Nessuna credenziale sensibile salvata",
             securityDescription:
-                "In questa fase VOLTIS non memorizza password MT5, API key broker, token o dati sensibili. La connessione reale verrÃ  costruita piÃ¹ avanti con un sistema dedicato e protetto.",
+                "In questa fase VOLTIS non memorizza password MT5, API key broker, token o dati sensibili. La connessione reale verrà costruita più avanti con un sistema dedicato e protetto.",
 
             saveNote:
-                "Salva solo impostazioni non sensibili. La sync reale verrÃ  testata piÃ¹ avanti in ambiente controllato.",
+                "Salva solo impostazioni non sensibili. La sync reale verrà testata più avanti in ambiente controllato.",
             saveButton: "Salva impostazioni integrazione",
         },
     },
@@ -475,297 +475,297 @@ const labels: Record<AppLanguage, IntegrationsLabels> = {
 
     uk: {
         modes: {
-            manual: "Ð¢Ñ–Ð»ÑŒÐºÐ¸ Ð²Ñ€ÑƒÑ‡Ð½Ñƒ",
+            manual: "Тільки вручну",
             mt5: "MT5 Connector",
             broker: "Broker Integration",
             hybrid: "MT5 + Broker",
         },
         statuses: {
-            connected: "ÐŸÑ–Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¾",
-            pending: "Ð’ Ð¾Ñ‡Ñ–ÐºÑƒÐ²Ð°Ð½Ð½Ñ–",
-            error: "ÐŸÐ¾Ð¼Ð¸Ð»ÐºÐ°",
-            inactive: "ÐÐµÐ°ÐºÑ‚Ð¸Ð²Ð½Ð¾",
+            connected: "Підключено",
+            pending: "В очікуванні",
+            error: "Помилка",
+            inactive: "Неактивно",
         },
         common: {
-            enabled: "Ð£Ð²Ñ–Ð¼ÐºÐ½ÐµÐ½Ð¾",
-            disabled: "Ð’Ð¸Ð¼ÐºÐ½ÐµÐ½Ð¾",
-            configured: "ÐÐ°Ð»Ð°ÑˆÑ‚Ð¾Ð²Ð°Ð½Ð¾",
-            missing: "Ð’Ñ–Ð´ÑÑƒÑ‚Ð½Ñ”",
+            enabled: "Увімкнено",
+            disabled: "Вимкнено",
+            configured: "Налаштовано",
+            missing: "Відсутнє",
             ok: "OK",
-            never: "ÐÑ–ÐºÐ¾Ð»Ð¸",
-            import: "Ð†Ð¼Ð¿Ð¾Ñ€Ñ‚",
-            updated: "ÐžÐ½Ð¾Ð²Ð»ÐµÐ½Ð¾",
-            reset: "Ð¡ÐºÐ¸Ð´Ð°Ð½Ð½Ñ",
-            settings: "ÐÐ°Ð»Ð°ÑˆÑ‚ÑƒÐ²Ð°Ð½Ð½Ñ",
+            never: "Ніколи",
+            import: "Імпорт",
+            updated: "Оновлено",
+            reset: "Скидання",
+            settings: "Налаштування",
         },
         readiness: {
-            title: "Ð“Ð¾Ñ‚Ð¾Ð²Ð½Ñ–ÑÑ‚ÑŒ Trade Sync",
+            title: "Готовність Trade Sync",
 
-            manualLabel: "Ð ÑƒÑ‡Ð½Ð¸Ð¹ Ñ€ÐµÐ¶Ð¸Ð¼",
+            manualLabel: "Ручний режим",
             manualDescription:
-                "Ð¦ÐµÐ¹ Ð°ÐºÐ°ÑƒÐ½Ñ‚ Ð½Ð°Ð»Ð°ÑˆÑ‚Ð¾Ð²Ð°Ð½Ð¸Ð¹ ÑÐº Manual Only. Ð£Ð³Ð¾Ð´Ð¸ ÐºÐµÑ€ÑƒÑŽÑ‚ÑŒÑÑ Ð²Ñ€ÑƒÑ‡Ð½Ñƒ Ñ‡ÐµÑ€ÐµÐ· Diary.",
-            manualModeActive: "Ð ÑƒÑ‡Ð½Ð¸Ð¹ Ñ€ÐµÐ¶Ð¸Ð¼ Ð°ÐºÑ‚Ð¸Ð²Ð½Ð¸Ð¹",
-            automaticSyncDisabled: "ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡Ð½Ð° ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ñ–Ð·Ð°Ñ†Ñ–Ñ Ð²Ð¸Ð¼ÐºÐ½ÐµÐ½Ð°",
+                "Цей акаунт налаштований як Manual Only. Угоди керуються вручну через Diary.",
+            manualModeActive: "Ручний режим активний",
+            automaticSyncDisabled: "Автоматична синхронізація вимкнена",
 
-            mt5Label: "Ð“Ð¾Ñ‚Ð¾Ð²Ð¾ Ð´Ð»Ñ MT5",
+            mt5Label: "Готово для MT5",
             mt5Description:
-                "Ð¦ÐµÐ¹ Ð°ÐºÐ°ÑƒÐ½Ñ‚ Ð³Ð¾Ñ‚Ð¾Ð²Ð¸Ð¹ Ð¾Ñ‚Ñ€Ð¸Ð¼ÑƒÐ²Ð°Ñ‚Ð¸ ÑƒÐ³Ð¾Ð´Ð¸ Ð· Ð¼Ð°Ð¹Ð±ÑƒÑ‚Ð½ÑŒÐ¾Ð³Ð¾ MT5 Connector.",
-            mt5ModeActive: "Ð ÐµÐ¶Ð¸Ð¼ MT5 Ð°ÐºÑ‚Ð¸Ð²Ð½Ð¸Ð¹",
-            autoSyncEnabled: "ÐÐ²Ñ‚Ð¾ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ñ–Ð·Ð°Ñ†Ñ–Ñ ÑƒÐ²Ñ–Ð¼ÐºÐ½ÐµÐ½Ð°",
-            mt5SourceEnabled: "Ð”Ð¶ÐµÑ€ÐµÐ»Ð¾ MT5 ÑƒÐ²Ñ–Ð¼ÐºÐ½ÐµÐ½Ðµ",
+                "Цей акаунт готовий отримувати угоди з майбутнього MT5 Connector.",
+            mt5ModeActive: "Режим MT5 активний",
+            autoSyncEnabled: "Автосинхронізація увімкнена",
+            mt5SourceEnabled: "Джерело MT5 увімкнене",
 
-            brokerLabel: "Ð“Ð¾Ñ‚Ð¾Ð²Ð¾ Ð´Ð»Ñ Broker",
+            brokerLabel: "Готово для Broker",
             brokerDescription:
-                "Ð¦ÐµÐ¹ Ð°ÐºÐ°ÑƒÐ½Ñ‚ Ð³Ð¾Ñ‚Ð¾Ð²Ð¸Ð¹ Ð¾Ñ‚Ñ€Ð¸Ð¼ÑƒÐ²Ð°Ñ‚Ð¸ ÑƒÐ³Ð¾Ð´Ð¸ Ð· Ð¼Ð°Ð¹Ð±ÑƒÑ‚Ð½ÑŒÐ¾Ñ— Broker Integration.",
-            brokerModeActive: "Ð ÐµÐ¶Ð¸Ð¼ Broker Ð°ÐºÑ‚Ð¸Ð²Ð½Ð¸Ð¹",
-            brokerSourceEnabled: "Ð”Ð¶ÐµÑ€ÐµÐ»Ð¾ Broker ÑƒÐ²Ñ–Ð¼ÐºÐ½ÐµÐ½Ðµ",
+                "Цей акаунт готовий отримувати угоди з майбутньої Broker Integration.",
+            brokerModeActive: "Режим Broker активний",
+            brokerSourceEnabled: "Джерело Broker увімкнене",
 
-            hybridLabel: "Ð“Ð¾Ñ‚Ð¾Ð²Ð¾ Ð´Ð»Ñ MT5 + Broker",
+            hybridLabel: "Готово для MT5 + Broker",
             hybridDescription:
-                "Ð¦ÐµÐ¹ Ð°ÐºÐ°ÑƒÐ½Ñ‚ Ð³Ð¾Ñ‚Ð¾Ð²Ð¸Ð¹ Ð¾Ñ‚Ñ€Ð¸Ð¼ÑƒÐ²Ð°Ñ‚Ð¸ ÑƒÐ³Ð¾Ð´Ð¸ Ñ– Ð· MT5, Ñ– Ð· Broker Integration.",
-            hybridModeActive: "Ð“Ñ–Ð±Ñ€Ð¸Ð´Ð½Ð¸Ð¹ Ñ€ÐµÐ¶Ð¸Ð¼ Ð°ÐºÑ‚Ð¸Ð²Ð½Ð¸Ð¹",
+                "Цей акаунт готовий отримувати угоди і з MT5, і з Broker Integration.",
+            hybridModeActive: "Гібридний режим активний",
 
-            neededLabel: "ÐŸÐ¾Ñ‚Ñ€Ñ–Ð±Ð½Ðµ Ð½Ð°Ð»Ð°ÑˆÑ‚ÑƒÐ²Ð°Ð½Ð½Ñ",
+            neededLabel: "Потрібне налаштування",
             neededDescription:
-                "Ð”Ð»Ñ Ñ†ÑŒÐ¾Ð³Ð¾ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð° Ð²Ð¸Ð±Ñ€Ð°Ð½Ð¾ Ñ€ÐµÐ¶Ð¸Ð¼ ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ñ–Ð·Ð°Ñ†Ñ–Ñ—, Ð°Ð»Ðµ ÐºÐ¾Ð½Ñ„Ñ–Ð³ÑƒÑ€Ð°Ñ†Ñ–Ñ Ñ‰Ðµ Ð½Ðµ Ð·Ð°Ð²ÐµÑ€ÑˆÐµÐ½Ð°.",
-            integrationModeSelected: "Ð ÐµÐ¶Ð¸Ð¼ Ñ–Ð½Ñ‚ÐµÐ³Ñ€Ð°Ñ†Ñ–Ñ— Ð²Ð¸Ð±Ñ€Ð°Ð½Ð¾",
+                "Для цього акаунта вибрано режим синхронізації, але конфігурація ще не завершена.",
+            integrationModeSelected: "Режим інтеграції вибрано",
         },
         hero: {
             badge: "Trade Sync",
-            eyebrow: "Ð†Ð½Ñ‚ÐµÐ³Ñ€Ð°Ñ†Ñ–Ñ— Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°",
-            title: "Ð†Ð½Ñ‚ÐµÐ³Ñ€Ð°Ñ†Ñ–Ñ—",
+            eyebrow: "Інтеграції акаунта",
+            title: "Інтеграції",
             description:
-                "ÐÐ°Ð»Ð°ÑˆÑ‚ÑƒÐ¹Ñ‚Ðµ Ð±Ð°Ð·Ñƒ Ð´Ð»Ñ Manual, MT5, Broker Ñ– Hybrid Sync. ÐÐ° Ñ†ÑŒÐ¾Ð¼Ñƒ ÐµÑ‚Ð°Ð¿Ñ– VOLTIS Ð½Ðµ Ð·Ð±ÐµÑ€Ñ–Ð³Ð°Ñ” Ð¿Ð°Ñ€Ð¾Ð»Ñ–, Ñ‚Ð¾ÐºÐµÐ½Ð¸ Ð°Ð±Ð¾ API-ÐºÐ»ÑŽÑ‡Ñ–: Ð²Ñ–Ð½ Ð»Ð¸ÑˆÐµ Ð³Ð¾Ñ‚ÑƒÑ” Ð±ÐµÐ·Ð¿ÐµÑ‡Ð½Ñƒ ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ñƒ Ð´Ð»Ñ ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ñ–Ð·Ð°Ñ†Ñ–Ñ—.",
-            back: "ÐÐ°Ð·Ð°Ð´ Ð´Ð¾ Account Hub",
+                "Налаштуйте базу для Manual, MT5, Broker і Hybrid Sync. На цьому етапі VOLTIS не зберігає паролі, токени або API-ключі: він лише готує безпечну структуру для синхронізації.",
+            back: "Назад до Account Hub",
         },
         cards: {
-            integrationMode: "Ð ÐµÐ¶Ð¸Ð¼ Ñ–Ð½Ñ‚ÐµÐ³Ñ€Ð°Ñ†Ñ–Ñ—",
+            integrationMode: "Режим інтеграції",
             integrationModeDescription:
-                "Ð¡Ñ‚Ñ€Ð°Ñ‚ÐµÐ³Ñ–Ñ ÐºÐµÑ€ÑƒÐ²Ð°Ð½Ð½Ñ ÑƒÐ³Ð¾Ð´Ð°Ð¼Ð¸ Ð´Ð»Ñ Ñ†ÑŒÐ¾Ð³Ð¾ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°.",
+                "Стратегія керування угодами для цього акаунта.",
             autoSync: "Auto Sync",
             autoSyncDescription:
-                "ÐšÐ¾Ð½Ñ‚Ñ€Ð¾Ð»ÑŽÑ”, Ñ‡Ð¸ Ð¿Ñ€Ð¸Ð¹Ð¼Ð°Ñ” Ð°ÐºÐ°ÑƒÐ½Ñ‚ Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡Ð½Ñ– Ñ–Ð¼Ð¿Ð¾Ñ€Ñ‚Ð¸.",
-            mt5Setup: "ÐÐ°Ð»Ð°ÑˆÑ‚ÑƒÐ²Ð°Ð½Ð½Ñ MT5",
+                "Контролює, чи приймає акаунт автоматичні імпорти.",
+            mt5Setup: "Налаштування MT5",
             mt5SetupDescription:
-                "Ð†Ð´ÐµÐ½Ñ‚Ð¸Ñ„Ñ–ÐºÐ°Ñ‚Ð¾Ñ€Ð¸ Ð»Ð¾Ð³Ñ–Ð½Ð° Ñ‚Ð° ÑÐµÑ€Ð²ÐµÑ€Ð° MT5 Ð±ÐµÐ· Ñ‡ÑƒÑ‚Ð»Ð¸Ð²Ð¸Ñ… Ð´Ð°Ð½Ð¸Ñ….",
-            lastSync: "ÐžÑÑ‚Ð°Ð½Ð½Ñ ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ñ–Ð·Ð°Ñ†Ñ–Ñ",
+                "Ідентифікатори логіна та сервера MT5 без чутливих даних.",
+            lastSync: "Остання синхронізація",
             lastSyncDescription:
-                "ÐžÑÑ‚Ð°Ð½Ð½Ñ ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ñ–Ð·Ð°Ñ†Ñ–Ñ, Ð·Ð°Ñ„Ñ–ÐºÑÐ¾Ð²Ð°Ð½Ð° Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð¾Ð¼.",
+                "Остання синхронізація, зафіксована акаунтом.",
         },
         syncError: {
-            eyebrow: "Ð’Ð¸ÑÐ²Ð»ÐµÐ½Ð¾ Ð¿Ð¾Ð¼Ð¸Ð»ÐºÑƒ ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ñ–Ð·Ð°Ñ†Ñ–Ñ—",
-            title: "ÐžÑÑ‚Ð°Ð½Ð½Ñ ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ñ–Ð·Ð°Ñ†Ñ–Ñ Ð½Ðµ Ð²Ð´Ð°Ð»Ð°ÑÑ",
+            eyebrow: "Виявлено помилку синхронізації",
+            title: "Остання синхронізація не вдалася",
             description:
-                "VOLTIS Ð²Ð¸ÑÐ²Ð¸Ð² Ð¿Ð¾Ð¼Ð¸Ð»ÐºÑƒ Ð¿Ñ–Ð´ Ñ‡Ð°Ñ Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡Ð½Ð¾Ð³Ð¾ Ñ–Ð¼Ð¿Ð¾Ñ€Ñ‚Ñƒ ÑƒÐ³Ð¾Ð´. ÐŸÐµÑ€ÐµÐ²Ñ–Ñ€Ñ‚Ðµ ÐºÐ¾Ð½Ñ„Ñ–Ð³ÑƒÑ€Ð°Ñ†Ñ–ÑŽ, Account ID, secret Ñ– Sync Logs.",
-            latestError: "ÐžÑÑ‚Ð°Ð½Ð½Ñ Ð¿Ð¾Ð¼Ð¸Ð»ÐºÐ°",
-            resetButton: "Ð¡ÐºÐ¸Ð½ÑƒÑ‚Ð¸ Sync",
+                "VOLTIS виявив помилку під час автоматичного імпорту угод. Перевірте конфігурацію, Account ID, secret і Sync Logs.",
+            latestError: "Остання помилка",
+            resetButton: "Скинути Sync",
         },
         form: {
-            syncMode: "Ð ÐµÐ¶Ð¸Ð¼ Sync",
-            integrationStrategy: "Ð¡Ñ‚Ñ€Ð°Ñ‚ÐµÐ³Ñ–Ñ Ñ–Ð½Ñ‚ÐµÐ³Ñ€Ð°Ñ†Ñ–Ñ—",
+            syncMode: "Режим Sync",
+            integrationStrategy: "Стратегія інтеграції",
             integrationStrategyDescription:
-                "Ð’Ð¸Ð±ÐµÑ€Ñ–Ñ‚ÑŒ, ÑÐº Ñ†ÐµÐ¹ Ð°ÐºÐ°ÑƒÐ½Ñ‚ Ð¼Ð°Ñ” ÐºÐµÑ€ÑƒÐ²Ð°Ñ‚Ð¸ ÑƒÐ³Ð¾Ð´Ð°Ð¼Ð¸. Manual Only Ð·Ð°Ð»Ð¸ÑˆÐ°Ñ” Ð»Ð¸ÑˆÐµ Ñ€ÑƒÑ‡Ð½Ðµ Ð²Ð²ÐµÐ´ÐµÐ½Ð½Ñ. MT5, Broker Ñ– Hybrid Ð³Ð¾Ñ‚ÑƒÑŽÑ‚ÑŒ Ð°ÐºÐ°ÑƒÐ½Ñ‚ Ð´Ð¾ Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡Ð½Ð¾Ñ— ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ñ–Ð·Ð°Ñ†Ñ–Ñ—.",
+                "Виберіть, як цей акаунт має керувати угодами. Manual Only залишає лише ручне введення. MT5, Broker і Hybrid готують акаунт до автоматичної синхронізації.",
 
-            activation: "ÐÐºÑ‚Ð¸Ð²Ð°Ñ†Ñ–Ñ",
-            sources: "Ð”Ð¶ÐµÑ€ÐµÐ»Ð°",
+            activation: "Активація",
+            sources: "Джерела",
             autoSyncDescription:
-                "Ð”Ð¾Ð·Ð²Ð¾Ð»ÑÑ” Ð°ÐºÐ°ÑƒÐ½Ñ‚Ñƒ Ð¿Ñ€Ð¸Ð¹Ð¼Ð°Ñ‚Ð¸ Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡Ð½Ñ– Ñ–Ð¼Ð¿Ð¾Ñ€Ñ‚Ð¸.",
+                "Дозволяє акаунту приймати автоматичні імпорти.",
             mt5Description:
-                "Ð’Ð¼Ð¸ÐºÐ°Ñ” Ð´Ð¶ÐµÑ€ÐµÐ»Ð¾ MT5 Ð´Ð»Ñ Ð¼Ð°Ð¹Ð±ÑƒÑ‚Ð½ÑŒÐ¾Ð³Ð¾ ÐºÐ¾Ð½ÐµÐºÑ‚Ð¾Ñ€Ð°.",
-            brokerDescription: "Ð’Ð¼Ð¸ÐºÐ°Ñ” Ð´Ð¶ÐµÑ€ÐµÐ»Ð¾ Broker Integration.",
+                "Вмикає джерело MT5 для майбутнього конектора.",
+            brokerDescription: "Вмикає джерело Broker Integration.",
 
             mt5Connector: "MT5 Connector",
-            mt5Details: "Ð”Ð°Ð½Ñ– MetaTrader 5",
+            mt5Details: "Дані MetaTrader 5",
             mt5DetailsDescription:
-                "Ð’Ð²Ð¾Ð´ÑŒÑ‚Ðµ Ð»Ð¸ÑˆÐµ Ð½ÐµÑ‡ÑƒÑ‚Ð»Ð¸Ð²Ñ– Ñ–Ð´ÐµÐ½Ñ‚Ð¸Ñ„Ñ–ÐºÐ°Ñ†Ñ–Ð¹Ð½Ñ– Ð´Ð°Ð½Ñ–. ÐŸÐ°Ñ€Ð¾Ð»Ñ– Ñ‚Ð° Ñ‚Ð¾ÐºÐµÐ½Ð¸ Ð½Ðµ ÐºÐµÑ€ÑƒÑŽÑ‚ÑŒÑÑ VOLTIS.",
+                "Вводьте лише нечутливі ідентифікаційні дані. Паролі та токени не керуються VOLTIS.",
             mt5AccountLoginPlaceholder: "MT5 account login",
             mt5ServerNamePlaceholder: "MT5 server name",
 
             brokerIntegration: "Broker Integration",
-            brokerDetails: "Ð”Ð°Ð½Ñ– Broker",
+            brokerDetails: "Дані Broker",
             brokerDetailsDescription:
-                "ÐœÐ¸ Ð·Ð±ÐµÑ€Ñ–Ð³Ð°Ñ”Ð¼Ð¾ Ð»Ð¸ÑˆÐµ Ð¿Ñ€Ð¾Ð²Ð°Ð¹Ð´ÐµÑ€Ð° Ñ‚Ð° Ñ–Ð´ÐµÐ½Ñ‚Ð¸Ñ„Ñ–ÐºÐ°Ñ‚Ð¾Ñ€ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°. Ð ÐµÐ°Ð»ÑŒÐ½Ñ– Ð¾Ð±Ð»Ñ–ÐºÐ¾Ð²Ñ– Ð´Ð°Ð½Ñ– Ð±ÑƒÐ´ÑƒÑ‚ÑŒ Ð´Ð¾Ð´Ð°Ð½Ñ– Ð¿Ñ–Ð·Ð½Ñ–ÑˆÐµ Ð· Ð±ÐµÐ·Ð¿ÐµÑ‡Ð½Ð¸Ð¼ Ð·Ð±ÐµÑ€Ñ–Ð³Ð°Ð½Ð½ÑÐ¼.",
+                "Ми зберігаємо лише провайдера та ідентифікатор акаунта. Реальні облікові дані будуть додані пізніше з безпечним зберіганням.",
             brokerProviderPlaceholder: "Broker provider",
             brokerAccountIdPlaceholder: "Broker account ID",
 
-            connectorSetup: "ÐÐ°Ð»Ð°ÑˆÑ‚ÑƒÐ²Ð°Ð½Ð½Ñ ÐºÐ¾Ð½ÐµÐºÑ‚Ð¾Ñ€Ð°",
-            connectionDetails: "Ð”Ð°Ð½Ñ– Ð¿Ñ–Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð½Ñ",
+            connectorSetup: "Налаштування конектора",
+            connectionDetails: "Дані підключення",
             connectionDescription:
-                "Ð¦Ñ– Ð´Ð°Ð½Ñ– Ð±ÑƒÐ´ÑƒÑ‚ÑŒ Ð²Ð¸ÐºÐ¾Ñ€Ð¸ÑÑ‚Ð°Ð½Ñ– Ð´Ð»Ñ Ñ‚ÐµÑÑ‚ÑƒÐ²Ð°Ð½Ð½Ñ Ð¼Ð°Ð¹Ð±ÑƒÑ‚Ð½ÑŒÐ¾Ð³Ð¾ MT5 Expert Advisor Ð°Ð±Ð¾ Ð¼Ð°Ð¹Ð±ÑƒÑ‚Ð½ÑŒÐ¾Ñ— Broker Ñ–Ð½Ñ‚ÐµÐ³Ñ€Ð°Ñ†Ñ–Ñ—. ÐÐ°Ñ€Ð°Ð·Ñ– Ñ†Ðµ Ñ–Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ñ–Ñ ÐºÐ¾Ð½Ñ„Ñ–Ð³ÑƒÑ€Ð°Ñ†Ñ–Ñ—, Ð° Ð½Ðµ Ñ€ÐµÐ°Ð»ÑŒÐ½Ðµ Ð¿Ñ–Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð½Ñ.",
+                "Ці дані будуть використані для тестування майбутнього MT5 Expert Advisor або майбутньої Broker інтеграції. Наразі це інформація конфігурації, а не реальне підключення.",
             tradingAccountId: "Trading Account ID",
             syncSecret: "Sync Secret",
-            syncSecretStored: "Ð—Ð±ÐµÑ€Ñ–Ð³Ð°Ñ”Ñ‚ÑŒÑÑ Ð»Ð¸ÑˆÐµ Ð² ÑÐµÑ€Ð²ÐµÑ€Ð½Ð¾Ð¼Ñƒ ÑÐµÑ€ÐµÐ´Ð¾Ð²Ð¸Ñ‰Ñ–",
+            syncSecretStored: "Зберігається лише в серверному середовищі",
             syncSecretDescription:
-                "Ð’Ñ–Ð½ Ð½Ðµ Ð¿Ð¾ÐºÐ°Ð·ÑƒÑ”Ñ‚ÑŒÑÑ Ð² Ð·Ð°ÑÑ‚Ð¾ÑÑƒÐ½ÐºÑƒ. Ð™Ð¾Ð³Ð¾ Ð±ÑƒÐ´Ðµ Ð²Ñ€ÑƒÑ‡Ð½Ñƒ Ð²Ð²ÐµÐ´ÐµÐ½Ð¾ Ð² ÐºÐ¾Ð½ÐµÐºÑ‚Ð¾Ñ€ Ð»Ð¸ÑˆÐµ Ð¿Ñ–Ð´ Ñ‡Ð°Ñ ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»ÑŒÐ¾Ð²Ð°Ð½Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚ÑƒÐ²Ð°Ð½Ð½Ñ.",
+                "Він не показується в застосунку. Його буде вручну введено в конектор лише під час контрольованого тестування.",
             healthEndpoint: "Health Check Endpoint",
             importEndpoint: "Import Endpoint",
-            futureSyncFlow: "ÐœÐ°Ð¹Ð±ÑƒÑ‚Ð½Ñ–Ð¹ Ð¿Ð¾Ñ‚Ñ–Ðº ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ñ–Ð·Ð°Ñ†Ñ–Ñ—",
+            futureSyncFlow: "Майбутній потік синхронізації",
             futureSyncDescription:
-                "ÐšÐ¾Ð½ÐµÐºÑ‚Ð¾Ñ€ ÑÐ¿Ð¾Ñ‡Ð°Ñ‚ÐºÑƒ Ð¿ÐµÑ€ÐµÐ²Ñ–Ñ€Ð¸Ñ‚ÑŒ Health Check. Ð¯ÐºÑ‰Ð¾ VOLTIS Ð²Ñ–Ð´Ð¿Ð¾Ð²Ñ–ÑÑ‚ÑŒ, Ñ‰Ð¾ sync Ð³Ð¾Ñ‚Ð¾Ð²Ð¸Ð¹, Ð²Ñ–Ð½ Ð²Ñ–Ð´Ð¿Ñ€Ð°Ð²Ð¸Ñ‚ÑŒ Ð·Ð°ÐºÑ€Ð¸Ñ‚Ñ– ÑƒÐ³Ð¾Ð´Ð¸ Ð½Ð° Import Endpoint. Ð£Ð³Ð¾Ð´Ð¸ Ð¿Ð¾Ñ‚Ñ€Ð°Ð¿Ð»ÑÑ‚ÑŒ Ñƒ Diary ÑÐº Ñ–Ð¼Ð¿Ð¾Ñ€Ñ‚Ð¾Ð²Ð°Ð½Ñ– Ñ‚Ð°, Ð·Ð° Ð¿Ð¾Ñ‚Ñ€ÐµÐ±Ð¸, Ñƒ ÑÑ‚Ð°Ñ‚ÑƒÑ Needs Review.",
+                "Конектор спочатку перевірить Health Check. Якщо VOLTIS відповість, що sync готовий, він відправить закриті угоди на Import Endpoint. Угоди потраплять у Diary як імпортовані та, за потреби, у статус Needs Review.",
 
             syncLogs: "Sync Logs",
-            recentImportActivity: "ÐžÑÑ‚Ð°Ð½Ð½Ñ Ð°ÐºÑ‚Ð¸Ð²Ð½Ñ–ÑÑ‚ÑŒ Ñ–Ð¼Ð¿Ð¾Ñ€Ñ‚Ñƒ",
+            recentImportActivity: "Остання активність імпорту",
             syncLogsDescription:
-                "Ð¢ÑƒÑ‚ Ð±ÑƒÐ´ÑƒÑ‚ÑŒ Ð¾ÑÑ‚Ð°Ð½Ð½Ñ– Ð¿Ð¾Ð´Ñ–Ñ—, Ð¿Ð¾Ð²â€™ÑÐ·Ð°Ð½Ñ– Ð· Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡Ð½Ð¾ÑŽ ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ñ–Ð·Ð°Ñ†Ñ–Ñ”ÑŽ: Ñ–Ð¼Ð¿Ð¾Ñ€Ñ‚Ð¾Ð²Ð°Ð½Ñ– ÑƒÐ³Ð¾Ð´Ð¸, Ð¾Ð½Ð¾Ð²Ð»ÐµÐ½Ñ– Ð½Ð°Ð»Ð°ÑˆÑ‚ÑƒÐ²Ð°Ð½Ð½Ñ, ÑÐºÐ¸Ð´Ð°Ð½Ð½Ñ Ñ‚Ð° Ð¼Ð°Ð¹Ð±ÑƒÑ‚Ð½Ñ– Ð¿Ð¾Ð¼Ð¸Ð»ÐºÐ¸ MT5/Broker.",
+                "Тут будуть останні події, пов’язані з автоматичною синхронізацією: імпортовані угоди, оновлені налаштування, скидання та майбутні помилки MT5/Broker.",
             noSyncActivity:
-                "ÐŸÐ¾ÐºÐ¸ Ñ‰Ð¾ Ð½ÐµÐ¼Ð°Ñ” Ð°ÐºÑ‚Ð¸Ð²Ð½Ð¾ÑÑ‚Ñ– sync. ÐšÐ¾Ð»Ð¸ ÑƒÐ³Ð¾Ð´Ñƒ Ð±ÑƒÐ´Ðµ Ñ–Ð¼Ð¿Ð¾Ñ€Ñ‚Ð¾Ð²Ð°Ð½Ð¾ Ð· MT5 Ð°Ð±Ð¾ Broker, Ð²Ð¾Ð½Ð° Ð·â€™ÑÐ²Ð¸Ñ‚ÑŒÑÑ Ñ‚ÑƒÑ‚.",
+                "Поки що немає активності sync. Коли угоду буде імпортовано з MT5 або Broker, вона з’явиться тут.",
 
-            securityNotice: "ÐŸÐ¾Ð²Ñ–Ð´Ð¾Ð¼Ð»ÐµÐ½Ð½Ñ Ð±ÐµÐ·Ð¿ÐµÐºÐ¸",
-            noSensitiveCredentials: "Ð§ÑƒÑ‚Ð»Ð¸Ð²Ñ– Ð¾Ð±Ð»Ñ–ÐºÐ¾Ð²Ñ– Ð´Ð°Ð½Ñ– Ð½Ðµ Ð·Ð±ÐµÑ€Ñ–Ð³Ð°ÑŽÑ‚ÑŒÑÑ",
+            securityNotice: "Повідомлення безпеки",
+            noSensitiveCredentials: "Чутливі облікові дані не зберігаються",
             securityDescription:
-                "ÐÐ° Ñ†ÑŒÐ¾Ð¼Ñƒ ÐµÑ‚Ð°Ð¿Ñ– VOLTIS Ð½Ðµ Ð·Ð±ÐµÑ€Ñ–Ð³Ð°Ñ” Ð¿Ð°Ñ€Ð¾Ð»Ñ– MT5, API-ÐºÐ»ÑŽÑ‡Ñ– Ð±Ñ€Ð¾ÐºÐµÑ€Ð°, Ñ‚Ð¾ÐºÐµÐ½Ð¸ Ð°Ð±Ð¾ Ñ‡ÑƒÑ‚Ð»Ð¸Ð²Ñ– Ð´Ð°Ð½Ñ–. Ð ÐµÐ°Ð»ÑŒÐ½Ðµ Ð¿Ñ–Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð½Ñ Ð±ÑƒÐ´Ðµ Ð¿Ð¾Ð±ÑƒÐ´Ð¾Ð²Ð°Ð½Ð¾ Ð¿Ñ–Ð·Ð½Ñ–ÑˆÐµ Ñ‡ÐµÑ€ÐµÐ· ÑÐ¿ÐµÑ†Ñ–Ð°Ð»ÑŒÐ½Ñƒ Ð·Ð°Ñ…Ð¸Ñ‰ÐµÐ½Ñƒ ÑÐ¸ÑÑ‚ÐµÐ¼Ñƒ.",
+                "На цьому етапі VOLTIS не зберігає паролі MT5, API-ключі брокера, токени або чутливі дані. Реальне підключення буде побудовано пізніше через спеціальну захищену систему.",
 
             saveNote:
-                "Ð—Ð±ÐµÑ€Ñ–Ð³Ð°Ð¹Ñ‚Ðµ Ð»Ð¸ÑˆÐµ Ð½ÐµÑ‡ÑƒÑ‚Ð»Ð¸Ð²Ñ– Ð½Ð°Ð»Ð°ÑˆÑ‚ÑƒÐ²Ð°Ð½Ð½Ñ. Ð ÐµÐ°Ð»ÑŒÐ½Ð° ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ñ–Ð·Ð°Ñ†Ñ–Ñ Ð±ÑƒÐ´Ðµ Ð¿Ñ€Ð¾Ñ‚ÐµÑÑ‚Ð¾Ð²Ð°Ð½Ð° Ð¿Ñ–Ð·Ð½Ñ–ÑˆÐµ Ð² ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»ÑŒÐ¾Ð²Ð°Ð½Ð¾Ð¼Ñƒ ÑÐµÑ€ÐµÐ´Ð¾Ð²Ð¸Ñ‰Ñ–.",
-            saveButton: "Ð—Ð±ÐµÑ€ÐµÐ³Ñ‚Ð¸ Ð½Ð°Ð»Ð°ÑˆÑ‚ÑƒÐ²Ð°Ð½Ð½Ñ Ñ–Ð½Ñ‚ÐµÐ³Ñ€Ð°Ñ†Ñ–Ñ—",
+                "Зберігайте лише нечутливі налаштування. Реальна синхронізація буде протестована пізніше в контрольованому середовищі.",
+            saveButton: "Зберегти налаштування інтеграції",
         },
     },
 
     ru: {
         modes: {
-            manual: "Ð¢Ð¾Ð»ÑŒÐºÐ¾ Ð²Ñ€ÑƒÑ‡Ð½ÑƒÑŽ",
+            manual: "Только вручную",
             mt5: "MT5 Connector",
             broker: "Broker Integration",
             hybrid: "MT5 + Broker",
         },
         statuses: {
-            connected: "ÐŸÐ¾Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¾",
-            pending: "Ð’ Ð¾Ð¶Ð¸Ð´Ð°Ð½Ð¸Ð¸",
-            error: "ÐžÑˆÐ¸Ð±ÐºÐ°",
-            inactive: "ÐÐµÐ°ÐºÑ‚Ð¸Ð²Ð½Ð¾",
+            connected: "Подключено",
+            pending: "В ожидании",
+            error: "Ошибка",
+            inactive: "Неактивно",
         },
         common: {
-            enabled: "Ð’ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¾",
-            disabled: "Ð’Ñ‹ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¾",
-            configured: "ÐÐ°ÑÑ‚Ñ€Ð¾ÐµÐ½Ð¾",
-            missing: "ÐžÑ‚ÑÑƒÑ‚ÑÑ‚Ð²ÑƒÐµÑ‚",
+            enabled: "Включено",
+            disabled: "Выключено",
+            configured: "Настроено",
+            missing: "Отсутствует",
             ok: "OK",
-            never: "ÐÐ¸ÐºÐ¾Ð³Ð´Ð°",
-            import: "Ð˜Ð¼Ð¿Ð¾Ñ€Ñ‚",
-            updated: "ÐžÐ±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¾",
-            reset: "Ð¡Ð±Ñ€Ð¾Ñ",
-            settings: "ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸",
+            never: "Никогда",
+            import: "Импорт",
+            updated: "Обновлено",
+            reset: "Сброс",
+            settings: "Настройки",
         },
         readiness: {
-            title: "Ð“Ð¾Ñ‚Ð¾Ð²Ð½Ð¾ÑÑ‚ÑŒ Trade Sync",
+            title: "Готовность Trade Sync",
 
-            manualLabel: "Ð ÑƒÑ‡Ð½Ð¾Ð¹ Ñ€ÐµÐ¶Ð¸Ð¼",
+            manualLabel: "Ручной режим",
             manualDescription:
-                "Ð­Ñ‚Ð¾Ñ‚ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚ Ð½Ð°ÑÑ‚Ñ€Ð¾ÐµÐ½ ÐºÐ°Ðº Manual Only. Ð¡Ð´ÐµÐ»ÐºÐ¸ ÑƒÐ¿Ñ€Ð°Ð²Ð»ÑÑŽÑ‚ÑÑ Ð²Ñ€ÑƒÑ‡Ð½ÑƒÑŽ Ñ‡ÐµÑ€ÐµÐ· Diary.",
-            manualModeActive: "Ð ÑƒÑ‡Ð½Ð¾Ð¹ Ñ€ÐµÐ¶Ð¸Ð¼ Ð°ÐºÑ‚Ð¸Ð²ÐµÐ½",
-            automaticSyncDisabled: "ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ°Ñ ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð¾Ñ‚ÐºÐ»ÑŽÑ‡ÐµÐ½Ð°",
+                "Этот аккаунт настроен как Manual Only. Сделки управляются вручную через Diary.",
+            manualModeActive: "Ручной режим активен",
+            automaticSyncDisabled: "Автоматическая синхронизация отключена",
 
-            mt5Label: "Ð“Ð¾Ñ‚Ð¾Ð²Ð¾ Ð´Ð»Ñ MT5",
+            mt5Label: "Готово для MT5",
             mt5Description:
-                "Ð­Ñ‚Ð¾Ñ‚ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚ Ð³Ð¾Ñ‚Ð¾Ð² Ð¿Ð¾Ð»ÑƒÑ‡Ð°Ñ‚ÑŒ ÑÐ´ÐµÐ»ÐºÐ¸ Ð¸Ð· Ð±ÑƒÐ´ÑƒÑ‰ÐµÐ³Ð¾ MT5 Connector.",
-            mt5ModeActive: "Ð ÐµÐ¶Ð¸Ð¼ MT5 Ð°ÐºÑ‚Ð¸Ð²ÐµÐ½",
-            autoSyncEnabled: "ÐÐ²Ñ‚Ð¾ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð²ÐºÐ»ÑŽÑ‡ÐµÐ½Ð°",
-            mt5SourceEnabled: "Ð˜ÑÑ‚Ð¾Ñ‡Ð½Ð¸Ðº MT5 Ð²ÐºÐ»ÑŽÑ‡ÐµÐ½",
+                "Этот аккаунт готов получать сделки из будущего MT5 Connector.",
+            mt5ModeActive: "Режим MT5 активен",
+            autoSyncEnabled: "Автосинхронизация включена",
+            mt5SourceEnabled: "Источник MT5 включен",
 
-            brokerLabel: "Ð“Ð¾Ñ‚Ð¾Ð²Ð¾ Ð´Ð»Ñ Broker",
+            brokerLabel: "Готово для Broker",
             brokerDescription:
-                "Ð­Ñ‚Ð¾Ñ‚ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚ Ð³Ð¾Ñ‚Ð¾Ð² Ð¿Ð¾Ð»ÑƒÑ‡Ð°Ñ‚ÑŒ ÑÐ´ÐµÐ»ÐºÐ¸ Ð¸Ð· Ð±ÑƒÐ´ÑƒÑ‰ÐµÐ¹ Broker Integration.",
-            brokerModeActive: "Ð ÐµÐ¶Ð¸Ð¼ Broker Ð°ÐºÑ‚Ð¸Ð²ÐµÐ½",
-            brokerSourceEnabled: "Ð˜ÑÑ‚Ð¾Ñ‡Ð½Ð¸Ðº Broker Ð²ÐºÐ»ÑŽÑ‡ÐµÐ½",
+                "Этот аккаунт готов получать сделки из будущей Broker Integration.",
+            brokerModeActive: "Режим Broker активен",
+            brokerSourceEnabled: "Источник Broker включен",
 
-            hybridLabel: "Ð“Ð¾Ñ‚Ð¾Ð²Ð¾ Ð´Ð»Ñ MT5 + Broker",
+            hybridLabel: "Готово для MT5 + Broker",
             hybridDescription:
-                "Ð­Ñ‚Ð¾Ñ‚ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚ Ð³Ð¾Ñ‚Ð¾Ð² Ð¿Ð¾Ð»ÑƒÑ‡Ð°Ñ‚ÑŒ ÑÐ´ÐµÐ»ÐºÐ¸ Ð¸ Ð¸Ð· MT5, Ð¸ Ð¸Ð· Broker Integration.",
-            hybridModeActive: "Ð“Ð¸Ð±Ñ€Ð¸Ð´Ð½Ñ‹Ð¹ Ñ€ÐµÐ¶Ð¸Ð¼ Ð°ÐºÑ‚Ð¸Ð²ÐµÐ½",
+                "Этот аккаунт готов получать сделки и из MT5, и из Broker Integration.",
+            hybridModeActive: "Гибридный режим активен",
 
-            neededLabel: "Ð¢Ñ€ÐµÐ±ÑƒÐµÑ‚ÑÑ Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ°",
+            neededLabel: "Требуется настройка",
             neededDescription:
-                "Ð”Ð»Ñ ÑÑ‚Ð¾Ð³Ð¾ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð° Ð²Ñ‹Ð±Ñ€Ð°Ð½ Ñ€ÐµÐ¶Ð¸Ð¼ ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ð¸Ð·Ð°Ñ†Ð¸Ð¸, Ð½Ð¾ ÐºÐ¾Ð½Ñ„Ð¸Ð³ÑƒÑ€Ð°Ñ†Ð¸Ñ ÐµÑ‰Ðµ Ð½Ðµ Ð·Ð°Ð²ÐµÑ€ÑˆÐµÐ½Ð°.",
-            integrationModeSelected: "Ð ÐµÐ¶Ð¸Ð¼ Ð¸Ð½Ñ‚ÐµÐ³Ñ€Ð°Ñ†Ð¸Ð¸ Ð²Ñ‹Ð±Ñ€Ð°Ð½",
+                "Для этого аккаунта выбран режим синхронизации, но конфигурация еще не завершена.",
+            integrationModeSelected: "Режим интеграции выбран",
         },
         hero: {
             badge: "Trade Sync",
-            eyebrow: "Ð˜Ð½Ñ‚ÐµÐ³Ñ€Ð°Ñ†Ð¸Ð¸ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°",
-            title: "Ð˜Ð½Ñ‚ÐµÐ³Ñ€Ð°Ñ†Ð¸Ð¸",
+            eyebrow: "Интеграции аккаунта",
+            title: "Интеграции",
             description:
-                "ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹Ñ‚Ðµ Ð±Ð°Ð·Ñƒ Ð´Ð»Ñ Manual, MT5, Broker Ð¸ Hybrid Sync. ÐÐ° ÑÑ‚Ð¾Ð¼ ÑÑ‚Ð°Ð¿Ðµ VOLTIS Ð½Ðµ Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ Ð¿Ð°Ñ€Ð¾Ð»Ð¸, Ñ‚Ð¾ÐºÐµÐ½Ñ‹ Ð¸Ð»Ð¸ API-ÐºÐ»ÑŽÑ‡Ð¸: Ð¾Ð½ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ð¿Ð¾Ð´Ð³Ð¾Ñ‚Ð°Ð²Ð»Ð¸Ð²Ð°ÐµÑ‚ Ð±ÐµÐ·Ð¾Ð¿Ð°ÑÐ½ÑƒÑŽ ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ñƒ Ð´Ð»Ñ ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ð¸Ð·Ð°Ñ†Ð¸Ð¸.",
-            back: "ÐÐ°Ð·Ð°Ð´ Ð² Account Hub",
+                "Настройте базу для Manual, MT5, Broker и Hybrid Sync. На этом этапе VOLTIS не хранит пароли, токены или API-ключи: он только подготавливает безопасную структуру для синхронизации.",
+            back: "Назад в Account Hub",
         },
         cards: {
-            integrationMode: "Ð ÐµÐ¶Ð¸Ð¼ Ð¸Ð½Ñ‚ÐµÐ³Ñ€Ð°Ñ†Ð¸Ð¸",
+            integrationMode: "Режим интеграции",
             integrationModeDescription:
-                "Ð¡Ñ‚Ñ€Ð°Ñ‚ÐµÐ³Ð¸Ñ ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ñ ÑÐ´ÐµÐ»ÐºÐ°Ð¼Ð¸ Ð´Ð»Ñ ÑÑ‚Ð¾Ð³Ð¾ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°.",
+                "Стратегия управления сделками для этого аккаунта.",
             autoSync: "Auto Sync",
             autoSyncDescription:
-                "ÐšÐ¾Ð½Ñ‚Ñ€Ð¾Ð»Ð¸Ñ€ÑƒÐµÑ‚, Ð¿Ñ€Ð¸Ð½Ð¸Ð¼Ð°ÐµÑ‚ Ð»Ð¸ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚ Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸Ðµ Ð¸Ð¼Ð¿Ð¾Ñ€Ñ‚Ñ‹.",
-            mt5Setup: "ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ° MT5",
+                "Контролирует, принимает ли аккаунт автоматические импорты.",
+            mt5Setup: "Настройка MT5",
             mt5SetupDescription:
-                "Ð˜Ð´ÐµÐ½Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ‚Ð¾Ñ€Ñ‹ Ð»Ð¾Ð³Ð¸Ð½Ð° Ð¸ ÑÐµÑ€Ð²ÐµÑ€Ð° MT5 Ð±ÐµÐ· Ñ‡ÑƒÐ²ÑÑ‚Ð²Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ñ… Ð´Ð°Ð½Ð½Ñ‹Ñ….",
-            lastSync: "ÐŸÐ¾ÑÐ»ÐµÐ´Ð½ÑÑ ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ð¸Ð·Ð°Ñ†Ð¸Ñ",
+                "Идентификаторы логина и сервера MT5 без чувствительных данных.",
+            lastSync: "Последняя синхронизация",
             lastSyncDescription:
-                "ÐŸÐ¾ÑÐ»ÐµÐ´Ð½ÑÑ ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ð¸Ð·Ð°Ñ†Ð¸Ñ, Ð·Ð°Ð¿Ð¸ÑÐ°Ð½Ð½Ð°Ñ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð¾Ð¼.",
+                "Последняя синхронизация, записанная аккаунтом.",
         },
         syncError: {
-            eyebrow: "ÐžÐ±Ð½Ð°Ñ€ÑƒÐ¶ÐµÐ½Ð° Ð¾ÑˆÐ¸Ð±ÐºÐ° ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ð¸Ð·Ð°Ñ†Ð¸Ð¸",
-            title: "ÐŸÐ¾ÑÐ»ÐµÐ´Ð½ÑÑ ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð½Ðµ ÑƒÐ´Ð°Ð»Ð°ÑÑŒ",
+            eyebrow: "Обнаружена ошибка синхронизации",
+            title: "Последняя синхронизация не удалась",
             description:
-                "VOLTIS Ð¾Ð±Ð½Ð°Ñ€ÑƒÐ¶Ð¸Ð» Ð¾ÑˆÐ¸Ð±ÐºÑƒ Ð²Ð¾ Ð²Ñ€ÐµÐ¼Ñ Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¾Ð³Ð¾ Ð¸Ð¼Ð¿Ð¾Ñ€Ñ‚Ð° ÑÐ´ÐµÐ»Ð¾Ðº. ÐŸÑ€Ð¾Ð²ÐµÑ€ÑŒÑ‚Ðµ ÐºÐ¾Ð½Ñ„Ð¸Ð³ÑƒÑ€Ð°Ñ†Ð¸ÑŽ, Account ID, secret Ð¸ Sync Logs.",
-            latestError: "ÐŸÐ¾ÑÐ»ÐµÐ´Ð½ÑÑ Ð¾ÑˆÐ¸Ð±ÐºÐ°",
-            resetButton: "Ð¡Ð±Ñ€Ð¾ÑÐ¸Ñ‚ÑŒ Sync",
+                "VOLTIS обнаружил ошибку во время автоматического импорта сделок. Проверьте конфигурацию, Account ID, secret и Sync Logs.",
+            latestError: "Последняя ошибка",
+            resetButton: "Сбросить Sync",
         },
         form: {
-            syncMode: "Ð ÐµÐ¶Ð¸Ð¼ Sync",
-            integrationStrategy: "Ð¡Ñ‚Ñ€Ð°Ñ‚ÐµÐ³Ð¸Ñ Ð¸Ð½Ñ‚ÐµÐ³Ñ€Ð°Ñ†Ð¸Ð¸",
+            syncMode: "Режим Sync",
+            integrationStrategy: "Стратегия интеграции",
             integrationStrategyDescription:
-                "Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ, ÐºÐ°Ðº ÑÑ‚Ð¾Ñ‚ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚ Ð´Ð¾Ð»Ð¶ÐµÐ½ ÑƒÐ¿Ñ€Ð°Ð²Ð»ÑÑ‚ÑŒ ÑÐ´ÐµÐ»ÐºÐ°Ð¼Ð¸. Manual Only Ð¾ÑÑ‚Ð°Ð²Ð»ÑÐµÑ‚ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ñ€ÑƒÑ‡Ð½Ð¾Ð¹ Ð²Ð²Ð¾Ð´. MT5, Broker Ð¸ Hybrid Ð¿Ð¾Ð´Ð³Ð¾Ñ‚Ð°Ð²Ð»Ð¸Ð²Ð°ÑŽÑ‚ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚ Ðº Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¾Ð¹ ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ð¸Ð·Ð°Ñ†Ð¸Ð¸.",
+                "Выберите, как этот аккаунт должен управлять сделками. Manual Only оставляет только ручной ввод. MT5, Broker и Hybrid подготавливают аккаунт к автоматической синхронизации.",
 
-            activation: "ÐÐºÑ‚Ð¸Ð²Ð°Ñ†Ð¸Ñ",
-            sources: "Ð˜ÑÑ‚Ð¾Ñ‡Ð½Ð¸ÐºÐ¸",
+            activation: "Активация",
+            sources: "Источники",
             autoSyncDescription:
-                "ÐŸÐ¾Ð·Ð²Ð¾Ð»ÑÐµÑ‚ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ñƒ Ð¿Ñ€Ð¸Ð½Ð¸Ð¼Ð°Ñ‚ÑŒ Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸Ðµ Ð¸Ð¼Ð¿Ð¾Ñ€Ñ‚Ñ‹.",
+                "Позволяет аккаунту принимать автоматические импорты.",
             mt5Description:
-                "Ð’ÐºÐ»ÑŽÑ‡Ð°ÐµÑ‚ Ð¸ÑÑ‚Ð¾Ñ‡Ð½Ð¸Ðº MT5 Ð´Ð»Ñ Ð±ÑƒÐ´ÑƒÑ‰ÐµÐ³Ð¾ ÐºÐ¾Ð½Ð½ÐµÐºÑ‚Ð¾Ñ€Ð°.",
-            brokerDescription: "Ð’ÐºÐ»ÑŽÑ‡Ð°ÐµÑ‚ Ð¸ÑÑ‚Ð¾Ñ‡Ð½Ð¸Ðº Broker Integration.",
+                "Включает источник MT5 для будущего коннектора.",
+            brokerDescription: "Включает источник Broker Integration.",
 
             mt5Connector: "MT5 Connector",
-            mt5Details: "Ð”Ð°Ð½Ð½Ñ‹Ðµ MetaTrader 5",
+            mt5Details: "Данные MetaTrader 5",
             mt5DetailsDescription:
-                "Ð’Ð²Ð¾Ð´Ð¸Ñ‚Ðµ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ð½ÐµÑ‡ÑƒÐ²ÑÑ‚Ð²Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ðµ Ð¸Ð´ÐµÐ½Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ†Ð¸Ð¾Ð½Ð½Ñ‹Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ. ÐŸÐ°Ñ€Ð¾Ð»Ð¸ Ð¸ Ñ‚Ð¾ÐºÐµÐ½Ñ‹ Ð½Ðµ ÑƒÐ¿Ñ€Ð°Ð²Ð»ÑÑŽÑ‚ÑÑ VOLTIS.",
+                "Вводите только нечувствительные идентификационные данные. Пароли и токены не управляются VOLTIS.",
             mt5AccountLoginPlaceholder: "MT5 account login",
             mt5ServerNamePlaceholder: "MT5 server name",
 
             brokerIntegration: "Broker Integration",
-            brokerDetails: "Ð”Ð°Ð½Ð½Ñ‹Ðµ Broker",
+            brokerDetails: "Данные Broker",
             brokerDetailsDescription:
-                "ÐœÑ‹ ÑÐ¾Ñ…Ñ€Ð°Ð½ÑÐµÐ¼ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ð¿Ñ€Ð¾Ð²Ð°Ð¹Ð´ÐµÑ€Ð° Ð¸ Ð¸Ð´ÐµÐ½Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ‚Ð¾Ñ€ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°. Ð ÐµÐ°Ð»ÑŒÐ½Ñ‹Ðµ ÑƒÑ‡ÐµÑ‚Ð½Ñ‹Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð±ÑƒÐ´ÑƒÑ‚ Ð´Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ñ‹ Ð¿Ð¾Ð·Ð¶Ðµ Ñ Ð±ÐµÐ·Ð¾Ð¿Ð°ÑÐ½Ñ‹Ð¼ Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¸ÐµÐ¼.",
+                "Мы сохраняем только провайдера и идентификатор аккаунта. Реальные учетные данные будут добавлены позже с безопасным хранением.",
             brokerProviderPlaceholder: "Broker provider",
             brokerAccountIdPlaceholder: "Broker account ID",
 
-            connectorSetup: "ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ° ÐºÐ¾Ð½Ð½ÐµÐºÑ‚Ð¾Ñ€Ð°",
-            connectionDetails: "Ð”Ð°Ð½Ð½Ñ‹Ðµ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ñ",
+            connectorSetup: "Настройка коннектора",
+            connectionDetails: "Данные подключения",
             connectionDescription:
-                "Ð­Ñ‚Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð±ÑƒÐ´ÑƒÑ‚ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ð½Ñ‹ Ð´Ð»Ñ Ñ‚ÐµÑÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ Ð±ÑƒÐ´ÑƒÑ‰ÐµÐ³Ð¾ MT5 Expert Advisor Ð¸Ð»Ð¸ Ð±ÑƒÐ´ÑƒÑ‰ÐµÐ¹ Broker Ð¸Ð½Ñ‚ÐµÐ³Ñ€Ð°Ñ†Ð¸Ð¸. Ð¡ÐµÐ¹Ñ‡Ð°Ñ ÑÑ‚Ð¾ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ ÐºÐ¾Ð½Ñ„Ð¸Ð³ÑƒÑ€Ð°Ñ†Ð¸Ð¸, Ð° Ð½Ðµ Ñ€ÐµÐ°Ð»ÑŒÐ½Ð¾Ðµ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ðµ.",
+                "Эти данные будут использованы для тестирования будущего MT5 Expert Advisor или будущей Broker интеграции. Сейчас это информация конфигурации, а не реальное подключение.",
             tradingAccountId: "Trading Account ID",
             syncSecret: "Sync Secret",
-            syncSecretStored: "Ð¥Ñ€Ð°Ð½Ð¸Ñ‚ÑÑ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ð² ÑÐµÑ€Ð²ÐµÑ€Ð½Ð¾Ð¹ ÑÑ€ÐµÐ´Ðµ",
+            syncSecretStored: "Хранится только в серверной среде",
             syncSecretDescription:
-                "ÐžÐ½ Ð½Ðµ Ð¾Ñ‚Ð¾Ð±Ñ€Ð°Ð¶Ð°ÐµÑ‚ÑÑ Ð² Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ð¸. ÐžÐ½ Ð±ÑƒÐ´ÐµÑ‚ Ð²Ñ€ÑƒÑ‡Ð½ÑƒÑŽ Ð²Ð²ÐµÐ´ÐµÐ½ Ð² ÐºÐ¾Ð½Ð½ÐµÐºÑ‚Ð¾Ñ€ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ð½Ð° ÑÑ‚Ð°Ð¿Ðµ ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»Ð¸Ñ€ÑƒÐµÐ¼Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ.",
+                "Он не отображается в приложении. Он будет вручную введен в коннектор только на этапе контролируемого тестирования.",
             healthEndpoint: "Health Check Endpoint",
             importEndpoint: "Import Endpoint",
-            futureSyncFlow: "Ð‘ÑƒÐ´ÑƒÑ‰Ð¸Ð¹ Ð¿Ð¾Ñ‚Ð¾Ðº ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ð¸Ð·Ð°Ñ†Ð¸Ð¸",
+            futureSyncFlow: "Будущий поток синхронизации",
             futureSyncDescription:
-                "ÐšÐ¾Ð½Ð½ÐµÐºÑ‚Ð¾Ñ€ ÑÐ½Ð°Ñ‡Ð°Ð»Ð° Ð¿Ñ€Ð¾Ð²ÐµÑ€Ð¸Ñ‚ Health Check. Ð•ÑÐ»Ð¸ VOLTIS Ð¾Ñ‚Ð²ÐµÑ‚Ð¸Ñ‚, Ñ‡Ñ‚Ð¾ sync Ð³Ð¾Ñ‚Ð¾Ð², Ð¾Ð½ Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð¸Ñ‚ Ð·Ð°ÐºÑ€Ñ‹Ñ‚Ñ‹Ðµ ÑÐ´ÐµÐ»ÐºÐ¸ Ð½Ð° Import Endpoint. Ð¡Ð´ÐµÐ»ÐºÐ¸ Ð¿Ð¾Ð¿Ð°Ð´ÑƒÑ‚ Ð² Diary ÐºÐ°Ðº Ð¸Ð¼Ð¿Ð¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ñ‹Ðµ Ð¸, Ð¿Ñ€Ð¸ Ð½ÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼Ð¾ÑÑ‚Ð¸, Ð² ÑÑ‚Ð°Ñ‚ÑƒÑ Needs Review.",
+                "Коннектор сначала проверит Health Check. Если VOLTIS ответит, что sync готов, он отправит закрытые сделки на Import Endpoint. Сделки попадут в Diary как импортированные и, при необходимости, в статус Needs Review.",
 
             syncLogs: "Sync Logs",
-            recentImportActivity: "ÐŸÐ¾ÑÐ»ÐµÐ´Ð½ÑÑ Ð°ÐºÑ‚Ð¸Ð²Ð½Ð¾ÑÑ‚ÑŒ Ð¸Ð¼Ð¿Ð¾Ñ€Ñ‚Ð°",
+            recentImportActivity: "Последняя активность импорта",
             syncLogsDescription:
-                "Ð—Ð´ÐµÑÑŒ Ð±ÑƒÐ´ÑƒÑ‚ Ð¿Ð¾ÑÐ»ÐµÐ´Ð½Ð¸Ðµ ÑÐ¾Ð±Ñ‹Ñ‚Ð¸Ñ, ÑÐ²ÑÐ·Ð°Ð½Ð½Ñ‹Ðµ Ñ Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¾Ð¹ ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ð¸Ð·Ð°Ñ†Ð¸ÐµÐ¹: Ð¸Ð¼Ð¿Ð¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ñ‹Ðµ ÑÐ´ÐµÐ»ÐºÐ¸, Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð½Ñ‹Ðµ Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸, ÑÐ±Ñ€Ð¾ÑÑ‹ Ð¸ Ð±ÑƒÐ´ÑƒÑ‰Ð¸Ðµ Ð¾ÑˆÐ¸Ð±ÐºÐ¸ MT5/Broker.",
+                "Здесь будут последние события, связанные с автоматической синхронизацией: импортированные сделки, обновленные настройки, сбросы и будущие ошибки MT5/Broker.",
             noSyncActivity:
-                "ÐŸÐ¾ÐºÐ° Ð½ÐµÑ‚ Ð°ÐºÑ‚Ð¸Ð²Ð½Ð¾ÑÑ‚Ð¸ sync. ÐšÐ¾Ð³Ð´Ð° ÑÐ´ÐµÐ»ÐºÐ° Ð±ÑƒÐ´ÐµÑ‚ Ð¸Ð¼Ð¿Ð¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð° Ð¸Ð· MT5 Ð¸Ð»Ð¸ Broker, Ð¾Ð½Ð° Ð¿Ð¾ÑÐ²Ð¸Ñ‚ÑÑ Ð·Ð´ÐµÑÑŒ.",
+                "Пока нет активности sync. Когда сделка будет импортирована из MT5 или Broker, она появится здесь.",
 
-            securityNotice: "Ð£Ð²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ðµ Ð±ÐµÐ·Ð¾Ð¿Ð°ÑÐ½Ð¾ÑÑ‚Ð¸",
-            noSensitiveCredentials: "Ð§ÑƒÐ²ÑÑ‚Ð²Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ðµ ÑƒÑ‡ÐµÑ‚Ð½Ñ‹Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð½Ðµ ÑÐ¾Ñ…Ñ€Ð°Ð½ÑÑŽÑ‚ÑÑ",
+            securityNotice: "Уведомление безопасности",
+            noSensitiveCredentials: "Чувствительные учетные данные не сохраняются",
             securityDescription:
-                "ÐÐ° ÑÑ‚Ð¾Ð¼ ÑÑ‚Ð°Ð¿Ðµ VOLTIS Ð½Ðµ Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ Ð¿Ð°Ñ€Ð¾Ð»Ð¸ MT5, API-ÐºÐ»ÑŽÑ‡Ð¸ Ð±Ñ€Ð¾ÐºÐµÑ€Ð°, Ñ‚Ð¾ÐºÐµÐ½Ñ‹ Ð¸Ð»Ð¸ Ñ‡ÑƒÐ²ÑÑ‚Ð²Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ. Ð ÐµÐ°Ð»ÑŒÐ½Ð¾Ðµ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ðµ Ð±ÑƒÐ´ÐµÑ‚ Ð¿Ð¾ÑÑ‚Ñ€Ð¾ÐµÐ½Ð¾ Ð¿Ð¾Ð·Ð¶Ðµ Ñ‡ÐµÑ€ÐµÐ· ÑÐ¿ÐµÑ†Ð¸Ð°Ð»ÑŒÐ½ÑƒÑŽ Ð·Ð°Ñ‰Ð¸Ñ‰ÐµÐ½Ð½ÑƒÑŽ ÑÐ¸ÑÑ‚ÐµÐ¼Ñƒ.",
+                "На этом этапе VOLTIS не хранит пароли MT5, API-ключи брокера, токены или чувствительные данные. Реальное подключение будет построено позже через специальную защищенную систему.",
 
             saveNote:
-                "Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÑÐ¹Ñ‚Ðµ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ð½ÐµÑ‡ÑƒÐ²ÑÑ‚Ð²Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ðµ Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸. Ð ÐµÐ°Ð»ÑŒÐ½Ð°Ñ ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð±ÑƒÐ´ÐµÑ‚ Ð¿Ñ€Ð¾Ñ‚ÐµÑÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð° Ð¿Ð¾Ð·Ð¶Ðµ Ð² ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»Ð¸Ñ€ÑƒÐµÐ¼Ð¾Ð¹ ÑÑ€ÐµÐ´Ðµ.",
-            saveButton: "Ð¡Ð¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ÑŒ Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ Ð¸Ð½Ñ‚ÐµÐ³Ñ€Ð°Ñ†Ð¸Ð¸",
+                "Сохраняйте только нечувствительные настройки. Реальная синхронизация будет протестирована позже в контролируемой среде.",
+            saveButton: "Сохранить настройки интеграции",
         },
     },
 
@@ -795,77 +795,77 @@ const labels: Record<AppLanguage, IntegrationsLabels> = {
             settings: "Ajustes",
         },
         readiness: {
-            title: "PreparaciÃ³n Trade Sync",
+            title: "Preparación Trade Sync",
 
             manualLabel: "Modo manual",
             manualDescription:
-                "Esta cuenta estÃ¡ configurada como Manual Only. Las operaciones se gestionan manualmente desde el Diary.",
+                "Esta cuenta está configurada como Manual Only. Las operaciones se gestionan manualmente desde el Diary.",
             manualModeActive: "Modo manual activo",
-            automaticSyncDisabled: "SincronizaciÃ³n automÃ¡tica desactivada",
+            automaticSyncDisabled: "Sincronización automática desactivada",
 
             mt5Label: "Lista para MT5",
             mt5Description:
-                "Esta cuenta estÃ¡ lista para recibir operaciones desde un futuro MT5 Connector.",
+                "Esta cuenta está lista para recibir operaciones desde un futuro MT5 Connector.",
             mt5ModeActive: "Modo MT5 activo",
             autoSyncEnabled: "Auto sync activado",
             mt5SourceEnabled: "Fuente MT5 activada",
 
             brokerLabel: "Lista para Broker",
             brokerDescription:
-                "Esta cuenta estÃ¡ lista para recibir operaciones desde una futura Broker Integration.",
+                "Esta cuenta está lista para recibir operaciones desde una futura Broker Integration.",
             brokerModeActive: "Modo Broker activo",
             brokerSourceEnabled: "Fuente Broker activada",
 
             hybridLabel: "Lista para MT5 + Broker",
             hybridDescription:
-                "Esta cuenta estÃ¡ lista para recibir operaciones tanto desde MT5 como desde Broker Integration.",
-            hybridModeActive: "Modo hÃ­brido activo",
+                "Esta cuenta está lista para recibir operaciones tanto desde MT5 como desde Broker Integration.",
+            hybridModeActive: "Modo híbrido activo",
 
-            neededLabel: "ConfiguraciÃ³n requerida",
+            neededLabel: "Configuración requerida",
             neededDescription:
-                "Esta cuenta tiene un modo sync seleccionado, pero la configuraciÃ³n aÃºn no estÃ¡ completa.",
-            integrationModeSelected: "Modo de integraciÃ³n seleccionado",
+                "Esta cuenta tiene un modo sync seleccionado, pero la configuración aún no está completa.",
+            integrationModeSelected: "Modo de integración seleccionado",
         },
         hero: {
             badge: "Trade Sync",
             eyebrow: "Integraciones de cuenta",
             title: "Integraciones",
             description:
-                "Configura la base para Manual, MT5, Broker y Hybrid Sync. En esta fase VOLTIS no guarda contraseÃ±as, tokens ni API keys: solo prepara la estructura segura para la sincronizaciÃ³n.",
+                "Configura la base para Manual, MT5, Broker y Hybrid Sync. En esta fase VOLTIS no guarda contraseñas, tokens ni API keys: solo prepara la estructura segura para la sincronización.",
             back: "Volver al Account Hub",
         },
         cards: {
-            integrationMode: "Modo de integraciÃ³n",
+            integrationMode: "Modo de integración",
             integrationModeDescription:
-                "Estrategia de gestiÃ³n de operaciones para esta cuenta.",
+                "Estrategia de gestión de operaciones para esta cuenta.",
             autoSync: "Auto Sync",
             autoSyncDescription:
-                "Controla si la cuenta acepta importaciones automÃ¡ticas.",
-            mt5Setup: "ConfiguraciÃ³n MT5",
+                "Controla si la cuenta acepta importaciones automáticas.",
+            mt5Setup: "Configuración MT5",
             mt5SetupDescription:
                 "Identificadores de login y servidor MT5, sin credenciales sensibles.",
-            lastSync: "Ãšltima sync",
+            lastSync: "Última sync",
             lastSyncDescription:
-                "Ãšltima sincronizaciÃ³n registrada por la cuenta.",
+                "Última sincronización registrada por la cuenta.",
         },
         syncError: {
             eyebrow: "Error de sync detectado",
-            title: "La Ãºltima sincronizaciÃ³n fallÃ³",
+            title: "La última sincronización falló",
             description:
-                "VOLTIS detectÃ³ un error durante la importaciÃ³n automÃ¡tica de operaciones. Revisa configuraciÃ³n, Account ID, secret y Sync Logs.",
-            latestError: "Ãšltimo error",
+                "VOLTIS detectó un error durante la importación automática de operaciones. Revisa configuración, Account ID, secret y Sync Logs.",
+            latestError: "Último error",
             resetButton: "Reset Sync",
         },
         form: {
             syncMode: "Modo sync",
-            integrationStrategy: "Estrategia de integraciÃ³n",
+            integrationStrategy: "Estrategia de integración",
             integrationStrategyDescription:
-                "Elige cÃ³mo esta cuenta debe gestionar las operaciones. Manual Only mantiene solo la entrada manual. MT5, Broker y Hybrid preparan la cuenta para sincronizaciÃ³n automÃ¡tica.",
+                "Elige cómo esta cuenta debe gestionar las operaciones. Manual Only mantiene solo la entrada manual. MT5, Broker y Hybrid preparan la cuenta para sincronización automática.",
 
-            activation: "ActivaciÃ³n",
+            activation: "Activación",
             sources: "Fuentes",
             autoSyncDescription:
-                "Permite que la cuenta acepte importaciones automÃ¡ticas.",
+                "Permite que la cuenta acepte importaciones automáticas.",
             mt5Description:
                 "Activa la fuente MT5 para el futuro conector.",
             brokerDescription: "Activa la fuente Broker Integration.",
@@ -873,47 +873,47 @@ const labels: Record<AppLanguage, IntegrationsLabels> = {
             mt5Connector: "MT5 Connector",
             mt5Details: "Detalles MetaTrader 5",
             mt5DetailsDescription:
-                "Introduce solo datos identificativos no sensibles. ContraseÃ±as y tokens no son gestionados por VOLTIS.",
+                "Introduce solo datos identificativos no sensibles. Contraseñas y tokens no son gestionados por VOLTIS.",
             mt5AccountLoginPlaceholder: "MT5 account login",
             mt5ServerNamePlaceholder: "MT5 server name",
 
             brokerIntegration: "Broker Integration",
             brokerDetails: "Detalles Broker",
             brokerDetailsDescription:
-                "Guardamos solo proveedor e identificador de cuenta. Las credenciales reales se aÃ±adirÃ¡n mÃ¡s adelante con almacenamiento seguro.",
+                "Guardamos solo proveedor e identificador de cuenta. Las credenciales reales se añadirán más adelante con almacenamiento seguro.",
             brokerProviderPlaceholder: "Broker provider",
             brokerAccountIdPlaceholder: "Broker account ID",
 
-            connectorSetup: "ConfiguraciÃ³n del conector",
-            connectionDetails: "Detalles de conexiÃ³n",
+            connectorSetup: "Configuración del conector",
+            connectionDetails: "Detalles de conexión",
             connectionDescription:
-                "Estos datos servirÃ¡n para probar el futuro Expert Advisor MT5 o una futura integraciÃ³n Broker. Por ahora son informaciÃ³n de configuraciÃ³n, no una conexiÃ³n real.",
+                "Estos datos servirán para probar el futuro Expert Advisor MT5 o una futura integración Broker. Por ahora son información de configuración, no una conexión real.",
             tradingAccountId: "Trading Account ID",
             syncSecret: "Sync Secret",
             syncSecretStored: "Guardado solo en el entorno servidor",
             syncSecretDescription:
-                "No se muestra en la app. Se introducirÃ¡ manualmente en el conector solo durante pruebas controladas.",
+                "No se muestra en la app. Se introducirá manualmente en el conector solo durante pruebas controladas.",
             healthEndpoint: "Health Check Endpoint",
             importEndpoint: "Import Endpoint",
             futureSyncFlow: "Flujo sync futuro",
             futureSyncDescription:
-                "El conector comprobarÃ¡ primero el Health Check. Si VOLTIS responde que la sync estÃ¡ lista, enviarÃ¡ las operaciones cerradas al Import Endpoint. Las operaciones entrarÃ¡n en el Diary como importadas y, si hace falta, en estado Needs Review.",
+                "El conector comprobará primero el Health Check. Si VOLTIS responde que la sync está lista, enviará las operaciones cerradas al Import Endpoint. Las operaciones entrarán en el Diary como importadas y, si hace falta, en estado Needs Review.",
 
             syncLogs: "Sync Logs",
-            recentImportActivity: "Actividad reciente de importaciÃ³n",
+            recentImportActivity: "Actividad reciente de importación",
             syncLogsDescription:
-                "AquÃ­ verÃ¡s los Ãºltimos eventos conectados a la sincronizaciÃ³n automÃ¡tica: operaciones importadas, ajustes actualizados, resets y futuros errores MT5/Broker.",
+                "Aquí verás los últimos eventos conectados a la sincronización automática: operaciones importadas, ajustes actualizados, resets y futuros errores MT5/Broker.",
             noSyncActivity:
-                "AÃºn no hay actividad sync registrada. Cuando una operaciÃ³n se importe desde MT5 o Broker, aparecerÃ¡ aquÃ­.",
+                "Aún no hay actividad sync registrada. Cuando una operación se importe desde MT5 o Broker, aparecerá aquí.",
 
             securityNotice: "Aviso de seguridad",
             noSensitiveCredentials: "No se guardan credenciales sensibles",
             securityDescription:
-                "En esta fase VOLTIS no almacena contraseÃ±as MT5, API keys de broker, tokens ni datos sensibles. La conexiÃ³n real se construirÃ¡ mÃ¡s adelante con un sistema dedicado y protegido.",
+                "En esta fase VOLTIS no almacena contraseñas MT5, API keys de broker, tokens ni datos sensibles. La conexión real se construirá más adelante con un sistema dedicado y protegido.",
 
             saveNote:
-                "Guarda solo ajustes no sensibles. La sync real se probarÃ¡ mÃ¡s adelante en un entorno controlado.",
-            saveButton: "Guardar ajustes de integraciÃ³n",
+                "Guarda solo ajustes no sensibles. La sync real se probará más adelante en un entorno controlado.",
+            saveButton: "Guardar ajustes de integración",
         },
     },
 
@@ -925,143 +925,143 @@ const labels: Record<AppLanguage, IntegrationsLabels> = {
             hybrid: "MT5 + Broker",
         },
         statuses: {
-            connected: "ConnectÃ©",
+            connected: "Connecté",
             pending: "En attente",
             error: "Erreur",
             inactive: "Inactif",
         },
         common: {
-            enabled: "ActivÃ©",
-            disabled: "DÃ©sactivÃ©",
-            configured: "ConfigurÃ©",
+            enabled: "Activé",
+            disabled: "Désactivé",
+            configured: "Configuré",
             missing: "Manquant",
             ok: "OK",
             never: "Jamais",
             import: "Import",
-            updated: "Mis Ã  jour",
+            updated: "Mis à jour",
             reset: "Reset",
-            settings: "ParamÃ¨tres",
+            settings: "Paramètres",
         },
         readiness: {
-            title: "PrÃ©paration Trade Sync",
+            title: "Préparation Trade Sync",
 
             manualLabel: "Mode manuel",
             manualDescription:
-                "Ce compte est configurÃ© en Manual Only. Les trades sont gÃ©rÃ©s manuellement depuis le Diary.",
+                "Ce compte est configuré en Manual Only. Les trades sont gérés manuellement depuis le Diary.",
             manualModeActive: "Mode manuel actif",
-            automaticSyncDisabled: "Synchronisation automatique dÃ©sactivÃ©e",
+            automaticSyncDisabled: "Synchronisation automatique désactivée",
 
-            mt5Label: "PrÃªt pour MT5",
+            mt5Label: "Prêt pour MT5",
             mt5Description:
-                "Ce compte est prÃªt Ã  recevoir des trades depuis un futur MT5 Connector.",
+                "Ce compte est prêt à recevoir des trades depuis un futur MT5 Connector.",
             mt5ModeActive: "Mode MT5 actif",
-            autoSyncEnabled: "Auto sync activÃ©",
-            mt5SourceEnabled: "Source MT5 activÃ©e",
+            autoSyncEnabled: "Auto sync activé",
+            mt5SourceEnabled: "Source MT5 activée",
 
-            brokerLabel: "PrÃªt pour Broker",
+            brokerLabel: "Prêt pour Broker",
             brokerDescription:
-                "Ce compte est prÃªt Ã  recevoir des trades depuis une future Broker Integration.",
+                "Ce compte est prêt à recevoir des trades depuis une future Broker Integration.",
             brokerModeActive: "Mode Broker actif",
-            brokerSourceEnabled: "Source Broker activÃ©e",
+            brokerSourceEnabled: "Source Broker activée",
 
-            hybridLabel: "PrÃªt pour MT5 + Broker",
+            hybridLabel: "Prêt pour MT5 + Broker",
             hybridDescription:
-                "Ce compte est prÃªt Ã  recevoir des trades depuis MT5 et Broker Integration.",
+                "Ce compte est prêt à recevoir des trades depuis MT5 et Broker Integration.",
             hybridModeActive: "Mode hybride actif",
 
             neededLabel: "Configuration requise",
             neededDescription:
-                "Ce compte a un mode sync sÃ©lectionnÃ©, mais la configuration nâ€™est pas encore complÃ¨te.",
-            integrationModeSelected: "Mode dâ€™intÃ©gration sÃ©lectionnÃ©",
+                "Ce compte a un mode sync sélectionné, mais la configuration n’est pas encore complète.",
+            integrationModeSelected: "Mode d’intégration sélectionné",
         },
         hero: {
             badge: "Trade Sync",
-            eyebrow: "IntÃ©grations du compte",
-            title: "IntÃ©grations",
+            eyebrow: "Intégrations du compte",
+            title: "Intégrations",
             description:
-                "Configure la base pour Manual, MT5, Broker et Hybrid Sync. Ã€ ce stade VOLTIS ne stocke pas de mots de passe, tokens ou clÃ©s API : il prÃ©pare seulement la structure sÃ©curisÃ©e pour la synchronisation.",
-            back: "Retour Ã  lâ€™Account Hub",
+                "Configure la base pour Manual, MT5, Broker et Hybrid Sync. À ce stade VOLTIS ne stocke pas de mots de passe, tokens ou clés API : il prépare seulement la structure sécurisée pour la synchronisation.",
+            back: "Retour à l’Account Hub",
         },
         cards: {
-            integrationMode: "Mode dâ€™intÃ©gration",
+            integrationMode: "Mode d’intégration",
             integrationModeDescription:
-                "StratÃ©gie de gestion des trades pour ce compte.",
+                "Stratégie de gestion des trades pour ce compte.",
             autoSync: "Auto Sync",
             autoSyncDescription:
-                "ContrÃ´le si le compte accepte les imports automatiques.",
+                "Contrôle si le compte accepte les imports automatiques.",
             mt5Setup: "Configuration MT5",
             mt5SetupDescription:
-                "Identifiants login et serveur MT5, sans donnÃ©es sensibles.",
-            lastSync: "DerniÃ¨re sync",
+                "Identifiants login et serveur MT5, sans données sensibles.",
+            lastSync: "Dernière sync",
             lastSyncDescription:
-                "DerniÃ¨re synchronisation enregistrÃ©e par le compte.",
+                "Dernière synchronisation enregistrée par le compte.",
         },
         syncError: {
-            eyebrow: "Erreur sync dÃ©tectÃ©e",
-            title: "La derniÃ¨re synchronisation a Ã©chouÃ©",
+            eyebrow: "Erreur sync détectée",
+            title: "La dernière synchronisation a échoué",
             description:
-                "VOLTIS a dÃ©tectÃ© une erreur pendant lâ€™import automatique des trades. VÃ©rifie la configuration, Account ID, secret et Sync Logs.",
-            latestError: "DerniÃ¨re erreur",
+                "VOLTIS a détecté une erreur pendant l’import automatique des trades. Vérifie la configuration, Account ID, secret et Sync Logs.",
+            latestError: "Dernière erreur",
             resetButton: "Reset Sync",
         },
         form: {
             syncMode: "Mode sync",
-            integrationStrategy: "StratÃ©gie dâ€™intÃ©gration",
+            integrationStrategy: "Stratégie d’intégration",
             integrationStrategyDescription:
-                "Choisis comment ce compte doit gÃ©rer les trades. Manual Only garde seulement la saisie manuelle. MT5, Broker et Hybrid prÃ©parent le compte Ã  la synchronisation automatique.",
+                "Choisis comment ce compte doit gérer les trades. Manual Only garde seulement la saisie manuelle. MT5, Broker et Hybrid préparent le compte à la synchronisation automatique.",
 
             activation: "Activation",
             sources: "Sources",
             autoSyncDescription:
-                "Permet au compte dâ€™accepter les imports automatiques.",
+                "Permet au compte d’accepter les imports automatiques.",
             mt5Description:
                 "Active la source MT5 pour le futur connecteur.",
             brokerDescription: "Active la source Broker Integration.",
 
             mt5Connector: "MT5 Connector",
-            mt5Details: "DÃ©tails MetaTrader 5",
+            mt5Details: "Détails MetaTrader 5",
             mt5DetailsDescription:
-                "Saisis uniquement des donnÃ©es dâ€™identification non sensibles. Les mots de passe et tokens ne sont pas gÃ©rÃ©s par VOLTIS.",
+                "Saisis uniquement des données d’identification non sensibles. Les mots de passe et tokens ne sont pas gérés par VOLTIS.",
             mt5AccountLoginPlaceholder: "MT5 account login",
             mt5ServerNamePlaceholder: "MT5 server name",
 
             brokerIntegration: "Broker Integration",
-            brokerDetails: "DÃ©tails Broker",
+            brokerDetails: "Détails Broker",
             brokerDetailsDescription:
-                "Nous stockons seulement le fournisseur et lâ€™identifiant du compte. Les vÃ©ritables identifiants seront ajoutÃ©s plus tard avec un stockage sÃ©curisÃ©.",
+                "Nous stockons seulement le fournisseur et l’identifiant du compte. Les véritables identifiants seront ajoutés plus tard avec un stockage sécurisé.",
             brokerProviderPlaceholder: "Broker provider",
             brokerAccountIdPlaceholder: "Broker account ID",
 
             connectorSetup: "Configuration du connecteur",
-            connectionDetails: "DÃ©tails de connexion",
+            connectionDetails: "Détails de connexion",
             connectionDescription:
-                "Ces donnÃ©es serviront Ã  tester le futur Expert Advisor MT5 ou une future intÃ©gration Broker. Pour lâ€™instant ce sont des informations de configuration, pas une connexion rÃ©elle.",
+                "Ces données serviront à tester le futur Expert Advisor MT5 ou une future intégration Broker. Pour l’instant ce sont des informations de configuration, pas une connexion réelle.",
             tradingAccountId: "Trading Account ID",
             syncSecret: "Sync Secret",
-            syncSecretStored: "StockÃ© uniquement dans lâ€™environnement serveur",
+            syncSecretStored: "Stocké uniquement dans l’environnement serveur",
             syncSecretDescription:
-                "Il nâ€™est pas affichÃ© dans lâ€™app. Il sera saisi manuellement dans le connecteur uniquement pendant les tests contrÃ´lÃ©s.",
+                "Il n’est pas affiché dans l’app. Il sera saisi manuellement dans le connecteur uniquement pendant les tests contrôlés.",
             healthEndpoint: "Health Check Endpoint",
             importEndpoint: "Import Endpoint",
             futureSyncFlow: "Flux sync futur",
             futureSyncDescription:
-                "Le connecteur vÃ©rifiera dâ€™abord le Health Check. Si VOLTIS rÃ©pond que la sync est prÃªte, il enverra les trades clÃ´turÃ©s Ã  lâ€™Import Endpoint. Les trades entreront dans le Diary comme importÃ©s et, si nÃ©cessaire, avec le statut Needs Review.",
+                "Le connecteur vérifiera d’abord le Health Check. Si VOLTIS répond que la sync est prête, il enverra les trades clôturés à l’Import Endpoint. Les trades entreront dans le Diary comme importés et, si nécessaire, avec le statut Needs Review.",
 
             syncLogs: "Sync Logs",
-            recentImportActivity: "ActivitÃ© dâ€™import rÃ©cente",
+            recentImportActivity: "Activité d’import récente",
             syncLogsDescription:
-                "Ici tu verras les derniers Ã©vÃ©nements liÃ©s Ã  la synchronisation automatique : trades importÃ©s, paramÃ¨tres mis Ã  jour, resets et futures erreurs MT5/Broker.",
+                "Ici tu verras les derniers événements liés à la synchronisation automatique : trades importés, paramètres mis à jour, resets et futures erreurs MT5/Broker.",
             noSyncActivity:
-                "Aucune activitÃ© sync enregistrÃ©e pour le moment. Quand un trade sera importÃ© depuis MT5 ou Broker, il apparaÃ®tra ici.",
+                "Aucune activité sync enregistrée pour le moment. Quand un trade sera importé depuis MT5 ou Broker, il apparaîtra ici.",
 
-            securityNotice: "Avis de sÃ©curitÃ©",
-            noSensitiveCredentials: "Aucun identifiant sensible stockÃ©",
+            securityNotice: "Avis de sécurité",
+            noSensitiveCredentials: "Aucun identifiant sensible stocké",
             securityDescription:
-                "Ã€ ce stade VOLTIS ne stocke pas de mots de passe MT5, clÃ©s API broker, tokens ou donnÃ©es sensibles. La connexion rÃ©elle sera construite plus tard avec un systÃ¨me dÃ©diÃ© et protÃ©gÃ©.",
+                "À ce stade VOLTIS ne stocke pas de mots de passe MT5, clés API broker, tokens ou données sensibles. La connexion réelle sera construite plus tard avec un système dédié et protégé.",
 
             saveNote:
-                "Sauvegarde uniquement les paramÃ¨tres non sensibles. La sync rÃ©elle sera testÃ©e plus tard dans un environnement contrÃ´lÃ©.",
-            saveButton: "Sauvegarder les paramÃ¨tres dâ€™intÃ©gration",
+                "Sauvegarde uniquement les paramètres non sensibles. La sync réelle sera testée plus tard dans un environnement contrôlé.",
+            saveButton: "Sauvegarder les paramètres d’intégration",
         },
     },
 
@@ -1099,41 +1099,41 @@ const labels: Record<AppLanguage, IntegrationsLabels> = {
             manualModeActive: "Manueller Modus aktiv",
             automaticSyncDisabled: "Automatische Synchronisierung deaktiviert",
 
-            mt5Label: "Bereit fÃ¼r MT5",
+            mt5Label: "Bereit für MT5",
             mt5Description:
-                "Dieses Konto ist bereit, Trades von einem zukÃ¼nftigen MT5 Connector zu empfangen.",
+                "Dieses Konto ist bereit, Trades von einem zukünftigen MT5 Connector zu empfangen.",
             mt5ModeActive: "MT5-Modus aktiv",
             autoSyncEnabled: "Auto Sync aktiviert",
             mt5SourceEnabled: "MT5-Quelle aktiviert",
 
-            brokerLabel: "Bereit fÃ¼r Broker",
+            brokerLabel: "Bereit für Broker",
             brokerDescription:
-                "Dieses Konto ist bereit, Trades von einer zukÃ¼nftigen Broker Integration zu empfangen.",
+                "Dieses Konto ist bereit, Trades von einer zukünftigen Broker Integration zu empfangen.",
             brokerModeActive: "Broker-Modus aktiv",
             brokerSourceEnabled: "Broker-Quelle aktiviert",
 
-            hybridLabel: "Bereit fÃ¼r MT5 + Broker",
+            hybridLabel: "Bereit für MT5 + Broker",
             hybridDescription:
                 "Dieses Konto ist bereit, Trades sowohl von MT5 als auch von Broker Integration zu empfangen.",
             hybridModeActive: "Hybrid-Modus aktiv",
 
             neededLabel: "Konfiguration erforderlich",
             neededDescription:
-                "FÃ¼r dieses Konto wurde ein Sync-Modus ausgewÃ¤hlt, aber die Konfiguration ist noch nicht vollstÃ¤ndig.",
-            integrationModeSelected: "Integrationsmodus ausgewÃ¤hlt",
+                "Für dieses Konto wurde ein Sync-Modus ausgewählt, aber die Konfiguration ist noch nicht vollständig.",
+            integrationModeSelected: "Integrationsmodus ausgewählt",
         },
         hero: {
             badge: "Trade Sync",
             eyebrow: "Konto-Integrationen",
             title: "Integrationen",
             description:
-                "Konfiguriere die Basis fÃ¼r Manual, MT5, Broker und Hybrid Sync. In dieser Phase speichert VOLTIS keine PasswÃ¶rter, Tokens oder API-SchlÃ¼ssel: es bereitet nur die sichere Struktur fÃ¼r die Synchronisierung vor.",
-            back: "ZurÃ¼ck zum Account Hub",
+                "Konfiguriere die Basis für Manual, MT5, Broker und Hybrid Sync. In dieser Phase speichert VOLTIS keine Passwörter, Tokens oder API-Schlüssel: es bereitet nur die sichere Struktur für die Synchronisierung vor.",
+            back: "Zurück zum Account Hub",
         },
         cards: {
             integrationMode: "Integrationsmodus",
             integrationModeDescription:
-                "Trade-Verwaltungsstrategie fÃ¼r dieses Konto.",
+                "Trade-Verwaltungsstrategie für dieses Konto.",
             autoSync: "Auto Sync",
             autoSyncDescription:
                 "Steuert, ob das Konto automatische Importe akzeptiert.",
@@ -1148,67 +1148,67 @@ const labels: Record<AppLanguage, IntegrationsLabels> = {
             eyebrow: "Sync-Fehler erkannt",
             title: "Letzte Synchronisierung fehlgeschlagen",
             description:
-                "VOLTIS hat einen Fehler beim automatischen Trade-Import erkannt. PrÃ¼fe Konfiguration, Account ID, Secret und Sync Logs.",
+                "VOLTIS hat einen Fehler beim automatischen Trade-Import erkannt. Prüfe Konfiguration, Account ID, Secret und Sync Logs.",
             latestError: "Letzter Fehler",
-            resetButton: "Sync zurÃ¼cksetzen",
+            resetButton: "Sync zurücksetzen",
         },
         form: {
             syncMode: "Sync-Modus",
             integrationStrategy: "Integrationsstrategie",
             integrationStrategyDescription:
-                "WÃ¤hle, wie dieses Konto Trades verwalten soll. Manual Only behÃ¤lt nur die manuelle Eingabe. MT5, Broker und Hybrid bereiten das Konto auf automatische Synchronisierung vor.",
+                "Wähle, wie dieses Konto Trades verwalten soll. Manual Only behält nur die manuelle Eingabe. MT5, Broker und Hybrid bereiten das Konto auf automatische Synchronisierung vor.",
 
             activation: "Aktivierung",
             sources: "Quellen",
             autoSyncDescription:
                 "Erlaubt dem Konto, automatische Importe zu akzeptieren.",
             mt5Description:
-                "Aktiviert die MT5-Quelle fÃ¼r den zukÃ¼nftigen Connector.",
+                "Aktiviert die MT5-Quelle für den zukünftigen Connector.",
             brokerDescription: "Aktiviert die Broker Integration-Quelle.",
 
             mt5Connector: "MT5 Connector",
             mt5Details: "MetaTrader 5 Details",
             mt5DetailsDescription:
-                "Gib nur nicht sensible Identifikationsdaten ein. PasswÃ¶rter und Tokens werden nicht von VOLTIS verwaltet.",
+                "Gib nur nicht sensible Identifikationsdaten ein. Passwörter und Tokens werden nicht von VOLTIS verwaltet.",
             mt5AccountLoginPlaceholder: "MT5 account login",
             mt5ServerNamePlaceholder: "MT5 server name",
 
             brokerIntegration: "Broker Integration",
             brokerDetails: "Broker Details",
             brokerDetailsDescription:
-                "Wir speichern nur Anbieter und Konto-ID. Echte Zugangsdaten werden spÃ¤ter mit sicherem Speicher hinzugefÃ¼gt.",
+                "Wir speichern nur Anbieter und Konto-ID. Echte Zugangsdaten werden später mit sicherem Speicher hinzugefügt.",
             brokerProviderPlaceholder: "Broker provider",
             brokerAccountIdPlaceholder: "Broker account ID",
 
             connectorSetup: "Connector-Setup",
             connectionDetails: "Verbindungsdetails",
             connectionDescription:
-                "Diese Daten dienen zum Testen des zukÃ¼nftigen MT5 Expert Advisor oder einer zukÃ¼nftigen Broker-Integration. Derzeit sind es Konfigurationsinformationen, keine echte Verbindung.",
+                "Diese Daten dienen zum Testen des zukünftigen MT5 Expert Advisor oder einer zukünftigen Broker-Integration. Derzeit sind es Konfigurationsinformationen, keine echte Verbindung.",
             tradingAccountId: "Trading Account ID",
             syncSecret: "Sync Secret",
             syncSecretStored: "Nur in der Serverumgebung gespeichert",
             syncSecretDescription:
-                "Es wird in der App nicht angezeigt. Es wird nur wÃ¤hrend kontrollierter Tests manuell in den Connector eingetragen.",
+                "Es wird in der App nicht angezeigt. Es wird nur während kontrollierter Tests manuell in den Connector eingetragen.",
             healthEndpoint: "Health Check Endpoint",
             importEndpoint: "Import Endpoint",
-            futureSyncFlow: "ZukÃ¼nftiger Sync-Flow",
+            futureSyncFlow: "Zukünftiger Sync-Flow",
             futureSyncDescription:
-                "Der Connector prÃ¼ft zuerst den Health Check. Wenn VOLTIS antwortet, dass die Sync bereit ist, sendet er geschlossene Trades an den Import Endpoint. Trades gelangen als importiert ins Diary und, falls nÃ¶tig, in den Status Needs Review.",
+                "Der Connector prüft zuerst den Health Check. Wenn VOLTIS antwortet, dass die Sync bereit ist, sendet er geschlossene Trades an den Import Endpoint. Trades gelangen als importiert ins Diary und, falls nötig, in den Status Needs Review.",
 
             syncLogs: "Sync Logs",
-            recentImportActivity: "Aktuelle ImportaktivitÃ¤t",
+            recentImportActivity: "Aktuelle Importaktivität",
             syncLogsDescription:
-                "Hier siehst du die letzten Ereignisse zur automatischen Synchronisierung: importierte Trades, aktualisierte Einstellungen, Resets und zukÃ¼nftige MT5/Broker-Fehler.",
+                "Hier siehst du die letzten Ereignisse zur automatischen Synchronisierung: importierte Trades, aktualisierte Einstellungen, Resets und zukünftige MT5/Broker-Fehler.",
             noSyncActivity:
-                "Noch keine Sync-AktivitÃ¤t aufgezeichnet. Wenn ein Trade aus MT5 oder Broker importiert wird, erscheint er hier.",
+                "Noch keine Sync-Aktivität aufgezeichnet. Wenn ein Trade aus MT5 oder Broker importiert wird, erscheint er hier.",
 
             securityNotice: "Sicherheitshinweis",
             noSensitiveCredentials: "Keine sensiblen Zugangsdaten gespeichert",
             securityDescription:
-                "In dieser Phase speichert VOLTIS keine MT5-PasswÃ¶rter, Broker-API-SchlÃ¼ssel, Tokens oder sensiblen Daten. Die echte Verbindung wird spÃ¤ter mit einem dedizierten und geschÃ¼tzten System aufgebaut.",
+                "In dieser Phase speichert VOLTIS keine MT5-Passwörter, Broker-API-Schlüssel, Tokens oder sensiblen Daten. Die echte Verbindung wird später mit einem dedizierten und geschützten System aufgebaut.",
 
             saveNote:
-                "Speichere nur nicht sensible Einstellungen. Die echte Sync wird spÃ¤ter in einer kontrollierten Umgebung getestet.",
+                "Speichere nur nicht sensible Einstellungen. Die echte Sync wird später in einer kontrollierten Umgebung getestet.",
             saveButton: "Integrationseinstellungen speichern",
         },
     },
@@ -2208,4 +2208,5 @@ return (
         </div>
     );
 }
+
 
