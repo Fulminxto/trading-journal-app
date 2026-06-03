@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+﻿import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -13,8 +13,6 @@ function getSeedPassword(envName: string) {
   }
 
   const forbiddenPasswords = new Set([
-    "yarik123",
-    "ivan123",
     "password",
     "password123",
     "12345678",
