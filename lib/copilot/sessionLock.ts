@@ -26,7 +26,7 @@ export function buildSessionLock({
 
   const lockReason =
     sessionLocked
-      ? "Rischio operativo elevato. VOLTIS consiglia stop temporaneo e review obbligatoria prima di continuare."
+      ? "Elevated operational risk. VOLTIS recommends a temporary stop and mandatory review before continuing."
       : reviewRequired
       ? "Cooldown recommended. Before continuing, complete a mental and operational review."
       : "Trading session is stable. No lock required.";
@@ -37,4 +37,5 @@ export function buildSessionLock({
     lockReason,
   };
 }
+
 

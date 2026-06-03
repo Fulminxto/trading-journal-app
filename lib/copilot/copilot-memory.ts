@@ -216,7 +216,7 @@ export async function analyzeCopilotMemory(
             memoryType: "profile",
             title: "Not Enough Trading Data",
             description:
-                "VOLTIS non ha ancora abbastanza trade per costruire una memoria operativa affidabile.",
+                "VOLTIS does not have enough trades yet to build reliable operational memory.",
             severity: "low",
             score: 0,
         });
@@ -476,7 +476,7 @@ const winRate = percentage(
             description:
                 disciplineScore >= 70
         ? `Operational discipline is stable. Current score: ${disciplineScore}/100.`
-                    : `La disciplina operativa richiede attenzione. Score attuale: ${disciplineScore}/100.`,
+                    : `Operational discipline requires attention. Current score: ${disciplineScore}/100.`,
             severity:
                 getPositiveSeverityFromScore(
                     disciplineScore
@@ -489,8 +489,8 @@ const winRate = percentage(
             title: "Behavioral Risk",
             description:
                 behavioralRisk >= 50
-                    ? `Rischio comportamentale elevato: ${behavioralRisk}/100. Execution debole, bassa confidence o componente emotiva stanno incidendo.`
-                    : `Rischio comportamentale sotto controllo: ${behavioralRisk}/100.`,
+                    ? `Elevated behavioral risk: ${behavioralRisk}/100. Weak execution, low confidence or emotional components are affecting performance.`
+                    : `Behavioral risk under control: ${behavioralRisk}/100.`,
             severity:
                 getSeverityFromScore(
                     behavioralRisk
@@ -559,7 +559,7 @@ const winRate = percentage(
             id: `${accountId}:pattern:weak-execution`,
             memoryType: "pattern",
             title: "Weak Execution Pattern",
-            description: `Trade con execution rating debole: ${weakExecutionTrades}.`,
+            description: `Trades with weak execution rating: ${weakExecutionTrades}.`,
             severity:
                 getSeverityFromScore(
                     percentage(
@@ -593,7 +593,7 @@ const winRate = percentage(
             id: `${accountId}:pattern:emotional-trading`,
             memoryType: "behavior",
             title: "Emotional Trading Pattern",
-            description: `Trade con componente emotiva rilevata: ${emotionalTrades}.`,
+            description: `Trades with emotional component detected: ${emotionalTrades}.`,
             severity:
                 getSeverityFromScore(
                     percentage(
@@ -849,3 +849,4 @@ export async function getCopilotMemorySnapshot(
         reviewNotes,
     };
 }
+

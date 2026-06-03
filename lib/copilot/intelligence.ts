@@ -1,4 +1,4 @@
-type Input = {
+﻿type Input = {
   disciplineScore: number;
   behavioralRisk: number;
   revengeRiskTrades: number;
@@ -30,13 +30,13 @@ export function buildIntelligenceFeed(input: Input) {
 
   if (input.disciplineScore >= 80) {
     intelligenceFeed.push(
-      "La disciplina operativa rimane stabile nelle ultime sessioni."
+      "Operational discipline remains stable across recent sessions."
     );
   }
 
   if (input.behavioralRisk >= 50) {
     intelligenceFeed.push(
-      "Rilevato aumento del rischio comportamentale operativo."
+      "Increase in operational behavioral risk detected."
     );
   }
 
@@ -48,31 +48,31 @@ export function buildIntelligenceFeed(input: Input) {
 
   if (input.winStreak >= 3) {
     intelligenceFeed.push(
-      `Momentum positivo rilevato: ${input.winStreak} win consecutivi.`
+      `Positive momentum detected: ${input.winStreak} consecutive wins.`
     );
   }
 
   if (input.lossStreak >= 3) {
     intelligenceFeed.push(
-      `Drawdown comportamentale rilevato: ${input.lossStreak} loss consecutivi.`
+      `Behavioral drawdown detected: ${input.lossStreak} consecutive losses.`
     );
   }
 
   if (input.weakTimeTrades > 0) {
     intelligenceFeed.push(
-      "Qualità execution ridotta nelle fasce orarie serali."
+      "QualitÃ  execution ridotta nelle fasce orarie serali."
     );
   }
 
   if (input.behavioralDrift) {
     intelligenceFeed.push(
-      `Behavioral drift rilevato: qualità recente ${input.recentAverageQuality}% vs precedente ${input.previousAverageQuality}%.`
+      `Behavioral drift rilevato: qualitÃ  recente ${input.recentAverageQuality}% vs precedente ${input.previousAverageQuality}%.`
     );
   }
 
   if (input.recoveryDetected) {
     intelligenceFeed.push(
-      `Recovery intelligence rileva segnali di recupero operativo (${input.recoveryLabel}).`
+      `Recovery intelligence detects operational recovery signals (${input.recoveryLabel}).`
     );
   }
 
@@ -90,37 +90,37 @@ export function buildIntelligenceFeed(input: Input) {
 
   if (input.supervisorLevel === "Critical") {
     intelligenceFeed.push(
-      "AI Risk Supervisor rileva rischio operativo critico: riduzione immediata della frequenza consigliata."
+      "AI Risk Supervisor detects critical operational risk: immediate frequency reduction recommended."
     );
   }
 
   if (input.emotionalVolatility) {
     intelligenceFeed.push(
-      `Emotional stability engine rileva instabilità emotiva elevata (${input.emotionalInstabilityScore}%).`
+      `Emotional stability engine rileva instabilitÃ  emotiva elevata (${input.emotionalInstabilityScore}%).`
     );
   }
 
   if (input.consistencyScore >= 80) {
     intelligenceFeed.push(
-      "Consistency engine rileva una struttura operativa altamente stabile."
+      "Consistency engine detects a highly stable operating structure."
     );
   }
 
   if (input.consistencyScore <= 45 && input.totalTrades > 0) {
     intelligenceFeed.push(
-      "Consistency engine rileva instabilità operativa e deterioramento decisionale."
+      "Consistency engine rileva instabilitÃ  operativa e deterioramento decisionale."
     );
   }
 
   if (input.reviewScore >= 85) {
     intelligenceFeed.push(
-      "AI Review Engine rileva execution e decision making di livello avanzato."
+      "AI Review Engine detects advanced execution and decision-making quality."
     );
   }
 
   if (input.reviewScore <= 50 && input.totalTrades > 0) {
     intelligenceFeed.push(
-      "AI Review Engine rileva deterioramento nella qualità decisionale e execution."
+      "AI Review Engine rileva deterioramento nella qualitÃ  decisionale e execution."
     );
   }
 
@@ -130,3 +130,4 @@ export function buildIntelligenceFeed(input: Input) {
 
   return intelligenceFeed;
 }
+

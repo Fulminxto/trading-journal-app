@@ -37,9 +37,9 @@ export function buildRiskEscalation({
 
   const message =
     escalationLevel === "Protection"
-      ? "Rischio operativo elevato: riduci frequenza, proteggi capitale e fai review prima di nuove operazioni."
+      ? "Elevated operational risk: reduce frequency, protect capital and review before taking new trades."
       : escalationLevel === "Cooldown"
-      ? "Segnali di deterioramento rilevati: consigliato rallentare, evitare overtrading e tornare a setup puliti."
+      ? "Deterioration signals detected: slow down, avoid overtrading and return to clean setups."
       : escalationLevel === "Monitor"
       ? "Some signals require attention: maintain discipline and monitor execution."
       : "Operational risk is under control.";
@@ -51,4 +51,5 @@ export function buildRiskEscalation({
     message,
   };
 }
+
 
