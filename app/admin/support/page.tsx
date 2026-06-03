@@ -1,4 +1,4 @@
-import {
+﻿import {
     LifeBuoy,
     Bug,
     Lightbulb,
@@ -27,8 +27,14 @@ export default async function AdminSupportPage() {
         },
     });
 
-    if (!user) {
-        redirect("/");
+    if (
+        !user ||
+        (
+            user.role !== "FOUNDER" &&
+            user.role !== "ADMIN"
+        )
+    ) {
+        redirect("/accounts");
     }
 
     const { t } = getAdminI18n(user.appLanguage);
@@ -184,3 +190,4 @@ export default async function AdminSupportPage() {
         </div>
     );
 }
+
