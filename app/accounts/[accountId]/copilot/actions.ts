@@ -1,4 +1,4 @@
-"use server";
+﻿"use server";
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -302,16 +302,16 @@ export async function sendCopilotMessage(
     ) {
         aiResponse =
             disciplineScore >= 75
-                ? `La tua disciplina operativa è stabile (${disciplineScore}%). Il problema principale non sembra essere impulsività ma mantenimento della consistenza durante aumento della frequenza operativa.`
-                : `La tua disciplina operativa è ancora instabile (${disciplineScore}%). VOLTIS rileva necessità di migliorare routine, execution e controllo emotivo.`;
+                ? `La tua disciplina operativa Ã¨ stabile (${disciplineScore}%). Il problema principale non sembra essere impulsivitÃ  ma mantenimento della consistenza durante aumento della frequenza operativa.`
+                : `La tua disciplina operativa Ã¨ ancora instabile (${disciplineScore}%). VOLTIS rileva necessitÃ  di migliorare routine, execution e controllo emotivo.`;
     } else if (
         lowerContent.includes("emotion") ||
         lowerContent.includes("emotivo")
     ) {
         aiResponse =
             emotionalTrades > 0
-                ? `Ho rilevato ${emotionalTrades} trade con componente emotiva. Il focus è ridurre revenge trading e decisioni prese sotto pressione emotiva.`
-                : "Non rilevo segnali importanti di emotional trading. La struttura emotiva appare stabile.";
+                ? `I detected ${emotionalTrades} trades with an emotional component. The focus is to reduce revenge trading and decisions made under emotional pressure.`
+                : "I do not detect major signs of emotional trading. The emotional structure appears stable.";
     } else if (
         lowerContent.includes("revenge") ||
         lowerContent.includes("impuls") ||
@@ -319,16 +319,16 @@ export async function sendCopilotMessage(
     ) {
         aiResponse =
             revengeRiskTrades > 0
-                ? `Ho rilevato ${revengeRiskTrades} possibili segnali di revenge trading: dopo una perdita compaiono execution debole, bassa confidence o componente emotiva. Il focus è fermarti dopo una loss e fare review prima del trade successivo.`
-                : "Non rilevo segnali forti di revenge trading nei dati attuali. Continua comunque a monitorare le operazioni successive a una perdita.";
+                ? `I detected ${revengeRiskTrades} possible revenge trading signals: after a loss, weak execution, low confidence or an emotional component appear. The focus is to stop after a loss and review before the next trade.`
+                : "I do not detect strong revenge trading signals in the current data. Keep monitoring trades taken after a loss.";
     } else if (
         lowerContent.includes("risk") ||
         lowerContent.includes("rischio")
     ) {
         aiResponse =
             behavioralRisk >= 50
-                ? `Il rischio comportamentale è elevato (${behavioralRisk}%). Weak execution e low confidence stanno aumentando instabilità operativa.`
-                : `Il rischio comportamentale è sotto controllo (${behavioralRisk}%). Continua a proteggere qualità execution e sizing.`;
+                ? `Il rischio comportamentale Ã¨ elevato (${behavioralRisk}%). Weak execution e low confidence stanno aumentando instabilitÃ  operativa.`
+                : `Il rischio comportamentale Ã¨ sotto controllo (${behavioralRisk}%). Continua a proteggere qualitÃ  execution e sizing.`;
     } else if (
         lowerContent.includes("win rate") ||
         lowerContent.includes("performance") ||
@@ -336,8 +336,8 @@ export async function sendCopilotMessage(
     ) {
         aiResponse =
             winRate >= 60
-                ? `La performance operativa è positiva. Win rate attuale: ${winRate}%. La priorità ora è scalare mantenendo disciplina e qualità setup.`
-                : `Il win rate attuale (${winRate}%) suggerisce necessità di migliorare selezione setup e qualità execution.`;
+                ? `La performance operativa Ã¨ positiva. Win rate attuale: ${winRate}%. La prioritÃ  ora Ã¨ scalare mantenendo disciplina e qualitÃ  setup.`
+                : `Il win rate attuale (${winRate}%) suggerisce necessitÃ  di migliorare selezione setup e qualitÃ  execution.`;
     } else if (
         lowerContent.includes("orari") ||
         lowerContent.includes("fascia") ||
@@ -346,8 +346,8 @@ export async function sendCopilotMessage(
     ) {
         aiResponse =
             weakTimeTrades > 0
-                ? `Ho rilevato ${weakTimeTrades} trade potenzialmente deboli nelle fasce orarie serali. Questo può indicare calo di lucidità, stanchezza o decisioni meno selettive.`
-                : "Non rilevo un peggioramento evidente della qualità operativa nelle fasce orarie serali.";
+                ? `Ho rilevato ${weakTimeTrades} trade potenzialmente deboli nelle fasce orarie serali. Questo puÃ² indicare calo di luciditÃ , stanchezza o decisioni meno selettive.`
+                : "Non rilevo un peggioramento evidente della qualitÃ  operativa nelle fasce orarie serali.";
     } else if (
         lowerContent.includes("session") ||
         lowerContent.includes("londra") ||
@@ -357,19 +357,19 @@ export async function sendCopilotMessage(
     ) {
         aiResponse =
             totalTrades === 0
-                ? "Non ho ancora abbastanza dati per analizzare le sessioni operative."
+                ? "I do not have enough data yet to analyze trading sessions."
                 : sessionEntries.length < 2
-                    ? "Per ora i dati sono concentrati in una sola sessione, quindi non posso confrontare in modo affidabile sessione migliore e peggiore. Inserisci trade in più fasce orarie per attivare un confronto reale."
-                    : `La sessione migliore risulta essere ${bestSession}, mentre quella più debole è ${worstSession}. Usa questa informazione per capire dove il tuo edge operativo è più forte e dove invece rischi di perdere qualità.`;
+                    ? "For now, the data is concentrated in a single session, so I cannot reliably compare the best and worst session. Add trades across more time windows to activate a real comparison."
+                    : `La sessione migliore risulta essere ${bestSession}, mentre quella piÃ¹ debole Ã¨ ${worstSession}. Usa questa informazione per capire dove il tuo edge operativo Ã¨ piÃ¹ forte e dove invece rischi di perdere qualitÃ .`;
     } else {
         aiResponse =
             totalTrades === 0
-                ? "Non ho ancora abbastanza dati per analizzare il tuo conto. Inserisci trade nel Diary per attivare il motore intelligence."
-                : `Ho analizzato ${totalTrades} trade. Win rate: ${winRate}%, disciplina: ${disciplineScore}%, rischio comportamentale: ${behavioralRisk}%. Streak attuale: ${winStreak > 0
-                    ? `${winStreak} win consecutivi`
+                ? "I do not have enough data yet to analyze your account. Add trades to the Diary to activate the intelligence engine."
+                : `I analyzed ${totalTrades} trades. Win rate: ${winRate}%, discipline: ${disciplineScore}%, behavioral risk: ${behavioralRisk}%. Current streak: ${winStreak > 0
+                    ? `${winStreak} consecutive wins`
                     : lossStreak > 0
-                        ? `${lossStreak} loss consecutivi`
-                        : "neutrale"
+                        ? `${lossStreak} consecutive losses`
+                        : "neutral"
                 }.`;
     }
 
@@ -383,7 +383,7 @@ export async function sendCopilotMessage(
                     increment: 1,
                 },
                 description:
-                    "Possibili segnali di revenge trading dopo una perdita.",
+                    "Possible revenge trading signals after a loss.",
                 severity:
                     revengeRiskTrades >= 5
                         ? "critical"
@@ -399,7 +399,7 @@ export async function sendCopilotMessage(
                 type: "behavior",
                 title: "Revenge Trading Risk",
                 description:
-                    "Possibili segnali di revenge trading dopo una perdita.",
+                    "Possible revenge trading signals after a loss.",
                 severity:
                     revengeRiskTrades >= 5
                         ? "critical"
@@ -426,11 +426,11 @@ export async function sendCopilotMessage(
 
     if (mainPattern) {
         if (mainPattern.severity === "critical") {
-            aiResponse += ` ALERT CRITICO: il pattern "${mainPattern.title}" continua a ripetersi. VOLTIS consiglia riduzione immediata della frequenza operativa e review completa della disciplina decisionale.`;
+            aiResponse += ` CRITICAL ALERT: the pattern "${mainPattern.title}" keeps repeating. VOLTIS recommends immediately reducing trading frequency and completing a full review of decision discipline.`;
         } else if (mainPattern.severity === "high") {
-            aiResponse += ` Pattern ricorrente ad alto rischio rilevato: "${mainPattern.title}" è comparso ${mainPattern.occurrences} volte. Priorità operativa: proteggere execution e controllo emotivo.`;
+            aiResponse += ` Pattern ricorrente ad alto rischio rilevato: "${mainPattern.title}" Ã¨ comparso ${mainPattern.occurrences} volte. PrioritÃ  operativa: proteggere execution e controllo emotivo.`;
         } else if (mainPattern.occurrences >= 3) {
-            aiResponse += ` Pattern ricorrente rilevato: "${mainPattern.title}" è comparso ${mainPattern.occurrences} volte.`;
+            aiResponse += ` Recurring pattern detected: "${mainPattern.title}" appeared ${mainPattern.occurrences} times.`;
         }
     }
 
@@ -468,7 +468,7 @@ export async function sendCopilotMessage(
             },
             update: {
                 description:
-                    "Rischio comportamentale elevato rilevato nel conto.",
+                    "Elevated behavioral risk detected on the account.",
                 severity: "high",
                 score: behavioralRisk,
             },
@@ -478,7 +478,7 @@ export async function sendCopilotMessage(
                 memoryType: "behavior",
                 title: "Elevated Behavioral Risk",
                 description:
-                    "Rischio comportamentale elevato rilevato nel conto.",
+                    "Elevated behavioral risk detected on the account.",
                 severity: "high",
                 score: behavioralRisk,
             },
@@ -492,7 +492,7 @@ export async function sendCopilotMessage(
             },
             update: {
                 description:
-                    "Pattern di revenge trading rilevato dopo operazioni negative.",
+                    "Revenge trading pattern detected after negative trades.",
                 severity:
                     revengeRiskTrades >= 3
                         ? "critical"
@@ -505,7 +505,7 @@ export async function sendCopilotMessage(
                 memoryType: "pattern",
                 title: "Revenge Trading Memory",
                 description:
-                    "Pattern di revenge trading rilevato dopo operazioni negative.",
+                    "Revenge trading pattern detected after negative trades.",
                 severity:
                     revengeRiskTrades >= 3
                         ? "critical"
@@ -521,7 +521,7 @@ export async function sendCopilotMessage(
         },
         update: {
             description:
-                "Profilo operativo generale aggiornato dal Copilot.",
+                "General operating profile updated by Copilot.",
             severity: "low",
             score: totalTrades,
         },
@@ -531,7 +531,7 @@ export async function sendCopilotMessage(
             memoryType: "profile",
             title: "General Trading Profile",
             description:
-                "Profilo operativo generale aggiornato dal Copilot.",
+                "General operating profile updated by Copilot.",
             severity: "low",
             score: totalTrades,
         },
@@ -541,7 +541,7 @@ export async function sendCopilotMessage(
         memorySnapshot.memories.slice(0, 3);
 
     if (activeMemories.length > 0) {
-        aiResponse += ` Memoria operativa attiva: VOLTIS riconosce ${activeMemories.length} pattern ricorrenti nel tuo storico. Pattern principale: "${activeMemories[0].title}".`;
+        aiResponse += ` Active operating memory: VOLTIS recognizes ${activeMemories.length} recurring patterns in your history. Main pattern: "${activeMemories[0].title}".`;
     }
 
     await prisma.copilotMessage.create({
