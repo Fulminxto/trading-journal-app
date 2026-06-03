@@ -1307,6 +1307,7 @@ export default async function DiaryPage({
           highQualityTrades={highQualityTrades}
           weakExecutionTrades={weakExecutionTrades}
           emotionalTrades={emotionalTrades}
+          appLanguage={language}
         />
       </div>
 
@@ -1333,6 +1334,7 @@ export default async function DiaryPage({
           bestSetup={bestSetup}
           weakSetupCount={weakSetupTrades}
           strongTradeCount={strongTrades}
+          appLanguage={language}
         />
       </div>
 
@@ -1341,6 +1343,7 @@ export default async function DiaryPage({
           traderType={traderType}
           strength={traderStrength}
           weakness={traderWeakness}
+          appLanguage={language}
         />
       </div>
 
@@ -1367,6 +1370,7 @@ export default async function DiaryPage({
           lowConfidenceTrades={lowConfidenceTrades}
           highConfidenceTrades={highConfidenceTrades}
           highQualityTrades={highQualityTrades}
+          appLanguage={language}
         />
       </div>
 
@@ -1385,6 +1389,7 @@ export default async function DiaryPage({
           highQualityTrades={highQualityTrades}
           weakExecutionTrades={weakExecutionTrades}
           disciplineScore={disciplineScore}
+          appLanguage={language}
         />
       </div>
 
@@ -2251,6 +2256,7 @@ export default async function DiaryPage({
     </div>
   );
 }
+
 
 
 
