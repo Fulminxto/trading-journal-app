@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+﻿import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
@@ -139,7 +139,7 @@ const dashboardLabels: Record<
   it: {
     accountStatus: "Stato account",
     accountStatusDescription:
-      "Snapshot basato su profitto, drawdown e comportamento recente dell’account.",
+      "Snapshot basato su profitto, drawdown e comportamento recente dellâ€™account.",
     dashboardAccount: "Dashboard account",
 
     accountType: "Tipo account",
@@ -154,7 +154,7 @@ const dashboardLabels: Record<
     accountGrowth: "Crescita account",
     equityCurve: "Curva equity",
     noTradesEquity:
-      "Nessun trade ancora. Quando aggiungerai operazioni, la curva equity apparirà qui.",
+      "Nessun trade ancora. Quando aggiungerai operazioni, la curva equity apparirÃ  qui.",
 
     targetProgress: "Progresso target",
     currentProfit: "Profitto attuale",
@@ -175,7 +175,7 @@ const dashboardLabels: Record<
     losses: "Loss",
     breakEven: "Break Even",
 
-    latestActivity: "Attività recente",
+    latestActivity: "AttivitÃ  recente",
     recentTrades: "Trade recenti",
     unknownSymbol: "Simbolo sconosciuto",
     equity: "Equity",
@@ -184,10 +184,10 @@ const dashboardLabels: Record<
     reviewNotes: "Note di review",
     whatToWatch: "Cosa osservare",
     risk: "Rischio",
-    currentMaxDrawdownIs: "Il drawdown massimo attuale è",
+    currentMaxDrawdownIs: "Il drawdown massimo attuale Ã¨",
     execution: "Esecuzione",
     averageResultPerTradeIs:
-      "Il risultato medio per trade è",
+      "Il risultato medio per trade Ã¨",
     consistency: "Consistenza",
     scoreCurrentlyAt: "Score attualmente a",
 
@@ -283,149 +283,149 @@ const dashboardLabels: Record<
   },
 
   uk: {
-    accountStatus: "Статус акаунта",
+    accountStatus: "Ð¡Ñ‚Ð°Ñ‚ÑƒÑ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°",
     accountStatusDescription:
-      "Знімок на основі прибутку, drawdown та останньої поведінки акаунта.",
-    dashboardAccount: "Дашборд акаунта",
+      "Ð—Ð½Ñ–Ð¼Ð¾Ðº Ð½Ð° Ð¾ÑÐ½Ð¾Ð²Ñ– Ð¿Ñ€Ð¸Ð±ÑƒÑ‚ÐºÑƒ, drawdown Ñ‚Ð° Ð¾ÑÑ‚Ð°Ð½Ð½ÑŒÐ¾Ñ— Ð¿Ð¾Ð²ÐµÐ´Ñ–Ð½ÐºÐ¸ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°.",
+    dashboardAccount: "Ð”Ð°ÑˆÐ±Ð¾Ñ€Ð´ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°",
 
-    accountType: "Тип акаунта",
-    initialBalance: "Початковий баланс",
-    currency: "Валюта",
-    brokerFirm: "Брокер / Фірма",
-    phase: "Фаза",
-    profitTarget: "Ціль прибутку",
-    maxDrawdownLimit: "Ліміт max drawdown",
-    dailyDrawdownLimit: "Денний ліміт drawdown",
+    accountType: "Ð¢Ð¸Ð¿ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°",
+    initialBalance: "ÐŸÐ¾Ñ‡Ð°Ñ‚ÐºÐ¾Ð²Ð¸Ð¹ Ð±Ð°Ð»Ð°Ð½Ñ",
+    currency: "Ð’Ð°Ð»ÑŽÑ‚Ð°",
+    brokerFirm: "Ð‘Ñ€Ð¾ÐºÐµÑ€ / Ð¤Ñ–Ñ€Ð¼Ð°",
+    phase: "Ð¤Ð°Ð·Ð°",
+    profitTarget: "Ð¦Ñ–Ð»ÑŒ Ð¿Ñ€Ð¸Ð±ÑƒÑ‚ÐºÑƒ",
+    maxDrawdownLimit: "Ð›Ñ–Ð¼Ñ–Ñ‚ max drawdown",
+    dailyDrawdownLimit: "Ð”ÐµÐ½Ð½Ð¸Ð¹ Ð»Ñ–Ð¼Ñ–Ñ‚ drawdown",
 
-    accountGrowth: "Зростання акаунта",
-    equityCurve: "Крива equity",
+    accountGrowth: "Ð—Ñ€Ð¾ÑÑ‚Ð°Ð½Ð½Ñ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°",
+    equityCurve: "ÐšÑ€Ð¸Ð²Ð° equity",
     noTradesEquity:
-      "Поки немає trade. Коли операції будуть додані, тут з’явиться крива equity.",
+      "ÐŸÐ¾ÐºÐ¸ Ð½ÐµÐ¼Ð°Ñ” trade. ÐšÐ¾Ð»Ð¸ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ñ— Ð±ÑƒÐ´ÑƒÑ‚ÑŒ Ð´Ð¾Ð´Ð°Ð½Ñ–, Ñ‚ÑƒÑ‚ Ð·â€™ÑÐ²Ð¸Ñ‚ÑŒÑÑ ÐºÑ€Ð¸Ð²Ð° equity.",
 
-    targetProgress: "Прогрес цілі",
-    currentProfit: "Поточний прибуток",
-    target: "Ціль",
-    remaining: "Залишилось",
+    targetProgress: "ÐŸÑ€Ð¾Ð³Ñ€ÐµÑ Ñ†Ñ–Ð»Ñ–",
+    currentProfit: "ÐŸÐ¾Ñ‚Ð¾Ñ‡Ð½Ð¸Ð¹ Ð¿Ñ€Ð¸Ð±ÑƒÑ‚Ð¾Ðº",
+    target: "Ð¦Ñ–Ð»ÑŒ",
+    remaining: "Ð—Ð°Ð»Ð¸ÑˆÐ¸Ð»Ð¾ÑÑŒ",
 
-    recentMomentum: "Останній momentum",
-    last: "Останні",
+    recentMomentum: "ÐžÑÑ‚Ð°Ð½Ð½Ñ–Ð¹ momentum",
+    last: "ÐžÑÑ‚Ð°Ð½Ð½Ñ–",
     trades: "trade",
     winsShort: "W",
     lossesShort: "L",
 
     profitFactor: "Profit Factor",
     profitFactorDescription:
-      "Валовий прибуток у порівнянні з валовим збитком.",
-    outcomeSplit: "Розподіл результатів",
-    wins: "Перемоги",
-    losses: "Поразки",
+      "Ð’Ð°Ð»Ð¾Ð²Ð¸Ð¹ Ð¿Ñ€Ð¸Ð±ÑƒÑ‚Ð¾Ðº Ñƒ Ð¿Ð¾Ñ€Ñ–Ð²Ð½ÑÐ½Ð½Ñ– Ð· Ð²Ð°Ð»Ð¾Ð²Ð¸Ð¼ Ð·Ð±Ð¸Ñ‚ÐºÐ¾Ð¼.",
+    outcomeSplit: "Ð Ð¾Ð·Ð¿Ð¾Ð´Ñ–Ð» Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ñ–Ð²",
+    wins: "ÐŸÐµÑ€ÐµÐ¼Ð¾Ð³Ð¸",
+    losses: "ÐŸÐ¾Ñ€Ð°Ð·ÐºÐ¸",
     breakEven: "Break Even",
 
-    latestActivity: "Остання активність",
-    recentTrades: "Останні trade",
-    unknownSymbol: "Невідомий символ",
+    latestActivity: "ÐžÑÑ‚Ð°Ð½Ð½Ñ Ð°ÐºÑ‚Ð¸Ð²Ð½Ñ–ÑÑ‚ÑŒ",
+    recentTrades: "ÐžÑÑ‚Ð°Ð½Ð½Ñ– trade",
+    unknownSymbol: "ÐÐµÐ²Ñ–Ð´Ð¾Ð¼Ð¸Ð¹ ÑÐ¸Ð¼Ð²Ð¾Ð»",
     equity: "Equity",
-    noRecentTrades: "Поки немає останніх trade.",
+    noRecentTrades: "ÐŸÐ¾ÐºÐ¸ Ð½ÐµÐ¼Ð°Ñ” Ð¾ÑÑ‚Ð°Ð½Ð½Ñ–Ñ… trade.",
 
-    reviewNotes: "Нотатки review",
-    whatToWatch: "На що звернути увагу",
-    risk: "Ризик",
-    currentMaxDrawdownIs: "Поточний max drawdown становить",
-    execution: "Виконання",
+    reviewNotes: "ÐÐ¾Ñ‚Ð°Ñ‚ÐºÐ¸ review",
+    whatToWatch: "ÐÐ° Ñ‰Ð¾ Ð·Ð²ÐµÑ€Ð½ÑƒÑ‚Ð¸ ÑƒÐ²Ð°Ð³Ñƒ",
+    risk: "Ð Ð¸Ð·Ð¸Ðº",
+    currentMaxDrawdownIs: "ÐŸÐ¾Ñ‚Ð¾Ñ‡Ð½Ð¸Ð¹ max drawdown ÑÑ‚Ð°Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ",
+    execution: "Ð’Ð¸ÐºÐ¾Ð½Ð°Ð½Ð½Ñ",
     averageResultPerTradeIs:
-      "Середній результат на trade становить",
-    consistency: "Стабільність",
-    scoreCurrentlyAt: "Поточний score",
+      "Ð¡ÐµÑ€ÐµÐ´Ð½Ñ–Ð¹ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚ Ð½Ð° trade ÑÑ‚Ð°Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ",
+    consistency: "Ð¡Ñ‚Ð°Ð±Ñ–Ð»ÑŒÐ½Ñ–ÑÑ‚ÑŒ",
+    scoreCurrentlyAt: "ÐŸÐ¾Ñ‚Ð¾Ñ‡Ð½Ð¸Ð¹ score",
 
-    currentEquity: "Поточна equity",
-    totalPnl: "Загальний PnL",
+    currentEquity: "ÐŸÐ¾Ñ‚Ð¾Ñ‡Ð½Ð° equity",
+    totalPnl: "Ð—Ð°Ð³Ð°Ð»ÑŒÐ½Ð¸Ð¹ PnL",
     winRate: "Win rate",
-    averageResult: "Середній результат",
-    averageWin: "Середній win",
-    averageLoss: "Середній loss",
-    bestTrade: "Найкращий trade",
-    worstTrade: "Найгірший trade",
+    averageResult: "Ð¡ÐµÑ€ÐµÐ´Ð½Ñ–Ð¹ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚",
+    averageWin: "Ð¡ÐµÑ€ÐµÐ´Ð½Ñ–Ð¹ win",
+    averageLoss: "Ð¡ÐµÑ€ÐµÐ´Ð½Ñ–Ð¹ loss",
+    bestTrade: "ÐÐ°Ð¹ÐºÑ€Ð°Ñ‰Ð¸Ð¹ trade",
+    worstTrade: "ÐÐ°Ð¹Ð³Ñ–Ñ€ÑˆÐ¸Ð¹ trade",
     maxDrawdown: "Max drawdown",
-    remainingTarget: "Залишок до цілі",
+    remainingTarget: "Ð—Ð°Ð»Ð¸ÑˆÐ¾Ðº Ð´Ð¾ Ñ†Ñ–Ð»Ñ–",
 
-    healthWaitingForData: "Очікування даних",
-    healthStable: "Стабільно",
+    healthWaitingForData: "ÐžÑ‡Ñ–ÐºÑƒÐ²Ð°Ð½Ð½Ñ Ð´Ð°Ð½Ð¸Ñ…",
+    healthStable: "Ð¡Ñ‚Ð°Ð±Ñ–Ð»ÑŒÐ½Ð¾",
     healthPositiveMonitorRisk:
-      "Позитивно, але контролюй ризик",
-    healthNeedsReview: "Потрібен review",
+      "ÐŸÐ¾Ð·Ð¸Ñ‚Ð¸Ð²Ð½Ð¾, Ð°Ð»Ðµ ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»ÑŽÐ¹ Ñ€Ð¸Ð·Ð¸Ðº",
+    healthNeedsReview: "ÐŸÐ¾Ñ‚Ñ€Ñ–Ð±ÐµÐ½ review",
   },
 
   ru: {
-    accountStatus: "Статус аккаунта",
+    accountStatus: "Ð¡Ñ‚Ð°Ñ‚ÑƒÑ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°",
     accountStatusDescription:
-      "Снимок на основе прибыли, drawdown и недавнего поведения аккаунта.",
-    dashboardAccount: "Дашборд аккаунта",
+      "Ð¡Ð½Ð¸Ð¼Ð¾Ðº Ð½Ð° Ð¾ÑÐ½Ð¾Ð²Ðµ Ð¿Ñ€Ð¸Ð±Ñ‹Ð»Ð¸, drawdown Ð¸ Ð½ÐµÐ´Ð°Ð²Ð½ÐµÐ³Ð¾ Ð¿Ð¾Ð²ÐµÐ´ÐµÐ½Ð¸Ñ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°.",
+    dashboardAccount: "Ð”Ð°ÑˆÐ±Ð¾Ñ€Ð´ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°",
 
-    accountType: "Тип аккаунта",
-    initialBalance: "Начальный баланс",
-    currency: "Валюта",
-    brokerFirm: "Брокер / Фирма",
-    phase: "Фаза",
-    profitTarget: "Цель прибыли",
-    maxDrawdownLimit: "Лимит max drawdown",
-    dailyDrawdownLimit: "Дневной лимит drawdown",
+    accountType: "Ð¢Ð¸Ð¿ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°",
+    initialBalance: "ÐÐ°Ñ‡Ð°Ð»ÑŒÐ½Ñ‹Ð¹ Ð±Ð°Ð»Ð°Ð½Ñ",
+    currency: "Ð’Ð°Ð»ÑŽÑ‚Ð°",
+    brokerFirm: "Ð‘Ñ€Ð¾ÐºÐµÑ€ / Ð¤Ð¸Ñ€Ð¼Ð°",
+    phase: "Ð¤Ð°Ð·Ð°",
+    profitTarget: "Ð¦ÐµÐ»ÑŒ Ð¿Ñ€Ð¸Ð±Ñ‹Ð»Ð¸",
+    maxDrawdownLimit: "Ð›Ð¸Ð¼Ð¸Ñ‚ max drawdown",
+    dailyDrawdownLimit: "Ð”Ð½ÐµÐ²Ð½Ð¾Ð¹ Ð»Ð¸Ð¼Ð¸Ñ‚ drawdown",
 
-    accountGrowth: "Рост аккаунта",
-    equityCurve: "Кривая equity",
+    accountGrowth: "Ð Ð¾ÑÑ‚ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°",
+    equityCurve: "ÐšÑ€Ð¸Ð²Ð°Ñ equity",
     noTradesEquity:
-      "Пока нет trade. Когда операции будут добавлены, здесь появится кривая equity.",
+      "ÐŸÐ¾ÐºÐ° Ð½ÐµÑ‚ trade. ÐšÐ¾Ð³Ð´Ð° Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¸ Ð±ÑƒÐ´ÑƒÑ‚ Ð´Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ñ‹, Ð·Ð´ÐµÑÑŒ Ð¿Ð¾ÑÐ²Ð¸Ñ‚ÑÑ ÐºÑ€Ð¸Ð²Ð°Ñ equity.",
 
-    targetProgress: "Прогресс цели",
-    currentProfit: "Текущая прибыль",
-    target: "Цель",
-    remaining: "Осталось",
+    targetProgress: "ÐŸÑ€Ð¾Ð³Ñ€ÐµÑÑ Ñ†ÐµÐ»Ð¸",
+    currentProfit: "Ð¢ÐµÐºÑƒÑ‰Ð°Ñ Ð¿Ñ€Ð¸Ð±Ñ‹Ð»ÑŒ",
+    target: "Ð¦ÐµÐ»ÑŒ",
+    remaining: "ÐžÑÑ‚Ð°Ð»Ð¾ÑÑŒ",
 
-    recentMomentum: "Последний momentum",
-    last: "Последние",
+    recentMomentum: "ÐŸÐ¾ÑÐ»ÐµÐ´Ð½Ð¸Ð¹ momentum",
+    last: "ÐŸÐ¾ÑÐ»ÐµÐ´Ð½Ð¸Ðµ",
     trades: "trade",
     winsShort: "W",
     lossesShort: "L",
 
     profitFactor: "Profit Factor",
     profitFactorDescription:
-      "Валовая прибыль по сравнению с валовым убытком.",
-    outcomeSplit: "Распределение результатов",
-    wins: "Победы",
-    losses: "Поражения",
+      "Ð’Ð°Ð»Ð¾Ð²Ð°Ñ Ð¿Ñ€Ð¸Ð±Ñ‹Ð»ÑŒ Ð¿Ð¾ ÑÑ€Ð°Ð²Ð½ÐµÐ½Ð¸ÑŽ Ñ Ð²Ð°Ð»Ð¾Ð²Ñ‹Ð¼ ÑƒÐ±Ñ‹Ñ‚ÐºÐ¾Ð¼.",
+    outcomeSplit: "Ð Ð°ÑÐ¿Ñ€ÐµÐ´ÐµÐ»ÐµÐ½Ð¸Ðµ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ð¾Ð²",
+    wins: "ÐŸÐ¾Ð±ÐµÐ´Ñ‹",
+    losses: "ÐŸÐ¾Ñ€Ð°Ð¶ÐµÐ½Ð¸Ñ",
     breakEven: "Break Even",
 
-    latestActivity: "Последняя активность",
-    recentTrades: "Последние trade",
-    unknownSymbol: "Неизвестный символ",
+    latestActivity: "ÐŸÐ¾ÑÐ»ÐµÐ´Ð½ÑÑ Ð°ÐºÑ‚Ð¸Ð²Ð½Ð¾ÑÑ‚ÑŒ",
+    recentTrades: "ÐŸÐ¾ÑÐ»ÐµÐ´Ð½Ð¸Ðµ trade",
+    unknownSymbol: "ÐÐµÐ¸Ð·Ð²ÐµÑÑ‚Ð½Ñ‹Ð¹ ÑÐ¸Ð¼Ð²Ð¾Ð»",
     equity: "Equity",
-    noRecentTrades: "Пока нет последних trade.",
+    noRecentTrades: "ÐŸÐ¾ÐºÐ° Ð½ÐµÑ‚ Ð¿Ð¾ÑÐ»ÐµÐ´Ð½Ð¸Ñ… trade.",
 
-    reviewNotes: "Заметки review",
-    whatToWatch: "За чем следить",
-    risk: "Риск",
-    currentMaxDrawdownIs: "Текущий max drawdown составляет",
-    execution: "Исполнение",
+    reviewNotes: "Ð—Ð°Ð¼ÐµÑ‚ÐºÐ¸ review",
+    whatToWatch: "Ð—Ð° Ñ‡ÐµÐ¼ ÑÐ»ÐµÐ´Ð¸Ñ‚ÑŒ",
+    risk: "Ð Ð¸ÑÐº",
+    currentMaxDrawdownIs: "Ð¢ÐµÐºÑƒÑ‰Ð¸Ð¹ max drawdown ÑÐ¾ÑÑ‚Ð°Ð²Ð»ÑÐµÑ‚",
+    execution: "Ð˜ÑÐ¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ",
     averageResultPerTradeIs:
-      "Средний результат на trade составляет",
-    consistency: "Стабильность",
-    scoreCurrentlyAt: "Текущий score",
+      "Ð¡Ñ€ÐµÐ´Ð½Ð¸Ð¹ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚ Ð½Ð° trade ÑÐ¾ÑÑ‚Ð°Ð²Ð»ÑÐµÑ‚",
+    consistency: "Ð¡Ñ‚Ð°Ð±Ð¸Ð»ÑŒÐ½Ð¾ÑÑ‚ÑŒ",
+    scoreCurrentlyAt: "Ð¢ÐµÐºÑƒÑ‰Ð¸Ð¹ score",
 
-    currentEquity: "Текущая equity",
-    totalPnl: "Общий PnL",
+    currentEquity: "Ð¢ÐµÐºÑƒÑ‰Ð°Ñ equity",
+    totalPnl: "ÐžÐ±Ñ‰Ð¸Ð¹ PnL",
     winRate: "Win rate",
-    averageResult: "Средний результат",
-    averageWin: "Средний win",
-    averageLoss: "Средний loss",
-    bestTrade: "Лучший trade",
-    worstTrade: "Худший trade",
+    averageResult: "Ð¡Ñ€ÐµÐ´Ð½Ð¸Ð¹ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚",
+    averageWin: "Ð¡Ñ€ÐµÐ´Ð½Ð¸Ð¹ win",
+    averageLoss: "Ð¡Ñ€ÐµÐ´Ð½Ð¸Ð¹ loss",
+    bestTrade: "Ð›ÑƒÑ‡ÑˆÐ¸Ð¹ trade",
+    worstTrade: "Ð¥ÑƒÐ´ÑˆÐ¸Ð¹ trade",
     maxDrawdown: "Max drawdown",
-    remainingTarget: "Остаток до цели",
+    remainingTarget: "ÐžÑÑ‚Ð°Ñ‚Ð¾Ðº Ð´Ð¾ Ñ†ÐµÐ»Ð¸",
 
-    healthWaitingForData: "Ожидание данных",
-    healthStable: "Стабильно",
+    healthWaitingForData: "ÐžÐ¶Ð¸Ð´Ð°Ð½Ð¸Ðµ Ð´Ð°Ð½Ð½Ñ‹Ñ…",
+    healthStable: "Ð¡Ñ‚Ð°Ð±Ð¸Ð»ÑŒÐ½Ð¾",
     healthPositiveMonitorRisk:
-      "Положительно, но контролируй риск",
-    healthNeedsReview: "Нужен review",
+      "ÐŸÐ¾Ð»Ð¾Ð¶Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð¾, Ð½Ð¾ ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»Ð¸Ñ€ÑƒÐ¹ Ñ€Ð¸ÑÐº",
+    healthNeedsReview: "ÐÑƒÐ¶ÐµÐ½ review",
   },
 
   es: {
@@ -440,13 +440,13 @@ const dashboardLabels: Record<
     brokerFirm: "Broker / Firma",
     phase: "Fase",
     profitTarget: "Objetivo de beneficio",
-    maxDrawdownLimit: "Límite max drawdown",
-    dailyDrawdownLimit: "Límite diario de drawdown",
+    maxDrawdownLimit: "LÃ­mite max drawdown",
+    dailyDrawdownLimit: "LÃ­mite diario de drawdown",
 
     accountGrowth: "Crecimiento de cuenta",
     equityCurve: "Curva de equity",
     noTradesEquity:
-      "Aún no hay trades. Cuando se añadan operaciones, la curva de equity aparecerá aquí.",
+      "AÃºn no hay trades. Cuando se aÃ±adan operaciones, la curva de equity aparecerÃ¡ aquÃ­.",
 
     targetProgress: "Progreso del objetivo",
     currentProfit: "Beneficio actual",
@@ -454,30 +454,30 @@ const dashboardLabels: Record<
     remaining: "Restante",
 
     recentMomentum: "Momentum reciente",
-    last: "Últimos",
+    last: "Ãšltimos",
     trades: "trades",
     winsShort: "W",
     lossesShort: "L",
 
     profitFactor: "Profit Factor",
     profitFactorDescription:
-      "Beneficio bruto comparado con pérdida bruta.",
-    outcomeSplit: "Distribución de resultados",
+      "Beneficio bruto comparado con pÃ©rdida bruta.",
+    outcomeSplit: "DistribuciÃ³n de resultados",
     wins: "Ganadas",
     losses: "Perdidas",
     breakEven: "Break Even",
 
     latestActivity: "Actividad reciente",
     recentTrades: "Trades recientes",
-    unknownSymbol: "Símbolo desconocido",
+    unknownSymbol: "SÃ­mbolo desconocido",
     equity: "Equity",
-    noRecentTrades: "Aún no hay trades recientes.",
+    noRecentTrades: "AÃºn no hay trades recientes.",
 
     reviewNotes: "Notas de review",
-    whatToWatch: "Qué observar",
+    whatToWatch: "QuÃ© observar",
     risk: "Riesgo",
     currentMaxDrawdownIs: "El max drawdown actual es",
-    execution: "Ejecución",
+    execution: "EjecuciÃ³n",
     averageResultPerTradeIs:
       "El resultado medio por trade es",
     consistency: "Consistencia",
@@ -498,13 +498,13 @@ const dashboardLabels: Record<
     healthStable: "Estable",
     healthPositiveMonitorRisk:
       "Positivo, pero controla el riesgo",
-    healthNeedsReview: "Necesita revisión",
+    healthNeedsReview: "Necesita revisiÃ³n",
   },
 
   fr: {
-    accountStatus: "État du compte",
+    accountStatus: "Ã‰tat du compte",
     accountStatusDescription:
-      "Snapshot basé sur le profit, le drawdown et le comportement récent du compte.",
+      "Snapshot basÃ© sur le profit, le drawdown et le comportement rÃ©cent du compte.",
     dashboardAccount: "Dashboard du compte",
 
     accountType: "Type de compte",
@@ -517,16 +517,16 @@ const dashboardLabels: Record<
     dailyDrawdownLimit: "Limite drawdown quotidien",
 
     accountGrowth: "Croissance du compte",
-    equityCurve: "Courbe d’equity",
+    equityCurve: "Courbe dâ€™equity",
     noTradesEquity:
-      "Aucun trade pour le moment. Quand des opérations seront ajoutées, la courbe d’equity apparaîtra ici.",
+      "Aucun trade pour le moment. Quand des opÃ©rations seront ajoutÃ©es, la courbe dâ€™equity apparaÃ®tra ici.",
 
-    targetProgress: "Progression de l’objectif",
+    targetProgress: "Progression de lâ€™objectif",
     currentProfit: "Profit actuel",
     target: "Objectif",
     remaining: "Restant",
 
-    recentMomentum: "Momentum récent",
+    recentMomentum: "Momentum rÃ©cent",
     last: "Derniers",
     trades: "trades",
     winsShort: "W",
@@ -534,32 +534,32 @@ const dashboardLabels: Record<
 
     profitFactor: "Profit Factor",
     profitFactorDescription:
-      "Profit brut comparé à la perte brute.",
-    outcomeSplit: "Répartition des résultats",
+      "Profit brut comparÃ© Ã  la perte brute.",
+    outcomeSplit: "RÃ©partition des rÃ©sultats",
     wins: "Wins",
     losses: "Losses",
     breakEven: "Break Even",
 
-    latestActivity: "Activité récente",
-    recentTrades: "Trades récents",
+    latestActivity: "ActivitÃ© rÃ©cente",
+    recentTrades: "Trades rÃ©cents",
     unknownSymbol: "Symbole inconnu",
     equity: "Equity",
-    noRecentTrades: "Aucun trade récent.",
+    noRecentTrades: "Aucun trade rÃ©cent.",
 
     reviewNotes: "Notes de review",
-    whatToWatch: "À surveiller",
+    whatToWatch: "Ã€ surveiller",
     risk: "Risque",
     currentMaxDrawdownIs: "Le max drawdown actuel est",
-    execution: "Exécution",
+    execution: "ExÃ©cution",
     averageResultPerTradeIs:
-      "Le résultat moyen par trade est",
+      "Le rÃ©sultat moyen par trade est",
     consistency: "Consistance",
     scoreCurrentlyAt: "Score actuel",
 
     currentEquity: "Equity actuelle",
     totalPnl: "PnL total",
     winRate: "Win rate",
-    averageResult: "Résultat moyen",
+    averageResult: "RÃ©sultat moyen",
     averageWin: "Win moyen",
     averageLoss: "Loss moyen",
     bestTrade: "Meilleur trade",
@@ -567,11 +567,11 @@ const dashboardLabels: Record<
     maxDrawdown: "Max drawdown",
     remainingTarget: "Objectif restant",
 
-    healthWaitingForData: "En attente de données",
+    healthWaitingForData: "En attente de donnÃ©es",
     healthStable: "Stable",
     healthPositiveMonitorRisk:
       "Positif, mais surveille le risque",
-    healthNeedsReview: "À revoir",
+    healthNeedsReview: "Ã€ revoir",
   },
 
   de: {
@@ -582,17 +582,17 @@ const dashboardLabels: Record<
 
     accountType: "Kontotyp",
     initialBalance: "Startkapital",
-    currency: "Währung",
+    currency: "WÃ¤hrung",
     brokerFirm: "Broker / Firma",
     phase: "Phase",
     profitTarget: "Gewinnziel",
     maxDrawdownLimit: "Max-Drawdown-Limit",
-    dailyDrawdownLimit: "Tägliches Drawdown-Limit",
+    dailyDrawdownLimit: "TÃ¤gliches Drawdown-Limit",
 
     accountGrowth: "Kontowachstum",
     equityCurve: "Equity-Kurve",
     noTradesEquity:
-      "Noch keine Trades. Sobald Trades hinzugefügt werden, erscheint hier die Equity-Kurve.",
+      "Noch keine Trades. Sobald Trades hinzugefÃ¼gt werden, erscheint hier die Equity-Kurve.",
 
     targetProgress: "Zielfortschritt",
     currentProfit: "Aktueller Gewinn",
@@ -613,7 +613,7 @@ const dashboardLabels: Record<
     losses: "Losses",
     breakEven: "Break Even",
 
-    latestActivity: "Letzte Aktivität",
+    latestActivity: "Letzte AktivitÃ¤t",
     recentTrades: "Letzte Trades",
     unknownSymbol: "Unbekanntes Symbol",
     equity: "Equity",
@@ -622,10 +622,10 @@ const dashboardLabels: Record<
     reviewNotes: "Review-Notizen",
     whatToWatch: "Worauf achten",
     risk: "Risiko",
-    currentMaxDrawdownIs: "Der aktuelle Max Drawdown beträgt",
-    execution: "Ausführung",
+    currentMaxDrawdownIs: "Der aktuelle Max Drawdown betrÃ¤gt",
+    execution: "AusfÃ¼hrung",
     averageResultPerTradeIs:
-      "Das durchschnittliche Ergebnis pro Trade beträgt",
+      "Das durchschnittliche Ergebnis pro Trade betrÃ¤gt",
     consistency: "Konstanz",
     scoreCurrentlyAt: "Aktueller Score",
 
@@ -643,8 +643,8 @@ const dashboardLabels: Record<
     healthWaitingForData: "Warte auf Daten",
     healthStable: "Stabil",
     healthPositiveMonitorRisk:
-      "Positiv, aber Risiko überwachen",
-    healthNeedsReview: "Review nötig",
+      "Positiv, aber Risiko Ã¼berwachen",
+    healthNeedsReview: "Review nÃ¶tig",
   },
 };
 
@@ -1054,12 +1054,14 @@ export default async function DashboardPage({
         )}
         winRate={formatPercent(winRate)}
         totalTrades={totalTrades}
+        appLanguage={language}
       />
 
       <div className="mt-8 grid grid-cols-1 gap-4 xl:grid-cols-3">
         <div className="xl:col-span-2">
           <ConsistencyScoreCard
             score={consistencyScore}
+            appLanguage={language}
           />
         </div>
 
@@ -1290,7 +1292,7 @@ export default async function DashboardPage({
           </h2>
 
           <p className="mt-3 text-sm text-gray-400">
-            {t.last} {recentTrades.length} {t.trades} ·{" "}
+            {t.last} {recentTrades.length} {t.trades} Â·{" "}
             <span className="text-green-400">
               {lastFiveWins}{t.winsShort}
             </span>{" "}
@@ -1414,8 +1416,8 @@ export default async function DashboardPage({
                     </p>
 
                     <p className="mt-1 text-xs text-gray-400">
-                      {getDateLabel(trade.openDate, language)} ·{" "}
-                      {trade.direction || "-"} ·{" "}
+                      {getDateLabel(trade.openDate, language)} Â·{" "}
+                      {trade.direction || "-"} Â·{" "}
                       {trade.outcome || "-"}
                     </p>
                   </div>
@@ -1525,3 +1527,5 @@ export default async function DashboardPage({
     </div>
   );
 }
+
+

@@ -1,5 +1,91 @@
+﻿import { normalizeAppLanguage } from "@/lib/i18n";
+
 type Props = {
   score: number;
+  appLanguage?: string | null;
+};
+
+type Labels = {
+  eyebrow: string;
+  title: string;
+  description: string;
+  elite: string;
+  consistent: string;
+  developing: string;
+  unstable: string;
+};
+
+const labels: Record<string, Labels> = {
+  it: {
+    eyebrow: "Trade Discipline",
+    title: "Discipline Score",
+    description:
+      "Score basato su execution, setup quality, confidence e disciplina emotiva del trader.",
+    elite: "Elite",
+    consistent: "Consistente",
+    developing: "In sviluppo",
+    unstable: "Instabile",
+  },
+  en: {
+    eyebrow: "Trade Discipline",
+    title: "Discipline Score",
+    description:
+      "Score based on execution, setup quality, confidence and the traderâ€™s emotional discipline.",
+    elite: "Elite",
+    consistent: "Consistent",
+    developing: "Developing",
+    unstable: "Unstable",
+  },
+  uk: {
+    eyebrow: "Trade Discipline",
+    title: "Discipline Score",
+    description:
+      "Score Ð½Ð° Ð¾ÑÐ½Ð¾Ð²Ñ– execution, setup quality, confidence Ñ‚Ð° ÐµÐ¼Ð¾Ñ†Ñ–Ð¹Ð½Ð¾Ñ— Ð´Ð¸ÑÑ†Ð¸Ð¿Ð»Ñ–Ð½Ð¸ Ñ‚Ñ€ÐµÐ¹Ð´ÐµÑ€Ð°.",
+    elite: "Elite",
+    consistent: "Ð¡Ñ‚Ð°Ð±Ñ–Ð»ÑŒÐ½Ð¸Ð¹",
+    developing: "Ð£ Ñ€Ð¾Ð·Ð²Ð¸Ñ‚ÐºÑƒ",
+    unstable: "ÐÐµÑÑ‚Ð°Ð±Ñ–Ð»ÑŒÐ½Ð¸Ð¹",
+  },
+  ru: {
+    eyebrow: "Trade Discipline",
+    title: "Discipline Score",
+    description:
+      "Score Ð½Ð° Ð¾ÑÐ½Ð¾Ð²Ðµ execution, setup quality, confidence Ð¸ ÑÐ¼Ð¾Ñ†Ð¸Ð¾Ð½Ð°Ð»ÑŒÐ½Ð¾Ð¹ Ð´Ð¸ÑÑ†Ð¸Ð¿Ð»Ð¸Ð½Ñ‹ Ñ‚Ñ€ÐµÐ¹Ð´ÐµÑ€Ð°.",
+    elite: "Elite",
+    consistent: "Ð¡Ñ‚Ð°Ð±Ð¸Ð»ÑŒÐ½Ñ‹Ð¹",
+    developing: "Ð’ Ñ€Ð°Ð·Ð²Ð¸Ñ‚Ð¸Ð¸",
+    unstable: "ÐÐµÑÑ‚Ð°Ð±Ð¸Ð»ÑŒÐ½Ñ‹Ð¹",
+  },
+  es: {
+    eyebrow: "Trade Discipline",
+    title: "Discipline Score",
+    description:
+      "Score basado en execution, setup quality, confidence y disciplina emocional del trader.",
+    elite: "Elite",
+    consistent: "Consistente",
+    developing: "En desarrollo",
+    unstable: "Inestable",
+  },
+  fr: {
+    eyebrow: "Trade Discipline",
+    title: "Discipline Score",
+    description:
+      "Score basÃ© sur execution, setup quality, confidence et discipline Ã©motionnelle du trader.",
+    elite: "Elite",
+    consistent: "Consistant",
+    developing: "En dÃ©veloppement",
+    unstable: "Instable",
+  },
+  de: {
+    eyebrow: "Trade Discipline",
+    title: "Discipline Score",
+    description:
+      "Score basierend auf Execution, Setup Quality, Confidence und emotionaler Disziplin des Traders.",
+    elite: "Elite",
+    consistent: "Konstant",
+    developing: "In Entwicklung",
+    unstable: "Instabil",
+  },
 };
 
 function getTone(score: number) {
@@ -18,26 +104,29 @@ function getTone(score: number) {
   return "text-red-400";
 }
 
-function getLabel(score: number) {
+function getLabel(score: number, t: Labels) {
   if (score >= 80) {
-    return "Elite";
+    return t.elite;
   }
 
   if (score >= 60) {
-    return "Consistent";
+    return t.consistent;
   }
 
   if (score >= 40) {
-    return "Developing";
+    return t.developing;
   }
 
-  return "Unstable";
+  return t.unstable;
 }
 
 export default function TradeDisciplineScore({
   score,
+  appLanguage,
 }: Props) {
   const tone = getTone(score);
+  const language = normalizeAppLanguage(appLanguage);
+  const t = labels[language] ?? labels.en;
 
   return (
     <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-[#0b1220] via-[#111827] to-black p-8">
@@ -47,18 +136,18 @@ export default function TradeDisciplineScore({
         <div className="flex items-start justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
-              Trade Discipline
+              {t.eyebrow}
             </p>
 
             <h2 className="mt-3 text-3xl font-black text-white">
-              Discipline Score
+              {t.title}
             </h2>
           </div>
 
           <div
             className={`rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-bold ${tone}`}
           >
-            {getLabel(score)}
+            {getLabel(score, t)}
           </div>
         </div>
 
@@ -84,9 +173,7 @@ export default function TradeDisciplineScore({
         </div>
 
         <p className="mt-6 max-w-2xl text-sm leading-relaxed text-gray-400">
-          Score basato su execution,
-          setup quality, confidence e
-          disciplina emotiva del trader.
+          {t.description}
         </p>
       </div>
     </div>

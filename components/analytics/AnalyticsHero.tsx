@@ -1,8 +1,94 @@
+﻿import { normalizeAppLanguage } from "@/lib/i18n";
+
 type Props = {
   accountName: string;
   totalPnl: string;
   winRate: number;
   totalTrades: number;
+  appLanguage?: string | null;
+};
+
+type Labels = {
+  eyebrow: string;
+  description: string;
+  totalPnl: string;
+  winRate: string;
+  totalTrades: string;
+  accountStatus: string;
+  active: string;
+};
+
+const labels: Record<string, Labels> = {
+  it: {
+    eyebrow: "VOLTIS Analytics",
+    description:
+      "Performance intelligence, psychology tracking, analytics avanzati e behavioral insights per costruire un sistema di trading professionale.",
+    totalPnl: "PnL totale",
+    winRate: "Win Rate",
+    totalTrades: "Trade totali",
+    accountStatus: "Stato account",
+    active: "Attivo",
+  },
+  en: {
+    eyebrow: "VOLTIS Analytics",
+    description:
+      "Performance intelligence, psychology tracking, advanced analytics and behavioral insights to build a professional trading system.",
+    totalPnl: "Total PnL",
+    winRate: "Win Rate",
+    totalTrades: "Total Trades",
+    accountStatus: "Account Status",
+    active: "Active",
+  },
+  uk: {
+    eyebrow: "VOLTIS Analytics",
+    description:
+      "Performance intelligence, psychology tracking, Ñ€Ð¾Ð·ÑˆÐ¸Ñ€ÐµÐ½Ð° Ð°Ð½Ð°Ð»Ñ–Ñ‚Ð¸ÐºÐ° Ñ‚Ð° behavioral insights Ð´Ð»Ñ Ð¿Ð¾Ð±ÑƒÐ´Ð¾Ð²Ð¸ Ð¿Ñ€Ð¾Ñ„ÐµÑÑ–Ð¹Ð½Ð¾Ñ— Ñ‚Ð¾Ñ€Ð³Ð¾Ð²Ð¾Ñ— ÑÐ¸ÑÑ‚ÐµÐ¼Ð¸.",
+    totalPnl: "Ð—Ð°Ð³Ð°Ð»ÑŒÐ½Ð¸Ð¹ PnL",
+    winRate: "Win Rate",
+    totalTrades: "Ð£ÑÑŒÐ¾Ð³Ð¾ ÑƒÐ³Ð¾Ð´",
+    accountStatus: "Ð¡Ñ‚Ð°Ñ‚ÑƒÑ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°",
+    active: "ÐÐºÑ‚Ð¸Ð²Ð½Ð¸Ð¹",
+  },
+  ru: {
+    eyebrow: "VOLTIS Analytics",
+    description:
+      "Performance intelligence, psychology tracking, Ñ€Ð°ÑÑˆÐ¸Ñ€ÐµÐ½Ð½Ð°Ñ Ð°Ð½Ð°Ð»Ð¸Ñ‚Ð¸ÐºÐ° Ð¸ behavioral insights Ð´Ð»Ñ Ð¿Ð¾ÑÑ‚Ñ€Ð¾ÐµÐ½Ð¸Ñ Ð¿Ñ€Ð¾Ñ„ÐµÑÑÐ¸Ð¾Ð½Ð°Ð»ÑŒÐ½Ð¾Ð¹ Ñ‚Ð¾Ñ€Ð³Ð¾Ð²Ð¾Ð¹ ÑÐ¸ÑÑ‚ÐµÐ¼Ñ‹.",
+    totalPnl: "ÐžÐ±Ñ‰Ð¸Ð¹ PnL",
+    winRate: "Win Rate",
+    totalTrades: "Ð’ÑÐµÐ³Ð¾ ÑÐ´ÐµÐ»Ð¾Ðº",
+    accountStatus: "Ð¡Ñ‚Ð°Ñ‚ÑƒÑ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°",
+    active: "ÐÐºÑ‚Ð¸Ð²ÐµÐ½",
+  },
+  es: {
+    eyebrow: "VOLTIS Analytics",
+    description:
+      "Performance intelligence, psychology tracking, analytics avanzados y behavioral insights para construir un sistema de trading profesional.",
+    totalPnl: "PnL total",
+    winRate: "Win Rate",
+    totalTrades: "Trades totales",
+    accountStatus: "Estado de la cuenta",
+    active: "Activo",
+  },
+  fr: {
+    eyebrow: "VOLTIS Analytics",
+    description:
+      "Performance intelligence, psychology tracking, analytics avancÃ©s et behavioral insights pour construire un systÃ¨me de trading professionnel.",
+    totalPnl: "PnL total",
+    winRate: "Win Rate",
+    totalTrades: "Trades totaux",
+    accountStatus: "Ã‰tat du compte",
+    active: "Actif",
+  },
+  de: {
+    eyebrow: "VOLTIS Analytics",
+    description:
+      "Performance Intelligence, Psychology Tracking, erweiterte Analytics und Behavioral Insights zum Aufbau eines professionellen Trading-Systems.",
+    totalPnl: "Gesamt-PnL",
+    winRate: "Win Rate",
+    totalTrades: "Trades gesamt",
+    accountStatus: "Kontostatus",
+    active: "Aktiv",
+  },
 };
 
 export default function AnalyticsHero({
@@ -10,7 +96,11 @@ export default function AnalyticsHero({
   totalPnl,
   winRate,
   totalTrades,
+  appLanguage,
 }: Props) {
+  const language = normalizeAppLanguage(appLanguage);
+  const t = labels[language] ?? labels.en;
+
   return (
     <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#070b14] via-[#0f1726] to-black p-8 shadow-2xl shadow-cyan-500/5">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.18),transparent_35%)]" />
@@ -26,7 +116,7 @@ export default function AnalyticsHero({
               <div className="h-2 w-2 rounded-full bg-cyan-400" />
 
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-300">
-                VOLTIS Analytics
+                {t.eyebrow}
               </p>
             </div>
 
@@ -35,19 +125,14 @@ export default function AnalyticsHero({
             </h1>
 
             <p className="mt-6 max-w-2xl text-base leading-relaxed text-gray-400 xl:text-lg">
-              Performance intelligence,
-              psychology tracking,
-              advanced analytics e
-              behavioral insights per
-              costruire un sistema di
-              trading professionale.
+              {t.description}
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-4 xl:min-w-[460px]">
             <div className="rounded-3xl border border-green-500/10 bg-green-500/[0.06] p-5 backdrop-blur-xl">
               <p className="text-sm text-gray-400">
-                Total PnL
+                {t.totalPnl}
               </p>
 
               <h2 className="mt-3 text-4xl font-black text-green-400">
@@ -57,7 +142,7 @@ export default function AnalyticsHero({
 
             <div className="rounded-3xl border border-cyan-500/10 bg-cyan-500/[0.06] p-5 backdrop-blur-xl">
               <p className="text-sm text-gray-400">
-                Win Rate
+                {t.winRate}
               </p>
 
               <h2 className="mt-3 text-4xl font-black text-cyan-400">
@@ -67,7 +152,7 @@ export default function AnalyticsHero({
 
             <div className="rounded-3xl border border-violet-500/10 bg-violet-500/[0.06] p-5 backdrop-blur-xl">
               <p className="text-sm text-gray-400">
-                Total Trades
+                {t.totalTrades}
               </p>
 
               <h2 className="mt-3 text-4xl font-black text-violet-400">
@@ -77,11 +162,11 @@ export default function AnalyticsHero({
 
             <div className="rounded-3xl border border-yellow-500/10 bg-yellow-500/[0.06] p-5 backdrop-blur-xl">
               <p className="text-sm text-gray-400">
-                Account Status
+                {t.accountStatus}
               </p>
 
               <h2 className="mt-3 text-4xl font-black text-yellow-400">
-                Active
+                {t.active}
               </h2>
             </div>
           </div>
