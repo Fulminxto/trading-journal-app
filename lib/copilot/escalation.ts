@@ -1,4 +1,4 @@
-type Input = {
+﻿type Input = {
   supervisorLevel: string;
   behavioralRisk: number;
   riskSignals: number;
@@ -41,8 +41,8 @@ export function buildRiskEscalation({
       : escalationLevel === "Cooldown"
       ? "Segnali di deterioramento rilevati: consigliato rallentare, evitare overtrading e tornare a setup puliti."
       : escalationLevel === "Monitor"
-      ? "Alcuni segnali richiedono attenzione: mantieni disciplina e monitora execution."
-      : "Rischio operativo sotto controllo.";
+      ? "Some signals require attention: maintain discipline and monitor execution."
+      : "Operational risk is under control.";
 
   return {
     escalationLevel,
@@ -51,3 +51,4 @@ export function buildRiskEscalation({
     message,
   };
 }
+

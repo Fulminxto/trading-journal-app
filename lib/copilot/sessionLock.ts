@@ -1,4 +1,4 @@
-type Input = {
+﻿type Input = {
   escalationLevel: string;
   protectionRequired: boolean;
   cooldownRecommended: boolean;
@@ -28,8 +28,8 @@ export function buildSessionLock({
     sessionLocked
       ? "Rischio operativo elevato. VOLTIS consiglia stop temporaneo e review obbligatoria prima di continuare."
       : reviewRequired
-      ? "Cooldown consigliato. Prima di continuare, completa una review mentale e operativa."
-      : "Sessione operativa stabile. Nessun lock richiesto.";
+      ? "Cooldown recommended. Before continuing, complete a mental and operational review."
+      : "Trading session is stable. No lock required.";
 
   return {
     sessionLocked,
@@ -37,3 +37,4 @@ export function buildSessionLock({
     lockReason,
   };
 }
+

@@ -1946,7 +1946,8 @@ export default async function AnalyticsPage({
       <div className="mt-8">
         <EmotionalStateHeatmap
           data={emotionalStateHeatmapData}
-        />
+        appLanguage={language}
+      />
       </div>
 
       <div className="mt-8">
@@ -2729,6 +2730,7 @@ export default async function AnalyticsPage({
     </div>
   );
 }
+
 
 
 
