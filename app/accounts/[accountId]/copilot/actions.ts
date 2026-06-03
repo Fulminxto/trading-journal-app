@@ -302,8 +302,8 @@ export async function sendCopilotMessage(
     ) {
         aiResponse =
             disciplineScore >= 75
-                ? `La tua disciplina operativa Ã¨ stabile (${disciplineScore}%). Il problema principale non sembra essere impulsivitÃ  ma mantenimento della consistenza durante aumento della frequenza operativa.`
-                : `La tua disciplina operativa Ã¨ ancora instabile (${disciplineScore}%). VOLTIS rileva necessitÃ  di migliorare routine, execution e controllo emotivo.`;
+                ? `Your operational discipline is stable (${disciplineScore}%). The main issue does not seem to be impulsiveness, but maintaining consistency as trading frequency increases.`
+                : `Your operational discipline is still unstable (${disciplineScore}%). VOLTIS detects the need to improve routine, execution and emotional control.`;
     } else if (
         lowerContent.includes("emotion") ||
         lowerContent.includes("emotivo")
@@ -327,8 +327,8 @@ export async function sendCopilotMessage(
     ) {
         aiResponse =
             behavioralRisk >= 50
-                ? `Il rischio comportamentale Ã¨ elevato (${behavioralRisk}%). Weak execution e low confidence stanno aumentando instabilitÃ  operativa.`
-                : `Il rischio comportamentale Ã¨ sotto controllo (${behavioralRisk}%). Continua a proteggere qualitÃ  execution e sizing.`;
+                ? `Behavioral risk is elevated (${behavioralRisk}%). Weak execution and low confidence are increasing operational instability.`
+                : `Behavioral risk is under control (${behavioralRisk}%). Keep protecting execution quality and sizing.`;
     } else if (
         lowerContent.includes("win rate") ||
         lowerContent.includes("performance") ||
@@ -336,8 +336,8 @@ export async function sendCopilotMessage(
     ) {
         aiResponse =
             winRate >= 60
-                ? `La performance operativa Ã¨ positiva. Win rate attuale: ${winRate}%. La prioritÃ  ora Ã¨ scalare mantenendo disciplina e qualitÃ  setup.`
-                : `Il win rate attuale (${winRate}%) suggerisce necessitÃ  di migliorare selezione setup e qualitÃ  execution.`;
+                ? `Operational performance is positive. Current win rate: ${winRate}%. The priority now is to scale while maintaining discipline and setup quality.`
+                : `The current win rate (${winRate}%) suggests the need to improve setup selection and execution quality.`;
     } else if (
         lowerContent.includes("orari") ||
         lowerContent.includes("fascia") ||
@@ -346,8 +346,8 @@ export async function sendCopilotMessage(
     ) {
         aiResponse =
             weakTimeTrades > 0
-                ? `Ho rilevato ${weakTimeTrades} trade potenzialmente deboli nelle fasce orarie serali. Questo puÃ² indicare calo di luciditÃ , stanchezza o decisioni meno selettive.`
-                : "Non rilevo un peggioramento evidente della qualitÃ  operativa nelle fasce orarie serali.";
+                ? `I detected ${weakTimeTrades} potentially weak trades during evening hours. This may indicate lower clarity, fatigue or less selective decisions.`
+                : "I do not detect a clear deterioration in operational quality during evening hours.";
     } else if (
         lowerContent.includes("session") ||
         lowerContent.includes("londra") ||
@@ -360,7 +360,7 @@ export async function sendCopilotMessage(
                 ? "I do not have enough data yet to analyze trading sessions."
                 : sessionEntries.length < 2
                     ? "For now, the data is concentrated in a single session, so I cannot reliably compare the best and worst session. Add trades across more time windows to activate a real comparison."
-                    : `La sessione migliore risulta essere ${bestSession}, mentre quella piÃ¹ debole Ã¨ ${worstSession}. Usa questa informazione per capire dove il tuo edge operativo Ã¨ piÃ¹ forte e dove invece rischi di perdere qualitÃ .`;
+                    : `The best session appears to be ${bestSession}, while the weakest one is ${worstSession}. Use this information to understand where your operating edge is strongest and where you risk losing quality.`;
     } else {
         aiResponse =
             totalTrades === 0
@@ -428,7 +428,7 @@ export async function sendCopilotMessage(
         if (mainPattern.severity === "critical") {
             aiResponse += ` CRITICAL ALERT: the pattern "${mainPattern.title}" keeps repeating. VOLTIS recommends immediately reducing trading frequency and completing a full review of decision discipline.`;
         } else if (mainPattern.severity === "high") {
-            aiResponse += ` Pattern ricorrente ad alto rischio rilevato: "${mainPattern.title}" Ã¨ comparso ${mainPattern.occurrences} volte. PrioritÃ  operativa: proteggere execution e controllo emotivo.`;
+            aiResponse += ` High-risk recurring pattern detected: "${mainPattern.title}" appeared ${mainPattern.occurrences} times. Operational priority: protect execution and emotional control.`;
         } else if (mainPattern.occurrences >= 3) {
             aiResponse += ` Recurring pattern detected: "${mainPattern.title}" appeared ${mainPattern.occurrences} times.`;
         }

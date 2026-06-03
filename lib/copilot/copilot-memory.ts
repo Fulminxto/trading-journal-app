@@ -475,7 +475,7 @@ const winRate = percentage(
             title: "Discipline Profile",
             description:
                 disciplineScore >= 70
-                    ? `La disciplina operativa Ã¨ stabile. Score attuale: ${disciplineScore}/100.`
+        ? `Operational discipline is stable. Current score: ${disciplineScore}/100.`
                     : `La disciplina operativa richiede attenzione. Score attuale: ${disciplineScore}/100.`,
             severity:
                 getPositiveSeverityFromScore(
@@ -610,7 +610,7 @@ const winRate = percentage(
             id: `${accountId}:strength:best-market`,
             memoryType: "strength",
             title: "Best Market",
-            description: `${bestMarket[0]} Ã¨ il mercato piÃ¹ forte nei dati attuali. PnL: ${bestMarket[1].pnl.toFixed(
+        description: `${bestMarket[0]} is the strongest market in the current data. PnL: ${bestMarket[1].pnl.toFixed(
                 2
             )}.`,
             severity: "low",
@@ -623,7 +623,7 @@ const winRate = percentage(
             id: `${accountId}:risk:worst-market`,
             memoryType: "risk",
             title: "Weakest Market",
-            description: `${worstMarket[0]} Ã¨ il mercato piÃ¹ debole nei dati attuali. PnL: ${worstMarket[1].pnl.toFixed(
+        description: `${worstMarket[0]} is the weakest market in the current data. PnL: ${worstMarket[1].pnl.toFixed(
                 2
             )}.`,
             severity:
@@ -641,7 +641,7 @@ const winRate = percentage(
             id: `${accountId}:strength:best-session`,
             memoryType: "strength",
             title: "Best Session",
-            description: `${bestSession[0]} Ã¨ la sessione piÃ¹ forte nei dati attuali. PnL: ${bestSession[1].pnl.toFixed(
+        description: `${bestSession[0]} is the strongest session in the current data. PnL: ${bestSession[1].pnl.toFixed(
                 2
             )}.`,
             severity: "low",
@@ -654,7 +654,7 @@ const winRate = percentage(
             id: `${accountId}:risk:worst-session`,
             memoryType: "risk",
             title: "Weakest Session",
-            description: `${worstSession[0]} Ã¨ la sessione piÃ¹ debole nei dati attuali. PnL: ${worstSession[1].pnl.toFixed(
+        description: `${worstSession[0]} is the weakest session in the current data. PnL: ${worstSession[1].pnl.toFixed(
                 2
             )}.`,
             severity:
@@ -689,7 +689,7 @@ const winRate = percentage(
             memoryType: "rules",
             title: "Active Trading Goals",
             description:
-                "Sono presenti obiettivi di trading attivi per il mese corrente o recente. VOLTIS li userÃ  come riferimento nelle analisi future.",
+            "Active trading goals exist for the current or recent month. VOLTIS will use them as a reference in future analyses.",
             severity: "low",
             score: 1,
         });
@@ -749,7 +749,7 @@ const winRate = percentage(
         type: "execution",
         title: "Weak Execution",
         description:
-            "Execution rating debole rilevato in piÃ¹ trade.",
+                "Weak execution rating detected in multiple trades.",
         severity:
             getSeverityFromScore(
                 percentage(
@@ -766,7 +766,7 @@ const winRate = percentage(
         type: "psychology",
         title: "Low Confidence",
         description:
-            "Confidence bassa rilevata in piÃ¹ trade.",
+                "Low confidence detected in multiple trades.",
         severity:
             getSeverityFromScore(
                 percentage(
@@ -783,7 +783,7 @@ const winRate = percentage(
         type: "psychology",
         title: "Emotional Trading",
         description:
-            "Componente emotiva rilevata in piÃ¹ trade.",
+                "Emotional component detected in multiple trades.",
         severity:
             getSeverityFromScore(
                 percentage(
