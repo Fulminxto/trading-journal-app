@@ -1,6 +1,11 @@
-import { auth } from "@/lib/auth";
+﻿import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+
+import {
+  normalizeAppLanguage,
+  type AppLanguage,
+} from "@/lib/i18n";
 
 import { updateAccountTrade } from "../../actions";
 
@@ -10,7 +15,284 @@ function formatDateForInput(date: Date | null) {
   return date.toISOString().split("T")[0];
 }
 
-function getTradeSourceLabel(source?: string | null) {
+type EditTradeLabels = {
+  eyebrow: string;
+  title: string;
+  description: string;
+  importedEyebrow: string;
+  importedTitle: string;
+  importedDescription: string;
+  needsReview: string;
+  reviewed: string;
+  reviewStatus: string;
+  markReviewed: string;
+  reviewCheckboxDescription: string;
+  manual: string;
+  reason: string;
+  strategy: string;
+  instrument: string;
+  goldAndCommodities: string;
+  crypto: string;
+  indices: string;
+  amount: string;
+  openingPrice: string;
+  stopLoss: string;
+  takeProfit: string;
+  riskReward: string;
+  closingPrice: string;
+  outcome: string;
+  resultUsd: string;
+  notes: string;
+  saveChanges: string;
+};
+
+const editTradeLabels: Record<
+  AppLanguage,
+  EditTradeLabels
+> = {
+  it: {
+    eyebrow: "Modifica trade",
+    title: "Modifica Trade",
+    description:
+      "Completa i dati operativi, la strategia, le note e la review del trade.",
+    importedEyebrow: "Trade importato",
+    importedTitle: "Review richiesta",
+    importedDescription:
+      "Questo trade è stato importato automaticamente. I dati tecnici sono già presenti, ma devi completare la parte personale: motivo, strategia, stato emotivo, errori e lezioni apprese.",
+    needsReview: "Da revisionare",
+    reviewed: "Revisionato",
+    reviewStatus: "Stato review",
+    markReviewed: "Segna il trade importato come revisionato",
+    reviewCheckboxDescription:
+      "Spunta questa casella solo dopo aver completato motivo, strategia, emozioni, errori e lezioni apprese.",
+    manual: "Manuale",
+    reason: "Motivo",
+    strategy: "Strategia",
+    instrument: "Strumento",
+    goldAndCommodities: "Oro e materie prime",
+    crypto: "Crypto",
+    indices: "Indici",
+    amount: "Amount",
+    openingPrice: "Opening Price",
+    stopLoss: "Stop Loss",
+    takeProfit: "Take Profit",
+    riskReward: "Risk Reward",
+    closingPrice: "Closing Price",
+    outcome: "Outcome",
+    resultUsd: "Result $",
+    notes: "Note",
+    saveChanges: "Salva modifiche",
+  },
+
+  en: {
+    eyebrow: "Edit trade",
+    title: "Edit Trade",
+    description:
+      "Complete the operational data, strategy, notes and trade review.",
+    importedEyebrow: "Imported Trade",
+    importedTitle: "Review required",
+    importedDescription:
+      "This trade was imported automatically. The technical data is already present, but you must complete the personal part: reason, strategy, emotional state, mistakes and lessons learned.",
+    needsReview: "Needs Review",
+    reviewed: "Reviewed",
+    reviewStatus: "Review Status",
+    markReviewed: "Mark imported trade as reviewed",
+    reviewCheckboxDescription:
+      "Check this box only after completing reason, strategy, emotions, mistakes and lessons learned.",
+    manual: "Manual",
+    reason: "Reason",
+    strategy: "Strategy",
+    instrument: "Instrument",
+    goldAndCommodities: "Gold & Commodities",
+    crypto: "Crypto",
+    indices: "Indices",
+    amount: "Amount",
+    openingPrice: "Opening Price",
+    stopLoss: "Stop Loss",
+    takeProfit: "Take Profit",
+    riskReward: "Risk Reward",
+    closingPrice: "Closing Price",
+    outcome: "Outcome",
+    resultUsd: "Result $",
+    notes: "Notes",
+    saveChanges: "Save changes",
+  },
+
+  uk: {
+    eyebrow: "Редагувати trade",
+    title: "Редагувати Trade",
+    description:
+      "Заповни операційні дані, стратегію, нотатки та review trade.",
+    importedEyebrow: "Імпортований trade",
+    importedTitle: "Потрібна review",
+    importedDescription:
+      "Цей trade було імпортовано автоматично. Технічні дані вже є, але потрібно заповнити особисту частину: причину, стратегію, емоційний стан, помилки та висновки.",
+    needsReview: "Потребує review",
+    reviewed: "Переглянуто",
+    reviewStatus: "Статус review",
+    markReviewed: "Позначити імпортований trade як переглянутий",
+    reviewCheckboxDescription:
+      "Позначай цю галочку лише після заповнення причини, стратегії, емоцій, помилок та висновків.",
+    manual: "Manual",
+    reason: "Причина",
+    strategy: "Стратегія",
+    instrument: "Інструмент",
+    goldAndCommodities: "Золото та сировина",
+    crypto: "Crypto",
+    indices: "Індекси",
+    amount: "Amount",
+    openingPrice: "Opening Price",
+    stopLoss: "Stop Loss",
+    takeProfit: "Take Profit",
+    riskReward: "Risk Reward",
+    closingPrice: "Closing Price",
+    outcome: "Outcome",
+    resultUsd: "Result $",
+    notes: "Нотатки",
+    saveChanges: "Зберегти зміни",
+  },
+
+  ru: {
+    eyebrow: "Редактировать trade",
+    title: "Редактировать Trade",
+    description:
+      "Заполни операционные данные, стратегию, заметки и review trade.",
+    importedEyebrow: "Импортированный trade",
+    importedTitle: "Требуется review",
+    importedDescription:
+      "Этот trade был импортирован автоматически. Технические данные уже есть, но нужно заполнить личную часть: причину, стратегию, эмоциональное состояние, ошибки и выводы.",
+    needsReview: "Нужна review",
+    reviewed: "Проверено",
+    reviewStatus: "Статус review",
+    markReviewed: "Отметить импортированный trade как проверенный",
+    reviewCheckboxDescription:
+      "Отмечай эту галочку только после заполнения причины, стратегии, эмоций, ошибок и выводов.",
+    manual: "Manual",
+    reason: "Причина",
+    strategy: "Стратегия",
+    instrument: "Инструмент",
+    goldAndCommodities: "Золото и сырьевые товары",
+    crypto: "Crypto",
+    indices: "Индексы",
+    amount: "Amount",
+    openingPrice: "Opening Price",
+    stopLoss: "Stop Loss",
+    takeProfit: "Take Profit",
+    riskReward: "Risk Reward",
+    closingPrice: "Closing Price",
+    outcome: "Outcome",
+    resultUsd: "Result $",
+    notes: "Заметки",
+    saveChanges: "Сохранить изменения",
+  },
+
+  es: {
+    eyebrow: "Editar trade",
+    title: "Editar Trade",
+    description:
+      "Completa los datos operativos, la estrategia, las notas y la review del trade.",
+    importedEyebrow: "Trade importado",
+    importedTitle: "Review requerida",
+    importedDescription:
+      "Este trade fue importado automáticamente. Los datos técnicos ya están presentes, pero debes completar la parte personal: motivo, estrategia, estado emocional, errores y lecciones aprendidas.",
+    needsReview: "Necesita review",
+    reviewed: "Revisado",
+    reviewStatus: "Estado review",
+    markReviewed: "Marcar trade importado como revisado",
+    reviewCheckboxDescription:
+      "Marca esta casilla solo después de completar motivo, estrategia, emociones, errores y lecciones aprendidas.",
+    manual: "Manual",
+    reason: "Motivo",
+    strategy: "Estrategia",
+    instrument: "Instrumento",
+    goldAndCommodities: "Oro y materias primas",
+    crypto: "Crypto",
+    indices: "Índices",
+    amount: "Amount",
+    openingPrice: "Opening Price",
+    stopLoss: "Stop Loss",
+    takeProfit: "Take Profit",
+    riskReward: "Risk Reward",
+    closingPrice: "Closing Price",
+    outcome: "Outcome",
+    resultUsd: "Result $",
+    notes: "Notas",
+    saveChanges: "Guardar cambios",
+  },
+
+  fr: {
+    eyebrow: "Modifier trade",
+    title: "Modifier Trade",
+    description:
+      "Complète les données opérationnelles, la stratégie, les notes et la review du trade.",
+    importedEyebrow: "Trade importé",
+    importedTitle: "Review requise",
+    importedDescription:
+      "Ce trade a été importé automatiquement. Les données techniques sont déjà présentes, mais tu dois compléter la partie personnelle : raison, stratégie, état émotionnel, erreurs et leçons apprises.",
+    needsReview: "Review requise",
+    reviewed: "Revu",
+    reviewStatus: "Statut review",
+    markReviewed: "Marquer le trade importé comme revu",
+    reviewCheckboxDescription:
+      "Coche cette case seulement après avoir complété la raison, la stratégie, les émotions, les erreurs et les leçons apprises.",
+    manual: "Manuel",
+    reason: "Raison",
+    strategy: "Stratégie",
+    instrument: "Instrument",
+    goldAndCommodities: "Or et matières premières",
+    crypto: "Crypto",
+    indices: "Indices",
+    amount: "Amount",
+    openingPrice: "Opening Price",
+    stopLoss: "Stop Loss",
+    takeProfit: "Take Profit",
+    riskReward: "Risk Reward",
+    closingPrice: "Closing Price",
+    outcome: "Outcome",
+    resultUsd: "Result $",
+    notes: "Notes",
+    saveChanges: "Enregistrer les modifications",
+  },
+
+  de: {
+    eyebrow: "Trade bearbeiten",
+    title: "Trade bearbeiten",
+    description:
+      "Vervollständige operative Daten, Strategie, Notizen und Trade-Review.",
+    importedEyebrow: "Importierter Trade",
+    importedTitle: "Review erforderlich",
+    importedDescription:
+      "Dieser Trade wurde automatisch importiert. Die technischen Daten sind bereits vorhanden, aber du musst den persönlichen Teil ergänzen: Grund, Strategie, emotionaler Zustand, Fehler und Lessons Learned.",
+    needsReview: "Review erforderlich",
+    reviewed: "Überprüft",
+    reviewStatus: "Review-Status",
+    markReviewed: "Importierten Trade als überprüft markieren",
+    reviewCheckboxDescription:
+      "Aktiviere diese Checkbox erst, nachdem Grund, Strategie, Emotionen, Fehler und Lessons Learned ergänzt wurden.",
+    manual: "Manuell",
+    reason: "Grund",
+    strategy: "Strategie",
+    instrument: "Instrument",
+    goldAndCommodities: "Gold & Rohstoffe",
+    crypto: "Crypto",
+    indices: "Indizes",
+    amount: "Amount",
+    openingPrice: "Opening Price",
+    stopLoss: "Stop Loss",
+    takeProfit: "Take Profit",
+    riskReward: "Risk Reward",
+    closingPrice: "Closing Price",
+    outcome: "Outcome",
+    resultUsd: "Result $",
+    notes: "Notizen",
+    saveChanges: "Änderungen speichern",
+  },
+};
+
+function getTradeSourceLabel(
+  source: string | null | undefined,
+  t: EditTradeLabels
+) {
   if (source === "mt5") {
     return "MT5";
   }
@@ -19,7 +301,7 @@ function getTradeSourceLabel(source?: string | null) {
     return "Broker";
   }
 
-  return "Manual";
+  return t.manual;
 }
 
 function getTradeSourceClass(source?: string | null) {
@@ -92,6 +374,21 @@ export default async function EditTradePage({
     redirect(`/accounts/${accountId}/diary`);
   }
 
+  const currentUser = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+    select: {
+      appLanguage: true,
+    },
+  });
+
+  const language = normalizeAppLanguage(
+    currentUser?.appLanguage
+  );
+
+  const t = editTradeLabels[language];
+
   const isImportedTrade =
     trade.source !== "manual";
 
@@ -111,15 +408,15 @@ export default async function EditTradePage({
     <div>
       <div className="mb-8">
         <p className="text-sm text-gray-400">
-          Modifica trade
+          {t.eyebrow}
         </p>
 
         <h1 className="text-3xl font-bold sm:text-4xl">
-          Edit Trade
+          {t.title}
         </h1>
 
         <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-400">
-          Completa i dati operativi, la strategia, le note e la review del trade.
+          {t.description}
         </p>
       </div>
 
@@ -128,15 +425,15 @@ export default async function EditTradePage({
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <p className="text-sm uppercase tracking-[0.18em] text-yellow-300">
-                Imported Trade
+                {t.importedEyebrow}
               </p>
 
               <h2 className="mt-2 text-2xl font-black text-white">
-                Review required
+                {t.importedTitle}
               </h2>
 
               <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-400">
-                Questo trade è stato importato automaticamente. I dati tecnici sono già presenti, ma devi completare la parte personale: motivo, strategia, stato emotivo, errori e lezioni apprese.
+                {t.importedDescription}
               </p>
             </div>
 
@@ -146,18 +443,18 @@ export default async function EditTradePage({
                   trade.source
                 )}`}
               >
-                {getTradeSourceLabel(trade.source)}
+                {getTradeSourceLabel(trade.source, t)}
               </span>
 
               {trade.needsReview && (
                 <span className="rounded-xl border border-yellow-500/20 bg-yellow-500/10 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-yellow-300">
-                  Needs Review
+                  {t.needsReview}
                 </span>
               )}
 
               {trade.syncStatus === "reviewed" && (
                 <span className="rounded-xl border border-green-500/20 bg-green-500/10 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-green-400">
-                  Reviewed
+                  {t.reviewed}
                 </span>
               )}
             </div>
@@ -174,15 +471,15 @@ export default async function EditTradePage({
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div>
                 <p className="text-sm text-gray-400">
-                  Review Status
+                  {t.reviewStatus}
                 </p>
 
                 <h3 className="mt-2 text-lg font-bold text-white">
-                  Mark imported trade as reviewed
+                  {t.markReviewed}
                 </h3>
 
                 <p className="mt-2 text-sm leading-6 text-gray-500">
-                  Spunta questa casella solo dopo aver completato motivo, strategia, emozioni, errori e lezioni apprese.
+                  {t.reviewCheckboxDescription}
                 </p>
               </div>
 
@@ -196,7 +493,7 @@ export default async function EditTradePage({
                   }
                   className="h-5 w-5"
                 />
-                Reviewed
+                {t.reviewed}
               </label>
             </div>
           </div>
@@ -222,14 +519,14 @@ export default async function EditTradePage({
         <input
           name="reason"
           defaultValue={trade.reason || ""}
-          placeholder="Motivo"
+          placeholder={t.reason}
           className="rounded-xl bg-zinc-900 p-3"
         />
 
         <input
           name="strategy"
           defaultValue={trade.strategy || ""}
-          placeholder="Strategia"
+          placeholder={t.strategy}
           className="rounded-xl bg-zinc-900 p-3"
         />
 
@@ -239,7 +536,7 @@ export default async function EditTradePage({
           required
           className="rounded-xl bg-zinc-900 p-3"
         >
-          <option value="">Strumento</option>
+          <option value="">{t.instrument}</option>
 
           <optgroup label="Forex">
             <option value="EURUSD">EURUSD</option>
@@ -251,21 +548,21 @@ export default async function EditTradePage({
             <option value="NZDUSD">NZDUSD</option>
           </optgroup>
 
-          <optgroup label="Gold & Commodities">
+          <optgroup label={t.goldAndCommodities}>
             <option value="XAUUSD">XAUUSD</option>
             <option value="XAGUSD">XAGUSD</option>
             <option value="USOIL">USOIL</option>
             <option value="UKOIL">UKOIL</option>
           </optgroup>
 
-          <optgroup label="Crypto">
+          <optgroup label={t.crypto}>
             <option value="BTCUSD">BTCUSD</option>
             <option value="ETHUSD">ETHUSD</option>
             <option value="SOLUSD">SOLUSD</option>
             <option value="XRPUSD">XRPUSD</option>
           </optgroup>
 
-          <optgroup label="Indices">
+          <optgroup label={t.indices}>
             <option value="NASDAQ">NASDAQ</option>
             <option value="S&P500">S&P500</option>
             <option value="DAX40">DAX40</option>
@@ -285,35 +582,35 @@ export default async function EditTradePage({
         <input
           name="amount"
           defaultValue={trade.amount ?? ""}
-          placeholder="Amount"
+          placeholder={t.amount}
           className="rounded-xl bg-zinc-900 p-3"
         />
 
         <input
           name="openingPrice"
           defaultValue={trade.openingPrice ?? ""}
-          placeholder="Opening Price"
+          placeholder={t.openingPrice}
           className="rounded-xl bg-zinc-900 p-3"
         />
 
         <input
           name="stopLoss"
           defaultValue={trade.stopLoss ?? ""}
-          placeholder="Stop Loss"
+          placeholder={t.stopLoss}
           className="rounded-xl bg-zinc-900 p-3"
         />
 
         <input
           name="takeProfit"
           defaultValue={trade.takeProfit ?? ""}
-          placeholder="Take Profit"
+          placeholder={t.takeProfit}
           className="rounded-xl bg-zinc-900 p-3"
         />
 
         <input
           name="riskReward"
           defaultValue={trade.riskReward ?? ""}
-          placeholder="Risk Reward"
+          placeholder={t.riskReward}
           className="rounded-xl bg-zinc-900 p-3"
         />
 
@@ -329,7 +626,7 @@ export default async function EditTradePage({
         <input
           name="closingPrice"
           defaultValue={trade.closingPrice ?? ""}
-          placeholder="Closing Price"
+          placeholder={t.closingPrice}
           className="rounded-xl bg-zinc-900 p-3"
         />
 
@@ -338,7 +635,7 @@ export default async function EditTradePage({
           defaultValue={trade.outcome || ""}
           className="rounded-xl bg-zinc-900 p-3"
         >
-          <option value="">Outcome</option>
+          <option value="">{t.outcome}</option>
           <option value="win">Win</option>
           <option value="loss">Loss</option>
           <option value="be">BE</option>
@@ -347,14 +644,14 @@ export default async function EditTradePage({
         <input
           name="resultUsd"
           defaultValue={trade.resultUsd ?? ""}
-          placeholder="Result $"
+          placeholder={t.resultUsd}
           className="rounded-xl bg-zinc-900 p-3"
         />
 
         <textarea
           name="notes"
           defaultValue={trade.notes || ""}
-          placeholder="Note"
+          placeholder={t.notes}
           className="rounded-xl bg-zinc-900 p-3 sm:col-span-2 xl:col-span-4"
         />
 
@@ -362,7 +659,7 @@ export default async function EditTradePage({
           type="submit"
           className="rounded-xl bg-green-500 p-3 font-bold text-black sm:col-span-2 xl:col-span-4"
         >
-          Salva modifiche
+          {t.saveChanges}
         </button>
       </form>
     </div>
