@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
   CalendarDays,
@@ -139,7 +139,7 @@ export default async function SessionsPage({
 
   if (
     membership.role !== "MANAGER" &&
-    !membership.canViewReports
+    membership.role !== "MEMBER"
   ) {
     redirect(`/accounts/${accountId}/dashboard`);
   }
@@ -699,3 +699,4 @@ export default async function SessionsPage({
     </div>
   );
 }
+
