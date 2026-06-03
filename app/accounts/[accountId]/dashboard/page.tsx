@@ -1057,7 +1057,7 @@ export default async function DashboardPage({
         appLanguage={language}
       />
 
-      <div className="mt-8 grid grid-cols-1 gap-4 xl:grid-cols-3">
+      <div className="mt-10 grid grid-cols-1 gap-6 xl:grid-cols-3">
         <div className="xl:col-span-2">
           <ConsistencyScoreCard
             score={consistencyScore}
@@ -1080,7 +1080,7 @@ export default async function DashboardPage({
         </div>
       </div>
 
-      <div className="mb-8 mt-10">
+      <div className="mb-10 mt-12">
         <p className="text-sm text-gray-400">
           {t.dashboardAccount}
         </p>
@@ -1090,7 +1090,7 @@ export default async function DashboardPage({
         </h1>
       </div>
 
-      <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4">
+      <div className="mb-10 grid grid-cols-1 gap-6 md:grid-cols-3 xl:grid-cols-4">
         <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             {t.accountType}
@@ -1187,7 +1187,7 @@ export default async function DashboardPage({
         </div>
       </div>
 
-      <div className="mb-8 grid grid-cols-1 gap-4 xl:grid-cols-3">
+      <div className="mb-10 grid grid-cols-1 gap-6 xl:grid-cols-3">
         <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
           <div className="mb-6">
             <p className="text-sm text-gray-400">
@@ -1274,7 +1274,7 @@ export default async function DashboardPage({
         </div>
       </div>
 
-      <div className="mb-8 grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <div className="mb-10 grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             {t.recentMomentum}
@@ -1391,7 +1391,7 @@ export default async function DashboardPage({
         </div>
       </div>
 
-      <div className="mb-8 grid grid-cols-1 gap-4 xl:grid-cols-5">
+      <div className="mb-10 grid grid-cols-1 gap-6 xl:grid-cols-5">
         <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-3">
           <div className="mb-5">
             <p className="text-sm text-gray-400">
@@ -1514,7 +1514,7 @@ export default async function DashboardPage({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat) => (
           <DashboardStatCard
             key={stat.label}
@@ -1527,6 +1527,7 @@ export default async function DashboardPage({
     </div>
   );
 }
+
 
 
 

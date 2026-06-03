@@ -1840,7 +1840,7 @@ export default async function AnalyticsPage({
         appLanguage={language}
       />
 
-      <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="mb-10 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             {t.grossProfit}
@@ -1902,7 +1902,7 @@ export default async function AnalyticsPage({
         </h1>
       </div>
 
-      <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="mb-10 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
         {cards.map((card) => (
           <AnalyticsStatCard
             key={card.label}
@@ -1934,79 +1934,79 @@ export default async function AnalyticsPage({
         bestSymbol={bestSymbol?.[0]}
       />
 
-      <div className="mt-8">
+      <div className="mt-10">
         <WeekdayHeatmap
           data={weekdayHeatmapData}
         />
       </div>
 
-      <div className="mt-8">
+      <div className="mt-10">
         <EmotionalStateHeatmap
           data={emotionalStateHeatmapData}
         />
       </div>
 
-      <div className="mt-8">
+      <div className="mt-10">
         <ConfidencePerformanceHeatmap
           data={confidenceHeatmapData}
         />
       </div>
 
-      <div className="mt-8">
+      <div className="mt-10">
         <ExecutionQualityHeatmap
           data={executionHeatmapData}
         />
       </div>
 
-      <div className="mt-8">
+      <div className="mt-10">
         <SetupQualityHeatmap
           data={setupHeatmapData}
         />
       </div>
 
-      <div className="mt-8">
+      <div className="mt-10">
         <BehavioralRiskHeatmap
           data={behavioralRiskHeatmapData}
         />
       </div>
 
-      <div className="mt-8">
+      <div className="mt-10">
         <RiskConcentrationMatrix
           risks={riskConcentrationData}
         />
       </div>
 
-      <div className="mt-8">
+      <div className="mt-10">
         <ExecutionTrendChart
           data={executionTrendData}
         />
       </div>
 
-      <div className="mt-8">
+      <div className="mt-10">
         <ConfidenceEvolutionChart
           data={confidenceEvolutionData}
         />
       </div>
 
-      <div className="mt-8">
+      <div className="mt-10">
         <EmotionalTimelineChart
           data={emotionalTimelineData}
         />
       </div>
 
-      <div className="mt-8">
+      <div className="mt-10">
         <DisciplineEvolutionChart
           data={disciplineEvolutionData}
         />
       </div>
 
-      <div className="mt-8">
+      <div className="mt-10">
         <ConsistencyCurveChart
           data={consistencyCurveData}
         />
       </div>
 
-      <div className="mt-8">
+      <div className="mt-10">
         <PsychologicalStabilityCurve
           data={psychologicalStabilityData}
         />
@@ -2044,7 +2044,7 @@ export default async function AnalyticsPage({
         }
       />
 
-      <div className="grid grid-cols-1 gap-8 xl:grid-cols-2">
+      <div className="grid grid-cols-1 gap-10 xl:grid-cols-2">
         <SymbolPerformance
           bestSymbol={bestSymbol}
           worstSymbol={worstSymbol}
@@ -2285,7 +2285,7 @@ export default async function AnalyticsPage({
           {t.setupPerformance}
         </h2>
 
-        <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
           {Object.entries(
             setupQualityStats
           ).map(([level, stats]) => {
@@ -2464,7 +2464,7 @@ export default async function AnalyticsPage({
           {t.monthlyDashboard}
         </h2>
 
-        <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
           <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
             <p className="text-sm text-gray-500">
               {t.bestMonth}
@@ -2640,7 +2640,7 @@ export default async function AnalyticsPage({
           {t.emotionalPerformance}
         </h2>
 
-        <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
           {Object.entries(
             emotionalStats
           ).map(([state, stats]) => {
@@ -2718,6 +2718,7 @@ export default async function AnalyticsPage({
     </div>
   );
 }
+
 
 
 
