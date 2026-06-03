@@ -17,7 +17,7 @@ import ReopenOnboardingButton from "@/components/ReopenOnboardingButton";
 import SettingsHardRefresh from "@/components/SettingsHardRefresh";
 import { auth } from "@/lib/auth";
 import {
-  LANGUAGE_LABELS,
+  LANGUAGE_OPTIONS,
   normalizeAppLanguage,
   type AppLanguage,
 } from "@/lib/i18n";
@@ -843,16 +843,14 @@ export default async function SettingsPage({
                 defaultValue={language}
                 className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
               >
-                {Object.entries(LANGUAGE_LABELS).map(
-                  ([value, label]) => (
-                    <option
-                      key={value}
-                      value={value}
-                    >
-                      {label}
-                    </option>
-                  )
-                )}
+                {LANGUAGE_OPTIONS.map((option) => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                  >
+                    {option.label}
+                  </option>
+                ))}
               </select>
 
               <p className="mt-2 text-xs text-gray-500">
@@ -1478,4 +1476,5 @@ export default async function SettingsPage({
     </div>
   );
 }
+
 
