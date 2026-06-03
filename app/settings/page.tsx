@@ -1,4 +1,4 @@
-import {
+﻿import {
   Settings,
   Palette,
   Bell,
@@ -1478,3 +1478,4 @@ export default async function SettingsPage({
     </div>
   );
 }
+

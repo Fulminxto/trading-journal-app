@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+﻿import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
     formatDateTimeByLanguage,
@@ -368,3 +368,4 @@ export default async function ActivitiesPage() {
         </div>
     );
 }
+
