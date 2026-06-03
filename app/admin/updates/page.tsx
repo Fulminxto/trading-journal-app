@@ -11,6 +11,11 @@ import { redirect } from "next/navigation";
 
 import GlobalToast from "@/components/GlobalToast";
 import { createReleaseNote } from "./actions";
+import {
+  formatAdminDate,
+  getAdminI18n,
+  valueLabel,
+} from "../AdminI18n";
 
 export default async function AdminUpdatesPage({
   searchParams,
@@ -41,6 +46,10 @@ export default async function AdminUpdatesPage({
     redirect("/");
   }
 
+  const { language, t } = getAdminI18n(
+    user.appLanguage
+  );
+
   const updates =
     await prisma.releaseNote.findMany({
       orderBy: {
@@ -55,17 +64,16 @@ export default async function AdminUpdatesPage({
       <div className="space-y-8">
         <div>
           <p className="text-sm text-gray-400">
-            Admin Updates
+            {t.adminUpdates}
           </p>
 
           <h1 className="mt-2 flex items-center gap-3 text-4xl font-black text-white">
             <Megaphone className="text-cyan-400" />
-            Release Notes
+            {t.releaseNotes}
           </h1>
 
           <p className="mt-4 max-w-3xl text-sm leading-relaxed text-gray-400">
-            Pubblica aggiornamenti, bug fix, patch e comunicazioni
-            importanti per gli utenti di VOLTIS.
+            {t.releaseNotesDescription}
           </p>
         </div>
 
@@ -74,18 +82,18 @@ export default async function AdminUpdatesPage({
           className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/10 p-8"
         >
           <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
-            New App Update
+            {t.newAppUpdate}
           </p>
 
           <h2 className="mt-3 text-3xl font-black text-white">
-            Publish Release Note
+            {t.publishReleaseNote}
           </h2>
 
           <div className="mt-8 grid gap-4 md:grid-cols-2">
             <input
               name="title"
               required
-              placeholder="Update title"
+              placeholder={t.updateTitle}
               className="rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none placeholder:text-gray-500"
             />
 
@@ -94,19 +102,19 @@ export default async function AdminUpdatesPage({
               className="rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none"
             >
               <option value="update">
-                General Update
+                {t.generalUpdate}
               </option>
               <option value="feature">
-                New Feature
+                {t.newFeature}
               </option>
               <option value="bugfix">
-                Bug Fix
+                {t.bugFix}
               </option>
               <option value="maintenance">
-                Maintenance
+                {t.maintenance}
               </option>
               <option value="notice">
-                Important Notice
+                {t.importantNotice}
               </option>
             </select>
 
@@ -114,13 +122,13 @@ export default async function AdminUpdatesPage({
               name="priority"
               className="rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none"
             >
-              <option value="low">Low</option>
+              <option value="low">{t.low}</option>
               <option value="normal">
-                Normal
+                {t.normal}
               </option>
-              <option value="high">High</option>
+              <option value="high">{t.high}</option>
               <option value="critical">
-                Critical
+                {t.critical}
               </option>
             </select>
 
@@ -131,7 +139,7 @@ export default async function AdminUpdatesPage({
                 className="h-5 w-5 rounded border-white/20 bg-black"
               />
 
-              Publish immediately
+              {t.publishImmediately}
             </label>
           </div>
 
@@ -139,7 +147,7 @@ export default async function AdminUpdatesPage({
             name="content"
             required
             rows={7}
-            placeholder="Describe what changed, what was fixed, or what users should know..."
+            placeholder={t.updateContentPlaceholder}
             className="mt-4 w-full rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none placeholder:text-gray-500"
           />
 
@@ -147,18 +155,18 @@ export default async function AdminUpdatesPage({
             type="submit"
             className="mt-6 rounded-2xl bg-cyan-500 px-6 py-4 text-sm font-black uppercase tracking-[0.15em] text-black transition hover:bg-cyan-400"
           >
-            Create Update
+            {t.createUpdate}
           </button>
         </form>
 
         <div className="rounded-[36px] border border-white/10 bg-white/[0.03] p-8">
           <div>
             <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
-              Update History
+              {t.updateHistory}
             </p>
 
             <h2 className="mt-3 text-3xl font-black text-white">
-              Published & Draft Updates
+              {t.publishedDraftUpdates}
             </h2>
           </div>
 
@@ -166,7 +174,7 @@ export default async function AdminUpdatesPage({
             {updates.length === 0 ? (
               <div className="rounded-[28px] border border-white/10 bg-black/20 p-6">
                 <p className="text-sm text-gray-400">
-                  Nessun aggiornamento creato.
+                  {t.noUpdatesCreated}
                 </p>
               </div>
             ) : (
@@ -175,11 +183,11 @@ export default async function AdminUpdatesPage({
                   update.type === "feature"
                     ? Sparkles
                     : update.type === "bugfix"
-                    ? Wrench
-                    : update.type ===
-                      "maintenance"
-                    ? AlertTriangle
-                    : Megaphone;
+                      ? Wrench
+                      : update.type ===
+                        "maintenance"
+                        ? AlertTriangle
+                        : Megaphone;
 
                 return (
                   <div
@@ -192,7 +200,11 @@ export default async function AdminUpdatesPage({
                           <Icon className="text-cyan-400" />
 
                           <p className="text-xs uppercase tracking-[0.15em] text-cyan-400">
-                            {update.type}
+                            {valueLabel(
+                              t,
+                              "updateType",
+                              update.type
+                            )}
                           </p>
                         </div>
 
@@ -205,22 +217,27 @@ export default async function AdminUpdatesPage({
                         </p>
 
                         <p className="mt-4 text-xs text-gray-500">
-                          Created:{" "}
-                          {new Date(
-                            update.createdAt
-                          ).toLocaleDateString()}
+                          {t.created}:{" "}
+                          {formatAdminDate(
+                            update.createdAt,
+                            language
+                          )}
                         </p>
                       </div>
 
                       <div className="space-y-2 text-right">
                         <div className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-gray-300">
                           {update.published
-                            ? "Published"
-                            : "Draft"}
+                            ? t.published
+                            : t.draft}
                         </div>
 
                         <div className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-cyan-300">
-                          {update.priority}
+                          {valueLabel(
+                            t,
+                            "priority",
+                            update.priority
+                          )}
                         </div>
                       </div>
                     </div>

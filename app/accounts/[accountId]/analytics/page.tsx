@@ -31,6 +31,13 @@ import {
   CandlestickChart,
 } from "lucide-react";
 
+import {
+  formatCurrencyByLanguage,
+  getLocaleFromLanguage,
+  normalizeAppLanguage,
+  type AppLanguage,
+} from "@/lib/i18n";
+
 function formatCurrency(
   value: number,
   currency: string
@@ -69,6 +76,629 @@ function getBestWinStreak(
 
   return bestStreak;
 }
+
+type AnalyticsLabels = {
+  grossProfit: string;
+  grossLoss: string;
+  profitFactor: string;
+  bestWinStreak: string;
+  advancedStatsEyebrow: string;
+  analyticsTitle: string;
+  totalTrades: string;
+  winRate: string;
+  averageRR: string;
+  totalPnl: string;
+  tradeDirectionEyebrow: string;
+  longVsShort: string;
+  longTrades: string;
+  shortTrades: string;
+  winrate: string;
+  tradeResultsEyebrow: string;
+  bestResults: string;
+  bestTrade: string;
+  worstTrade: string;
+  outcomeBreakdownEyebrow: string;
+  outcomeBreakdownTitle: string;
+  wins: string;
+  losses: string;
+  breakEven: string;
+  mistakesEyebrow: string;
+  recurringMistakes: string;
+  noMistakes: string;
+  repeatedTimes: (count: number) => string;
+  setupQualityEyebrow: string;
+  setupPerformance: string;
+  trades: string;
+  teamAnalyticsEyebrow: string;
+  traderLeaderboard: string;
+  traderFallback: string;
+  monthlyPerformanceEyebrow: string;
+  monthlyDashboard: string;
+  bestMonth: string;
+  worstMonth: string;
+  greenMonths: string;
+  redMonths: string;
+  aiInsightsEyebrow: string;
+  performanceInsights: string;
+  noInsights: string;
+  tradingPsychologyEyebrow: string;
+  emotionalPerformance: string;
+  pnl: string;
+  wr: string;
+  lowConfidence: string;
+  mediumConfidence: string;
+  highConfidence: string;
+  weakExecution: string;
+  averageExecution: string;
+  eliteExecution: string;
+  weakSetup: string;
+  averageSetup: string;
+  eliteSetup: string;
+  weakSetups: string;
+  emotionalTrades: string;
+  psychology: string;
+  confidence: string;
+  execution: string;
+  setupQuality: string;
+  bestEmotionalState: (state: string, rate: string) => string;
+  mostExpensiveMistake: (mistake: string) => string;
+  longBetter: string;
+  shortBetter: string;
+  solidExecution: string;
+  focusRisk: string;
+};
+
+const analyticsLabels: Record<
+  AppLanguage,
+  AnalyticsLabels
+> = {
+  it: {
+    grossProfit: "Profitto lordo",
+    grossLoss: "Perdita lorda",
+    profitFactor: "Profit Factor",
+    bestWinStreak: "Migliore serie di win",
+    advancedStatsEyebrow: "Statistiche avanzate",
+    analyticsTitle: "Analytics",
+    totalTrades: "Trade totali",
+    winRate: "Win Rate",
+    averageRR: "RR medio",
+    totalPnl: "PnL totale",
+    tradeDirectionEyebrow: "Direzione trade",
+    longVsShort: "Long vs Short",
+    longTrades: "Trade Long",
+    shortTrades: "Trade Short",
+    winrate: "winrate",
+    tradeResultsEyebrow: "Risultati trade",
+    bestResults: "Migliori risultati",
+    bestTrade: "Miglior trade",
+    worstTrade: "Peggior trade",
+    outcomeBreakdownEyebrow: "Distribuzione esiti",
+    outcomeBreakdownTitle: "Breakdown risultati",
+    wins: "Win",
+    losses: "Loss",
+    breakEven: "Break Even",
+    mistakesEyebrow: "Analisi errori",
+    recurringMistakes: "Errori ricorrenti",
+    noMistakes: "Nessun errore registrato nei trade.",
+    repeatedTimes: (count) =>
+      `Ripetuto ${count} ${count === 1 ? "volta" : "volte"}`,
+    setupQualityEyebrow: "Qualità setup",
+    setupPerformance: "Performance setup",
+    trades: "trade",
+    teamAnalyticsEyebrow: "Analytics team",
+    traderLeaderboard: "Classifica trader",
+    traderFallback: "Trader",
+    monthlyPerformanceEyebrow: "Performance mensile",
+    monthlyDashboard: "Dashboard mensile",
+    bestMonth: "Mese migliore",
+    worstMonth: "Mese peggiore",
+    greenMonths: "Mesi positivi",
+    redMonths: "Mesi negativi",
+    aiInsightsEyebrow: "AI Insights",
+    performanceInsights: "Insight performance",
+    noInsights: "Non ci sono ancora abbastanza dati.",
+    tradingPsychologyEyebrow: "Psicologia trading",
+    emotionalPerformance: "Performance emotiva",
+    pnl: "PnL",
+    wr: "WR",
+    lowConfidence: "Bassa fiducia",
+    mediumConfidence: "Fiducia media",
+    highConfidence: "Alta fiducia",
+    weakExecution: "Execution debole",
+    averageExecution: "Execution media",
+    eliteExecution: "Execution elite",
+    weakSetup: "Setup debole",
+    averageSetup: "Setup medio",
+    eliteSetup: "Setup elite",
+    weakSetups: "Setup deboli",
+    emotionalTrades: "Trade emotivi",
+    psychology: "Psicologia",
+    confidence: "Fiducia",
+    execution: "Execution",
+    setupQuality: "Qualità setup",
+    bestEmotionalState: (state, rate) =>
+      `Migliore stato emotivo: ${state} (${rate}% WR)`,
+    mostExpensiveMistake: (mistake) =>
+      `Errore più costoso: ${mistake}`,
+    longBetter:
+      "I trade Long stanno performando meglio dei trade Short.",
+    shortBetter:
+      "I trade Short stanno performando meglio dei trade Long.",
+    solidExecution:
+      "La tua esecuzione complessiva è attualmente molto solida.",
+    focusRisk:
+      "Concentrati sulla gestione del rischio e sulla selezione dei trade.",
+  },
+
+  en: {
+    grossProfit: "Gross Profit",
+    grossLoss: "Gross Loss",
+    profitFactor: "Profit Factor",
+    bestWinStreak: "Best Win Streak",
+    advancedStatsEyebrow: "Advanced statistics",
+    analyticsTitle: "Analytics",
+    totalTrades: "Total Trades",
+    winRate: "Win Rate",
+    averageRR: "Average RR",
+    totalPnl: "Total PnL",
+    tradeDirectionEyebrow: "Trade Direction",
+    longVsShort: "Long vs Short",
+    longTrades: "Long Trades",
+    shortTrades: "Short Trades",
+    winrate: "winrate",
+    tradeResultsEyebrow: "Trade Results",
+    bestResults: "Best results",
+    bestTrade: "Best Trade",
+    worstTrade: "Worst Trade",
+    outcomeBreakdownEyebrow: "Outcome Breakdown",
+    outcomeBreakdownTitle: "Results breakdown",
+    wins: "Wins",
+    losses: "Losses",
+    breakEven: "Break Even",
+    mistakesEyebrow: "Mistakes Analytics",
+    recurringMistakes: "Recurring mistakes",
+    noMistakes: "No mistakes recorded in trades.",
+    repeatedTimes: (count) =>
+      `Repeated ${count} ${count === 1 ? "time" : "times"}`,
+    setupQualityEyebrow: "Setup Quality",
+    setupPerformance: "Setup Performance",
+    trades: "trades",
+    teamAnalyticsEyebrow: "Team Analytics",
+    traderLeaderboard: "Trader Leaderboard",
+    traderFallback: "Trader",
+    monthlyPerformanceEyebrow: "Monthly Performance",
+    monthlyDashboard: "Monthly Dashboard",
+    bestMonth: "Best Month",
+    worstMonth: "Worst Month",
+    greenMonths: "Green Months",
+    redMonths: "Red Months",
+    aiInsightsEyebrow: "AI Insights",
+    performanceInsights: "Performance Insights",
+    noInsights: "There is not enough data yet.",
+    tradingPsychologyEyebrow: "Trading Psychology",
+    emotionalPerformance: "Emotional Performance",
+    pnl: "PnL",
+    wr: "WR",
+    lowConfidence: "Low Confidence",
+    mediumConfidence: "Medium Confidence",
+    highConfidence: "High Confidence",
+    weakExecution: "Weak Execution",
+    averageExecution: "Average Execution",
+    eliteExecution: "Elite Execution",
+    weakSetup: "Weak Setup",
+    averageSetup: "Average Setup",
+    eliteSetup: "Elite Setup",
+    weakSetups: "Weak Setups",
+    emotionalTrades: "Emotional Trades",
+    psychology: "Psychology",
+    confidence: "Confidence",
+    execution: "Execution",
+    setupQuality: "Setup Quality",
+    bestEmotionalState: (state, rate) =>
+      `Best emotional state: ${state} (${rate}% WR)`,
+    mostExpensiveMistake: (mistake) =>
+      `Most expensive mistake: ${mistake}`,
+    longBetter:
+      "Long trades are currently performing better than Short trades.",
+    shortBetter:
+      "Short trades are currently performing better than Long trades.",
+    solidExecution:
+      "Your overall execution quality is currently very solid.",
+    focusRisk:
+      "Focus on risk management and trade selection.",
+  },
+
+  uk: {
+    grossProfit: "Валовий прибуток",
+    grossLoss: "Валовий збиток",
+    profitFactor: "Profit Factor",
+    bestWinStreak: "Найкраща серія перемог",
+    advancedStatsEyebrow: "Розширена статистика",
+    analyticsTitle: "Аналітика",
+    totalTrades: "Усього угод",
+    winRate: "Win Rate",
+    averageRR: "Середній RR",
+    totalPnl: "Загальний PnL",
+    tradeDirectionEyebrow: "Напрямок угод",
+    longVsShort: "Long vs Short",
+    longTrades: "Long угоди",
+    shortTrades: "Short угоди",
+    winrate: "winrate",
+    tradeResultsEyebrow: "Результати угод",
+    bestResults: "Найкращі результати",
+    bestTrade: "Найкраща угода",
+    worstTrade: "Найгірша угода",
+    outcomeBreakdownEyebrow: "Розподіл результатів",
+    outcomeBreakdownTitle: "Breakdown результатів",
+    wins: "Перемоги",
+    losses: "Збитки",
+    breakEven: "Break Even",
+    mistakesEyebrow: "Аналітика помилок",
+    recurringMistakes: "Повторювані помилки",
+    noMistakes: "У трейдах ще не зафіксовано помилок.",
+    repeatedTimes: (count) =>
+      `Повторено ${count} ${count === 1 ? "раз" : "рази"}`,
+    setupQualityEyebrow: "Якість сетапу",
+    setupPerformance: "Performance сетапів",
+    trades: "угод",
+    teamAnalyticsEyebrow: "Аналітика команди",
+    traderLeaderboard: "Рейтинг трейдерів",
+    traderFallback: "Трейдер",
+    monthlyPerformanceEyebrow: "Місячна performance",
+    monthlyDashboard: "Місячна dashboard",
+    bestMonth: "Найкращий місяць",
+    worstMonth: "Найгірший місяць",
+    greenMonths: "Позитивні місяці",
+    redMonths: "Негативні місяці",
+    aiInsightsEyebrow: "AI Insights",
+    performanceInsights: "Інсайти performance",
+    noInsights: "Поки недостатньо даних.",
+    tradingPsychologyEyebrow: "Психологія трейдингу",
+    emotionalPerformance: "Емоційна performance",
+    pnl: "PnL",
+    wr: "WR",
+    lowConfidence: "Низька впевненість",
+    mediumConfidence: "Середня впевненість",
+    highConfidence: "Висока впевненість",
+    weakExecution: "Слабке виконання",
+    averageExecution: "Середнє виконання",
+    eliteExecution: "Elite виконання",
+    weakSetup: "Слабкий сетап",
+    averageSetup: "Середній сетап",
+    eliteSetup: "Elite сетап",
+    weakSetups: "Слабкі сетапи",
+    emotionalTrades: "Емоційні угоди",
+    psychology: "Психологія",
+    confidence: "Впевненість",
+    execution: "Виконання",
+    setupQuality: "Якість сетапу",
+    bestEmotionalState: (state, rate) =>
+      `Найкращий емоційний стан: ${state} (${rate}% WR)`,
+    mostExpensiveMistake: (mistake) =>
+      `Найдорожча помилка: ${mistake}`,
+    longBetter:
+      "Long угоди зараз працюють краще, ніж Short угоди.",
+    shortBetter:
+      "Short угоди зараз працюють краще, ніж Long угоди.",
+    solidExecution:
+      "Твоя загальна якість виконання зараз дуже сильна.",
+    focusRisk:
+      "Зосередься на ризик-менеджменті та відборі угод.",
+  },
+
+  ru: {
+    grossProfit: "Валовая прибыль",
+    grossLoss: "Валовый убыток",
+    profitFactor: "Profit Factor",
+    bestWinStreak: "Лучшая серия побед",
+    advancedStatsEyebrow: "Расширенная статистика",
+    analyticsTitle: "Аналитика",
+    totalTrades: "Всего сделок",
+    winRate: "Win Rate",
+    averageRR: "Средний RR",
+    totalPnl: "Общий PnL",
+    tradeDirectionEyebrow: "Направление сделок",
+    longVsShort: "Long vs Short",
+    longTrades: "Long сделки",
+    shortTrades: "Short сделки",
+    winrate: "winrate",
+    tradeResultsEyebrow: "Результаты сделок",
+    bestResults: "Лучшие результаты",
+    bestTrade: "Лучшая сделка",
+    worstTrade: "Худшая сделка",
+    outcomeBreakdownEyebrow: "Разбор результатов",
+    outcomeBreakdownTitle: "Breakdown результатов",
+    wins: "Победы",
+    losses: "Убытки",
+    breakEven: "Break Even",
+    mistakesEyebrow: "Аналитика ошибок",
+    recurringMistakes: "Повторяющиеся ошибки",
+    noMistakes: "В сделках пока нет зарегистрированных ошибок.",
+    repeatedTimes: (count) =>
+      `Повторено ${count} ${count === 1 ? "раз" : "раза"}`,
+    setupQualityEyebrow: "Качество сетапа",
+    setupPerformance: "Performance сетапов",
+    trades: "сделок",
+    teamAnalyticsEyebrow: "Аналитика команды",
+    traderLeaderboard: "Рейтинг трейдеров",
+    traderFallback: "Трейдер",
+    monthlyPerformanceEyebrow: "Месячная performance",
+    monthlyDashboard: "Месячная dashboard",
+    bestMonth: "Лучший месяц",
+    worstMonth: "Худший месяц",
+    greenMonths: "Положительные месяцы",
+    redMonths: "Отрицательные месяцы",
+    aiInsightsEyebrow: "AI Insights",
+    performanceInsights: "Инсайты performance",
+    noInsights: "Пока недостаточно данных.",
+    tradingPsychologyEyebrow: "Психология трейдинга",
+    emotionalPerformance: "Эмоциональная performance",
+    pnl: "PnL",
+    wr: "WR",
+    lowConfidence: "Низкая уверенность",
+    mediumConfidence: "Средняя уверенность",
+    highConfidence: "Высокая уверенность",
+    weakExecution: "Слабое исполнение",
+    averageExecution: "Среднее исполнение",
+    eliteExecution: "Elite исполнение",
+    weakSetup: "Слабый сетап",
+    averageSetup: "Средний сетап",
+    eliteSetup: "Elite сетап",
+    weakSetups: "Слабые сетапы",
+    emotionalTrades: "Эмоциональные сделки",
+    psychology: "Психология",
+    confidence: "Уверенность",
+    execution: "Исполнение",
+    setupQuality: "Качество сетапа",
+    bestEmotionalState: (state, rate) =>
+      `Лучшее эмоциональное состояние: ${state} (${rate}% WR)`,
+    mostExpensiveMistake: (mistake) =>
+      `Самая дорогая ошибка: ${mistake}`,
+    longBetter:
+      "Long сделки сейчас показывают результат лучше, чем Short сделки.",
+    shortBetter:
+      "Short сделки сейчас показывают результат лучше, чем Long сделки.",
+    solidExecution:
+      "Общее качество твоего исполнения сейчас очень сильное.",
+    focusRisk:
+      "Сфокусируйся на риск-менеджменте и отборе сделок.",
+  },
+
+  es: {
+    grossProfit: "Beneficio bruto",
+    grossLoss: "Pérdida bruta",
+    profitFactor: "Profit Factor",
+    bestWinStreak: "Mejor racha ganadora",
+    advancedStatsEyebrow: "Estadísticas avanzadas",
+    analyticsTitle: "Analítica",
+    totalTrades: "Trades totales",
+    winRate: "Win Rate",
+    averageRR: "RR medio",
+    totalPnl: "PnL total",
+    tradeDirectionEyebrow: "Dirección del trade",
+    longVsShort: "Long vs Short",
+    longTrades: "Trades Long",
+    shortTrades: "Trades Short",
+    winrate: "winrate",
+    tradeResultsEyebrow: "Resultados de trades",
+    bestResults: "Mejores resultados",
+    bestTrade: "Mejor trade",
+    worstTrade: "Peor trade",
+    outcomeBreakdownEyebrow: "Desglose de resultados",
+    outcomeBreakdownTitle: "Breakdown de resultados",
+    wins: "Ganadas",
+    losses: "Perdidas",
+    breakEven: "Break Even",
+    mistakesEyebrow: "Analítica de errores",
+    recurringMistakes: "Errores recurrentes",
+    noMistakes: "No hay errores registrados en los trades.",
+    repeatedTimes: (count) =>
+      `Repetido ${count} ${count === 1 ? "vez" : "veces"}`,
+    setupQualityEyebrow: "Calidad del setup",
+    setupPerformance: "Performance del setup",
+    trades: "trades",
+    teamAnalyticsEyebrow: "Analítica del equipo",
+    traderLeaderboard: "Ranking de traders",
+    traderFallback: "Trader",
+    monthlyPerformanceEyebrow: "Performance mensual",
+    monthlyDashboard: "Dashboard mensual",
+    bestMonth: "Mejor mes",
+    worstMonth: "Peor mes",
+    greenMonths: "Meses positivos",
+    redMonths: "Meses negativos",
+    aiInsightsEyebrow: "AI Insights",
+    performanceInsights: "Insights de performance",
+    noInsights: "Todavía no hay suficientes datos.",
+    tradingPsychologyEyebrow: "Psicología del trading",
+    emotionalPerformance: "Performance emocional",
+    pnl: "PnL",
+    wr: "WR",
+    lowConfidence: "Baja confianza",
+    mediumConfidence: "Confianza media",
+    highConfidence: "Alta confianza",
+    weakExecution: "Ejecución débil",
+    averageExecution: "Ejecución media",
+    eliteExecution: "Ejecución elite",
+    weakSetup: "Setup débil",
+    averageSetup: "Setup medio",
+    eliteSetup: "Setup elite",
+    weakSetups: "Setups débiles",
+    emotionalTrades: "Trades emocionales",
+    psychology: "Psicología",
+    confidence: "Confianza",
+    execution: "Ejecución",
+    setupQuality: "Calidad del setup",
+    bestEmotionalState: (state, rate) =>
+      `Mejor estado emocional: ${state} (${rate}% WR)`,
+    mostExpensiveMistake: (mistake) =>
+      `Error más costoso: ${mistake}`,
+    longBetter:
+      "Los trades Long actualmente funcionan mejor que los Short.",
+    shortBetter:
+      "Los trades Short actualmente funcionan mejor que los Long.",
+    solidExecution:
+      "Tu ejecución general actualmente es muy sólida.",
+    focusRisk:
+      "Concéntrate en la gestión del riesgo y la selección de trades.",
+  },
+
+  fr: {
+    grossProfit: "Profit brut",
+    grossLoss: "Perte brute",
+    profitFactor: "Profit Factor",
+    bestWinStreak: "Meilleure série de gains",
+    advancedStatsEyebrow: "Statistiques avancées",
+    analyticsTitle: "Analytics",
+    totalTrades: "Trades totaux",
+    winRate: "Win Rate",
+    averageRR: "RR moyen",
+    totalPnl: "PnL total",
+    tradeDirectionEyebrow: "Direction des trades",
+    longVsShort: "Long vs Short",
+    longTrades: "Trades Long",
+    shortTrades: "Trades Short",
+    winrate: "winrate",
+    tradeResultsEyebrow: "Résultats des trades",
+    bestResults: "Meilleurs résultats",
+    bestTrade: "Meilleur trade",
+    worstTrade: "Pire trade",
+    outcomeBreakdownEyebrow: "Répartition des résultats",
+    outcomeBreakdownTitle: "Breakdown des résultats",
+    wins: "Gagnants",
+    losses: "Perdants",
+    breakEven: "Break Even",
+    mistakesEyebrow: "Analyse des erreurs",
+    recurringMistakes: "Erreurs récurrentes",
+    noMistakes: "Aucune erreur enregistrée dans les trades.",
+    repeatedTimes: (count) =>
+      `Répété ${count} ${count === 1 ? "fois" : "fois"}`,
+    setupQualityEyebrow: "Qualité du setup",
+    setupPerformance: "Performance des setups",
+    trades: "trades",
+    teamAnalyticsEyebrow: "Analytics équipe",
+    traderLeaderboard: "Classement des traders",
+    traderFallback: "Trader",
+    monthlyPerformanceEyebrow: "Performance mensuelle",
+    monthlyDashboard: "Dashboard mensuel",
+    bestMonth: "Meilleur mois",
+    worstMonth: "Pire mois",
+    greenMonths: "Mois positifs",
+    redMonths: "Mois négatifs",
+    aiInsightsEyebrow: "AI Insights",
+    performanceInsights: "Insights performance",
+    noInsights: "Il n’y a pas encore assez de données.",
+    tradingPsychologyEyebrow: "Psychologie du trading",
+    emotionalPerformance: "Performance émotionnelle",
+    pnl: "PnL",
+    wr: "WR",
+    lowConfidence: "Faible confiance",
+    mediumConfidence: "Confiance moyenne",
+    highConfidence: "Haute confiance",
+    weakExecution: "Exécution faible",
+    averageExecution: "Exécution moyenne",
+    eliteExecution: "Exécution elite",
+    weakSetup: "Setup faible",
+    averageSetup: "Setup moyen",
+    eliteSetup: "Setup elite",
+    weakSetups: "Setups faibles",
+    emotionalTrades: "Trades émotionnels",
+    psychology: "Psychologie",
+    confidence: "Confiance",
+    execution: "Exécution",
+    setupQuality: "Qualité du setup",
+    bestEmotionalState: (state, rate) =>
+      `Meilleur état émotionnel : ${state} (${rate}% WR)`,
+    mostExpensiveMistake: (mistake) =>
+      `Erreur la plus coûteuse : ${mistake}`,
+    longBetter:
+      "Les trades Long performent actuellement mieux que les trades Short.",
+    shortBetter:
+      "Les trades Short performent actuellement mieux que les trades Long.",
+    solidExecution:
+      "Ton exécution globale est actuellement très solide.",
+    focusRisk:
+      "Concentre-toi sur la gestion du risque et la sélection des trades.",
+  },
+
+  de: {
+    grossProfit: "Bruttogewinn",
+    grossLoss: "Bruttoverlust",
+    profitFactor: "Profit Factor",
+    bestWinStreak: "Beste Gewinnserie",
+    advancedStatsEyebrow: "Erweiterte Statistiken",
+    analyticsTitle: "Analytics",
+    totalTrades: "Trades gesamt",
+    winRate: "Win Rate",
+    averageRR: "Durchschnittlicher RR",
+    totalPnl: "Gesamt-PnL",
+    tradeDirectionEyebrow: "Trade-Richtung",
+    longVsShort: "Long vs Short",
+    longTrades: "Long Trades",
+    shortTrades: "Short Trades",
+    winrate: "Winrate",
+    tradeResultsEyebrow: "Trade-Ergebnisse",
+    bestResults: "Beste Ergebnisse",
+    bestTrade: "Bester Trade",
+    worstTrade: "Schlechtester Trade",
+    outcomeBreakdownEyebrow: "Ergebnisübersicht",
+    outcomeBreakdownTitle: "Ergebnis-Breakdown",
+    wins: "Gewinne",
+    losses: "Verluste",
+    breakEven: "Break Even",
+    mistakesEyebrow: "Fehleranalyse",
+    recurringMistakes: "Wiederkehrende Fehler",
+    noMistakes: "Keine Fehler in den Trades erfasst.",
+    repeatedTimes: (count) =>
+      `${count} ${count === 1 ? "Mal" : "Mal"} wiederholt`,
+    setupQualityEyebrow: "Setup-Qualität",
+    setupPerformance: "Setup-Performance",
+    trades: "Trades",
+    teamAnalyticsEyebrow: "Team Analytics",
+    traderLeaderboard: "Trader-Rangliste",
+    traderFallback: "Trader",
+    monthlyPerformanceEyebrow: "Monatliche Performance",
+    monthlyDashboard: "Monatliches Dashboard",
+    bestMonth: "Bester Monat",
+    worstMonth: "Schlechtester Monat",
+    greenMonths: "Positive Monate",
+    redMonths: "Negative Monate",
+    aiInsightsEyebrow: "AI Insights",
+    performanceInsights: "Performance Insights",
+    noInsights: "Es gibt noch nicht genug Daten.",
+    tradingPsychologyEyebrow: "Trading-Psychologie",
+    emotionalPerformance: "Emotionale Performance",
+    pnl: "PnL",
+    wr: "WR",
+    lowConfidence: "Geringes Vertrauen",
+    mediumConfidence: "Mittleres Vertrauen",
+    highConfidence: "Hohes Vertrauen",
+    weakExecution: "Schwache Ausführung",
+    averageExecution: "Durchschnittliche Ausführung",
+    eliteExecution: "Elite-Ausführung",
+    weakSetup: "Schwaches Setup",
+    averageSetup: "Durchschnittliches Setup",
+    eliteSetup: "Elite-Setup",
+    weakSetups: "Schwache Setups",
+    emotionalTrades: "Emotionale Trades",
+    psychology: "Psychologie",
+    confidence: "Vertrauen",
+    execution: "Ausführung",
+    setupQuality: "Setup-Qualität",
+    bestEmotionalState: (state, rate) =>
+      `Bester emotionaler Zustand: ${state} (${rate}% WR)`,
+    mostExpensiveMistake: (mistake) =>
+      `Teuerster Fehler: ${mistake}`,
+    longBetter:
+      "Long Trades performen aktuell besser als Short Trades.",
+    shortBetter:
+      "Short Trades performen aktuell besser als Long Trades.",
+    solidExecution:
+      "Deine gesamte Ausführung ist aktuell sehr solide.",
+    focusRisk:
+      "Konzentriere dich auf Risikomanagement und Trade-Auswahl.",
+  },
+};
+
 
 export default async function AnalyticsPage({
   params,
@@ -115,6 +745,32 @@ export default async function AnalyticsPage({
   }
 
   const account = membership.tradingAccount;
+
+  const currentUser = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+    select: {
+      appLanguage: true,
+    },
+  });
+
+  const language = normalizeAppLanguage(
+    currentUser?.appLanguage
+  );
+
+  const locale = getLocaleFromLanguage(language);
+  const t = analyticsLabels[language];
+
+  const formatCurrency = (
+    value: number,
+    currency: string
+  ) =>
+    formatCurrencyByLanguage(
+      value,
+      currency,
+      language
+    );
 
   const accountMembers =
     await prisma.accountMember.findMany({
@@ -393,7 +1049,7 @@ export default async function AnalyticsPage({
   for (const trade of trades) {
     const month = new Date(
       trade.openDate
-    ).toLocaleDateString("en-US", {
+    ).toLocaleDateString(locale, {
       month: "long",
       year: "numeric",
     });
@@ -536,7 +1192,7 @@ export default async function AnalyticsPage({
         : "0";
 
     insights.push(
-      `Best emotional state: ${bestEmotion[0]} (${rate}% WR)`
+      t.bestEmotionalState(bestEmotion[0], rate)
     );
   }
 
@@ -548,29 +1204,29 @@ export default async function AnalyticsPage({
 
   if (worstMistake) {
     insights.push(
-      `Most expensive mistake: ${worstMistake[0]}`
+      t.mostExpensiveMistake(worstMistake[0])
     );
   }
 
   if (longWinRate > shortWinRate) {
     insights.push(
-      "Long trades currently perform better than short trades."
+      t.longBetter
     );
   } else if (
     shortWinRate > longWinRate
   ) {
     insights.push(
-      "Short trades currently perform better than long trades."
+      t.shortBetter
     );
   }
 
   if (winRate >= 60) {
     insights.push(
-      "Your overall execution is currently very solid."
+      t.solidExecution
     );
   } else if (winRate <= 40) {
     insights.push(
-      "Focus on risk management and trade selection."
+      t.focusRisk
     );
   }
 
@@ -591,7 +1247,7 @@ export default async function AnalyticsPage({
     const traderName =
       trade.createdBy?.username ||
       trade.createdBy?.name ||
-      "Trader";
+      t.traderFallback;
 
     if (!traderStats[traderId]) {
       traderStats[traderId] = {
@@ -637,14 +1293,14 @@ export default async function AnalyticsPage({
 
   const cards = [
     {
-      label: "Total Trades",
+      label: t.totalTrades,
       value: totalTrades,
       tone: "text-white",
       icon: BarChart3,
     },
 
     {
-      label: "Win Rate",
+      label: t.winRate,
       value: `${winRate.toFixed(2)}%`,
       tone:
         winRate >= 50
@@ -654,14 +1310,14 @@ export default async function AnalyticsPage({
     },
 
     {
-      label: "Average RR",
+      label: t.averageRR,
       value: averageRR.toFixed(2),
       tone: "text-yellow-400",
       icon: CandlestickChart,
     },
 
     {
-      label: "Total PnL",
+      label: t.totalPnl,
       value: formatCurrency(
         totalPnl,
         account.currency
@@ -717,7 +1373,7 @@ export default async function AnalyticsPage({
   const emotionalStateMap = trades.reduce(
     (acc, trade) => {
       const emotion =
-        trade.emotionalState || "Unknown";
+        trade.emotionalState || t.traderFallback;
 
       if (!acc[emotion]) {
         acc[emotion] = {
@@ -751,7 +1407,7 @@ export default async function AnalyticsPage({
 
   const confidenceHeatmapData = [
     {
-      level: "Low Confidence",
+      level: t.lowConfidence,
       count: trades.filter(
         (trade) =>
           (trade.confidence || 0) > 0 &&
@@ -770,7 +1426,7 @@ export default async function AnalyticsPage({
         ),
     },
     {
-      level: "Medium Confidence",
+      level: t.mediumConfidence,
       count: trades.filter(
         (trade) =>
           (trade.confidence || 0) >= 5 &&
@@ -789,7 +1445,7 @@ export default async function AnalyticsPage({
         ),
     },
     {
-      level: "High Confidence",
+      level: t.highConfidence,
       count: trades.filter(
         (trade) =>
           (trade.confidence || 0) >= 8
@@ -809,7 +1465,7 @@ export default async function AnalyticsPage({
 
   const executionHeatmapData = [
     {
-      level: "Weak Execution",
+      level: t.weakExecution,
       count: trades.filter(
         (trade) =>
           (trade.executionRating || 0) > 0 &&
@@ -828,7 +1484,7 @@ export default async function AnalyticsPage({
         ),
     },
     {
-      level: "Average Execution",
+      level: t.averageExecution,
       count: trades.filter(
         (trade) =>
           (trade.executionRating || 0) >= 5 &&
@@ -847,7 +1503,7 @@ export default async function AnalyticsPage({
         ),
     },
     {
-      level: "Elite Execution",
+      level: t.eliteExecution,
       count: trades.filter(
         (trade) =>
           (trade.executionRating || 0) >= 8
@@ -867,7 +1523,7 @@ export default async function AnalyticsPage({
 
   const setupHeatmapData = [
     {
-      level: "Weak Setup",
+      level: t.weakSetup,
       count: trades.filter(
         (trade) =>
           (trade.setupQuality || 0) > 0 &&
@@ -886,7 +1542,7 @@ export default async function AnalyticsPage({
         ),
     },
     {
-      level: "Average Setup",
+      level: t.averageSetup,
       count: trades.filter(
         (trade) =>
           (trade.setupQuality || 0) >= 5 &&
@@ -905,7 +1561,7 @@ export default async function AnalyticsPage({
         ),
     },
     {
-      level: "Elite Setup",
+      level: t.eliteSetup,
       count: trades.filter(
         (trade) =>
           (trade.setupQuality || 0) >= 8
@@ -970,7 +1626,7 @@ export default async function AnalyticsPage({
 
   const behavioralRiskHeatmapData = [
     {
-      factor: "Low Confidence",
+      factor: t.lowConfidence,
       count: lowConfidenceCount,
       severity: getRiskSeverity(
         lowConfidenceCount,
@@ -978,7 +1634,7 @@ export default async function AnalyticsPage({
       ),
     },
     {
-      factor: "Weak Execution",
+      factor: t.weakExecution,
       count: weakExecutionCount,
       severity: getRiskSeverity(
         weakExecutionCount,
@@ -986,7 +1642,7 @@ export default async function AnalyticsPage({
       ),
     },
     {
-      factor: "Weak Setups",
+      factor: t.weakSetups,
       count: weakSetupCount,
       severity: getRiskSeverity(
         weakSetupCount,
@@ -994,7 +1650,7 @@ export default async function AnalyticsPage({
       ),
     },
     {
-      factor: "Emotional Trades",
+      factor: t.emotionalTrades,
       count: emotionalCount,
       severity: getRiskSeverity(
         emotionalCount,
@@ -1005,7 +1661,7 @@ export default async function AnalyticsPage({
 
   const riskConcentrationData = [
     {
-      label: "Psychology",
+      label: t.psychology,
       value:
         trades.length > 0
           ? Math.round(
@@ -1015,7 +1671,7 @@ export default async function AnalyticsPage({
           : 0,
     },
     {
-      label: "Confidence",
+      label: t.confidence,
       value:
         trades.length > 0
           ? Math.round(
@@ -1026,7 +1682,7 @@ export default async function AnalyticsPage({
           : 0,
     },
     {
-      label: "Execution",
+      label: t.execution,
       value:
         trades.length > 0
           ? Math.round(
@@ -1037,7 +1693,7 @@ export default async function AnalyticsPage({
           : 0,
     },
     {
-      label: "Setup Quality",
+      label: t.setupQuality,
       value:
         trades.length > 0
           ? Math.round(
@@ -1055,7 +1711,7 @@ export default async function AnalyticsPage({
     )
     .map((trade) => ({
       date: new Date(trade.openDate).toLocaleDateString(
-        "it-IT",
+        locale,
         {
           day: "2-digit",
           month: "2-digit",
@@ -1071,7 +1727,7 @@ export default async function AnalyticsPage({
     )
     .map((trade) => ({
       date: new Date(trade.openDate).toLocaleDateString(
-        "it-IT",
+        locale,
         {
           day: "2-digit",
           month: "2-digit",
@@ -1088,7 +1744,7 @@ export default async function AnalyticsPage({
     )
     .map((trade) => ({
       date: new Date(trade.openDate).toLocaleDateString(
-        "it-IT",
+        locale,
         {
           day: "2-digit",
           month: "2-digit",
@@ -1117,7 +1773,7 @@ export default async function AnalyticsPage({
 
       return {
         date: new Date(trade.openDate).toLocaleDateString(
-          "it-IT",
+          locale,
           {
             day: "2-digit",
             month: "2-digit",
@@ -1145,7 +1801,7 @@ export default async function AnalyticsPage({
 
     return {
       date: new Date(trade.openDate).toLocaleDateString(
-        "it-IT",
+        locale,
         {
           day: "2-digit",
           month: "2-digit",
@@ -1176,7 +1832,7 @@ export default async function AnalyticsPage({
 
     return {
       date: new Date(trade.openDate).toLocaleDateString(
-        "it-IT",
+        locale,
         {
           day: "2-digit",
           month: "2-digit",
@@ -1187,7 +1843,7 @@ export default async function AnalyticsPage({
   });
 
   return (
-    <div className="space-y-8">
+    <div>
 
       <AnalyticsHero
         accountName={account.name}
@@ -1199,10 +1855,10 @@ export default async function AnalyticsPage({
         totalTrades={trades.length}
       />
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
-            Gross Profit
+            {t.grossProfit}
           </p>
 
           <h2 className="mt-2 text-2xl font-black text-green-400">
@@ -1215,7 +1871,7 @@ export default async function AnalyticsPage({
 
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
-            Gross Loss
+            {t.grossLoss}
           </p>
 
           <h2 className="mt-2 text-2xl font-black text-red-400">
@@ -1228,12 +1884,12 @@ export default async function AnalyticsPage({
 
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
-            Profit Factor
+            {t.profitFactor}
           </p>
 
           <h2 className={`mt-2 text-2xl font-black ${profitFactor >= 1
-            ? "text-green-400"
-            : "text-red-400"
+              ? "text-green-400"
+              : "text-red-400"
             }`}>
             {profitFactor.toFixed(2)}
           </h2>
@@ -1241,7 +1897,7 @@ export default async function AnalyticsPage({
 
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
-            Best Win Streak
+            {t.bestWinStreak}
           </p>
 
           <h2 className="mt-2 text-2xl font-black text-white">
@@ -1250,18 +1906,18 @@ export default async function AnalyticsPage({
         </div>
       </div>
 
-      <div>
+      <div className="mb-8">
         <p className="text-sm text-gray-400">
-          Statistiche avanzate
+          {t.advancedStatsEyebrow}
         </p>
 
         <h1 className="mt-2 flex items-center gap-3 text-3xl font-bold sm:text-4xl">
           <BarChart3 className="text-green-400" />
-          Analytics
+          {t.analyticsTitle}
         </h1>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         {cards.map((card) => (
           <AnalyticsStatCard
             key={card.label}
@@ -1403,7 +2059,7 @@ export default async function AnalyticsPage({
         }
       />
 
-      <div className="grid grid-cols-1 gap-8">
+      <div className="grid grid-cols-1 gap-8 xl:grid-cols-2">
         <SymbolPerformance
           bestSymbol={bestSymbol}
           worstSymbol={worstSymbol}
@@ -1415,18 +2071,18 @@ export default async function AnalyticsPage({
 
       <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
         <p className="text-sm text-gray-400">
-          Trade Direction
+          {t.tradeDirectionEyebrow}
         </p>
 
         <h2 className="mt-1 text-2xl font-bold">
-          Long vs Short
+          {t.longVsShort}
         </h2>
 
         <div className="mt-6 space-y-4">
           <div className="rounded-2xl bg-black/20 p-4">
             <div className="flex items-center justify-between">
               <p className="text-gray-400">
-                Long Trades
+                {t.longTrades}
               </p>
 
               <p className="font-bold text-white">
@@ -1448,14 +2104,14 @@ export default async function AnalyticsPage({
 
             <p className="mt-2 text-sm text-green-400">
               {longWinRate.toFixed(2)}%
-              winrate
+              {t.winrate}
             </p>
           </div>
 
           <div className="rounded-2xl bg-black/20 p-4">
             <div className="flex items-center justify-between">
               <p className="text-gray-400">
-                Short Trades
+                {t.shortTrades}
               </p>
 
               <p className="font-bold text-white">
@@ -1477,7 +2133,7 @@ export default async function AnalyticsPage({
 
             <p className="mt-2 text-sm text-red-400">
               {shortWinRate.toFixed(2)}%
-              winrate
+              {t.winrate}
             </p>
           </div>
         </div>
@@ -1485,17 +2141,17 @@ export default async function AnalyticsPage({
 
       <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
         <p className="text-sm text-gray-400">
-          Trade Results
+          {t.tradeResultsEyebrow}
         </p>
 
         <h2 className="mt-1 text-2xl font-bold">
-          Migliori risultati
+          {t.bestResults}
         </h2>
 
         <div className="mt-6 space-y-4">
           <div className="rounded-2xl bg-black/20 p-4">
             <p className="text-sm text-gray-500">
-              Best Trade
+              {t.bestTrade}
             </p>
 
             <h3 className="mt-2 text-2xl font-bold text-green-400">
@@ -1508,7 +2164,7 @@ export default async function AnalyticsPage({
 
           <div className="rounded-2xl bg-black/20 p-4">
             <p className="text-sm text-gray-500">
-              Worst Trade
+              {t.worstTrade}
             </p>
 
             <h3 className="mt-2 text-2xl font-bold text-red-400">
@@ -1546,17 +2202,17 @@ export default async function AnalyticsPage({
 
       <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
         <p className="text-sm text-gray-400">
-          Outcome Breakdown
+          {t.outcomeBreakdownEyebrow}
         </p>
 
         <h2 className="mt-1 text-2xl font-bold">
-          Breakdown risultati
+          {t.outcomeBreakdownTitle}
         </h2>
 
         <div className="mt-6 space-y-4">
           <div className="flex items-center justify-between rounded-2xl bg-black/20 p-4">
             <p className="text-gray-400">
-              Wins
+              {t.wins}
             </p>
 
             <p className="font-bold text-green-400">
@@ -1566,7 +2222,7 @@ export default async function AnalyticsPage({
 
           <div className="flex items-center justify-between rounded-2xl bg-black/20 p-4">
             <p className="text-gray-400">
-              Losses
+              {t.losses}
             </p>
 
             <p className="font-bold text-red-400">
@@ -1576,7 +2232,7 @@ export default async function AnalyticsPage({
 
           <div className="flex items-center justify-between rounded-2xl bg-black/20 p-4">
             <p className="text-gray-400">
-              Break Even
+              {t.breakEven}
             </p>
 
             <p className="font-bold text-yellow-400">
@@ -1591,17 +2247,17 @@ export default async function AnalyticsPage({
 
       <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
         <p className="text-sm text-gray-400">
-          Mistakes Analytics
+          {t.mistakesEyebrow}
         </p>
 
         <h2 className="mt-1 text-2xl font-bold">
-          Errori ricorrenti
+          {t.recurringMistakes}
         </h2>
 
         <div className="mt-6 space-y-4">
           {Object.entries(mistakesStats).length === 0 ? (
             <p className="text-sm text-gray-500">
-              Nessun errore registrato nei trade.
+              {t.noMistakes}
             </p>
           ) : (
             Object.entries(mistakesStats)
@@ -1617,7 +2273,7 @@ export default async function AnalyticsPage({
                     </h3>
 
                     <p className="mt-1 text-sm text-gray-500">
-                      Ripetuto {stats.count} volte
+                      {t.repeatedTimes(stats.count)}
                     </p>
                   </div>
 
@@ -1637,11 +2293,11 @@ export default async function AnalyticsPage({
 
       <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
         <p className="text-sm text-gray-400">
-          Setup Quality
+          {t.setupQualityEyebrow}
         </p>
 
         <h2 className="mt-1 text-2xl font-bold">
-          Setup Performance
+          {t.setupPerformance}
         </h2>
 
         <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -1680,7 +2336,7 @@ export default async function AnalyticsPage({
                 <div className="mt-5 space-y-3">
                   <div className="flex items-center justify-between">
                     <p className="text-sm text-gray-500">
-                      Trades
+                      {t.trades}
                     </p>
 
                     <p className="font-bold text-white">
@@ -1690,7 +2346,7 @@ export default async function AnalyticsPage({
 
                   <div className="flex items-center justify-between">
                     <p className="text-sm text-gray-500">
-                      Wins
+                      {t.wins}
                     </p>
 
                     <p className="font-bold text-green-400">
@@ -1700,7 +2356,7 @@ export default async function AnalyticsPage({
 
                   <div className="flex items-center justify-between">
                     <p className="text-sm text-gray-500">
-                      PnL
+                      {t.pnl}
                     </p>
 
                     <p
@@ -1725,11 +2381,11 @@ export default async function AnalyticsPage({
       {isSharedAccount && (
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
           <p className="text-sm text-gray-400">
-            Team Analytics
+            {t.teamAnalyticsEyebrow}
           </p>
 
           <h2 className="mt-1 text-2xl font-bold">
-            Trader Leaderboard
+            {t.traderLeaderboard}
           </h2>
 
           <div className="mt-6 space-y-4">
@@ -1762,7 +2418,7 @@ export default async function AnalyticsPage({
                           </h3>
 
                           <p className="text-sm text-gray-500">
-                            {trader.trades} trades
+                            {trader.trades} {t.trades}
                           </p>
                         </div>
                       </div>
@@ -1771,7 +2427,7 @@ export default async function AnalyticsPage({
                     <div className="flex gap-6">
                       <div>
                         <p className="text-xs text-gray-500">
-                          WR
+                          {t.wr}
                         </p>
 
                         <p className="font-bold text-white">
@@ -1781,7 +2437,7 @@ export default async function AnalyticsPage({
 
                       <div>
                         <p className="text-xs text-gray-500">
-                          Wins
+                          {t.wins}
                         </p>
 
                         <p className="font-bold text-green-400">
@@ -1791,7 +2447,7 @@ export default async function AnalyticsPage({
 
                       <div>
                         <p className="text-xs text-gray-500">
-                          PnL
+                          {t.pnl}
                         </p>
 
                         <p
@@ -1816,17 +2472,17 @@ export default async function AnalyticsPage({
 
       <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
         <p className="text-sm text-gray-400">
-          Monthly Performance
+          {t.monthlyPerformanceEyebrow}
         </p>
 
         <h2 className="mt-1 text-2xl font-bold">
-          Monthly Dashboard
+          {t.monthlyDashboard}
         </h2>
 
         <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
           <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
             <p className="text-sm text-gray-500">
-              Best Month
+              {t.bestMonth}
             </p>
 
             <h3 className="mt-2 text-lg font-bold text-green-400">
@@ -1845,7 +2501,7 @@ export default async function AnalyticsPage({
 
           <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
             <p className="text-sm text-gray-500">
-              Worst Month
+              {t.worstMonth}
             </p>
 
             <h3 className="mt-2 text-lg font-bold text-red-400">
@@ -1864,7 +2520,7 @@ export default async function AnalyticsPage({
 
           <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
             <p className="text-sm text-gray-500">
-              Green Months
+              {t.greenMonths}
             </p>
 
             <h3 className="mt-2 text-2xl font-bold text-green-400">
@@ -1874,7 +2530,7 @@ export default async function AnalyticsPage({
 
           <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
             <p className="text-sm text-gray-500">
-              Red Months
+              {t.redMonths}
             </p>
 
             <h3 className="mt-2 text-2xl font-bold text-red-400">
@@ -1907,14 +2563,14 @@ export default async function AnalyticsPage({
                     </h3>
 
                     <p className="mt-1 text-sm text-gray-500">
-                      {stats.trades} trades
+                      {stats.trades} {t.trades}
                     </p>
                   </div>
 
                   <div className="flex gap-6">
                     <div>
                       <p className="text-xs text-gray-500">
-                        WR
+                        {t.wr}
                       </p>
 
                       <p
@@ -1929,7 +2585,7 @@ export default async function AnalyticsPage({
 
                     <div>
                       <p className="text-xs text-gray-500">
-                        Wins
+                        {t.wins}
                       </p>
 
                       <p className="font-bold text-green-400">
@@ -1939,7 +2595,7 @@ export default async function AnalyticsPage({
 
                     <div>
                       <p className="text-xs text-gray-500">
-                        PnL
+                        {t.pnl}
                       </p>
 
                       <p
@@ -1963,17 +2619,17 @@ export default async function AnalyticsPage({
 
       <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
         <p className="text-sm text-gray-400">
-          AI Insights
+          {t.aiInsightsEyebrow}
         </p>
 
         <h2 className="mt-1 text-2xl font-bold">
-          Performance Insights
+          {t.performanceInsights}
         </h2>
 
         <div className="mt-6 space-y-4">
           {insights.length === 0 ? (
             <p className="text-sm text-gray-500">
-              Non ci sono ancora abbastanza dati.
+              {t.noInsights}
             </p>
           ) : (
             insights.map((insight) => (
@@ -1992,11 +2648,11 @@ export default async function AnalyticsPage({
 
       <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
         <p className="text-sm text-gray-400">
-          Trading Psychology
+          {t.tradingPsychologyEyebrow}
         </p>
 
         <h2 className="mt-1 text-2xl font-bold">
-          Emotional Performance
+          {t.emotionalPerformance}
         </h2>
 
         <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -2033,7 +2689,7 @@ export default async function AnalyticsPage({
                 <div className="mt-5 space-y-3">
                   <div className="flex items-center justify-between">
                     <p className="text-sm text-gray-500">
-                      Trades
+                      {t.trades}
                     </p>
 
                     <p className="font-bold text-white">
@@ -2043,7 +2699,7 @@ export default async function AnalyticsPage({
 
                   <div className="flex items-center justify-between">
                     <p className="text-sm text-gray-500">
-                      Wins
+                      {t.wins}
                     </p>
 
                     <p className="font-bold text-green-400">
@@ -2053,7 +2709,7 @@ export default async function AnalyticsPage({
 
                   <div className="flex items-center justify-between">
                     <p className="text-sm text-gray-500">
-                      Total PnL
+                      {t.totalPnl}
                     </p>
 
                     <p

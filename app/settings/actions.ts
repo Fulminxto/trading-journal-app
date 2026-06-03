@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { logActivity } from "@/lib/activity";
+import { normalizeAppLanguage } from "@/lib/i18n";
 
 function getString(
   formData: FormData,
@@ -64,12 +65,9 @@ export async function updateSettings(
       "USD"
     );
 
-  const appLanguage =
-    getAllowedValue(
-      getString(formData, "appLanguage"),
-      ["it", "en", "uk", "es", "fr", "de"],
-      "it"
-    );
+  const appLanguage = normalizeAppLanguage(
+    getString(formData, "appLanguage")
+  );
 
   const themePreference =
     getAllowedValue(

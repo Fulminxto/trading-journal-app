@@ -1,23 +1,22 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
-  AlertTriangle,
-  BookOpen,
-  Brain,
   CalendarDays,
   CheckCircle2,
   ClipboardList,
   Clock3,
   Save,
-  ShieldCheck,
   Star,
-  Target,
   TrendingUp,
   type LucideIcon,
 } from "lucide-react";
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import {
+  getLocaleFromLanguage,
+  normalizeAppLanguage,
+} from "@/lib/i18n";
 
 import { createTradingSession } from "./actions";
 import SessionsHero from "@/components/sessions/SessionsHero";
@@ -25,6 +24,7 @@ import SessionInsightCard from "@/components/sessions/SessionInsightCard";
 import PostMarketIntelligence from "@/components/sessions/PostMarketIntelligence";
 import BehaviorWarningCard from "@/components/sessions/BehaviorWarningCard";
 import ExecutionIntelligence from "@/components/sessions/ExecutionIntelligence";
+import { getSessionsCopy } from "@/components/sessions/SessionI18n";
 
 type StatCardProps = {
   title: string;
@@ -78,8 +78,32 @@ function getScoreTone(score: number) {
   return "text-yellow-300";
 }
 
-function formatPercent(value: number) {
-  return `${value.toFixed(0)}%`;
+function formatPercent(
+  value: number,
+  language?: string | null
+) {
+  return (
+    new Intl.NumberFormat(
+      getLocaleFromLanguage(language),
+      {
+        maximumFractionDigits: 0,
+      }
+    ).format(value) + "%"
+  );
+}
+
+function formatDate(
+  date: Date,
+  language?: string | null
+) {
+  return new Intl.DateTimeFormat(
+    getLocaleFromLanguage(language),
+    {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }
+  ).format(new Date(date));
 }
 
 export default async function SessionsPage({
@@ -126,7 +150,7 @@ export default async function SessionsPage({
     redirect(`/accounts/${accountId}/dashboard`);
   }
 
-  await prisma.user.update({
+  const currentUser = await prisma.user.update({
     where: {
       id: session.user.id,
     },
@@ -134,7 +158,16 @@ export default async function SessionsPage({
       lastSeenAt: new Date(),
       lastActivityAt: new Date(),
     },
+    select: {
+      appLanguage: true,
+    },
   });
+
+  const appLanguage = normalizeAppLanguage(
+    currentUser.appLanguage
+  );
+
+  const t = getSessionsCopy(appLanguage);
 
   const canCreateSessions =
     membership.role === "MANAGER" ||
@@ -212,7 +245,7 @@ export default async function SessionsPage({
           <div>
             <div className="mb-6 flex flex-wrap items-center gap-3">
               <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-300">
-                Session workspace
+                {t.page.workspaceBadge}
               </span>
 
               <span className="rounded-full border border-white/10 bg-black/20 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-gray-300">
@@ -221,17 +254,15 @@ export default async function SessionsPage({
             </div>
 
             <p className="text-sm text-gray-400">
-              Trading Sessions
+              {t.page.titleSmall}
             </p>
 
             <h1 className="mt-3 text-5xl font-black tracking-tight text-white sm:text-6xl">
-              Plan. Execute. Review.
+              {t.page.title}
             </h1>
 
             <p className="mt-6 max-w-3xl text-base leading-7 text-gray-400">
-              Organizza mindset, focus, checklist e review operative.
-              Questa pagina serve a proteggere la qualità della sessione
-              prima e dopo il mercato.
+              {t.page.description}
             </p>
           </div>
 
@@ -239,7 +270,7 @@ export default async function SessionsPage({
             href={`/accounts/${accountId}`}
             className="w-fit rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-bold text-white transition hover:bg-white/[0.08]"
           >
-            Back to Account Hub
+            {t.page.backToAccountHub}
           </Link>
         </div>
       </section>
@@ -247,37 +278,44 @@ export default async function SessionsPage({
       <SessionsHero
         totalSessions={sessions.length}
         averageScore={averageScore}
+        appLanguage={appLanguage}
       />
 
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <StatCard
-          title="Total Sessions"
+          title={t.page.totalSessions}
           value={sessions.length}
-          description="Sessioni pianificate o revisionate in questo account."
+          description={t.page.totalSessionsDescription}
           icon={CalendarDays}
           tone="text-cyan-300"
         />
 
         <StatCard
-          title="Average Score"
+          title={t.page.averageScore}
           value={`${averageScore}/10`}
-          description="Media del punteggio finale registrato nelle sessioni."
+          description={t.page.averageScoreDescription}
           icon={Star}
           tone={getScoreTone(averageScore)}
         />
 
         <StatCard
-          title="Review Completion"
-          value={formatPercent(reviewCompletionRate)}
-          description="Percentuale di sessioni con review post-market compilata."
+          title={t.page.reviewCompletion}
+          value={formatPercent(
+            reviewCompletionRate,
+            appLanguage
+          )}
+          description={t.page.reviewCompletionDescription}
           icon={CheckCircle2}
           tone="text-violet-400"
         />
 
         <StatCard
-          title="High Quality Sessions"
-          value={formatPercent(highScoreRate)}
-          description="Quota di sessioni con score operativo pari o superiore a 8/10."
+          title={t.page.highQualitySessions}
+          value={formatPercent(
+            highScoreRate,
+            appLanguage
+          )}
+          description={t.page.highQualitySessionsDescription}
           icon={TrendingUp}
           tone="text-green-400"
         />
@@ -285,24 +323,24 @@ export default async function SessionsPage({
 
       <section className="grid grid-cols-1 gap-6 md:grid-cols-3">
         <SessionInsightCard
-          title="Focused Sessions"
+          title={t.page.focusedSessions}
           value={focusedSessions}
           tone="text-cyan-400"
-          description="Sessioni con focus operativo dettagliato e pianificazione reale."
+          description={t.page.focusedSessionsDescription}
         />
 
         <SessionInsightCard
-          title="Reviewed Sessions"
+          title={t.page.reviewedSessions}
           value={reviewedSessions}
           tone="text-violet-400"
-          description="Sessioni con review post-market completata."
+          description={t.page.reviewedSessionsDescription}
         />
 
         <SessionInsightCard
-          title="High Score Sessions"
+          title={t.page.highScoreSessions}
           value={highScoreSessions}
           tone="text-green-400"
-          description="Sessioni con execution score superiore a 8/10."
+          description={t.page.highScoreSessionsDescription}
         />
       </section>
 
@@ -312,6 +350,7 @@ export default async function SessionsPage({
             reviewedSessions={reviewedSessions}
             pendingReviews={pendingReviews}
             highScoreSessions={highScoreSessions}
+            appLanguage={appLanguage}
           />
         </div>
 
@@ -319,6 +358,7 @@ export default async function SessionsPage({
           <BehaviorWarningCard
             lowScoreSessions={lowScoreSessions}
             pendingReviews={pendingReviews}
+            appLanguage={appLanguage}
           />
         </div>
       </section>
@@ -328,6 +368,7 @@ export default async function SessionsPage({
         highScoreSessions={highScoreSessions}
         reviewedSessions={reviewedSessions}
         totalSessions={sessions.length}
+        appLanguage={appLanguage}
       />
 
       {canCreateSessions && (
@@ -345,16 +386,15 @@ export default async function SessionsPage({
             <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div>
                 <p className="text-sm text-gray-400">
-                  Nuova sessione
+                  {t.page.newSessionEyebrow}
                 </p>
 
                 <h2 className="mt-1 text-3xl font-black text-white">
-                  Pre Market Planning
+                  {t.page.preMarketPlanning}
                 </h2>
 
                 <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-500">
-                  Compila il piano prima della sessione e usa la review finale
-                  per trasformare l’esecuzione in feedback reale.
+                  {t.page.preMarketDescription}
                 </p>
               </div>
 
@@ -373,7 +413,7 @@ export default async function SessionsPage({
 
               <input
                 name="title"
-                placeholder="Titolo sessione"
+                placeholder={t.page.titlePlaceholder}
                 className={inputClass}
               />
 
@@ -382,35 +422,35 @@ export default async function SessionsPage({
                 className={inputClass}
               >
                 <option value="">
-                  Session Type
+                  {t.page.sessionTypePlaceholder}
                 </option>
 
                 <option value="ASIA">
-                  Asia
+                  {t.options.asia}
                 </option>
 
                 <option value="LONDON">
-                  London
+                  {t.options.london}
                 </option>
 
                 <option value="NEW_YORK">
-                  New York
+                  {t.options.newYork}
                 </option>
 
                 <option value="OVERLAP">
-                  Overlap
+                  {t.options.overlap}
                 </option>
               </select>
 
               <input
                 name="marketBias"
-                placeholder="Market Bias"
+                placeholder={t.page.marketBiasPlaceholder}
                 className={inputClass}
               />
 
               <input
                 name="focus"
-                placeholder="Focus del giorno"
+                placeholder={t.page.focusPlaceholder}
                 className={inputClass}
               />
 
@@ -419,55 +459,55 @@ export default async function SessionsPage({
                 className={inputClass}
               >
                 <option value="">
-                  Emotional State
+                  {t.page.emotionalStatePlaceholder}
                 </option>
 
                 <option value="CALM">
-                  Calm
+                  {t.options.calm}
                 </option>
 
                 <option value="FOCUSED">
-                  Focused
+                  {t.options.focused}
                 </option>
 
                 <option value="CONFIDENT">
-                  Confident
+                  {t.options.confident}
                 </option>
 
                 <option value="TIRED">
-                  Tired
+                  {t.options.tired}
                 </option>
 
                 <option value="STRESSED">
-                  Stressed
+                  {t.options.stressed}
                 </option>
 
                 <option value="IMPULSIVE">
-                  Impulsive
+                  {t.options.impulsive}
                 </option>
               </select>
 
               <textarea
                 name="checklist"
-                placeholder="Checklist"
+                placeholder={t.page.checklistPlaceholder}
                 className={`${inputClass} min-h-[120px]`}
               />
 
               <textarea
                 name="goals"
-                placeholder="Goals"
+                placeholder={t.page.goalsPlaceholder}
                 className={`${inputClass} min-h-[120px]`}
               />
 
               <textarea
                 name="mistakesToAvoid"
-                placeholder="Errori da evitare"
+                placeholder={t.page.mistakesPlaceholder}
                 className={`${inputClass} min-h-[120px]`}
               />
 
               <textarea
                 name="sessionReview"
-                placeholder="Review finale"
+                placeholder={t.page.reviewPlaceholder}
                 className={`${inputClass} min-h-[120px] sm:col-span-2`}
               />
 
@@ -477,7 +517,7 @@ export default async function SessionsPage({
                   type="number"
                   min="1"
                   max="10"
-                  placeholder="Final Score (1-10)"
+                  placeholder={t.page.finalScorePlaceholder}
                   className={inputClass}
                 />
 
@@ -486,7 +526,7 @@ export default async function SessionsPage({
                   className="flex h-full min-h-[52px] items-center justify-center gap-2 rounded-2xl bg-green-500 px-5 py-4 font-black text-black transition hover:bg-green-400"
                 >
                   <Save size={18} />
-                  Salva sessione
+                  {t.page.saveSession}
                 </button>
               </div>
             </div>
@@ -498,25 +538,29 @@ export default async function SessionsPage({
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm text-gray-400">
-              Session history
+              {t.page.sessionHistory}
             </p>
 
             <h2 className="mt-1 text-3xl font-black text-white">
-              Recent Sessions
+              {t.page.recentSessions}
             </h2>
           </div>
 
           {lastSession && (
             <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-gray-400">
               <Clock3 size={16} />
-              Last: {new Date(lastSession.date).toLocaleDateString("it-IT")}
+              {t.page.last}:{" "}
+              {formatDate(
+                lastSession.date,
+                appLanguage
+              )}
             </div>
           )}
         </div>
 
         {sessions.length === 0 ? (
           <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-10 text-center text-gray-500">
-            Nessuna sessione registrata.
+            {t.page.emptySessions}
           </div>
         ) : (
           sessions.map((tradingSession) => {
@@ -535,14 +579,15 @@ export default async function SessionsPage({
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                     <div>
                       <p className="text-sm text-gray-500">
-                        {new Date(
-                          tradingSession.date
-                        ).toLocaleDateString("it-IT")}
+                        {formatDate(
+                          tradingSession.date,
+                          appLanguage
+                        )}
                       </p>
 
                       <h2 className="mt-1 text-2xl font-bold text-white">
                         {tradingSession.title ||
-                          "Trading Session"}
+                          t.page.defaultSessionTitle}
                       </h2>
 
                       <div className="mt-3 flex flex-wrap gap-3">
@@ -564,7 +609,8 @@ export default async function SessionsPage({
                               tradingSession.finalScore || 0
                             )}`}
                           >
-                            Score: {tradingSession.finalScore}/10
+                            {t.page.score}:{" "}
+                            {tradingSession.finalScore}/10
                           </span>
                         )}
                       </div>
@@ -573,7 +619,7 @@ export default async function SessionsPage({
                     {tradingSession.marketBias && (
                       <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm">
                         <p className="text-gray-500">
-                          Market Bias
+                          {t.page.marketBias}
                         </p>
 
                         <p className="mt-1 font-bold text-white">
@@ -587,7 +633,7 @@ export default async function SessionsPage({
                     {tradingSession.focus && (
                       <div className="rounded-2xl bg-black/20 p-4">
                         <p className="text-sm text-gray-500">
-                          Focus
+                          {t.page.focus}
                         </p>
 
                         <p className="mt-2 text-gray-300">
@@ -599,7 +645,7 @@ export default async function SessionsPage({
                     {tradingSession.goals && (
                       <div className="rounded-2xl bg-black/20 p-4">
                         <p className="text-sm text-gray-500">
-                          Goals
+                          {t.page.goals}
                         </p>
 
                         <p className="mt-2 whitespace-pre-wrap text-gray-300">
@@ -611,7 +657,7 @@ export default async function SessionsPage({
                     {tradingSession.checklist && (
                       <div className="rounded-2xl bg-black/20 p-4">
                         <p className="text-sm text-gray-500">
-                          Checklist
+                          {t.page.checklist}
                         </p>
 
                         <p className="mt-2 whitespace-pre-wrap text-gray-300">
@@ -623,7 +669,7 @@ export default async function SessionsPage({
                     {tradingSession.mistakesToAvoid && (
                       <div className="rounded-2xl border border-red-500/10 bg-red-500/[0.03] p-4">
                         <p className="text-sm text-red-400">
-                          Mistakes To Avoid
+                          {t.page.mistakesToAvoid}
                         </p>
 
                         <p className="mt-2 whitespace-pre-wrap text-gray-300">
@@ -636,7 +682,7 @@ export default async function SessionsPage({
                   {tradingSession.sessionReview && (
                     <div className="mt-5 rounded-2xl border border-green-500/10 bg-green-500/[0.03] p-4">
                       <p className="text-sm text-green-400">
-                        Session Review
+                        {t.page.sessionReview}
                       </p>
 
                       <p className="mt-2 whitespace-pre-wrap text-gray-300">

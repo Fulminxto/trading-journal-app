@@ -70,6 +70,34 @@ type SidebarProps = {
   appLanguage?: string | null;
 };
 
+type SidebarLabels = {
+  performanceSystem: string;
+  closeSidebar: string;
+  loadingPermissions: string;
+
+  dashboard: string;
+  diary: string;
+  calendar: string;
+  equity: string;
+  analytics: string;
+  reports: string;
+  copilot: string;
+  workspace: string;
+  sessions: string;
+  rules: string;
+  integrations: string;
+
+  updates: string;
+  switchAccount: string;
+  accounts: string;
+
+  adminPanel: string;
+  accountsManagement: string;
+  supportTickets: string;
+  appUpdates: string;
+  maintenance: string;
+};
+
 function isManager(
   permissions: AccountPermissions
 ) {
@@ -78,33 +106,7 @@ function isManager(
 
 const sidebarLabels: Record<
   AppLanguage,
-  {
-    performanceSystem: string;
-    closeSidebar: string;
-    loadingPermissions: string;
-
-    dashboard: string;
-    diary: string;
-    calendar: string;
-    equity: string;
-    analytics: string;
-    reports: string;
-    copilot: string;
-    workspace: string;
-    sessions: string;
-    rules: string;
-    integrations: string;
-
-    updates: string;
-    switchAccount: string;
-    accounts: string;
-
-    adminPanel: string;
-    accountsManagement: string;
-    supportTickets: string;
-    appUpdates: string;
-    maintenance: string;
-  }
+  SidebarLabels
 > = {
   it: {
     performanceSystem: "Sistema Performance",
@@ -160,6 +162,146 @@ const sidebarLabels: Record<
     supportTickets: "Support Tickets",
     appUpdates: "App Updates",
     maintenance: "Maintenance",
+  },
+
+  uk: {
+    performanceSystem: "Система продуктивності",
+    closeSidebar: "Закрити меню",
+    loadingPermissions: "Завантаження дозволів...",
+
+    dashboard: "Панель",
+    diary: "Торговий щоденник",
+    calendar: "Календар",
+    equity: "Equity",
+    analytics: "Аналітика",
+    reports: "Звіти",
+    copilot: "Copilot",
+    workspace: "Workspace Intelligence",
+    sessions: "Сесії",
+    rules: "Правила та цілі",
+    integrations: "Інтеграції",
+
+    updates: "Оновлення",
+    switchAccount: "Змінити акаунт",
+    accounts: "Акаунти",
+
+    adminPanel: "Адмін-панель",
+    accountsManagement: "Керування акаунтами",
+    supportTickets: "Тікети підтримки",
+    appUpdates: "Оновлення застосунку",
+    maintenance: "Обслуговування",
+  },
+
+  ru: {
+    performanceSystem: "Система производительности",
+    closeSidebar: "Закрыть меню",
+    loadingPermissions: "Загрузка разрешений...",
+
+    dashboard: "Панель",
+    diary: "Торговый дневник",
+    calendar: "Календарь",
+    equity: "Equity",
+    analytics: "Аналитика",
+    reports: "Отчеты",
+    copilot: "Copilot",
+    workspace: "Workspace Intelligence",
+    sessions: "Сессии",
+    rules: "Правила и цели",
+    integrations: "Интеграции",
+
+    updates: "Обновления",
+    switchAccount: "Сменить аккаунт",
+    accounts: "Аккаунты",
+
+    adminPanel: "Админ-панель",
+    accountsManagement: "Управление аккаунтами",
+    supportTickets: "Тикеты поддержки",
+    appUpdates: "Обновления приложения",
+    maintenance: "Обслуживание",
+  },
+
+  es: {
+    performanceSystem: "Sistema de rendimiento",
+    closeSidebar: "Cerrar menú",
+    loadingPermissions: "Cargando permisos...",
+
+    dashboard: "Panel",
+    diary: "Diario de trading",
+    calendar: "Calendario",
+    equity: "Equity",
+    analytics: "Analítica",
+    reports: "Informes",
+    copilot: "Copilot",
+    workspace: "Workspace Intelligence",
+    sessions: "Sesiones",
+    rules: "Reglas y objetivos",
+    integrations: "Integraciones",
+
+    updates: "Actualizaciones",
+    switchAccount: "Cambiar cuenta",
+    accounts: "Cuentas",
+
+    adminPanel: "Panel Admin",
+    accountsManagement: "Gestión de cuentas",
+    supportTickets: "Tickets de soporte",
+    appUpdates: "Actualizaciones de la app",
+    maintenance: "Mantenimiento",
+  },
+
+  fr: {
+    performanceSystem: "Système de performance",
+    closeSidebar: "Fermer le menu",
+    loadingPermissions: "Chargement des autorisations...",
+
+    dashboard: "Tableau de bord",
+    diary: "Journal de trading",
+    calendar: "Calendrier",
+    equity: "Equity",
+    analytics: "Analytics",
+    reports: "Rapports",
+    copilot: "Copilot",
+    workspace: "Workspace Intelligence",
+    sessions: "Sessions",
+    rules: "Règles et objectifs",
+    integrations: "Intégrations",
+
+    updates: "Mises à jour",
+    switchAccount: "Changer de compte",
+    accounts: "Comptes",
+
+    adminPanel: "Panneau Admin",
+    accountsManagement: "Gestion des comptes",
+    supportTickets: "Tickets support",
+    appUpdates: "Mises à jour de l’app",
+    maintenance: "Maintenance",
+  },
+
+  de: {
+    performanceSystem: "Performance-System",
+    closeSidebar: "Menü schließen",
+    loadingPermissions: "Berechtigungen werden geladen...",
+
+    dashboard: "Dashboard",
+    diary: "Trading-Tagebuch",
+    calendar: "Kalender",
+    equity: "Equity",
+    analytics: "Analytics",
+    reports: "Berichte",
+    copilot: "Copilot",
+    workspace: "Workspace Intelligence",
+    sessions: "Sessions",
+    rules: "Regeln & Ziele",
+    integrations: "Integrationen",
+
+    updates: "Updates",
+    switchAccount: "Konto wechseln",
+    accounts: "Konten",
+
+    adminPanel: "Admin-Bereich",
+    accountsManagement: "Kontoverwaltung",
+    supportTickets: "Support-Tickets",
+    appUpdates: "App-Updates",
+    maintenance: "Wartung",
   },
 };
 
@@ -239,14 +381,70 @@ const baseLinks: AccountLink[] = [
   },
 ];
 
+function getAccountLinkLabel(
+  path: string,
+  fallback: string,
+  labels: SidebarLabels
+) {
+  if (path === "dashboard") {
+    return labels.dashboard;
+  }
+
+  if (path === "diary") {
+    return labels.diary;
+  }
+
+  if (path === "calendar") {
+    return labels.calendar;
+  }
+
+  if (path === "equity") {
+    return labels.equity;
+  }
+
+  if (path === "analytics") {
+    return labels.analytics;
+  }
+
+  if (path === "reports") {
+    return labels.reports;
+  }
+
+  if (path === "copilot") {
+    return labels.copilot;
+  }
+
+  if (path === "workspace") {
+    return labels.workspace;
+  }
+
+  if (path === "sessions") {
+    return labels.sessions;
+  }
+
+  if (path === "rules") {
+    return labels.rules;
+  }
+
+  if (path === "integrations") {
+    return labels.integrations;
+  }
+
+  return fallback;
+}
+
 export default function Sidebar({
   open = false,
   onClose,
   appLanguage,
 }: SidebarProps) {
   const pathname = usePathname();
-  const language = normalizeAppLanguage(appLanguage);
-  const t = sidebarLabels[language];
+
+  const language =
+    normalizeAppLanguage(appLanguage);
+
+  const t =
+    sidebarLabels[language] ?? sidebarLabels.en;
 
   const [collapsed, setCollapsed] =
     useState(true);
@@ -328,37 +526,35 @@ export default function Sidebar({
     };
   }, [accountId, isAdminArea]);
 
-  const adminLinks: SidebarLink[] = [
-    {
-      href: "/admin",
-      label: t.adminPanel,
-      icon: Shield,
-    },
-    {
-      href: "/admin/accounts",
-      label: t.accountsManagement,
-      icon: Users,
-    },
-    {
-      href: "/admin/support",
-      label: t.supportTickets,
-      icon: FileText,
-    },
-    {
-      href: "/admin/updates",
-      label: t.appUpdates,
-      icon: Megaphone,
-    },
-    {
-      href: "/admin/maintenance",
-      label: t.maintenance,
-      icon: ShieldAlert,
-    },
-  ];
-
   const links = useMemo<SidebarLink[]>(() => {
     if (isAdminArea) {
-      return adminLinks;
+      return [
+        {
+          href: "/admin",
+          label: t.adminPanel,
+          icon: Shield,
+        },
+        {
+          href: "/admin/accounts",
+          label: t.accountsManagement,
+          icon: Users,
+        },
+        {
+          href: "/admin/support",
+          label: t.supportTickets,
+          icon: FileText,
+        },
+        {
+          href: "/admin/updates",
+          label: t.appUpdates,
+          icon: Megaphone,
+        },
+        {
+          href: "/admin/maintenance",
+          label: t.maintenance,
+          icon: ShieldAlert,
+        },
+      ];
     }
 
     if (accountId) {
@@ -380,30 +576,11 @@ export default function Sidebar({
       return [
         ...visibleAccountLinks.map((link) => ({
           href: `/accounts/${accountId}/${link.path}`,
-          label:
-            link.path === "dashboard"
-              ? t.dashboard
-              : link.path === "diary"
-                ? t.diary
-                : link.path === "calendar"
-                  ? t.calendar
-                  : link.path === "equity"
-                    ? t.equity
-                    : link.path === "analytics"
-                      ? t.analytics
-                      : link.path === "reports"
-                        ? t.reports
-                        : link.path === "copilot"
-                          ? t.copilot
-                          : link.path === "workspace"
-                            ? t.workspace
-                            : link.path === "sessions"
-                              ? t.sessions
-                              : link.path === "rules"
-                                ? t.rules
-                                : link.path === "integrations"
-                                  ? t.integrations
-                                  : link.label,
+          label: getAccountLinkLabel(
+            link.path,
+            link.label,
+            t
+          ),
           icon: link.icon,
         })),
         {
@@ -427,7 +604,7 @@ export default function Sidebar({
       },
       {
         href: "/updates",
-        label: "Updates",
+        label: t.updates,
         icon: Megaphone,
       },
     ];

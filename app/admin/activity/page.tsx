@@ -3,6 +3,11 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
+import {
+  formatAdminDateTime,
+  getAdminI18n,
+} from "../AdminI18n";
+
 export default async function AdminActivityPage() {
   const session = await auth();
 
@@ -24,6 +29,10 @@ export default async function AdminActivityPage() {
     redirect("/accounts");
   }
 
+  const { language, t } = getAdminI18n(
+    currentUser.appLanguage
+  );
+
   const activities = await prisma.activityLog.findMany({
     include: {
       user: true,
@@ -39,15 +48,15 @@ export default async function AdminActivityPage() {
     <div>
       <div className="mb-10">
         <p className="text-sm text-green-400">
-          Platform Intelligence
+          {t.platformIntelligence}
         </p>
 
         <h1 className="mt-2 text-4xl font-bold">
-          Platform Activity
+          {t.platformActivity}
         </h1>
 
         <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-400">
-          Cronologia globale delle attività della piattaforma.
+          {t.activityDescription}
         </p>
       </div>
 
@@ -89,7 +98,10 @@ export default async function AdminActivityPage() {
                   )}
 
                   <p className="mt-3 text-xs text-gray-600">
-                    {new Date(activity.createdAt).toLocaleString("it-IT")}
+                    {formatAdminDateTime(
+                      activity.createdAt,
+                      language
+                    )}
                   </p>
                 </div>
 
@@ -98,7 +110,7 @@ export default async function AdminActivityPage() {
                     href={`/accounts/${activity.accountId}`}
                     className="rounded-xl bg-white/10 px-4 py-3 text-sm font-semibold hover:bg-white/20"
                   >
-                    Open Account
+                    {t.openAccount}
                   </Link>
                 )}
               </div>
@@ -106,7 +118,7 @@ export default async function AdminActivityPage() {
           ))
         ) : (
           <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-10 text-center text-gray-400">
-            Nessuna attività registrata.
+            {t.noActivity}
           </div>
         )}
       </div>

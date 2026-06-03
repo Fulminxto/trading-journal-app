@@ -1,0 +1,1576 @@
+
+===== FILE: AdaptiveCoachingCard.tsx =====
+
+type Props = {
+  mode: string;
+  tone: string;
+  message: string;
+};
+
+export default function AdaptiveCoachingCard({
+  mode,
+  tone,
+  message,
+}: Props) {
+  return (
+    <div className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/10 p-8">
+      <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+        Adaptive Coaching
+      </p>
+
+      <h2 className="mt-3 text-3xl font-black text-white">
+        {mode}
+      </h2>
+
+      <p className="mt-5 text-sm leading-relaxed text-gray-300">
+        {message}
+      </p>
+
+      <div className="mt-6 rounded-full border border-white/10 bg-black/20 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-gray-300">
+        Tone: {tone}
+      </div>
+    </div>
+  );
+}
+
+===== FILE: AIReviewEngineCard.tsx =====
+
+type Props = {
+  reviewScore: number;
+  reviewLabel: string;
+  averageExecution: number;
+  averageConfidence: number;
+};
+
+export default function AIReviewEngineCard({
+  reviewScore,
+  reviewLabel,
+  averageExecution,
+  averageConfidence,
+}: Props) {
+  return (
+    <div className="rounded-[36px] border border-violet-500/20 bg-violet-500/10 p-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-[0.2em] text-violet-400">
+            AI Review Engine
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Decision Quality Analysis
+          </h2>
+        </div>
+
+        <div
+          className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${
+            reviewScore >= 85
+              ? "bg-emerald-500/20 text-emerald-300"
+              : reviewScore >= 70
+              ? "bg-cyan-500/20 text-cyan-300"
+              : reviewScore >= 50
+              ? "bg-yellow-500/20 text-yellow-300"
+              : "bg-red-500/20 text-red-300"
+          }`}
+        >
+          {reviewLabel}
+        </div>
+      </div>
+
+      <div className="mt-8 grid gap-4 xl:grid-cols-3">
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Review Score
+          </p>
+
+          <h3 className="mt-3 text-4xl font-black text-white">
+            {reviewScore}%
+          </h3>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Avg Execution
+          </p>
+
+          <h3 className="mt-3 text-4xl font-black text-white">
+            {averageExecution}/10
+          </h3>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Avg Confidence
+          </p>
+
+          <h3 className="mt-3 text-4xl font-black text-white">
+            {averageConfidence}/10
+          </h3>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: AIRiskSupervisorCard.tsx =====
+
+type Props = {
+  supervisorLevel: string;
+  riskSignals: number;
+  behavioralDrift: boolean;
+  executionDecay: boolean;
+  confidenceDecay: boolean;
+};
+
+export default function AIRiskSupervisorCard({
+  supervisorLevel,
+  riskSignals,
+  behavioralDrift,
+  executionDecay,
+  confidenceDecay,
+}: Props) {
+  return (
+    <div className="rounded-[36px] border border-red-500/20 bg-red-500/10 p-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-[0.2em] text-red-400">
+            AI Risk Supervisor
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Operational Risk Overview
+          </h2>
+        </div>
+
+        <div
+          className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${
+            supervisorLevel === "Critical"
+              ? "bg-red-600/20 text-red-300"
+              : supervisorLevel === "High"
+              ? "bg-red-500/20 text-red-300"
+              : supervisorLevel === "Moderate"
+              ? "bg-yellow-500/20 text-yellow-300"
+              : "bg-emerald-500/20 text-emerald-300"
+          }`}
+        >
+          {supervisorLevel}
+        </div>
+      </div>
+
+      <div className="mt-8 grid gap-4 xl:grid-cols-4">
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Risk Signals
+          </p>
+
+          <h3 className="mt-3 text-4xl font-black text-white">
+            {riskSignals}
+          </h3>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Drift
+          </p>
+
+          <h3
+            className={`mt-3 text-2xl font-black ${
+              behavioralDrift
+                ? "text-red-400"
+                : "text-emerald-400"
+            }`}
+          >
+            {behavioralDrift ? "Detected" : "Stable"}
+          </h3>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Execution
+          </p>
+
+          <h3
+            className={`mt-3 text-2xl font-black ${
+              executionDecay
+                ? "text-red-400"
+                : "text-emerald-400"
+            }`}
+          >
+            {executionDecay ? "Declining" : "Stable"}
+          </h3>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Confidence
+          </p>
+
+          <h3
+            className={`mt-3 text-2xl font-black ${
+              confidenceDecay
+                ? "text-red-400"
+                : "text-emerald-400"
+            }`}
+          >
+            {confidenceDecay ? "Declining" : "Stable"}
+          </h3>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: BehavioralDriftCard.tsx =====
+
+type Props = {
+  behavioralDrift: boolean;
+  recentAverageQuality: number;
+  previousAverageQuality: number;
+};
+
+export default function BehavioralDriftCard({
+  behavioralDrift,
+  recentAverageQuality,
+  previousAverageQuality,
+}: Props) {
+  return (
+    <div className="rounded-[36px] border border-red-500/20 bg-red-500/10 p-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-[0.2em] text-red-400">
+            Behavioral Drift Detection
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Quality Decay Monitor
+          </h2>
+        </div>
+
+        <div
+          className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${
+            behavioralDrift
+              ? "bg-red-500/20 text-red-300"
+              : "bg-emerald-500/20 text-emerald-300"
+          }`}
+        >
+          {behavioralDrift ? "Drift Detected" : "Stable"}
+        </div>
+      </div>
+
+      <div className="mt-8 grid gap-4 xl:grid-cols-3">
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Recent Quality
+          </p>
+
+          <h3 className="mt-3 text-4xl font-black text-white">
+            {recentAverageQuality}%
+          </h3>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Previous Quality
+          </p>
+
+          <h3 className="mt-3 text-4xl font-black text-white">
+            {previousAverageQuality}%
+          </h3>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Status
+          </p>
+
+          <h3
+            className={`mt-3 text-3xl font-black ${
+              behavioralDrift
+                ? "text-red-400"
+                : "text-emerald-400"
+            }`}
+          >
+            {behavioralDrift ? "Decay" : "Stable"}
+          </h3>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: ConfidenceStabilityCard.tsx =====
+
+type Props = {
+  confidenceDecay: boolean;
+  recentConfidenceAverage: number;
+  previousConfidenceAverage: number;
+};
+
+export default function ConfidenceStabilityCard({
+  confidenceDecay,
+  recentConfidenceAverage,
+  previousConfidenceAverage,
+}: Props) {
+  return (
+    <div className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/10 p-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+            Confidence Stability
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Confidence Quality Monitor
+          </h2>
+        </div>
+
+        <div
+          className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${
+            confidenceDecay
+              ? "bg-red-500/20 text-red-300"
+              : "bg-emerald-500/20 text-emerald-300"
+          }`}
+        >
+          {confidenceDecay ? "Declining" : "Stable"}
+        </div>
+      </div>
+
+      <div className="mt-8 grid gap-4 xl:grid-cols-3">
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Recent Confidence
+          </p>
+
+          <h3 className="mt-3 text-4xl font-black text-white">
+            {recentConfidenceAverage}/10
+          </h3>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Previous Confidence
+          </p>
+
+          <h3 className="mt-3 text-4xl font-black text-white">
+            {previousConfidenceAverage}/10
+          </h3>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Status
+          </p>
+
+          <h3
+            className={`mt-3 text-3xl font-black ${
+              confidenceDecay
+                ? "text-red-400"
+                : "text-emerald-400"
+            }`}
+          >
+            {confidenceDecay ? "Declining" : "Stable"}
+          </h3>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: ConsistencyEngineCard.tsx =====
+
+type Props = {
+  consistencyScore: number;
+  consistencyLabel: string;
+  disciplineScore: number;
+  behavioralRisk: number;
+};
+
+export default function ConsistencyEngineCard({
+  consistencyScore,
+  consistencyLabel,
+  disciplineScore,
+  behavioralRisk,
+}: Props) {
+  return (
+    <div className="rounded-[36px] border border-emerald-500/20 bg-emerald-500/10 p-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-[0.2em] text-emerald-400">
+            Consistency Engine
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Operational Stability
+          </h2>
+        </div>
+
+        <div
+          className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${
+            consistencyScore >= 80
+              ? "bg-emerald-500/20 text-emerald-300"
+              : consistencyScore >= 65
+              ? "bg-cyan-500/20 text-cyan-300"
+              : consistencyScore >= 45
+              ? "bg-yellow-500/20 text-yellow-300"
+              : "bg-red-500/20 text-red-300"
+          }`}
+        >
+          {consistencyLabel}
+        </div>
+      </div>
+
+      <div className="mt-8 grid gap-4 xl:grid-cols-3">
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Consistency Score
+          </p>
+
+          <h3 className="mt-3 text-4xl font-black text-white">
+            {consistencyScore}%
+          </h3>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Discipline
+          </p>
+
+          <h3 className="mt-3 text-4xl font-black text-white">
+            {disciplineScore}%
+          </h3>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Behavioral Risk
+          </p>
+
+          <h3 className="mt-3 text-4xl font-black text-white">
+            {behavioralRisk}%
+          </h3>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: CopilotConversationCard.tsx =====
+
+import { sendCopilotMessage } from "@/app/accounts/[accountId]/copilot/actions";
+
+type Message = {
+  id: string;
+  role: string;
+  content: string;
+};
+
+type Props = {
+  copilotMessages: Message[];
+  accountId: string;
+};
+
+export default function CopilotConversationCard({
+  copilotMessages,
+  accountId,
+}: Props) {
+  return (
+    <div className="rounded-[36px] border border-white/10 bg-black/30 p-8 backdrop-blur-xl">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+            AI Conversation
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            VOLTIS Assistant
+          </h2>
+        </div>
+
+        <div className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-emerald-400">
+          Online
+        </div>
+      </div>
+
+      <div className="mt-8 space-y-6">
+        {copilotMessages.length === 0 ? (
+          <div className="max-w-2xl rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
+            <p className="text-sm leading-relaxed text-gray-300">
+              Ciao, sono VOLTIS Copilot. Scrivimi una domanda sul tuo account, sulla tua performance o sui tuoi pattern operativi.
+            </p>
+          </div>
+        ) : (
+          copilotMessages.map((message) => (
+            <div
+              key={message.id}
+              className={`max-w-2xl rounded-[28px] border p-5 ${
+                message.role === "user"
+                  ? "ml-auto border-cyan-500/20 bg-cyan-500/10"
+                  : "border-white/10 bg-white/[0.04]"
+              }`}
+            >
+              <p
+                className={`text-sm leading-relaxed ${
+                  message.role === "user"
+                    ? "text-cyan-100"
+                    : "text-gray-300"
+                }`}
+              >
+                {message.content}
+              </p>
+            </div>
+          ))
+        )}
+      </div>
+
+      <form
+        action={sendCopilotMessage}
+        className="mt-8 flex items-center gap-4"
+      >
+        <input
+          type="hidden"
+          name="tradingAccountId"
+          value={accountId}
+        />
+
+        <input
+          type="text"
+          name="content"
+          placeholder="Ask VOLTIS Copilot..."
+          className="h-14 flex-1 rounded-2xl border border-white/10 bg-white/[0.04] px-5 text-sm text-white outline-none placeholder:text-gray-500"
+        />
+
+        <button className="h-14 rounded-2xl bg-cyan-500 px-6 text-sm font-black uppercase tracking-[0.15em] text-black transition hover:bg-cyan-400">
+          Send
+        </button>
+      </form>
+    </div>
+  );
+}
+
+===== FILE: CopilotHero.tsx =====
+
+export default function CopilotHero() {
+  return (
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#070b14] via-[#0f1726] to-black p-8">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.14),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.25em] text-cyan-400">
+          VOLTIS Copilot
+        </p>
+
+        <h1 className="mt-4 text-5xl font-black tracking-tight text-white xl:text-7xl">
+          AI Trading Copilot
+        </h1>
+
+        <p className="mt-6 max-w-3xl text-base leading-relaxed text-gray-400 xl:text-lg">
+          Assistant intelligente per analizzare performance,
+          comportamento, execution, psicologia operativa e pattern
+          ricorrenti.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: CriticalAlertCard.tsx =====
+
+type Props = {
+  criticalPatterns: {
+    id: string;
+    title: string;
+    description: string;
+  }[];
+};
+
+export default function CriticalAlertCard({
+  criticalPatterns,
+}: Props) {
+  if (criticalPatterns.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="rounded-[32px] border border-red-500/30 bg-red-500/10 p-6">
+      <div className="flex items-start justify-between gap-6">
+        <div>
+          <p className="text-sm uppercase tracking-[0.2em] text-red-300">
+            Critical Alert
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Behavioral Risk Escalation
+          </h2>
+
+          <p className="mt-4 max-w-3xl text-sm leading-relaxed text-red-100">
+            VOLTIS AI ha rilevato pattern comportamentali ad
+            alto rischio che potrebbero compromettere la
+            stabilità operativa.
+          </p>
+        </div>
+
+        <div className="rounded-full border border-red-400/20 bg-red-500/10 px-4 py-2 text-sm font-bold text-red-300">
+          {criticalPatterns.length} High Risk
+        </div>
+      </div>
+
+      <div className="mt-8 grid gap-4">
+        {criticalPatterns.map((pattern) => (
+          <div
+            key={pattern.id}
+            className="rounded-[24px] border border-white/10 bg-black/20 p-5"
+          >
+            <h3 className="text-lg font-black text-white">
+              {pattern.title}
+            </h3>
+
+            <p className="mt-2 text-sm leading-relaxed text-gray-300">
+              {pattern.description}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+===== FILE: DailyIntelligenceFeed.tsx =====
+
+type Props = {
+  intelligenceFeed: string[];
+};
+
+export default function DailyIntelligenceFeed({
+  intelligenceFeed,
+}: Props) {
+  return (
+    <div className="rounded-[36px] border border-white/10 bg-black/30 p-8 backdrop-blur-xl">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+            Daily Intelligence Feed
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Operational Highlights
+          </h2>
+        </div>
+
+        <div className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-cyan-300">
+          {intelligenceFeed.length} Insights
+        </div>
+      </div>
+
+      <div className="mt-8 space-y-4">
+        {intelligenceFeed.length === 0 ? (
+          <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
+            <p className="text-sm leading-relaxed text-gray-400">
+              Nessun insight operativo disponibile al momento.
+            </p>
+          </div>
+        ) : (
+          intelligenceFeed.map((item) => (
+            <div
+              key={item}
+              className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5"
+            >
+              <p className="text-sm leading-relaxed text-gray-300">
+                {item}
+              </p>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
+===== FILE: ElevatedRiskCard.tsx =====
+
+type Props = {
+  highPatternsCount: number;
+  show: boolean;
+};
+
+export default function ElevatedRiskCard({
+  highPatternsCount,
+  show,
+}: Props) {
+  if (!show) {
+    return null;
+  }
+
+  return (
+    <div className="rounded-[32px] border border-yellow-500/30 bg-yellow-500/10 p-6">
+      <div className="flex items-start justify-between gap-6">
+        <div>
+          <p className="text-sm uppercase tracking-[0.2em] text-yellow-300">
+            Elevated Risk
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Behavioral Warning
+          </h2>
+
+          <p className="mt-4 max-w-3xl text-sm leading-relaxed text-yellow-100">
+            VOLTIS rileva pattern ad alto rischio che potrebbero ridurre qualità decisionale, disciplina ed execution.
+          </p>
+        </div>
+
+        <div className="rounded-full border border-yellow-400/20 bg-yellow-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.15em] text-yellow-300">
+          {highPatternsCount} High Risk
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: EmotionalStabilityCard.tsx =====
+
+type Props = {
+  emotionalLabel: string;
+  emotionalInstabilityScore: number;
+  emotionalVolatility: boolean;
+  emotionalTradesCount: number;
+};
+
+export default function EmotionalStabilityCard({
+  emotionalLabel,
+  emotionalInstabilityScore,
+  emotionalVolatility,
+  emotionalTradesCount,
+}: Props) {
+  return (
+    <div className="rounded-[36px] border border-pink-500/20 bg-pink-500/10 p-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-[0.2em] text-pink-400">
+            Emotional Stability
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Emotional Volatility Monitor
+          </h2>
+        </div>
+
+        <div
+          className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${
+            emotionalLabel === "Critical"
+              ? "bg-red-600/20 text-red-300"
+              : emotionalLabel === "High"
+              ? "bg-red-500/20 text-red-300"
+              : emotionalLabel === "Moderate"
+              ? "bg-yellow-500/20 text-yellow-300"
+              : "bg-emerald-500/20 text-emerald-300"
+          }`}
+        >
+          {emotionalLabel}
+        </div>
+      </div>
+
+      <div className="mt-8 grid gap-4 xl:grid-cols-3">
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Emotional Instability
+          </p>
+
+          <h3 className="mt-3 text-4xl font-black text-white">
+            {emotionalInstabilityScore}%
+          </h3>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Emotional Trades
+          </p>
+
+          <h3 className="mt-3 text-4xl font-black text-white">
+            {emotionalTradesCount}
+          </h3>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Status
+          </p>
+
+          <h3
+            className={`mt-3 text-3xl font-black ${
+              emotionalVolatility
+                ? "text-red-400"
+                : "text-emerald-400"
+            }`}
+          >
+            {emotionalVolatility
+              ? "Volatile"
+              : "Stable"}
+          </h3>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: ExecutionStabilityCard.tsx =====
+
+type Props = {
+  executionDecay: boolean;
+  recentExecutionAverage: number;
+  previousExecutionAverage: number;
+};
+
+export default function ExecutionStabilityCard({
+  executionDecay,
+  recentExecutionAverage,
+  previousExecutionAverage,
+}: Props) {
+  return (
+    <div className="rounded-[36px] border border-orange-500/20 bg-orange-500/10 p-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-[0.2em] text-orange-400">
+            Execution Stability
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Execution Quality Monitor
+          </h2>
+        </div>
+
+        <div
+          className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${
+            executionDecay
+              ? "bg-red-500/20 text-red-300"
+              : "bg-emerald-500/20 text-emerald-300"
+          }`}
+        >
+          {executionDecay ? "Decay" : "Stable"}
+        </div>
+      </div>
+
+      <div className="mt-8 grid gap-4 xl:grid-cols-3">
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Recent Execution
+          </p>
+
+          <h3 className="mt-3 text-4xl font-black text-white">
+            {recentExecutionAverage}/10
+          </h3>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Previous Execution
+          </p>
+
+          <h3 className="mt-3 text-4xl font-black text-white">
+            {previousExecutionAverage}/10
+          </h3>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Status
+          </p>
+
+          <h3
+            className={`mt-3 text-3xl font-black ${
+              executionDecay
+                ? "text-red-400"
+                : "text-emerald-400"
+            }`}
+          >
+            {executionDecay ? "Declining" : "Stable"}
+          </h3>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: MandatoryReviewCard.tsx =====
+
+type Props = {
+  sessionLocked: boolean;
+  reviewRequired: boolean;
+};
+
+export default function MandatoryReviewCard({
+  sessionLocked,
+  reviewRequired,
+}: Props) {
+  if (!sessionLocked && !reviewRequired) {
+    return null;
+  }
+
+  return (
+    <div className="rounded-[36px] border border-yellow-500/20 bg-yellow-500/10 p-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-[0.2em] text-yellow-300">
+            Mandatory Review
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Recovery Protocol Required
+          </h2>
+        </div>
+
+        <div className="rounded-full bg-yellow-500/20 px-4 py-2 text-xs font-black uppercase tracking-[0.15em] text-yellow-300">
+          Required
+        </div>
+      </div>
+
+      <p className="mt-6 max-w-4xl text-sm leading-relaxed text-gray-300">
+        VOLTIS consiglia una review mentale e operativa prima di continuare.
+        L’obiettivo è ridurre impulsività, ripristinare lucidità e proteggere
+        qualità decisionale.
+      </p>
+
+      <div className="mt-8 grid gap-4 xl:grid-cols-3">
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Step 1
+          </p>
+          <h3 className="mt-3 text-xl font-black text-white">
+            Stop operativo
+          </h3>
+          <p className="mt-3 text-sm text-gray-400">
+            Prenditi una pausa prima di valutare nuove operazioni.
+          </p>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Step 2
+          </p>
+          <h3 className="mt-3 text-xl font-black text-white">
+            Review mentale
+          </h3>
+          <p className="mt-3 text-sm text-gray-400">
+            Identifica stato emotivo, trigger e qualità della decisione.
+          </p>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Step 3
+          </p>
+          <h3 className="mt-3 text-xl font-black text-white">
+            Reset execution
+          </h3>
+          <p className="mt-3 text-sm text-gray-400">
+            Torna solo su setup chiari, pianificati e ad alta qualità.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: PatternMemoryCard.tsx =====
+
+type Pattern = {
+  id: string;
+  type: string;
+  title: string;
+  description: string;
+  severity: string;
+  occurrences: number;
+};
+
+type Props = {
+  copilotPatterns: Pattern[];
+};
+
+export default function PatternMemoryCard({
+  copilotPatterns,
+}: Props) {
+  return (
+    <div className="rounded-[36px] border border-white/10 bg-black/30 p-8 backdrop-blur-xl">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-[0.2em] text-amber-400">
+            Pattern Memory
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Behavioral Intelligence
+          </h2>
+        </div>
+
+        <div className="rounded-full border border-amber-500/20 bg-amber-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-amber-300">
+          {copilotPatterns.length} Patterns
+        </div>
+      </div>
+
+      <div className="mt-8 space-y-4">
+        {copilotPatterns.length === 0 ? (
+          <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
+            <p className="text-sm leading-relaxed text-gray-400">
+              Nessun pattern comportamentale rilevato al momento.
+            </p>
+          </div>
+        ) : (
+          copilotPatterns.map((pattern) => (
+            <div
+              key={pattern.id}
+              className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-sm uppercase tracking-[0.15em] text-amber-400">
+                    {pattern.type}
+                  </p>
+
+                  <h3 className="mt-2 text-xl font-black text-white">
+                    {pattern.title}
+                  </h3>
+
+                  <p className="mt-3 text-sm leading-relaxed text-gray-400">
+                    {pattern.description}
+                  </p>
+                </div>
+
+                <div
+                  className={`rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] ${
+                    pattern.severity === "critical"
+                      ? "bg-red-600/20 text-red-300"
+                      : pattern.severity === "high"
+                      ? "bg-red-500/10 text-red-400"
+                      : pattern.severity === "medium"
+                      ? "bg-yellow-500/10 text-yellow-300"
+                      : "bg-emerald-500/10 text-emerald-400"
+                  }`}
+                >
+                  {pattern.severity}
+                </div>
+              </div>
+
+              <div className="mt-5 flex items-center justify-between text-xs text-gray-500">
+                <span>Occurrences: {pattern.occurrences}</span>
+                <span>Updated recently</span>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
+===== FILE: PerformanceTimelineCard.tsx =====
+
+type TimelineItem = {
+  id: string | number;
+  index: number;
+  symbol: string;
+  outcome: string | null;
+  qualityScore: number;
+};
+
+type Props = {
+  performanceTimeline: TimelineItem[];
+};
+
+export default function PerformanceTimelineCard({
+  performanceTimeline,
+}: Props) {
+  return (
+    <div className="rounded-[36px] border border-violet-500/20 bg-violet-500/10 p-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-[0.2em] text-violet-400">
+            AI Performance Timeline
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Trader Evolution Tracking
+          </h2>
+        </div>
+
+        <div className="rounded-full border border-violet-500/20 bg-violet-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-violet-300">
+          {performanceTimeline.length} Trades
+        </div>
+      </div>
+
+      <div className="mt-8 space-y-4">
+        {performanceTimeline.length === 0 ? (
+          <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
+            <p className="text-sm text-gray-400">
+              Nessun dato disponibile per costruire la timeline AI.
+            </p>
+          </div>
+        ) : (
+          performanceTimeline.slice(-8).map((item) => (
+            <div
+              key={item.id}
+              className="rounded-[28px] border border-white/10 bg-black/20 p-5"
+            >
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+                    Trade #{item.index}
+                  </p>
+
+                  <h3 className="mt-2 text-xl font-black text-white">
+                    {item.symbol}
+                  </h3>
+                </div>
+
+                <div className="text-right">
+                  <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+                    Quality Score
+                  </p>
+
+                  <h3
+                    className={`mt-2 text-2xl font-black ${
+                      item.qualityScore >= 80
+                        ? "text-emerald-400"
+                        : item.qualityScore >= 60
+                        ? "text-cyan-400"
+                        : item.qualityScore >= 40
+                        ? "text-yellow-300"
+                        : "text-red-400"
+                    }`}
+                  >
+                    {item.qualityScore}%
+                  </h3>
+                </div>
+              </div>
+
+              <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/10">
+                <div
+                  className="h-full rounded-full bg-violet-400"
+                  style={{
+                    width: `${item.qualityScore}%`,
+                  }}
+                />
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
+===== FILE: RecoveryChecklistCard.tsx =====
+
+type Props = {
+  reviewRequired: boolean;
+};
+
+export default function RecoveryChecklistCard({
+  reviewRequired,
+}: Props) {
+  if (!reviewRequired) {
+    return null;
+  }
+
+  const checklist = [
+    "Ho interrotto l’operatività per almeno qualche minuto.",
+    "Ho identificato se sto operando per paura, fretta o recupero.",
+    "Ho controllato se il prossimo trade rispetta il piano.",
+    "Ho accettato che non devo recuperare subito una perdita.",
+  ];
+
+  return (
+    <div className="rounded-[36px] border border-white/10 bg-black/30 p-8 backdrop-blur-xl">
+      <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+        Recovery Checklist
+      </p>
+
+      <h2 className="mt-3 text-3xl font-black text-white">
+        Pre-Execution Reset
+      </h2>
+
+      <div className="mt-8 space-y-4">
+        {checklist.map((item, index) => (
+          <div
+            key={item}
+            className="flex items-start gap-4 rounded-[24px] border border-white/10 bg-white/[0.04] p-5"
+          >
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cyan-500/20 text-sm font-black text-cyan-300">
+              {index + 1}
+            </div>
+
+            <p className="text-sm leading-relaxed text-gray-300">
+              {item}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+===== FILE: RecoveryIntelligenceCard.tsx =====
+
+type Props = {
+  recoveryScore: number;
+  recoveryLabel: string;
+  recentWins: number;
+  recentLosses: number;
+};
+
+export default function RecoveryIntelligenceCard({
+  recoveryScore,
+  recoveryLabel,
+  recentWins,
+  recentLosses,
+}: Props) {
+  return (
+    <div className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/10 p-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+            AI Recovery Intelligence
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Drawdown Recovery Analysis
+          </h2>
+        </div>
+
+        <div
+          className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${
+            recoveryScore >= 80
+              ? "bg-emerald-500/20 text-emerald-300"
+              : recoveryScore >= 60
+              ? "bg-cyan-500/20 text-cyan-300"
+              : recoveryScore > 0
+              ? "bg-yellow-500/20 text-yellow-300"
+              : "bg-red-500/20 text-red-300"
+          }`}
+        >
+          {recoveryLabel}
+        </div>
+      </div>
+
+      <div className="mt-8 grid gap-4 xl:grid-cols-3">
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Recovery Score
+          </p>
+
+          <h3 className="mt-3 text-4xl font-black text-white">
+            {recoveryScore}%
+          </h3>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Recent Wins
+          </p>
+
+          <h3 className="mt-3 text-4xl font-black text-white">
+            {recentWins}
+          </h3>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Recent Losses
+          </p>
+
+          <h3 className="mt-3 text-4xl font-black text-white">
+            {recentLosses}
+          </h3>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: RecoveryStatusCard.tsx =====
+
+type Props = {
+  sessionLocked: boolean;
+  reviewRequired: boolean;
+};
+
+export default function RecoveryStatusCard({
+  sessionLocked,
+  reviewRequired,
+}: Props) {
+  const status = sessionLocked
+    ? "Locked"
+    : reviewRequired
+    ? "Review Required"
+    : "Cleared";
+
+  return (
+    <div className="rounded-[36px] border border-emerald-500/20 bg-emerald-500/10 p-8">
+      <p className="text-sm uppercase tracking-[0.2em] text-emerald-400">
+        Recovery Status
+      </p>
+
+      <h2 className="mt-3 text-3xl font-black text-white">
+        {status}
+      </h2>
+
+      <p className="mt-5 text-sm leading-relaxed text-gray-300">
+        {sessionLocked
+          ? "La sessione richiede protezione massima prima di continuare."
+          : reviewRequired
+          ? "Completa il reset operativo prima di riprendere."
+          : "La sessione è stabile e non richiede recovery immediata."}
+      </p>
+    </div>
+  );
+}
+
+===== FILE: RiskEscalationCard.tsx =====
+
+type Props = {
+  escalationLevel: string;
+  protectionRequired: boolean;
+  cooldownRecommended: boolean;
+  message: string;
+};
+
+export default function RiskEscalationCard({
+  escalationLevel,
+  protectionRequired,
+  cooldownRecommended,
+  message,
+}: Props) {
+  return (
+    <div className="rounded-[36px] border border-red-500/20 bg-red-500/10 p-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-[0.2em] text-red-400">
+            Risk Escalation
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Protection Protocol
+          </h2>
+        </div>
+
+        <div
+          className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${
+            escalationLevel === "Protection"
+              ? "bg-red-600/20 text-red-300"
+              : escalationLevel === "Cooldown"
+              ? "bg-yellow-500/20 text-yellow-300"
+              : escalationLevel === "Monitor"
+              ? "bg-cyan-500/20 text-cyan-300"
+              : "bg-emerald-500/20 text-emerald-300"
+          }`}
+        >
+          {escalationLevel}
+        </div>
+      </div>
+
+      <p className="mt-6 max-w-4xl text-sm leading-relaxed text-gray-300">
+        {message}
+      </p>
+
+      <div className="mt-8 grid gap-4 xl:grid-cols-2">
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Protection Required
+          </p>
+
+          <h3 className="mt-3 text-3xl font-black text-white">
+            {protectionRequired ? "Yes" : "No"}
+          </h3>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Cooldown Recommended
+          </p>
+
+          <h3 className="mt-3 text-3xl font-black text-white">
+            {cooldownRecommended ? "Yes" : "No"}
+          </h3>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: SessionLockCard.tsx =====
+
+type Props = {
+  sessionLocked: boolean;
+  reviewRequired: boolean;
+  lockReason: string;
+};
+
+export default function SessionLockCard({
+  sessionLocked,
+  reviewRequired,
+  lockReason,
+}: Props) {
+  return (
+    <div className="rounded-[36px] border border-red-500/20 bg-red-500/10 p-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-[0.2em] text-red-400">
+            Session Lock System
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Trading Protection Gate
+          </h2>
+        </div>
+
+        <div
+          className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${
+            sessionLocked
+              ? "bg-red-600/20 text-red-300"
+              : reviewRequired
+              ? "bg-yellow-500/20 text-yellow-300"
+              : "bg-emerald-500/20 text-emerald-300"
+          }`}
+        >
+          {sessionLocked
+            ? "Locked"
+            : reviewRequired
+            ? "Review"
+            : "Open"}
+        </div>
+      </div>
+
+      <p className="mt-6 max-w-4xl text-sm leading-relaxed text-gray-300">
+        {lockReason}
+      </p>
+
+      <div className="mt-8 grid gap-4 xl:grid-cols-2">
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Session Locked
+          </p>
+
+          <h3 className="mt-3 text-3xl font-black text-white">
+            {sessionLocked ? "Yes" : "No"}
+          </h3>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+          <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+            Review Required
+          </p>
+
+          <h3 className="mt-3 text-3xl font-black text-white">
+            {reviewRequired ? "Yes" : "No"}
+          </h3>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: TradeReviewCard.tsx =====
+
+type LatestTrade = {
+  symbol: string;
+  outcome: string | null;
+  executionRating: number | null;
+  confidence: number | null;
+  emotionalState: string | null;
+};
+
+type Props = {
+  latestTrade: LatestTrade | undefined;
+  latestTradeReview: string;
+};
+
+export default function TradeReviewCard({
+  latestTrade,
+  latestTradeReview,
+}: Props) {
+  return (
+    <div className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/10 p-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+            Trade-by-Trade Review
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Latest Trade Intelligence
+          </h2>
+        </div>
+
+        <div className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.15em] text-cyan-300">
+          AI Review
+        </div>
+      </div>
+
+      <div className="mt-8 rounded-[28px] border border-white/10 bg-black/20 p-6">
+        {latestTrade ? (
+          <>
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+                  Latest Trade
+                </p>
+
+                <h3 className="mt-2 text-2xl font-black text-white">
+                  {latestTrade.symbol}
+                </h3>
+              </div>
+
+              <div
+                className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${
+                  latestTrade.outcome === "win"
+                    ? "bg-emerald-500/20 text-emerald-300"
+                    : latestTrade.outcome === "loss"
+                    ? "bg-red-500/20 text-red-300"
+                    : "bg-yellow-500/20 text-yellow-300"
+                }`}
+              >
+                {latestTrade.outcome}
+              </div>
+            </div>
+
+            <p className="mt-6 text-sm leading-relaxed text-gray-300">
+              {latestTradeReview}
+            </p>
+
+            <div className="mt-6 grid gap-4 xl:grid-cols-3">
+              <div className="rounded-[24px] border border-white/10 bg-black/20 p-4">
+                <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+                  Execution
+                </p>
+
+                <h3 className="mt-2 text-3xl font-black text-white">
+                  {latestTrade.executionRating || 0}/10
+                </h3>
+              </div>
+
+              <div className="rounded-[24px] border border-white/10 bg-black/20 p-4">
+                <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+                  Confidence
+                </p>
+
+                <h3 className="mt-2 text-3xl font-black text-white">
+                  {latestTrade.confidence || 0}/10
+                </h3>
+              </div>
+
+              <div className="rounded-[24px] border border-white/10 bg-black/20 p-4">
+                <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+                  Emotional State
+                </p>
+
+                <h3 className="mt-2 text-lg font-black text-white">
+                  {latestTrade.emotionalState || "Stable"}
+                </h3>
+              </div>
+            </div>
+          </>
+        ) : (
+          <p className="text-sm text-gray-400">
+            Nessun trade disponibile per la review AI.
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}

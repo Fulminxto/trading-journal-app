@@ -1,4 +1,11 @@
-type Props = {
+import {
+  formatReportCurrency,
+  formatReportDate,
+  getReportLabels,
+  type ReportI18nProps,
+} from "@/components/reports/ReportI18n";
+
+type Props = ReportI18nProps & {
   totalTrades: number;
   totalPnl: number;
   winRate: number;
@@ -8,16 +15,14 @@ export default function PDFReportHeader({
   totalTrades,
   totalPnl,
   winRate,
+  appLanguage,
+  currency,
 }: Props) {
-  const currentDate =
-    new Date().toLocaleDateString(
-      "it-IT",
-      {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      }
-    );
+  const t = getReportLabels(appLanguage);
+  const currentDate = formatReportDate(
+    new Date(),
+    appLanguage
+  );
 
   return (
     <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#050b10] via-[#0f1726] to-black p-10">
@@ -26,22 +31,22 @@ export default function PDFReportHeader({
       <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
         <div>
           <p className="text-sm uppercase tracking-[0.35em] text-cyan-400">
-            VOLTIS Intelligence Report
+            {t.voltisIntelligenceReport}
           </p>
 
           <h1 className="mt-4 text-6xl font-black tracking-tight text-white">
-            Trading Performance Report
+            {t.tradingPerformanceReport}
           </h1>
 
           <p className="mt-4 text-base text-gray-400">
-            Generated on {currentDate}
+            {t.generatedOn} {currentDate}
           </p>
         </div>
 
         <div className="grid grid-cols-3 gap-4">
           <div className="rounded-3xl border border-white/10 bg-black/20 p-5 text-center">
             <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-              Trades
+              {t.trades}
             </p>
 
             <h3 className="mt-3 text-4xl font-black text-cyan-400">
@@ -51,23 +56,26 @@ export default function PDFReportHeader({
 
           <div className="rounded-3xl border border-white/10 bg-black/20 p-5 text-center">
             <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-              PnL
+              {t.pnl}
             </p>
 
             <h3
-              className={`mt-3 text-4xl font-black ${
-                totalPnl >= 0
+              className={`mt-3 text-4xl font-black ${totalPnl >= 0
                   ? "text-green-400"
                   : "text-red-400"
-              }`}
+                }`}
             >
-              ${totalPnl.toFixed(0)}
+              {formatReportCurrency(
+                totalPnl,
+                currency,
+                appLanguage
+              )}
             </h3>
           </div>
 
           <div className="rounded-3xl border border-white/10 bg-black/20 p-5 text-center">
             <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
-              Win Rate
+              {t.winRate}
             </p>
 
             <h3 className="mt-3 text-4xl font-black text-violet-400">

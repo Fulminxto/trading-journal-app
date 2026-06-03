@@ -16,6 +16,12 @@ import {
   deleteAccount,
 } from "@/app/accounts/actions";
 
+import {
+  formatAdminMoney,
+  getAdminI18n,
+  valueLabel,
+} from "../AdminI18n";
+
 export default async function AdminAccountsPage() {
   const session = await auth();
 
@@ -32,6 +38,10 @@ export default async function AdminAccountsPage() {
   if (!currentUser || currentUser.role !== "FOUNDER") {
     redirect("/accounts");
   }
+
+  const { language, t } = getAdminI18n(
+    currentUser.appLanguage
+  );
 
   const accounts = await prisma.tradingAccount.findMany({
     include: {
@@ -67,16 +77,16 @@ export default async function AdminAccountsPage() {
       0
     );
 
-    const isArchived = account.status === "ARCHIVED";
+    const isArchived =
+      account.status === "ARCHIVED";
 
     return (
       <div
         key={account.id}
-        className={`rounded-3xl border p-6 ${
-          isArchived
+        className={`rounded-3xl border p-6 ${isArchived
             ? "border-yellow-500/20 bg-yellow-500/[0.04]"
             : "border-white/10 bg-white/[0.03]"
-        }`}
+          }`}
       >
         <div className="mb-6 flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
           <div>
@@ -86,27 +96,30 @@ export default async function AdminAccountsPage() {
               </h2>
 
               <span
-                className={`rounded-xl px-3 py-1 text-xs font-bold ${
-                  isArchived
+                className={`rounded-xl px-3 py-1 text-xs font-bold ${isArchived
                     ? "bg-yellow-500/10 text-yellow-300"
                     : "bg-green-500/10 text-green-400"
-                }`}
+                  }`}
               >
-                {account.status}
+                {valueLabel(
+                  t,
+                  "accountStatus",
+                  account.status
+                )}
               </span>
             </div>
 
             <p className="mt-2 text-sm text-gray-400">
-              {account.type} · Created by{" "}
+              {account.type} · {t.createdBy}{" "}
               <span className="text-gray-200">
-                {account.createdBy?.username || "System"}
+                {account.createdBy?.username || t.system}
               </span>
             </p>
 
             <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-5">
               <div className="rounded-xl border border-white/10 bg-black/20 p-4">
                 <p className="text-xs text-gray-500">
-                  Broker
+                  {t.broker}
                 </p>
 
                 <h3 className="mt-2 font-bold">
@@ -116,7 +129,7 @@ export default async function AdminAccountsPage() {
 
               <div className="rounded-xl border border-white/10 bg-black/20 p-4">
                 <p className="text-xs text-gray-500">
-                  Phase
+                  {t.phase}
                 </p>
 
                 <h3 className="mt-2 font-bold">
@@ -126,7 +139,7 @@ export default async function AdminAccountsPage() {
 
               <div className="rounded-xl border border-white/10 bg-black/20 p-4">
                 <p className="text-xs text-gray-500">
-                  Profit Target
+                  {t.profitTarget}
                 </p>
 
                 <h3 className="mt-2 font-bold text-green-400">
@@ -138,7 +151,7 @@ export default async function AdminAccountsPage() {
 
               <div className="rounded-xl border border-white/10 bg-black/20 p-4">
                 <p className="text-xs text-gray-500">
-                  Max DD
+                  {t.maxDd}
                 </p>
 
                 <h3 className="mt-2 font-bold text-red-400">
@@ -150,7 +163,7 @@ export default async function AdminAccountsPage() {
 
               <div className="rounded-xl border border-white/10 bg-black/20 p-4">
                 <p className="text-xs text-gray-500">
-                  Daily DD
+                  {t.dailyDd}
                 </p>
 
                 <h3 className="mt-2 font-bold text-red-400">
@@ -168,24 +181,28 @@ export default async function AdminAccountsPage() {
             </div>
 
             <div className="rounded-2xl bg-white/10 px-4 py-2 text-sm">
-              Trades: {account.trades.length}
+              {t.trades}: {account.trades.length}
             </div>
 
             <div
-              className={`rounded-2xl px-4 py-2 text-sm font-semibold ${
-                totalPnl >= 0
+              className={`rounded-2xl px-4 py-2 text-sm font-semibold ${totalPnl >= 0
                   ? "bg-green-500/10 text-green-400"
                   : "bg-red-500/10 text-red-400"
-              }`}
+                }`}
             >
-              PnL: {totalPnl.toFixed(2)}
+              {t.pnl}:{" "}
+              {formatAdminMoney(
+                totalPnl,
+                account.currency,
+                language
+              )}
             </div>
           </div>
         </div>
 
         <div className="mb-8 rounded-2xl border border-white/10 bg-black/20 p-4">
           <p className="mb-3 text-sm font-semibold text-gray-300">
-            Account Actions
+            {t.accountActions}
           </p>
 
           <div className="flex flex-wrap gap-3">
@@ -193,7 +210,7 @@ export default async function AdminAccountsPage() {
               href={`/accounts/${account.id}`}
               className="rounded-xl bg-green-500 px-4 py-3 text-sm font-bold text-black hover:bg-green-400"
             >
-              Open Account
+              {t.openAccount}
             </a>
 
             {!isArchived ? (
@@ -214,7 +231,7 @@ export default async function AdminAccountsPage() {
                   type="submit"
                   className="rounded-xl bg-yellow-500/10 px-4 py-3 text-sm font-bold text-yellow-400 hover:bg-yellow-500/20"
                 >
-                  Archive
+                  {t.archive}
                 </button>
               </form>
             ) : (
@@ -235,7 +252,7 @@ export default async function AdminAccountsPage() {
                   type="submit"
                   className="rounded-xl bg-blue-500/10 px-4 py-3 text-sm font-bold text-blue-400 hover:bg-blue-500/20"
                 >
-                  Restore
+                  {t.restore}
                 </button>
               </form>
             )}
@@ -254,14 +271,14 @@ export default async function AdminAccountsPage() {
 
           <input
             name="username"
-            placeholder="Username utente"
+            placeholder={t.userUsernamePlaceholder}
             className="rounded-2xl bg-zinc-900 p-4"
             required
           />
 
           <select
             name="role"
-            aria-label="Member role"
+            aria-label={t.memberRole}
             className="rounded-2xl bg-zinc-900 p-4"
             defaultValue="MEMBER"
           >
@@ -274,7 +291,7 @@ export default async function AdminAccountsPage() {
             type="submit"
             className="rounded-2xl bg-white/10 p-4 font-semibold hover:bg-white/20"
           >
-            Aggiungi membro
+            {t.addMember}
           </button>
         </form>
 
@@ -317,7 +334,7 @@ export default async function AdminAccountsPage() {
 
                     <select
                       name="role"
-                      aria-label="Update member role"
+                      aria-label={t.updateMemberRole}
                       defaultValue={member.role}
                       className="rounded-xl bg-zinc-900 p-3 text-sm"
                     >
@@ -330,13 +347,13 @@ export default async function AdminAccountsPage() {
                       type="submit"
                       className="rounded-xl bg-green-500/10 px-3 py-2 text-sm font-semibold text-green-400 hover:bg-green-500/20"
                     >
-                      Update Role
+                      {t.updateRole}
                     </button>
                   </form>
 
                   {isAccountManager ? (
                     <div className="rounded-xl border border-green-500/20 bg-green-500/10 p-3 text-sm text-green-300">
-                      Full account access. Managers do not need custom permissions.
+                      {t.fullAccountAccess}
                     </div>
                   ) : (
                     <form
@@ -356,7 +373,7 @@ export default async function AdminAccountsPage() {
                             name="canCreateTrades"
                             defaultChecked={member.canCreateTrades}
                           />
-                          Create Trades
+                          {t.createTrades}
                         </label>
 
                         <label className="flex items-center gap-2">
@@ -365,7 +382,7 @@ export default async function AdminAccountsPage() {
                             name="canEditTrades"
                             defaultChecked={member.canEditTrades}
                           />
-                          Edit Trades
+                          {t.editTrades}
                         </label>
 
                         <label className="flex items-center gap-2">
@@ -374,7 +391,7 @@ export default async function AdminAccountsPage() {
                             name="canDeleteTrades"
                             defaultChecked={member.canDeleteTrades}
                           />
-                          Delete Trades
+                          {t.deleteTrades}
                         </label>
 
                         <label className="flex items-center gap-2">
@@ -383,7 +400,7 @@ export default async function AdminAccountsPage() {
                             name="canViewAnalytics"
                             defaultChecked={member.canViewAnalytics}
                           />
-                          Analytics
+                          {t.analytics}
                         </label>
 
                         <label className="flex items-center gap-2">
@@ -392,7 +409,7 @@ export default async function AdminAccountsPage() {
                             name="canViewReports"
                             defaultChecked={member.canViewReports}
                           />
-                          Reports
+                          {t.reports}
                         </label>
 
                         <label className="flex items-center gap-2">
@@ -401,7 +418,7 @@ export default async function AdminAccountsPage() {
                             name="canViewCopilot"
                             defaultChecked={member.canViewCopilot}
                           />
-                          Copilot
+                          {t.copilot}
                         </label>
 
                         <label className="flex items-center gap-2">
@@ -410,7 +427,7 @@ export default async function AdminAccountsPage() {
                             name="canViewMembers"
                             defaultChecked={member.canViewMembers}
                           />
-                          Members
+                          {t.members}
                         </label>
 
                         <label className="flex items-center gap-2">
@@ -419,7 +436,7 @@ export default async function AdminAccountsPage() {
                             name="canManageMembers"
                             defaultChecked={member.canManageMembers}
                           />
-                          Manage Members
+                          {t.manageMembers}
                         </label>
 
                         <label className="flex items-center gap-2">
@@ -428,7 +445,7 @@ export default async function AdminAccountsPage() {
                             name="canManageRoles"
                             defaultChecked={member.canManageRoles}
                           />
-                          Manage Roles
+                          {t.manageRoles}
                         </label>
 
                         <label className="flex items-center gap-2">
@@ -437,7 +454,7 @@ export default async function AdminAccountsPage() {
                             name="canManageAccount"
                             defaultChecked={member.canManageAccount}
                           />
-                          Manage Account
+                          {t.manageAccount}
                         </label>
                       </div>
 
@@ -445,7 +462,7 @@ export default async function AdminAccountsPage() {
                         type="submit"
                         className="mt-3 w-full rounded-xl bg-blue-500/10 px-3 py-2 text-sm font-semibold text-blue-400 hover:bg-blue-500/20"
                       >
-                        Save Permissions
+                        {t.savePermissions}
                       </button>
                     </form>
                   )}
@@ -461,7 +478,7 @@ export default async function AdminAccountsPage() {
                       type="submit"
                       className="w-full rounded-xl bg-red-500/10 px-3 py-2 text-sm text-red-400 hover:bg-red-500/20"
                     >
-                      Remove
+                      {t.remove}
                     </button>
                   </form>
                 </div>
@@ -472,17 +489,17 @@ export default async function AdminAccountsPage() {
 
         <details className="mt-8 rounded-2xl border border-red-500/20 bg-red-500/[0.04] p-4">
           <summary className="cursor-pointer text-sm font-bold text-red-400">
-            Danger Zone
+            {t.dangerZone}
           </summary>
 
           <div className="mt-4 flex flex-col gap-3 rounded-xl border border-red-500/20 bg-black/20 p-4 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="font-bold text-red-300">
-                Delete account permanently
+                {t.deleteAccountPermanently}
               </p>
 
               <p className="mt-1 text-sm text-gray-400">
-                This action cannot be undone. Trades, members and related data may be permanently removed.
+                {t.deleteAccountWarning}
               </p>
             </div>
 
@@ -503,7 +520,7 @@ export default async function AdminAccountsPage() {
                 type="submit"
                 className="rounded-xl bg-red-500 px-4 py-3 text-sm font-black text-black hover:bg-red-400"
               >
-                Delete Permanently
+                {t.deletePermanently}
               </button>
             </form>
           </div>
@@ -516,11 +533,11 @@ export default async function AdminAccountsPage() {
     <div>
       <div className="mb-10">
         <p className="text-sm text-gray-400">
-          Gestione conti
+          {t.accountsEyebrow}
         </p>
 
         <h1 className="mt-2 text-4xl font-bold">
-          Accounts Management
+          {t.accountsManagement}
         </h1>
       </div>
 
@@ -530,14 +547,14 @@ export default async function AdminAccountsPage() {
       >
         <input
           name="name"
-          placeholder="Nome account"
+          placeholder={t.accountName}
           className="rounded-2xl bg-zinc-900 p-4"
           required
         />
 
         <select
           name="type"
-          aria-label="Account type"
+          aria-label={t.accountType}
           className="rounded-2xl bg-zinc-900 p-4"
           required
         >
@@ -552,7 +569,7 @@ export default async function AdminAccountsPage() {
         <input
           name="initialBalance"
           type="number"
-          placeholder="Balance iniziale"
+          placeholder={t.initialBalance}
           className="rounded-2xl bg-zinc-900 p-4"
           required
         />
@@ -560,20 +577,20 @@ export default async function AdminAccountsPage() {
         <input
           name="currency"
           defaultValue="USD"
-          placeholder="Valuta"
+          placeholder={t.currency}
           className="rounded-2xl bg-zinc-900 p-4"
           required
         />
 
         <input
           name="broker"
-          placeholder="Broker / Prop Firm"
+          placeholder={t.brokerPropFirm}
           className="rounded-2xl bg-zinc-900 p-4"
         />
 
         <input
           name="phase"
-          placeholder="Phase"
+          placeholder={t.phase}
           className="rounded-2xl bg-zinc-900 p-4"
         />
 
@@ -581,7 +598,7 @@ export default async function AdminAccountsPage() {
           name="profitTarget"
           type="number"
           step="0.01"
-          placeholder="Profit Target %"
+          placeholder={`${t.profitTarget} %`}
           className="rounded-2xl bg-zinc-900 p-4"
         />
 
@@ -589,7 +606,7 @@ export default async function AdminAccountsPage() {
           name="maxDrawdown"
           type="number"
           step="0.01"
-          placeholder="Max Drawdown %"
+          placeholder={`${t.maxDd} %`}
           className="rounded-2xl bg-zinc-900 p-4"
         />
 
@@ -597,7 +614,7 @@ export default async function AdminAccountsPage() {
           name="dailyDrawdown"
           type="number"
           step="0.01"
-          placeholder="Daily Drawdown %"
+          placeholder={`${t.dailyDd} %`}
           className="rounded-2xl bg-zinc-900 p-4"
         />
 
@@ -605,7 +622,7 @@ export default async function AdminAccountsPage() {
           type="submit"
           className="rounded-2xl bg-green-500 p-4 font-bold text-black md:col-span-2 xl:col-span-4"
         >
-          Crea account
+          {t.createAccount}
         </button>
       </form>
 
@@ -614,11 +631,11 @@ export default async function AdminAccountsPage() {
           <div className="mb-5 flex items-end justify-between gap-4">
             <div>
               <p className="text-sm text-gray-400">
-                Active workspace
+                {t.activeWorkspace}
               </p>
 
               <h2 className="text-2xl font-black">
-                Active Accounts
+                {t.activeAccounts}
               </h2>
             </div>
 
@@ -632,7 +649,7 @@ export default async function AdminAccountsPage() {
               activeAccounts.map(renderAccountCard)
             ) : (
               <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-8 text-sm text-gray-400">
-                Nessun account attivo.
+                {t.noActiveAccounts}
               </div>
             )}
           </div>
@@ -642,11 +659,11 @@ export default async function AdminAccountsPage() {
           <div className="mb-5 flex items-end justify-between gap-4">
             <div>
               <p className="text-sm text-gray-400">
-                Inactive workspace
+                {t.inactiveWorkspace}
               </p>
 
               <h2 className="text-2xl font-black">
-                Archived Accounts
+                {t.archivedAccounts}
               </h2>
             </div>
 
@@ -660,7 +677,7 @@ export default async function AdminAccountsPage() {
               archivedAccounts.map(renderAccountCard)
             ) : (
               <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-8 text-sm text-gray-400">
-                Nessun account archiviato.
+                {t.noArchivedAccounts}
               </div>
             )}
           </div>
@@ -669,4 +686,3 @@ export default async function AdminAccountsPage() {
     </div>
   );
 }
-

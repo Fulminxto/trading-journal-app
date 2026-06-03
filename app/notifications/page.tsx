@@ -2,10 +2,147 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+
 import {
     markAllNotificationsAsRead,
     markNotificationAsRead,
 } from "./actions";
+
+import {
+    normalizeAppLanguage,
+    type AppLanguage,
+} from "@/lib/i18n";
+
+type NotificationsCopy = {
+    eyebrow: string;
+    title: string;
+    description: string;
+    markAllAsRead: string;
+    total: string;
+    unread: string;
+    read: string;
+    new: string;
+    open: string;
+    markAsRead: string;
+    empty: string;
+};
+
+const notificationsCopy: Record<AppLanguage, NotificationsCopy> = {
+    it: {
+        eyebrow: "Notification Center",
+        title: "Notifiche",
+        description:
+            "Qui trovi gli aggiornamenti importanti sui tuoi account, trade e permessi.",
+        markAllAsRead: "Segna tutto come letto",
+        total: "Totale",
+        unread: "Non lette",
+        read: "Lette",
+        new: "Nuova",
+        open: "Apri",
+        markAsRead: "Segna come letta",
+        empty: "Nessuna notifica per ora.",
+    },
+
+    en: {
+        eyebrow: "Notification Center",
+        title: "Notifications",
+        description:
+            "Here you can find important updates about your accounts, trades and permissions.",
+        markAllAsRead: "Mark all as read",
+        total: "Total",
+        unread: "Unread",
+        read: "Read",
+        new: "New",
+        open: "Open",
+        markAsRead: "Mark as read",
+        empty: "No notifications for now.",
+    },
+
+    uk: {
+        eyebrow: "Центр сповіщень",
+        title: "Сповіщення",
+        description:
+            "Тут знаходяться важливі оновлення щодо ваших акаунтів, угод і дозволів.",
+        markAllAsRead: "Позначити все як прочитане",
+        total: "Усього",
+        unread: "Непрочитані",
+        read: "Прочитані",
+        new: "Нове",
+        open: "Відкрити",
+        markAsRead: "Позначити як прочитане",
+        empty: "Поки що немає сповіщень.",
+    },
+
+    ru: {
+        eyebrow: "Центр уведомлений",
+        title: "Уведомления",
+        description:
+            "Здесь находятся важные обновления по вашим аккаунтам, сделкам и разрешениям.",
+        markAllAsRead: "Отметить все как прочитанные",
+        total: "Всего",
+        unread: "Непрочитанные",
+        read: "Прочитанные",
+        new: "Новое",
+        open: "Открыть",
+        markAsRead: "Отметить как прочитанное",
+        empty: "Пока нет уведомлений.",
+    },
+
+    es: {
+        eyebrow: "Centro de notificaciones",
+        title: "Notificaciones",
+        description:
+            "Aquí encuentras actualizaciones importantes sobre tus cuentas, trades y permisos.",
+        markAllAsRead: "Marcar todo como leído",
+        total: "Total",
+        unread: "No leídas",
+        read: "Leídas",
+        new: "Nueva",
+        open: "Abrir",
+        markAsRead: "Marcar como leída",
+        empty: "No hay notificaciones por ahora.",
+    },
+
+    fr: {
+        eyebrow: "Centre de notifications",
+        title: "Notifications",
+        description:
+            "Vous trouverez ici les mises à jour importantes concernant vos comptes, trades et permissions.",
+        markAllAsRead: "Tout marquer comme lu",
+        total: "Total",
+        unread: "Non lues",
+        read: "Lues",
+        new: "Nouvelle",
+        open: "Ouvrir",
+        markAsRead: "Marquer comme lue",
+        empty: "Aucune notification pour le moment.",
+    },
+
+    de: {
+        eyebrow: "Benachrichtigungszentrum",
+        title: "Benachrichtigungen",
+        description:
+            "Hier findest du wichtige Updates zu deinen Konten, Trades und Berechtigungen.",
+        markAllAsRead: "Alle als gelesen markieren",
+        total: "Gesamt",
+        unread: "Ungelesen",
+        read: "Gelesen",
+        new: "Neu",
+        open: "Öffnen",
+        markAsRead: "Als gelesen markieren",
+        empty: "Derzeit keine Benachrichtigungen.",
+    },
+};
+
+const localeMap: Record<AppLanguage, string> = {
+    it: "it-IT",
+    en: "en-US",
+    uk: "uk-UA",
+    ru: "ru-RU",
+    es: "es-ES",
+    fr: "fr-FR",
+    de: "de-DE",
+};
 
 export default async function NotificationsPage() {
     const session = await auth();
@@ -13,6 +150,22 @@ export default async function NotificationsPage() {
     if (!session?.user?.id) {
         redirect("/login");
     }
+
+    const currentUser = await prisma.user.findUnique({
+        where: {
+            id: session.user.id,
+        },
+        select: {
+            appLanguage: true,
+        },
+    });
+
+    const appLanguage = normalizeAppLanguage(
+        currentUser?.appLanguage
+    );
+
+    const t = notificationsCopy[appLanguage];
+    const locale = localeMap[appLanguage];
 
     const notifications =
         await prisma.notification.findMany({
@@ -34,15 +187,15 @@ export default async function NotificationsPage() {
             <div className="mb-10 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
                     <p className="text-sm text-green-400">
-                        Notification Center
+                        {t.eyebrow}
                     </p>
 
                     <h1 className="mt-2 text-4xl font-bold">
-                        Notifications
+                        {t.title}
                     </h1>
 
                     <p className="mt-3 text-sm text-gray-400">
-                        Qui trovi gli aggiornamenti importanti sui tuoi account, trade e permessi.
+                        {t.description}
                     </p>
                 </div>
 
@@ -52,7 +205,7 @@ export default async function NotificationsPage() {
                             type="submit"
                             className="rounded-2xl bg-green-500 px-4 py-3 text-sm font-bold text-black hover:bg-green-400"
                         >
-                            Mark all as read
+                            {t.markAllAsRead}
                         </button>
                     </form>
                 )}
@@ -61,7 +214,7 @@ export default async function NotificationsPage() {
             <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3">
                 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
                     <p className="text-sm text-gray-400">
-                        Total
+                        {t.total}
                     </p>
 
                     <h2 className="mt-2 text-3xl font-black">
@@ -71,7 +224,7 @@ export default async function NotificationsPage() {
 
                 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
                     <p className="text-sm text-gray-400">
-                        Unread
+                        {t.unread}
                     </p>
 
                     <h2 className="mt-2 text-3xl font-black text-red-400">
@@ -81,7 +234,7 @@ export default async function NotificationsPage() {
 
                 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
                     <p className="text-sm text-gray-400">
-                        Read
+                        {t.read}
                     </p>
 
                     <h2 className="mt-2 text-3xl font-black text-green-400">
@@ -105,7 +258,7 @@ export default async function NotificationsPage() {
                                     <div className="mb-2 flex flex-wrap items-center gap-2">
                                         {!notification.read && (
                                             <span className="rounded-full bg-green-500 px-2 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-black">
-                                                New
+                                                {t.new}
                                             </span>
                                         )}
 
@@ -123,7 +276,9 @@ export default async function NotificationsPage() {
                                     </p>
 
                                     <p className="mt-3 text-xs text-gray-600">
-                                        {new Date(notification.createdAt).toLocaleString("it-IT")}
+                                        {new Date(
+                                            notification.createdAt
+                                        ).toLocaleString(locale)}
                                     </p>
                                 </div>
 
@@ -133,7 +288,7 @@ export default async function NotificationsPage() {
                                             href={notification.link}
                                             className="rounded-xl bg-white/10 px-4 py-3 text-sm font-semibold hover:bg-white/20"
                                         >
-                                            Open
+                                            {t.open}
                                         </Link>
                                     )}
 
@@ -149,7 +304,7 @@ export default async function NotificationsPage() {
                                                 type="submit"
                                                 className="rounded-xl bg-green-500/10 px-4 py-3 text-sm font-semibold text-green-400 hover:bg-green-500/20"
                                             >
-                                                Mark as read
+                                                {t.markAsRead}
                                             </button>
                                         </form>
                                     )}
@@ -159,7 +314,7 @@ export default async function NotificationsPage() {
                     ))
                 ) : (
                     <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-10 text-center text-gray-400">
-                        Nessuna notifica per ora.
+                        {t.empty}
                     </div>
                 )}
             </div>

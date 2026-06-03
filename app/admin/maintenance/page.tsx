@@ -10,6 +10,7 @@ import { redirect } from "next/navigation";
 
 import GlobalToast from "@/components/GlobalToast";
 import { updateMaintenanceMode } from "./actions";
+import { getAdminI18n } from "../AdminI18n";
 
 export default async function MaintenancePage({
   searchParams,
@@ -40,6 +41,8 @@ export default async function MaintenancePage({
     redirect("/");
   }
 
+  const { t } = getAdminI18n(user.appLanguage);
+
   const maintenance =
     await prisma.maintenanceMode.findFirst();
 
@@ -50,17 +53,16 @@ export default async function MaintenancePage({
       <div className="space-y-8">
         <div>
           <p className="text-sm text-gray-400">
-            System Maintenance
+            {t.systemMaintenance}
           </p>
 
           <h1 className="mt-2 flex items-center gap-3 text-4xl font-black text-white">
             <ShieldAlert className="text-cyan-400" />
-            Maintenance Mode
+            {t.maintenanceMode}
           </h1>
 
           <p className="mt-4 max-w-3xl text-sm leading-relaxed text-gray-400">
-            Gestisci manutenzioni, downtime programmati,
-            notifiche utenti e blocco login.
+            {t.maintenanceDescription}
           </p>
         </div>
 
@@ -70,13 +72,12 @@ export default async function MaintenancePage({
               <AlertTriangle className="text-yellow-300" />
 
               <h2 className="text-xl font-black text-white">
-                Warning Mode
+                {t.warningMode}
               </h2>
             </div>
 
             <p className="mt-4 text-sm leading-relaxed text-gray-300">
-              Mostra un avviso agli utenti senza bloccare
-              l’accesso all’app.
+              {t.warningModeDescription}
             </p>
           </div>
 
@@ -85,12 +86,12 @@ export default async function MaintenancePage({
               <ShieldAlert className="text-red-300" />
 
               <h2 className="text-xl font-black text-white">
-                Hard Maintenance
+                {t.hardMaintenance}
               </h2>
             </div>
 
             <p className="mt-4 text-sm leading-relaxed text-gray-300">
-              Blocca login e accesso all’applicazione.
+              {t.hardMaintenanceDescription}
             </p>
           </div>
 
@@ -99,12 +100,12 @@ export default async function MaintenancePage({
               <Wrench className="text-cyan-300" />
 
               <h2 className="text-xl font-black text-white">
-                System Updates
+                {t.systemUpdates}
               </h2>
             </div>
 
             <p className="mt-4 text-sm leading-relaxed text-gray-300">
-              Comunica patch, fix e aggiornamenti server.
+              {t.systemUpdatesDescription}
             </p>
           </div>
         </div>
@@ -114,11 +115,11 @@ export default async function MaintenancePage({
           className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/10 p-8"
         >
           <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
-            Maintenance Configuration
+            {t.maintenanceConfiguration}
           </p>
 
           <h2 className="mt-3 text-3xl font-black text-white">
-            Configure Maintenance Mode
+            {t.configureMaintenanceMode}
           </h2>
 
           <div className="mt-8 grid gap-4 md:grid-cols-2">
@@ -132,7 +133,7 @@ export default async function MaintenancePage({
                 className="h-5 w-5 rounded border-white/20 bg-black"
               />
 
-              Enable Maintenance Mode
+              {t.enableMaintenanceMode}
             </label>
 
             <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-gray-300">
@@ -145,7 +146,7 @@ export default async function MaintenancePage({
                 className="h-5 w-5 rounded border-white/20 bg-black"
               />
 
-              Block User Login
+              {t.blockUserLogin}
             </label>
 
             <input
@@ -153,7 +154,7 @@ export default async function MaintenancePage({
               defaultValue={
                 maintenance?.title || ""
               }
-              placeholder="Maintenance title"
+              placeholder={t.maintenanceTitlePlaceholder}
               className="rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none placeholder:text-gray-500"
             />
 
@@ -166,15 +167,15 @@ export default async function MaintenancePage({
               className="rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none"
             >
               <option value="info">
-                Info
+                {t.info}
               </option>
 
               <option value="warning">
-                Warning
+                {t.warning}
               </option>
 
               <option value="critical">
-                Critical
+                {t.critical}
               </option>
             </select>
           </div>
@@ -185,7 +186,7 @@ export default async function MaintenancePage({
             defaultValue={
               maintenance?.message || ""
             }
-            placeholder="Describe the maintenance, expected downtime and other important information..."
+            placeholder={t.maintenanceMessagePlaceholder}
             className="mt-4 w-full rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none placeholder:text-gray-500"
           />
 
@@ -193,7 +194,7 @@ export default async function MaintenancePage({
             type="submit"
             className="mt-6 rounded-2xl bg-cyan-500 px-6 py-4 text-sm font-black uppercase tracking-[0.15em] text-black transition hover:bg-cyan-400"
           >
-            Save Maintenance Settings
+            {t.saveMaintenanceSettings}
           </button>
         </form>
       </div>

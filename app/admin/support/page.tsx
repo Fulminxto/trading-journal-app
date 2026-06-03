@@ -9,6 +9,10 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 import Link from "next/link";
+import {
+    getAdminI18n,
+    valueLabel,
+} from "../AdminI18n";
 
 export default async function AdminSupportPage() {
     const session = await auth();
@@ -27,6 +31,8 @@ export default async function AdminSupportPage() {
         redirect("/");
     }
 
+    const { t } = getAdminI18n(user.appLanguage);
+
     const tickets =
         await prisma.supportTicket.findMany({
             include: {
@@ -42,19 +48,19 @@ export default async function AdminSupportPage() {
         <div className="space-y-8">
             <div>
                 <p className="text-sm text-gray-400">
-                    Admin Support Dashboard
+                    {t.adminSupportDashboard}
                 </p>
 
                 <h1 className="mt-2 flex items-center gap-3 text-4xl font-black text-white">
                     <LifeBuoy className="text-cyan-400" />
-                    Support Management
+                    {t.supportManagement}
                 </h1>
             </div>
 
             <div className="grid gap-6 md:grid-cols-3">
                 <div className="rounded-[32px] border border-red-500/20 bg-red-500/10 p-6">
                     <p className="text-sm text-red-200">
-                        Bug Reports
+                        {t.bugReports}
                     </p>
 
                     <h2 className="mt-3 text-4xl font-black text-white">
@@ -69,15 +75,14 @@ export default async function AdminSupportPage() {
 
                 <div className="rounded-[32px] border border-yellow-500/20 bg-yellow-500/10 p-6">
                     <p className="text-sm text-yellow-200">
-                        Feature Requests
+                        {t.featureRequests}
                     </p>
 
                     <h2 className="mt-3 text-4xl font-black text-white">
                         {
                             tickets.filter(
                                 (ticket) =>
-                                    ticket.type ===
-                                    "feature"
+                                    ticket.type === "feature"
                             ).length
                         }
                     </h2>
@@ -85,15 +90,14 @@ export default async function AdminSupportPage() {
 
                 <div className="rounded-[32px] border border-cyan-500/20 bg-cyan-500/10 p-6">
                     <p className="text-sm text-cyan-200">
-                        Open Tickets
+                        {t.openTickets}
                     </p>
 
                     <h2 className="mt-3 text-4xl font-black text-white">
                         {
                             tickets.filter(
                                 (ticket) =>
-                                    ticket.status ===
-                                    "open"
+                                    ticket.status === "open"
                             ).length
                         }
                     </h2>
@@ -104,7 +108,7 @@ export default async function AdminSupportPage() {
                 {tickets.length === 0 ? (
                     <div className="rounded-[32px] border border-white/10 bg-white/[0.03] p-8">
                         <p className="text-sm text-gray-400">
-                            Nessun ticket presente.
+                            {t.noTickets}
                         </p>
                     </div>
                 ) : (
@@ -117,15 +121,18 @@ export default async function AdminSupportPage() {
                             <div className="flex items-start justify-between gap-4">
                                 <div>
                                     <div className="flex items-center gap-3">
-                                        {ticket.type ===
-                                            "bug" ? (
+                                        {ticket.type === "bug" ? (
                                             <Bug className="text-red-400" />
                                         ) : (
                                             <Lightbulb className="text-yellow-300" />
                                         )}
 
                                         <p className="text-xs uppercase tracking-[0.15em] text-cyan-400">
-                                            {ticket.type}
+                                            {valueLabel(
+                                                t,
+                                                "ticketType",
+                                                ticket.type
+                                            )}
                                         </p>
                                     </div>
 
@@ -139,29 +146,35 @@ export default async function AdminSupportPage() {
 
                                     <div className="mt-6 flex flex-wrap gap-4 text-xs text-gray-500">
                                         <span>
-                                            User:{" "}
-                                            {
-                                                ticket.user
-                                                    .username
-                                            }
+                                            {t.user}: {ticket.user.username}
                                         </span>
 
                                         <span>
-                                            Status:{" "}
-                                            {ticket.status}
+                                            {t.status}:{" "}
+                                            {valueLabel(
+                                                t,
+                                                "ticketStatus",
+                                                ticket.status
+                                            )}
                                         </span>
 
                                         <span>
-                                            Priority:{" "}
-                                            {
+                                            {t.priority}:{" "}
+                                            {valueLabel(
+                                                t,
+                                                "priority",
                                                 ticket.priority
-                                            }
+                                            )}
                                         </span>
                                     </div>
                                 </div>
 
                                 <div className="rounded-full border border-white/10 bg-black/20 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-gray-300">
-                                    {ticket.status}
+                                    {valueLabel(
+                                        t,
+                                        "ticketStatus",
+                                        ticket.status
+                                    )}
                                 </div>
                             </div>
                         </Link>

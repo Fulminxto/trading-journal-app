@@ -30,17 +30,320 @@ import PDFReportHeader from "@/components/reports/PDFReportHeader";
 import PDFReportFooter from "@/components/reports/PDFReportFooter";
 import PDFCompactReport from "@/components/reports/PDFCompactReport";
 
-function formatCurrency(
-  value: number,
-  currency: string
-) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  }).format(value);
-}
+import {
+  formatCurrencyByLanguage,
+  normalizeAppLanguage,
+  type AppLanguage,
+} from "@/lib/i18n";
+
+type ReportsLabels = {
+  heroEyebrow: string;
+  heroTitle: string;
+  heroDescription: string;
+
+  totalTrades: string;
+  totalPnl: string;
+  average: string;
+  winRate: string;
+  behavioralRisk: string;
+  behavioralRiskDescription: string;
+
+  executiveFocus: string;
+  edgeQuality: string;
+  profitFactorDescription: (lossRate: number) => string;
+
+  strongSample: string;
+  growingSample: string;
+  earlySample: string;
+
+  waitingForData: string;
+  healthy: string;
+  profitableMonitorBehavior: string;
+  needsReview: string;
+
+  focusReduceBehavioralRisk: string;
+  focusImproveRiskReward: string;
+  focusReviewSetups: string;
+  focusProtectEdge: string;
+};
+
+const reportsLabels: Record<
+  AppLanguage,
+  ReportsLabels
+> = {
+  it: {
+    heroEyebrow: "VOLTIS AI Reports",
+    heroTitle: "Report Intelligence",
+    heroDescription:
+      "Un riepilogo operativo per leggere performance, comportamento, rischio, disciplina ed evoluzione del trader.",
+
+    totalTrades: "Trade Totali",
+    totalPnl: "PnL Totale",
+    average: "Media",
+    winRate: "Win Rate",
+    behavioralRisk: "Rischio Comportamentale",
+    behavioralRiskDescription:
+      "Emozione, confidence, esecuzione",
+
+    executiveFocus: "Focus esecutivo",
+    edgeQuality: "Qualità edge",
+    profitFactorDescription: (lossRate) =>
+      `Profit factor basato su gross profit e gross loss. Loss rate: ${lossRate}%.`,
+
+    strongSample: "Campione solido",
+    growingSample: "Campione in crescita",
+    earlySample: "Campione iniziale",
+
+    waitingForData: "In attesa di dati",
+    healthy: "Sano",
+    profitableMonitorBehavior:
+      "Profittevole, monitora il comportamento",
+    needsReview: "Da revisionare",
+
+    focusReduceBehavioralRisk:
+      "Riduci il rischio comportamentale prima di aumentare il volume.",
+    focusImproveRiskReward:
+      "Migliora il rapporto rischio/rendimento e il controllo delle perdite.",
+    focusReviewSetups:
+      "Rivedi setup e qualità degli ingressi.",
+    focusProtectEdge:
+      "Proteggi l’edge attuale con esecuzione costante.",
+  },
+
+  en: {
+    heroEyebrow: "VOLTIS AI Reports",
+    heroTitle: "Intelligence Reports",
+    heroDescription:
+      "An operational summary to read performance, behavior, risk, discipline and trader evolution.",
+
+    totalTrades: "Total Trades",
+    totalPnl: "Total PnL",
+    average: "Average",
+    winRate: "Win Rate",
+    behavioralRisk: "Behavioral Risk",
+    behavioralRiskDescription:
+      "Emotion, confidence, execution",
+
+    executiveFocus: "Executive focus",
+    edgeQuality: "Edge quality",
+    profitFactorDescription: (lossRate) =>
+      `Profit factor based on gross profit and gross loss. Loss rate is ${lossRate}%.`,
+
+    strongSample: "Strong sample",
+    growingSample: "Growing sample",
+    earlySample: "Early sample",
+
+    waitingForData: "Waiting for data",
+    healthy: "Healthy",
+    profitableMonitorBehavior:
+      "Profitable, monitor behavior",
+    needsReview: "Needs review",
+
+    focusReduceBehavioralRisk:
+      "Reduce behavioral risk before scaling volume.",
+    focusImproveRiskReward:
+      "Improve risk/reward balance and loss control.",
+    focusReviewSetups:
+      "Review setups and entry quality.",
+    focusProtectEdge:
+      "Protect the current edge with consistent execution.",
+  },
+
+  uk: {
+    heroEyebrow: "VOLTIS AI Reports",
+    heroTitle: "Інтелектуальні звіти",
+    heroDescription:
+      "Операційний підсумок для аналізу результатів, поведінки, ризику, дисципліни та розвитку трейдера.",
+
+    totalTrades: "Усього угод",
+    totalPnl: "Загальний PnL",
+    average: "Середнє",
+    winRate: "Відсоток перемог",
+    behavioralRisk: "Поведінковий ризик",
+    behavioralRiskDescription:
+      "Емоції, впевненість, виконання",
+
+    executiveFocus: "Операційний фокус",
+    edgeQuality: "Якість переваги",
+    profitFactorDescription: (lossRate) =>
+      `Profit factor на основі валового прибутку та валових збитків. Loss rate: ${lossRate}%.`,
+
+    strongSample: "Сильна вибірка",
+    growingSample: "Вибірка зростає",
+    earlySample: "Початкова вибірка",
+
+    waitingForData: "Очікування даних",
+    healthy: "Здоровий стан",
+    profitableMonitorBehavior:
+      "Прибутково, контролюй поведінку",
+    needsReview: "Потребує перегляду",
+
+    focusReduceBehavioralRisk:
+      "Зменш поведінковий ризик перед збільшенням обсягу.",
+    focusImproveRiskReward:
+      "Покращ баланс ризику/прибутку та контроль збитків.",
+    focusReviewSetups:
+      "Переглянь сетапи та якість входів.",
+    focusProtectEdge:
+      "Захищай поточну перевагу стабільним виконанням.",
+  },
+
+  ru: {
+    heroEyebrow: "VOLTIS AI Reports",
+    heroTitle: "Интеллектуальные отчеты",
+    heroDescription:
+      "Операционный обзор для анализа результатов, поведения, риска, дисциплины и развития трейдера.",
+
+    totalTrades: "Всего сделок",
+    totalPnl: "Общий PnL",
+    average: "Среднее",
+    winRate: "Процент побед",
+    behavioralRisk: "Поведенческий риск",
+    behavioralRiskDescription:
+      "Эмоции, уверенность, исполнение",
+
+    executiveFocus: "Операционный фокус",
+    edgeQuality: "Качество преимущества",
+    profitFactorDescription: (lossRate) =>
+      `Profit factor на основе валовой прибыли и валового убытка. Loss rate: ${lossRate}%.`,
+
+    strongSample: "Сильная выборка",
+    growingSample: "Растущая выборка",
+    earlySample: "Начальная выборка",
+
+    waitingForData: "Ожидание данных",
+    healthy: "Здоровое состояние",
+    profitableMonitorBehavior:
+      "Прибыльно, следи за поведением",
+    needsReview: "Требует анализа",
+
+    focusReduceBehavioralRisk:
+      "Снизь поведенческий риск перед увеличением объема.",
+    focusImproveRiskReward:
+      "Улучши баланс риск/прибыль и контроль убытков.",
+    focusReviewSetups:
+      "Пересмотри сетапы и качество входов.",
+    focusProtectEdge:
+      "Защищай текущий edge стабильным исполнением.",
+  },
+
+  es: {
+    heroEyebrow: "VOLTIS AI Reports",
+    heroTitle: "Informes de inteligencia",
+    heroDescription:
+      "Un resumen operativo para leer rendimiento, comportamiento, riesgo, disciplina y evolución del trader.",
+
+    totalTrades: "Trades totales",
+    totalPnl: "PnL total",
+    average: "Media",
+    winRate: "Win Rate",
+    behavioralRisk: "Riesgo conductual",
+    behavioralRiskDescription:
+      "Emoción, confianza, ejecución",
+
+    executiveFocus: "Foco ejecutivo",
+    edgeQuality: "Calidad del edge",
+    profitFactorDescription: (lossRate) =>
+      `Profit factor basado en beneficio bruto y pérdida bruta. Loss rate: ${lossRate}%.`,
+
+    strongSample: "Muestra sólida",
+    growingSample: "Muestra en crecimiento",
+    earlySample: "Muestra inicial",
+
+    waitingForData: "Esperando datos",
+    healthy: "Saludable",
+    profitableMonitorBehavior:
+      "Rentable, monitorea el comportamiento",
+    needsReview: "Necesita revisión",
+
+    focusReduceBehavioralRisk:
+      "Reduce el riesgo conductual antes de aumentar volumen.",
+    focusImproveRiskReward:
+      "Mejora el balance riesgo/beneficio y el control de pérdidas.",
+    focusReviewSetups:
+      "Revisa setups y calidad de entrada.",
+    focusProtectEdge:
+      "Protege el edge actual con ejecución constante.",
+  },
+
+  fr: {
+    heroEyebrow: "VOLTIS AI Reports",
+    heroTitle: "Rapports d’intelligence",
+    heroDescription:
+      "Un résumé opérationnel pour lire performance, comportement, risque, discipline et évolution du trader.",
+
+    totalTrades: "Trades totaux",
+    totalPnl: "PnL total",
+    average: "Moyenne",
+    winRate: "Win Rate",
+    behavioralRisk: "Risque comportemental",
+    behavioralRiskDescription:
+      "Émotion, confiance, exécution",
+
+    executiveFocus: "Focus exécutif",
+    edgeQuality: "Qualité de l’edge",
+    profitFactorDescription: (lossRate) =>
+      `Profit factor basé sur le profit brut et la perte brute. Loss rate : ${lossRate}%.`,
+
+    strongSample: "Échantillon solide",
+    growingSample: "Échantillon en croissance",
+    earlySample: "Échantillon initial",
+
+    waitingForData: "En attente de données",
+    healthy: "Sain",
+    profitableMonitorBehavior:
+      "Rentable, surveille le comportement",
+    needsReview: "À revoir",
+
+    focusReduceBehavioralRisk:
+      "Réduis le risque comportemental avant d’augmenter le volume.",
+    focusImproveRiskReward:
+      "Améliore l’équilibre risque/rendement et le contrôle des pertes.",
+    focusReviewSetups:
+      "Revois les setups et la qualité des entrées.",
+    focusProtectEdge:
+      "Protège l’edge actuel avec une exécution constante.",
+  },
+
+  de: {
+    heroEyebrow: "VOLTIS AI Reports",
+    heroTitle: "Intelligence-Berichte",
+    heroDescription:
+      "Eine operative Zusammenfassung zur Analyse von Performance, Verhalten, Risiko, Disziplin und Trader-Entwicklung.",
+
+    totalTrades: "Trades gesamt",
+    totalPnl: "Gesamt-PnL",
+    average: "Durchschnitt",
+    winRate: "Win Rate",
+    behavioralRisk: "Verhaltensrisiko",
+    behavioralRiskDescription:
+      "Emotion, Vertrauen, Ausführung",
+
+    executiveFocus: "Operativer Fokus",
+    edgeQuality: "Edge-Qualität",
+    profitFactorDescription: (lossRate) =>
+      `Profit Factor basierend auf Bruttogewinn und Bruttoverlust. Loss Rate: ${lossRate}%.`,
+
+    strongSample: "Starke Stichprobe",
+    growingSample: "Wachsende Stichprobe",
+    earlySample: "Frühe Stichprobe",
+
+    waitingForData: "Warten auf Daten",
+    healthy: "Gesund",
+    profitableMonitorBehavior:
+      "Profitabel, Verhalten beobachten",
+    needsReview: "Benötigt Review",
+
+    focusReduceBehavioralRisk:
+      "Reduziere Verhaltensrisiko, bevor du Volumen erhöhst.",
+    focusImproveRiskReward:
+      "Verbessere Risiko/Ertrag-Balance und Verlustkontrolle.",
+    focusReviewSetups:
+      "Überprüfe Setups und Einstiegsqualität.",
+    focusProtectEdge:
+      "Schütze den aktuellen Edge mit konstanter Ausführung.",
+  },
+};
 
 function getResultTone(value: number) {
   if (value > 0) {
@@ -93,16 +396,24 @@ export default async function ReportsPage({
 
   const { accountId } = await params;
 
-  const membership =
-    await prisma.accountMember.findFirst({
-      where: {
-        userId: session.user.id,
-        tradingAccountId: accountId,
-      },
-      include: {
-        tradingAccount: true,
-      },
-    });
+  const [membership, currentUser] =
+    await Promise.all([
+      prisma.accountMember.findFirst({
+        where: {
+          userId: session.user.id,
+          tradingAccountId: accountId,
+        },
+        include: {
+          tradingAccount: true,
+        },
+      }),
+
+      prisma.user.findUnique({
+        where: {
+          id: session.user.id,
+        },
+      }),
+    ]);
 
   if (!membership) {
     redirect("/accounts");
@@ -121,8 +432,31 @@ export default async function ReportsPage({
     redirect(`/accounts/${accountId}/dashboard`);
   }
 
+  await prisma.user.update({
+    where: {
+      id: session.user.id,
+    },
+    data: {
+      lastSeenAt: new Date(),
+      lastActivityAt: new Date(),
+    },
+  });
+
+  const language = normalizeAppLanguage(
+    currentUser?.appLanguage
+  );
+
+  const t = reportsLabels[language];
+
   const account = membership.tradingAccount;
   const currency = account.currency || "USD";
+
+  const formatCurrency = (value: number) =>
+    formatCurrencyByLanguage(
+      value,
+      currency,
+      language
+    );
 
   const trades = await prisma.trade.findMany({
     where: {
@@ -253,34 +587,40 @@ export default async function ReportsPage({
 
   const reportReadiness =
     totalTrades >= 30
-      ? "Strong sample"
+      ? t.strongSample
       : totalTrades >= 10
-        ? "Growing sample"
-        : "Early sample";
+        ? t.growingSample
+        : t.earlySample;
 
   const accountStatus =
     totalTrades === 0
-      ? "Waiting for data"
+      ? t.waitingForData
       : totalPnl >= 0 &&
         behavioralRisk < 35
-        ? "Healthy"
+        ? t.healthy
         : totalPnl >= 0
-          ? "Profitable, monitor behavior"
-          : "Needs review";
+          ? t.profitableMonitorBehavior
+          : t.needsReview;
 
   const primaryFocus =
     behavioralRisk >= 50
-      ? "Reduce behavioral risk before scaling volume."
+      ? t.focusReduceBehavioralRisk
       : profitFactor < 1
-        ? "Improve risk/reward balance and loss control."
+        ? t.focusImproveRiskReward
         : winRate < 45
-          ? "Review setups and entry quality."
-          : "Protect the current edge with consistent execution.";
+          ? t.focusReviewSetups
+          : t.focusProtectEdge;
 
   return (
     <div className="space-y-8 print:space-y-0 print:bg-[#050b10]">
       <PDFCompactReport
-        userName={session.user.name ?? "Trader"}
+        appLanguage={language}
+        currency={currency}
+        userName={
+          currentUser?.name ??
+          session.user.name ??
+          "Trader"
+        }
         totalTrades={totalTrades}
         totalPnl={totalPnl}
         winRate={winRate}
@@ -297,6 +637,8 @@ export default async function ReportsPage({
       <div className="web-report-content space-y-8">
         <div className="print-hidden">
           <PDFReportHeader
+            appLanguage={language}
+            currency={currency}
             totalTrades={totalTrades}
             totalPnl={totalPnl}
             winRate={winRate}
@@ -310,32 +652,30 @@ export default async function ReportsPage({
           <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
             <div>
               <p className="text-sm uppercase tracking-[0.25em] text-cyan-400">
-                VOLTIS AI Reports
+                {t.heroEyebrow}
               </p>
 
               <h1 className="mt-4 text-5xl font-black tracking-tight text-white xl:text-7xl">
-                Intelligence Reports
+                {t.heroTitle}
               </h1>
 
               <p className="mt-6 max-w-3xl text-base leading-relaxed text-gray-400 xl:text-lg">
-                Un riepilogo operativo per leggere
-                performance, comportamento, rischio,
-                disciplina ed evoluzione del trader.
+                {t.heroDescription}
               </p>
             </div>
 
             <div className="shrink-0">
-              <PrintReportButton />
+              <PrintReportButton appLanguage={language} />
             </div>
           </div>
         </div>
 
-        <ReportsNavigation />
+        <ReportsNavigation appLanguage={language} />
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
           <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
             <p className="text-sm text-gray-400">
-              Total Trades
+              {t.totalTrades}
             </p>
 
             <h2 className="mt-4 text-4xl font-black text-cyan-400">
@@ -349,24 +689,33 @@ export default async function ReportsPage({
 
           <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
             <p className="text-sm text-gray-400">
-              Total PnL
+              {t.totalPnl}
             </p>
 
-            <h2 className={`mt-4 text-4xl font-black ${getResultTone(totalPnl)}`}>
-              {formatCurrency(totalPnl, currency)}
+            <h2
+              className={`mt-4 text-4xl font-black ${getResultTone(
+                totalPnl
+              )}`}
+            >
+              {formatCurrency(totalPnl)}
             </h2>
 
             <p className="mt-3 text-sm text-gray-500">
-              Average {formatCurrency(averageResult, currency)}
+              {t.average}{" "}
+              {formatCurrency(averageResult)}
             </p>
           </div>
 
           <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
             <p className="text-sm text-gray-400">
-              Win Rate
+              {t.winRate}
             </p>
 
-            <h2 className={`mt-4 text-4xl font-black ${getScoreTone(winRate)}`}>
+            <h2
+              className={`mt-4 text-4xl font-black ${getScoreTone(
+                winRate
+              )}`}
+            >
               {winRate}%
             </h2>
 
@@ -377,15 +726,19 @@ export default async function ReportsPage({
 
           <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
             <p className="text-sm text-gray-400">
-              Behavioral Risk
+              {t.behavioralRisk}
             </p>
 
-            <h2 className={`mt-4 text-4xl font-black ${getRiskTone(behavioralRisk)}`}>
+            <h2
+              className={`mt-4 text-4xl font-black ${getRiskTone(
+                behavioralRisk
+              )}`}
+            >
               {behavioralRisk}%
             </h2>
 
             <p className="mt-3 text-sm text-gray-500">
-              Emotion, confidence, execution
+              {t.behavioralRiskDescription}
             </p>
           </div>
         </div>
@@ -393,7 +746,7 @@ export default async function ReportsPage({
         <div className="print-hidden grid grid-cols-1 gap-6 xl:grid-cols-3">
           <div className="rounded-[32px] border border-white/10 bg-white/[0.04] p-6 xl:col-span-2">
             <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
-              Executive focus
+              {t.executiveFocus}
             </p>
 
             <h2 className="mt-3 text-3xl font-black text-white">
@@ -407,7 +760,7 @@ export default async function ReportsPage({
 
           <div className="rounded-[32px] border border-white/10 bg-white/[0.04] p-6">
             <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
-              Edge quality
+              {t.edgeQuality}
             </p>
 
             <h2 className="mt-3 text-3xl font-black text-white">
@@ -415,14 +768,15 @@ export default async function ReportsPage({
             </h2>
 
             <p className="mt-4 text-sm leading-6 text-gray-400">
-              Profit factor based on gross profit and
-              gross loss. Loss rate is {lossRate}%.
+              {t.profitFactorDescription(lossRate)}
             </p>
           </div>
         </div>
 
         <div id="executive">
           <ExecutiveSummaryCard
+            appLanguage={language}
+            currency={currency}
             totalPnl={totalPnl}
             winRate={winRate}
             disciplineScore={disciplineScore}
@@ -435,6 +789,8 @@ export default async function ReportsPage({
           className="print-hidden"
         >
           <WeeklyReportCard
+            appLanguage={language}
+            currency={currency}
             totalTrades={totalTrades}
             totalPnl={totalPnl}
             winRate={winRate}
@@ -446,6 +802,8 @@ export default async function ReportsPage({
           className="report-section"
         >
           <MonthlyReportCard
+            appLanguage={language}
+            currency={currency}
             totalTrades={totalTrades}
             totalPnl={totalPnl}
             winRate={winRate}
@@ -459,6 +817,8 @@ export default async function ReportsPage({
           className="report-section"
         >
           <BehavioralReportCard
+            appLanguage={language}
+            currency={currency}
             emotionalTrades={emotionalTrades}
             lowConfidenceTrades={lowConfidenceTrades}
             weakExecutionTrades={weakExecutionTrades}
@@ -471,6 +831,8 @@ export default async function ReportsPage({
           className="report-section"
         >
           <PerformanceBreakdownCard
+            appLanguage={language}
+            currency={currency}
             wins={wins}
             losses={losses}
             breakEven={breakEven}
@@ -484,6 +846,8 @@ export default async function ReportsPage({
           className="print-hidden report-section"
         >
           <TraderEvolutionReport
+            appLanguage={language}
+            currency={currency}
             disciplineScore={disciplineScore}
             winRate={winRate}
             emotionalTrades={emotionalTrades}
@@ -496,6 +860,8 @@ export default async function ReportsPage({
           className="report-section"
         >
           <AICoachingReport
+            appLanguage={language}
+            currency={currency}
             disciplineScore={disciplineScore}
             behavioralRisk={behavioralRisk}
             winRate={winRate}
@@ -508,6 +874,8 @@ export default async function ReportsPage({
           className="report-section"
         >
           <RiskManagementReport
+            appLanguage={language}
+            currency={currency}
             averageLoss={averageLoss}
             averageWin={averageWin}
             behavioralRisk={behavioralRisk}
@@ -520,6 +888,8 @@ export default async function ReportsPage({
           className="print-hidden report-section"
         >
           <ConsistencyIntelligenceReport
+            appLanguage={language}
+            currency={currency}
             disciplineScore={disciplineScore}
             winRate={winRate}
             totalTrades={totalTrades}
@@ -532,6 +902,8 @@ export default async function ReportsPage({
           className="print-hidden report-section"
         >
           <PsychologicalStabilityReport
+            appLanguage={language}
+            currency={currency}
             emotionalTrades={emotionalTrades}
             totalTrades={totalTrades}
             behavioralRisk={behavioralRisk}
@@ -544,6 +916,8 @@ export default async function ReportsPage({
           className="print-hidden report-section"
         >
           <PerformanceForecastReport
+            appLanguage={language}
+            currency={currency}
             winRate={winRate}
             disciplineScore={disciplineScore}
             behavioralRisk={behavioralRisk}
@@ -556,6 +930,8 @@ export default async function ReportsPage({
           className="print-hidden report-section"
         >
           <GrowthRoadmapReport
+            appLanguage={language}
+            currency={currency}
             disciplineScore={disciplineScore}
             behavioralRisk={behavioralRisk}
             winRate={winRate}
@@ -567,6 +943,8 @@ export default async function ReportsPage({
           className="print-hidden report-section"
         >
           <EdgeAnalysisReport
+            appLanguage={language}
+            currency={currency}
             averageWin={averageWin}
             averageLoss={averageLoss}
             winRate={winRate}
@@ -579,6 +957,8 @@ export default async function ReportsPage({
           className="print-hidden report-section"
         >
           <DecisionQualityReport
+            appLanguage={language}
+            currency={currency}
             disciplineScore={disciplineScore}
             behavioralRisk={behavioralRisk}
             winRate={winRate}
@@ -591,6 +971,8 @@ export default async function ReportsPage({
           className="print-hidden report-section"
         >
           <ExecutionIntelligenceReport
+            appLanguage={language}
+            currency={currency}
             weakExecutionTrades={weakExecutionTrades}
             totalTrades={totalTrades}
             disciplineScore={disciplineScore}
@@ -604,6 +986,8 @@ export default async function ReportsPage({
           className="print-hidden report-section"
         >
           <SetupIntelligenceReport
+            appLanguage={language}
+            currency={currency}
             totalTrades={totalTrades}
             disciplineScore={disciplineScore}
             averageWin={averageWin}
@@ -617,6 +1001,8 @@ export default async function ReportsPage({
           className="print-hidden report-section"
         >
           <ConfidenceIntelligenceReport
+            appLanguage={language}
+            currency={currency}
             lowConfidenceTrades={lowConfidenceTrades}
             totalTrades={totalTrades}
             disciplineScore={disciplineScore}
@@ -629,6 +1015,8 @@ export default async function ReportsPage({
           className="print-hidden report-section"
         >
           <DisciplineIntelligenceReport
+            appLanguage={language}
+            currency={currency}
             disciplineScore={disciplineScore}
             behavioralRisk={behavioralRisk}
             emotionalTrades={emotionalTrades}
@@ -641,6 +1029,8 @@ export default async function ReportsPage({
           className="print-hidden report-section"
         >
           <EmotionalIntelligenceReport
+            appLanguage={language}
+            currency={currency}
             emotionalTrades={emotionalTrades}
             totalTrades={totalTrades}
             behavioralRisk={behavioralRisk}
@@ -653,6 +1043,8 @@ export default async function ReportsPage({
           className="print-hidden report-section"
         >
           <TraderIdentityReport
+            appLanguage={language}
+            currency={currency}
             disciplineScore={disciplineScore}
             behavioralRisk={behavioralRisk}
             winRate={winRate}
@@ -666,6 +1058,8 @@ export default async function ReportsPage({
           className="print-hidden report-section"
         >
           <CognitivePerformanceReport
+            appLanguage={language}
+            currency={currency}
             disciplineScore={disciplineScore}
             behavioralRisk={behavioralRisk}
             lowConfidenceTrades={lowConfidenceTrades}
@@ -679,6 +1073,8 @@ export default async function ReportsPage({
           className="print-hidden report-section"
         >
           <MentalResilienceReport
+            appLanguage={language}
+            currency={currency}
             disciplineScore={disciplineScore}
             behavioralRisk={behavioralRisk}
             emotionalTrades={emotionalTrades}
@@ -688,7 +1084,7 @@ export default async function ReportsPage({
         </div>
 
         <div className="print-hidden">
-          <PDFReportFooter />
+          <PDFReportFooter appLanguage={language} />
         </div>
       </div>
     </div>

@@ -1,4 +1,9 @@
-type Props = {
+import {
+  getAnalyticsLabels,
+  type AnalyticsI18nProps,
+} from "./AnalyticsI18n";
+
+type Props = AnalyticsI18nProps & {
   data: {
     day: string;
     pnl: number;
@@ -27,18 +32,21 @@ function getIntensity(value: number) {
 
 export default function WeekdayHeatmap({
   data,
+  appLanguage,
 }: Props) {
+  const t = getAnalyticsLabels(appLanguage);
+
   return (
     <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.08),transparent_35%)]" />
 
       <div className="relative z-10">
         <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
-          Performance Heatmap
+          {t.performanceHeatmap}
         </p>
 
         <h2 className="mt-3 text-3xl font-black text-white">
-          Weekday Performance
+          {t.weekdayPerformance}
         </h2>
 
         <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-5">
@@ -62,11 +70,7 @@ export default function WeekdayHeatmap({
         </div>
 
         <p className="mt-8 max-w-2xl text-sm leading-relaxed text-gray-400">
-          VOLTIS visualizza le
-          performance per giorno della
-          settimana per identificare
-          pattern operativi ricorrenti
-          e giornate ad alto edge.
+          {t.weekdayHeatmapDescription}
         </p>
       </div>
     </div>

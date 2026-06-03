@@ -1,6 +1,10 @@
 import AnalyticsSection from "./AnalyticsSection";
+import {
+  getAnalyticsLabels,
+  type AnalyticsI18nProps,
+} from "./AnalyticsI18n";
 
-type Props = {
+type Props = AnalyticsI18nProps & {
   winRate: number;
   averageRR: number;
   totalPnl: number;
@@ -12,61 +16,64 @@ export default function PerformanceInsights({
   averageRR,
   totalPnl,
   bestSymbol,
+  appLanguage,
 }: Props) {
+  const t = getAnalyticsLabels(appLanguage);
+
   const insights = [
     {
-      title: "Performance Health",
-      label: totalPnl >= 0 ? "Positive" : "Defensive",
+      title: t.performanceHealth,
+      label: totalPnl >= 0 ? t.positive : t.defensive,
       tone:
         totalPnl >= 0
           ? "text-green-400"
           : "text-red-400",
       text:
         totalPnl >= 0
-          ? "Il conto è in fase positiva. Mantieni focus su esecuzione e gestione rischio."
-          : "Il conto è in fase negativa. Riduci esposizione e concentrati sulla qualità dei setup.",
+          ? t.positivePerformanceText
+          : t.defensivePerformanceText,
     },
     {
-      title: "Win Rate Quality",
-      label: winRate >= 50 ? "Stable" : "Review",
+      title: t.winRateQuality,
+      label: winRate >= 50 ? t.stable : t.review,
       tone:
         winRate >= 50
           ? "text-cyan-400"
           : "text-yellow-400",
       text:
         winRate >= 50
-          ? "Il win rate è sopra la soglia base. Ora il focus è migliorare il rapporto rischio/rendimento."
-          : "Il win rate è sotto il 50%. Analizza gli errori ricorrenti e filtra meglio gli ingressi.",
+          ? t.stableWinRateText
+          : t.weakWinRateText,
     },
     {
-      title: "Risk Reward",
-      label: averageRR >= 1.5 ? "Healthy" : "Weak",
+      title: t.riskReward,
+      label: averageRR >= 1.5 ? t.healthy : t.weak,
       tone:
         averageRR >= 1.5
           ? "text-violet-400"
           : "text-yellow-400",
       text:
         averageRR >= 1.5
-          ? "Il rapporto rischio/rendimento è sano. Continua a proteggere questa metrica."
-          : "Il rapporto rischio/rendimento può migliorare. Evita trade con upside debole.",
+          ? t.healthyRiskRewardText
+          : t.weakRiskRewardText,
     },
     {
-      title: "Market Edge",
-      label: bestSymbol || "Pending",
+      title: t.marketEdge,
+      label: bestSymbol || t.pending,
       tone: bestSymbol
         ? "text-green-400"
         : "text-gray-400",
       text: bestSymbol
-        ? `${bestSymbol} sembra essere lo strumento con maggiore edge operativo.`
-        : "Non ci sono ancora abbastanza dati per identificare un mercato dominante.",
+        ? t.bestSymbolText(bestSymbol)
+        : t.noMarketEdgeText,
     },
   ];
 
   return (
     <div className="xl:col-span-2">
       <AnalyticsSection
-        subtitle="Performance insights"
-        title="VOLTIS Intelligence"
+        subtitle={t.performanceInsights}
+        title={t.voltisIntelligence}
       >
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {insights.map((insight) => (

@@ -1,4 +1,10 @@
-type Props = {
+import {
+    formatReportCurrency,
+    getReportLabels,
+    type ReportI18nProps,
+} from "@/components/reports/ReportI18n";
+
+type Props = ReportI18nProps & {
     userName: string;
 
     totalTrades: number;
@@ -16,7 +22,6 @@ type Props = {
 
 export default function PDFCompactReport({
     userName,
-
     totalTrades,
     totalPnl,
     winRate,
@@ -28,95 +33,141 @@ export default function PDFCompactReport({
     behavioralRisk,
     emotionalTrades,
     weakExecutionTrades,
+    appLanguage,
+    currency,
 }: Props) {
+    const t = getReportLabels(appLanguage);
+
     return (
         <div className="pdf-only pdf-page min-h-0 bg-[#050b10] p-4 text-white">
             <section className="mb-6 border-b border-gray-300 pb-4">
                 <p className="text-xs uppercase tracking-[0.3em] text-gray-300">
-                    VOLTIS Intelligence Report
+                    {t.voltisIntelligenceReport}
                 </p>
 
                 <h1 className="mt-2 text-3xl font-black">
-                    Trading Performance Report
+                    {t.tradingPerformanceReport}
                 </h1>
 
                 <p className="mt-2 text-sm text-gray-500">
-                    Institutional performance summary
+                    {t.institutionalPerformanceSummary}
                 </p>
             </section>
 
             <section className="mb-5 grid grid-cols-4 gap-3">
                 <div className="rounded-xl border border-gray-300 p-3">
-                    <p className="text-xs text-gray-500">Trades</p>
-                    <h2 className="text-2xl font-black">{totalTrades}</h2>
+                    <p className="text-xs text-gray-500">
+                        {t.trades}
+                    </p>
+                    <h2 className="text-2xl font-black">
+                        {totalTrades}
+                    </h2>
                 </div>
 
                 <div className="rounded-xl border border-gray-300 p-3">
-                    <p className="text-xs text-gray-500">PnL</p>
-                    <h2 className="text-2xl font-black">${totalPnl.toFixed(0)}</h2>
+                    <p className="text-xs text-gray-500">
+                        {t.pnl}
+                    </p>
+                    <h2 className="text-2xl font-black">
+                        {formatReportCurrency(
+                            totalPnl,
+                            currency,
+                            appLanguage
+                        )}
+                    </h2>
                 </div>
 
                 <div className="rounded-xl border border-gray-300 p-3">
-                    <p className="text-xs text-gray-500">Win Rate</p>
-                    <h2 className="text-2xl font-black">{winRate}%</h2>
+                    <p className="text-xs text-gray-500">
+                        {t.winRate}
+                    </p>
+                    <h2 className="text-2xl font-black">
+                        {winRate}%
+                    </h2>
                 </div>
 
                 <div className="rounded-xl border border-gray-300 p-3">
-                    <p className="text-xs text-gray-500">Discipline</p>
-                    <h2 className="text-2xl font-black">{disciplineScore}</h2>
+                    <p className="text-xs text-gray-500">
+                        {t.discipline}
+                    </p>
+                    <h2 className="text-2xl font-black">
+                        {disciplineScore}
+                    </h2>
                 </div>
             </section>
 
             <section className="mb-5 grid grid-cols-2 gap-4">
                 <div className="rounded-xl border border-gray-300 p-4">
-                    <h2 className="text-lg font-black">Executive Summary</h2>
+                    <h2 className="text-lg font-black">
+                        {t.pdfExecutiveSummary}
+                    </h2>
                     <p className="mt-3 text-sm leading-relaxed">
                         {totalPnl >= 0
-                            ? "Il conto mostra una struttura positiva. La priorità è proteggere disciplina, rischio e ripetibilità."
-                            : "Il conto mostra una fase di pressione. La priorità è ridurre esposizione e migliorare qualità esecutiva."}
+                            ? t.pdfPositive
+                            : t.pdfNegative}
                     </p>
                 </div>
 
                 <div className="rounded-xl border border-gray-300 p-4">
-                    <h2 className="text-lg font-black">Behavioral Risk</h2>
+                    <h2 className="text-lg font-black">
+                        {t.pdfBehavioralRisk}
+                    </h2>
                     <p className="mt-3 text-sm leading-relaxed">
-                        Rischio comportamentale: {behavioralRisk}%. Emotional trades:{" "}
-                        {emotionalTrades}. Weak executions: {weakExecutionTrades}.
+                        {t.pdfBehavior(
+                            behavioralRisk,
+                            emotionalTrades,
+                            weakExecutionTrades
+                        )}
                     </p>
                 </div>
             </section>
 
             <section className="mb-5 grid grid-cols-2 gap-4">
                 <div className="rounded-xl border border-gray-300 p-4">
-                    <h2 className="text-lg font-black">Performance Breakdown</h2>
+                    <h2 className="text-lg font-black">
+                        {t.pdfPerformanceBreakdown}
+                    </h2>
                     <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
-                        <p>Wins: {wins}</p>
-                        <p>Losses: {losses}</p>
-                        <p>Avg Win: ${averageWin.toFixed(0)}</p>
-                        <p>Avg Loss: ${averageLoss.toFixed(0)}</p>
+                        <p>{t.wins}: {wins}</p>
+                        <p>{t.losses}: {losses}</p>
+                        <p>
+                            {t.avgWin}:{" "}
+                            {formatReportCurrency(
+                                averageWin,
+                                currency,
+                                appLanguage
+                            )}
+                        </p>
+                        <p>
+                            {t.avgLoss}:{" "}
+                            {formatReportCurrency(
+                                averageLoss,
+                                currency,
+                                appLanguage
+                            )}
+                        </p>
                     </div>
                 </div>
 
                 <div className="rounded-xl border border-gray-300 p-4">
-                    <h2 className="text-lg font-black">AI Coaching Focus</h2>
+                    <h2 className="text-lg font-black">
+                        {t.aiCoachingFocus}
+                    </h2>
                     <p className="mt-3 text-sm leading-relaxed">
                         {disciplineScore >= 80
-                            ? "Focus: scalare la consistenza senza perdere controllo operativo."
+                            ? t.pdfFocusHigh
                             : disciplineScore >= 60
-                                ? "Focus: consolidare disciplina, review e qualità media dei setup."
-                                : "Focus: costruire routine, ridurre impulsività e semplificare il processo."}
+                                ? t.pdfFocusMedium
+                                : t.pdfFocusLow}
                     </p>
                 </div>
             </section>
 
-
             <footer className="mt-2 flex items-center justify-between border-t border-gray-300 pt-3 text-[10px] text-gray-500">
-                <span>
-                    Generated by VOLTIS · Trading Performance Operating System
-                </span>
+                <span>{t.generatedBy}</span>
 
                 <span>
-                    Prepared for {userName}
+                    {t.preparedFor} {userName}
                 </span>
             </footer>
         </div>

@@ -1,0 +1,2143 @@
+
+===== FILE: .\app\admin\page.tsx =====
+
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
+
+import {
+  createUser,
+  deleteUser,
+  freezeUser,
+  unfreezeUser,
+  resetUserPassword,
+  updateUserRole,
+  updateUserPermissions,
+} from "./actions";
+
+export default async function AdminPage() {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
+
+  const currentUser = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+  });
+
+  if (!currentUser || currentUser.role !== "FOUNDER") {
+    redirect("/accounts");
+  }
+
+  const users = await prisma.user.findMany({
+    include: {
+      memberships: {
+        include: {
+          tradingAccount: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return (
+    <div>
+      <div className="mb-10">
+        <p className="text-sm text-gray-400">
+          Platform control
+        </p>
+
+        <h1 className="mt-2 text-4xl font-bold">
+          Admin Panel
+        </h1>
+      </div>
+
+      <form
+        action={createUser}
+        className="mb-8 grid grid-cols-1 gap-4 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:grid-cols-4"
+      >
+        <input
+          name="username"
+          placeholder="Username"
+          className="rounded-xl bg-zinc-900 p-3"
+          required
+        />
+
+        <input
+          name="password"
+          type="password"
+          placeholder="Password"
+          className="rounded-xl bg-zinc-900 p-3"
+          required
+        />
+
+        <input
+          name="name"
+          placeholder="Nome"
+          className="rounded-xl bg-zinc-900 p-3"
+        />
+
+        <select
+          name="role"
+          defaultValue="MEMBER"
+          aria-label="New user role"
+          className="rounded-xl bg-zinc-900 p-3"
+        >
+          <option value="MEMBER">MEMBER</option>
+          <option value="VIEWER">VIEWER</option>
+          <option value="ADMIN">ADMIN</option>
+          <option value="FOUNDER">FOUNDER</option>
+        </select>
+
+        <button
+          type="submit"
+          className="rounded-xl bg-green-500 p-3 font-bold text-black md:col-span-4"
+        >
+          Create User
+        </button>
+      </form>
+
+      <div className="space-y-6">
+        {users.map((user) => {
+          const isCurrentUser =
+            user.id === currentUser.id;
+
+          const isSelfFounder =
+            isCurrentUser && user.role === "FOUNDER";
+
+          const isFrozen =
+            user.status === "FROZEN";
+
+          const isOnline =
+            user.lastActivityAt &&
+            Date.now() -
+            new Date(user.lastActivityAt).getTime() <
+            5 * 60 * 1000;
+
+          return (
+            <div
+              key={user.id}
+              className="rounded-3xl border border-white/10 bg-white/[0.03] p-6"
+            >
+              <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
+                <div>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <h2 className="text-2xl font-bold">
+                      {user.username}
+                    </h2>
+
+                    {isOnline ? (
+                      <span className="rounded-xl bg-green-500/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] text-green-400">
+                        Online
+                      </span>
+                    ) : (
+                      <span className="rounded-xl bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] text-gray-400">
+                        Offline
+                      </span>
+                    )}
+
+                    {isFrozen && (
+                      <span className="rounded-xl bg-yellow-500/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] text-yellow-300">
+                        Frozen
+                      </span>
+                    )}
+                  </div>
+
+                  <p className="mt-1 text-sm text-gray-400">
+                    {user.name || "No name"}
+                  </p>
+
+                  <p className="mt-2 text-xs text-gray-500">
+                    Created:{" "}
+                    {new Date(user.createdAt).toLocaleDateString("it-IT")}
+                  </p>
+
+                  {user.loginCount > 0 && (
+                    <p className="mt-1 text-xs text-gray-500">
+                      Logins: {user.loginCount}
+                    </p>
+                  )}
+
+                  {user.lastLoginAt && (
+                    <p className="mt-1 text-xs text-gray-500">
+                      Last login:{" "}
+                      {new Date(user.lastLoginAt).toLocaleString("it-IT")}
+                    </p>
+                  )}
+
+                  {user.lastActivityAt && (
+                    <p className="mt-1 text-xs text-gray-500">
+                      Last activity:{" "}
+                      {new Date(user.lastActivityAt).toLocaleString("it-IT")}
+                    </p>
+                  )}
+
+                  {user.lastSeenAt && (
+                    <p className="mt-1 text-xs text-gray-500">
+                      Last seen:{" "}
+                      {new Date(user.lastSeenAt).toLocaleString("it-IT")}
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex flex-col gap-3">
+                  {isSelfFounder ? (
+                    <div className="rounded-xl bg-green-500/10 px-4 py-2 text-sm font-semibold text-green-400">
+                      FOUNDER · System Admin
+                    </div>
+                  ) : (
+                    <form
+                      action={updateUserRole}
+                      className="flex items-center gap-2"
+                    >
+                      <input
+                        type="hidden"
+                        name="userId"
+                        value={user.id}
+                      />
+
+                      <select
+                        name="role"
+                        defaultValue={user.role}
+                        aria-label="User role"
+                        className="rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-sm"
+                      >
+                        <option value="FOUNDER">FOUNDER</option>
+                        <option value="ADMIN">ADMIN</option>
+                        <option value="MEMBER">MEMBER</option>
+                        <option value="VIEWER">VIEWER</option>
+                      </select>
+
+                      <button
+                        type="submit"
+                        className="rounded-xl bg-green-500/10 px-3 py-2 text-sm font-semibold text-green-400 hover:bg-green-500/20"
+                      >
+                        Save
+                      </button>
+                    </form>
+                  )}
+
+                  <div className="flex flex-wrap gap-2">
+                    {!isCurrentUser && (
+                      <>
+                        {isFrozen ? (
+                          <form action={unfreezeUser}>
+                            <input
+                              type="hidden"
+                              name="userId"
+                              value={user.id}
+                            />
+
+                            <button
+                              type="submit"
+                              className="rounded-xl bg-green-500/10 px-3 py-2 text-sm font-semibold text-green-400 hover:bg-green-500/20"
+                            >
+                              Unfreeze
+                            </button>
+                          </form>
+                        ) : (
+                          <form action={freezeUser}>
+                            <input
+                              type="hidden"
+                              name="userId"
+                              value={user.id}
+                            />
+
+                            <button
+                              type="submit"
+                              className="rounded-xl bg-yellow-500/10 px-3 py-2 text-sm font-semibold text-yellow-300 hover:bg-yellow-500/20"
+                            >
+                              Freeze
+                            </button>
+                          </form>
+                        )}
+
+                        <form action={deleteUser}>
+                          <input
+                            type="hidden"
+                            name="userId"
+                            value={user.id}
+                          />
+
+                          <button
+                            type="submit"
+                            className="rounded-xl bg-red-500/10 px-3 py-2 text-sm font-semibold text-red-400 hover:bg-red-500/20"
+                          >
+                            Delete
+                          </button>
+                        </form>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {!isSelfFounder && (
+                <form
+                  action={updateUserPermissions}
+                  className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4"
+                >
+                  <input
+                    type="hidden"
+                    name="userId"
+                    value={user.id}
+                  />
+
+                  <p className="mb-3 text-sm font-semibold text-gray-300">
+                    Global Permissions
+                  </p>
+
+                  <div className="grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
+                    <label className="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        name="canCreatePersonalAccounts"
+                        defaultChecked={user.canCreatePersonalAccounts}
+                      />
+                      Create Personal Accounts
+                    </label>
+
+                    <label className="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        name="canCreateSharedAccounts"
+                        defaultChecked={user.canCreateSharedAccounts}
+                      />
+                      Create Shared Accounts
+                    </label>
+
+                    <label className="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        name="canArchiveOwnAccounts"
+                        defaultChecked={user.canArchiveOwnAccounts}
+                      />
+                      Archive Own Accounts
+                    </label>
+
+                    <label className="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        name="canDeleteOwnAccounts"
+                        defaultChecked={user.canDeleteOwnAccounts}
+                      />
+                      Delete Own Accounts
+                    </label>
+
+                    <label className="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        name="canUseCopilot"
+                        defaultChecked={user.canUseCopilot}
+                      />
+                      Use Copilot
+                    </label>
+
+                    <label className="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        name="canViewAnalytics"
+                        defaultChecked={user.canViewAnalytics}
+                      />
+                      View Analytics
+                    </label>
+
+                    <label className="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        name="canViewReports"
+                        defaultChecked={user.canViewReports}
+                      />
+                      View Reports
+                    </label>
+
+                    <label className="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        name="canManageUsers"
+                        defaultChecked={user.canManageUsers}
+                      />
+                      Manage Users
+                    </label>
+
+                    <label className="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        name="canManageSystem"
+                        defaultChecked={user.canManageSystem}
+                      />
+                      Manage System
+                    </label>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="mt-4 rounded-xl bg-blue-500/10 px-4 py-2 text-sm font-semibold text-blue-400 hover:bg-blue-500/20"
+                  >
+                    Save Permissions
+                  </button>
+                </form>
+              )}
+
+              <form
+                action={resetUserPassword}
+                className="mt-6 grid grid-cols-1 gap-3 rounded-2xl border border-white/10 bg-black/20 p-4 md:grid-cols-[1fr_auto]"
+              >
+                <input
+                  type="hidden"
+                  name="userId"
+                  value={user.id}
+                />
+
+                <input
+                  name="password"
+                  type="password"
+                  placeholder="Nuova password"
+                  className="rounded-xl bg-zinc-900 p-3"
+                  required
+                />
+
+                <button
+                  type="submit"
+                  className="rounded-xl bg-white/10 px-4 py-3 text-sm font-semibold hover:bg-white/20"
+                >
+                  Reset Password
+                </button>
+              </form>
+
+              {user.memberships.length > 0 && (
+                <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4">
+                  <p className="mb-3 text-sm font-semibold text-gray-300">
+                    Account Memberships
+                  </p>
+
+                  <div className="flex flex-wrap gap-2">
+                    {user.memberships.map((membership) => (
+                      <div
+                        key={membership.id}
+                        className="rounded-xl bg-white/10 px-3 py-2 text-xs text-gray-300"
+                      >
+                        {membership.tradingAccount.name} · {membership.role}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+===== FILE: .\app\admin\accounts\page.tsx =====
+
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
+
+import {
+  createTradingAccount,
+  addMemberToAccount,
+  removeMemberFromAccount,
+  updateMemberRole,
+  updateMemberPermissions,
+} from "../actions";
+
+import {
+  archiveAccount,
+  restoreAccount,
+  deleteAccount,
+} from "@/app/accounts/actions";
+
+export default async function AdminAccountsPage() {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
+
+  const currentUser = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+  });
+
+  if (!currentUser || currentUser.role !== "FOUNDER") {
+    redirect("/accounts");
+  }
+
+  const accounts = await prisma.tradingAccount.findMany({
+    include: {
+      createdBy: true,
+      members: {
+        include: {
+          user: true,
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+      },
+      trades: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  const activeAccounts = accounts.filter(
+    (account) => account.status === "ACTIVE"
+  );
+
+  const archivedAccounts = accounts.filter(
+    (account) => account.status === "ARCHIVED"
+  );
+
+  const renderAccountCard = (
+    account: (typeof accounts)[number]
+  ) => {
+    const totalPnl = account.trades.reduce(
+      (acc, trade) => acc + (trade.resultUsd || 0),
+      0
+    );
+
+    const isArchived = account.status === "ARCHIVED";
+
+    return (
+      <div
+        key={account.id}
+        className={`rounded-3xl border p-6 ${
+          isArchived
+            ? "border-yellow-500/20 bg-yellow-500/[0.04]"
+            : "border-white/10 bg-white/[0.03]"
+        }`}
+      >
+        <div className="mb-6 flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+          <div>
+            <div className="flex flex-wrap items-center gap-3">
+              <h2 className="text-3xl font-bold">
+                {account.name}
+              </h2>
+
+              <span
+                className={`rounded-xl px-3 py-1 text-xs font-bold ${
+                  isArchived
+                    ? "bg-yellow-500/10 text-yellow-300"
+                    : "bg-green-500/10 text-green-400"
+                }`}
+              >
+                {account.status}
+              </span>
+            </div>
+
+            <p className="mt-2 text-sm text-gray-400">
+              {account.type} · Created by{" "}
+              <span className="text-gray-200">
+                {account.createdBy?.username || "System"}
+              </span>
+            </p>
+
+            <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-5">
+              <div className="rounded-xl border border-white/10 bg-black/20 p-4">
+                <p className="text-xs text-gray-500">
+                  Broker
+                </p>
+
+                <h3 className="mt-2 font-bold">
+                  {account.broker || "-"}
+                </h3>
+              </div>
+
+              <div className="rounded-xl border border-white/10 bg-black/20 p-4">
+                <p className="text-xs text-gray-500">
+                  Phase
+                </p>
+
+                <h3 className="mt-2 font-bold">
+                  {account.phase || "-"}
+                </h3>
+              </div>
+
+              <div className="rounded-xl border border-white/10 bg-black/20 p-4">
+                <p className="text-xs text-gray-500">
+                  Profit Target
+                </p>
+
+                <h3 className="mt-2 font-bold text-green-400">
+                  {account.profitTarget
+                    ? `${account.profitTarget}%`
+                    : "-"}
+                </h3>
+              </div>
+
+              <div className="rounded-xl border border-white/10 bg-black/20 p-4">
+                <p className="text-xs text-gray-500">
+                  Max DD
+                </p>
+
+                <h3 className="mt-2 font-bold text-red-400">
+                  {account.maxDrawdown
+                    ? `${account.maxDrawdown}%`
+                    : "-"}
+                </h3>
+              </div>
+
+              <div className="rounded-xl border border-white/10 bg-black/20 p-4">
+                <p className="text-xs text-gray-500">
+                  Daily DD
+                </p>
+
+                <h3 className="mt-2 font-bold text-red-400">
+                  {account.dailyDrawdown
+                    ? `${account.dailyDrawdown}%`
+                    : "-"}
+                </h3>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            <div className="rounded-2xl bg-green-500/10 px-4 py-2 text-sm font-semibold text-green-400">
+              {account.currency}
+            </div>
+
+            <div className="rounded-2xl bg-white/10 px-4 py-2 text-sm">
+              Trades: {account.trades.length}
+            </div>
+
+            <div
+              className={`rounded-2xl px-4 py-2 text-sm font-semibold ${
+                totalPnl >= 0
+                  ? "bg-green-500/10 text-green-400"
+                  : "bg-red-500/10 text-red-400"
+              }`}
+            >
+              PnL: {totalPnl.toFixed(2)}
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-8 rounded-2xl border border-white/10 bg-black/20 p-4">
+          <p className="mb-3 text-sm font-semibold text-gray-300">
+            Account Actions
+          </p>
+
+          <div className="flex flex-wrap gap-3">
+            <a
+              href={`/accounts/${account.id}`}
+              className="rounded-xl bg-green-500 px-4 py-3 text-sm font-bold text-black hover:bg-green-400"
+            >
+              Open Account
+            </a>
+
+            {!isArchived ? (
+              <form action={archiveAccount}>
+                <input
+                  type="hidden"
+                  name="accountId"
+                  value={account.id}
+                />
+
+                <input
+                  type="hidden"
+                  name="redirectTo"
+                  value="/admin/accounts"
+                />
+
+                <button
+                  type="submit"
+                  className="rounded-xl bg-yellow-500/10 px-4 py-3 text-sm font-bold text-yellow-400 hover:bg-yellow-500/20"
+                >
+                  Archive
+                </button>
+              </form>
+            ) : (
+              <form action={restoreAccount}>
+                <input
+                  type="hidden"
+                  name="accountId"
+                  value={account.id}
+                />
+
+                <input
+                  type="hidden"
+                  name="redirectTo"
+                  value="/admin/accounts"
+                />
+
+                <button
+                  type="submit"
+                  className="rounded-xl bg-blue-500/10 px-4 py-3 text-sm font-bold text-blue-400 hover:bg-blue-500/20"
+                >
+                  Restore
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+
+        <form
+          action={addMemberToAccount}
+          className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3"
+        >
+          <input
+            type="hidden"
+            name="tradingAccountId"
+            value={account.id}
+          />
+
+          <input
+            name="username"
+            placeholder="Username utente"
+            className="rounded-2xl bg-zinc-900 p-4"
+            required
+          />
+
+          <select
+            name="role"
+            aria-label="Member role"
+            className="rounded-2xl bg-zinc-900 p-4"
+            defaultValue="MEMBER"
+          >
+            <option value="MANAGER">MANAGER</option>
+            <option value="MEMBER">MEMBER</option>
+            <option value="VIEWER">VIEWER</option>
+          </select>
+
+          <button
+            type="submit"
+            className="rounded-2xl bg-white/10 p-4 font-semibold hover:bg-white/20"
+          >
+            Aggiungi membro
+          </button>
+        </form>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {account.members.map((member) => {
+            const isAccountManager =
+              member.role === "MANAGER";
+
+            return (
+              <div
+                key={member.id}
+                className="rounded-2xl border border-white/10 bg-black/20 p-5"
+              >
+                <div className="mb-5 flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-lg font-bold">
+                      {member.user.username}
+                    </p>
+
+                    <p className="mt-1 text-sm text-gray-400">
+                      {member.user.name || "-"}
+                    </p>
+                  </div>
+
+                  <div className="rounded-lg bg-white/10 px-3 py-1 text-sm font-bold">
+                    {member.role}
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <form
+                    action={updateMemberRole}
+                    className="grid grid-cols-1 gap-3"
+                  >
+                    <input
+                      type="hidden"
+                      name="membershipId"
+                      value={member.id}
+                    />
+
+                    <select
+                      name="role"
+                      aria-label="Update member role"
+                      defaultValue={member.role}
+                      className="rounded-xl bg-zinc-900 p-3 text-sm"
+                    >
+                      <option value="MANAGER">MANAGER</option>
+                      <option value="MEMBER">MEMBER</option>
+                      <option value="VIEWER">VIEWER</option>
+                    </select>
+
+                    <button
+                      type="submit"
+                      className="rounded-xl bg-green-500/10 px-3 py-2 text-sm font-semibold text-green-400 hover:bg-green-500/20"
+                    >
+                      Update Role
+                    </button>
+                  </form>
+
+                  {isAccountManager ? (
+                    <div className="rounded-xl border border-green-500/20 bg-green-500/10 p-3 text-sm text-green-300">
+                      Full account access. Managers do not need custom permissions.
+                    </div>
+                  ) : (
+                    <form
+                      action={updateMemberPermissions}
+                      className="rounded-xl border border-white/10 p-3 text-sm"
+                    >
+                      <input
+                        type="hidden"
+                        name="membershipId"
+                        value={member.id}
+                      />
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            name="canCreateTrades"
+                            defaultChecked={member.canCreateTrades}
+                          />
+                          Create Trades
+                        </label>
+
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            name="canEditTrades"
+                            defaultChecked={member.canEditTrades}
+                          />
+                          Edit Trades
+                        </label>
+
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            name="canDeleteTrades"
+                            defaultChecked={member.canDeleteTrades}
+                          />
+                          Delete Trades
+                        </label>
+
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            name="canViewAnalytics"
+                            defaultChecked={member.canViewAnalytics}
+                          />
+                          Analytics
+                        </label>
+
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            name="canViewReports"
+                            defaultChecked={member.canViewReports}
+                          />
+                          Reports
+                        </label>
+
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            name="canViewCopilot"
+                            defaultChecked={member.canViewCopilot}
+                          />
+                          Copilot
+                        </label>
+
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            name="canViewMembers"
+                            defaultChecked={member.canViewMembers}
+                          />
+                          Members
+                        </label>
+
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            name="canManageMembers"
+                            defaultChecked={member.canManageMembers}
+                          />
+                          Manage Members
+                        </label>
+
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            name="canManageRoles"
+                            defaultChecked={member.canManageRoles}
+                          />
+                          Manage Roles
+                        </label>
+
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            name="canManageAccount"
+                            defaultChecked={member.canManageAccount}
+                          />
+                          Manage Account
+                        </label>
+                      </div>
+
+                      <button
+                        type="submit"
+                        className="mt-3 w-full rounded-xl bg-blue-500/10 px-3 py-2 text-sm font-semibold text-blue-400 hover:bg-blue-500/20"
+                      >
+                        Save Permissions
+                      </button>
+                    </form>
+                  )}
+
+                  <form action={removeMemberFromAccount}>
+                    <input
+                      type="hidden"
+                      name="membershipId"
+                      value={member.id}
+                    />
+
+                    <button
+                      type="submit"
+                      className="w-full rounded-xl bg-red-500/10 px-3 py-2 text-sm text-red-400 hover:bg-red-500/20"
+                    >
+                      Remove
+                    </button>
+                  </form>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <details className="mt-8 rounded-2xl border border-red-500/20 bg-red-500/[0.04] p-4">
+          <summary className="cursor-pointer text-sm font-bold text-red-400">
+            Danger Zone
+          </summary>
+
+          <div className="mt-4 flex flex-col gap-3 rounded-xl border border-red-500/20 bg-black/20 p-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="font-bold text-red-300">
+                Delete account permanently
+              </p>
+
+              <p className="mt-1 text-sm text-gray-400">
+                This action cannot be undone. Trades, members and related data may be permanently removed.
+              </p>
+            </div>
+
+            <form action={deleteAccount}>
+              <input
+                type="hidden"
+                name="accountId"
+                value={account.id}
+              />
+
+              <input
+                type="hidden"
+                name="redirectTo"
+                value="/admin/accounts"
+              />
+
+              <button
+                type="submit"
+                className="rounded-xl bg-red-500 px-4 py-3 text-sm font-black text-black hover:bg-red-400"
+              >
+                Delete Permanently
+              </button>
+            </form>
+          </div>
+        </details>
+      </div>
+    );
+  };
+
+  return (
+    <div>
+      <div className="mb-10">
+        <p className="text-sm text-gray-400">
+          Gestione conti
+        </p>
+
+        <h1 className="mt-2 text-4xl font-bold">
+          Accounts Management
+        </h1>
+      </div>
+
+      <form
+        action={createTradingAccount}
+        className="mb-10 grid grid-cols-1 gap-4 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:grid-cols-2 xl:grid-cols-4"
+      >
+        <input
+          name="name"
+          placeholder="Nome account"
+          className="rounded-2xl bg-zinc-900 p-4"
+          required
+        />
+
+        <select
+          name="type"
+          aria-label="Account type"
+          className="rounded-2xl bg-zinc-900 p-4"
+          required
+        >
+          <option value="LIVE">LIVE</option>
+          <option value="DEMO">DEMO</option>
+          <option value="PROP">PROP</option>
+          <option value="SHARED">SHARED</option>
+          <option value="CHALLENGE">CHALLENGE</option>
+          <option value="FUNDED">FUNDED</option>
+        </select>
+
+        <input
+          name="initialBalance"
+          type="number"
+          placeholder="Balance iniziale"
+          className="rounded-2xl bg-zinc-900 p-4"
+          required
+        />
+
+        <input
+          name="currency"
+          defaultValue="USD"
+          placeholder="Valuta"
+          className="rounded-2xl bg-zinc-900 p-4"
+          required
+        />
+
+        <input
+          name="broker"
+          placeholder="Broker / Prop Firm"
+          className="rounded-2xl bg-zinc-900 p-4"
+        />
+
+        <input
+          name="phase"
+          placeholder="Phase"
+          className="rounded-2xl bg-zinc-900 p-4"
+        />
+
+        <input
+          name="profitTarget"
+          type="number"
+          step="0.01"
+          placeholder="Profit Target %"
+          className="rounded-2xl bg-zinc-900 p-4"
+        />
+
+        <input
+          name="maxDrawdown"
+          type="number"
+          step="0.01"
+          placeholder="Max Drawdown %"
+          className="rounded-2xl bg-zinc-900 p-4"
+        />
+
+        <input
+          name="dailyDrawdown"
+          type="number"
+          step="0.01"
+          placeholder="Daily Drawdown %"
+          className="rounded-2xl bg-zinc-900 p-4"
+        />
+
+        <button
+          type="submit"
+          className="rounded-2xl bg-green-500 p-4 font-bold text-black md:col-span-2 xl:col-span-4"
+        >
+          Crea account
+        </button>
+      </form>
+
+      <div className="space-y-12">
+        <section>
+          <div className="mb-5 flex items-end justify-between gap-4">
+            <div>
+              <p className="text-sm text-gray-400">
+                Active workspace
+              </p>
+
+              <h2 className="text-2xl font-black">
+                Active Accounts
+              </h2>
+            </div>
+
+            <span className="rounded-xl bg-green-500/10 px-3 py-2 text-sm font-bold text-green-400">
+              {activeAccounts.length}
+            </span>
+          </div>
+
+          <div className="space-y-8">
+            {activeAccounts.length > 0 ? (
+              activeAccounts.map(renderAccountCard)
+            ) : (
+              <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-8 text-sm text-gray-400">
+                Nessun account attivo.
+              </div>
+            )}
+          </div>
+        </section>
+
+        <section>
+          <div className="mb-5 flex items-end justify-between gap-4">
+            <div>
+              <p className="text-sm text-gray-400">
+                Inactive workspace
+              </p>
+
+              <h2 className="text-2xl font-black">
+                Archived Accounts
+              </h2>
+            </div>
+
+            <span className="rounded-xl bg-yellow-500/10 px-3 py-2 text-sm font-bold text-yellow-300">
+              {archivedAccounts.length}
+            </span>
+          </div>
+
+          <div className="space-y-8">
+            {archivedAccounts.length > 0 ? (
+              archivedAccounts.map(renderAccountCard)
+            ) : (
+              <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-8 text-sm text-gray-400">
+                Nessun account archiviato.
+              </div>
+            )}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+
+===== FILE: .\app\admin\activity\page.tsx =====
+
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
+import Link from "next/link";
+
+export default async function AdminActivityPage() {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
+
+  const currentUser = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+  });
+
+  if (
+    !currentUser ||
+    (currentUser.role !== "FOUNDER" &&
+      currentUser.role !== "ADMIN")
+  ) {
+    redirect("/accounts");
+  }
+
+  const activities = await prisma.activityLog.findMany({
+    include: {
+      user: true,
+      account: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 200,
+  });
+
+  return (
+    <div>
+      <div className="mb-10">
+        <p className="text-sm text-green-400">
+          Platform Intelligence
+        </p>
+
+        <h1 className="mt-2 text-4xl font-bold">
+          Platform Activity
+        </h1>
+
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-400">
+          Cronologia globale delle attività della piattaforma.
+        </p>
+      </div>
+
+      <div className="space-y-4">
+        {activities.length > 0 ? (
+          activities.map((activity) => (
+            <div
+              key={activity.id}
+              className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+            >
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                <div>
+                  <div className="mb-3 flex flex-wrap items-center gap-2">
+                    <span className="rounded-xl bg-white/10 px-3 py-1 text-xs font-bold text-gray-300">
+                      {activity.type}
+                    </span>
+
+                    {activity.user && (
+                      <span className="rounded-xl bg-blue-500/10 px-3 py-1 text-xs font-bold text-blue-400">
+                        {activity.user.username}
+                      </span>
+                    )}
+
+                    {activity.account && (
+                      <span className="rounded-xl bg-green-500/10 px-3 py-1 text-xs font-bold text-green-400">
+                        {activity.account.name}
+                      </span>
+                    )}
+                  </div>
+
+                  <h2 className="text-lg font-bold">
+                    {activity.title}
+                  </h2>
+
+                  {activity.description && (
+                    <p className="mt-2 text-sm text-gray-400">
+                      {activity.description}
+                    </p>
+                  )}
+
+                  <p className="mt-3 text-xs text-gray-600">
+                    {new Date(activity.createdAt).toLocaleString("it-IT")}
+                  </p>
+                </div>
+
+                {activity.accountId && (
+                  <Link
+                    href={`/accounts/${activity.accountId}`}
+                    className="rounded-xl bg-white/10 px-4 py-3 text-sm font-semibold hover:bg-white/20"
+                  >
+                    Open Account
+                  </Link>
+                )}
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-10 text-center text-gray-400">
+            Nessuna attività registrata.
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+===== FILE: .\app\admin\maintenance\page.tsx =====
+
+import {
+  ShieldAlert,
+  AlertTriangle,
+  Wrench,
+} from "lucide-react";
+
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
+
+import GlobalToast from "@/components/GlobalToast";
+import { updateMaintenanceMode } from "./actions";
+
+export default async function MaintenancePage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    toast?: string;
+  }>;
+}) {
+  const query = await searchParams;
+
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+  });
+
+  if (
+    !user ||
+    (user.role !== "MANAGER" &&
+      user.role !== "ADMIN")
+  ) {
+    redirect("/");
+  }
+
+  const maintenance =
+    await prisma.maintenanceMode.findFirst();
+
+  return (
+    <>
+      <GlobalToast status={query.toast} />
+
+      <div className="space-y-8">
+        <div>
+          <p className="text-sm text-gray-400">
+            System Maintenance
+          </p>
+
+          <h1 className="mt-2 flex items-center gap-3 text-4xl font-black text-white">
+            <ShieldAlert className="text-cyan-400" />
+            Maintenance Mode
+          </h1>
+
+          <p className="mt-4 max-w-3xl text-sm leading-relaxed text-gray-400">
+            Gestisci manutenzioni, downtime programmati,
+            notifiche utenti e blocco login.
+          </p>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-3">
+          <div className="rounded-[32px] border border-yellow-500/20 bg-yellow-500/10 p-6">
+            <div className="flex items-center gap-3">
+              <AlertTriangle className="text-yellow-300" />
+
+              <h2 className="text-xl font-black text-white">
+                Warning Mode
+              </h2>
+            </div>
+
+            <p className="mt-4 text-sm leading-relaxed text-gray-300">
+              Mostra un avviso agli utenti senza bloccare
+              l’accesso all’app.
+            </p>
+          </div>
+
+          <div className="rounded-[32px] border border-red-500/20 bg-red-500/10 p-6">
+            <div className="flex items-center gap-3">
+              <ShieldAlert className="text-red-300" />
+
+              <h2 className="text-xl font-black text-white">
+                Hard Maintenance
+              </h2>
+            </div>
+
+            <p className="mt-4 text-sm leading-relaxed text-gray-300">
+              Blocca login e accesso all’applicazione.
+            </p>
+          </div>
+
+          <div className="rounded-[32px] border border-cyan-500/20 bg-cyan-500/10 p-6">
+            <div className="flex items-center gap-3">
+              <Wrench className="text-cyan-300" />
+
+              <h2 className="text-xl font-black text-white">
+                System Updates
+              </h2>
+            </div>
+
+            <p className="mt-4 text-sm leading-relaxed text-gray-300">
+              Comunica patch, fix e aggiornamenti server.
+            </p>
+          </div>
+        </div>
+
+        <form
+          action={updateMaintenanceMode}
+          className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/10 p-8"
+        >
+          <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+            Maintenance Configuration
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Configure Maintenance Mode
+          </h2>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-gray-300">
+              <input
+                type="checkbox"
+                name="enabled"
+                defaultChecked={
+                  maintenance?.enabled
+                }
+                className="h-5 w-5 rounded border-white/20 bg-black"
+              />
+
+              Enable Maintenance Mode
+            </label>
+
+            <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-gray-300">
+              <input
+                type="checkbox"
+                name="blockLogin"
+                defaultChecked={
+                  maintenance?.blockLogin
+                }
+                className="h-5 w-5 rounded border-white/20 bg-black"
+              />
+
+              Block User Login
+            </label>
+
+            <input
+              name="title"
+              defaultValue={
+                maintenance?.title || ""
+              }
+              placeholder="Maintenance title"
+              className="rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none placeholder:text-gray-500"
+            />
+
+            <select
+              name="type"
+              defaultValue={
+                maintenance?.type ||
+                "warning"
+              }
+              className="rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none"
+            >
+              <option value="info">
+                Info
+              </option>
+
+              <option value="warning">
+                Warning
+              </option>
+
+              <option value="critical">
+                Critical
+              </option>
+            </select>
+          </div>
+
+          <textarea
+            name="message"
+            rows={7}
+            defaultValue={
+              maintenance?.message || ""
+            }
+            placeholder="Describe the maintenance, expected downtime and other important information..."
+            className="mt-4 w-full rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none placeholder:text-gray-500"
+          />
+
+          <button
+            type="submit"
+            className="mt-6 rounded-2xl bg-cyan-500 px-6 py-4 text-sm font-black uppercase tracking-[0.15em] text-black transition hover:bg-cyan-400"
+          >
+            Save Maintenance Settings
+          </button>
+        </form>
+      </div>
+    </>
+  );
+}
+
+===== FILE: .\app\admin\support\page.tsx =====
+
+import {
+    LifeBuoy,
+    Bug,
+    Lightbulb,
+} from "lucide-react";
+
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
+
+import Link from "next/link";
+
+export default async function AdminSupportPage() {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+        redirect("/login");
+    }
+
+    const user = await prisma.user.findUnique({
+        where: {
+            id: session.user.id,
+        },
+    });
+
+    if (!user) {
+        redirect("/");
+    }
+
+    const tickets =
+        await prisma.supportTicket.findMany({
+            include: {
+                user: true,
+            },
+
+            orderBy: {
+                createdAt: "desc",
+            },
+        });
+
+    return (
+        <div className="space-y-8">
+            <div>
+                <p className="text-sm text-gray-400">
+                    Admin Support Dashboard
+                </p>
+
+                <h1 className="mt-2 flex items-center gap-3 text-4xl font-black text-white">
+                    <LifeBuoy className="text-cyan-400" />
+                    Support Management
+                </h1>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-3">
+                <div className="rounded-[32px] border border-red-500/20 bg-red-500/10 p-6">
+                    <p className="text-sm text-red-200">
+                        Bug Reports
+                    </p>
+
+                    <h2 className="mt-3 text-4xl font-black text-white">
+                        {
+                            tickets.filter(
+                                (ticket) =>
+                                    ticket.type === "bug"
+                            ).length
+                        }
+                    </h2>
+                </div>
+
+                <div className="rounded-[32px] border border-yellow-500/20 bg-yellow-500/10 p-6">
+                    <p className="text-sm text-yellow-200">
+                        Feature Requests
+                    </p>
+
+                    <h2 className="mt-3 text-4xl font-black text-white">
+                        {
+                            tickets.filter(
+                                (ticket) =>
+                                    ticket.type ===
+                                    "feature"
+                            ).length
+                        }
+                    </h2>
+                </div>
+
+                <div className="rounded-[32px] border border-cyan-500/20 bg-cyan-500/10 p-6">
+                    <p className="text-sm text-cyan-200">
+                        Open Tickets
+                    </p>
+
+                    <h2 className="mt-3 text-4xl font-black text-white">
+                        {
+                            tickets.filter(
+                                (ticket) =>
+                                    ticket.status ===
+                                    "open"
+                            ).length
+                        }
+                    </h2>
+                </div>
+            </div>
+
+            <div className="space-y-4">
+                {tickets.length === 0 ? (
+                    <div className="rounded-[32px] border border-white/10 bg-white/[0.03] p-8">
+                        <p className="text-sm text-gray-400">
+                            Nessun ticket presente.
+                        </p>
+                    </div>
+                ) : (
+                    tickets.map((ticket) => (
+                        <Link
+                            key={ticket.id}
+                            href={`/admin/support/${ticket.id}`}
+                            className="block rounded-[32px] border border-white/10 bg-white/[0.03] p-8 transition hover:border-cyan-500/30 hover:bg-cyan-500/[0.03]"
+                        >
+                            <div className="flex items-start justify-between gap-4">
+                                <div>
+                                    <div className="flex items-center gap-3">
+                                        {ticket.type ===
+                                            "bug" ? (
+                                            <Bug className="text-red-400" />
+                                        ) : (
+                                            <Lightbulb className="text-yellow-300" />
+                                        )}
+
+                                        <p className="text-xs uppercase tracking-[0.15em] text-cyan-400">
+                                            {ticket.type}
+                                        </p>
+                                    </div>
+
+                                    <h2 className="mt-4 text-2xl font-black text-white">
+                                        {ticket.subject}
+                                    </h2>
+
+                                    <p className="mt-4 text-sm leading-relaxed text-gray-300">
+                                        {ticket.message}
+                                    </p>
+
+                                    <div className="mt-6 flex flex-wrap gap-4 text-xs text-gray-500">
+                                        <span>
+                                            User:{" "}
+                                            {
+                                                ticket.user
+                                                    .username
+                                            }
+                                        </span>
+
+                                        <span>
+                                            Status:{" "}
+                                            {ticket.status}
+                                        </span>
+
+                                        <span>
+                                            Priority:{" "}
+                                            {
+                                                ticket.priority
+                                            }
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="rounded-full border border-white/10 bg-black/20 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-gray-300">
+                                    {ticket.status}
+                                </div>
+                            </div>
+                        </Link>
+                    ))
+                )}
+            </div>
+        </div>
+    );
+}
+
+===== FILE: .\app\admin\support\[ticketId]\page.tsx =====
+
+import {
+  ArrowLeft,
+  Bug,
+  Lightbulb,
+  LifeBuoy,
+} from "lucide-react";
+
+import Link from "next/link";
+
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
+
+import GlobalToast from "@/components/GlobalToast";
+import { updateSupportTicketStatus } from "./actions";
+
+export default async function AdminTicketPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{
+    ticketId: string;
+  }>;
+
+  searchParams: Promise<{
+    toast?: string;
+  }>;
+}) {
+  const query = await searchParams;
+
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+  });
+
+  if (
+    !user ||
+    (user.role !== "OWNER" &&
+      user.role !== "ADMIN")
+  ) {
+    redirect("/");
+  }
+
+  const { ticketId } = await params;
+
+  const ticketData =
+    await prisma.supportTicket.findUnique({
+      where: {
+        id: ticketId,
+      },
+      include: {
+        user: true,
+      },
+    });
+
+  if (!ticketData) {
+    redirect("/admin/support");
+  }
+
+  const ticket = ticketData;
+
+  return (
+    <>
+      <GlobalToast status={query.toast} />
+
+      <div className="space-y-8">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm text-gray-400">
+              Support Ticket
+            </p>
+
+            <h1 className="mt-2 text-4xl font-black text-white">
+              Ticket Details
+            </h1>
+          </div>
+
+          <Link
+            href="/admin/support"
+            className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-3 text-sm text-gray-300 transition hover:bg-white/[0.05]"
+          >
+            <ArrowLeft size={16} />
+            Back
+          </Link>
+        </div>
+
+        <div className="rounded-[36px] border border-white/10 bg-white/[0.03] p-8">
+          <div className="flex items-start justify-between gap-6">
+            <div>
+              <div className="flex items-center gap-3">
+                {ticket.type === "bug" ? (
+                  <Bug className="text-red-400" />
+                ) : ticket.type === "feature" ? (
+                  <Lightbulb className="text-yellow-300" />
+                ) : (
+                  <LifeBuoy className="text-cyan-300" />
+                )}
+
+                <p className="text-xs uppercase tracking-[0.15em] text-cyan-400">
+                  {ticket.type}
+                </p>
+              </div>
+
+              <h2 className="mt-4 text-3xl font-black text-white">
+                {ticket.subject}
+              </h2>
+
+              <p className="mt-6 max-w-3xl text-sm leading-relaxed text-gray-300">
+                {ticket.message}
+              </p>
+            </div>
+
+            <div className="rounded-full border border-white/10 bg-black/20 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-gray-300">
+              {ticket.status}
+            </div>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-4">
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+              <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
+                User
+              </p>
+
+              <h3 className="mt-3 text-lg font-black text-white">
+                {ticket.user.username}
+              </h3>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+              <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
+                Ticket Status
+              </p>
+
+              <h3 className="mt-3 text-lg font-black text-white">
+                {ticket.status}
+              </h3>
+
+              <p className="mt-2 text-xs leading-relaxed text-gray-500">
+                Indica lo stato attuale della richiesta.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+              <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
+                Ticket Priority
+              </p>
+
+              <h3 className="mt-3 text-lg font-black text-white">
+                {ticket.priority}
+              </h3>
+
+              <p className="mt-2 text-xs leading-relaxed text-gray-500">
+                Indica quanto è urgente o importante il ticket.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+              <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
+                Created
+              </p>
+
+              <h3 className="mt-3 text-lg font-black text-white">
+                {new Date(
+                  ticket.createdAt
+                ).toLocaleDateString()}
+              </h3>
+            </div>
+          </div>
+
+          {ticket.adminNote && (
+            <div className="mt-8 rounded-[28px] border border-cyan-500/20 bg-cyan-500/10 p-6">
+              <p className="text-xs uppercase tracking-[0.15em] text-cyan-400">
+                Admin Response
+              </p>
+
+              <p className="mt-4 text-sm leading-relaxed text-gray-300">
+                {ticket.adminNote}
+              </p>
+
+              {ticket.resolvedAt && (
+                <p className="mt-4 text-xs text-gray-500">
+                  Resolved at:{" "}
+                  {new Date(
+                    ticket.resolvedAt
+                  ).toLocaleDateString()}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+
+        <form
+          action={updateSupportTicketStatus.bind(
+            null,
+            ticket.id
+          )}
+          className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/10 p-8"
+        >
+          <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+            Ticket Management
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Update Ticket
+          </h2>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            <div>
+              <label className="text-xs uppercase tracking-[0.15em] text-gray-400">
+                Ticket Status
+              </label>
+
+              <select
+                name="status"
+                defaultValue={ticket.status}
+                className="mt-3 w-full rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none"
+              >
+                <option value="open">Open</option>
+                <option value="in_review">In Review</option>
+                <option value="resolved">Resolved</option>
+                <option value="closed">Closed</option>
+                <option value="rejected">Rejected</option>
+              </select>
+
+              <p className="mt-2 text-xs leading-relaxed text-gray-500">
+                Usa questo campo per indicare se il ticket è aperto,
+                in verifica, risolto, chiuso o respinto.
+              </p>
+            </div>
+
+            <div>
+              <label className="text-xs uppercase tracking-[0.15em] text-gray-400">
+                Ticket Priority
+              </label>
+
+              <select
+                name="priority"
+                defaultValue={ticket.priority}
+                className="mt-3 w-full rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none"
+              >
+                <option value="low">Low</option>
+                <option value="normal">Normal</option>
+                <option value="high">High</option>
+                <option value="critical">Critical</option>
+              </select>
+
+              <p className="mt-2 text-xs leading-relaxed text-gray-500">
+                Usa questo campo per definire la gravità o urgenza
+                della richiesta.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <label className="text-xs uppercase tracking-[0.15em] text-gray-400">
+              Admin Response
+            </label>
+
+            <textarea
+              name="adminNote"
+              defaultValue={ticket.adminNote || ""}
+              rows={6}
+              placeholder="Scrivi cosa è stato fatto, cosa è stato risolto oppure perché la richiesta è stata respinta..."
+              className="mt-3 w-full rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none placeholder:text-gray-500"
+            />
+
+            <p className="mt-2 text-xs leading-relaxed text-gray-500">
+              Questa risposta sarà visibile all’utente nella sua
+              Ticket History.
+            </p>
+          </div>
+
+          <button
+            type="submit"
+            className="mt-6 rounded-2xl bg-cyan-500 px-6 py-4 text-sm font-black uppercase tracking-[0.15em] text-black transition hover:bg-cyan-400"
+          >
+            Update Ticket
+          </button>
+        </form>
+      </div>
+    </>
+  );
+}
+
+===== FILE: .\app\admin\updates\page.tsx =====
+
+import {
+  Megaphone,
+  Wrench,
+  Sparkles,
+  AlertTriangle,
+} from "lucide-react";
+
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
+
+import GlobalToast from "@/components/GlobalToast";
+import { createReleaseNote } from "./actions";
+
+export default async function AdminUpdatesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    toast?: string;
+  }>;
+}) {
+  const query = await searchParams;
+
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+  });
+
+  if (
+    !user ||
+    (user.role !== "MANAGER" &&
+      user.role !== "ADMIN")
+  ) {
+    redirect("/");
+  }
+
+  const updates =
+    await prisma.releaseNote.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+  return (
+    <>
+      <GlobalToast status={query.toast} />
+
+      <div className="space-y-8">
+        <div>
+          <p className="text-sm text-gray-400">
+            Admin Updates
+          </p>
+
+          <h1 className="mt-2 flex items-center gap-3 text-4xl font-black text-white">
+            <Megaphone className="text-cyan-400" />
+            Release Notes
+          </h1>
+
+          <p className="mt-4 max-w-3xl text-sm leading-relaxed text-gray-400">
+            Pubblica aggiornamenti, bug fix, patch e comunicazioni
+            importanti per gli utenti di VOLTIS.
+          </p>
+        </div>
+
+        <form
+          action={createReleaseNote}
+          className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/10 p-8"
+        >
+          <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+            New App Update
+          </p>
+
+          <h2 className="mt-3 text-3xl font-black text-white">
+            Publish Release Note
+          </h2>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            <input
+              name="title"
+              required
+              placeholder="Update title"
+              className="rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none placeholder:text-gray-500"
+            />
+
+            <select
+              name="type"
+              className="rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none"
+            >
+              <option value="update">
+                General Update
+              </option>
+              <option value="feature">
+                New Feature
+              </option>
+              <option value="bugfix">
+                Bug Fix
+              </option>
+              <option value="maintenance">
+                Maintenance
+              </option>
+              <option value="notice">
+                Important Notice
+              </option>
+            </select>
+
+            <select
+              name="priority"
+              className="rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none"
+            >
+              <option value="low">Low</option>
+              <option value="normal">
+                Normal
+              </option>
+              <option value="high">High</option>
+              <option value="critical">
+                Critical
+              </option>
+            </select>
+
+            <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-gray-300">
+              <input
+                type="checkbox"
+                name="published"
+                className="h-5 w-5 rounded border-white/20 bg-black"
+              />
+
+              Publish immediately
+            </label>
+          </div>
+
+          <textarea
+            name="content"
+            required
+            rows={7}
+            placeholder="Describe what changed, what was fixed, or what users should know..."
+            className="mt-4 w-full rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none placeholder:text-gray-500"
+          />
+
+          <button
+            type="submit"
+            className="mt-6 rounded-2xl bg-cyan-500 px-6 py-4 text-sm font-black uppercase tracking-[0.15em] text-black transition hover:bg-cyan-400"
+          >
+            Create Update
+          </button>
+        </form>
+
+        <div className="rounded-[36px] border border-white/10 bg-white/[0.03] p-8">
+          <div>
+            <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+              Update History
+            </p>
+
+            <h2 className="mt-3 text-3xl font-black text-white">
+              Published & Draft Updates
+            </h2>
+          </div>
+
+          <div className="mt-8 space-y-4">
+            {updates.length === 0 ? (
+              <div className="rounded-[28px] border border-white/10 bg-black/20 p-6">
+                <p className="text-sm text-gray-400">
+                  Nessun aggiornamento creato.
+                </p>
+              </div>
+            ) : (
+              updates.map((update) => {
+                const Icon =
+                  update.type === "feature"
+                    ? Sparkles
+                    : update.type === "bugfix"
+                    ? Wrench
+                    : update.type ===
+                      "maintenance"
+                    ? AlertTriangle
+                    : Megaphone;
+
+                return (
+                  <div
+                    key={update.id}
+                    className="rounded-[28px] border border-white/10 bg-black/20 p-6"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <div className="flex items-center gap-3">
+                          <Icon className="text-cyan-400" />
+
+                          <p className="text-xs uppercase tracking-[0.15em] text-cyan-400">
+                            {update.type}
+                          </p>
+                        </div>
+
+                        <h3 className="mt-3 text-xl font-black text-white">
+                          {update.title}
+                        </h3>
+
+                        <p className="mt-4 text-sm leading-relaxed text-gray-300">
+                          {update.content}
+                        </p>
+
+                        <p className="mt-4 text-xs text-gray-500">
+                          Created:{" "}
+                          {new Date(
+                            update.createdAt
+                          ).toLocaleDateString()}
+                        </p>
+                      </div>
+
+                      <div className="space-y-2 text-right">
+                        <div className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-gray-300">
+                          {update.published
+                            ? "Published"
+                            : "Draft"}
+                        </div>
+
+                        <div className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-cyan-300">
+                          {update.priority}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

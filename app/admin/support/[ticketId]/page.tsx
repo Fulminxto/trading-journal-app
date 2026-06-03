@@ -13,6 +13,11 @@ import { redirect } from "next/navigation";
 
 import GlobalToast from "@/components/GlobalToast";
 import { updateSupportTicketStatus } from "./actions";
+import {
+  formatAdminDate,
+  getAdminI18n,
+  valueLabel,
+} from "../../AdminI18n";
 
 export default async function AdminTicketPage({
   params,
@@ -34,19 +39,23 @@ export default async function AdminTicketPage({
     redirect("/login");
   }
 
-  const user = await prisma.user.findUnique({
+  const currentUser = await prisma.user.findUnique({
     where: {
       id: session.user.id,
     },
   });
 
   if (
-    !user ||
-    (user.role !== "OWNER" &&
-      user.role !== "ADMIN")
+    !currentUser ||
+    (currentUser.role !== "FOUNDER" &&
+      currentUser.role !== "ADMIN")
   ) {
     redirect("/");
   }
+
+  const { language, t } = getAdminI18n(
+    currentUser.appLanguage
+  );
 
   const { ticketId } = await params;
 
@@ -74,11 +83,11 @@ export default async function AdminTicketPage({
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-gray-400">
-              Support Ticket
+              {t.supportTicket}
             </p>
 
             <h1 className="mt-2 text-4xl font-black text-white">
-              Ticket Details
+              {t.ticketDetails}
             </h1>
           </div>
 
@@ -87,7 +96,7 @@ export default async function AdminTicketPage({
             className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-3 text-sm text-gray-300 transition hover:bg-white/[0.05]"
           >
             <ArrowLeft size={16} />
-            Back
+            {t.back}
           </Link>
         </div>
 
@@ -104,7 +113,11 @@ export default async function AdminTicketPage({
                 )}
 
                 <p className="text-xs uppercase tracking-[0.15em] text-cyan-400">
-                  {ticket.type}
+                  {valueLabel(
+                    t,
+                    "ticketType",
+                    ticket.type
+                  )}
                 </p>
               </div>
 
@@ -118,14 +131,18 @@ export default async function AdminTicketPage({
             </div>
 
             <div className="rounded-full border border-white/10 bg-black/20 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-gray-300">
-              {ticket.status}
+              {valueLabel(
+                t,
+                "ticketStatus",
+                ticket.status
+              )}
             </div>
           </div>
 
           <div className="mt-8 grid gap-4 md:grid-cols-4">
             <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
               <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
-                User
+                {t.user}
               </p>
 
               <h3 className="mt-3 text-lg font-black text-white">
@@ -135,41 +152,50 @@ export default async function AdminTicketPage({
 
             <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
               <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
-                Ticket Status
+                {t.ticketStatus}
               </p>
 
               <h3 className="mt-3 text-lg font-black text-white">
-                {ticket.status}
+                {valueLabel(
+                  t,
+                  "ticketStatus",
+                  ticket.status
+                )}
               </h3>
 
               <p className="mt-2 text-xs leading-relaxed text-gray-500">
-                Indica lo stato attuale della richiesta.
+                {t.ticketStatusDescription}
               </p>
             </div>
 
             <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
               <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
-                Ticket Priority
+                {t.ticketPriority}
               </p>
 
               <h3 className="mt-3 text-lg font-black text-white">
-                {ticket.priority}
+                {valueLabel(
+                  t,
+                  "priority",
+                  ticket.priority
+                )}
               </h3>
 
               <p className="mt-2 text-xs leading-relaxed text-gray-500">
-                Indica quanto è urgente o importante il ticket.
+                {t.ticketPriorityDescription}
               </p>
             </div>
 
             <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
               <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
-                Created
+                {t.created}
               </p>
 
               <h3 className="mt-3 text-lg font-black text-white">
-                {new Date(
-                  ticket.createdAt
-                ).toLocaleDateString()}
+                {formatAdminDate(
+                  ticket.createdAt,
+                  language
+                )}
               </h3>
             </div>
           </div>
@@ -177,7 +203,7 @@ export default async function AdminTicketPage({
           {ticket.adminNote && (
             <div className="mt-8 rounded-[28px] border border-cyan-500/20 bg-cyan-500/10 p-6">
               <p className="text-xs uppercase tracking-[0.15em] text-cyan-400">
-                Admin Response
+                {t.adminResponse}
               </p>
 
               <p className="mt-4 text-sm leading-relaxed text-gray-300">
@@ -186,10 +212,11 @@ export default async function AdminTicketPage({
 
               {ticket.resolvedAt && (
                 <p className="mt-4 text-xs text-gray-500">
-                  Resolved at:{" "}
-                  {new Date(
-                    ticket.resolvedAt
-                  ).toLocaleDateString()}
+                  {t.resolvedAt}:{" "}
+                  {formatAdminDate(
+                    ticket.resolvedAt,
+                    language
+                  )}
                 </p>
               )}
             </div>
@@ -204,17 +231,17 @@ export default async function AdminTicketPage({
           className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/10 p-8"
         >
           <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
-            Ticket Management
+            {t.ticketManagement}
           </p>
 
           <h2 className="mt-3 text-3xl font-black text-white">
-            Update Ticket
+            {t.updateTicket}
           </h2>
 
           <div className="mt-8 grid gap-4 md:grid-cols-2">
             <div>
               <label className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                Ticket Status
+                {t.ticketStatus}
               </label>
 
               <select
@@ -222,22 +249,51 @@ export default async function AdminTicketPage({
                 defaultValue={ticket.status}
                 className="mt-3 w-full rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none"
               >
-                <option value="open">Open</option>
-                <option value="in_review">In Review</option>
-                <option value="resolved">Resolved</option>
-                <option value="closed">Closed</option>
-                <option value="rejected">Rejected</option>
+                <option value="open">
+                  {valueLabel(
+                    t,
+                    "ticketStatus",
+                    "open"
+                  )}
+                </option>
+                <option value="in_review">
+                  {valueLabel(
+                    t,
+                    "ticketStatus",
+                    "in_review"
+                  )}
+                </option>
+                <option value="resolved">
+                  {valueLabel(
+                    t,
+                    "ticketStatus",
+                    "resolved"
+                  )}
+                </option>
+                <option value="closed">
+                  {valueLabel(
+                    t,
+                    "ticketStatus",
+                    "closed"
+                  )}
+                </option>
+                <option value="rejected">
+                  {valueLabel(
+                    t,
+                    "ticketStatus",
+                    "rejected"
+                  )}
+                </option>
               </select>
 
               <p className="mt-2 text-xs leading-relaxed text-gray-500">
-                Usa questo campo per indicare se il ticket è aperto,
-                in verifica, risolto, chiuso o respinto.
+                {t.ticketStatusHelp}
               </p>
             </div>
 
             <div>
               <label className="text-xs uppercase tracking-[0.15em] text-gray-400">
-                Ticket Priority
+                {t.ticketPriority}
               </label>
 
               <select
@@ -245,35 +301,41 @@ export default async function AdminTicketPage({
                 defaultValue={ticket.priority}
                 className="mt-3 w-full rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none"
               >
-                <option value="low">Low</option>
-                <option value="normal">Normal</option>
-                <option value="high">High</option>
-                <option value="critical">Critical</option>
+                <option value="low">
+                  {valueLabel(t, "priority", "low")}
+                </option>
+                <option value="normal">
+                  {valueLabel(t, "priority", "normal")}
+                </option>
+                <option value="high">
+                  {valueLabel(t, "priority", "high")}
+                </option>
+                <option value="critical">
+                  {valueLabel(t, "priority", "critical")}
+                </option>
               </select>
 
               <p className="mt-2 text-xs leading-relaxed text-gray-500">
-                Usa questo campo per definire la gravità o urgenza
-                della richiesta.
+                {t.ticketPriorityHelp}
               </p>
             </div>
           </div>
 
           <div className="mt-6">
             <label className="text-xs uppercase tracking-[0.15em] text-gray-400">
-              Admin Response
+              {t.adminResponse}
             </label>
 
             <textarea
               name="adminNote"
               defaultValue={ticket.adminNote || ""}
               rows={6}
-              placeholder="Scrivi cosa è stato fatto, cosa è stato risolto oppure perché la richiesta è stata respinta..."
+              placeholder={t.adminResponsePlaceholder}
               className="mt-3 w-full rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none placeholder:text-gray-500"
             />
 
             <p className="mt-2 text-xs leading-relaxed text-gray-500">
-              Questa risposta sarà visibile all’utente nella sua
-              Ticket History.
+              {t.adminResponseHelp}
             </p>
           </div>
 
@@ -281,7 +343,7 @@ export default async function AdminTicketPage({
             type="submit"
             className="mt-6 rounded-2xl bg-cyan-500 px-6 py-4 text-sm font-black uppercase tracking-[0.15em] text-black transition hover:bg-cyan-400"
           >
-            Update Ticket
+            {t.updateTicket}
           </button>
         </form>
       </div>

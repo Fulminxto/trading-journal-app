@@ -1,8 +1,15 @@
 import { Prisma } from "@prisma/client";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
-import Link from "next/link";
+import {
+  formatCurrencyByLanguage,
+  formatDateByLanguage,
+  normalizeAppLanguage,
+  type AppLanguage,
+} from "@/lib/i18n";
 
 import TradeQualityHero from "@/components/diary/TradeQualityHero";
 import TradeQualityIntelligence from "@/components/diary/TradeQualityIntelligence";
@@ -23,29 +30,709 @@ import {
   deleteAccountTrade,
 } from "./actions";
 
-function formatCurrency(
-  value: number,
-  currency: string
-) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-    minimumFractionDigits: 2,
-  }).format(value);
-}
+type DiaryLabels = {
+  filteredPnl: string;
+  currentEquity: string;
+  winRate: string;
+  filteredTrades: string;
+  imported: string;
+  needsReview: string;
+  bestTrade: string;
+  worstTrade: string;
+
+  operationalRegister: string;
+  title: string;
+  memberFilterActive: string;
+  viewingOnlyTradesOf: string;
+  clearFilter: string;
+  readOnlyMode: string;
+  readOnlyTitle: string;
+  readOnlyDescription: string;
+  account: string;
+  readOnly: string;
+  win: string;
+  loss: string;
+  be: string;
+
+  filtersEyebrow: string;
+  filtersTitle: string;
+  resetFilters: string;
+  allSymbols: string;
+  allOutcomes: string;
+  allDirections: string;
+  allSources: string;
+  allStatuses: string;
+  allTraders: string;
+  strategy: string;
+  applyFilters: string;
+
+  newTradeEyebrow: string;
+  newTradeTitle: string;
+  openDate: string;
+  openTime: string;
+  reason: string;
+  instrument: string;
+  amount: string;
+  openingPrice: string;
+  stopLoss: string;
+  takeProfit: string;
+  riskReward: string;
+  closeDate: string;
+  closingPrice: string;
+  outcome: string;
+  result: string;
+  session: string;
+  emotionalState: string;
+  setupQuality: string;
+  executionRating: string;
+  confidence: string;
+  mistakes: string;
+  lessonsLearned: string;
+  addTrade: string;
+
+  calm: string;
+  focused: string;
+  confident: string;
+  tired: string;
+  stressed: string;
+  impulsive: string;
+
+  historyEyebrow: string;
+  historyTitle: string;
+  filteredCount: (filtered: number, total: number) => string;
+  noTrades: string;
+
+  date: string;
+  trader: string;
+  symbol: string;
+  sync: string;
+  direction: string;
+  equity: string;
+  actions: string;
+  edit: string;
+  delete: string;
+  manual: string;
+  mt5: string;
+  broker: string;
+  unknownTrader: string;
+  notes: string;
+};
+
+const diaryLabels: Record<AppLanguage, DiaryLabels> = {
+  it: {
+    filteredPnl: "PnL filtrato",
+    currentEquity: "Equity attuale",
+    winRate: "Win Rate",
+    filteredTrades: "Trade filtrati",
+    imported: "Importati",
+    needsReview: "Da revisionare",
+    bestTrade: "Miglior trade",
+    worstTrade: "Peggior trade",
+
+    operationalRegister: "Registro operativo",
+    title: "Trading Diary",
+    memberFilterActive: "Filtro membro attivo",
+    viewingOnlyTradesOf: "Stai visualizzando solo i trade di",
+    clearFilter: "Pulisci filtro",
+    readOnlyMode: "Modalità sola lettura",
+    readOnlyTitle: "Questo account è in modalità visualizzazione",
+    readOnlyDescription:
+      "Puoi consultare il diario, ma non puoi creare, modificare o eliminare trade.",
+    account: "Account",
+    readOnly: "Sola lettura",
+    win: "Win",
+    loss: "Loss",
+    be: "BE",
+
+    filtersEyebrow: "Filtri operativi",
+    filtersTitle: "Analizza i tuoi trade",
+    resetFilters: "Reset filtri",
+    allSymbols: "Tutti i simboli",
+    allOutcomes: "Tutti gli outcome",
+    allDirections: "Tutte le direzioni",
+    allSources: "Tutte le sorgenti",
+    allStatuses: "Tutti gli stati",
+    allTraders: "Tutti i trader",
+    strategy: "Strategia",
+    applyFilters: "Applica filtri",
+
+    newTradeEyebrow: "Nuova operazione",
+    newTradeTitle: "Inserisci trade",
+    openDate: "Data apertura",
+    openTime: "Ora apertura",
+    reason: "Motivo",
+    instrument: "Strumento",
+    amount: "Amount / Lot",
+    openingPrice: "Prezzo apertura",
+    stopLoss: "Stop Loss",
+    takeProfit: "Take Profit",
+    riskReward: "Risk Reward",
+    closeDate: "Data chiusura",
+    closingPrice: "Prezzo chiusura",
+    outcome: "Outcome",
+    result: "Risultato $",
+    session: "Sessione",
+    emotionalState: "Stato emotivo",
+    setupQuality: "Qualità setup (1-10)",
+    executionRating: "Valutazione esecuzione (1-10)",
+    confidence: "Confidence (1-10)",
+    mistakes: "Errori commessi",
+    lessonsLearned: "Lezioni apprese",
+    addTrade: "Aggiungi trade",
+
+    calm: "Calmo",
+    focused: "Focused",
+    confident: "Confident",
+    tired: "Stanco",
+    stressed: "Stressato",
+    impulsive: "Impulsivo",
+
+    historyEyebrow: "Storico operazioni",
+    historyTitle: "Trade registrati",
+    filteredCount: (filtered, total) =>
+      `${filtered} operazioni filtrate su ${total} totali`,
+    noTrades: "Nessun trade trovato con questi filtri.",
+
+    date: "Data",
+    trader: "Trader",
+    symbol: "Symbol",
+    sync: "Sync",
+    direction: "Direction",
+    equity: "Equity",
+    actions: "Azioni",
+    edit: "Modifica",
+    delete: "Elimina",
+    manual: "Manuale",
+    mt5: "MT5",
+    broker: "Broker",
+    unknownTrader: "Trader",
+    notes: "Note",
+  },
+
+  en: {
+    filteredPnl: "Filtered PnL",
+    currentEquity: "Current Equity",
+    winRate: "Win Rate",
+    filteredTrades: "Filtered Trades",
+    imported: "Imported",
+    needsReview: "Needs Review",
+    bestTrade: "Best Trade",
+    worstTrade: "Worst Trade",
+
+    operationalRegister: "Operational register",
+    title: "Trading Diary",
+    memberFilterActive: "Member filter active",
+    viewingOnlyTradesOf: "You are viewing only trades from",
+    clearFilter: "Clear filter",
+    readOnlyMode: "Read only mode",
+    readOnlyTitle: "This account is in view-only mode",
+    readOnlyDescription:
+      "You can read the diary, but you cannot create, edit or delete trades.",
+    account: "Account",
+    readOnly: "Read only",
+    win: "Win",
+    loss: "Loss",
+    be: "BE",
+
+    filtersEyebrow: "Operational filters",
+    filtersTitle: "Analyze your trades",
+    resetFilters: "Reset filters",
+    allSymbols: "All symbols",
+    allOutcomes: "All outcomes",
+    allDirections: "All directions",
+    allSources: "All sources",
+    allStatuses: "All statuses",
+    allTraders: "All traders",
+    strategy: "Strategy",
+    applyFilters: "Apply filters",
+
+    newTradeEyebrow: "New operation",
+    newTradeTitle: "Add trade",
+    openDate: "Open date",
+    openTime: "Open time",
+    reason: "Reason",
+    instrument: "Instrument",
+    amount: "Amount / Lot",
+    openingPrice: "Opening price",
+    stopLoss: "Stop Loss",
+    takeProfit: "Take Profit",
+    riskReward: "Risk Reward",
+    closeDate: "Close date",
+    closingPrice: "Closing price",
+    outcome: "Outcome",
+    result: "Result $",
+    session: "Session",
+    emotionalState: "Emotional state",
+    setupQuality: "Setup Quality (1-10)",
+    executionRating: "Execution Rating (1-10)",
+    confidence: "Confidence (1-10)",
+    mistakes: "Mistakes",
+    lessonsLearned: "Lessons learned",
+    addTrade: "Add trade",
+
+    calm: "Calm",
+    focused: "Focused",
+    confident: "Confident",
+    tired: "Tired",
+    stressed: "Stressed",
+    impulsive: "Impulsive",
+
+    historyEyebrow: "Trade history",
+    historyTitle: "Registered trades",
+    filteredCount: (filtered, total) =>
+      `${filtered} filtered trades out of ${total} total`,
+    noTrades: "No trades found with these filters.",
+
+    date: "Date",
+    trader: "Trader",
+    symbol: "Symbol",
+    sync: "Sync",
+    direction: "Direction",
+    equity: "Equity",
+    actions: "Actions",
+    edit: "Edit",
+    delete: "Delete",
+    manual: "Manual",
+    mt5: "MT5",
+    broker: "Broker",
+    unknownTrader: "Trader",
+    notes: "Notes",
+  },
+
+  uk: {
+    filteredPnl: "Відфільтрований PnL",
+    currentEquity: "Поточна equity",
+    winRate: "Win Rate",
+    filteredTrades: "Відфільтровані угоди",
+    imported: "Імпортовані",
+    needsReview: "Потребує ревʼю",
+    bestTrade: "Найкраща угода",
+    worstTrade: "Найгірша угода",
+    operationalRegister: "Операційний журнал",
+    title: "Торговий щоденник",
+    memberFilterActive: "Фільтр учасника активний",
+    viewingOnlyTradesOf: "Ви переглядаєте лише угоди від",
+    clearFilter: "Очистити фільтр",
+    readOnlyMode: "Режим лише перегляду",
+    readOnlyTitle: "Цей акаунт у режимі перегляду",
+    readOnlyDescription:
+      "Ви можете переглядати щоденник, але не можете створювати, редагувати або видаляти угоди.",
+    account: "Акаунт",
+    readOnly: "Лише перегляд",
+    win: "Win",
+    loss: "Loss",
+    be: "BE",
+    filtersEyebrow: "Операційні фільтри",
+    filtersTitle: "Аналізуйте свої угоди",
+    resetFilters: "Скинути фільтри",
+    allSymbols: "Усі символи",
+    allOutcomes: "Усі результати",
+    allDirections: "Усі напрямки",
+    allSources: "Усі джерела",
+    allStatuses: "Усі статуси",
+    allTraders: "Усі трейдери",
+    strategy: "Стратегія",
+    applyFilters: "Застосувати фільтри",
+    newTradeEyebrow: "Нова операція",
+    newTradeTitle: "Додати угоду",
+    openDate: "Дата відкриття",
+    openTime: "Час відкриття",
+    reason: "Причина",
+    instrument: "Інструмент",
+    amount: "Amount / Lot",
+    openingPrice: "Ціна відкриття",
+    stopLoss: "Stop Loss",
+    takeProfit: "Take Profit",
+    riskReward: "Risk Reward",
+    closeDate: "Дата закриття",
+    closingPrice: "Ціна закриття",
+    outcome: "Результат",
+    result: "Результат $",
+    session: "Сесія",
+    emotionalState: "Емоційний стан",
+    setupQuality: "Якість сетапу (1-10)",
+    executionRating: "Оцінка виконання (1-10)",
+    confidence: "Впевненість (1-10)",
+    mistakes: "Помилки",
+    lessonsLearned: "Вивчені уроки",
+    addTrade: "Додати угоду",
+    calm: "Спокійний",
+    focused: "Сфокусований",
+    confident: "Впевнений",
+    tired: "Втомлений",
+    stressed: "Напружений",
+    impulsive: "Імпульсивний",
+    historyEyebrow: "Історія операцій",
+    historyTitle: "Зареєстровані угоди",
+    filteredCount: (filtered, total) =>
+      `${filtered} відфільтрованих угод із ${total}`,
+    noTrades: "За цими фільтрами угод не знайдено.",
+    date: "Дата",
+    trader: "Трейдер",
+    symbol: "Символ",
+    sync: "Синхр.",
+    direction: "Напрямок",
+    equity: "Equity",
+    actions: "Дії",
+    edit: "Редагувати",
+    delete: "Видалити",
+    manual: "Вручну",
+    mt5: "MT5",
+    broker: "Брокер",
+    unknownTrader: "Трейдер",
+    notes: "Нотатки",
+  },
+
+  ru: {
+    filteredPnl: "Отфильтрованный PnL",
+    currentEquity: "Текущая equity",
+    winRate: "Win Rate",
+    filteredTrades: "Отфильтрованные сделки",
+    imported: "Импортированные",
+    needsReview: "Требует ревью",
+    bestTrade: "Лучшая сделка",
+    worstTrade: "Худшая сделка",
+    operationalRegister: "Операционный журнал",
+    title: "Торговый дневник",
+    memberFilterActive: "Фильтр участника активен",
+    viewingOnlyTradesOf: "Вы просматриваете только сделки от",
+    clearFilter: "Очистить фильтр",
+    readOnlyMode: "Режим только просмотра",
+    readOnlyTitle: "Этот аккаунт в режиме просмотра",
+    readOnlyDescription:
+      "Вы можете просматривать дневник, но не можете создавать, редактировать или удалять сделки.",
+    account: "Аккаунт",
+    readOnly: "Только просмотр",
+    win: "Win",
+    loss: "Loss",
+    be: "BE",
+    filtersEyebrow: "Операционные фильтры",
+    filtersTitle: "Анализируйте свои сделки",
+    resetFilters: "Сбросить фильтры",
+    allSymbols: "Все символы",
+    allOutcomes: "Все результаты",
+    allDirections: "Все направления",
+    allSources: "Все источники",
+    allStatuses: "Все статусы",
+    allTraders: "Все трейдеры",
+    strategy: "Стратегия",
+    applyFilters: "Применить фильтры",
+    newTradeEyebrow: "Новая операция",
+    newTradeTitle: "Добавить сделку",
+    openDate: "Дата открытия",
+    openTime: "Время открытия",
+    reason: "Причина",
+    instrument: "Инструмент",
+    amount: "Amount / Lot",
+    openingPrice: "Цена открытия",
+    stopLoss: "Stop Loss",
+    takeProfit: "Take Profit",
+    riskReward: "Risk Reward",
+    closeDate: "Дата закрытия",
+    closingPrice: "Цена закрытия",
+    outcome: "Результат",
+    result: "Результат $",
+    session: "Сессия",
+    emotionalState: "Эмоциональное состояние",
+    setupQuality: "Качество сетапа (1-10)",
+    executionRating: "Оценка исполнения (1-10)",
+    confidence: "Уверенность (1-10)",
+    mistakes: "Ошибки",
+    lessonsLearned: "Уроки",
+    addTrade: "Добавить сделку",
+    calm: "Спокойный",
+    focused: "Сфокусированный",
+    confident: "Уверенный",
+    tired: "Уставший",
+    stressed: "В стрессе",
+    impulsive: "Импульсивный",
+    historyEyebrow: "История операций",
+    historyTitle: "Зарегистрированные сделки",
+    filteredCount: (filtered, total) =>
+      `${filtered} отфильтрованных сделок из ${total}`,
+    noTrades: "По этим фильтрам сделки не найдены.",
+    date: "Дата",
+    trader: "Трейдер",
+    symbol: "Символ",
+    sync: "Синхр.",
+    direction: "Направление",
+    equity: "Equity",
+    actions: "Действия",
+    edit: "Редактировать",
+    delete: "Удалить",
+    manual: "Вручную",
+    mt5: "MT5",
+    broker: "Брокер",
+    unknownTrader: "Трейдер",
+    notes: "Заметки",
+  },
+
+  es: {
+    filteredPnl: "PnL filtrado",
+    currentEquity: "Equity actual",
+    winRate: "Win Rate",
+    filteredTrades: "Trades filtrados",
+    imported: "Importados",
+    needsReview: "Necesita revisión",
+    bestTrade: "Mejor trade",
+    worstTrade: "Peor trade",
+    operationalRegister: "Registro operativo",
+    title: "Diario de trading",
+    memberFilterActive: "Filtro de miembro activo",
+    viewingOnlyTradesOf: "Estás viendo solo los trades de",
+    clearFilter: "Limpiar filtro",
+    readOnlyMode: "Modo solo lectura",
+    readOnlyTitle: "Esta cuenta está en modo visualización",
+    readOnlyDescription:
+      "Puedes consultar el diario, pero no puedes crear, editar o eliminar trades.",
+    account: "Cuenta",
+    readOnly: "Solo lectura",
+    win: "Win",
+    loss: "Loss",
+    be: "BE",
+    filtersEyebrow: "Filtros operativos",
+    filtersTitle: "Analiza tus trades",
+    resetFilters: "Restablecer filtros",
+    allSymbols: "Todos los símbolos",
+    allOutcomes: "Todos los resultados",
+    allDirections: "Todas las direcciones",
+    allSources: "Todas las fuentes",
+    allStatuses: "Todos los estados",
+    allTraders: "Todos los traders",
+    strategy: "Estrategia",
+    applyFilters: "Aplicar filtros",
+    newTradeEyebrow: "Nueva operación",
+    newTradeTitle: "Añadir trade",
+    openDate: "Fecha de apertura",
+    openTime: "Hora de apertura",
+    reason: "Motivo",
+    instrument: "Instrumento",
+    amount: "Amount / Lot",
+    openingPrice: "Precio de apertura",
+    stopLoss: "Stop Loss",
+    takeProfit: "Take Profit",
+    riskReward: "Risk Reward",
+    closeDate: "Fecha de cierre",
+    closingPrice: "Precio de cierre",
+    outcome: "Resultado",
+    result: "Resultado $",
+    session: "Sesión",
+    emotionalState: "Estado emocional",
+    setupQuality: "Calidad del setup (1-10)",
+    executionRating: "Ejecución (1-10)",
+    confidence: "Confianza (1-10)",
+    mistakes: "Errores",
+    lessonsLearned: "Lecciones aprendidas",
+    addTrade: "Añadir trade",
+    calm: "Calmo",
+    focused: "Enfocado",
+    confident: "Confiado",
+    tired: "Cansado",
+    stressed: "Estresado",
+    impulsive: "Impulsivo",
+    historyEyebrow: "Historial de operaciones",
+    historyTitle: "Trades registrados",
+    filteredCount: (filtered, total) =>
+      `${filtered} trades filtrados de ${total} totales`,
+    noTrades: "No se encontraron trades con estos filtros.",
+    date: "Fecha",
+    trader: "Trader",
+    symbol: "Símbolo",
+    sync: "Sync",
+    direction: "Dirección",
+    equity: "Equity",
+    actions: "Acciones",
+    edit: "Editar",
+    delete: "Eliminar",
+    manual: "Manual",
+    mt5: "MT5",
+    broker: "Broker",
+    unknownTrader: "Trader",
+    notes: "Notas",
+  },
+
+  fr: {
+    filteredPnl: "PnL filtré",
+    currentEquity: "Equity actuelle",
+    winRate: "Win Rate",
+    filteredTrades: "Trades filtrés",
+    imported: "Importés",
+    needsReview: "À revoir",
+    bestTrade: "Meilleur trade",
+    worstTrade: "Pire trade",
+    operationalRegister: "Registre opérationnel",
+    title: "Journal de trading",
+    memberFilterActive: "Filtre membre actif",
+    viewingOnlyTradesOf: "Vous consultez uniquement les trades de",
+    clearFilter: "Effacer le filtre",
+    readOnlyMode: "Mode lecture seule",
+    readOnlyTitle: "Ce compte est en mode consultation",
+    readOnlyDescription:
+      "Vous pouvez consulter le journal, mais vous ne pouvez pas créer, modifier ou supprimer des trades.",
+    account: "Compte",
+    readOnly: "Lecture seule",
+    win: "Win",
+    loss: "Loss",
+    be: "BE",
+    filtersEyebrow: "Filtres opérationnels",
+    filtersTitle: "Analysez vos trades",
+    resetFilters: "Réinitialiser les filtres",
+    allSymbols: "Tous les symboles",
+    allOutcomes: "Tous les résultats",
+    allDirections: "Toutes les directions",
+    allSources: "Toutes les sources",
+    allStatuses: "Tous les statuts",
+    allTraders: "Tous les traders",
+    strategy: "Stratégie",
+    applyFilters: "Appliquer les filtres",
+    newTradeEyebrow: "Nouvelle opération",
+    newTradeTitle: "Ajouter un trade",
+    openDate: "Date d’ouverture",
+    openTime: "Heure d’ouverture",
+    reason: "Raison",
+    instrument: "Instrument",
+    amount: "Amount / Lot",
+    openingPrice: "Prix d’ouverture",
+    stopLoss: "Stop Loss",
+    takeProfit: "Take Profit",
+    riskReward: "Risk Reward",
+    closeDate: "Date de clôture",
+    closingPrice: "Prix de clôture",
+    outcome: "Résultat",
+    result: "Résultat $",
+    session: "Session",
+    emotionalState: "État émotionnel",
+    setupQuality: "Qualité du setup (1-10)",
+    executionRating: "Exécution (1-10)",
+    confidence: "Confiance (1-10)",
+    mistakes: "Erreurs",
+    lessonsLearned: "Leçons apprises",
+    addTrade: "Ajouter un trade",
+    calm: "Calme",
+    focused: "Concentré",
+    confident: "Confiant",
+    tired: "Fatigué",
+    stressed: "Stressé",
+    impulsive: "Impulsif",
+    historyEyebrow: "Historique des opérations",
+    historyTitle: "Trades enregistrés",
+    filteredCount: (filtered, total) =>
+      `${filtered} trades filtrés sur ${total} au total`,
+    noTrades: "Aucun trade trouvé avec ces filtres.",
+    date: "Date",
+    trader: "Trader",
+    symbol: "Symbole",
+    sync: "Sync",
+    direction: "Direction",
+    equity: "Equity",
+    actions: "Actions",
+    edit: "Modifier",
+    delete: "Supprimer",
+    manual: "Manuel",
+    mt5: "MT5",
+    broker: "Broker",
+    unknownTrader: "Trader",
+    notes: "Notes",
+  },
+
+  de: {
+    filteredPnl: "Gefilterter PnL",
+    currentEquity: "Aktuelle Equity",
+    winRate: "Win Rate",
+    filteredTrades: "Gefilterte Trades",
+    imported: "Importiert",
+    needsReview: "Review nötig",
+    bestTrade: "Bester Trade",
+    worstTrade: "Schlechtester Trade",
+    operationalRegister: "Operatives Register",
+    title: "Trading-Tagebuch",
+    memberFilterActive: "Mitgliederfilter aktiv",
+    viewingOnlyTradesOf: "Du siehst nur Trades von",
+    clearFilter: "Filter löschen",
+    readOnlyMode: "Nur-Lese-Modus",
+    readOnlyTitle: "Dieses Konto ist im Ansichtsmodus",
+    readOnlyDescription:
+      "Du kannst das Tagebuch ansehen, aber keine Trades erstellen, bearbeiten oder löschen.",
+    account: "Konto",
+    readOnly: "Nur Lesen",
+    win: "Win",
+    loss: "Loss",
+    be: "BE",
+    filtersEyebrow: "Operative Filter",
+    filtersTitle: "Analysiere deine Trades",
+    resetFilters: "Filter zurücksetzen",
+    allSymbols: "Alle Symbole",
+    allOutcomes: "Alle Ergebnisse",
+    allDirections: "Alle Richtungen",
+    allSources: "Alle Quellen",
+    allStatuses: "Alle Status",
+    allTraders: "Alle Trader",
+    strategy: "Strategie",
+    applyFilters: "Filter anwenden",
+    newTradeEyebrow: "Neue Operation",
+    newTradeTitle: "Trade hinzufügen",
+    openDate: "Eröffnungsdatum",
+    openTime: "Eröffnungszeit",
+    reason: "Grund",
+    instrument: "Instrument",
+    amount: "Amount / Lot",
+    openingPrice: "Eröffnungspreis",
+    stopLoss: "Stop Loss",
+    takeProfit: "Take Profit",
+    riskReward: "Risk Reward",
+    closeDate: "Schlussdatum",
+    closingPrice: "Schlusspreis",
+    outcome: "Ergebnis",
+    result: "Ergebnis $",
+    session: "Session",
+    emotionalState: "Emotionaler Zustand",
+    setupQuality: "Setup-Qualität (1-10)",
+    executionRating: "Execution Rating (1-10)",
+    confidence: "Confidence (1-10)",
+    mistakes: "Fehler",
+    lessonsLearned: "Gelernte Lektionen",
+    addTrade: "Trade hinzufügen",
+    calm: "Ruhig",
+    focused: "Fokussiert",
+    confident: "Selbstbewusst",
+    tired: "Müde",
+    stressed: "Gestresst",
+    impulsive: "Impulsiv",
+    historyEyebrow: "Operationshistorie",
+    historyTitle: "Registrierte Trades",
+    filteredCount: (filtered, total) =>
+      `${filtered} gefilterte Trades von ${total} insgesamt`,
+    noTrades: "Keine Trades mit diesen Filtern gefunden.",
+    date: "Datum",
+    trader: "Trader",
+    symbol: "Symbol",
+    sync: "Sync",
+    direction: "Richtung",
+    equity: "Equity",
+    actions: "Aktionen",
+    edit: "Bearbeiten",
+    delete: "Löschen",
+    manual: "Manuell",
+    mt5: "MT5",
+    broker: "Broker",
+    unknownTrader: "Trader",
+    notes: "Notizen",
+  },
+};
 
 function getTradeSourceLabel(
-  source?: string | null
+  source: string | null | undefined,
+  labels: DiaryLabels
 ) {
   if (source === "mt5") {
-    return "MT5";
+    return labels.mt5;
   }
 
   if (source === "broker") {
-    return "Broker";
+    return labels.broker;
   }
 
-  return "Manual";
+  return labels.manual;
 }
 
 function getTradeSourceClass(
@@ -60,6 +747,41 @@ function getTradeSourceClass(
   }
 
   return "border-white/10 bg-white/10 text-gray-300";
+}
+
+function getOutcomeLabel(
+  outcome: string | null,
+  labels: DiaryLabels
+) {
+  if (outcome === "win") {
+    return labels.win;
+  }
+
+  if (outcome === "loss") {
+    return labels.loss;
+  }
+
+  if (outcome === "be") {
+    return labels.be;
+  }
+
+  return "-";
+}
+
+function getOutcomeClass(outcome: string | null) {
+  if (outcome === "win") {
+    return "bg-green-500/10 text-green-400";
+  }
+
+  if (outcome === "loss") {
+    return "bg-red-500/10 text-red-400";
+  }
+
+  if (outcome === "be") {
+    return "bg-yellow-500/10 text-yellow-400";
+  }
+
+  return "bg-white/10 text-gray-400";
 }
 
 export default async function DiaryPage({
@@ -92,17 +814,33 @@ export default async function DiaryPage({
   const { accountId } = await params;
   const filters = await searchParams;
 
+  const currentUser = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+    select: {
+      appLanguage: true,
+    },
+  });
+
+  if (!currentUser) {
+    redirect("/login");
+  }
+
+  const language = normalizeAppLanguage(
+    currentUser.appLanguage
+  );
+
+  const t = diaryLabels[language] ?? diaryLabels.en;
+
   const selectedTraderId =
     filters.trader || filters.member;
 
-  const memberId = selectedTraderId;
-
-  const selectedMember = memberId
+  const selectedMember = selectedTraderId
     ? await prisma.user.findUnique({
       where: {
-        id: memberId,
+        id: selectedTraderId,
       },
-
       select: {
         username: true,
         name: true,
@@ -110,48 +848,53 @@ export default async function DiaryPage({
     })
     : null;
 
-  const membership = await prisma.accountMember.findFirst({
-    where: {
-      userId: session.user.id,
-      tradingAccountId: accountId,
-    },
-    include: {
-      tradingAccount: true,
-    },
-  });
+  const membership =
+    await prisma.accountMember.findFirst({
+      where: {
+        userId: session.user.id,
+        tradingAccountId: accountId,
+      },
+      include: {
+        tradingAccount: true,
+      },
+    });
+
+  if (!membership) {
+    redirect("/accounts");
+  }
 
   const isManager =
-    membership &&
     String(membership.role) === "MANAGER";
 
-  const canCreateTrades =
-    Boolean(isManager || membership?.canCreateTrades);
+  const canCreateTrades = Boolean(
+    isManager || membership.canCreateTrades
+  );
 
-  const canEditTrades =
-    Boolean(isManager || membership?.canEditTrades);
+  const canEditTrades = Boolean(
+    isManager || membership.canEditTrades
+  );
 
-  const canDeleteTrades =
-    Boolean(isManager || membership?.canDeleteTrades);
+  const canDeleteTrades = Boolean(
+    isManager || membership.canDeleteTrades
+  );
 
   const isReadOnly =
     !canCreateTrades &&
     !canEditTrades &&
     !canDeleteTrades;
 
-  if (!membership) {
-    redirect("/accounts");
-  }
-
   const account = membership.tradingAccount;
+  const currency = account.currency || "USD";
 
-  const accountMembers = await prisma.accountMember.findMany({
-    where: {
-      tradingAccountId: accountId,
-    },
-    include: {
-      user: true,
-    },
-  });
+  const accountMembers =
+    await prisma.accountMember.findMany({
+      where: {
+        tradingAccountId: accountId,
+      },
+      include: {
+        user: true,
+      },
+    });
 
   const isSharedAccount =
     accountMembers.length > 1;
@@ -174,7 +917,9 @@ export default async function DiaryPage({
 
   if (
     filters.source &&
-    ["manual", "mt5", "broker"].includes(filters.source)
+    ["manual", "mt5", "broker"].includes(
+      filters.source
+    )
   ) {
     where.source = filters.source;
   }
@@ -201,7 +946,6 @@ export default async function DiaryPage({
           gte: new Date(filters.from),
         }
         : {}),
-
       ...(filters.to
         ? {
           lte: new Date(filters.to),
@@ -247,7 +991,10 @@ export default async function DiaryPage({
     new Set(
       allTrades
         .map((trade) => trade.strategy)
-        .filter(Boolean)
+        .filter(
+          (strategy): strategy is string =>
+            Boolean(strategy)
+        )
     )
   ).sort();
 
@@ -279,7 +1026,9 @@ export default async function DiaryPage({
   );
 
   const winRate =
-    totalTrades > 0 ? (wins / totalTrades) * 100 : 0;
+    totalTrades > 0
+      ? (wins / totalTrades) * 100
+      : 0;
 
   const latestTrade = allTrades[0];
 
@@ -290,14 +1039,18 @@ export default async function DiaryPage({
   const bestTrade =
     trades.length > 0
       ? Math.max(
-        ...trades.map((trade) => trade.resultUsd || 0)
+        ...trades.map(
+          (trade) => trade.resultUsd || 0
+        )
       )
       : 0;
 
   const worstTrade =
     trades.length > 0
       ? Math.min(
-        ...trades.map((trade) => trade.resultUsd || 0)
+        ...trades.map(
+          (trade) => trade.resultUsd || 0
+        )
       )
       : 0;
 
@@ -314,46 +1067,62 @@ export default async function DiaryPage({
 
   const statCards = [
     {
-      label: "Filtered PnL",
-      value: formatCurrency(totalPnl, account.currency),
+      label: t.filteredPnl,
+      value: formatCurrencyByLanguage(
+        totalPnl,
+        currency,
+        language
+      ),
       tone:
         totalPnl >= 0
           ? "text-green-400"
           : "text-red-400",
     },
     {
-      label: "Current Equity",
-      value: formatCurrency(currentEquity, account.currency),
+      label: t.currentEquity,
+      value: formatCurrencyByLanguage(
+        currentEquity,
+        currency,
+        language
+      ),
       tone: "text-white",
     },
     {
-      label: "Win Rate",
+      label: t.winRate,
       value: `${winRate.toFixed(2)}%`,
       tone: "text-green-400",
     },
     {
-      label: "Filtered Trades",
+      label: t.filteredTrades,
       value: totalTrades,
       tone: "text-white",
     },
     {
-      label: "Imported",
+      label: t.imported,
       value: importedTrades,
       tone: "text-cyan-400",
     },
     {
-      label: "Needs Review",
+      label: t.needsReview,
       value: needsReviewTrades,
       tone: "text-yellow-300",
     },
     {
-      label: "Best Trade",
-      value: formatCurrency(bestTrade, account.currency),
+      label: t.bestTrade,
+      value: formatCurrencyByLanguage(
+        bestTrade,
+        currency,
+        language
+      ),
       tone: "text-green-400",
     },
     {
-      label: "Worst Trade",
-      value: formatCurrency(worstTrade, account.currency),
+      label: t.worstTrade,
+      value: formatCurrencyByLanguage(
+        worstTrade,
+        currency,
+        language
+      ),
       tone: "text-red-400",
     },
   ];
@@ -363,8 +1132,7 @@ export default async function DiaryPage({
       ? Math.round(
         trades.reduce(
           (acc, trade) =>
-            acc +
-            (trade.executionRating || 0),
+            acc + (trade.executionRating || 0),
           0
         ) / trades.length
       )
@@ -375,8 +1143,7 @@ export default async function DiaryPage({
       ? Math.round(
         trades.reduce(
           (acc, trade) =>
-            acc +
-            (trade.confidence || 0),
+            acc + (trade.confidence || 0),
           0
         ) / trades.length
       )
@@ -456,8 +1223,7 @@ export default async function DiaryPage({
 
   const setupStats = trades.reduce(
     (acc, trade) => {
-      const setup =
-        trade.strategy || "Unknown";
+      const setup = trade.strategy || "Unknown";
 
       if (!acc[setup]) {
         acc[setup] = {
@@ -484,24 +1250,22 @@ export default async function DiaryPage({
   );
 
   const bestSetup =
-    Object.entries(setupStats)
-      .sort((a, b) => {
-        const winRateA =
-          a[1].count > 0
-            ? a[1].wins / a[1].count
-            : 0;
+    Object.entries(setupStats).sort((a, b) => {
+      const winRateA =
+        a[1].count > 0
+          ? a[1].wins / a[1].count
+          : 0;
 
-        const winRateB =
-          b[1].count > 0
-            ? b[1].wins / b[1].count
-            : 0;
+      const winRateB =
+        b[1].count > 0
+          ? b[1].wins / b[1].count
+          : 0;
 
-        return winRateB - winRateA;
-      })[0]?.[0] || "Not enough data";
+      return winRateB - winRateA;
+    })[0]?.[0] || "Not enough data";
 
   const traderType =
-    averageConfidence >= 7 &&
-      averageExecution >= 7
+    averageConfidence >= 7 && averageExecution >= 7
       ? "Confident Executor"
       : averageExecution >= 7
         ? "Technical Executor"
@@ -522,13 +1286,11 @@ export default async function DiaryPage({
         : "Consistency";
 
   const highConfidenceTrades = trades.filter(
-    (trade) =>
-      (trade.confidence || 0) >= 8
+    (trade) => (trade.confidence || 0) >= 8
   ).length;
 
   return (
     <div>
-
       <TradeQualityHero
         totalTrades={trades.length}
         averageExecution={averageExecution}
@@ -536,9 +1298,7 @@ export default async function DiaryPage({
       />
 
       <div className="mt-8">
-        <TradeDisciplineScore
-          score={disciplineScore}
-        />
+        <TradeDisciplineScore score={disciplineScore} />
       </div>
 
       <div className="mt-8">
@@ -633,68 +1393,68 @@ export default async function DiaryPage({
         />
       </div>
 
-      <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div className="mb-8 mt-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <p className="text-sm text-gray-400">
-            Registro operativo
+            {t.operationalRegister}
           </p>
 
           <h1 className="text-3xl font-bold sm:text-4xl">
-            Trading Diary
+            {t.title}
           </h1>
 
           {selectedMember && (
             <div className="mt-4 rounded-3xl border border-cyan-500/20 bg-cyan-500/10 p-5">
               <p className="text-xs uppercase tracking-[0.2em] text-cyan-400">
-                Member Filter Active
+                {t.memberFilterActive}
               </p>
 
               <h2 className="mt-2 text-xl font-black text-white">
-                Stai visualizzando solo i trade di{" "}
+                {t.viewingOnlyTradesOf}{" "}
                 {selectedMember.name ||
                   selectedMember.username}
               </h2>
 
-              <a
+              <Link
                 href={`/accounts/${accountId}/diary`}
                 className="mt-4 inline-flex rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm font-bold text-gray-300 transition hover:bg-white/[0.05]"
               >
-                Clear Filter
-              </a>
+                {t.clearFilter}
+              </Link>
             </div>
           )}
 
           {isReadOnly && (
             <div className="mt-4 rounded-3xl border border-yellow-500/20 bg-yellow-500/10 p-5">
               <p className="text-xs uppercase tracking-[0.2em] text-yellow-300">
-                Read Only Mode
+                {t.readOnlyMode}
               </p>
 
               <h2 className="mt-2 text-xl font-black text-white">
-                Questo account è in modalità visualizzazione
+                {t.readOnlyTitle}
               </h2>
 
               <p className="mt-3 text-sm text-gray-300">
-                Puoi consultare il diario, ma non puoi creare, modificare o eliminare trade.
+                {t.readOnlyDescription}
               </p>
             </div>
           )}
 
           <div className="mt-2 flex flex-wrap items-center gap-3">
             <p className="text-sm text-gray-500">
-              Account: {account.name}
+              {t.account}: {account.name}
             </p>
 
             {isReadOnly && (
               <div className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-4 py-1 text-xs font-black uppercase tracking-[0.2em] text-yellow-300">
-                Read Only
+                {t.readOnly}
               </div>
             )}
           </div>
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-gray-300">
-          {wins} Win - {losses} Loss - {breakEven} BE
+          {wins} {t.win} - {losses} {t.loss} - {breakEven} {t.be}
         </div>
       </div>
 
@@ -708,7 +1468,9 @@ export default async function DiaryPage({
               {stat.label}
             </p>
 
-            <h2 className={`mt-2 text-2xl font-bold ${stat.tone}`}>
+            <h2
+              className={`mt-2 text-2xl font-bold ${stat.tone}`}
+            >
               {stat.value}
             </h2>
           </div>
@@ -722,11 +1484,11 @@ export default async function DiaryPage({
         <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="text-sm text-gray-400">
-              Filtri operativi
+              {t.filtersEyebrow}
             </p>
 
             <h2 className="mt-1 text-2xl font-bold">
-              Analizza i tuoi trade
+              {t.filtersTitle}
             </h2>
           </div>
 
@@ -735,7 +1497,7 @@ export default async function DiaryPage({
               href={`/accounts/${accountId}/diary`}
               className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-gray-300 hover:bg-white/[0.06]"
             >
-              Reset filtri
+              {t.resetFilters}
             </Link>
           )}
         </div>
@@ -746,7 +1508,7 @@ export default async function DiaryPage({
             defaultValue={filters.symbol || ""}
             className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
           >
-            <option value="">Tutti i simboli</option>
+            <option value="">{t.allSymbols}</option>
 
             {symbols.map((symbol) => (
               <option key={symbol} value={symbol}>
@@ -760,10 +1522,10 @@ export default async function DiaryPage({
             defaultValue={filters.outcome || ""}
             className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
           >
-            <option value="">Tutti gli outcome</option>
-            <option value="win">Win</option>
-            <option value="loss">Loss</option>
-            <option value="be">BE</option>
+            <option value="">{t.allOutcomes}</option>
+            <option value="win">{t.win}</option>
+            <option value="loss">{t.loss}</option>
+            <option value="be">{t.be}</option>
           </select>
 
           <select
@@ -771,7 +1533,7 @@ export default async function DiaryPage({
             defaultValue={filters.direction || ""}
             className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
           >
-            <option value="">Tutte le direzioni</option>
+            <option value="">{t.allDirections}</option>
             <option value="LONG">LONG</option>
             <option value="SHORT">SHORT</option>
           </select>
@@ -781,10 +1543,10 @@ export default async function DiaryPage({
             defaultValue={filters.source || ""}
             className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
           >
-            <option value="">Tutte le sorgenti</option>
-            <option value="manual">Manual</option>
-            <option value="mt5">MT5</option>
-            <option value="broker">Broker</option>
+            <option value="">{t.allSources}</option>
+            <option value="manual">{t.manual}</option>
+            <option value="mt5">{t.mt5}</option>
+            <option value="broker">{t.broker}</option>
           </select>
 
           <select
@@ -792,8 +1554,8 @@ export default async function DiaryPage({
             defaultValue={filters.needsReview || ""}
             className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
           >
-            <option value="">Tutti gli stati</option>
-            <option value="true">Needs Review</option>
+            <option value="">{t.allStatuses}</option>
+            <option value="true">{t.needsReview}</option>
           </select>
 
           {isSharedAccount && (
@@ -802,9 +1564,7 @@ export default async function DiaryPage({
               defaultValue={selectedTraderId || ""}
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             >
-              <option value="">
-                Tutti i trader
-              </option>
+              <option value="">{t.allTraders}</option>
 
               {accountMembers.map((member) => (
                 <option
@@ -813,7 +1573,7 @@ export default async function DiaryPage({
                 >
                   {member.user.name ||
                     member.user.username ||
-                    "Trader"}
+                    t.unknownTrader}
                 </option>
               ))}
             </select>
@@ -823,7 +1583,7 @@ export default async function DiaryPage({
             name="strategy"
             defaultValue={filters.strategy || ""}
             list="strategy-list"
-            placeholder="Strategia"
+            placeholder={t.strategy}
             className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
           />
 
@@ -831,7 +1591,7 @@ export default async function DiaryPage({
             {strategies.map((strategy) => (
               <option
                 key={strategy}
-                value={strategy || ""}
+                value={strategy}
               />
             ))}
           </datalist>
@@ -854,7 +1614,7 @@ export default async function DiaryPage({
             type="submit"
             className="rounded-2xl bg-green-500 p-4 font-bold text-black transition hover:bg-green-400 sm:col-span-2 xl:col-span-9"
           >
-            Applica filtri
+            {t.applyFilters}
           </button>
         </div>
       </form>
@@ -866,11 +1626,11 @@ export default async function DiaryPage({
         >
           <div className="mb-6">
             <p className="text-sm text-gray-400">
-              Nuova operazione
+              {t.newTradeEyebrow}
             </p>
 
             <h2 className="mt-1 text-2xl font-bold">
-              Inserisci trade
+              {t.newTradeTitle}
             </h2>
           </div>
 
@@ -878,6 +1638,7 @@ export default async function DiaryPage({
             <input
               name="openDate"
               type="date"
+              aria-label={t.openDate}
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
               required
             />
@@ -885,18 +1646,19 @@ export default async function DiaryPage({
             <input
               name="openTime"
               type="time"
+              aria-label={t.openTime}
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             />
 
             <input
               name="reason"
-              placeholder="Motivo"
+              placeholder={t.reason}
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             />
 
             <input
               name="strategy"
-              placeholder="Strategia"
+              placeholder={t.strategy}
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             />
 
@@ -905,7 +1667,7 @@ export default async function DiaryPage({
               required
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             >
-              <option value="">Strumento</option>
+              <option value="">{t.instrument}</option>
 
               <optgroup label="Forex">
                 <option value="EURUSD">EURUSD</option>
@@ -949,43 +1711,44 @@ export default async function DiaryPage({
 
             <input
               name="amount"
-              placeholder="Amount / Lot"
+              placeholder={t.amount}
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             />
 
             <input
               name="openingPrice"
-              placeholder="Opening Price"
+              placeholder={t.openingPrice}
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             />
 
             <input
               name="stopLoss"
-              placeholder="Stop Loss"
+              placeholder={t.stopLoss}
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             />
 
             <input
               name="takeProfit"
-              placeholder="Take Profit"
+              placeholder={t.takeProfit}
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             />
 
             <input
               name="riskReward"
-              placeholder="Risk Reward"
+              placeholder={t.riskReward}
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             />
 
             <input
               name="closeDate"
               type="date"
+              aria-label={t.closeDate}
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             />
 
             <input
               name="closingPrice"
-              placeholder="Closing Price"
+              placeholder={t.closingPrice}
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             />
 
@@ -993,15 +1756,15 @@ export default async function DiaryPage({
               name="outcome"
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             >
-              <option value="">Outcome</option>
-              <option value="win">Win</option>
-              <option value="loss">Loss</option>
-              <option value="be">BE</option>
+              <option value="">{t.outcome}</option>
+              <option value="win">{t.win}</option>
+              <option value="loss">{t.loss}</option>
+              <option value="be">{t.be}</option>
             </select>
 
             <input
               name="resultUsd"
-              placeholder="Result $"
+              placeholder={t.result}
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             />
 
@@ -1009,7 +1772,7 @@ export default async function DiaryPage({
               name="session"
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             >
-              <option value="">Sessione</option>
+              <option value="">{t.session}</option>
               <option value="ASIA">Asia</option>
               <option value="LONDON">London</option>
               <option value="NEW_YORK">New York</option>
@@ -1020,13 +1783,15 @@ export default async function DiaryPage({
               name="emotionalState"
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             >
-              <option value="">Stato emotivo</option>
-              <option value="CALM">Calmo</option>
-              <option value="FOCUSED">Focused</option>
-              <option value="CONFIDENT">Confident</option>
-              <option value="TIRED">Stanco</option>
-              <option value="STRESSED">Stressato</option>
-              <option value="IMPULSIVE">Impulsivo</option>
+              <option value="">{t.emotionalState}</option>
+              <option value="CALM">{t.calm}</option>
+              <option value="FOCUSED">{t.focused}</option>
+              <option value="CONFIDENT">{t.confident}</option>
+              <option value="TIRED">{t.tired}</option>
+              <option value="STRESSED">{t.stressed}</option>
+              <option value="IMPULSIVE">
+                {t.impulsive}
+              </option>
             </select>
 
             <input
@@ -1034,7 +1799,7 @@ export default async function DiaryPage({
               type="number"
               min="1"
               max="10"
-              placeholder="Setup Quality (1-10)"
+              placeholder={t.setupQuality}
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             />
 
@@ -1043,7 +1808,7 @@ export default async function DiaryPage({
               type="number"
               min="1"
               max="10"
-              placeholder="Execution Rating (1-10)"
+              placeholder={t.executionRating}
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             />
 
@@ -1052,19 +1817,19 @@ export default async function DiaryPage({
               type="number"
               min="1"
               max="10"
-              placeholder="Confidence (1-10)"
+              placeholder={t.confidence}
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             />
 
             <textarea
               name="mistakes"
-              placeholder="Errori commessi"
+              placeholder={t.mistakes}
               className="min-h-[110px] rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40 sm:col-span-2"
             />
 
             <textarea
               name="lessonsLearned"
-              placeholder="Lessons learned"
+              placeholder={t.lessonsLearned}
               className="min-h-[110px] rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40 sm:col-span-2"
             />
 
@@ -1072,7 +1837,7 @@ export default async function DiaryPage({
               type="submit"
               className="rounded-2xl bg-green-500 p-4 font-bold text-black transition hover:bg-green-400 sm:col-span-2 xl:col-span-4"
             >
-              Aggiungi trade
+              {t.addTrade}
             </button>
           </div>
         </form>
@@ -1081,16 +1846,16 @@ export default async function DiaryPage({
       <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
           <p className="text-sm text-gray-400">
-            Storico operazioni
+            {t.historyEyebrow}
           </p>
 
           <h2 className="text-2xl font-bold">
-            Trade registrati
+            {t.historyTitle}
           </h2>
         </div>
 
         <p className="text-sm text-gray-500">
-          {totalTrades} operazioni filtrate su {allTrades.length} totali
+          {t.filteredCount(totalTrades, allTrades.length)}
         </p>
       </div>
 
@@ -1098,21 +1863,19 @@ export default async function DiaryPage({
         <table className="w-full border-collapse">
           <thead className="bg-white/5 text-left text-sm text-gray-400">
             <tr>
-              <th className="p-4">Data</th>
+              <th className="p-4">{t.date}</th>
               {isSharedAccount && (
-                <th className="p-4">
-                  Trader
-                </th>
+                <th className="p-4">{t.trader}</th>
               )}
-              <th className="p-4">Symbol</th>
-              <th className="p-4">Sync</th>
-              <th className="p-4">Direction</th>
-              <th className="p-4">Outcome</th>
-              <th className="p-4">Result</th>
-              <th className="p-4">Equity</th>
-              <th className="p-4">Strategy</th>
+              <th className="p-4">{t.symbol}</th>
+              <th className="p-4">{t.sync}</th>
+              <th className="p-4">{t.direction}</th>
+              <th className="p-4">{t.outcome}</th>
+              <th className="p-4">{t.result}</th>
+              <th className="p-4">{t.equity}</th>
+              <th className="p-4">{t.strategy}</th>
               <th className="p-4">R:R</th>
-              <th className="p-4">Actions</th>
+              <th className="p-4">{t.actions}</th>
             </tr>
           </thead>
 
@@ -1124,7 +1887,10 @@ export default async function DiaryPage({
               >
                 <td className="p-4">
                   <div className="font-semibold">
-                    {new Date(trade.openDate).toLocaleDateString("it-IT")}
+                    {formatDateByLanguage(
+                      trade.openDate,
+                      language
+                    )}
                   </div>
 
                   <div className="text-xs text-gray-500">
@@ -1137,7 +1903,7 @@ export default async function DiaryPage({
                     <span className="rounded-xl bg-white/10 px-3 py-1 text-sm font-semibold text-white">
                       {trade.createdBy?.name ||
                         trade.createdBy?.username ||
-                        "Trader"}
+                        t.unknownTrader}
                     </span>
                   </td>
                 )}
@@ -1153,12 +1919,15 @@ export default async function DiaryPage({
                         trade.source
                       )}`}
                     >
-                      {getTradeSourceLabel(trade.source)}
+                      {getTradeSourceLabel(
+                        trade.source,
+                        t
+                      )}
                     </span>
 
                     {trade.needsReview && (
                       <span className="w-fit rounded-xl border border-yellow-500/20 bg-yellow-500/10 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-yellow-300">
-                        Needs Review
+                        {t.needsReview}
                       </span>
                     )}
                   </div>
@@ -1166,8 +1935,8 @@ export default async function DiaryPage({
 
                 <td
                   className={`p-4 font-semibold ${trade.direction === "LONG"
-                    ? "text-green-400"
-                    : "text-red-400"
+                      ? "text-green-400"
+                      : "text-red-400"
                     }`}
                 >
                   {trade.direction}
@@ -1175,35 +1944,32 @@ export default async function DiaryPage({
 
                 <td className="p-4">
                   <span
-                    className={`rounded-xl px-3 py-1 text-sm font-semibold ${trade.outcome === "win"
-                      ? "bg-green-500/10 text-green-400"
-                      : trade.outcome === "loss"
-                        ? "bg-red-500/10 text-red-400"
-                        : trade.outcome === "be"
-                          ? "bg-yellow-500/10 text-yellow-400"
-                          : "bg-white/10 text-gray-400"
-                      }`}
+                    className={`rounded-xl px-3 py-1 text-sm font-semibold ${getOutcomeClass(
+                      trade.outcome
+                    )}`}
                   >
-                    {trade.outcome || "-"}
+                    {getOutcomeLabel(trade.outcome, t)}
                   </span>
                 </td>
 
                 <td
                   className={`p-4 font-bold ${(trade.resultUsd || 0) >= 0
-                    ? "text-green-400"
-                    : "text-red-400"
+                      ? "text-green-400"
+                      : "text-red-400"
                     }`}
                 >
-                  {formatCurrency(
+                  {formatCurrencyByLanguage(
                     trade.resultUsd || 0,
-                    account.currency
+                    currency,
+                    language
                   )}
                 </td>
 
                 <td className="p-4 font-semibold">
-                  {formatCurrency(
+                  {formatCurrencyByLanguage(
                     trade.equity || account.initialBalance,
-                    account.currency
+                    currency,
+                    language
                   )}
                 </td>
 
@@ -1223,7 +1989,7 @@ export default async function DiaryPage({
                           href={`/accounts/${accountId}/diary/${trade.id}/edit`}
                           className="rounded-xl bg-white/10 px-3 py-2 text-sm hover:bg-white/20"
                         >
-                          Edit
+                          {t.edit}
                         </Link>
                       )}
 
@@ -1239,14 +2005,14 @@ export default async function DiaryPage({
                             type="submit"
                             className="rounded-xl bg-red-500/10 px-3 py-2 text-sm text-red-400 hover:bg-red-500/20"
                           >
-                            Delete
+                            {t.delete}
                           </button>
                         </form>
                       )}
                     </div>
                   ) : (
                     <span className="rounded-xl bg-yellow-500/10 px-3 py-2 text-xs font-semibold text-yellow-300">
-                      Read only
+                      {t.readOnly}
                     </span>
                   )}
                 </td>
@@ -1259,7 +2025,7 @@ export default async function DiaryPage({
                   colSpan={isSharedAccount ? 11 : 10}
                   className="p-8 text-center text-gray-500"
                 >
-                  Nessun trade trovato con questi filtri.
+                  {t.noTrades}
                 </td>
               </tr>
             )}
@@ -1270,7 +2036,7 @@ export default async function DiaryPage({
       <div className="space-y-4 lg:hidden">
         {trades.length === 0 ? (
           <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 text-center text-gray-500">
-            Nessun trade trovato con questi filtri.
+            {t.noTrades}
           </div>
         ) : (
           trades.map((trade) => (
@@ -1278,209 +2044,171 @@ export default async function DiaryPage({
               key={trade.id}
               className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl transition-all duration-300 hover:border-cyan-500/20 hover:bg-white/[0.06]"
             >
-
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.06),transparent_35%)] opacity-0 transition group-hover:opacity-100" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.06),transparent_35%)]" />
 
               <div className="relative z-10">
-
-                <div className="mb-4 flex items-start justify-between gap-4">
+                <div className="flex items-start justify-between gap-4">
                   <div>
-                    <h3 className="text-xl font-bold">
+                    <p className="text-xs uppercase tracking-[0.18em] text-gray-500">
+                      {formatDateByLanguage(
+                        trade.openDate,
+                        language
+                      )} {trade.openTime || ""}
+                    </p>
+
+                    <h3 className="mt-2 text-2xl font-black text-white">
                       {trade.symbol}
                     </h3>
 
-                    <p className="text-sm text-gray-500">
-                      {new Date(trade.openDate).toLocaleDateString("it-IT")} -{" "}
-                      {trade.openTime || "-"}
-                    </p>
-
                     {isSharedAccount && (
-                      <p className="mt-2 inline-flex rounded-xl bg-white/10 px-3 py-1 text-xs font-semibold text-white">
-                        {trade.createdBy?.name ||
-                          trade.createdBy?.username ||
-                          "Trader"}
+                      <p className="mt-1 text-sm text-gray-500">
+                        {t.trader}: {trade.createdBy?.name || trade.createdBy?.username || t.unknownTrader}
                       </p>
                     )}
                   </div>
 
                   <span
-                    className={`rounded-xl px-3 py-1 text-sm font-bold ${trade.direction === "LONG"
-                      ? "bg-green-500/10 text-green-400"
-                      : "bg-red-500/10 text-red-400"
+                    className={`rounded-2xl px-3 py-2 text-xs font-black ${trade.direction === "LONG"
+                        ? "bg-green-500/10 text-green-400"
+                        : "bg-red-500/10 text-red-400"
                       }`}
                   >
                     {trade.direction}
                   </span>
                 </div>
 
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <span
-                    className={`rounded-xl border px-3 py-1 text-xs font-bold ${getTradeSourceClass(
-                      trade.source
-                    )}`}
-                  >
-                    {getTradeSourceLabel(trade.source)}
-                  </span>
-
-                  {trade.needsReview && (
-                    <span className="rounded-xl border border-yellow-500/20 bg-yellow-500/10 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-yellow-300">
-                      Needs Review
-                    </span>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="mt-5 grid grid-cols-2 gap-3">
                   <div className="rounded-2xl bg-black/20 p-3">
-                    <p className="text-gray-500">Outcome</p>
-                    <p className="mt-1 font-bold">
-                      {trade.outcome || "-"}
+                    <p className="text-xs text-gray-500">
+                      {t.outcome}
+                    </p>
+
+                    <p className="mt-1 font-bold text-white">
+                      {getOutcomeLabel(trade.outcome, t)}
                     </p>
                   </div>
 
                   <div className="rounded-2xl bg-black/20 p-3">
-                    <p className="text-gray-500">Result</p>
+                    <p className="text-xs text-gray-500">
+                      {t.result}
+                    </p>
+
                     <p
                       className={`mt-1 font-bold ${(trade.resultUsd || 0) >= 0
-                        ? "text-green-400"
-                        : "text-red-400"
+                          ? "text-green-400"
+                          : "text-red-400"
                         }`}
                     >
-                      {formatCurrency(
+                      {formatCurrencyByLanguage(
                         trade.resultUsd || 0,
-                        account.currency
+                        currency,
+                        language
                       )}
                     </p>
                   </div>
 
                   <div className="rounded-2xl bg-black/20 p-3">
-                    <p className="text-gray-500">Equity</p>
-                    <p className="mt-1 font-bold">
-                      {formatCurrency(
+                    <p className="text-xs text-gray-500">
+                      {t.equity}
+                    </p>
+
+                    <p className="mt-1 font-bold text-white">
+                      {formatCurrencyByLanguage(
                         trade.equity || account.initialBalance,
-                        account.currency
+                        currency,
+                        language
                       )}
                     </p>
                   </div>
 
                   <div className="rounded-2xl bg-black/20 p-3">
-                    <p className="text-gray-500">R:R</p>
-                    <p className="mt-1 font-bold">
-                      {trade.riskReward || "-"}
+                    <p className="text-xs text-gray-500">
+                      {t.sync}
+                    </p>
+
+                    <p className="mt-1 font-bold text-cyan-300">
+                      {getTradeSourceLabel(trade.source, t)}
                     </p>
                   </div>
                 </div>
 
-                {(
-                  trade.strategy ||
-                  trade.notes ||
-                  trade.session ||
-                  trade.emotionalState ||
-                  trade.setupQuality ||
+                {(trade.setupQuality ||
                   trade.executionRating ||
-                  trade.confidence ||
-                  trade.mistakes ||
-                  trade.lessonsLearned
-                ) && (
-                    <div className="mt-4 space-y-3">
-                      <div className="grid grid-cols-2 gap-3">
-                        {trade.session && (
-                          <div className="rounded-2xl bg-black/20 p-3">
-                            <p className="text-xs text-gray-500">
-                              Session
-                            </p>
-
-                            <p className="mt-1 font-bold text-white">
-                              {trade.session}
-                            </p>
-                          </div>
-                        )}
-
-                        {trade.emotionalState && (
-                          <div className="rounded-2xl bg-black/20 p-3">
-                            <p className="text-xs text-gray-500">
-                              Emotional State
-                            </p>
-
-                            <p className="mt-1 font-bold text-white">
-                              {trade.emotionalState}
-                            </p>
-                          </div>
-                        )}
-
-                        {trade.setupQuality && (
-                          <div className="rounded-2xl bg-black/20 p-3">
-                            <p className="text-xs text-gray-500">
-                              Setup Quality
-                            </p>
-
-                            <p className="mt-1 font-bold text-green-400">
-                              {trade.setupQuality}/10
-                            </p>
-                          </div>
-                        )}
-
-                        {trade.executionRating && (
-                          <div className="rounded-2xl bg-black/20 p-3">
-                            <p className="text-xs text-gray-500">
-                              Execution
-                            </p>
-
-                            <p className="mt-1 font-bold text-yellow-400">
-                              {trade.executionRating}/10
-                            </p>
-                          </div>
-                        )}
-
-                        {trade.confidence && (
-                          <div className="rounded-2xl bg-black/20 p-3">
-                            <p className="text-xs text-gray-500">
-                              Confidence
-                            </p>
-
-                            <p className="mt-1 font-bold text-blue-400">
-                              {trade.confidence}/10
-                            </p>
-                          </div>
-                        )}
-                      </div>
-
-                      {trade.strategy && (
-                        <p className="rounded-2xl bg-black/20 p-3 text-sm text-gray-400">
-                          Strategia: {trade.strategy}
-                        </p>
-                      )}
-
-                      {trade.notes && (
-                        <p className="rounded-2xl bg-black/20 p-3 text-sm text-gray-400">
-                          {trade.notes}
-                        </p>
-                      )}
-
-                      {trade.mistakes && (
-                        <div className="rounded-2xl border border-red-500/10 bg-red-500/[0.03] p-3">
-                          <p className="text-xs font-semibold uppercase tracking-wide text-red-400">
-                            Mistakes
+                  trade.confidence) && (
+                    <div className="mt-4 grid grid-cols-3 gap-3">
+                      {trade.setupQuality && (
+                        <div className="rounded-2xl bg-black/20 p-3">
+                          <p className="text-xs text-gray-500">
+                            Setup
                           </p>
 
-                          <p className="mt-2 text-sm text-gray-300">
-                            {trade.mistakes}
+                          <p className="mt-1 font-bold text-green-400">
+                            {trade.setupQuality}/10
                           </p>
                         </div>
                       )}
 
-                      {trade.lessonsLearned && (
-                        <div className="rounded-2xl border border-green-500/10 bg-green-500/[0.03] p-3">
-                          <p className="text-xs font-semibold uppercase tracking-wide text-green-400">
-                            Lessons Learned
+                      {trade.executionRating && (
+                        <div className="rounded-2xl bg-black/20 p-3">
+                          <p className="text-xs text-gray-500">
+                            Execution
                           </p>
 
-                          <p className="mt-2 text-sm text-gray-300">
-                            {trade.lessonsLearned}
+                          <p className="mt-1 font-bold text-yellow-300">
+                            {trade.executionRating}/10
+                          </p>
+                        </div>
+                      )}
+
+                      {trade.confidence && (
+                        <div className="rounded-2xl bg-black/20 p-3">
+                          <p className="text-xs text-gray-500">
+                            Confidence
+                          </p>
+
+                          <p className="mt-1 font-bold text-blue-400">
+                            {trade.confidence}/10
                           </p>
                         </div>
                       )}
                     </div>
                   )}
+
+                {trade.strategy && (
+                  <p className="mt-4 rounded-2xl bg-black/20 p-3 text-sm text-gray-400">
+                    {t.strategy}: {trade.strategy}
+                  </p>
+                )}
+
+                {trade.notes && (
+                  <p className="mt-4 rounded-2xl bg-black/20 p-3 text-sm text-gray-400">
+                    {trade.notes}
+                  </p>
+                )}
+
+                {trade.mistakes && (
+                  <div className="mt-4 rounded-2xl border border-red-500/10 bg-red-500/[0.03] p-3">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-red-400">
+                      {t.mistakes}
+                    </p>
+
+                    <p className="mt-2 text-sm text-gray-300">
+                      {trade.mistakes}
+                    </p>
+                  </div>
+                )}
+
+                {trade.lessonsLearned && (
+                  <div className="mt-4 rounded-2xl border border-green-500/10 bg-green-500/[0.03] p-3">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-green-400">
+                      {t.lessonsLearned}
+                    </p>
+
+                    <p className="mt-2 text-sm text-gray-300">
+                      {trade.lessonsLearned}
+                    </p>
+                  </div>
+                )}
 
                 {(canEditTrades || canDeleteTrades) && (
                   <div className="mt-4 flex gap-3">
@@ -1489,7 +2217,7 @@ export default async function DiaryPage({
                         href={`/accounts/${accountId}/diary/${trade.id}/edit`}
                         className="flex-1 rounded-xl bg-white/10 px-3 py-3 text-center text-sm hover:bg-white/20"
                       >
-                        Edit
+                        {t.edit}
                       </Link>
                     )}
 
@@ -1506,7 +2234,7 @@ export default async function DiaryPage({
                           type="submit"
                           className="w-full rounded-xl bg-red-500/10 px-3 py-3 text-sm text-red-400 hover:bg-red-500/20"
                         >
-                          Delete
+                          {t.delete}
                         </button>
                       </form>
                     )}

@@ -20,12 +20,18 @@ import CopilotConversationCard from "@/components/copilot/CopilotConversationCar
 import ElevatedRiskCard from "@/components/copilot/ElevatedRiskCard";
 import RiskEscalationCard from "@/components/copilot/RiskEscalationCard";
 import SessionLockCard from "@/components/copilot/SessionLockCard";
-import { buildCopilotSystem } from "@/lib/copilot";
 import AdaptiveCoachingCard from "@/components/copilot/AdaptiveCoachingCard";
 import MandatoryReviewCard from "@/components/copilot/MandatoryReviewCard";
 import RecoveryChecklistCard from "@/components/copilot/RecoveryChecklistCard";
 import RecoveryStatusCard from "@/components/copilot/RecoveryStatusCard";
+
+import { buildCopilotSystem } from "@/lib/copilot";
 import { analyzeCopilotMemory } from "@/lib/copilot/copilot-memory";
+import {
+    getArrayCount,
+    getCopilotLabels,
+    getCopilotStatusLabel,
+} from "@/components/copilot/CopilotI18n";
 
 function getRiskLabel(behavioralRisk: number) {
     if (behavioralRisk >= 50) {
@@ -80,8 +86,8 @@ export default async function CopilotPage({
 
     const { accountId } = await params;
 
-    const membership =
-        await prisma.accountMember.findFirst({
+    const [membership, currentUser] = await Promise.all([
+        prisma.accountMember.findFirst({
             where: {
                 userId: session.user.id,
                 tradingAccountId: accountId,
@@ -89,7 +95,16 @@ export default async function CopilotPage({
             include: {
                 tradingAccount: true,
             },
-        });
+        }),
+        prisma.user.findUnique({
+            where: {
+                id: session.user.id,
+            },
+            select: {
+                appLanguage: true,
+            },
+        }),
+    ]);
 
     if (!membership) {
         redirect("/accounts");
@@ -102,11 +117,12 @@ export default async function CopilotPage({
         redirect(`/accounts/${accountId}/dashboard`);
     }
 
-    if (
-        membership.tradingAccount.status === "ARCHIVED"
-    ) {
+    if (membership.tradingAccount.status === "ARCHIVED") {
         redirect(`/accounts/${accountId}/dashboard`);
     }
+
+    const appLanguage = currentUser?.appLanguage;
+    const t = getCopilotLabels(appLanguage);
 
     const trades = await prisma.trade.findMany({
         where: {
@@ -130,30 +146,22 @@ export default async function CopilotPage({
     const memorySnapshot =
         await analyzeCopilotMemory(accountId);
 
-    const copilotPatterns =
-        memorySnapshot.patterns;
+    const copilotPatterns = memorySnapshot.patterns;
+    const copilotMemories = memorySnapshot.memories;
+    const reviewNotes = memorySnapshot.reviewNotes;
 
-    const copilotMemories =
-        memorySnapshot.memories;
+    const criticalPatterns = copilotPatterns.filter(
+        (pattern) => pattern.severity === "critical"
+    );
 
-    const reviewNotes =
-        memorySnapshot.reviewNotes;
+    const highPatterns = copilotPatterns.filter(
+        (pattern) => pattern.severity === "high"
+    );
 
-    const criticalPatterns =
-        copilotPatterns.filter(
-            (pattern) => pattern.severity === "critical"
-        );
-
-    const highPatterns =
-        copilotPatterns.filter(
-            (pattern) => pattern.severity === "high"
-        );
-
-    const copilotSystem =
-        buildCopilotSystem({
-            trades,
-            copilotMemories,
-        });
+    const copilotSystem = buildCopilotSystem({
+        trades,
+        copilotMemories,
+    });
 
     const {
         performanceTimeline,
@@ -195,7 +203,6 @@ export default async function CopilotPage({
         previousConfidenceAverage,
         confidenceDecay,
         emotionalRecentTrades,
-        emotionalTradesCount,
         emotionalInstabilityScore,
         emotionalVolatility,
         emotionalLabel,
@@ -204,25 +211,26 @@ export default async function CopilotPage({
     } = copilotSystem.stability;
 
     const riskLabel = getRiskLabel(behavioralRisk);
-
     const riskTone = getRiskTone(behavioralRisk);
+    const riskSignalsCount = getArrayCount(riskSignals);
 
     const summaryText =
         totalTrades === 0
-            ? "Non ci sono ancora abbastanza dati per generare una lettura intelligente del conto."
+            ? t.page.summaryNoData
             : disciplineScore >= 75 && behavioralRisk < 25
-                ? "VOLTIS ha rilevato una struttura operativa stabile. La disciplina rimane elevata e il rischio comportamentale appare controllato."
+                ? t.page.summaryStable
                 : behavioralRisk >= 50
-                    ? "VOLTIS rileva segnali di rischio comportamentale elevato. Serve ridurre impulsività, migliorare review e proteggere execution."
-                    : "VOLTIS rileva una struttura in sviluppo. Il focus principale è migliorare consistenza, selezione setup e stabilità decisionale.";
+                    ? t.page.summaryHighRisk
+                    : t.page.summaryDeveloping;
 
     return (
         <div className="space-y-10">
-            <CopilotHero />
+            <CopilotHero appLanguage={appLanguage} />
 
             <section className="space-y-4">
                 <CriticalAlertCard
                     criticalPatterns={criticalPatterns}
+                    appLanguage={appLanguage}
                 />
 
                 {criticalPatterns.length === 0 &&
@@ -233,6 +241,7 @@ export default async function CopilotPage({
                                 highPatterns.length > 0
                             }
                             highPatternsCount={highPatterns.length}
+                            appLanguage={appLanguage}
                         />
                     )}
             </section>
@@ -241,16 +250,15 @@ export default async function CopilotPage({
                 <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                     <div>
                         <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
-                            Copilot Control Room
+                            {t.page.controlRoom}
                         </p>
 
                         <h2 className="mt-3 text-3xl font-black text-white">
-                            Account Intelligence Snapshot
+                            {t.page.snapshotTitle}
                         </h2>
 
                         <p className="mt-4 max-w-3xl text-sm leading-relaxed text-gray-400">
-                            Una lettura rapida dello stato operativo del conto:
-                            disciplina, rischio comportamentale, review e memoria attiva.
+                            {t.page.snapshotDescription}
                         </p>
                     </div>
 
@@ -260,60 +268,27 @@ export default async function CopilotPage({
                 </div>
 
                 <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
-                            Total Trades
-                        </p>
-
-                        <h3 className="mt-3 text-3xl font-black text-white">
-                            {totalTrades}
-                        </h3>
-                    </div>
-
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
-                            Discipline
-                        </p>
-
-                        <h3 className="mt-3 text-3xl font-black text-white">
-                            {disciplineScore}%
-                        </h3>
-                    </div>
-
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
-                            Behavioral Risk
-                        </p>
-
-                        <h3 className={`mt-3 text-3xl font-black ${riskTone}`}>
-                            {riskLabel}
-                        </h3>
-                    </div>
-
-                    <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
-                        <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
-                            Active Memories
-                        </p>
-
-                        <h3 className="mt-3 text-3xl font-black text-emerald-400">
-                            {copilotMemories.length}
-                        </h3>
-                    </div>
+                    <SnapshotCard label={t.common.totalTrades} value={String(totalTrades)} />
+                    <SnapshotCard label={t.common.discipline} value={`${disciplineScore}%`} />
+                    <SnapshotCard label={t.common.behavioralRisk} value={getCopilotStatusLabel(riskLabel, t)} valueClassName={riskTone} />
+                    <SnapshotCard label={t.common.activeMemories} value={String(copilotMemories.length)} valueClassName="text-emerald-400" />
                 </div>
             </section>
 
-            <section className="grid items-stretch gap-6 xl:grid-cols-5">
-                <div className="flex xl:col-span-3 [&>*]:h-full [&>*]:w-full">
+            <section className="grid gap-6 xl:grid-cols-5">
+                <div className="xl:col-span-3">
                     <DailyIntelligenceFeed
                         intelligenceFeed={intelligenceFeed}
+                        appLanguage={appLanguage}
                     />
                 </div>
 
-                <div className="flex xl:col-span-2 [&>*]:h-full [&>*]:w-full">
+                <div className="xl:col-span-2">
                     <AdaptiveCoachingCard
                         mode={adaptiveCoaching.mode}
                         tone={adaptiveCoaching.tone}
                         message={adaptiveCoaching.message}
+                        appLanguage={appLanguage}
                     />
                 </div>
             </section>
@@ -324,6 +299,7 @@ export default async function CopilotPage({
                     consistencyLabel={consistencyLabel}
                     disciplineScore={disciplineScore}
                     behavioralRisk={behavioralRisk}
+                    appLanguage={appLanguage}
                 />
 
                 <AIReviewEngineCard
@@ -331,28 +307,30 @@ export default async function CopilotPage({
                     reviewLabel={reviewLabel}
                     averageExecution={averageExecution}
                     averageConfidence={averageConfidence}
+                    appLanguage={appLanguage}
                 />
             </section>
 
             <TradeReviewCard
                 latestTrade={latestTrade}
                 latestTradeReview={latestTradeReview}
+                appLanguage={appLanguage}
             />
 
             <section className="rounded-[36px] border border-white/10 bg-black/30 p-6 backdrop-blur-xl sm:p-8">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
-                            AI Review Timeline
+                            {t.page.reviewTimeline}
                         </p>
 
                         <h2 className="mt-3 text-3xl font-black text-white">
-                            Persistent Review Memory
+                            {t.page.persistentReviewMemory}
                         </h2>
                     </div>
 
                     <div className="w-fit rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-cyan-300">
-                        {reviewNotes.length} Notes
+                        {reviewNotes.length} {t.common.notes}
                     </div>
                 </div>
 
@@ -360,7 +338,7 @@ export default async function CopilotPage({
                     {reviewNotes.length === 0 ? (
                         <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
                             <p className="text-sm leading-relaxed text-gray-400">
-                                Nessuna review AI salvata al momento.
+                                {t.page.noReviewNotes}
                             </p>
                         </div>
                     ) : (
@@ -382,13 +360,13 @@ export default async function CopilotPage({
 
                                     <div
                                         className={`w-fit rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] ${note.severity === "high"
-                                            ? "bg-red-500/10 text-red-400"
-                                            : note.severity === "medium"
-                                                ? "bg-yellow-500/10 text-yellow-300"
-                                                : "bg-emerald-500/10 text-emerald-400"
+                                                ? "bg-red-500/10 text-red-400"
+                                                : note.severity === "medium"
+                                                    ? "bg-yellow-500/10 text-yellow-300"
+                                                    : "bg-emerald-500/10 text-emerald-400"
                                             }`}
                                     >
-                                        {note.severity}
+                                        {getCopilotStatusLabel(note.severity, t)}
                                     </div>
                                 </div>
                             </div>
@@ -397,21 +375,21 @@ export default async function CopilotPage({
                 </div>
             </section>
 
-            <section className="grid items-stretch gap-6 xl:grid-cols-3">
-                <div className="flex xl:col-span-2 [&>*]:h-full [&>*]:w-full">
+            <section className="grid gap-6 xl:grid-cols-3">
+                <div className="xl:col-span-2">
                     <PerformanceTimelineCard
                         performanceTimeline={performanceTimeline}
+                        appLanguage={appLanguage}
                     />
                 </div>
 
-                <div className="flex [&>*]:h-full [&>*]:w-full">
-                    <RecoveryIntelligenceCard
-                        recoveryScore={recoveryScore}
-                        recoveryLabel={recoveryLabel}
-                        recentWins={recentWins}
-                        recentLosses={recentLosses}
-                    />
-                </div>
+                <RecoveryIntelligenceCard
+                    recoveryScore={recoveryScore}
+                    recoveryLabel={recoveryLabel}
+                    recentWins={recentWins}
+                    recentLosses={recentLosses}
+                    appLanguage={appLanguage}
+                />
             </section>
 
             <section className="grid gap-6 xl:grid-cols-2">
@@ -419,6 +397,7 @@ export default async function CopilotPage({
                     behavioralDrift={behavioralDrift}
                     recentAverageQuality={recentAverageQuality}
                     previousAverageQuality={previousAverageQuality}
+                    appLanguage={appLanguage}
                 />
 
                 <EmotionalStabilityCard
@@ -432,6 +411,7 @@ export default async function CopilotPage({
                                 trade.emotionalState.length > 0
                         ).length
                     }
+                    appLanguage={appLanguage}
                 />
             </section>
 
@@ -440,12 +420,14 @@ export default async function CopilotPage({
                     executionDecay={executionDecay}
                     recentExecutionAverage={recentExecutionAverage}
                     previousExecutionAverage={previousExecutionAverage}
+                    appLanguage={appLanguage}
                 />
 
                 <ConfidenceStabilityCard
                     confidenceDecay={confidenceDecay}
                     recentConfidenceAverage={recentConfidenceAverage}
                     previousConfidenceAverage={previousConfidenceAverage}
+                    appLanguage={appLanguage}
                 />
             </section>
 
@@ -453,20 +435,20 @@ export default async function CopilotPage({
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                     <div>
                         <p className="text-sm uppercase tracking-[0.2em] text-red-400">
-                            Protection Layer
+                            {t.page.protectionLayer}
                         </p>
 
                         <h2 className="mt-3 text-3xl font-black text-white">
-                            Risk Supervision
+                            {t.page.riskSupervision}
                         </h2>
 
                         <p className="mt-4 max-w-3xl text-sm leading-relaxed text-gray-400">
-                            Controlli dedicati a rischio, escalation, blocco sessione e recupero operativo.
+                            {t.page.riskSupervisionDescription}
                         </p>
                     </div>
 
                     <div className="rounded-full border border-red-500/20 bg-red-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-red-300">
-                        {riskSignals} Signals
+                        {riskSignalsCount} {t.common.signals}
                     </div>
                 </div>
 
@@ -477,6 +459,7 @@ export default async function CopilotPage({
                         behavioralDrift={behavioralDrift}
                         executionDecay={executionDecay}
                         confidenceDecay={confidenceDecay}
+                        appLanguage={appLanguage}
                     />
 
                     <RiskEscalationCard
@@ -484,26 +467,31 @@ export default async function CopilotPage({
                         protectionRequired={riskEscalation.protectionRequired}
                         cooldownRecommended={riskEscalation.cooldownRecommended}
                         message={riskEscalation.message}
+                        appLanguage={appLanguage}
                     />
 
                     <SessionLockCard
                         sessionLocked={sessionLock.sessionLocked}
                         reviewRequired={sessionLock.reviewRequired}
                         lockReason={sessionLock.lockReason}
+                        appLanguage={appLanguage}
                     />
 
                     <MandatoryReviewCard
                         sessionLocked={sessionLock.sessionLocked}
                         reviewRequired={sessionLock.reviewRequired}
+                        appLanguage={appLanguage}
                     />
 
                     <RecoveryChecklistCard
                         reviewRequired={sessionLock.reviewRequired}
+                        appLanguage={appLanguage}
                     />
 
                     <RecoveryStatusCard
                         sessionLocked={sessionLock.sessionLocked}
                         reviewRequired={sessionLock.reviewRequired}
+                        appLanguage={appLanguage}
                     />
                 </div>
             </section>
@@ -512,11 +500,11 @@ export default async function CopilotPage({
                 <div className="grid gap-6 xl:grid-cols-2">
                     <div>
                         <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
-                            AI Summary
+                            {t.page.aiSummary}
                         </p>
 
                         <h2 className="mt-4 text-3xl font-black text-white">
-                            Operational Intelligence
+                            {t.page.operationalIntelligence}
                         </h2>
 
                         <p className="mt-5 text-sm leading-relaxed text-cyan-100">
@@ -526,27 +514,20 @@ export default async function CopilotPage({
 
                     <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
                         <p className="text-sm uppercase tracking-[0.2em] text-violet-400">
-                            Strategic Focus
+                            {t.page.strategicFocus}
                         </p>
 
                         <div className="mt-6 space-y-4">
-                            <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                                <p className="text-sm leading-relaxed text-gray-300">
-                                    Ridurre frequenza operativa dopo una perdita consecutiva.
-                                </p>
-                            </div>
-
-                            <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                                <p className="text-sm leading-relaxed text-gray-300">
-                                    Proteggere qualità execution durante alta volatilità.
-                                </p>
-                            </div>
-
-                            <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                                <p className="text-sm leading-relaxed text-gray-300">
-                                    Mantenere focus su setup ad alta probabilità.
-                                </p>
-                            </div>
+                            {t.page.strategicItems.map((item) => (
+                                <div
+                                    key={item}
+                                    className="rounded-2xl border border-white/10 bg-white/[0.04] p-4"
+                                >
+                                    <p className="text-sm leading-relaxed text-gray-300">
+                                        {item}
+                                    </p>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -556,20 +537,20 @@ export default async function CopilotPage({
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div>
                         <p className="text-sm uppercase tracking-[0.2em] text-emerald-400">
-                            Copilot Memory System
+                            {t.page.memorySystem}
                         </p>
 
                         <h2 className="mt-3 text-3xl font-black text-white">
-                            Active Operational Memory
+                            {t.page.activeOperationalMemory}
                         </h2>
 
                         <p className="mt-4 max-w-3xl text-sm leading-relaxed text-gray-400">
-                            VOLTIS conserva pattern, rischi e punti di forza ricorrenti del tuo account per rendere il Copilot sempre più contestuale.
+                            {t.page.memoryDescription}
                         </p>
                     </div>
 
                     <div className="w-fit rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-emerald-300">
-                        {copilotMemories.length} Memories
+                        {copilotMemories.length} {t.common.memories}
                     </div>
                 </div>
 
@@ -577,7 +558,7 @@ export default async function CopilotPage({
                     {copilotMemories.length === 0 ? (
                         <div className="rounded-[28px] border border-white/10 bg-black/20 p-5 xl:col-span-3">
                             <p className="text-sm leading-relaxed text-gray-400">
-                                Nessuna memoria operativa attiva. Usa il Copilot dopo aver inserito trade, sessioni e review per generare pattern persistenti.
+                                {t.page.noMemories}
                             </p>
                         </div>
                     ) : (
@@ -598,9 +579,11 @@ export default async function CopilotPage({
                                     </div>
 
                                     <span
-                                        className={`w-fit rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] ${getMemoryTone(memory.severity)}`}
+                                        className={`w-fit rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] ${getMemoryTone(
+                                            memory.severity
+                                        )}`}
                                     >
-                                        {memory.severity}
+                                        {getCopilotStatusLabel(memory.severity, t)}
                                     </span>
                                 </div>
 
@@ -610,7 +593,7 @@ export default async function CopilotPage({
 
                                 <div className="mt-5 flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3">
                                     <span className="text-xs uppercase tracking-[0.15em] text-gray-500">
-                                        Score
+                                        {t.common.score}
                                     </span>
 
                                     <span className="text-sm font-black text-white">
@@ -623,12 +606,38 @@ export default async function CopilotPage({
                 </div>
             </section>
 
-            <PatternMemoryCard copilotPatterns={copilotPatterns} />
+            <PatternMemoryCard
+                copilotPatterns={copilotPatterns}
+                appLanguage={appLanguage}
+            />
 
             <CopilotConversationCard
                 copilotMessages={copilotMessages}
                 accountId={accountId}
+                appLanguage={appLanguage}
             />
+        </div>
+    );
+}
+
+function SnapshotCard({
+    label,
+    value,
+    valueClassName = "text-white",
+}: {
+    label: string;
+    value: string;
+    valueClassName?: string;
+}) {
+    return (
+        <div className="rounded-[28px] border border-white/10 bg-black/20 p-5">
+            <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
+                {label}
+            </p>
+
+            <h3 className={`mt-3 text-3xl font-black ${valueClassName}`}>
+                {value}
+            </h3>
         </div>
     );
 }

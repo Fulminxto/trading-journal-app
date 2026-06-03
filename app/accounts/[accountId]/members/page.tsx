@@ -1,25 +1,383 @@
 import {
     Activity,
     ArrowLeft,
-    BarChart3,
     Clock3,
     Radio,
-    TrendingUp,
     Users,
 } from "lucide-react";
-
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
+import {
+    normalizeAppLanguage,
+    getLocaleFromLanguage,
+    type AppLanguage,
+} from "@/lib/i18n";
 
-function formatDateTime(date: Date | null) {
-    if (!date) {
-        return "Never";
-    }
+type MembersLabels = {
+    never: string;
+    accountMembers: string;
+    membersActivity: string;
+    description: string;
+    members: string;
+    onlineNow: string;
+    activeToday: string;
+    totalTrades: string;
+    lastTrade: string;
+    noTrades: string;
+    latestTradeDescription: string;
+    mostActive: string;
+    basedOnInsertedTrades: string;
+    livePresence: string;
+    activeLastFiveMinutes: string;
+    accountStatus: string;
+    live: string;
+    quiet: string;
+    presenceSnapshot: string;
+    leaderboard: string;
+    mostActiveMembers: string;
+    topFive: string;
+    trades: string;
+    onlineMembers: string;
+    activeNow: string;
+    noOnlineMembers: string;
+    memberOverview: string;
+    accountTeam: string;
+    activityProfile: string;
+    lastActivity: string;
+    lastLogin: string;
+    viewMemberTrades: string;
+    memberAnalytics: string;
+    openWorkspace: string;
+    backToAccount: string;
+    onlineStatus: string;
+    activeTodayStatus: string;
+    activeThisWeekStatus: string;
+    inactiveStatus: string;
+    notAvailable: string;
+};
 
-    return new Date(date).toLocaleString("it-IT", {
+const labels: Record<AppLanguage, MembersLabels> = {
+    it: {
+        never: "Mai",
+        accountMembers: "Membri account",
+        membersActivity: "Attività membri",
+        description:
+            "Monitora presenza, attività e contributo operativo dei membri dentro questo account condiviso.",
+        members: "Membri",
+        onlineNow: "Online ora",
+        activeToday: "Attivi oggi",
+        totalTrades: "Trade totali",
+        lastTrade: "Ultimo trade",
+        noTrades: "Nessun trade",
+        latestTradeDescription: "Ultimo trade registrato in questo account.",
+        mostActive: "Più attivo",
+        basedOnInsertedTrades: "Basato sui trade inseriti.",
+        livePresence: "Presenza live",
+        activeLastFiveMinutes: "Attivi negli ultimi 5 minuti.",
+        accountStatus: "Stato account",
+        live: "Live",
+        quiet: "Silenzioso",
+        presenceSnapshot: "Snapshot di presenza e attività.",
+        leaderboard: "Leaderboard",
+        mostActiveMembers: "Membri più attivi",
+        topFive: "Top 5",
+        trades: "trade",
+        onlineMembers: "Membri online",
+        activeNow: "Attivo ora",
+        noOnlineMembers: "Nessun membro online ora.",
+        memberOverview: "Panoramica membri",
+        accountTeam: "Team account",
+        activityProfile:
+            "Profilo attività basato su presenza, ultima attività e contributo operativo dentro questo account.",
+        lastActivity: "Ultima attività",
+        lastLogin: "Ultimo login",
+        viewMemberTrades: "Vedi trade membro",
+        memberAnalytics: "Analytics membro",
+        openWorkspace: "Apri workspace",
+        backToAccount: "Torna all’account",
+        onlineStatus: "Online ora",
+        activeTodayStatus: "Attivo oggi",
+        activeThisWeekStatus: "Attivo questa settimana",
+        inactiveStatus: "Inattivo",
+        notAvailable: "N/D",
+    },
+    en: {
+        never: "Never",
+        accountMembers: "Account Members",
+        membersActivity: "Members Activity",
+        description:
+            "Monitor presence, activity and operational contribution of members inside this shared account.",
+        members: "Members",
+        onlineNow: "Online Now",
+        activeToday: "Active Today",
+        totalTrades: "Total Trades",
+        lastTrade: "Last Trade",
+        noTrades: "No trades",
+        latestTradeDescription: "Latest trade across this account.",
+        mostActive: "Most Active",
+        basedOnInsertedTrades: "Based on inserted trades.",
+        livePresence: "Live Presence",
+        activeLastFiveMinutes: "Active in the last 5 minutes.",
+        accountStatus: "Account Status",
+        live: "Live",
+        quiet: "Quiet",
+        presenceSnapshot: "Presence and activity snapshot.",
+        leaderboard: "Leaderboard",
+        mostActiveMembers: "Most Active Members",
+        topFive: "Top 5",
+        trades: "trades",
+        onlineMembers: "Online Members",
+        activeNow: "Active now",
+        noOnlineMembers: "No members online now.",
+        memberOverview: "Member Overview",
+        accountTeam: "Account Team",
+        activityProfile:
+            "Activity profile based on login presence, last activity and trade contribution inside this account.",
+        lastActivity: "Last Activity",
+        lastLogin: "Last Login",
+        viewMemberTrades: "View Member Trades",
+        memberAnalytics: "Member Analytics",
+        openWorkspace: "Open Workspace",
+        backToAccount: "Back to account",
+        onlineStatus: "Online Now",
+        activeTodayStatus: "Active Today",
+        activeThisWeekStatus: "Active This Week",
+        inactiveStatus: "Inactive",
+        notAvailable: "N/A",
+    },
+    uk: {
+        never: "Ніколи",
+        accountMembers: "Учасники акаунта",
+        membersActivity: "Активність учасників",
+        description:
+            "Моніторинг присутності, активності та операційного внеску учасників у цьому спільному акаунті.",
+        members: "Учасники",
+        onlineNow: "Онлайн зараз",
+        activeToday: "Активні сьогодні",
+        totalTrades: "Усього угод",
+        lastTrade: "Остання угода",
+        noTrades: "Немає угод",
+        latestTradeDescription: "Остання угода в цьому акаунті.",
+        mostActive: "Найактивніший",
+        basedOnInsertedTrades: "На основі внесених угод.",
+        livePresence: "Онлайн-присутність",
+        activeLastFiveMinutes: "Активні протягом останніх 5 хвилин.",
+        accountStatus: "Статус акаунта",
+        live: "Live",
+        quiet: "Тихо",
+        presenceSnapshot: "Знімок присутності та активності.",
+        leaderboard: "Рейтинг",
+        mostActiveMembers: "Найактивніші учасники",
+        topFive: "Топ 5",
+        trades: "угод",
+        onlineMembers: "Учасники онлайн",
+        activeNow: "Активний зараз",
+        noOnlineMembers: "Зараз немає учасників онлайн.",
+        memberOverview: "Огляд учасників",
+        accountTeam: "Команда акаунта",
+        activityProfile:
+            "Профіль активності на основі присутності, останньої активності та торгового внеску в цьому акаунті.",
+        lastActivity: "Остання активність",
+        lastLogin: "Останній вхід",
+        viewMemberTrades: "Переглянути угоди учасника",
+        memberAnalytics: "Аналітика учасника",
+        openWorkspace: "Відкрити workspace",
+        backToAccount: "Назад до акаунта",
+        onlineStatus: "Онлайн зараз",
+        activeTodayStatus: "Активний сьогодні",
+        activeThisWeekStatus: "Активний цього тижня",
+        inactiveStatus: "Неактивний",
+        notAvailable: "Н/Д",
+    },
+    ru: {
+        never: "Никогда",
+        accountMembers: "Участники аккаунта",
+        membersActivity: "Активность участников",
+        description:
+            "Мониторинг присутствия, активности и операционного вклада участников в этом общем аккаунте.",
+        members: "Участники",
+        onlineNow: "Онлайн сейчас",
+        activeToday: "Активны сегодня",
+        totalTrades: "Всего сделок",
+        lastTrade: "Последняя сделка",
+        noTrades: "Нет сделок",
+        latestTradeDescription: "Последняя сделка в этом аккаунте.",
+        mostActive: "Самый активный",
+        basedOnInsertedTrades: "На основе внесенных сделок.",
+        livePresence: "Онлайн-присутствие",
+        activeLastFiveMinutes: "Активны за последние 5 минут.",
+        accountStatus: "Статус аккаунта",
+        live: "Live",
+        quiet: "Тихо",
+        presenceSnapshot: "Снимок присутствия и активности.",
+        leaderboard: "Рейтинг",
+        mostActiveMembers: "Самые активные участники",
+        topFive: "Топ 5",
+        trades: "сделок",
+        onlineMembers: "Участники онлайн",
+        activeNow: "Активен сейчас",
+        noOnlineMembers: "Сейчас нет участников онлайн.",
+        memberOverview: "Обзор участников",
+        accountTeam: "Команда аккаунта",
+        activityProfile:
+            "Профиль активности на основе присутствия, последней активности и торгового вклада в этом аккаунте.",
+        lastActivity: "Последняя активность",
+        lastLogin: "Последний вход",
+        viewMemberTrades: "Смотреть сделки участника",
+        memberAnalytics: "Аналитика участника",
+        openWorkspace: "Открыть workspace",
+        backToAccount: "Назад к аккаунту",
+        onlineStatus: "Онлайн сейчас",
+        activeTodayStatus: "Активен сегодня",
+        activeThisWeekStatus: "Активен на этой неделе",
+        inactiveStatus: "Неактивен",
+        notAvailable: "Н/Д",
+    },
+    es: {
+        never: "Nunca",
+        accountMembers: "Miembros de la cuenta",
+        membersActivity: "Actividad de miembros",
+        description:
+            "Monitoriza presencia, actividad y contribución operativa de los miembros dentro de esta cuenta compartida.",
+        members: "Miembros",
+        onlineNow: "Online ahora",
+        activeToday: "Activos hoy",
+        totalTrades: "Trades totales",
+        lastTrade: "Último trade",
+        noTrades: "Sin trades",
+        latestTradeDescription: "Último trade en esta cuenta.",
+        mostActive: "Más activo",
+        basedOnInsertedTrades: "Basado en los trades insertados.",
+        livePresence: "Presencia en vivo",
+        activeLastFiveMinutes: "Activos en los últimos 5 minutos.",
+        accountStatus: "Estado de cuenta",
+        live: "Live",
+        quiet: "Silencioso",
+        presenceSnapshot: "Snapshot de presencia y actividad.",
+        leaderboard: "Clasificación",
+        mostActiveMembers: "Miembros más activos",
+        topFive: "Top 5",
+        trades: "trades",
+        onlineMembers: "Miembros online",
+        activeNow: "Activo ahora",
+        noOnlineMembers: "No hay miembros online ahora.",
+        memberOverview: "Resumen de miembros",
+        accountTeam: "Equipo de cuenta",
+        activityProfile:
+            "Perfil de actividad basado en presencia, última actividad y contribución de trades dentro de esta cuenta.",
+        lastActivity: "Última actividad",
+        lastLogin: "Último login",
+        viewMemberTrades: "Ver trades del miembro",
+        memberAnalytics: "Analytics del miembro",
+        openWorkspace: "Abrir workspace",
+        backToAccount: "Volver a la cuenta",
+        onlineStatus: "Online ahora",
+        activeTodayStatus: "Activo hoy",
+        activeThisWeekStatus: "Activo esta semana",
+        inactiveStatus: "Inactivo",
+        notAvailable: "N/D",
+    },
+    fr: {
+        never: "Jamais",
+        accountMembers: "Membres du compte",
+        membersActivity: "Activité des membres",
+        description:
+            "Surveille la présence, l’activité et la contribution opérationnelle des membres dans ce compte partagé.",
+        members: "Membres",
+        onlineNow: "En ligne maintenant",
+        activeToday: "Actifs aujourd’hui",
+        totalTrades: "Trades totaux",
+        lastTrade: "Dernier trade",
+        noTrades: "Aucun trade",
+        latestTradeDescription: "Dernier trade enregistré dans ce compte.",
+        mostActive: "Le plus actif",
+        basedOnInsertedTrades: "Basé sur les trades saisis.",
+        livePresence: "Présence en direct",
+        activeLastFiveMinutes: "Actifs au cours des 5 dernières minutes.",
+        accountStatus: "Statut du compte",
+        live: "Live",
+        quiet: "Calme",
+        presenceSnapshot: "Snapshot de présence et d’activité.",
+        leaderboard: "Classement",
+        mostActiveMembers: "Membres les plus actifs",
+        topFive: "Top 5",
+        trades: "trades",
+        onlineMembers: "Membres en ligne",
+        activeNow: "Actif maintenant",
+        noOnlineMembers: "Aucun membre en ligne maintenant.",
+        memberOverview: "Vue d’ensemble des membres",
+        accountTeam: "Équipe du compte",
+        activityProfile:
+            "Profil d’activité basé sur la présence, la dernière activité et la contribution trading dans ce compte.",
+        lastActivity: "Dernière activité",
+        lastLogin: "Dernière connexion",
+        viewMemberTrades: "Voir les trades du membre",
+        memberAnalytics: "Analytics du membre",
+        openWorkspace: "Ouvrir le workspace",
+        backToAccount: "Retour au compte",
+        onlineStatus: "En ligne maintenant",
+        activeTodayStatus: "Actif aujourd’hui",
+        activeThisWeekStatus: "Actif cette semaine",
+        inactiveStatus: "Inactif",
+        notAvailable: "N/D",
+    },
+    de: {
+        never: "Nie",
+        accountMembers: "Kontomitglieder",
+        membersActivity: "Mitgliederaktivität",
+        description:
+            "Überwache Präsenz, Aktivität und operativen Beitrag der Mitglieder in diesem gemeinsamen Konto.",
+        members: "Mitglieder",
+        onlineNow: "Jetzt online",
+        activeToday: "Heute aktiv",
+        totalTrades: "Gesamte Trades",
+        lastTrade: "Letzter Trade",
+        noTrades: "Keine Trades",
+        latestTradeDescription: "Letzter Trade in diesem Konto.",
+        mostActive: "Aktivstes Mitglied",
+        basedOnInsertedTrades: "Basierend auf eingetragenen Trades.",
+        livePresence: "Live-Präsenz",
+        activeLastFiveMinutes: "Aktiv in den letzten 5 Minuten.",
+        accountStatus: "Kontostatus",
+        live: "Live",
+        quiet: "Ruhig",
+        presenceSnapshot: "Snapshot von Präsenz und Aktivität.",
+        leaderboard: "Leaderboard",
+        mostActiveMembers: "Aktivste Mitglieder",
+        topFive: "Top 5",
+        trades: "Trades",
+        onlineMembers: "Online-Mitglieder",
+        activeNow: "Jetzt aktiv",
+        noOnlineMembers: "Derzeit keine Mitglieder online.",
+        memberOverview: "Mitgliederübersicht",
+        accountTeam: "Kontoteam",
+        activityProfile:
+            "Aktivitätsprofil basierend auf Login-Präsenz, letzter Aktivität und Trade-Beitrag in diesem Konto.",
+        lastActivity: "Letzte Aktivität",
+        lastLogin: "Letzter Login",
+        viewMemberTrades: "Trades des Mitglieds ansehen",
+        memberAnalytics: "Mitglieder-Analytics",
+        openWorkspace: "Workspace öffnen",
+        backToAccount: "Zurück zum Konto",
+        onlineStatus: "Jetzt online",
+        activeTodayStatus: "Heute aktiv",
+        activeThisWeekStatus: "Diese Woche aktiv",
+        inactiveStatus: "Inaktiv",
+        notAvailable: "N/A",
+    },
+};
+
+function formatDateTime(
+    date: Date | null,
+    language: AppLanguage,
+    t: MembersLabels
+) {
+    if (!date) return t.never;
+
+    return new Date(date).toLocaleString(getLocaleFromLanguage(language), {
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
@@ -28,80 +386,73 @@ function formatDateTime(date: Date | null) {
     });
 }
 
-function formatDate(date: Date | null) {
-    if (!date) {
-        return "Never";
-    }
+function formatDate(
+    date: Date | null,
+    language: AppLanguage,
+    t: MembersLabels
+) {
+    if (!date) return t.never;
 
-    return new Date(date).toLocaleDateString("it-IT", {
+    return new Date(date).toLocaleDateString(getLocaleFromLanguage(language), {
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
     });
 }
 
-function getActivityStatus(lastActivityAt: Date | null) {
+function getActivityStatus(
+    lastActivityAt: Date | null,
+    t: MembersLabels
+) {
     if (!lastActivityAt) {
         return {
-            label: "Inactive",
-            color:
-                "bg-red-500/10 text-red-300 border-red-500/20",
+            label: t.inactiveStatus,
+            color: "bg-red-500/10 text-red-300 border-red-500/20",
             dot: "bg-red-400",
         };
     }
 
     const now = new Date().getTime();
-
-    const diff =
-        now - new Date(lastActivityAt).getTime();
-
+    const diff = now - new Date(lastActivityAt).getTime();
     const minutes = diff / (1000 * 60);
     const days = diff / (1000 * 60 * 60 * 24);
 
     if (minutes <= 5) {
         return {
-            label: "Online Now",
-            color:
-                "bg-green-500/10 text-green-300 border-green-500/20",
+            label: t.onlineStatus,
+            color: "bg-green-500/10 text-green-300 border-green-500/20",
             dot: "bg-green-400",
         };
     }
 
     if (days < 1) {
         return {
-            label: "Active Today",
-            color:
-                "bg-cyan-500/10 text-cyan-300 border-cyan-500/20",
+            label: t.activeTodayStatus,
+            color: "bg-cyan-500/10 text-cyan-300 border-cyan-500/20",
             dot: "bg-cyan-400",
         };
     }
 
     if (days < 7) {
         return {
-            label: "Active This Week",
-            color:
-                "bg-yellow-500/10 text-yellow-300 border-yellow-500/20",
+            label: t.activeThisWeekStatus,
+            color: "bg-yellow-500/10 text-yellow-300 border-yellow-500/20",
             dot: "bg-yellow-400",
         };
     }
 
     return {
-        label: "Inactive",
-        color:
-            "bg-red-500/10 text-red-300 border-red-500/20",
+        label: t.inactiveStatus,
+        color: "bg-red-500/10 text-red-300 border-red-500/20",
         dot: "bg-red-400",
     };
 }
 
 function isOnline(lastActivityAt: Date | null) {
-    if (!lastActivityAt) {
-        return false;
-    }
+    if (!lastActivityAt) return false;
 
     const now = new Date().getTime();
-
-    const diff =
-        now - new Date(lastActivityAt).getTime();
+    const diff = now - new Date(lastActivityAt).getTime();
 
     return diff <= 1000 * 60 * 5;
 }
@@ -137,28 +488,27 @@ export default async function MembersPage({
 
     const { accountId } = await params;
 
-    const membership =
-        await prisma.accountMember.findFirst({
-            where: {
-                userId: session.user.id,
-                tradingAccountId: accountId,
-            },
-
-            include: {
-                tradingAccount: true,
-            },
-        });
+    const membership = await prisma.accountMember.findFirst({
+        where: {
+            userId: session.user.id,
+            tradingAccountId: accountId,
+        },
+        include: {
+            tradingAccount: true,
+            user: true,
+        },
+    });
 
     if (!membership) {
         redirect("/accounts");
     }
 
-    if (
-        membership.role !== "MANAGER" &&
-        !membership.canViewMembers
-    ) {
+    if (membership.role !== "MANAGER" && !membership.canViewMembers) {
         redirect(`/accounts/${accountId}/dashboard`);
     }
+
+    const language = normalizeAppLanguage(membership.user.appLanguage);
+    const t = labels[language] ?? labels.en;
 
     await prisma.user.update({
         where: {
@@ -170,132 +520,111 @@ export default async function MembersPage({
         },
     });
 
-    const members =
-        await prisma.accountMember.findMany({
-            where: {
-                tradingAccountId: accountId,
+    const members = await prisma.accountMember.findMany({
+        where: {
+            tradingAccountId: accountId,
+        },
+        include: {
+            user: {
+                select: {
+                    id: true,
+                    username: true,
+                    name: true,
+                    role: true,
+                    lastSeenAt: true,
+                    lastLoginAt: true,
+                    lastActivityAt: true,
+                    loginCount: true,
+                },
             },
+        },
+        orderBy: [
+            {
+                role: "asc",
+            },
+            {
+                createdAt: "asc",
+            },
+        ],
+    });
 
-            include: {
-                user: {
-                    select: {
-                        id: true,
-                        username: true,
-                        name: true,
-                        role: true,
-                        lastSeenAt: true,
-                        lastLoginAt: true,
-                        lastActivityAt: true,
-                        loginCount: true,
+    const membersWithStats = await Promise.all(
+        members.map(async (member) => {
+            const lastTrade = await prisma.trade.findFirst({
+                where: {
+                    tradingAccountId: accountId,
+                    createdById: member.userId,
+                },
+                orderBy: [
+                    {
+                        openDate: "desc",
                     },
+                    {
+                        openTime: "desc",
+                    },
+                    {
+                        createdAt: "desc",
+                    },
+                ],
+            });
+
+            const totalTrades = await prisma.trade.count({
+                where: {
+                    tradingAccountId: accountId,
+                    createdById: member.userId,
                 },
+            });
+
+            return {
+                ...member,
+                lastTrade,
+                totalTrades,
+            };
+        })
+    );
+
+    const totalAccountTrades = await prisma.trade.count({
+        where: {
+            tradingAccountId: accountId,
+        },
+    });
+
+    const lastAccountTrade = await prisma.trade.findFirst({
+        where: {
+            tradingAccountId: accountId,
+        },
+        orderBy: [
+            {
+                openDate: "desc",
             },
-
-            orderBy: [
-                {
-                    role: "asc",
-                },
-                {
-                    createdAt: "asc",
-                },
-            ],
-        });
-
-    const membersWithStats =
-        await Promise.all(
-            members.map(async (member) => {
-                const lastTrade =
-                    await prisma.trade.findFirst({
-                        where: {
-                            tradingAccountId: accountId,
-                            createdById: member.userId,
-                        },
-
-                        orderBy: [
-                            {
-                                openDate: "desc",
-                            },
-                            {
-                                openTime: "desc",
-                            },
-                            {
-                                createdAt: "desc",
-                            },
-                        ],
-                    });
-
-                const totalTrades =
-                    await prisma.trade.count({
-                        where: {
-                            tradingAccountId: accountId,
-                            createdById: member.userId,
-                        },
-                    });
-
-                return {
-                    ...member,
-
-                    lastTrade,
-                    totalTrades,
-                };
-            })
-        );
-
-    const totalAccountTrades =
-        await prisma.trade.count({
-            where: {
-                tradingAccountId: accountId,
+            {
+                openTime: "desc",
             },
-        });
-
-    const lastAccountTrade =
-        await prisma.trade.findFirst({
-            where: {
-                tradingAccountId: accountId,
+            {
+                createdAt: "desc",
             },
-            orderBy: [
-                {
-                    openDate: "desc",
-                },
-                {
-                    openTime: "desc",
-                },
-                {
-                    createdAt: "desc",
-                },
-            ],
-        });
+        ],
+    });
 
-    const sortedByActivity =
-        membersWithStats
-            .slice()
-            .sort(
-                (a, b) =>
-                    b.totalTrades - a.totalTrades
-            );
+    const sortedByActivity = membersWithStats
+        .slice()
+        .sort((a, b) => b.totalTrades - a.totalTrades);
 
-    const mostActiveMember =
-        sortedByActivity[0];
+    const mostActiveMember = sortedByActivity[0];
 
-    const onlineMembers =
-        membersWithStats.filter((member) =>
-            isOnline(member.user.lastActivityAt)
-        );
+    const onlineMembers = membersWithStats.filter((member) =>
+        isOnline(member.user.lastActivityAt)
+    );
 
-    const activeToday =
-        membersWithStats.filter((member) => {
-            if (!member.user.lastActivityAt) {
-                return false;
-            }
+    const activeToday = membersWithStats.filter((member) => {
+        if (!member.user.lastActivityAt) return false;
 
-            const diff =
-                new Date().getTime() -
-                new Date(
-                    member.user.lastActivityAt
-                ).getTime();
+        const diff =
+            new Date().getTime() -
+            new Date(member.user.lastActivityAt).getTime();
 
-            return diff <= 1000 * 60 * 60 * 24;
-        });
+        return diff <= 1000 * 60 * 60 * 24;
+    });
 
     return (
         <div className="space-y-8">
@@ -306,55 +635,42 @@ export default async function MembersPage({
                     <div>
                         <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-cyan-300">
                             <Users size={14} />
-                            Account Members
+                            {t.accountMembers}
                         </div>
 
                         <h1 className="mt-6 text-4xl font-black text-white md:text-6xl">
-                            Members Activity
+                            {t.membersActivity}
                         </h1>
 
                         <p className="mt-5 max-w-3xl text-sm leading-7 text-gray-400 md:text-base">
-                            Monitora presenza, attività e contributo operativo
-                            dei membri dentro questo account condiviso.
+                            {t.description}
                         </p>
                     </div>
 
                     <div className="grid min-w-full grid-cols-1 gap-3 sm:grid-cols-2 xl:min-w-[460px]">
                         <div className="rounded-3xl border border-white/10 bg-black/20 p-5">
-                            <p className="text-sm text-gray-400">
-                                Members
-                            </p>
-
+                            <p className="text-sm text-gray-400">{t.members}</p>
                             <p className="mt-3 text-3xl font-black text-white">
                                 {members.length}
                             </p>
                         </div>
 
                         <div className="rounded-3xl border border-green-500/20 bg-green-500/10 p-5">
-                            <p className="text-sm text-gray-400">
-                                Online Now
-                            </p>
-
+                            <p className="text-sm text-gray-400">{t.onlineNow}</p>
                             <p className="mt-3 text-3xl font-black text-green-400">
                                 {onlineMembers.length}
                             </p>
                         </div>
 
                         <div className="rounded-3xl border border-cyan-500/20 bg-cyan-500/10 p-5">
-                            <p className="text-sm text-gray-400">
-                                Active Today
-                            </p>
-
+                            <p className="text-sm text-gray-400">{t.activeToday}</p>
                             <p className="mt-3 text-3xl font-black text-cyan-300">
                                 {activeToday.length}
                             </p>
                         </div>
 
                         <div className="rounded-3xl border border-yellow-500/20 bg-yellow-500/10 p-5">
-                            <p className="text-sm text-gray-400">
-                                Total Trades
-                            </p>
-
+                            <p className="text-sm text-gray-400">{t.totalTrades}</p>
                             <p className="mt-3 text-3xl font-black text-yellow-300">
                                 {totalAccountTrades}
                             </p>
@@ -365,70 +681,44 @@ export default async function MembersPage({
 
             <section className="grid grid-cols-1 gap-4 md:grid-cols-4">
                 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-                    <p className="text-sm text-gray-400">
-                        Last Trade
-                    </p>
-
+                    <p className="text-sm text-gray-400">{t.lastTrade}</p>
                     <p className="mt-3 text-2xl font-black text-white">
-                        {lastAccountTrade
-                            ? lastAccountTrade.symbol
-                            : "No trades"}
+                        {lastAccountTrade ? lastAccountTrade.symbol : t.noTrades}
                     </p>
-
                     <p className="mt-2 text-xs text-gray-500">
-                        Latest trade across this account.
+                        {t.latestTradeDescription}
                     </p>
                 </div>
 
                 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-                    <p className="text-sm text-gray-400">
-                        Most Active
-                    </p>
-
+                    <p className="text-sm text-gray-400">{t.mostActive}</p>
                     <p className="mt-3 text-2xl font-black text-white">
-                        {mostActiveMember
-                            ? mostActiveMember.user.username
-                            : "N/A"}
+                        {mostActiveMember ? mostActiveMember.user.username : t.notAvailable}
                     </p>
-
                     <p className="mt-2 text-xs text-gray-500">
-                        Based on inserted trades.
+                        {t.basedOnInsertedTrades}
                     </p>
                 </div>
 
                 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-                    <p className="text-sm text-gray-400">
-                        Live Presence
-                    </p>
-
+                    <p className="text-sm text-gray-400">{t.livePresence}</p>
                     <p className="mt-3 text-2xl font-black text-green-400">
                         {members.length > 0
-                            ? `${Math.round(
-                                (onlineMembers.length /
-                                    members.length) *
-                                100
-                            )}%`
+                            ? `${Math.round((onlineMembers.length / members.length) * 100)}%`
                             : "0%"}
                     </p>
-
                     <p className="mt-2 text-xs text-gray-500">
-                        Active in the last 5 minutes.
+                        {t.activeLastFiveMinutes}
                     </p>
                 </div>
 
                 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-                    <p className="text-sm text-gray-400">
-                        Account Status
-                    </p>
-
+                    <p className="text-sm text-gray-400">{t.accountStatus}</p>
                     <p className="mt-3 text-2xl font-black text-cyan-300">
-                        {onlineMembers.length > 0
-                            ? "Live"
-                            : "Quiet"}
+                        {onlineMembers.length > 0 ? t.live : t.quiet}
                     </p>
-
                     <p className="mt-2 text-xs text-gray-500">
-                        Presence and activity snapshot.
+                        {t.presenceSnapshot}
                     </p>
                 </div>
             </section>
@@ -437,75 +727,60 @@ export default async function MembersPage({
                 <div className="rounded-[32px] border border-white/10 bg-white/[0.03] p-7">
                     <div className="flex items-center justify-between gap-4">
                         <div>
-                            <p className="text-sm text-gray-400">
-                                Leaderboard
-                            </p>
-
+                            <p className="text-sm text-gray-400">{t.leaderboard}</p>
                             <h2 className="mt-1 text-3xl font-black text-white">
-                                Most Active Members
+                                {t.mostActiveMembers}
                             </h2>
                         </div>
 
                         <div className="rounded-full border border-green-500/20 bg-green-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.15em] text-green-300">
-                            Top 5
+                            {t.topFive}
                         </div>
                     </div>
 
                     <div className="mt-7 space-y-3">
-                        {sortedByActivity
-                            .slice(0, 5)
-                            .map((member, index) => (
-                                <div
-                                    key={member.id}
-                                    className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/20 p-4"
-                                >
-                                    <div className="flex items-center gap-4">
-                                        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-green-500/10 text-lg font-black text-green-400">
-                                            #{index + 1}
-                                        </div>
-
-                                        <div>
-                                            <p className="text-lg font-black text-white">
-                                                {
-                                                    member.user
-                                                        .username
-                                                }
-                                            </p>
-
-                                            <p className="mt-1 text-xs uppercase tracking-[0.12em] text-gray-500">
-                                                {member.role}
-                                            </p>
-                                        </div>
+                        {sortedByActivity.slice(0, 5).map((member, index) => (
+                            <div
+                                key={member.id}
+                                className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/20 p-4"
+                            >
+                                <div className="flex items-center gap-4">
+                                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-green-500/10 text-lg font-black text-green-400">
+                                        #{index + 1}
                                     </div>
 
-                                    <div className="text-right">
-                                        <p className="text-xl font-black text-white">
-                                            {member.totalTrades}
+                                    <div>
+                                        <p className="text-lg font-black text-white">
+                                            {member.user.username}
                                         </p>
-
-                                        <p className="text-xs text-gray-500">
-                                            trades
+                                        <p className="mt-1 text-xs uppercase tracking-[0.12em] text-gray-500">
+                                            {member.role}
                                         </p>
                                     </div>
                                 </div>
-                            ))}
+
+                                <div className="text-right">
+                                    <p className="text-xl font-black text-white">
+                                        {member.totalTrades}
+                                    </p>
+                                    <p className="text-xs text-gray-500">{t.trades}</p>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
 
                 <div className="rounded-[32px] border border-white/10 bg-white/[0.03] p-7">
                     <div className="flex items-center justify-between gap-4">
                         <div>
-                            <p className="text-sm text-gray-400">
-                                Live Presence
-                            </p>
-
+                            <p className="text-sm text-gray-400">{t.livePresence}</p>
                             <h2 className="mt-1 text-3xl font-black text-white">
-                                Online Members
+                                {t.onlineMembers}
                             </h2>
                         </div>
 
                         <div className="rounded-full border border-green-500/20 bg-green-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.15em] text-green-300">
-                            {onlineMembers.length} Online
+                            {onlineMembers.length} {t.onlineNow}
                         </div>
                     </div>
 
@@ -518,14 +793,10 @@ export default async function MembersPage({
                                 >
                                     <div>
                                         <p className="text-lg font-black text-white">
-                                            {
-                                                member.user
-                                                    .username
-                                            }
+                                            {member.user.username}
                                         </p>
-
                                         <p className="mt-1 text-xs text-green-300">
-                                            Active now
+                                            {t.activeNow}
                                         </p>
                                     </div>
 
@@ -534,7 +805,7 @@ export default async function MembersPage({
                             ))
                         ) : (
                             <div className="rounded-2xl border border-white/10 bg-black/20 p-6 text-sm text-gray-400">
-                                Nessun membro online ora.
+                                {t.noOnlineMembers}
                             </div>
                         )}
                     </div>
@@ -543,22 +814,15 @@ export default async function MembersPage({
 
             <section className="space-y-5">
                 <div>
-                    <p className="text-sm text-gray-400">
-                        Member Overview
-                    </p>
-
+                    <p className="text-sm text-gray-400">{t.memberOverview}</p>
                     <h2 className="mt-1 text-3xl font-black text-white">
-                        Account Team
+                        {t.accountTeam}
                     </h2>
                 </div>
 
                 <div className="grid gap-6">
                     {membersWithStats.map((member) => {
-                        const activity =
-                            getActivityStatus(
-                                member.user
-                                    .lastActivityAt
-                            );
+                        const activity = getActivityStatus(member.user.lastActivityAt, t);
 
                         return (
                             <div
@@ -569,18 +833,13 @@ export default async function MembersPage({
                                     <div>
                                         <div className="flex flex-wrap items-center gap-3">
                                             <h3 className="text-3xl font-black text-white">
-                                                {
-                                                    member.user
-                                                        .username
-                                                }
+                                                {member.user.username}
                                             </h3>
 
                                             <div
                                                 className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-black uppercase tracking-[0.15em] ${activity.color}`}
                                             >
-                                                <span
-                                                    className={`h-2 w-2 rounded-full ${activity.dot}`}
-                                                />
+                                                <span className={`h-2 w-2 rounded-full ${activity.dot}`} />
                                                 {activity.label}
                                             </div>
 
@@ -594,82 +853,59 @@ export default async function MembersPage({
                                         </div>
 
                                         <p className="mt-4 max-w-3xl text-sm leading-6 text-gray-400">
-                                            Activity profile based on
-                                            login presence, last
-                                            activity and trade
-                                            contribution inside this
-                                            account.
+                                            {t.activityProfile}
                                         </p>
                                     </div>
 
                                     <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/10 px-5 py-3 text-sm font-black uppercase tracking-[0.15em] text-cyan-300">
-                                        {member.totalTrades} Trades
+                                        {member.totalTrades} {t.trades}
                                     </div>
                                 </div>
 
                                 <div className="mt-7 grid gap-4 md:grid-cols-3">
                                     <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
                                         <div className="flex items-center gap-3">
-                                            <Clock3
-                                                size={18}
-                                                className="text-cyan-400"
-                                            />
-
+                                            <Clock3 size={18} className="text-cyan-400" />
                                             <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
-                                                Last Activity
+                                                {t.lastActivity}
                                             </p>
                                         </div>
-
                                         <p className="mt-4 text-lg font-black text-white">
                                             {formatDateTime(
-                                                member.user
-                                                    .lastActivityAt ||
-                                                member.user
-                                                    .lastSeenAt
+                                                member.user.lastActivityAt || member.user.lastSeenAt,
+                                                language,
+                                                t
                                             )}
                                         </p>
                                     </div>
 
                                     <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
                                         <div className="flex items-center gap-3">
-                                            <Clock3
-                                                size={18}
-                                                className="text-cyan-400"
-                                            />
-
+                                            <Clock3 size={18} className="text-cyan-400" />
                                             <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
-                                                Last Login
+                                                {t.lastLogin}
                                             </p>
                                         </div>
-
                                         <p className="mt-4 text-lg font-black text-white">
-                                            {formatDateTime(
-                                                member.user
-                                                    .lastLoginAt
-                                            )}
+                                            {formatDateTime(member.user.lastLoginAt, language, t)}
                                         </p>
                                     </div>
 
                                     <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
                                         <div className="flex items-center gap-3">
-                                            <Activity
-                                                size={18}
-                                                className="text-cyan-400"
-                                            />
-
+                                            <Activity size={18} className="text-cyan-400" />
                                             <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
-                                                Last Trade
+                                                {t.lastTrade}
                                             </p>
                                         </div>
-
                                         <p className="mt-4 text-lg font-black text-white">
                                             {member.lastTrade
                                                 ? `${member.lastTrade.symbol} · ${formatDate(
-                                                    member
-                                                        .lastTrade
-                                                        .openDate
+                                                    member.lastTrade.openDate,
+                                                    language,
+                                                    t
                                                 )}`
-                                                : "No trades"}
+                                                : t.noTrades}
                                         </p>
                                     </div>
                                 </div>
@@ -679,21 +915,21 @@ export default async function MembersPage({
                                         href={`/accounts/${accountId}/diary?member=${member.userId}`}
                                         className="rounded-2xl border border-cyan-500/20 bg-cyan-500/10 px-5 py-3 text-sm font-bold text-cyan-300 transition hover:bg-cyan-500/20"
                                     >
-                                        View Member Trades
+                                        {t.viewMemberTrades}
                                     </Link>
 
                                     <Link
                                         href={`/accounts/${accountId}/members/${member.userId}`}
                                         className="rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-3 text-sm font-bold text-gray-300 transition hover:bg-white/[0.06]"
                                     >
-                                        Member Analytics
+                                        {t.memberAnalytics}
                                     </Link>
 
                                     <Link
                                         href={`/accounts/${accountId}/workspace`}
                                         className="rounded-2xl border border-yellow-500/20 bg-yellow-500/10 px-5 py-3 text-sm font-bold text-yellow-300 transition hover:bg-yellow-500/20"
                                     >
-                                        Open Workspace
+                                        {t.openWorkspace}
                                     </Link>
                                 </div>
                             </div>
@@ -708,7 +944,7 @@ export default async function MembersPage({
                     className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-3 text-sm font-bold text-gray-300 transition hover:bg-white/[0.06]"
                 >
                     <ArrowLeft size={16} />
-                    Back to account
+                    {t.backToAccount}
                 </Link>
             </div>
         </div>

@@ -1,19 +1,146 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
+import {
+    formatDateTimeByLanguage,
+    normalizeAppLanguage,
+    type AppLanguage,
+} from "@/lib/i18n";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-    return typeof value === "object" && value !== null && !Array.isArray(value);
+type ActivityLabels = {
+    eyebrow: string;
+    title: string;
+    description: string;
+    changes: string;
+    openAccount: string;
+    emptyState: string;
+    enabled: string;
+    disabled: string;
+    emptyValue: string;
+};
+
+const activityLabels: Record<AppLanguage, ActivityLabels> = {
+    it: {
+        eyebrow: "Activity Feed",
+        title: "Attività recenti",
+        description:
+            "Cronologia intelligente delle attività legate ai tuoi account, trade e permessi.",
+        changes: "Modifiche",
+        openAccount: "Apri account",
+        emptyState: "Nessuna attività registrata per ora.",
+        enabled: "Attivo",
+        disabled: "Disattivo",
+        emptyValue: "-",
+    },
+
+    en: {
+        eyebrow: "Activity Feed",
+        title: "Recent Activity",
+        description:
+            "Intelligent timeline of activities related to your accounts, trades and permissions.",
+        changes: "Changes",
+        openAccount: "Open Account",
+        emptyState: "No activity recorded yet.",
+        enabled: "Enabled",
+        disabled: "Disabled",
+        emptyValue: "-",
+    },
+
+    uk: {
+        eyebrow: "Стрічка активності",
+        title: "Остання активність",
+        description:
+            "Інтелектуальна хронологія дій, пов’язаних із вашими акаунтами, угодами та дозволами.",
+        changes: "Зміни",
+        openAccount: "Відкрити акаунт",
+        emptyState: "Поки що немає зареєстрованої активності.",
+        enabled: "Увімкнено",
+        disabled: "Вимкнено",
+        emptyValue: "-",
+    },
+
+    ru: {
+        eyebrow: "Лента активности",
+        title: "Последняя активность",
+        description:
+            "Интеллектуальная хронология действий, связанных с вашими аккаунтами, сделками и разрешениями.",
+        changes: "Изменения",
+        openAccount: "Открыть аккаунт",
+        emptyState: "Пока нет зарегистрированной активности.",
+        enabled: "Включено",
+        disabled: "Отключено",
+        emptyValue: "-",
+    },
+
+    es: {
+        eyebrow: "Feed de actividad",
+        title: "Actividad reciente",
+        description:
+            "Cronología inteligente de actividades relacionadas con tus cuentas, trades y permisos.",
+        changes: "Cambios",
+        openAccount: "Abrir cuenta",
+        emptyState: "Aún no hay actividad registrada.",
+        enabled: "Activado",
+        disabled: "Desactivado",
+        emptyValue: "-",
+    },
+
+    fr: {
+        eyebrow: "Flux d’activité",
+        title: "Activité récente",
+        description:
+            "Chronologie intelligente des activités liées à vos comptes, trades et permissions.",
+        changes: "Modifications",
+        openAccount: "Ouvrir le compte",
+        emptyState: "Aucune activité enregistrée pour le moment.",
+        enabled: "Activé",
+        disabled: "Désactivé",
+        emptyValue: "-",
+    },
+
+    de: {
+        eyebrow: "Aktivitätsfeed",
+        title: "Letzte Aktivität",
+        description:
+            "Intelligente Chronologie der Aktivitäten rund um deine Konten, Trades und Berechtigungen.",
+        changes: "Änderungen",
+        openAccount: "Konto öffnen",
+        emptyState: "Noch keine Aktivität aufgezeichnet.",
+        enabled: "Aktiviert",
+        disabled: "Deaktiviert",
+        emptyValue: "-",
+    },
+};
+
+function isRecord(
+    value: unknown
+): value is Record<string, unknown> {
+    return (
+        typeof value === "object" &&
+        value !== null &&
+        !Array.isArray(value)
+    );
 }
 
-function formatValue(value: unknown) {
+function formatValue(
+    value: unknown,
+    labels: ActivityLabels
+) {
     if (typeof value === "boolean") {
-        return value ? "Enabled" : "Disabled";
+        return value ? labels.enabled : labels.disabled;
     }
 
     if (value === null || value === undefined) {
-        return "-";
+        return labels.emptyValue;
+    }
+
+    if (typeof value === "object") {
+        try {
+            return JSON.stringify(value);
+        } catch {
+            return String(value);
+        }
     }
 
     return String(value);
@@ -61,62 +188,86 @@ export default async function ActivitiesPage() {
         redirect("/login");
     }
 
-    const memberships = await prisma.accountMember.findMany({
+    const currentUser = await prisma.user.findUnique({
         where: {
-            userId: session.user.id,
+            id: session.user.id,
         },
         select: {
-            tradingAccountId: true,
+            id: true,
+            appLanguage: true,
         },
     });
+
+    if (!currentUser) {
+        redirect("/login");
+    }
+
+    const appLanguage = normalizeAppLanguage(
+        currentUser.appLanguage
+    );
+
+    const t = activityLabels[appLanguage];
+
+    const memberships =
+        await prisma.accountMember.findMany({
+            where: {
+                userId: session.user.id,
+            },
+            select: {
+                tradingAccountId: true,
+            },
+        });
 
     const accountIds = memberships.map(
         (membership) => membership.tradingAccountId
     );
 
-    const activities = await prisma.activityLog.findMany({
-        where: {
-            OR: [
-                {
-                    userId: session.user.id,
-                },
-                {
-                    accountId: {
-                        in: accountIds,
+    const activities =
+        await prisma.activityLog.findMany({
+            where: {
+                OR: [
+                    {
+                        userId: session.user.id,
                     },
-                },
-            ],
-        },
-        include: {
-            user: true,
-            account: true,
-        },
-        orderBy: {
-            createdAt: "desc",
-        },
-        take: 100,
-    });
+                    {
+                        accountId: {
+                            in: accountIds,
+                        },
+                    },
+                ],
+            },
+            include: {
+                user: true,
+                account: true,
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+            take: 100,
+        });
 
     return (
         <div>
             <div className="mb-10">
                 <p className="text-sm text-green-400">
-                    Activity Feed
+                    {t.eyebrow}
                 </p>
 
                 <h1 className="mt-2 text-4xl font-bold">
-                    Recent Activity
+                    {t.title}
                 </h1>
 
                 <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-400">
-                    Cronologia intelligente delle attività legate ai tuoi account, trade e permessi.
+                    {t.description}
                 </p>
             </div>
 
             <div className="space-y-4">
                 {activities.length > 0 ? (
                     activities.map((activity) => {
-                        const changes = getChanges(activity.metadata);
+                        const changes = getChanges(
+                            activity.metadata
+                        );
 
                         return (
                             <div
@@ -156,7 +307,7 @@ export default async function ActivitiesPage() {
                                         {changes.length > 0 && (
                                             <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4">
                                                 <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
-                                                    Changes
+                                                    {t.changes}
                                                 </p>
 
                                                 <div className="space-y-2">
@@ -170,11 +321,17 @@ export default async function ActivitiesPage() {
                                                             </span>
 
                                                             <span className="rounded-lg bg-red-500/10 px-2 py-1 text-xs font-bold text-red-300">
-                                                                {formatValue(change.before)}
+                                                                {formatValue(
+                                                                    change.before,
+                                                                    t
+                                                                )}
                                                             </span>
 
                                                             <span className="rounded-lg bg-green-500/10 px-2 py-1 text-xs font-bold text-green-300">
-                                                                {formatValue(change.after)}
+                                                                {formatValue(
+                                                                    change.after,
+                                                                    t
+                                                                )}
                                                             </span>
                                                         </div>
                                                     ))}
@@ -183,7 +340,10 @@ export default async function ActivitiesPage() {
                                         )}
 
                                         <p className="mt-3 text-xs text-gray-600">
-                                            {new Date(activity.createdAt).toLocaleString("it-IT")}
+                                            {formatDateTimeByLanguage(
+                                                activity.createdAt,
+                                                appLanguage
+                                            )}
                                         </p>
                                     </div>
 
@@ -192,7 +352,7 @@ export default async function ActivitiesPage() {
                                             href={`/accounts/${activity.accountId}`}
                                             className="rounded-xl bg-white/10 px-4 py-3 text-sm font-semibold hover:bg-white/20"
                                         >
-                                            Open Account
+                                            {t.openAccount}
                                         </Link>
                                     )}
                                 </div>
@@ -201,7 +361,7 @@ export default async function ActivitiesPage() {
                     })
                 ) : (
                     <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-10 text-center text-gray-400">
-                        Nessuna attività registrata per ora.
+                        {t.emptyState}
                     </div>
                 )}
             </div>

@@ -1,19 +1,31 @@
 export const SUPPORTED_APP_LANGUAGES = [
     "it",
     "en",
+    "uk",
+    "ru",
+    "es",
+    "fr",
+    "de",
 ] as const;
 
 export type AppLanguage =
     (typeof SUPPORTED_APP_LANGUAGES)[number];
 
-export const DEFAULT_APP_LANGUAGE: AppLanguage =
-    "it";
+export const DEFAULT_APP_LANGUAGE: AppLanguage = "it";
 
 export function normalizeAppLanguage(
     language?: string | null
 ): AppLanguage {
-    if (language === "en") {
-        return "en";
+    if (
+        language === "it" ||
+        language === "en" ||
+        language === "uk" ||
+        language === "ru" ||
+        language === "es" ||
+        language === "fr" ||
+        language === "de"
+    ) {
+        return language;
     }
 
     return DEFAULT_APP_LANGUAGE;
@@ -22,12 +34,14 @@ export function normalizeAppLanguage(
 export function getLocaleFromLanguage(
     language?: string | null
 ) {
-    const appLanguage =
-        normalizeAppLanguage(language);
+    const appLanguage = normalizeAppLanguage(language);
 
-    if (appLanguage === "en") {
-        return "en-US";
-    }
+    if (appLanguage === "en") return "en-US";
+    if (appLanguage === "uk") return "uk-UA";
+    if (appLanguage === "ru") return "ru-RU";
+    if (appLanguage === "es") return "es-ES";
+    if (appLanguage === "fr") return "fr-FR";
+    if (appLanguage === "de") return "de-DE";
 
     return "it-IT";
 }
@@ -61,13 +75,15 @@ export function formatPercentByLanguage(
     value: number,
     language?: string | null
 ) {
-    return new Intl.NumberFormat(
-        getLocaleFromLanguage(language),
-        {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-        }
-    ).format(value) + "%";
+    return (
+        new Intl.NumberFormat(
+            getLocaleFromLanguage(language),
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            }
+        ).format(value) + "%"
+    );
 }
 
 export function formatDateByLanguage(
@@ -108,4 +124,9 @@ export const LANGUAGE_LABELS: Record<
 > = {
     it: "Italiano",
     en: "English",
+    uk: "Українська",
+    ru: "Русский",
+    es: "Español",
+    fr: "Français",
+    de: "Deutsch",
 };

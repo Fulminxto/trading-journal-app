@@ -1,0 +1,3044 @@
+
+===== FILE: AICoachingReport.tsx =====
+
+type Props = {
+  disciplineScore: number;
+  behavioralRisk: number;
+  winRate: number;
+  emotionalTrades: number;
+};
+
+export default function AICoachingReport({
+  disciplineScore,
+  behavioralRisk,
+  winRate,
+  emotionalTrades,
+}: Props) {
+  const primaryFocus =
+    disciplineScore < 60
+      ? "Discipline & Execution"
+      : behavioralRisk >= 30
+      ? "Behavioral Stability"
+      : winRate < 50
+      ? "Setup Quality"
+      : "Scaling Consistency";
+
+  const coachingMessage =
+    primaryFocus ===
+    "Discipline & Execution"
+      ? "Riduci overtrading, migliora review e aumenta la qualità media dei setup."
+      : primaryFocus ===
+        "Behavioral Stability"
+      ? "Monitora impulsività, emotional trading e gestione psicologica."
+      : primaryFocus ===
+        "Setup Quality"
+      ? "Concentrati solo sui setup ad alto edge e riduci esposizione inutile."
+      : "La struttura è positiva. Ora il focus è mantenere consistenza e scalabilità.";
+
+  return (
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#071018] via-[#0f1726] to-black p-10">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.10),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">
+          AI Coaching Layer
+        </p>
+
+        <h2 className="mt-4 text-5xl font-black tracking-tight text-white">
+          Coaching Report
+        </h2>
+
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-4">
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Discipline
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-green-400">
+              {disciplineScore}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Behavioral Risk
+            </p>
+
+            <h3
+              className={`mt-4 text-4xl font-black ${
+                behavioralRisk >= 50
+                  ? "text-red-400"
+                  : behavioralRisk >= 25
+                  ? "text-yellow-400"
+                  : "text-cyan-400"
+              }`}
+            >
+              {behavioralRisk}%
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Win Rate
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-violet-400">
+              {winRate}%
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Emotional Trades
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-yellow-400">
+              {emotionalTrades}
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-6">
+          <p className="text-sm text-gray-400">
+            Primary Focus
+          </p>
+
+          <h3 className="mt-4 text-3xl font-black text-cyan-400">
+            {primaryFocus}
+          </h3>
+
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-gray-300">
+            {coachingMessage}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: BehavioralReportCard.tsx =====
+
+type Props = {
+  emotionalTrades: number;
+  lowConfidenceTrades: number;
+  weakExecutionTrades: number;
+  totalTrades: number;
+};
+
+export default function BehavioralReportCard({
+  emotionalTrades,
+  lowConfidenceTrades,
+  weakExecutionTrades,
+  totalTrades,
+}: Props) {
+  const behavioralRisk =
+    totalTrades > 0
+      ? Math.round(
+          ((emotionalTrades +
+            lowConfidenceTrades +
+            weakExecutionTrades) /
+            totalTrades) *
+            100
+        )
+      : 0;
+
+  const riskLabel =
+    behavioralRisk >= 50
+      ? "High Behavioral Risk"
+      : behavioralRisk >= 25
+      ? "Behavior Watchlist"
+      : "Stable Behavior";
+
+  const riskTone =
+    behavioralRisk >= 50
+      ? "text-red-400"
+      : behavioralRisk >= 25
+      ? "text-yellow-400"
+      : "text-green-400";
+
+  return (
+    <div className="report-card relative overflow-hidden rounded-[36px] border border-white/10 bg-gradient-to-br from-[#140909] via-[#171020] to-black p-8">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.12),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.25em] text-red-400">
+          Behavioral Report
+        </p>
+
+        <h2 className="mt-3 text-4xl font-black text-white">
+          Trader Behavior Analysis
+        </h2>
+
+        <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-4">
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              Risk Score
+            </p>
+
+            <h3 className={`mt-3 text-4xl font-black ${riskTone}`}>
+              {behavioralRisk}%
+            </h3>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              Status
+            </p>
+
+            <h3 className={`mt-3 text-2xl font-black ${riskTone}`}>
+              {riskLabel}
+            </h3>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              Emotional Trades
+            </p>
+
+            <h3 className="mt-3 text-4xl font-black text-yellow-400">
+              {emotionalTrades}
+            </h3>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              Weak Execution
+            </p>
+
+            <h3 className="mt-3 text-4xl font-black text-red-400">
+              {weakExecutionTrades}
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-8 rounded-2xl border border-white/10 bg-black/20 p-5">
+          <p className="text-sm text-gray-400">
+            AI Behavioral Summary
+          </p>
+
+          <h3 className="mt-3 text-xl font-black leading-relaxed text-white">
+            {behavioralRisk >= 50
+              ? "Il comportamento operativo mostra segnali di rischio elevato. Priorità: ridurre impulsività, migliorare review e filtrare meglio i setup."
+              : behavioralRisk >= 25
+              ? "Sono presenti alcuni segnali da monitorare. Mantieni focus su execution, confidence e disciplina emotiva."
+              : "La struttura comportamentale appare stabile. Continua a proteggere processo, routine e qualità decisionale."}
+          </h3>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: CognitivePerformanceReport.tsx =====
+
+type Props = {
+  disciplineScore: number;
+  behavioralRisk: number;
+  lowConfidenceTrades: number;
+  weakExecutionTrades: number;
+  totalTrades: number;
+};
+
+export default function CognitivePerformanceReport({
+  disciplineScore,
+  behavioralRisk,
+  lowConfidenceTrades,
+  weakExecutionTrades,
+  totalTrades,
+}: Props) {
+  const cognitiveLoad =
+    totalTrades > 0
+      ? (
+          (lowConfidenceTrades +
+            weakExecutionTrades) /
+          totalTrades
+        ) *
+        100
+      : 0;
+
+  const cognitiveScore = Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round(
+        disciplineScore -
+          behavioralRisk * 0.4 -
+          cognitiveLoad * 0.3
+      )
+    )
+  );
+
+  const cognitiveStatus =
+    cognitiveScore >= 80
+      ? "High Cognitive Clarity"
+      : cognitiveScore >= 60
+      ? "Moderate Cognitive Stability"
+      : "Cognitive Instability";
+
+  const tone =
+    cognitiveStatus ===
+    "High Cognitive Clarity"
+      ? "text-green-400"
+      : cognitiveStatus ===
+        "Moderate Cognitive Stability"
+      ? "text-yellow-400"
+      : "text-red-400";
+
+  return (
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#0b1020] via-[#111827] to-black p-10">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.10),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.3em] text-violet-400">
+          Cognitive Intelligence
+        </p>
+
+        <h2 className="mt-4 text-5xl font-black tracking-tight text-white">
+          Cognitive Performance Report
+        </h2>
+
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-5">
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Cognitive Score
+            </p>
+
+            <h3 className={`mt-4 text-4xl font-black ${tone}`}>
+              {cognitiveScore}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Behavioral Risk
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-red-400">
+              {behavioralRisk}%
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Low Confidence
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-yellow-400">
+              {lowConfidenceTrades}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Weak Execution
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-orange-400">
+              {weakExecutionTrades}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Cognitive Load
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-cyan-400">
+              {Math.round(cognitiveLoad)}%
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-6">
+          <p className="text-sm text-gray-400">
+            AI Cognitive Assessment
+          </p>
+
+          <h3 className={`mt-4 text-3xl font-black ${tone}`}>
+            {cognitiveStatus}
+          </h3>
+
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-gray-300">
+            {cognitiveStatus ===
+            "High Cognitive Clarity"
+              ? "Il trader mantiene lucidità operativa, chiarezza decisionale e stabilità cognitiva."
+              : cognitiveStatus ===
+                  "Moderate Cognitive Stability"
+                ? "La struttura cognitiva è discreta ma vulnerabile durante pressione operativa."
+                : "La performance cognitiva mostra overload decisionale e instabilità mentale."}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: ConfidenceIntelligenceReport.tsx =====
+
+type Props = {
+  lowConfidenceTrades: number;
+  totalTrades: number;
+  disciplineScore: number;
+  winRate: number;
+};
+
+export default function ConfidenceIntelligenceReport({
+  lowConfidenceTrades,
+  totalTrades,
+  disciplineScore,
+  winRate,
+}: Props) {
+  const confidenceRatio =
+    totalTrades > 0
+      ? lowConfidenceTrades / totalTrades
+      : 0;
+
+  const confidenceScore = Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round(
+        disciplineScore * 0.5 +
+          winRate * 0.3 +
+          (1 - confidenceRatio) * 20
+      )
+    )
+  );
+
+  const confidenceStatus =
+    confidenceScore >= 80
+      ? "High Confidence Stability"
+      : confidenceScore >= 60
+      ? "Developing Confidence"
+      : "Confidence Fragility";
+
+  const tone =
+    confidenceStatus ===
+    "High Confidence Stability"
+      ? "text-green-400"
+      : confidenceStatus ===
+        "Developing Confidence"
+      ? "text-yellow-400"
+      : "text-red-400";
+
+  return (
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#071018] via-[#111827] to-black p-10">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.10),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">
+          Confidence Intelligence
+        </p>
+
+        <h2 className="mt-4 text-5xl font-black tracking-tight text-white">
+          Confidence Report
+        </h2>
+
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-4">
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Confidence Score
+            </p>
+
+            <h3 className={`mt-4 text-4xl font-black ${tone}`}>
+              {confidenceScore}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Low Confidence
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-yellow-400">
+              {lowConfidenceTrades}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Discipline
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-green-400">
+              {disciplineScore}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Win Rate
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-violet-400">
+              {winRate}%
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-6">
+          <p className="text-sm text-gray-400">
+            AI Confidence Assessment
+          </p>
+
+          <h3 className={`mt-4 text-3xl font-black ${tone}`}>
+            {confidenceStatus}
+          </h3>
+
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-gray-300">
+            {confidenceStatus ===
+            "High Confidence Stability"
+              ? "Il trader mostra sicurezza operativa stabile e fiducia coerente nel processo."
+              : confidenceStatus ===
+                "Developing Confidence"
+              ? "La confidence operativa è in crescita ma ancora vulnerabile."
+              : "La struttura mentale mostra instabilità e mancanza di fiducia nel processo."}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: ConsistencyIntelligenceReport.tsx =====
+
+type Props = {
+  disciplineScore: number;
+  winRate: number;
+  totalTrades: number;
+  emotionalTrades: number;
+};
+
+export default function ConsistencyIntelligenceReport({
+  disciplineScore,
+  winRate,
+  totalTrades,
+  emotionalTrades,
+}: Props) {
+  const emotionalRatio =
+    totalTrades > 0
+      ? emotionalTrades / totalTrades
+      : 0;
+
+  const consistencyLevel =
+    disciplineScore >= 80 &&
+    winRate >= 60 &&
+    emotionalRatio < 0.2
+      ? "Elite Consistency"
+      : disciplineScore >= 60 &&
+        winRate >= 50
+      ? "Developing Consistency"
+      : "Inconsistent Structure";
+
+  const consistencyTone =
+    consistencyLevel ===
+    "Elite Consistency"
+      ? "text-green-400"
+      : consistencyLevel ===
+        "Developing Consistency"
+      ? "text-yellow-400"
+      : "text-red-400";
+
+  return (
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#071018] via-[#0f1726] to-black p-10">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.10),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">
+          Consistency Intelligence
+        </p>
+
+        <h2 className="mt-4 text-5xl font-black tracking-tight text-white">
+          Consistency Report
+        </h2>
+
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-4">
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Discipline
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-green-400">
+              {disciplineScore}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Win Rate
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-cyan-400">
+              {winRate}%
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Emotional Ratio
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-yellow-400">
+              {Math.round(emotionalRatio * 100)}%
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Structure
+            </p>
+
+            <h3
+              className={`mt-4 text-2xl font-black ${consistencyTone}`}
+            >
+              {consistencyLevel}
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-6">
+          <p className="text-sm text-gray-400">
+            AI Consistency Assessment
+          </p>
+
+          <h3
+            className={`mt-4 text-3xl font-black ${consistencyTone}`}
+          >
+            {consistencyLevel}
+          </h3>
+
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-gray-300">
+            {consistencyLevel ===
+            "Elite Consistency"
+              ? "Il trader mostra una struttura operativa stabile e ripetibile."
+              : consistencyLevel ===
+                "Developing Consistency"
+              ? "La consistenza è in crescita ma necessita consolidamento."
+              : "La struttura operativa mostra instabilità e variabilità elevata."}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: DecisionQualityReport.tsx =====
+
+type Props = {
+  disciplineScore: number;
+  behavioralRisk: number;
+  winRate: number;
+  emotionalTrades: number;
+};
+
+export default function DecisionQualityReport({
+  disciplineScore,
+  behavioralRisk,
+  winRate,
+  emotionalTrades,
+}: Props) {
+  const decisionScore = Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round(
+        disciplineScore * 0.5 +
+          winRate * 0.3 +
+          (100 - behavioralRisk) * 0.2
+      )
+    )
+  );
+
+  const decisionStatus =
+    decisionScore >= 80
+      ? "High Decision Quality"
+      : decisionScore >= 60
+      ? "Developing Decision Process"
+      : "Unstable Decision Process";
+
+  const tone =
+    decisionStatus ===
+    "High Decision Quality"
+      ? "text-green-400"
+      : decisionStatus ===
+        "Developing Decision Process"
+      ? "text-yellow-400"
+      : "text-red-400";
+
+  return (
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#071018] via-[#111827] to-black p-10">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.10),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">
+          Decision Intelligence
+        </p>
+
+        <h2 className="mt-4 text-5xl font-black tracking-tight text-white">
+          Decision Quality Report
+        </h2>
+
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-4">
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Decision Score
+            </p>
+
+            <h3 className={`mt-4 text-4xl font-black ${tone}`}>
+              {decisionScore}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Discipline
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-green-400">
+              {disciplineScore}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Behavioral Risk
+            </p>
+
+            <h3
+              className={`mt-4 text-4xl font-black ${
+                behavioralRisk >= 50
+                  ? "text-red-400"
+                  : behavioralRisk >= 25
+                  ? "text-yellow-400"
+                  : "text-cyan-400"
+              }`}
+            >
+              {behavioralRisk}%
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Emotional Trades
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-yellow-400">
+              {emotionalTrades}
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-6">
+          <p className="text-sm text-gray-400">
+            AI Decision Assessment
+          </p>
+
+          <h3 className={`mt-4 text-3xl font-black ${tone}`}>
+            {decisionStatus}
+          </h3>
+
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-gray-300">
+            {decisionStatus ===
+            "High Decision Quality"
+              ? "Il trader mostra una struttura decisionale disciplinata e stabile."
+              : decisionStatus ===
+                "Developing Decision Process"
+              ? "La qualità decisionale è in crescita ma ancora vulnerabile sotto pressione."
+              : "La struttura decisionale mostra instabilità e rischio comportamentale elevato."}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: DisciplineIntelligenceReport.tsx =====
+
+type Props = {
+  disciplineScore: number;
+  behavioralRisk: number;
+  emotionalTrades: number;
+  totalTrades: number;
+};
+
+export default function DisciplineIntelligenceReport({
+  disciplineScore,
+  behavioralRisk,
+  emotionalTrades,
+  totalTrades,
+}: Props) {
+  const emotionalRatio =
+    totalTrades > 0
+      ? emotionalTrades / totalTrades
+      : 0;
+
+  const disciplineStatus =
+    disciplineScore >= 80 &&
+    behavioralRisk < 25 &&
+    emotionalRatio < 0.2
+      ? "Elite Discipline"
+      : disciplineScore >= 60
+      ? "Developing Discipline"
+      : "Discipline Instability";
+
+  const tone =
+    disciplineStatus === "Elite Discipline"
+      ? "text-green-400"
+      : disciplineStatus ===
+        "Developing Discipline"
+      ? "text-yellow-400"
+      : "text-red-400";
+
+  return (
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#0b1020] via-[#111827] to-black p-10">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.10),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.3em] text-violet-400">
+          Discipline Intelligence
+        </p>
+
+        <h2 className="mt-4 text-5xl font-black tracking-tight text-white">
+          Discipline Report
+        </h2>
+
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-4">
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Discipline Score
+            </p>
+
+            <h3 className={`mt-4 text-4xl font-black ${tone}`}>
+              {disciplineScore}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Behavioral Risk
+            </p>
+
+            <h3
+              className={`mt-4 text-4xl font-black ${
+                behavioralRisk >= 50
+                  ? "text-red-400"
+                  : behavioralRisk >= 25
+                  ? "text-yellow-400"
+                  : "text-green-400"
+              }`}
+            >
+              {behavioralRisk}%
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Emotional Ratio
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-yellow-400">
+              {Math.round(emotionalRatio * 100)}%
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Status
+            </p>
+
+            <h3 className={`mt-4 text-2xl font-black ${tone}`}>
+              {disciplineStatus}
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-6">
+          <p className="text-sm text-gray-400">
+            AI Discipline Assessment
+          </p>
+
+          <h3 className={`mt-4 text-3xl font-black ${tone}`}>
+            {disciplineStatus}
+          </h3>
+
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-gray-300">
+            {disciplineStatus ===
+            "Elite Discipline"
+              ? "Il trader mostra alta disciplina, controllo operativo e forte stabilità comportamentale."
+              : disciplineStatus ===
+                "Developing Discipline"
+              ? "La disciplina operativa è in crescita ma ancora vulnerabile sotto pressione."
+              : "La struttura disciplinare mostra instabilità e mancanza di controllo operativo."}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: EdgeAnalysisReport.tsx =====
+
+type Props = {
+  averageWin: number;
+  averageLoss: number;
+  winRate: number;
+  disciplineScore: number;
+};
+
+export default function EdgeAnalysisReport({
+  averageWin,
+  averageLoss,
+  winRate,
+  disciplineScore,
+}: Props) {
+  const edgeScore =
+    Math.round(
+      winRate * 0.5 +
+        disciplineScore * 0.3 +
+        (averageWin >
+        Math.abs(averageLoss)
+          ? 20
+          : 0)
+    );
+
+  const edgeStatus =
+    edgeScore >= 80
+      ? "Strong Edge"
+      : edgeScore >= 60
+      ? "Developing Edge"
+      : "Weak Edge";
+
+  const edgeTone =
+    edgeStatus === "Strong Edge"
+      ? "text-green-400"
+      : edgeStatus ===
+        "Developing Edge"
+      ? "text-yellow-400"
+      : "text-red-400";
+
+  return (
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#071018] via-[#111827] to-black p-10">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.10),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">
+          Edge Analysis
+        </p>
+
+        <h2 className="mt-4 text-5xl font-black tracking-tight text-white">
+          AI Edge Engine
+        </h2>
+
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-4">
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Edge Score
+            </p>
+
+            <h3 className={`mt-4 text-4xl font-black ${edgeTone}`}>
+              {edgeScore}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Avg Win
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-green-400">
+              ${averageWin.toFixed(0)}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Avg Loss
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-red-400">
+              ${averageLoss.toFixed(0)}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Win Rate
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-violet-400">
+              {winRate}%
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-6">
+          <p className="text-sm text-gray-400">
+            AI Edge Assessment
+          </p>
+
+          <h3 className={`mt-4 text-3xl font-black ${edgeTone}`}>
+            {edgeStatus}
+          </h3>
+
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-gray-300">
+            {edgeStatus === "Strong Edge"
+              ? "Il trader mostra una struttura profittevole con edge operativo riconoscibile."
+              : edgeStatus ===
+                "Developing Edge"
+              ? "L'edge operativo è presente ma necessita più consistenza e stabilità."
+              : "La struttura operativa non mostra ancora un edge sufficientemente stabile."}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: EmotionalIntelligenceReport.tsx =====
+
+type Props = {
+  emotionalTrades: number;
+  totalTrades: number;
+  behavioralRisk: number;
+  disciplineScore: number;
+};
+
+export default function EmotionalIntelligenceReport({
+  emotionalTrades,
+  totalTrades,
+  behavioralRisk,
+  disciplineScore,
+}: Props) {
+  const emotionalRatio =
+    totalTrades > 0
+      ? emotionalTrades / totalTrades
+      : 0;
+
+  const emotionalScore = Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round(
+        100 -
+          emotionalRatio * 50 -
+          behavioralRisk * 0.3 +
+          disciplineScore * 0.2
+      )
+    )
+  );
+
+  const emotionalStatus =
+    emotionalScore >= 80
+      ? "Emotionally Stable"
+      : emotionalScore >= 60
+      ? "Moderate Emotional Stability"
+      : "Emotional Instability";
+
+  const tone =
+    emotionalStatus ===
+    "Emotionally Stable"
+      ? "text-green-400"
+      : emotionalStatus ===
+        "Moderate Emotional Stability"
+      ? "text-yellow-400"
+      : "text-red-400";
+
+  return (
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#120c08] via-[#171020] to-black p-10">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(245,158,11,0.10),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.3em] text-yellow-400">
+          Emotional Intelligence
+        </p>
+
+        <h2 className="mt-4 text-5xl font-black tracking-tight text-white">
+          Emotional Stability Report
+        </h2>
+
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-4">
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Emotional Score
+            </p>
+
+            <h3 className={`mt-4 text-4xl font-black ${tone}`}>
+              {emotionalScore}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Emotional Trades
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-yellow-400">
+              {emotionalTrades}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Emotional Ratio
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-cyan-400">
+              {Math.round(emotionalRatio * 100)}%
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Behavioral Risk
+            </p>
+
+            <h3
+              className={`mt-4 text-4xl font-black ${
+                behavioralRisk >= 50
+                  ? "text-red-400"
+                  : behavioralRisk >= 25
+                  ? "text-yellow-400"
+                  : "text-green-400"
+              }`}
+            >
+              {behavioralRisk}%
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-6">
+          <p className="text-sm text-gray-400">
+            AI Emotional Assessment
+          </p>
+
+          <h3 className={`mt-4 text-3xl font-black ${tone}`}>
+            {emotionalStatus}
+          </h3>
+
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-gray-300">
+            {emotionalStatus ===
+            "Emotionally Stable"
+              ? "Il trader mostra buona stabilità emotiva e controllo psicologico operativo."
+              : emotionalStatus ===
+                "Moderate Emotional Stability"
+              ? "La stabilità emotiva è discreta ma vulnerabile durante pressione o drawdown."
+              : "La struttura emotiva mostra instabilità e forte influenza psicologica sulle decisioni."}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: ExecutionIntelligenceReport.tsx =====
+
+type Props = {
+  weakExecutionTrades: number;
+  totalTrades: number;
+  disciplineScore: number;
+  averageWin: number;
+  averageLoss: number;
+};
+
+export default function ExecutionIntelligenceReport({
+  weakExecutionTrades,
+  totalTrades,
+  disciplineScore,
+  averageWin,
+  averageLoss,
+}: Props) {
+  const executionRatio =
+    totalTrades > 0
+      ? weakExecutionTrades / totalTrades
+      : 0;
+
+  const executionScore = Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round(
+        disciplineScore -
+          executionRatio * 40 +
+          (averageWin >
+          Math.abs(averageLoss)
+            ? 10
+            : -10)
+      )
+    )
+  );
+
+  const executionStatus =
+    executionScore >= 80
+      ? "Elite Execution"
+      : executionScore >= 60
+      ? "Stable Execution"
+      : "Execution Instability";
+
+  const tone =
+    executionStatus === "Elite Execution"
+      ? "text-green-400"
+      : executionStatus ===
+        "Stable Execution"
+      ? "text-yellow-400"
+      : "text-red-400";
+
+  return (
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#071018] via-[#0f1726] to-black p-10">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.10),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">
+          Execution Intelligence
+        </p>
+
+        <h2 className="mt-4 text-5xl font-black tracking-tight text-white">
+          Execution Report
+        </h2>
+
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-4">
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Execution Score
+            </p>
+
+            <h3 className={`mt-4 text-4xl font-black ${tone}`}>
+              {executionScore}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Weak Executions
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-red-400">
+              {weakExecutionTrades}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Discipline
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-green-400">
+              {disciplineScore}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Execution Ratio
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-yellow-400">
+              {Math.round(executionRatio * 100)}%
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-6">
+          <p className="text-sm text-gray-400">
+            AI Execution Assessment
+          </p>
+
+          <h3 className={`mt-4 text-3xl font-black ${tone}`}>
+            {executionStatus}
+          </h3>
+
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-gray-300">
+            {executionStatus ===
+            "Elite Execution"
+              ? "L'esecuzione operativa mostra alta qualità, controllo e ripetibilità."
+              : executionStatus ===
+                "Stable Execution"
+              ? "La qualità esecutiva è discreta ma necessita maggiore consistenza."
+              : "La struttura esecutiva mostra instabilità e vulnerabilità operative."}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: ExecutiveSummaryCard.tsx =====
+
+type Props = {
+  totalPnl: number;
+  winRate: number;
+  disciplineScore: number;
+  behavioralRisk: number;
+};
+
+export default function ExecutiveSummaryCard({
+  totalPnl,
+  winRate,
+  disciplineScore,
+  behavioralRisk,
+}: Props) {
+  const overallStatus =
+    totalPnl >= 0 &&
+    disciplineScore >= 70 &&
+    behavioralRisk < 30
+      ? "Strong Structure"
+      : totalPnl >= 0
+      ? "Developing Stability"
+      : "Risk Exposure";
+
+  const overallTone =
+    overallStatus === "Strong Structure"
+      ? "text-green-400"
+      : overallStatus ===
+        "Developing Stability"
+      ? "text-yellow-400"
+      : "text-red-400";
+
+  return (
+    <div className="report-card relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#050b10] via-[#0d1726] to-black p-10">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.10),transparent_35%)]" />
+
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.08),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">
+          Executive Summary
+        </p>
+
+        <h2 className="mt-4 text-5xl font-black tracking-tight text-white">
+          AI Strategic Overview
+        </h2>
+
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-4">
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              PnL Status
+            </p>
+
+            <h3
+              className={`mt-4 text-4xl font-black ${
+                totalPnl >= 0
+                  ? "text-green-400"
+                  : "text-red-400"
+              }`}
+            >
+              ${totalPnl.toFixed(0)}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Win Rate
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-cyan-400">
+              {winRate}%
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Discipline
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-violet-400">
+              {disciplineScore}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Behavioral Risk
+            </p>
+
+            <h3
+              className={`mt-4 text-4xl font-black ${
+                behavioralRisk >= 50
+                  ? "text-red-400"
+                  : behavioralRisk >= 25
+                  ? "text-yellow-400"
+                  : "text-green-400"
+              }`}
+            >
+              {behavioralRisk}%
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-6">
+          <p className="text-sm text-gray-400">
+            AI Executive Assessment
+          </p>
+
+          <h3
+            className={`mt-4 text-3xl font-black ${overallTone}`}
+          >
+            {overallStatus}
+          </h3>
+
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-gray-300">
+            {overallStatus ===
+            "Strong Structure"
+              ? "Il trader mostra una struttura operativa solida, con buona disciplina, controllo comportamentale e consistenza."
+              : overallStatus ===
+                "Developing Stability"
+              ? "La struttura operativa è in crescita, ma sono ancora presenti aree di instabilità da consolidare."
+              : "La struttura operativa mostra fragilità comportamentali e rischio operativo elevato."}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: GrowthRoadmapReport.tsx =====
+
+type Props = {
+  disciplineScore: number;
+  behavioralRisk: number;
+  winRate: number;
+};
+
+export default function GrowthRoadmapReport({
+  disciplineScore,
+  behavioralRisk,
+  winRate,
+}: Props) {
+  const nextLevel =
+    disciplineScore >= 80 &&
+    winRate >= 60 &&
+    behavioralRisk < 25
+      ? "Scaling Phase"
+      : disciplineScore >= 60
+      ? "Stabilization Phase"
+      : "Foundation Phase";
+
+  const nextAction =
+    nextLevel === "Scaling Phase"
+      ? "Incrementare consistenza, proteggere edge e ottimizzare execution."
+      : nextLevel ===
+        "Stabilization Phase"
+      ? "Ridurre variabilità emotiva e migliorare qualità media dei setup."
+      : "Costruire disciplina, review process e routine operative solide.";
+
+  const tone =
+    nextLevel === "Scaling Phase"
+      ? "text-green-400"
+      : nextLevel ===
+        "Stabilization Phase"
+      ? "text-yellow-400"
+      : "text-red-400";
+
+  return (
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#0b1020] via-[#111827] to-black p-10">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.10),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.3em] text-violet-400">
+          Growth Roadmap
+        </p>
+
+        <h2 className="mt-4 text-5xl font-black tracking-tight text-white">
+          AI Growth Engine
+        </h2>
+
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-3">
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Discipline
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-green-400">
+              {disciplineScore}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Behavioral Risk
+            </p>
+
+            <h3
+              className={`mt-4 text-4xl font-black ${
+                behavioralRisk >= 50
+                  ? "text-red-400"
+                  : behavioralRisk >= 25
+                  ? "text-yellow-400"
+                  : "text-cyan-400"
+              }`}
+            >
+              {behavioralRisk}%
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Win Rate
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-cyan-400">
+              {winRate}%
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-6">
+          <p className="text-sm text-gray-400">
+            Next Trader Phase
+          </p>
+
+          <h3 className={`mt-4 text-3xl font-black ${tone}`}>
+            {nextLevel}
+          </h3>
+
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-gray-300">
+            {nextAction}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: MentalResilienceReport.tsx =====
+
+type Props = {
+  disciplineScore: number;
+  behavioralRisk: number;
+  emotionalTrades: number;
+  losses: number;
+  totalTrades: number;
+};
+
+export default function MentalResilienceReport({
+  disciplineScore,
+  behavioralRisk,
+  emotionalTrades,
+  losses,
+  totalTrades,
+}: Props) {
+  const pressureRatio =
+    totalTrades > 0
+      ? (emotionalTrades + losses) /
+        totalTrades
+      : 0;
+
+  const resilienceScore = Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round(
+        disciplineScore -
+          behavioralRisk * 0.3 -
+          pressureRatio * 25
+      )
+    )
+  );
+
+  const resilienceStatus =
+    resilienceScore >= 80
+      ? "High Mental Resilience"
+      : resilienceScore >= 60
+      ? "Moderate Resilience"
+      : "Mental Fragility";
+
+  const tone =
+    resilienceStatus ===
+    "High Mental Resilience"
+      ? "text-green-400"
+      : resilienceStatus ===
+        "Moderate Resilience"
+      ? "text-yellow-400"
+      : "text-red-400";
+
+  return (
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#120c08] via-[#171020] to-black p-10">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(245,158,11,0.10),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.3em] text-yellow-400">
+          Mental Resilience
+        </p>
+
+        <h2 className="mt-4 text-5xl font-black tracking-tight text-white">
+          Resilience Report
+        </h2>
+
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-5">
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Resilience Score
+            </p>
+
+            <h3 className={`mt-4 text-4xl font-black ${tone}`}>
+              {resilienceScore}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Discipline
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-green-400">
+              {disciplineScore}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Behavioral Risk
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-red-400">
+              {behavioralRisk}%
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Emotional Trades
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-yellow-400">
+              {emotionalTrades}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Pressure Ratio
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-cyan-400">
+              {Math.round(pressureRatio * 100)}%
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-6">
+          <p className="text-sm text-gray-400">
+            AI Resilience Assessment
+          </p>
+
+          <h3 className={`mt-4 text-3xl font-black ${tone}`}>
+            {resilienceStatus}
+          </h3>
+
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-gray-300">
+            {resilienceStatus ===
+            "High Mental Resilience"
+              ? "Il trader mostra capacità di mantenere stabilità e lucidità anche sotto pressione."
+              : resilienceStatus ===
+                "Moderate Resilience"
+              ? "La resilienza mentale è discreta ma vulnerabile durante drawdown o volatilità."
+              : "La struttura mentale mostra fragilità operative sotto pressione emotiva e decisionale."}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: MonthlyReportCard.tsx =====
+
+type Props = {
+  totalTrades: number;
+  totalPnl: number;
+  winRate: number;
+  emotionalTrades: number;
+  disciplineScore: number;
+};
+
+export default function MonthlyReportCard({
+  totalTrades,
+  totalPnl,
+  winRate,
+  emotionalTrades,
+  disciplineScore,
+}: Props) {
+  const pnlTone =
+    totalPnl >= 0
+      ? "text-green-400"
+      : "text-red-400";
+
+  const disciplineLabel =
+    disciplineScore >= 80
+      ? "Elite Discipline"
+      : disciplineScore >= 60
+      ? "Stable Discipline"
+      : "Developing Discipline";
+
+  const psychologyStatus =
+    emotionalTrades >= 5
+      ? "Psychological pressure detected"
+      : "Psychological structure stable";
+
+  return (
+    <div className="report-card relative overflow-hidden rounded-[36px] border border-white/10 bg-gradient-to-br from-[#071018] via-[#0d1726] to-black p-8">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.10),transparent_35%)]" />
+
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.08),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.25em] text-cyan-400">
+          Monthly Intelligence
+        </p>
+
+        <h2 className="mt-3 text-4xl font-black text-white">
+          Monthly AI Report
+        </h2>
+
+        <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-4">
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              Trades
+            </p>
+
+            <h3 className="mt-3 text-4xl font-black text-cyan-400">
+              {totalTrades}
+            </h3>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              PnL
+            </p>
+
+            <h3 className={`mt-3 text-4xl font-black ${pnlTone}`}>
+              ${totalPnl.toFixed(0)}
+            </h3>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              Win Rate
+            </p>
+
+            <h3 className="mt-3 text-4xl font-black text-violet-400">
+              {winRate}%
+            </h3>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              Discipline
+            </p>
+
+            <h3 className="mt-3 text-2xl font-black text-green-400">
+              {disciplineLabel}
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-8 space-y-4">
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              Performance Summary
+            </p>
+
+            <h3 className="mt-3 text-xl font-black text-white">
+              {totalPnl >= 0
+                ? "Il trader ha mantenuto una struttura profittevole durante il mese."
+                : "Il trader ha attraversato una fase di drawdown operativo."}
+            </h3>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              Psychology Summary
+            </p>
+
+            <h3 className="mt-3 text-xl font-black text-yellow-400">
+              {psychologyStatus}
+            </h3>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              AI Coaching Insight
+            </p>
+
+            <h3 className="mt-3 text-xl font-black text-cyan-400">
+              VOLTIS suggerisce di
+              mantenere focus sulla
+              ripetibilità del processo
+              e sulla stabilità psicologica.
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: PDFCompactReport.tsx =====
+
+type Props = {
+    userName: string;
+
+    totalTrades: number;
+    totalPnl: number;
+    winRate: number;
+    wins: number;
+    losses: number;
+    averageWin: number;
+    averageLoss: number;
+    disciplineScore: number;
+    behavioralRisk: number;
+    emotionalTrades: number;
+    weakExecutionTrades: number;
+};
+
+export default function PDFCompactReport({
+    userName,
+
+    totalTrades,
+    totalPnl,
+    winRate,
+    wins,
+    losses,
+    averageWin,
+    averageLoss,
+    disciplineScore,
+    behavioralRisk,
+    emotionalTrades,
+    weakExecutionTrades,
+}: Props) {
+    return (
+        <div className="pdf-only pdf-page min-h-0 bg-[#050b10] p-4 text-white">
+            <section className="mb-6 border-b border-gray-300 pb-4">
+                <p className="text-xs uppercase tracking-[0.3em] text-gray-300">
+                    VOLTIS Intelligence Report
+                </p>
+
+                <h1 className="mt-2 text-3xl font-black">
+                    Trading Performance Report
+                </h1>
+
+                <p className="mt-2 text-sm text-gray-500">
+                    Institutional performance summary
+                </p>
+            </section>
+
+            <section className="mb-5 grid grid-cols-4 gap-3">
+                <div className="rounded-xl border border-gray-300 p-3">
+                    <p className="text-xs text-gray-500">Trades</p>
+                    <h2 className="text-2xl font-black">{totalTrades}</h2>
+                </div>
+
+                <div className="rounded-xl border border-gray-300 p-3">
+                    <p className="text-xs text-gray-500">PnL</p>
+                    <h2 className="text-2xl font-black">${totalPnl.toFixed(0)}</h2>
+                </div>
+
+                <div className="rounded-xl border border-gray-300 p-3">
+                    <p className="text-xs text-gray-500">Win Rate</p>
+                    <h2 className="text-2xl font-black">{winRate}%</h2>
+                </div>
+
+                <div className="rounded-xl border border-gray-300 p-3">
+                    <p className="text-xs text-gray-500">Discipline</p>
+                    <h2 className="text-2xl font-black">{disciplineScore}</h2>
+                </div>
+            </section>
+
+            <section className="mb-5 grid grid-cols-2 gap-4">
+                <div className="rounded-xl border border-gray-300 p-4">
+                    <h2 className="text-lg font-black">Executive Summary</h2>
+                    <p className="mt-3 text-sm leading-relaxed">
+                        {totalPnl >= 0
+                            ? "Il conto mostra una struttura positiva. La priorità è proteggere disciplina, rischio e ripetibilità."
+                            : "Il conto mostra una fase di pressione. La priorità è ridurre esposizione e migliorare qualità esecutiva."}
+                    </p>
+                </div>
+
+                <div className="rounded-xl border border-gray-300 p-4">
+                    <h2 className="text-lg font-black">Behavioral Risk</h2>
+                    <p className="mt-3 text-sm leading-relaxed">
+                        Rischio comportamentale: {behavioralRisk}%. Emotional trades:{" "}
+                        {emotionalTrades}. Weak executions: {weakExecutionTrades}.
+                    </p>
+                </div>
+            </section>
+
+            <section className="mb-5 grid grid-cols-2 gap-4">
+                <div className="rounded-xl border border-gray-300 p-4">
+                    <h2 className="text-lg font-black">Performance Breakdown</h2>
+                    <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
+                        <p>Wins: {wins}</p>
+                        <p>Losses: {losses}</p>
+                        <p>Avg Win: ${averageWin.toFixed(0)}</p>
+                        <p>Avg Loss: ${averageLoss.toFixed(0)}</p>
+                    </div>
+                </div>
+
+                <div className="rounded-xl border border-gray-300 p-4">
+                    <h2 className="text-lg font-black">AI Coaching Focus</h2>
+                    <p className="mt-3 text-sm leading-relaxed">
+                        {disciplineScore >= 80
+                            ? "Focus: scalare la consistenza senza perdere controllo operativo."
+                            : disciplineScore >= 60
+                                ? "Focus: consolidare disciplina, review e qualità media dei setup."
+                                : "Focus: costruire routine, ridurre impulsività e semplificare il processo."}
+                    </p>
+                </div>
+            </section>
+
+
+            <footer className="mt-2 flex items-center justify-between border-t border-gray-300 pt-3 text-[10px] text-gray-500">
+                <span>
+                    Generated by VOLTIS · Trading Performance Operating System
+                </span>
+
+                <span>
+                    Prepared for {userName}
+                </span>
+            </footer>
+        </div>
+    );
+}
+
+===== FILE: PDFReportFooter.tsx =====
+
+export default function PDFReportFooter() {
+  return (
+    <div className="hidden print:hidden report-card mt-10 rounded-[28px] border border-white/10 bg-black/30 p-6 text-center backdrop-blur-xl">
+      <p className="text-xs uppercase tracking-[0.25em] text-cyan-400">
+        VOLTIS Intelligence System
+      </p>
+
+      <p className="mt-3 text-sm text-gray-400">
+        Generated by VOLTIS · Trading Performance Operating System
+      </p>
+    </div>
+  );
+}
+
+===== FILE: PDFReportHeader.tsx =====
+
+type Props = {
+  totalTrades: number;
+  totalPnl: number;
+  winRate: number;
+};
+
+export default function PDFReportHeader({
+  totalTrades,
+  totalPnl,
+  winRate,
+}: Props) {
+  const currentDate =
+    new Date().toLocaleDateString(
+      "it-IT",
+      {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      }
+    );
+
+  return (
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#050b10] via-[#0f1726] to-black p-10">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.12),transparent_35%)]" />
+
+      <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-[0.35em] text-cyan-400">
+            VOLTIS Intelligence Report
+          </p>
+
+          <h1 className="mt-4 text-6xl font-black tracking-tight text-white">
+            Trading Performance Report
+          </h1>
+
+          <p className="mt-4 text-base text-gray-400">
+            Generated on {currentDate}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-3 gap-4">
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-5 text-center">
+            <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+              Trades
+            </p>
+
+            <h3 className="mt-3 text-4xl font-black text-cyan-400">
+              {totalTrades}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-5 text-center">
+            <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+              PnL
+            </p>
+
+            <h3
+              className={`mt-3 text-4xl font-black ${
+                totalPnl >= 0
+                  ? "text-green-400"
+                  : "text-red-400"
+              }`}
+            >
+              ${totalPnl.toFixed(0)}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-5 text-center">
+            <p className="text-xs uppercase tracking-[0.15em] text-gray-400">
+              Win Rate
+            </p>
+
+            <h3 className="mt-3 text-4xl font-black text-violet-400">
+              {winRate}%
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: PerformanceBreakdownCard.tsx =====
+
+type Props = {
+  wins: number;
+  losses: number;
+  breakEven: number;
+  averageWin: number;
+  averageLoss: number;
+};
+
+export default function PerformanceBreakdownCard({
+  wins,
+  losses,
+  breakEven,
+  averageWin,
+  averageLoss,
+}: Props) {
+  return (
+    <div className="report-card relative overflow-hidden rounded-[36px] border border-white/10 bg-gradient-to-br from-[#071018] via-[#111827] to-black p-8">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.10),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.25em] text-cyan-400">
+          Performance Breakdown
+        </p>
+
+        <h2 className="mt-3 text-4xl font-black text-white">
+          Execution Summary
+        </h2>
+
+        <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-5">
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              Wins
+            </p>
+
+            <h3 className="mt-3 text-4xl font-black text-green-400">
+              {wins}
+            </h3>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              Losses
+            </p>
+
+            <h3 className="mt-3 text-4xl font-black text-red-400">
+              {losses}
+            </h3>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              Break Even
+            </p>
+
+            <h3 className="mt-3 text-4xl font-black text-yellow-400">
+              {breakEven}
+            </h3>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              Avg Win
+            </p>
+
+            <h3 className="mt-3 text-3xl font-black text-green-400">
+              ${averageWin.toFixed(0)}
+            </h3>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              Avg Loss
+            </p>
+
+            <h3 className="mt-3 text-3xl font-black text-red-400">
+              ${averageLoss.toFixed(0)}
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-8 rounded-2xl border border-white/10 bg-black/20 p-5">
+          <p className="text-sm text-gray-400">
+            AI Performance Insight
+          </p>
+
+          <h3 className="mt-3 text-xl font-black leading-relaxed text-white">
+            {averageWin > Math.abs(averageLoss)
+              ? "La struttura rischio/rendimento è positiva. Il trader mantiene un edge matematico favorevole."
+              : "La struttura rischio/rendimento è fragile. Necessario migliorare gestione trade e qualità setup."}
+          </h3>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: PerformanceForecastReport.tsx =====
+
+type Props = {
+  winRate: number;
+  disciplineScore: number;
+  behavioralRisk: number;
+  totalPnl: number;
+};
+
+export default function PerformanceForecastReport({
+  winRate,
+  disciplineScore,
+  behavioralRisk,
+  totalPnl,
+}: Props) {
+  const forecast =
+    winRate >= 60 &&
+    disciplineScore >= 75 &&
+    behavioralRisk < 25
+      ? "High Growth Potential"
+      : winRate >= 50 &&
+        behavioralRisk < 40
+      ? "Stable Development"
+      : "Performance Instability";
+
+  const forecastTone =
+    forecast === "High Growth Potential"
+      ? "text-green-400"
+      : forecast ===
+        "Stable Development"
+      ? "text-yellow-400"
+      : "text-red-400";
+
+  return (
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#071018] via-[#111827] to-black p-10">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.10),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">
+          Performance Forecast
+        </p>
+
+        <h2 className="mt-4 text-5xl font-black tracking-tight text-white">
+          AI Forecast Engine
+        </h2>
+
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-4">
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Win Rate
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-cyan-400">
+              {winRate}%
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Discipline
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-green-400">
+              {disciplineScore}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Behavioral Risk
+            </p>
+
+            <h3
+              className={`mt-4 text-4xl font-black ${
+                behavioralRisk >= 50
+                  ? "text-red-400"
+                  : behavioralRisk >= 25
+                  ? "text-yellow-400"
+                  : "text-green-400"
+              }`}
+            >
+              {behavioralRisk}%
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Net PnL
+            </p>
+
+            <h3
+              className={`mt-4 text-4xl font-black ${
+                totalPnl >= 0
+                  ? "text-green-400"
+                  : "text-red-400"
+              }`}
+            >
+              ${totalPnl.toFixed(0)}
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-6">
+          <p className="text-sm text-gray-400">
+            AI Forecast Assessment
+          </p>
+
+          <h3
+            className={`mt-4 text-3xl font-black ${forecastTone}`}
+          >
+            {forecast}
+          </h3>
+
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-gray-300">
+            {forecast === "High Growth Potential"
+              ? "La struttura operativa suggerisce forte potenziale di crescita e scalabilità."
+              : forecast ===
+                "Stable Development"
+              ? "Il trader sta costruendo una base operativa stabile ma ancora migliorabile."
+              : "La struttura operativa mostra instabilità che potrebbe limitare la crescita futura."}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: PrintReportButton.tsx =====
+
+"use client";
+
+export default function PrintReportButton() {
+  return (
+    <button
+      type="button"
+      onClick={() => window.print()}
+      className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-5 py-3 text-sm font-bold uppercase tracking-[0.16em] text-cyan-300 transition hover:border-cyan-400/40 hover:bg-cyan-500/20"
+    >
+      Export PDF
+    </button>
+  );
+}
+
+===== FILE: PsychologicalStabilityReport.tsx =====
+
+type Props = {
+  emotionalTrades: number;
+  totalTrades: number;
+  behavioralRisk: number;
+  disciplineScore: number;
+};
+
+export default function PsychologicalStabilityReport({
+  emotionalTrades,
+  totalTrades,
+  behavioralRisk,
+  disciplineScore,
+}: Props) {
+  const emotionalRatio =
+    totalTrades > 0
+      ? emotionalTrades / totalTrades
+      : 0;
+
+  const stability =
+    emotionalRatio < 0.2 &&
+    behavioralRisk < 25 &&
+    disciplineScore >= 70
+      ? "Stable Mindset"
+      : emotionalRatio < 0.4
+      ? "Moderate Stability"
+      : "Psychological Fragility";
+
+  const stabilityTone =
+    stability === "Stable Mindset"
+      ? "text-green-400"
+      : stability === "Moderate Stability"
+      ? "text-yellow-400"
+      : "text-red-400";
+
+  return (
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#120c08] via-[#171020] to-black p-10">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(245,158,11,0.10),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.3em] text-yellow-400">
+          Psychological Stability
+        </p>
+
+        <h2 className="mt-4 text-5xl font-black tracking-tight text-white">
+          Psychology Report
+        </h2>
+
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-4">
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Emotional Trades
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-yellow-400">
+              {emotionalTrades}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Emotional Ratio
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-cyan-400">
+              {Math.round(emotionalRatio * 100)}%
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Behavioral Risk
+            </p>
+
+            <h3
+              className={`mt-4 text-4xl font-black ${
+                behavioralRisk >= 50
+                  ? "text-red-400"
+                  : behavioralRisk >= 25
+                  ? "text-yellow-400"
+                  : "text-green-400"
+              }`}
+            >
+              {behavioralRisk}%
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Stability
+            </p>
+
+            <h3
+              className={`mt-4 text-2xl font-black ${stabilityTone}`}
+            >
+              {stability}
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-6">
+          <p className="text-sm text-gray-400">
+            AI Psychological Assessment
+          </p>
+
+          <h3
+            className={`mt-4 text-3xl font-black ${stabilityTone}`}
+          >
+            {stability}
+          </h3>
+
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-gray-300">
+            {stability === "Stable Mindset"
+              ? "Il trader mantiene buona stabilità emotiva e controllo operativo."
+              : stability === "Moderate Stability"
+              ? "La stabilità psicologica è discreta ma ancora vulnerabile sotto pressione."
+              : "La struttura psicologica mostra segnali di instabilità operativa ed emotiva."}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: ReportsNavigation.tsx =====
+
+const sections = [
+  {
+    id: "executive",
+    label: "Executive",
+  },
+  {
+    id: "weekly",
+    label: "Weekly",
+  },
+  {
+    id: "monthly",
+    label: "Monthly",
+  },
+  {
+    id: "behavior",
+    label: "Behavior",
+  },
+  {
+    id: "performance",
+    label: "Performance",
+  },
+  {
+    id: "evolution",
+    label: "Evolution",
+  },
+  {
+    id: "coaching",
+    label: "Coaching",
+  },
+  {
+    id: "risk",
+    label: "Risk",
+  },
+  {
+    id: "consistency",
+    label: "Consistency",
+  },
+  {
+    id: "psychology",
+    label: "Psychology",
+  },
+  {
+    id: "forecast",
+    label: "Forecast",
+  },
+  {
+    id: "growth",
+    label: "Growth",
+  },
+  {
+    id: "edge",
+    label: "Edge",
+  },
+  {
+    id: "decision",
+    label: "Decision",
+  },
+  {
+    id: "execution",
+    label: "Execution",
+  },
+  {
+    id: "setup",
+    label: "Setup",
+  },
+  {
+    id: "confidence",
+    label: "Confidence",
+  },
+  {
+    id: "discipline",
+    label: "Discipline",
+  },
+  {
+    id: "emotion",
+    label: "Emotion",
+  },
+  {
+    id: "identity",
+    label: "Identity",
+  },
+  {
+    id: "cognitive",
+    label: "Cognitive",
+  },
+  {
+    id: "resilience",
+    label: "Resilience",
+  },
+];
+
+export default function ReportsNavigation() {
+  return (
+    <div className="print-hidden sticky top-4 z-30 rounded-[28px] border border-white/10 bg-black/40 p-4 backdrop-blur-xl">
+      <div className="flex gap-3 overflow-x-auto">
+        {sections.map((section) => (
+          <a
+            key={section.id}
+            href={`#${section.id}`}
+            className="shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-gray-300 transition hover:border-cyan-400/40 hover:text-cyan-400"
+          >
+            {section.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+===== FILE: RiskManagementReport.tsx =====
+
+type Props = {
+  averageLoss: number;
+  averageWin: number;
+  behavioralRisk: number;
+  losses: number;
+};
+
+export default function RiskManagementReport({
+  averageLoss,
+  averageWin,
+  behavioralRisk,
+  losses,
+}: Props) {
+  const riskReward =
+    averageLoss !== 0
+      ? (
+          averageWin /
+          Math.abs(averageLoss)
+        ).toFixed(2)
+      : "0";
+
+  const riskStatus =
+    Number(riskReward) >= 1.5 &&
+    behavioralRisk < 30
+      ? "Controlled Risk"
+      : Number(riskReward) >= 1
+      ? "Moderate Risk"
+      : "Risk Exposure";
+
+  const riskTone =
+    riskStatus === "Controlled Risk"
+      ? "text-green-400"
+      : riskStatus === "Moderate Risk"
+      ? "text-yellow-400"
+      : "text-red-400";
+
+  return (
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#140909] via-[#171020] to-black p-10">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.10),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.3em] text-red-400">
+          Risk Management
+        </p>
+
+        <h2 className="mt-4 text-5xl font-black tracking-tight text-white">
+          Risk Report
+        </h2>
+
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-4">
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Avg Win
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-green-400">
+              ${averageWin.toFixed(0)}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Avg Loss
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-red-400">
+              ${averageLoss.toFixed(0)}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Risk Reward
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-cyan-400">
+              {riskReward}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Losses
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-yellow-400">
+              {losses}
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-6">
+          <p className="text-sm text-gray-400">
+            AI Risk Assessment
+          </p>
+
+          <h3 className={`mt-4 text-3xl font-black ${riskTone}`}>
+            {riskStatus}
+          </h3>
+
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-gray-300">
+            {riskStatus === "Controlled Risk"
+              ? "La gestione del rischio appare strutturata e sostenibile."
+              : riskStatus === "Moderate Risk"
+              ? "La gestione del rischio è discreta ma ancora migliorabile."
+              : "La struttura rischio/rendimento mostra fragilità operative."}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: SetupIntelligenceReport.tsx =====
+
+type Props = {
+  totalTrades: number;
+  disciplineScore: number;
+  averageWin: number;
+ averageLoss: number;
+  winRate: number;
+};
+
+export default function SetupIntelligenceReport({
+  totalTrades,
+  disciplineScore,
+  averageWin,
+  averageLoss,
+  winRate,
+}: Props) {
+  const setupScore = Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round(
+        disciplineScore * 0.4 +
+          winRate * 0.4 +
+          (averageWin >
+          Math.abs(averageLoss)
+            ? 20
+            : 0)
+      )
+    )
+  );
+
+  const setupStatus =
+    setupScore >= 80
+      ? "Elite Setup Selection"
+      : setupScore >= 60
+      ? "Developing Setup Quality"
+      : "Weak Setup Structure";
+
+  const tone =
+    setupStatus ===
+    "Elite Setup Selection"
+      ? "text-green-400"
+      : setupStatus ===
+        "Developing Setup Quality"
+      ? "text-yellow-400"
+      : "text-red-400";
+
+  return (
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#0b1020] via-[#111827] to-black p-10">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.10),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.3em] text-violet-400">
+          Setup Intelligence
+        </p>
+
+        <h2 className="mt-4 text-5xl font-black tracking-tight text-white">
+          Setup Quality Report
+        </h2>
+
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-4">
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Setup Score
+            </p>
+
+            <h3 className={`mt-4 text-4xl font-black ${tone}`}>
+              {setupScore}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Win Rate
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-cyan-400">
+              {winRate}%
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Avg Win
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-green-400">
+              ${averageWin.toFixed(0)}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Avg Loss
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-red-400">
+              ${averageLoss.toFixed(0)}
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-6">
+          <p className="text-sm text-gray-400">
+            AI Setup Assessment
+          </p>
+
+          <h3 className={`mt-4 text-3xl font-black ${tone}`}>
+            {setupStatus}
+          </h3>
+
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-gray-300">
+            {setupStatus ===
+            "Elite Setup Selection"
+              ? "Il trader mostra alta qualità nella selezione dei setup e buona precisione operativa."
+              : setupStatus ===
+                "Developing Setup Quality"
+              ? "La qualità dei setup è discreta ma ancora migliorabile."
+              : "La struttura dei setup mostra instabilità e mancanza di selettività."}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: TraderEvolutionReport.tsx =====
+
+type Props = {
+  disciplineScore: number;
+  winRate: number;
+  emotionalTrades: number;
+  totalTrades: number;
+};
+
+export default function TraderEvolutionReport({
+  disciplineScore,
+  winRate,
+  emotionalTrades,
+  totalTrades,
+}: Props) {
+  const maturity =
+    disciplineScore >= 80
+      ? "Advanced Trader"
+      : disciplineScore >= 60
+      ? "Developing Consistency"
+      : "Early Stage Trader";
+
+  const psychologyHealth =
+    emotionalTrades <= totalTrades * 0.2
+      ? "Stable"
+      : emotionalTrades <= totalTrades * 0.4
+      ? "Watchlist"
+      : "Unstable";
+
+  const psychologyTone =
+    psychologyHealth === "Stable"
+      ? "text-green-400"
+      : psychologyHealth === "Watchlist"
+      ? "text-yellow-400"
+      : "text-red-400";
+
+  return (
+    <div className="report-card relative overflow-hidden rounded-[36px] border border-white/10 bg-gradient-to-br from-[#0b0f1a] via-[#111827] to-black p-8">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.12),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.25em] text-violet-400">
+          Trader Evolution
+        </p>
+
+        <h2 className="mt-3 text-4xl font-black text-white">
+          Evolution Report
+        </h2>
+
+        <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-4">
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              Discipline
+            </p>
+
+            <h3 className="mt-3 text-4xl font-black text-green-400">
+              {disciplineScore}
+            </h3>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              Win Rate
+            </p>
+
+            <h3 className="mt-3 text-4xl font-black text-cyan-400">
+              {winRate}%
+            </h3>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              Trader Stage
+            </p>
+
+            <h3 className="mt-3 text-2xl font-black text-violet-400">
+              {maturity}
+            </h3>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              Psychology
+            </p>
+
+            <h3 className={`mt-3 text-2xl font-black ${psychologyTone}`}>
+              {psychologyHealth}
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-8 rounded-2xl border border-white/10 bg-black/20 p-5">
+          <p className="text-sm text-gray-400">
+            AI Evolution Insight
+          </p>
+
+          <h3 className="mt-3 text-xl font-black leading-relaxed text-white">
+            {disciplineScore >= 80
+              ? "Il trader sta costruendo una struttura operativa avanzata con buona stabilità comportamentale."
+              : disciplineScore >= 60
+              ? "La crescita è positiva, ma serve più consistenza nella qualità esecutiva."
+              : "La priorità è costruire disciplina, routine e ripetibilità del processo."}
+          </h3>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: TraderIdentityReport.tsx =====
+
+type Props = {
+  disciplineScore: number;
+  behavioralRisk: number;
+  winRate: number;
+  emotionalTrades: number;
+  totalTrades: number;
+};
+
+export default function TraderIdentityReport({
+  disciplineScore,
+  behavioralRisk,
+  winRate,
+  emotionalTrades,
+  totalTrades,
+}: Props) {
+  const emotionalRatio =
+    totalTrades > 0
+      ? emotionalTrades / totalTrades
+      : 0;
+
+  const identity =
+    disciplineScore >= 80 &&
+    behavioralRisk < 25 &&
+    winRate >= 60
+      ? "Structured Trader"
+      : disciplineScore >= 60
+      ? "Developing Trader"
+      : emotionalRatio >= 0.4
+      ? "Emotional Trader"
+      : "Unstable Trader";
+
+  const tone =
+    identity === "Structured Trader"
+      ? "text-green-400"
+      : identity ===
+          "Developing Trader"
+        ? "text-yellow-400"
+        : "text-red-400";
+
+  return (
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#071018] via-[#0f1726] to-black p-10">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.10),transparent_35%)]" />
+
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.08),transparent_35%)]" />
+
+      <div className="relative z-10">
+        <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">
+          Trader Identity
+        </p>
+
+        <h2 className="mt-4 text-5xl font-black tracking-tight text-white">
+          Identity Report
+        </h2>
+
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-5">
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Identity
+            </p>
+
+            <h3 className={`mt-4 text-2xl font-black ${tone}`}>
+              {identity}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Discipline
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-green-400">
+              {disciplineScore}
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Behavioral Risk
+            </p>
+
+            <h3
+              className={`mt-4 text-4xl font-black ${
+                behavioralRisk >= 50
+                  ? "text-red-400"
+                  : behavioralRisk >= 25
+                  ? "text-yellow-400"
+                  : "text-cyan-400"
+              }`}
+            >
+              {behavioralRisk}%
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Win Rate
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-violet-400">
+              {winRate}%
+            </h3>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+            <p className="text-sm text-gray-400">
+              Emotional Ratio
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black text-yellow-400">
+              {Math.round(emotionalRatio * 100)}%
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-6">
+          <p className="text-sm text-gray-400">
+            AI Identity Assessment
+          </p>
+
+          <h3 className={`mt-4 text-3xl font-black ${tone}`}>
+            {identity}
+          </h3>
+
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-gray-300">
+            {identity === "Structured Trader"
+              ? "Il trader mostra struttura operativa stabile, controllo emotivo e processo ripetibile."
+              : identity ===
+                  "Developing Trader"
+                ? "La struttura operativa è in crescita ma necessita consolidamento."
+                : identity ===
+                    "Emotional Trader"
+                  ? "Le emozioni stanno influenzando significativamente il processo decisionale."
+                  : "La struttura operativa mostra instabilità e mancanza di coerenza."}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+===== FILE: WeeklyReportCard.tsx =====
+
+type Props = {
+  totalTrades: number;
+  totalPnl: number;
+  winRate: number;
+};
+
+export default function WeeklyReportCard({
+  totalTrades,
+  totalPnl,
+  winRate,
+}: Props) {
+  const performanceText =
+    totalPnl >= 0
+      ? "Settimana positiva. Il processo sta producendo risultati favorevoli."
+      : "Settimana negativa. Serve ridurre esposizione e migliorare qualità esecutiva.";
+
+  const consistencyText =
+    winRate >= 50
+      ? "La consistenza è sopra la soglia base."
+      : "La consistenza è sotto soglia. Focus su setup migliori e gestione emotiva.";
+
+  return (
+    <div className="rounded-[32px] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl">
+      <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+        Weekly Intelligence
+      </p>
+
+      <h2 className="mt-3 text-3xl font-black text-white">
+        Weekly Report
+      </h2>
+
+      <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+          <p className="text-sm text-gray-400">Trades</p>
+          <h3 className="mt-3 text-4xl font-black text-cyan-400">
+            {totalTrades}
+          </h3>
+        </div>
+
+        <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+          <p className="text-sm text-gray-400">PnL</p>
+          <h3 className="mt-3 text-4xl font-black text-green-400">
+            ${totalPnl.toFixed(0)}
+          </h3>
+        </div>
+
+        <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+          <p className="text-sm text-gray-400">Win Rate</p>
+          <h3 className="mt-3 text-4xl font-black text-violet-400">
+            {winRate}%
+          </h3>
+        </div>
+      </div>
+
+      <div className="mt-8 space-y-4">
+        <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+          <p className="text-sm text-gray-400">Performance</p>
+          <h3 className="mt-3 text-xl font-black text-white">
+            {performanceText}
+          </h3>
+        </div>
+
+        <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+          <p className="text-sm text-gray-400">Consistency</p>
+          <h3 className="mt-3 text-xl font-black text-cyan-400">
+            {consistencyText}
+          </h3>
+        </div>
+      </div>
+    </div>
+  );
+}

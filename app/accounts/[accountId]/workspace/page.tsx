@@ -2,6 +2,334 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import {
+    normalizeAppLanguage,
+    getLocaleFromLanguage,
+    type AppLanguage,
+} from "@/lib/i18n";
+
+type WorkspaceLabels = {
+    never: string;
+    workspaceIntelligence: string;
+    description: string;
+    manageMembers: string;
+    viewActivity: string;
+    workspaceStatus: string;
+    activeToday: string;
+    livePresence: string;
+    members: string;
+    onlineNow: string;
+    recentEvents: string;
+    totalMembersDescription: string;
+    onlineDescription: string;
+    activeTodayDescription: string;
+    recentEventsDescription: string;
+    leaderboard: string;
+    mostActiveMembers: string;
+    topFive: string;
+    logins: string;
+    noMembers: string;
+    onlineMembers: string;
+    lastActivity: string;
+    online: string;
+    noOnlineMembers: string;
+    attention: string;
+    inactiveMembers: string;
+    offline: string;
+    allMembersActive: string;
+    audit: string;
+    recentActivity: string;
+    viewAll: string;
+    noRecentActivity: string;
+    waitingForMembers: string;
+    fullyActiveToday: string;
+    liveActivityDetected: string;
+    activityRecordedToday: string;
+    quietWorkspace: string;
+};
+
+const labels: Record<AppLanguage, WorkspaceLabels> = {
+    it: {
+        never: "Mai",
+        workspaceIntelligence: "Workspace Intelligence",
+        description:
+            "Monitoraggio del team, attività recenti, membri online e utilizzo reale del workspace.",
+        manageMembers: "Gestisci membri",
+        viewActivity: "Vedi attività",
+        workspaceStatus: "Stato workspace",
+        activeToday: "Attivi oggi",
+        livePresence: "Presenza live",
+        members: "Membri",
+        onlineNow: "Online ora",
+        recentEvents: "Eventi recenti",
+        totalMembersDescription: "Membri totali dentro questo account.",
+        onlineDescription: "Attivi negli ultimi 5 minuti.",
+        activeTodayDescription: "Membri con attività registrata oggi.",
+        recentEventsDescription: "Ultimi record attività caricati.",
+        leaderboard: "Leaderboard",
+        mostActiveMembers: "Membri più attivi",
+        topFive: "Top 5",
+        logins: "accessi",
+        noMembers: "Nessun membro disponibile.",
+        onlineMembers: "Membri online",
+        lastActivity: "Ultima attività",
+        online: "Online",
+        noOnlineMembers: "Nessun membro online ora.",
+        attention: "Attenzione",
+        inactiveMembers: "Membri inattivi",
+        offline: "Offline",
+        allMembersActive: "Tutti i membri risultano attivi.",
+        audit: "Audit",
+        recentActivity: "Attività recente",
+        viewAll: "Vedi tutto",
+        noRecentActivity: "Nessuna attività recente.",
+        waitingForMembers: "In attesa di membri",
+        fullyActiveToday: "Tutti attivi oggi",
+        liveActivityDetected: "Attività live rilevata",
+        activityRecordedToday: "Attività registrata oggi",
+        quietWorkspace: "Workspace silenzioso",
+    },
+    en: {
+        never: "Never",
+        workspaceIntelligence: "Workspace Intelligence",
+        description:
+            "Team monitoring, recent activity, online members and real workspace usage.",
+        manageMembers: "Manage Members",
+        viewActivity: "View Activity",
+        workspaceStatus: "Workspace Status",
+        activeToday: "Active Today",
+        livePresence: "Live Presence",
+        members: "Members",
+        onlineNow: "Online Now",
+        recentEvents: "Recent Events",
+        totalMembersDescription: "Total members inside this account.",
+        onlineDescription: "Active in the last 5 minutes.",
+        activeTodayDescription: "Members with activity today.",
+        recentEventsDescription: "Latest activity records loaded.",
+        leaderboard: "Leaderboard",
+        mostActiveMembers: "Most Active Members",
+        topFive: "Top 5",
+        logins: "logins",
+        noMembers: "No members available.",
+        onlineMembers: "Online Members",
+        lastActivity: "Last activity",
+        online: "Online",
+        noOnlineMembers: "No members online now.",
+        attention: "Attention",
+        inactiveMembers: "Inactive Members",
+        offline: "Offline",
+        allMembersActive: "All members appear active.",
+        audit: "Audit",
+        recentActivity: "Recent Activity",
+        viewAll: "View all",
+        noRecentActivity: "No recent activity.",
+        waitingForMembers: "Waiting for members",
+        fullyActiveToday: "Fully active today",
+        liveActivityDetected: "Live activity detected",
+        activityRecordedToday: "Activity recorded today",
+        quietWorkspace: "Quiet workspace",
+    },
+    uk: {
+        never: "Ніколи",
+        workspaceIntelligence: "Інтелект робочого простору",
+        description:
+            "Моніторинг команди, останньої активності, онлайн-учасників і реального використання workspace.",
+        manageMembers: "Керувати учасниками",
+        viewActivity: "Переглянути активність",
+        workspaceStatus: "Статус workspace",
+        activeToday: "Активні сьогодні",
+        livePresence: "Онлайн-присутність",
+        members: "Учасники",
+        onlineNow: "Онлайн зараз",
+        recentEvents: "Останні події",
+        totalMembersDescription: "Загальна кількість учасників у цьому акаунті.",
+        onlineDescription: "Активні протягом останніх 5 хвилин.",
+        activeTodayDescription: "Учасники з активністю сьогодні.",
+        recentEventsDescription: "Останні завантажені записи активності.",
+        leaderboard: "Рейтинг",
+        mostActiveMembers: "Найактивніші учасники",
+        topFive: "Топ 5",
+        logins: "входи",
+        noMembers: "Немає доступних учасників.",
+        onlineMembers: "Учасники онлайн",
+        lastActivity: "Остання активність",
+        online: "Онлайн",
+        noOnlineMembers: "Зараз немає учасників онлайн.",
+        attention: "Увага",
+        inactiveMembers: "Неактивні учасники",
+        offline: "Офлайн",
+        allMembersActive: "Усі учасники виглядають активними.",
+        audit: "Аудит",
+        recentActivity: "Остання активність",
+        viewAll: "Переглянути все",
+        noRecentActivity: "Немає останньої активності.",
+        waitingForMembers: "Очікування учасників",
+        fullyActiveToday: "Усі активні сьогодні",
+        liveActivityDetected: "Виявлено live-активність",
+        activityRecordedToday: "Активність зафіксована сьогодні",
+        quietWorkspace: "Тихий workspace",
+    },
+    ru: {
+        never: "Никогда",
+        workspaceIntelligence: "Интеллект рабочего пространства",
+        description:
+            "Мониторинг команды, последней активности, участников онлайн и реального использования workspace.",
+        manageMembers: "Управлять участниками",
+        viewActivity: "Смотреть активность",
+        workspaceStatus: "Статус workspace",
+        activeToday: "Активны сегодня",
+        livePresence: "Онлайн-присутствие",
+        members: "Участники",
+        onlineNow: "Онлайн сейчас",
+        recentEvents: "Последние события",
+        totalMembersDescription: "Общее количество участников в этом аккаунте.",
+        onlineDescription: "Активны за последние 5 минут.",
+        activeTodayDescription: "Участники с активностью сегодня.",
+        recentEventsDescription: "Последние загруженные записи активности.",
+        leaderboard: "Рейтинг",
+        mostActiveMembers: "Самые активные участники",
+        topFive: "Топ 5",
+        logins: "входы",
+        noMembers: "Нет доступных участников.",
+        onlineMembers: "Участники онлайн",
+        lastActivity: "Последняя активность",
+        online: "Онлайн",
+        noOnlineMembers: "Сейчас нет участников онлайн.",
+        attention: "Внимание",
+        inactiveMembers: "Неактивные участники",
+        offline: "Офлайн",
+        allMembersActive: "Все участники выглядят активными.",
+        audit: "Аудит",
+        recentActivity: "Последняя активность",
+        viewAll: "Смотреть все",
+        noRecentActivity: "Нет недавней активности.",
+        waitingForMembers: "Ожидание участников",
+        fullyActiveToday: "Все активны сегодня",
+        liveActivityDetected: "Обнаружена live-активность",
+        activityRecordedToday: "Активность зафиксирована сегодня",
+        quietWorkspace: "Тихий workspace",
+    },
+    es: {
+        never: "Nunca",
+        workspaceIntelligence: "Inteligencia del workspace",
+        description:
+            "Monitorización del equipo, actividad reciente, miembros online y uso real del workspace.",
+        manageMembers: "Gestionar miembros",
+        viewActivity: "Ver actividad",
+        workspaceStatus: "Estado del workspace",
+        activeToday: "Activos hoy",
+        livePresence: "Presencia en vivo",
+        members: "Miembros",
+        onlineNow: "Online ahora",
+        recentEvents: "Eventos recientes",
+        totalMembersDescription: "Total de miembros dentro de esta cuenta.",
+        onlineDescription: "Activos en los últimos 5 minutos.",
+        activeTodayDescription: "Miembros con actividad hoy.",
+        recentEventsDescription: "Últimos registros de actividad cargados.",
+        leaderboard: "Clasificación",
+        mostActiveMembers: "Miembros más activos",
+        topFive: "Top 5",
+        logins: "accesos",
+        noMembers: "No hay miembros disponibles.",
+        onlineMembers: "Miembros online",
+        lastActivity: "Última actividad",
+        online: "Online",
+        noOnlineMembers: "No hay miembros online ahora.",
+        attention: "Atención",
+        inactiveMembers: "Miembros inactivos",
+        offline: "Offline",
+        allMembersActive: "Todos los miembros parecen activos.",
+        audit: "Auditoría",
+        recentActivity: "Actividad reciente",
+        viewAll: "Ver todo",
+        noRecentActivity: "No hay actividad reciente.",
+        waitingForMembers: "Esperando miembros",
+        fullyActiveToday: "Todos activos hoy",
+        liveActivityDetected: "Actividad en vivo detectada",
+        activityRecordedToday: "Actividad registrada hoy",
+        quietWorkspace: "Workspace silencioso",
+    },
+    fr: {
+        never: "Jamais",
+        workspaceIntelligence: "Intelligence du workspace",
+        description:
+            "Suivi de l’équipe, activité récente, membres en ligne et utilisation réelle du workspace.",
+        manageMembers: "Gérer les membres",
+        viewActivity: "Voir l’activité",
+        workspaceStatus: "Statut du workspace",
+        activeToday: "Actifs aujourd’hui",
+        livePresence: "Présence en direct",
+        members: "Membres",
+        onlineNow: "En ligne maintenant",
+        recentEvents: "Événements récents",
+        totalMembersDescription: "Nombre total de membres dans ce compte.",
+        onlineDescription: "Actifs au cours des 5 dernières minutes.",
+        activeTodayDescription: "Membres avec activité aujourd’hui.",
+        recentEventsDescription: "Derniers enregistrements d’activité chargés.",
+        leaderboard: "Classement",
+        mostActiveMembers: "Membres les plus actifs",
+        topFive: "Top 5",
+        logins: "connexions",
+        noMembers: "Aucun membre disponible.",
+        onlineMembers: "Membres en ligne",
+        lastActivity: "Dernière activité",
+        online: "En ligne",
+        noOnlineMembers: "Aucun membre en ligne maintenant.",
+        attention: "Attention",
+        inactiveMembers: "Membres inactifs",
+        offline: "Hors ligne",
+        allMembersActive: "Tous les membres semblent actifs.",
+        audit: "Audit",
+        recentActivity: "Activité récente",
+        viewAll: "Tout voir",
+        noRecentActivity: "Aucune activité récente.",
+        waitingForMembers: "En attente de membres",
+        fullyActiveToday: "Tous actifs aujourd’hui",
+        liveActivityDetected: "Activité en direct détectée",
+        activityRecordedToday: "Activité enregistrée aujourd’hui",
+        quietWorkspace: "Workspace calme",
+    },
+    de: {
+        never: "Nie",
+        workspaceIntelligence: "Workspace Intelligence",
+        description:
+            "Team-Monitoring, aktuelle Aktivitäten, Online-Mitglieder und reale Workspace-Nutzung.",
+        manageMembers: "Mitglieder verwalten",
+        viewActivity: "Aktivität ansehen",
+        workspaceStatus: "Workspace-Status",
+        activeToday: "Heute aktiv",
+        livePresence: "Live-Präsenz",
+        members: "Mitglieder",
+        onlineNow: "Jetzt online",
+        recentEvents: "Aktuelle Ereignisse",
+        totalMembersDescription: "Gesamtzahl der Mitglieder in diesem Konto.",
+        onlineDescription: "Aktiv in den letzten 5 Minuten.",
+        activeTodayDescription: "Mitglieder mit heutiger Aktivität.",
+        recentEventsDescription: "Neueste Aktivitätsdatensätze geladen.",
+        leaderboard: "Leaderboard",
+        mostActiveMembers: "Aktivste Mitglieder",
+        topFive: "Top 5",
+        logins: "Logins",
+        noMembers: "Keine Mitglieder verfügbar.",
+        onlineMembers: "Online-Mitglieder",
+        lastActivity: "Letzte Aktivität",
+        online: "Online",
+        noOnlineMembers: "Derzeit keine Mitglieder online.",
+        attention: "Achtung",
+        inactiveMembers: "Inaktive Mitglieder",
+        offline: "Offline",
+        allMembersActive: "Alle Mitglieder scheinen aktiv zu sein.",
+        audit: "Audit",
+        recentActivity: "Aktuelle Aktivität",
+        viewAll: "Alle anzeigen",
+        noRecentActivity: "Keine aktuelle Aktivität.",
+        waitingForMembers: "Warten auf Mitglieder",
+        fullyActiveToday: "Heute vollständig aktiv",
+        liveActivityDetected: "Live-Aktivität erkannt",
+        activityRecordedToday: "Aktivität heute aufgezeichnet",
+        quietWorkspace: "Ruhiger Workspace",
+    },
+};
 
 function isOnline(date?: Date | null) {
     if (!date) return false;
@@ -9,10 +337,14 @@ function isOnline(date?: Date | null) {
     return Date.now() - new Date(date).getTime() < 5 * 60 * 1000;
 }
 
-function formatDate(date?: Date | null) {
-    if (!date) return "Never";
+function formatDate(
+    date: Date | null | undefined,
+    language: AppLanguage,
+    t: WorkspaceLabels
+) {
+    if (!date) return t.never;
 
-    return new Date(date).toLocaleString("it-IT", {
+    return new Date(date).toLocaleString(getLocaleFromLanguage(language), {
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
@@ -75,6 +407,7 @@ export default async function WorkspacePage({
         },
         include: {
             tradingAccount: true,
+            user: true,
         },
     });
 
@@ -89,11 +422,12 @@ export default async function WorkspacePage({
         redirect(`/accounts/${accountId}/dashboard`);
     }
 
-    if (
-        membership.tradingAccount.status === "ARCHIVED"
-    ) {
+    if (membership.tradingAccount.status === "ARCHIVED") {
         redirect(`/accounts/${accountId}/dashboard`);
     }
+
+    const language = normalizeAppLanguage(membership.user.appLanguage);
+    const t = labels[language] ?? labels.en;
 
     await prisma.user.update({
         where: {
@@ -168,14 +502,14 @@ export default async function WorkspacePage({
 
     const workspaceHealth =
         members.length === 0
-            ? "Waiting for members"
+            ? t.waitingForMembers
             : activeToday.length === members.length
-                ? "Fully active today"
+                ? t.fullyActiveToday
                 : onlineMembers.length > 0
-                    ? "Live activity detected"
+                    ? t.liveActivityDetected
                     : activeToday.length > 0
-                        ? "Activity recorded today"
-                        : "Quiet workspace";
+                        ? t.activityRecordedToday
+                        : t.quietWorkspace;
 
     const recentActivityCount = activities.length;
 
@@ -187,7 +521,7 @@ export default async function WorkspacePage({
                 <div className="relative z-10 grid gap-8 xl:grid-cols-5">
                     <div className="xl:col-span-3">
                         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-green-400">
-                            Workspace Intelligence
+                            {t.workspaceIntelligence}
                         </p>
 
                         <h1 className="mt-3 text-4xl font-black tracking-tight text-white sm:text-5xl">
@@ -195,7 +529,7 @@ export default async function WorkspacePage({
                         </h1>
 
                         <p className="mt-4 max-w-2xl text-sm leading-6 text-gray-400">
-                            Monitoraggio del team, attività recenti, membri online e utilizzo reale del workspace.
+                            {t.description}
                         </p>
 
                         <div className="mt-6 flex flex-wrap gap-3">
@@ -203,14 +537,14 @@ export default async function WorkspacePage({
                                 href={`/accounts/${accountId}/members`}
                                 className="rounded-2xl bg-green-400 px-4 py-3 text-sm font-black text-black transition hover:bg-green-300"
                             >
-                                Manage Members
+                                {t.manageMembers}
                             </Link>
 
                             <Link
                                 href="/activities"
                                 className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-bold text-white transition hover:bg-white/15"
                             >
-                                View Activity
+                                {t.viewActivity}
                             </Link>
                         </div>
                     </div>
@@ -218,7 +552,7 @@ export default async function WorkspacePage({
                     <div className="grid gap-4 sm:grid-cols-3 xl:col-span-2 xl:grid-cols-1">
                         <div className="rounded-3xl border border-white/10 bg-black/20 p-5">
                             <p className="text-sm text-gray-400">
-                                Workspace Status
+                                {t.workspaceStatus}
                             </p>
 
                             <h2 className="mt-2 text-2xl font-black text-white">
@@ -228,7 +562,7 @@ export default async function WorkspacePage({
 
                         <div className="rounded-3xl border border-white/10 bg-black/20 p-5">
                             <p className="text-sm text-gray-400">
-                                Active Today
+                                {t.activeToday}
                             </p>
 
                             <h2 className="mt-2 text-2xl font-black text-blue-400">
@@ -238,7 +572,7 @@ export default async function WorkspacePage({
 
                         <div className="rounded-3xl border border-white/10 bg-black/20 p-5">
                             <p className="text-sm text-gray-400">
-                                Live Presence
+                                {t.livePresence}
                             </p>
 
                             <h2 className="mt-2 text-2xl font-black text-green-400">
@@ -251,58 +585,42 @@ export default async function WorkspacePage({
 
             <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-                    <p className="text-sm text-gray-400">
-                        Members
-                    </p>
-
+                    <p className="text-sm text-gray-400">{t.members}</p>
                     <h2 className="mt-2 text-3xl font-black text-white">
                         {members.length}
                     </h2>
-
                     <p className="mt-3 text-xs text-gray-500">
-                        Total members inside this account.
+                        {t.totalMembersDescription}
                     </p>
                 </div>
 
                 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-                    <p className="text-sm text-gray-400">
-                        Online Now
-                    </p>
-
+                    <p className="text-sm text-gray-400">{t.onlineNow}</p>
                     <h2 className="mt-2 text-3xl font-black text-green-400">
                         {onlineMembers.length}
                     </h2>
-
                     <p className="mt-3 text-xs text-gray-500">
-                        Active in the last 5 minutes.
+                        {t.onlineDescription}
                     </p>
                 </div>
 
                 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-                    <p className="text-sm text-gray-400">
-                        Active Today
-                    </p>
-
+                    <p className="text-sm text-gray-400">{t.activeToday}</p>
                     <h2 className="mt-2 text-3xl font-black text-blue-400">
                         {activeToday.length}
                     </h2>
-
                     <p className="mt-3 text-xs text-gray-500">
-                        Members with activity today.
+                        {t.activeTodayDescription}
                     </p>
                 </div>
 
                 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-                    <p className="text-sm text-gray-400">
-                        Recent Events
-                    </p>
-
+                    <p className="text-sm text-gray-400">{t.recentEvents}</p>
                     <h2 className="mt-2 text-3xl font-black text-yellow-300">
                         {recentActivityCount}
                     </h2>
-
                     <p className="mt-3 text-xs text-gray-500">
-                        Latest activity records loaded.
+                        {t.recentEventsDescription}
                     </p>
                 </div>
             </section>
@@ -312,17 +630,13 @@ export default async function WorkspacePage({
                     <section className="w-full rounded-3xl border border-white/10 bg-white/[0.03] p-6">
                         <div className="mb-6 flex items-end justify-between gap-4">
                             <div>
-                                <p className="text-sm text-gray-400">
-                                    Leaderboard
-                                </p>
-
+                                <p className="text-sm text-gray-400">{t.leaderboard}</p>
                                 <h2 className="text-2xl font-black text-white">
-                                    Most Active Members
+                                    {t.mostActiveMembers}
                                 </h2>
                             </div>
-
                             <span className="rounded-xl bg-green-500/10 px-3 py-2 text-xs font-black uppercase tracking-[0.15em] text-green-400">
-                                Top 5
+                                {t.topFive}
                             </span>
                         </div>
 
@@ -340,8 +654,7 @@ export default async function WorkspacePage({
 
                                             <div className="min-w-0">
                                                 <p className="truncate font-bold text-white">
-                                                    {member.user.name ||
-                                                        member.user.username}
+                                                    {member.user.name || member.user.username}
                                                 </p>
 
                                                 <p className="text-xs text-gray-500">
@@ -356,14 +669,14 @@ export default async function WorkspacePage({
                                             </p>
 
                                             <p className="text-xs text-gray-500">
-                                                logins
+                                                {t.logins}
                                             </p>
                                         </div>
                                     </div>
                                 ))
                             ) : (
                                 <div className="rounded-2xl border border-white/10 bg-black/20 p-6 text-sm text-gray-400">
-                                    Nessun membro disponibile.
+                                    {t.noMembers}
                                 </div>
                             )}
                         </div>
@@ -374,17 +687,13 @@ export default async function WorkspacePage({
                     <section className="w-full rounded-3xl border border-white/10 bg-white/[0.03] p-6">
                         <div className="mb-6 flex items-end justify-between gap-4">
                             <div>
-                                <p className="text-sm text-gray-400">
-                                    Live Presence
-                                </p>
-
+                                <p className="text-sm text-gray-400">{t.livePresence}</p>
                                 <h2 className="text-2xl font-black text-white">
-                                    Online Members
+                                    {t.onlineMembers}
                                 </h2>
                             </div>
-
                             <span className="rounded-xl bg-green-500/10 px-3 py-2 text-xs font-black uppercase tracking-[0.15em] text-green-400">
-                                {onlineMembers.length} Online
+                                {onlineMembers.length} {t.online}
                             </span>
                         </div>
 
@@ -397,26 +706,22 @@ export default async function WorkspacePage({
                                     >
                                         <div className="min-w-0">
                                             <p className="truncate font-bold text-white">
-                                                {member.user.name ||
-                                                    member.user.username}
+                                                {member.user.name || member.user.username}
                                             </p>
 
                                             <p className="mt-1 text-xs text-gray-500">
-                                                Last activity:{" "}
-                                                {formatDate(
-                                                    member.user.lastActivityAt
-                                                )}
+                                                {t.lastActivity}: {formatDate(member.user.lastActivityAt, language, t)}
                                             </p>
                                         </div>
 
                                         <span className="shrink-0 rounded-xl bg-green-500/10 px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-green-400">
-                                            Online
+                                            {t.online}
                                         </span>
                                     </div>
                                 ))
                             ) : (
                                 <div className="rounded-2xl border border-white/10 bg-black/20 p-6 text-sm text-gray-400">
-                                    Nessun membro online ora.
+                                    {t.noOnlineMembers}
                                 </div>
                             )}
                         </div>
@@ -429,17 +734,13 @@ export default async function WorkspacePage({
                     <section className="w-full rounded-3xl border border-white/10 bg-white/[0.03] p-6">
                         <div className="mb-6 flex items-end justify-between gap-4">
                             <div>
-                                <p className="text-sm text-gray-400">
-                                    Attention
-                                </p>
-
+                                <p className="text-sm text-gray-400">{t.attention}</p>
                                 <h2 className="text-2xl font-black text-white">
-                                    Inactive Members
+                                    {t.inactiveMembers}
                                 </h2>
                             </div>
-
                             <span className="rounded-xl bg-yellow-500/10 px-3 py-2 text-xs font-black uppercase tracking-[0.15em] text-yellow-300">
-                                {inactiveMembers.length} Offline
+                                {inactiveMembers.length} {t.offline}
                             </span>
                         </div>
 
@@ -452,26 +753,22 @@ export default async function WorkspacePage({
                                     >
                                         <div className="min-w-0">
                                             <p className="truncate font-bold text-white">
-                                                {member.user.name ||
-                                                    member.user.username}
+                                                {member.user.name || member.user.username}
                                             </p>
 
                                             <p className="mt-1 text-xs text-gray-500">
-                                                Last activity:{" "}
-                                                {formatDate(
-                                                    member.user.lastActivityAt
-                                                )}
+                                                {t.lastActivity}: {formatDate(member.user.lastActivityAt, language, t)}
                                             </p>
                                         </div>
 
                                         <span className="shrink-0 rounded-xl bg-yellow-500/10 px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-yellow-300">
-                                            Offline
+                                            {t.offline}
                                         </span>
                                     </div>
                                 ))
                             ) : (
                                 <div className="rounded-2xl border border-green-500/20 bg-green-500/[0.04] p-6 text-sm text-green-400">
-                                    Tutti i membri risultano attivi.
+                                    {t.allMembersActive}
                                 </div>
                             )}
                         </div>
@@ -482,20 +779,16 @@ export default async function WorkspacePage({
                     <section className="w-full rounded-3xl border border-white/10 bg-white/[0.03] p-6">
                         <div className="mb-6 flex items-end justify-between gap-4">
                             <div>
-                                <p className="text-sm text-gray-400">
-                                    Audit
-                                </p>
-
+                                <p className="text-sm text-gray-400">{t.audit}</p>
                                 <h2 className="text-2xl font-black text-white">
-                                    Recent Activity
+                                    {t.recentActivity}
                                 </h2>
                             </div>
-
                             <Link
                                 href="/activities"
                                 className="shrink-0 rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/20"
                             >
-                                View all
+                                {t.viewAll}
                             </Link>
                         </div>
 
@@ -522,9 +815,7 @@ export default async function WorkspacePage({
                                             )}
                                         </div>
 
-                                        <p className="font-bold text-white">
-                                            {activity.title}
-                                        </p>
+                                        <p className="font-bold text-white">{activity.title}</p>
 
                                         {activity.description && (
                                             <p className="mt-1 text-sm leading-6 text-gray-500">
@@ -533,13 +824,13 @@ export default async function WorkspacePage({
                                         )}
 
                                         <p className="mt-2 text-xs text-gray-600">
-                                            {formatDate(activity.createdAt)}
+                                            {formatDate(activity.createdAt, language, t)}
                                         </p>
                                     </div>
                                 ))
                             ) : (
                                 <div className="rounded-2xl border border-white/10 bg-black/20 p-6 text-sm text-gray-400">
-                                    Nessuna attività recente.
+                                    {t.noRecentActivity}
                                 </div>
                             )}
                         </div>

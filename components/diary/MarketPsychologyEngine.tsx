@@ -1,4 +1,9 @@
-type Props = {
+import {
+  getDiaryLabels,
+  type DiaryI18nProps,
+} from "./DiaryI18n";
+
+type Props = DiaryI18nProps & {
   emotionalTrades: number;
   lowConfidenceTrades: number;
   highQualityTrades: number;
@@ -8,7 +13,10 @@ export default function MarketPsychologyEngine({
   emotionalTrades,
   lowConfidenceTrades,
   highQualityTrades,
+  appLanguage,
 }: Props) {
+  const t = getDiaryLabels(appLanguage);
+
   const emotionalRisk =
     emotionalTrades > highQualityTrades ||
     lowConfidenceTrades > 2;
@@ -19,17 +27,17 @@ export default function MarketPsychologyEngine({
 
       <div className="relative z-10">
         <p className="text-sm uppercase tracking-[0.2em] text-violet-400">
-          Market Psychology
+          {t.marketPsychology}
         </p>
 
         <h2 className="mt-3 text-3xl font-black text-white">
-          Psychology Engine
+          {t.psychologyEngine}
         </h2>
 
         <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
           <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
             <p className="text-sm text-gray-400">
-              Emotional Trades
+              {t.emotionalTrades}
             </p>
 
             <h3 className="mt-3 text-4xl font-black text-yellow-400">
@@ -39,7 +47,7 @@ export default function MarketPsychologyEngine({
 
           <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
             <p className="text-sm text-gray-400">
-              Low Confidence
+              {t.lowConfidence}
             </p>
 
             <h3 className="mt-3 text-4xl font-black text-red-400">
@@ -49,26 +57,22 @@ export default function MarketPsychologyEngine({
 
           <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
             <p className="text-sm text-gray-400">
-              Psychology Status
+              {t.psychologyStatus}
             </p>
 
             <h3
-              className={`mt-3 text-3xl font-black ${
-                emotionalRisk
+              className={`mt-3 text-3xl font-black ${emotionalRisk
                   ? "text-red-400"
                   : "text-green-400"
-              }`}
+                }`}
             >
-              {emotionalRisk ? "At Risk" : "Stable"}
+              {emotionalRisk ? t.atRisk : t.stable}
             </h3>
           </div>
         </div>
 
         <p className="mt-8 max-w-2xl text-sm leading-relaxed text-gray-400">
-          VOLTIS monitora stato emotivo,
-          confidence e qualità dei trade
-          per individuare rischi psicologici
-          prima che impattino la performance.
+          {t.psychologyDescription}
         </p>
       </div>
     </div>

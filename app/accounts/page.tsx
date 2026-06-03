@@ -13,16 +13,285 @@ import {
   Settings,
 } from "lucide-react";
 
-function formatCurrency(
-  value: number,
-  currency: string
-) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-    minimumFractionDigits: 2,
-  }).format(value);
-}
+import {
+  formatCurrencyByLanguage,
+  formatNumberByLanguage,
+  normalizeAppLanguage,
+  type AppLanguage,
+} from "@/lib/i18n";
+
+type AccountsCopy = {
+  overviewEyebrow: string;
+  welcomeBack: string;
+  heroDescription: string;
+
+  manageAccounts: string;
+  createAccount: string;
+  admin: string;
+  platformAccounts: string;
+
+  accessibleAccounts: string;
+  active: string;
+  totalTrades: string;
+  totalPnl: string;
+  personalAccounts: string;
+  sharedAccounts: string;
+  archived: string;
+
+  workspaceEyebrow: string;
+  activeAccounts: string;
+  noActiveAccounts: string;
+  inactiveWorkspace: string;
+  archivedAccounts: string;
+
+  role: string;
+  balance: string;
+  trades: string;
+  winRateShort: string;
+  members: string;
+  accountPnl: string;
+  openAccount: string;
+};
+
+const accountsCopy: Record<AppLanguage, AccountsCopy> = {
+  it: {
+    overviewEyebrow: "Panoramica account",
+    welcomeBack: "Bentornato",
+    heroDescription:
+      "Panoramica pulita dei tuoi account operativi. Qui apri e analizzi; la gestione completa rimane nella sezione Manage My Accounts.",
+
+    manageAccounts: "Gestisci account",
+    createAccount: "Crea account",
+    admin: "Admin",
+    platformAccounts: "Account piattaforma",
+
+    accessibleAccounts: "Account accessibili",
+    active: "Attivi",
+    totalTrades: "Trade totali",
+    totalPnl: "PnL totale",
+    personalAccounts: "Account personali",
+    sharedAccounts: "Account condivisi",
+    archived: "Archiviati",
+
+    workspaceEyebrow: "Workspace",
+    activeAccounts: "Account attivi",
+    noActiveAccounts: "Nessun account attivo disponibile.",
+    inactiveWorkspace: "Workspace inattivo",
+    archivedAccounts: "Account archiviati",
+
+    role: "Ruolo",
+    balance: "Saldo",
+    trades: "Trade",
+    winRateShort: "WR",
+    members: "Membri",
+    accountPnl: "PnL account",
+    openAccount: "Apri account",
+  },
+
+  en: {
+    overviewEyebrow: "Accounts overview",
+    welcomeBack: "Welcome back",
+    heroDescription:
+      "A clean overview of your operating accounts. Open and analyze from here; full management remains inside Manage My Accounts.",
+
+    manageAccounts: "Manage My Accounts",
+    createAccount: "Create Account",
+    admin: "Admin",
+    platformAccounts: "Platform Accounts",
+
+    accessibleAccounts: "Accessible Accounts",
+    active: "Active",
+    totalTrades: "Total Trades",
+    totalPnl: "Total PnL",
+    personalAccounts: "Personal Accounts",
+    sharedAccounts: "Shared Accounts",
+    archived: "Archived",
+
+    workspaceEyebrow: "Workspace",
+    activeAccounts: "Active Accounts",
+    noActiveAccounts: "No active accounts available.",
+    inactiveWorkspace: "Inactive workspace",
+    archivedAccounts: "Archived Accounts",
+
+    role: "Role",
+    balance: "Balance",
+    trades: "Trades",
+    winRateShort: "WR",
+    members: "Members",
+    accountPnl: "Account PnL",
+    openAccount: "Open Account",
+  },
+
+  uk: {
+    overviewEyebrow: "Огляд акаунтів",
+    welcomeBack: "З поверненням",
+    heroDescription:
+      "Чистий огляд ваших робочих акаунтів. Тут ви відкриваєте та аналізуєте; повне керування залишається в розділі керування акаунтами.",
+
+    manageAccounts: "Керувати акаунтами",
+    createAccount: "Створити акаунт",
+    admin: "Адмін",
+    platformAccounts: "Акаунти платформи",
+
+    accessibleAccounts: "Доступні акаунти",
+    active: "Активні",
+    totalTrades: "Усього угод",
+    totalPnl: "Загальний PnL",
+    personalAccounts: "Особисті акаунти",
+    sharedAccounts: "Спільні акаунти",
+    archived: "Архівні",
+
+    workspaceEyebrow: "Workspace",
+    activeAccounts: "Активні акаунти",
+    noActiveAccounts: "Немає доступних активних акаунтів.",
+    inactiveWorkspace: "Неактивний workspace",
+    archivedAccounts: "Архівні акаунти",
+
+    role: "Роль",
+    balance: "Баланс",
+    trades: "Угоди",
+    winRateShort: "WR",
+    members: "Учасники",
+    accountPnl: "PnL акаунта",
+    openAccount: "Відкрити акаунт",
+  },
+
+  ru: {
+    overviewEyebrow: "Обзор аккаунтов",
+    welcomeBack: "С возвращением",
+    heroDescription:
+      "Чистый обзор ваших рабочих аккаунтов. Здесь вы открываете и анализируете; полное управление остается в разделе управления аккаунтами.",
+
+    manageAccounts: "Управлять аккаунтами",
+    createAccount: "Создать аккаунт",
+    admin: "Админ",
+    platformAccounts: "Аккаунты платформы",
+
+    accessibleAccounts: "Доступные аккаунты",
+    active: "Активные",
+    totalTrades: "Всего сделок",
+    totalPnl: "Общий PnL",
+    personalAccounts: "Личные аккаунты",
+    sharedAccounts: "Общие аккаунты",
+    archived: "Архивные",
+
+    workspaceEyebrow: "Workspace",
+    activeAccounts: "Активные аккаунты",
+    noActiveAccounts: "Нет доступных активных аккаунтов.",
+    inactiveWorkspace: "Неактивный workspace",
+    archivedAccounts: "Архивные аккаунты",
+
+    role: "Роль",
+    balance: "Баланс",
+    trades: "Сделки",
+    winRateShort: "WR",
+    members: "Участники",
+    accountPnl: "PnL аккаунта",
+    openAccount: "Открыть аккаунт",
+  },
+
+  es: {
+    overviewEyebrow: "Resumen de cuentas",
+    welcomeBack: "Bienvenido de nuevo",
+    heroDescription:
+      "Una vista limpia de tus cuentas operativas. Desde aquí abres y analizas; la gestión completa queda dentro de Manage My Accounts.",
+
+    manageAccounts: "Gestionar cuentas",
+    createAccount: "Crear cuenta",
+    admin: "Admin",
+    platformAccounts: "Cuentas de plataforma",
+
+    accessibleAccounts: "Cuentas accesibles",
+    active: "Activas",
+    totalTrades: "Trades totales",
+    totalPnl: "PnL total",
+    personalAccounts: "Cuentas personales",
+    sharedAccounts: "Cuentas compartidas",
+    archived: "Archivadas",
+
+    workspaceEyebrow: "Workspace",
+    activeAccounts: "Cuentas activas",
+    noActiveAccounts: "No hay cuentas activas disponibles.",
+    inactiveWorkspace: "Workspace inactivo",
+    archivedAccounts: "Cuentas archivadas",
+
+    role: "Rol",
+    balance: "Balance",
+    trades: "Trades",
+    winRateShort: "WR",
+    members: "Miembros",
+    accountPnl: "PnL de cuenta",
+    openAccount: "Abrir cuenta",
+  },
+
+  fr: {
+    overviewEyebrow: "Vue d’ensemble des comptes",
+    welcomeBack: "Bon retour",
+    heroDescription:
+      "Une vue claire de vos comptes opérationnels. Ouvrez et analysez ici; la gestion complète reste dans Manage My Accounts.",
+
+    manageAccounts: "Gérer mes comptes",
+    createAccount: "Créer un compte",
+    admin: "Admin",
+    platformAccounts: "Comptes plateforme",
+
+    accessibleAccounts: "Comptes accessibles",
+    active: "Actifs",
+    totalTrades: "Trades totaux",
+    totalPnl: "PnL total",
+    personalAccounts: "Comptes personnels",
+    sharedAccounts: "Comptes partagés",
+    archived: "Archivés",
+
+    workspaceEyebrow: "Workspace",
+    activeAccounts: "Comptes actifs",
+    noActiveAccounts: "Aucun compte actif disponible.",
+    inactiveWorkspace: "Workspace inactif",
+    archivedAccounts: "Comptes archivés",
+
+    role: "Rôle",
+    balance: "Solde",
+    trades: "Trades",
+    winRateShort: "WR",
+    members: "Membres",
+    accountPnl: "PnL du compte",
+    openAccount: "Ouvrir le compte",
+  },
+
+  de: {
+    overviewEyebrow: "Kontenübersicht",
+    welcomeBack: "Willkommen zurück",
+    heroDescription:
+      "Eine klare Übersicht deiner operativen Konten. Hier öffnest und analysierst du; die vollständige Verwaltung bleibt in Manage My Accounts.",
+
+    manageAccounts: "Konten verwalten",
+    createAccount: "Konto erstellen",
+    admin: "Admin",
+    platformAccounts: "Plattformkonten",
+
+    accessibleAccounts: "Zugängliche Konten",
+    active: "Aktiv",
+    totalTrades: "Trades gesamt",
+    totalPnl: "Gesamt-PnL",
+    personalAccounts: "Persönliche Konten",
+    sharedAccounts: "Geteilte Konten",
+    archived: "Archiviert",
+
+    workspaceEyebrow: "Workspace",
+    activeAccounts: "Aktive Konten",
+    noActiveAccounts: "Keine aktiven Konten verfügbar.",
+    inactiveWorkspace: "Inaktiver Workspace",
+    archivedAccounts: "Archivierte Konten",
+
+    role: "Rolle",
+    balance: "Kontostand",
+    trades: "Trades",
+    winRateShort: "WR",
+    members: "Mitglieder",
+    accountPnl: "Konto-PnL",
+    openAccount: "Konto öffnen",
+  },
+};
 
 export default async function AccountsPage() {
   const session = await auth();
@@ -41,6 +310,15 @@ export default async function AccountsPage() {
   if (!currentUser) {
     redirect("/login");
   }
+
+  const language = normalizeAppLanguage(
+    currentUser.appLanguage
+  );
+
+  const t = accountsCopy[language] ?? accountsCopy.en;
+
+  const defaultCurrency =
+    currentUser.defaultCurrency ?? "USD";
 
   const canCreateAccount =
     currentUser.role === "FOUNDER" ||
@@ -80,7 +358,8 @@ export default async function AccountsPage() {
 
   const personalMemberships = memberships.filter(
     (membership) =>
-      membership.tradingAccount.createdById === currentUser.id
+      membership.tradingAccount.createdById ===
+      currentUser.id
   );
 
   const sharedMemberships = memberships.filter(
@@ -112,16 +391,14 @@ export default async function AccountsPage() {
     const account =
       membership.tradingAccount;
 
-    const accountPnl =
-      account.trades.reduce(
-        (acc, trade) =>
-          acc + (trade.resultUsd || 0),
-        0
-      );
+    const accountPnl = account.trades.reduce(
+      (acc, trade) =>
+        acc + (trade.resultUsd || 0),
+      0
+    );
 
     const wins = account.trades.filter(
-      (trade) =>
-        trade.outcome === "win"
+      (trade) => trade.outcome === "win"
     ).length;
 
     const winRate =
@@ -147,7 +424,7 @@ export default async function AccountsPage() {
 
               {account.status === "ARCHIVED" && (
                 <span className="rounded-xl bg-yellow-500/10 px-3 py-1 text-xs font-semibold text-yellow-300">
-                  ARCHIVED
+                  {t.archived}
                 </span>
               )}
             </div>
@@ -160,7 +437,7 @@ export default async function AccountsPage() {
               </h2>
 
               <p className="mt-2 text-sm text-gray-500">
-                Role: {membership.role}
+                {t.role}: {membership.role}
               </p>
             </div>
 
@@ -174,13 +451,14 @@ export default async function AccountsPage() {
             <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
               <div className="mb-2 flex items-center gap-2 text-gray-500">
                 <TrendingUp size={15} />
-                Balance
+                {t.balance}
               </div>
 
               <p className="font-bold text-white">
-                {formatCurrency(
+                {formatCurrencyByLanguage(
                   account.initialBalance,
-                  account.currency
+                  account.currency,
+                  language
                 )}
               </p>
             </div>
@@ -188,18 +466,21 @@ export default async function AccountsPage() {
             <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
               <div className="mb-2 flex items-center gap-2 text-gray-500">
                 <Activity size={15} />
-                Trades
+                {t.trades}
               </div>
 
               <p className="font-bold text-white">
-                {account.trades.length}
+                {formatNumberByLanguage(
+                  account.trades.length,
+                  language
+                )}
               </p>
             </div>
 
             <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
               <div className="mb-2 flex items-center gap-2 text-gray-500">
                 <Shield size={15} />
-                WR
+                {t.winRateShort}
               </div>
 
               <p
@@ -215,18 +496,21 @@ export default async function AccountsPage() {
             <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
               <div className="mb-2 flex items-center gap-2 text-gray-500">
                 <Users size={15} />
-                Members
+                {t.members}
               </div>
 
               <p className="font-bold text-white">
-                {account.members.length}
+                {formatNumberByLanguage(
+                  account.members.length,
+                  language
+                )}
               </p>
             </div>
           </div>
 
           <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4">
             <p className="text-sm text-gray-500">
-              Account PnL
+              {t.accountPnl}
             </p>
 
             <p
@@ -235,9 +519,10 @@ export default async function AccountsPage() {
                   : "text-red-400"
                 }`}
             >
-              {formatCurrency(
+              {formatCurrencyByLanguage(
                 accountPnl,
-                account.currency
+                account.currency,
+                language
               )}
             </p>
           </div>
@@ -248,7 +533,7 @@ export default async function AccountsPage() {
             href={`/accounts/${account.id}`}
             className="flex-1 rounded-2xl bg-green-500 px-4 py-3 text-center text-sm font-bold text-black hover:bg-green-400"
           >
-            Open Account
+            {t.openAccount}
           </a>
         </div>
       </div>
@@ -263,18 +548,17 @@ export default async function AccountsPage() {
         <div className="relative flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-sm text-green-400">
-              Accounts Overview
+              {t.overviewEyebrow}
             </p>
 
             <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">
-              Welcome back,{" "}
+              {t.welcomeBack},{" "}
               {currentUser.name ||
                 currentUser.username}
             </h1>
 
             <p className="mt-4 max-w-2xl text-sm leading-6 text-gray-400">
-              Panoramica pulita dei tuoi account operativi. Qui apri e analizzi;
-              la gestione completa rimane nella sezione Manage My Accounts.
+              {t.heroDescription}
             </p>
           </div>
 
@@ -284,7 +568,7 @@ export default async function AccountsPage() {
               className="inline-flex items-center gap-2 rounded-2xl bg-green-500 px-4 py-3 text-sm font-bold text-black hover:bg-green-400"
             >
               <Settings size={16} />
-              Manage My Accounts
+              {t.manageAccounts}
             </a>
 
             {canCreateAccount && (
@@ -292,7 +576,7 @@ export default async function AccountsPage() {
                 href="/accounts/manage"
                 className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-gray-300 hover:bg-white/[0.06]"
               >
-                Create Account
+                {t.createAccount}
               </a>
             )}
 
@@ -302,14 +586,14 @@ export default async function AccountsPage() {
                   href="/admin"
                   className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-gray-300 hover:bg-white/[0.06]"
                 >
-                  Admin
+                  {t.admin}
                 </a>
 
                 <a
                   href="/admin/accounts"
                   className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-gray-300 hover:bg-white/[0.06]"
                 >
-                  Platform Accounts
+                  {t.platformAccounts}
                 </a>
               </>
             )}
@@ -320,37 +604,46 @@ export default async function AccountsPage() {
       <div className="mb-10 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-5">
           <p className="text-sm text-gray-400">
-            Accessible Accounts
+            {t.accessibleAccounts}
           </p>
 
           <h2 className="mt-2 text-3xl font-bold">
-            {memberships.length}
+            {formatNumberByLanguage(
+              memberships.length,
+              language
+            )}
           </h2>
         </div>
 
         <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-5">
           <p className="text-sm text-gray-400">
-            Active
+            {t.active}
           </p>
 
           <h2 className="mt-2 text-3xl font-bold text-green-400">
-            {activeMemberships.length}
+            {formatNumberByLanguage(
+              activeMemberships.length,
+              language
+            )}
           </h2>
         </div>
 
         <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-5">
           <p className="text-sm text-gray-400">
-            Total Trades
+            {t.totalTrades}
           </p>
 
           <h2 className="mt-2 text-3xl font-bold">
-            {totalTrades}
+            {formatNumberByLanguage(
+              totalTrades,
+              language
+            )}
           </h2>
         </div>
 
         <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-5">
           <p className="text-sm text-gray-400">
-            Total PnL
+            {t.totalPnl}
           </p>
 
           <h2
@@ -359,7 +652,11 @@ export default async function AccountsPage() {
                 : "text-red-400"
               }`}
           >
-            {totalPnl.toFixed(2)} $
+            {formatCurrencyByLanguage(
+              totalPnl,
+              defaultCurrency,
+              language
+            )}
           </h2>
         </div>
       </div>
@@ -367,31 +664,40 @@ export default async function AccountsPage() {
       <div className="mb-10 grid grid-cols-1 gap-4 md:grid-cols-3">
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5">
           <p className="text-sm text-gray-400">
-            Personal Accounts
+            {t.personalAccounts}
           </p>
 
           <h2 className="mt-2 text-3xl font-black">
-            {personalMemberships.length}
+            {formatNumberByLanguage(
+              personalMemberships.length,
+              language
+            )}
           </h2>
         </div>
 
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5">
           <p className="text-sm text-gray-400">
-            Shared Accounts
+            {t.sharedAccounts}
           </p>
 
           <h2 className="mt-2 text-3xl font-black">
-            {sharedMemberships.length}
+            {formatNumberByLanguage(
+              sharedMemberships.length,
+              language
+            )}
           </h2>
         </div>
 
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5">
           <p className="text-sm text-gray-400">
-            Archived
+            {t.archived}
           </p>
 
           <h2 className="mt-2 text-3xl font-black text-yellow-300">
-            {archivedMemberships.length}
+            {formatNumberByLanguage(
+              archivedMemberships.length,
+              language
+            )}
           </h2>
         </div>
       </div>
@@ -399,11 +705,11 @@ export default async function AccountsPage() {
       <div className="mb-5 flex items-center justify-between">
         <div>
           <p className="text-sm text-gray-400">
-            Workspace
+            {t.workspaceEyebrow}
           </p>
 
           <h2 className="text-2xl font-bold">
-            Active Accounts
+            {t.activeAccounts}
           </h2>
         </div>
       </div>
@@ -414,22 +720,25 @@ export default async function AccountsPage() {
         </div>
       ) : (
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-8 text-sm text-gray-400">
-          Nessun account attivo disponibile.
+          {t.noActiveAccounts}
         </div>
       )}
 
       {archivedMemberships.length > 0 && (
         <div className="mt-12">
           <div className="mb-5 flex items-center gap-3">
-            <Archive size={18} className="text-yellow-300" />
+            <Archive
+              size={18}
+              className="text-yellow-300"
+            />
 
             <div>
               <p className="text-sm text-gray-400">
-                Inactive workspace
+                {t.inactiveWorkspace}
               </p>
 
               <h2 className="text-2xl font-bold">
-                Archived Accounts
+                {t.archivedAccounts}
               </h2>
             </div>
           </div>

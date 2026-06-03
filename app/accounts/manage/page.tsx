@@ -9,6 +9,12 @@ import {
     deleteAccount,
 } from "../actions";
 
+import {
+    formatCurrencyByLanguage,
+    normalizeAppLanguage,
+    type AppLanguage,
+} from "@/lib/i18n";
+
 const accountTypes = [
     "LIVE",
     "PROP",
@@ -18,15 +24,485 @@ const accountTypes = [
     "FUNDED",
 ] as const;
 
-function formatCurrency(
-    value: number,
-    currency: string
-) {
-    return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency,
-        minimumFractionDigits: 2,
-    }).format(value);
+type AccountType = (typeof accountTypes)[number];
+
+type ManageAccountsLabels = {
+    personalWorkspace: string;
+    title: string;
+    description: string;
+
+    myAccounts: string;
+    totalTrades: string;
+    totalPnl: string;
+
+    createdBy: string;
+    system: string;
+    openAccount: string;
+    balance: string;
+    pnl: string;
+    trades: string;
+    members: string;
+
+    archive: string;
+    restore: string;
+    dangerZone: string;
+    deleteAccountTitle: string;
+    deleteAccountDescription: string;
+    deletePermanently: string;
+
+    noAccountsInSection: string;
+    activeAccounts: string;
+    inactiveWorkspace: string;
+    archivedAccounts: string;
+    accountsSuffix: string;
+
+    createAccountTitle: string;
+    accountNamePlaceholder: string;
+    accountTypeAria: string;
+    initialBalancePlaceholder: string;
+    currencyPlaceholder: string;
+    brokerPlaceholder: string;
+    phasePlaceholder: string;
+    profitTargetPlaceholder: string;
+    maxDrawdownPlaceholder: string;
+    dailyDrawdownPlaceholder: string;
+    createAccount: string;
+
+    statuses: Record<"ACTIVE" | "ARCHIVED", string>;
+    accountTypes: Record<AccountType, string>;
+};
+
+const manageAccountsLabels: Record<
+    AppLanguage,
+    ManageAccountsLabels
+> = {
+    it: {
+        personalWorkspace: "Personal workspace",
+        title: "Gestisci i miei account",
+        description:
+            "Gestisci solo gli account creati da te o dove hai ruolo Manager. La gestione globale della piattaforma rimane separata nell’area Admin.",
+
+        myAccounts: "I miei account",
+        totalTrades: "Trade totali",
+        totalPnl: "PnL totale",
+
+        createdBy: "Creato da",
+        system: "Sistema",
+        openAccount: "Apri account",
+        balance: "Balance",
+        pnl: "PnL",
+        trades: "Trade",
+        members: "Membri",
+
+        archive: "Archivia",
+        restore: "Ripristina",
+        dangerZone: "Zona pericolosa",
+        deleteAccountTitle: "Elimina account definitivamente",
+        deleteAccountDescription:
+            "Questa azione non può essere annullata.",
+        deletePermanently: "Elimina definitivamente",
+
+        noAccountsInSection:
+            "Nessun account in questa sezione.",
+        activeAccounts: "Account attivi",
+        inactiveWorkspace: "Workspace inattivo",
+        archivedAccounts: "Account archiviati",
+        accountsSuffix: "Account",
+
+        createAccountTitle: "Crea nuovo account",
+        accountNamePlaceholder: "Nome account",
+        accountTypeAria: "Tipo account",
+        initialBalancePlaceholder: "Balance iniziale",
+        currencyPlaceholder: "Valuta",
+        brokerPlaceholder: "Broker / Prop Firm",
+        phasePlaceholder: "Fase",
+        profitTargetPlaceholder: "Profit Target %",
+        maxDrawdownPlaceholder: "Max Drawdown %",
+        dailyDrawdownPlaceholder: "Daily Drawdown %",
+        createAccount: "Crea account",
+
+        statuses: {
+            ACTIVE: "ATTIVO",
+            ARCHIVED: "ARCHIVIATO",
+        },
+
+        accountTypes: {
+            LIVE: "LIVE",
+            PROP: "PROP",
+            DEMO: "DEMO",
+            SHARED: "SHARED",
+            CHALLENGE: "CHALLENGE",
+            FUNDED: "FUNDED",
+        },
+    },
+
+    en: {
+        personalWorkspace: "Personal workspace",
+        title: "Manage My Accounts",
+        description:
+            "Manage only accounts created by you or where you have the Manager role. Global platform management remains separate in the Admin area.",
+
+        myAccounts: "My Accounts",
+        totalTrades: "Total Trades",
+        totalPnl: "Total PnL",
+
+        createdBy: "Created by",
+        system: "System",
+        openAccount: "Open Account",
+        balance: "Balance",
+        pnl: "PnL",
+        trades: "Trades",
+        members: "Members",
+
+        archive: "Archive",
+        restore: "Restore",
+        dangerZone: "Danger Zone",
+        deleteAccountTitle: "Delete account permanently",
+        deleteAccountDescription:
+            "This action cannot be undone.",
+        deletePermanently: "Delete Permanently",
+
+        noAccountsInSection:
+            "No accounts in this section.",
+        activeAccounts: "Active accounts",
+        inactiveWorkspace: "Inactive workspace",
+        archivedAccounts: "Archived Accounts",
+        accountsSuffix: "Accounts",
+
+        createAccountTitle: "Create new account",
+        accountNamePlaceholder: "Account name",
+        accountTypeAria: "Account type",
+        initialBalancePlaceholder: "Initial balance",
+        currencyPlaceholder: "Currency",
+        brokerPlaceholder: "Broker / Prop Firm",
+        phasePlaceholder: "Phase",
+        profitTargetPlaceholder: "Profit Target %",
+        maxDrawdownPlaceholder: "Max Drawdown %",
+        dailyDrawdownPlaceholder: "Daily Drawdown %",
+        createAccount: "Create Account",
+
+        statuses: {
+            ACTIVE: "ACTIVE",
+            ARCHIVED: "ARCHIVED",
+        },
+
+        accountTypes: {
+            LIVE: "LIVE",
+            PROP: "PROP",
+            DEMO: "DEMO",
+            SHARED: "SHARED",
+            CHALLENGE: "CHALLENGE",
+            FUNDED: "FUNDED",
+        },
+    },
+
+    uk: {
+        personalWorkspace: "Особистий workspace",
+        title: "Керування моїми акаунтами",
+        description:
+            "Керуйте лише акаунтами, які створили ви, або тими, де у вас роль Manager. Глобальне керування платформою залишається окремо в зоні Admin.",
+
+        myAccounts: "Мої акаунти",
+        totalTrades: "Усього угод",
+        totalPnl: "Загальний PnL",
+
+        createdBy: "Створено",
+        system: "Система",
+        openAccount: "Відкрити акаунт",
+        balance: "Баланс",
+        pnl: "PnL",
+        trades: "Угоди",
+        members: "Учасники",
+
+        archive: "Архівувати",
+        restore: "Відновити",
+        dangerZone: "Небезпечна зона",
+        deleteAccountTitle: "Видалити акаунт назавжди",
+        deleteAccountDescription:
+            "Цю дію неможливо скасувати.",
+        deletePermanently: "Видалити назавжди",
+
+        noAccountsInSection:
+            "У цій секції немає акаунтів.",
+        activeAccounts: "Активні акаунти",
+        inactiveWorkspace: "Неактивний workspace",
+        archivedAccounts: "Архівовані акаунти",
+        accountsSuffix: "Акаунти",
+
+        createAccountTitle: "Створити новий акаунт",
+        accountNamePlaceholder: "Назва акаунта",
+        accountTypeAria: "Тип акаунта",
+        initialBalancePlaceholder: "Початковий баланс",
+        currencyPlaceholder: "Валюта",
+        brokerPlaceholder: "Брокер / Prop Firm",
+        phasePlaceholder: "Фаза",
+        profitTargetPlaceholder: "Ціль прибутку %",
+        maxDrawdownPlaceholder: "Макс. drawdown %",
+        dailyDrawdownPlaceholder: "Денний drawdown %",
+        createAccount: "Створити акаунт",
+
+        statuses: {
+            ACTIVE: "АКТИВНИЙ",
+            ARCHIVED: "АРХІВОВАНИЙ",
+        },
+
+        accountTypes: {
+            LIVE: "LIVE",
+            PROP: "PROP",
+            DEMO: "DEMO",
+            SHARED: "SHARED",
+            CHALLENGE: "CHALLENGE",
+            FUNDED: "FUNDED",
+        },
+    },
+
+    ru: {
+        personalWorkspace: "Личный workspace",
+        title: "Управление моими аккаунтами",
+        description:
+            "Управляйте только аккаунтами, созданными вами, или теми, где у вас роль Manager. Глобальное управление платформой остается отдельно в зоне Admin.",
+
+        myAccounts: "Мои аккаунты",
+        totalTrades: "Всего сделок",
+        totalPnl: "Общий PnL",
+
+        createdBy: "Создано",
+        system: "Система",
+        openAccount: "Открыть аккаунт",
+        balance: "Баланс",
+        pnl: "PnL",
+        trades: "Сделки",
+        members: "Участники",
+
+        archive: "Архивировать",
+        restore: "Восстановить",
+        dangerZone: "Опасная зона",
+        deleteAccountTitle: "Удалить аккаунт навсегда",
+        deleteAccountDescription:
+            "Это действие нельзя отменить.",
+        deletePermanently: "Удалить навсегда",
+
+        noAccountsInSection:
+            "В этой секции нет аккаунтов.",
+        activeAccounts: "Активные аккаунты",
+        inactiveWorkspace: "Неактивный workspace",
+        archivedAccounts: "Архивированные аккаунты",
+        accountsSuffix: "Аккаунты",
+
+        createAccountTitle: "Создать новый аккаунт",
+        accountNamePlaceholder: "Название аккаунта",
+        accountTypeAria: "Тип аккаунта",
+        initialBalancePlaceholder: "Начальный баланс",
+        currencyPlaceholder: "Валюта",
+        brokerPlaceholder: "Брокер / Prop Firm",
+        phasePlaceholder: "Фаза",
+        profitTargetPlaceholder: "Цель прибыли %",
+        maxDrawdownPlaceholder: "Макс. drawdown %",
+        dailyDrawdownPlaceholder: "Дневной drawdown %",
+        createAccount: "Создать аккаунт",
+
+        statuses: {
+            ACTIVE: "АКТИВНЫЙ",
+            ARCHIVED: "АРХИВИРОВАН",
+        },
+
+        accountTypes: {
+            LIVE: "LIVE",
+            PROP: "PROP",
+            DEMO: "DEMO",
+            SHARED: "SHARED",
+            CHALLENGE: "CHALLENGE",
+            FUNDED: "FUNDED",
+        },
+    },
+
+    es: {
+        personalWorkspace: "Workspace personal",
+        title: "Gestionar mis cuentas",
+        description:
+            "Gestiona solo las cuentas creadas por ti o donde tienes el rol Manager. La gestión global de la plataforma permanece separada en el área Admin.",
+
+        myAccounts: "Mis cuentas",
+        totalTrades: "Trades totales",
+        totalPnl: "PnL total",
+
+        createdBy: "Creado por",
+        system: "Sistema",
+        openAccount: "Abrir cuenta",
+        balance: "Balance",
+        pnl: "PnL",
+        trades: "Trades",
+        members: "Miembros",
+
+        archive: "Archivar",
+        restore: "Restaurar",
+        dangerZone: "Zona peligrosa",
+        deleteAccountTitle: "Eliminar cuenta permanentemente",
+        deleteAccountDescription:
+            "Esta acción no se puede deshacer.",
+        deletePermanently: "Eliminar permanentemente",
+
+        noAccountsInSection:
+            "No hay cuentas en esta sección.",
+        activeAccounts: "Cuentas activas",
+        inactiveWorkspace: "Workspace inactivo",
+        archivedAccounts: "Cuentas archivadas",
+        accountsSuffix: "Cuentas",
+
+        createAccountTitle: "Crear nueva cuenta",
+        accountNamePlaceholder: "Nombre de la cuenta",
+        accountTypeAria: "Tipo de cuenta",
+        initialBalancePlaceholder: "Balance inicial",
+        currencyPlaceholder: "Moneda",
+        brokerPlaceholder: "Broker / Prop Firm",
+        phasePlaceholder: "Fase",
+        profitTargetPlaceholder: "Objetivo de beneficio %",
+        maxDrawdownPlaceholder: "Drawdown máximo %",
+        dailyDrawdownPlaceholder: "Drawdown diario %",
+        createAccount: "Crear cuenta",
+
+        statuses: {
+            ACTIVE: "ACTIVA",
+            ARCHIVED: "ARCHIVADA",
+        },
+
+        accountTypes: {
+            LIVE: "LIVE",
+            PROP: "PROP",
+            DEMO: "DEMO",
+            SHARED: "SHARED",
+            CHALLENGE: "CHALLENGE",
+            FUNDED: "FUNDED",
+        },
+    },
+
+    fr: {
+        personalWorkspace: "Workspace personnel",
+        title: "Gérer mes comptes",
+        description:
+            "Gérez uniquement les comptes créés par vous ou ceux où vous avez le rôle Manager. La gestion globale de la plateforme reste séparée dans la zone Admin.",
+
+        myAccounts: "Mes comptes",
+        totalTrades: "Trades totaux",
+        totalPnl: "PnL total",
+
+        createdBy: "Créé par",
+        system: "Système",
+        openAccount: "Ouvrir le compte",
+        balance: "Balance",
+        pnl: "PnL",
+        trades: "Trades",
+        members: "Membres",
+
+        archive: "Archiver",
+        restore: "Restaurer",
+        dangerZone: "Zone dangereuse",
+        deleteAccountTitle: "Supprimer le compte définitivement",
+        deleteAccountDescription:
+            "Cette action ne peut pas être annulée.",
+        deletePermanently: "Supprimer définitivement",
+
+        noAccountsInSection:
+            "Aucun compte dans cette section.",
+        activeAccounts: "Comptes actifs",
+        inactiveWorkspace: "Workspace inactif",
+        archivedAccounts: "Comptes archivés",
+        accountsSuffix: "Comptes",
+
+        createAccountTitle: "Créer un nouveau compte",
+        accountNamePlaceholder: "Nom du compte",
+        accountTypeAria: "Type de compte",
+        initialBalancePlaceholder: "Balance initiale",
+        currencyPlaceholder: "Devise",
+        brokerPlaceholder: "Broker / Prop Firm",
+        phasePlaceholder: "Phase",
+        profitTargetPlaceholder: "Objectif de profit %",
+        maxDrawdownPlaceholder: "Drawdown maximum %",
+        dailyDrawdownPlaceholder: "Drawdown quotidien %",
+        createAccount: "Créer le compte",
+
+        statuses: {
+            ACTIVE: "ACTIF",
+            ARCHIVED: "ARCHIVÉ",
+        },
+
+        accountTypes: {
+            LIVE: "LIVE",
+            PROP: "PROP",
+            DEMO: "DEMO",
+            SHARED: "SHARED",
+            CHALLENGE: "CHALLENGE",
+            FUNDED: "FUNDED",
+        },
+    },
+
+    de: {
+        personalWorkspace: "Persönlicher Workspace",
+        title: "Meine Konten verwalten",
+        description:
+            "Verwalte nur Konten, die von dir erstellt wurden oder bei denen du die Manager-Rolle hast. Die globale Plattformverwaltung bleibt separat im Admin-Bereich.",
+
+        myAccounts: "Meine Konten",
+        totalTrades: "Gesamte Trades",
+        totalPnl: "Gesamter PnL",
+
+        createdBy: "Erstellt von",
+        system: "System",
+        openAccount: "Konto öffnen",
+        balance: "Balance",
+        pnl: "PnL",
+        trades: "Trades",
+        members: "Mitglieder",
+
+        archive: "Archivieren",
+        restore: "Wiederherstellen",
+        dangerZone: "Gefahrenzone",
+        deleteAccountTitle: "Konto dauerhaft löschen",
+        deleteAccountDescription:
+            "Diese Aktion kann nicht rückgängig gemacht werden.",
+        deletePermanently: "Dauerhaft löschen",
+
+        noAccountsInSection:
+            "Keine Konten in diesem Abschnitt.",
+        activeAccounts: "Aktive Konten",
+        inactiveWorkspace: "Inaktiver Workspace",
+        archivedAccounts: "Archivierte Konten",
+        accountsSuffix: "Konten",
+
+        createAccountTitle: "Neues Konto erstellen",
+        accountNamePlaceholder: "Kontoname",
+        accountTypeAria: "Kontotyp",
+        initialBalancePlaceholder: "Anfangsbalance",
+        currencyPlaceholder: "Währung",
+        brokerPlaceholder: "Broker / Prop Firm",
+        phasePlaceholder: "Phase",
+        profitTargetPlaceholder: "Gewinnziel %",
+        maxDrawdownPlaceholder: "Max. Drawdown %",
+        dailyDrawdownPlaceholder: "Täglicher Drawdown %",
+        createAccount: "Konto erstellen",
+
+        statuses: {
+            ACTIVE: "AKTIV",
+            ARCHIVED: "ARCHIVIERT",
+        },
+
+        accountTypes: {
+            LIVE: "LIVE",
+            PROP: "PROP",
+            DEMO: "DEMO",
+            SHARED: "SHARED",
+            CHALLENGE: "CHALLENGE",
+            FUNDED: "FUNDED",
+        },
+    },
+};
+
+function getResultTone(value: number) {
+    if (value >= 0) {
+        return "text-green-400";
+    }
+
+    return "text-red-400";
 }
 
 export default async function ManageMyAccountsPage() {
@@ -45,6 +521,12 @@ export default async function ManageMyAccountsPage() {
     if (!currentUser) {
         redirect("/login");
     }
+
+    const language = normalizeAppLanguage(
+        currentUser.appLanguage
+    );
+
+    const t = manageAccountsLabels[language];
 
     const canCreatePersonalAccount =
         currentUser.role === "FOUNDER" ||
@@ -113,6 +595,9 @@ export default async function ManageMyAccountsPage() {
         0
     );
 
+    const defaultCurrency =
+        currentUser.defaultCurrency || "USD";
+
     const renderAccountCard = (
         account: (typeof accounts)[number]
     ) => {
@@ -141,8 +626,8 @@ export default async function ManageMyAccountsPage() {
             <div
                 key={account.id}
                 className={`rounded-3xl border p-6 ${isArchived
-                    ? "border-yellow-500/20 bg-yellow-500/[0.04]"
-                    : "border-white/10 bg-white/[0.03]"
+                        ? "border-yellow-500/20 bg-yellow-500/[0.04]"
+                        : "border-white/10 bg-white/[0.03]"
                     }`}
             >
                 <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
@@ -154,22 +639,30 @@ export default async function ManageMyAccountsPage() {
 
                             <span
                                 className={`rounded-xl px-3 py-1 text-xs font-bold ${isArchived
-                                    ? "bg-yellow-500/10 text-yellow-300"
-                                    : "bg-green-500/10 text-green-400"
+                                        ? "bg-yellow-500/10 text-yellow-300"
+                                        : "bg-green-500/10 text-green-400"
                                     }`}
                             >
-                                {account.status}
+                                {
+                                    t.statuses[
+                                    account.status as "ACTIVE" | "ARCHIVED"
+                                    ] ?? account.status
+                                }
                             </span>
 
                             <span className="rounded-xl bg-white/10 px-3 py-1 text-xs font-bold text-gray-300">
-                                {account.type}
+                                {
+                                    t.accountTypes[
+                                    account.type as AccountType
+                                    ] ?? account.type
+                                }
                             </span>
                         </div>
 
                         <p className="mt-2 text-sm text-gray-400">
-                            Created by{" "}
+                            {t.createdBy}{" "}
                             <span className="text-gray-200">
-                                {account.createdBy?.username || "System"}
+                                {account.createdBy?.username || t.system}
                             </span>
                         </p>
                     </div>
@@ -178,45 +671,46 @@ export default async function ManageMyAccountsPage() {
                         href={`/accounts/${account.id}`}
                         className="rounded-2xl bg-green-500 px-4 py-3 text-center text-sm font-black text-black hover:bg-green-400"
                     >
-                        Open Account
+                        {t.openAccount}
                     </a>
                 </div>
 
                 <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
                     <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                         <p className="text-xs text-gray-500">
-                            Balance
+                            {t.balance}
                         </p>
 
                         <h4 className="mt-2 font-bold">
-                            {formatCurrency(
+                            {formatCurrencyByLanguage(
                                 account.initialBalance,
-                                account.currency
+                                account.currency,
+                                language
                             )}
                         </h4>
                     </div>
 
                     <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                         <p className="text-xs text-gray-500">
-                            PnL
+                            {t.pnl}
                         </p>
 
                         <h4
-                            className={`mt-2 font-bold ${accountPnl >= 0
-                                ? "text-green-400"
-                                : "text-red-400"
-                                }`}
+                            className={`mt-2 font-bold ${getResultTone(
+                                accountPnl
+                            )}`}
                         >
-                            {formatCurrency(
+                            {formatCurrencyByLanguage(
                                 accountPnl,
-                                account.currency
+                                account.currency,
+                                language
                             )}
                         </h4>
                     </div>
 
                     <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                         <p className="text-xs text-gray-500">
-                            Trades
+                            {t.trades}
                         </p>
 
                         <h4 className="mt-2 font-bold">
@@ -226,7 +720,7 @@ export default async function ManageMyAccountsPage() {
 
                     <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                         <p className="text-xs text-gray-500">
-                            Members
+                            {t.members}
                         </p>
 
                         <h4 className="mt-2 font-bold">
@@ -254,7 +748,7 @@ export default async function ManageMyAccountsPage() {
                                 type="submit"
                                 className="rounded-xl bg-yellow-500/10 px-4 py-3 text-sm font-bold text-yellow-300 hover:bg-yellow-500/20"
                             >
-                                Archive
+                                {t.archive}
                             </button>
                         </form>
                     )}
@@ -277,7 +771,7 @@ export default async function ManageMyAccountsPage() {
                                 type="submit"
                                 className="rounded-xl bg-blue-500/10 px-4 py-3 text-sm font-bold text-blue-400 hover:bg-blue-500/20"
                             >
-                                Restore
+                                {t.restore}
                             </button>
                         </form>
                     )}
@@ -286,17 +780,17 @@ export default async function ManageMyAccountsPage() {
                 {canDelete && (
                     <details className="mt-6 rounded-2xl border border-red-500/20 bg-red-500/[0.04] p-4">
                         <summary className="cursor-pointer text-sm font-bold text-red-400">
-                            Danger Zone
+                            {t.dangerZone}
                         </summary>
 
                         <div className="mt-4 flex flex-col gap-3 rounded-xl border border-red-500/20 bg-black/20 p-4 md:flex-row md:items-center md:justify-between">
                             <div>
                                 <p className="font-bold text-red-300">
-                                    Delete account permanently
+                                    {t.deleteAccountTitle}
                                 </p>
 
                                 <p className="mt-1 text-sm text-gray-400">
-                                    This action cannot be undone.
+                                    {t.deleteAccountDescription}
                                 </p>
                             </div>
 
@@ -317,7 +811,7 @@ export default async function ManageMyAccountsPage() {
                                     type="submit"
                                     className="rounded-xl bg-red-500 px-4 py-3 text-sm font-black text-black hover:bg-red-400"
                                 >
-                                    Delete Permanently
+                                    {t.deletePermanently}
                                 </button>
                             </form>
                         </div>
@@ -364,7 +858,7 @@ export default async function ManageMyAccountsPage() {
                     </div>
                 ) : (
                     <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-8 text-sm text-gray-400">
-                        Nessun account in questa sezione.
+                        {t.noAccountsInSection}
                     </div>
                 )}
             </section>
@@ -375,23 +869,22 @@ export default async function ManageMyAccountsPage() {
         <div>
             <div className="mb-10">
                 <p className="text-sm text-green-400">
-                    Personal workspace
+                    {t.personalWorkspace}
                 </p>
 
                 <h1 className="mt-2 text-4xl font-bold">
-                    Manage My Accounts
+                    {t.title}
                 </h1>
 
                 <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-400">
-                    Gestisci solo gli account creati da te o dove hai ruolo Manager.
-                    La gestione globale della piattaforma rimane separata nell’area Admin.
+                    {t.description}
                 </p>
             </div>
 
             <div className="mb-10 grid grid-cols-1 gap-4 md:grid-cols-3">
                 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
                     <p className="text-sm text-gray-400">
-                        My Accounts
+                        {t.myAccounts}
                     </p>
 
                     <h2 className="mt-2 text-3xl font-black">
@@ -401,7 +894,7 @@ export default async function ManageMyAccountsPage() {
 
                 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
                     <p className="text-sm text-gray-400">
-                        Total Trades
+                        {t.totalTrades}
                     </p>
 
                     <h2 className="mt-2 text-3xl font-black">
@@ -411,16 +904,19 @@ export default async function ManageMyAccountsPage() {
 
                 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
                     <p className="text-sm text-gray-400">
-                        Total PnL
+                        {t.totalPnl}
                     </p>
 
                     <h2
-                        className={`mt-2 text-3xl font-black ${totalPnl >= 0
-                            ? "text-green-400"
-                            : "text-red-400"
-                            }`}
+                        className={`mt-2 text-3xl font-black ${getResultTone(
+                            totalPnl
+                        )}`}
                     >
-                        {totalPnl.toFixed(2)}
+                        {formatCurrencyByLanguage(
+                            totalPnl,
+                            defaultCurrency,
+                            language
+                        )}
                     </h2>
                 </div>
             </div>
@@ -430,9 +926,15 @@ export default async function ManageMyAccountsPage() {
                     action={createAccount}
                     className="mb-12 grid grid-cols-1 gap-4 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:grid-cols-2 xl:grid-cols-4"
                 >
+                    <div className="md:col-span-2 xl:col-span-4">
+                        <h2 className="text-2xl font-black text-white">
+                            {t.createAccountTitle}
+                        </h2>
+                    </div>
+
                     <input
                         name="name"
-                        placeholder="Account name"
+                        placeholder={t.accountNamePlaceholder}
                         className="rounded-2xl bg-zinc-900 p-4"
                         required
                     />
@@ -444,7 +946,7 @@ export default async function ManageMyAccountsPage() {
                                 ? "LIVE"
                                 : "SHARED"
                         }
-                        aria-label="Account type"
+                        aria-label={t.accountTypeAria}
                         className="rounded-2xl bg-zinc-900 p-4"
                         required
                     >
@@ -466,7 +968,7 @@ export default async function ManageMyAccountsPage() {
                     <input
                         name="initialBalance"
                         type="number"
-                        placeholder="Initial balance"
+                        placeholder={t.initialBalancePlaceholder}
                         className="rounded-2xl bg-zinc-900 p-4"
                         required
                     />
@@ -474,20 +976,20 @@ export default async function ManageMyAccountsPage() {
                     <input
                         name="currency"
                         defaultValue="USD"
-                        placeholder="Currency"
+                        placeholder={t.currencyPlaceholder}
                         className="rounded-2xl bg-zinc-900 p-4"
                         required
                     />
 
                     <input
                         name="broker"
-                        placeholder="Broker / Prop Firm"
+                        placeholder={t.brokerPlaceholder}
                         className="rounded-2xl bg-zinc-900 p-4"
                     />
 
                     <input
                         name="phase"
-                        placeholder="Phase"
+                        placeholder={t.phasePlaceholder}
                         className="rounded-2xl bg-zinc-900 p-4"
                     />
 
@@ -495,7 +997,7 @@ export default async function ManageMyAccountsPage() {
                         name="profitTarget"
                         type="number"
                         step="0.01"
-                        placeholder="Profit Target %"
+                        placeholder={t.profitTargetPlaceholder}
                         className="rounded-2xl bg-zinc-900 p-4"
                     />
 
@@ -503,7 +1005,7 @@ export default async function ManageMyAccountsPage() {
                         name="maxDrawdown"
                         type="number"
                         step="0.01"
-                        placeholder="Max Drawdown %"
+                        placeholder={t.maxDrawdownPlaceholder}
                         className="rounded-2xl bg-zinc-900 p-4"
                     />
 
@@ -511,7 +1013,7 @@ export default async function ManageMyAccountsPage() {
                         name="dailyDrawdown"
                         type="number"
                         step="0.01"
-                        placeholder="Daily Drawdown %"
+                        placeholder={t.dailyDrawdownPlaceholder}
                         className="rounded-2xl bg-zinc-900 p-4"
                     />
 
@@ -519,7 +1021,7 @@ export default async function ManageMyAccountsPage() {
                         type="submit"
                         className="rounded-2xl bg-green-500 p-4 font-bold text-black hover:bg-green-400 md:col-span-2 xl:col-span-4"
                     >
-                        Create Account
+                        {t.createAccount}
                     </button>
                 </form>
             )}
@@ -531,16 +1033,16 @@ export default async function ManageMyAccountsPage() {
                     );
 
                     return renderSection(
-                        `${type} Accounts`,
-                        "Active accounts",
+                        `${t.accountTypes[type]} ${t.accountsSuffix}`,
+                        t.activeAccounts,
                         sectionAccounts,
                         "green"
                     );
                 })}
 
                 {renderSection(
-                    "Archived Accounts",
-                    "Inactive workspace",
+                    t.archivedAccounts,
+                    t.inactiveWorkspace,
                     archivedAccounts,
                     "yellow"
                 )}

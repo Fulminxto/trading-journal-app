@@ -16,7 +16,6 @@ import {
 import Sidebar from "@/components/Sidebar";
 import OnboardingModal from "@/components/OnboardingModal";
 import NotificationBell from "@/components/NotificationBell";
-
 import {
   normalizeAppLanguage,
   type AppLanguage,
@@ -29,22 +28,20 @@ type AppShellUser = {
   appLanguage?: string | null;
 } | null;
 
-const labels: Record<
-  AppLanguage,
-  {
-    profileFallback: string;
-    userFallback: string;
-    openProfileMenu: string;
-    profile: string;
-    settings: string;
-    support: string;
-    switchAccount: string;
-    admin: string;
-    logout: string;
-    openSidebar: string;
-    supportSubject: string;
-  }
-> = {
+type AppShellLabels = {
+  profileFallback: string;
+  userFallback: string;
+  openProfileMenu: string;
+  profile: string;
+  settings: string;
+  support: string;
+  switchAccount: string;
+  admin: string;
+  logout: string;
+  openSidebar: string;
+};
+
+const labels: Record<AppLanguage, AppShellLabels> = {
   it: {
     profileFallback: "Profilo",
     userFallback: "utente",
@@ -56,7 +53,6 @@ const labels: Record<
     admin: "Admin",
     logout: "Esci",
     openSidebar: "Apri menu",
-    supportSubject: "Richiesta supporto - VOLTIS",
   },
   en: {
     profileFallback: "Profile",
@@ -69,7 +65,66 @@ const labels: Record<
     admin: "Admin",
     logout: "Logout",
     openSidebar: "Open sidebar",
-    supportSubject: "Support request - VOLTIS",
+  },
+  uk: {
+    profileFallback: "Профіль",
+    userFallback: "користувач",
+    openProfileMenu: "Відкрити меню профілю",
+    profile: "Профіль",
+    settings: "Налаштування",
+    support: "Підтримка",
+    switchAccount: "Змінити акаунт",
+    admin: "Адмін",
+    logout: "Вийти",
+    openSidebar: "Відкрити меню",
+  },
+  ru: {
+    profileFallback: "Профиль",
+    userFallback: "пользователь",
+    openProfileMenu: "Открыть меню профиля",
+    profile: "Профиль",
+    settings: "Настройки",
+    support: "Поддержка",
+    switchAccount: "Сменить аккаунт",
+    admin: "Админ",
+    logout: "Выйти",
+    openSidebar: "Открыть меню",
+  },
+  es: {
+    profileFallback: "Perfil",
+    userFallback: "usuario",
+    openProfileMenu: "Abrir menú de perfil",
+    profile: "Perfil",
+    settings: "Ajustes",
+    support: "Soporte",
+    switchAccount: "Cambiar cuenta",
+    admin: "Admin",
+    logout: "Cerrar sesión",
+    openSidebar: "Abrir menú",
+  },
+  fr: {
+    profileFallback: "Profil",
+    userFallback: "utilisateur",
+    openProfileMenu: "Ouvrir le menu du profil",
+    profile: "Profil",
+    settings: "Paramètres",
+    support: "Support",
+    switchAccount: "Changer de compte",
+    admin: "Admin",
+    logout: "Déconnexion",
+    openSidebar: "Ouvrir le menu",
+  },
+  de: {
+    profileFallback: "Profil",
+    userFallback: "Benutzer",
+    openProfileMenu: "Profilmenü öffnen",
+    profile: "Profil",
+    settings: "Einstellungen",
+    support: "Support",
+    switchAccount: "Konto wechseln",
+    admin: "Admin",
+    logout: "Abmelden",
+    openSidebar: "Menü öffnen",
   },
 };
 
@@ -89,7 +144,7 @@ export default function AppShell({
     user?.appLanguage
   );
 
-  const t = labels[appLanguage];
+  const t = labels[appLanguage] ?? labels.en;
 
   const displayName =
     user?.name || user?.username || t.profileFallback;
@@ -103,10 +158,6 @@ export default function AppShell({
     .join("")
     .slice(0, 2)
     .toUpperCase();
-
-  const supportHref = `mailto:yarikdziuban@gmail.com?subject=${encodeURIComponent(
-    t.supportSubject
-  )}`;
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -133,7 +184,7 @@ export default function AppShell({
 
   return (
     <div className="flex min-h-screen bg-[#050b10] text-white">
-      <OnboardingModal />
+      <OnboardingModal appLanguage={user?.appLanguage} />
 
       <Sidebar
         open={sidebarOpen}
@@ -146,10 +197,7 @@ export default function AppShell({
           <div className="pointer-events-auto flex items-start gap-3">
             <NotificationBell />
 
-            <div
-              ref={profileRef}
-              className="relative"
-            >
+            <div ref={profileRef} className="relative">
               <button
                 onClick={() =>
                   setProfileOpen(!profileOpen)

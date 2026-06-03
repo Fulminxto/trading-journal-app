@@ -1,4 +1,9 @@
-type Props = {
+import {
+  getDiaryLabels,
+  type DiaryI18nProps,
+} from "./DiaryI18n";
+
+type Props = DiaryI18nProps & {
   disciplineScore: number;
   traderType: string;
   weakness: string;
@@ -12,20 +17,23 @@ export default function AdaptiveCoachingLayer({
   weakness,
   weakExecutionTrades,
   emotionalTrades,
+  appLanguage,
 }: Props) {
+  const t = getDiaryLabels(appLanguage);
+
   const mainAdvice =
     disciplineScore >= 80
-      ? "Continua a proteggere il tuo processo. Il focus ora è scalare senza perdere disciplina."
+      ? t.strongAdvice
       : disciplineScore >= 60
-      ? "La base è buona, ma serve più costanza. Concentrati su qualità setup e review post-trade."
-      : "Riduci complessità e rischio. Prima di aumentare performance, stabilizza esecuzione e disciplina.";
+        ? t.mediumAdvice
+        : t.weakAdvice;
 
   const warning =
     weakExecutionTrades > 2
-      ? "Hai diverse esecuzioni deboli: evita trade non pianificati e aumenta il filtro prima dell’ingresso."
+      ? t.weakExecutionWarning
       : emotionalTrades > 2
-      ? "La componente emotiva è presente: monitora impulsività, FOMO e revenge trading."
-      : "Nessun warning critico rilevato. Continua a rispettare il processo.";
+        ? t.emotionalWarning
+        : t.noCriticalWarning;
 
   return (
     <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-[#071014] via-[#0b1720] to-black p-8">
@@ -33,17 +41,17 @@ export default function AdaptiveCoachingLayer({
 
       <div className="relative z-10">
         <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
-          Adaptive Coaching
+          {t.adaptiveCoaching}
         </p>
 
         <h2 className="mt-3 text-3xl font-black text-white">
-          VOLTIS Coach Layer
+          {t.coachLayer}
         </h2>
 
         <div className="mt-8 grid grid-cols-1 gap-4 xl:grid-cols-3">
           <div className="rounded-2xl border border-white/10 bg-black/20 p-5 xl:col-span-2">
             <p className="text-sm text-gray-400">
-              Main Guidance
+              {t.mainGuidance}
             </p>
 
             <h3 className="mt-3 text-xl font-black text-cyan-400">
@@ -53,7 +61,7 @@ export default function AdaptiveCoachingLayer({
 
           <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
             <p className="text-sm text-gray-400">
-              Trader Profile
+              {t.traderProfile}
             </p>
 
             <h3 className="mt-3 text-xl font-black text-violet-400">
@@ -63,7 +71,7 @@ export default function AdaptiveCoachingLayer({
 
           <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
             <p className="text-sm text-gray-400">
-              Current Weakness
+              {t.currentWeakness}
             </p>
 
             <h3 className="mt-3 text-xl font-black text-red-400">
@@ -73,7 +81,7 @@ export default function AdaptiveCoachingLayer({
 
           <div className="rounded-2xl border border-white/10 bg-black/20 p-5 xl:col-span-2">
             <p className="text-sm text-gray-400">
-              Warning
+              {t.warning}
             </p>
 
             <h3 className="mt-3 text-xl font-black text-yellow-400">
@@ -83,10 +91,7 @@ export default function AdaptiveCoachingLayer({
         </div>
 
         <p className="mt-8 max-w-2xl text-sm leading-relaxed text-gray-400">
-          Il coaching layer usa disciplina,
-          qualità esecutiva, stato emotivo
-          e profilo operativo per generare
-          feedback contestuale.
+          {t.coachingDescription}
         </p>
       </div>
     </div>

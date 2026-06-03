@@ -18,20 +18,588 @@ import Link from "next/link";
 import { updateProfile } from "./actions";
 import GlobalToast from "@/components/GlobalToast";
 
-function formatCurrency(value: number) {
-  return `$${value.toLocaleString("en-US", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
-}
+import {
+  formatCurrencyByLanguage,
+  formatDateByLanguage,
+  formatDateTimeByLanguage,
+  normalizeAppLanguage,
+  type AppLanguage,
+} from "@/lib/i18n";
 
-function formatDate(date?: Date | null) {
-  if (!date) {
-    return "Never";
-  }
+type ProfileLabels = {
+  never: string;
+  online: string;
+  offline: string;
+  complete: string;
+  open: string;
 
-  return new Date(date).toLocaleString("it-IT");
-}
+  profileCenter: string;
+  traderProfile: string;
+  profileDescription: string;
+
+  accounts: string;
+  trades: string;
+  totalPnl: string;
+  winRate: string;
+
+  lastLogin: string;
+  lastActivity: string;
+  logins: string;
+
+  personalInformation: string;
+  editProfile: string;
+  profileImage: string;
+  uploadAvatar: string;
+  uploadAvatarDescription: string;
+  displayName: string;
+  displayNamePlaceholder: string;
+  username: string;
+  usernamePlaceholder: string;
+  workspaceName: string;
+  workspaceNamePlaceholder: string;
+  timezone: string;
+  bio: string;
+  bioPlaceholder: string;
+
+  tradingIdentity: string;
+  tradingPreferences: string;
+  tradingStyle: string;
+  selectStyle: string;
+  favoriteMarket: string;
+  selectMarket: string;
+  preferredSession: string;
+  selectSession: string;
+  riskPerTrade: string;
+  preferredBroker: string;
+  preferredBrokerPlaceholder: string;
+  setupStyle: string;
+  setupStylePlaceholder: string;
+  saveProfile: string;
+
+  completion: string;
+  profileScore: string;
+  profileCompleted: string;
+
+  workspace: string;
+  accountAccess: string;
+  noLinkedAccounts: string;
+
+  activity: string;
+  recentTrades: string;
+  noRecentTrades: string;
+
+  access: string;
+  securityStatus: string;
+  authentication: string;
+  protected: string;
+  accountRole: string;
+};
+
+const labels: Record<AppLanguage, ProfileLabels> = {
+  it: {
+    never: "Mai",
+    online: "Online",
+    offline: "Offline",
+    complete: "Completo",
+    open: "Apri",
+
+    profileCenter: "Centro profilo",
+    traderProfile: "Profilo Trader",
+    profileDescription:
+      "Gestisci identità, preferenze operative, stile di trading e informazioni personali usate da VOLTIS per personalizzare l’esperienza.",
+
+    accounts: "Account",
+    trades: "Trade",
+    totalPnl: "PnL totale",
+    winRate: "Win Rate",
+
+    lastLogin: "Ultimo login",
+    lastActivity: "Ultima attività",
+    logins: "Login",
+
+    personalInformation: "Informazioni personali",
+    editProfile: "Modifica profilo",
+    profileImage: "Immagine profilo",
+    uploadAvatar: "Carica avatar",
+    uploadAvatarDescription:
+      "Carica un’immagine profilo in formato JPG, PNG o WEBP. Dimensione massima: 5MB.",
+    displayName: "Nome visualizzato",
+    displayNamePlaceholder: "Nome visualizzato",
+    username: "Username",
+    usernamePlaceholder: "Username",
+    workspaceName: "Nome workspace",
+    workspaceNamePlaceholder: "Nome workspace",
+    timezone: "Fuso orario",
+    bio: "Bio",
+    bioPlaceholder:
+      "Descrivi brevemente il tuo profilo da trader...",
+
+    tradingIdentity: "Identità di trading",
+    tradingPreferences: "Preferenze operative",
+    tradingStyle: "Stile di trading",
+    selectStyle: "Seleziona stile",
+    favoriteMarket: "Mercato preferito",
+    selectMarket: "Seleziona mercato",
+    preferredSession: "Sessione preferita",
+    selectSession: "Seleziona sessione",
+    riskPerTrade: "Rischio per trade %",
+    preferredBroker: "Broker preferito",
+    preferredBrokerPlaceholder: "Broker / Prop Firm",
+    setupStyle: "Stile setup",
+    setupStylePlaceholder: "Breakout, Pullback, SMC...",
+    saveProfile: "Salva profilo",
+
+    completion: "Completamento",
+    profileScore: "Punteggio profilo",
+    profileCompleted: "Profilo completato",
+
+    workspace: "Workspace",
+    accountAccess: "Accesso account",
+    noLinkedAccounts: "Nessun account collegato.",
+
+    activity: "Attività",
+    recentTrades: "Trade recenti",
+    noRecentTrades: "Nessun trade recente.",
+
+    access: "Accesso",
+    securityStatus: "Stato sicurezza",
+    authentication: "Autenticazione",
+    protected: "Protetto",
+    accountRole: "Ruolo account",
+  },
+
+  en: {
+    never: "Never",
+    online: "Online",
+    offline: "Offline",
+    complete: "Complete",
+    open: "Open",
+
+    profileCenter: "Profile Center",
+    traderProfile: "Trader Profile",
+    profileDescription:
+      "Manage identity, operating preferences, trading style and personal information used by VOLTIS to personalize the experience.",
+
+    accounts: "Accounts",
+    trades: "Trades",
+    totalPnl: "Total PnL",
+    winRate: "Win Rate",
+
+    lastLogin: "Last Login",
+    lastActivity: "Last Activity",
+    logins: "Logins",
+
+    personalInformation: "Personal Information",
+    editProfile: "Edit Profile",
+    profileImage: "Profile Image",
+    uploadAvatar: "Upload avatar",
+    uploadAvatarDescription:
+      "Upload a profile image in JPG, PNG or WEBP format. Maximum size: 5MB.",
+    displayName: "Display Name",
+    displayNamePlaceholder: "Display name",
+    username: "Username",
+    usernamePlaceholder: "Username",
+    workspaceName: "Workspace Name",
+    workspaceNamePlaceholder: "Workspace name",
+    timezone: "Timezone",
+    bio: "Bio",
+    bioPlaceholder:
+      "Briefly describe your trader profile...",
+
+    tradingIdentity: "Trading Identity",
+    tradingPreferences: "Trading Preferences",
+    tradingStyle: "Trading Style",
+    selectStyle: "Select style",
+    favoriteMarket: "Favorite Market",
+    selectMarket: "Select market",
+    preferredSession: "Preferred Session",
+    selectSession: "Select session",
+    riskPerTrade: "Risk Per Trade %",
+    preferredBroker: "Preferred Broker",
+    preferredBrokerPlaceholder: "Broker / Prop Firm",
+    setupStyle: "Setup Style",
+    setupStylePlaceholder: "Breakout, Pullback, SMC...",
+    saveProfile: "Save Profile",
+
+    completion: "Completion",
+    profileScore: "Profile Score",
+    profileCompleted: "Profile completed",
+
+    workspace: "Workspace",
+    accountAccess: "Account Access",
+    noLinkedAccounts: "No linked accounts.",
+
+    activity: "Activity",
+    recentTrades: "Recent Trades",
+    noRecentTrades: "No recent trades.",
+
+    access: "Access",
+    securityStatus: "Security Status",
+    authentication: "Authentication",
+    protected: "Protected",
+    accountRole: "Account Role",
+  },
+
+  uk: {
+    never: "Ніколи",
+    online: "Онлайн",
+    offline: "Офлайн",
+    complete: "Заповнено",
+    open: "Відкрити",
+
+    profileCenter: "Центр профілю",
+    traderProfile: "Профіль трейдера",
+    profileDescription:
+      "Керуйте особистістю, операційними налаштуваннями, стилем трейдингу та персональною інформацією, яку VOLTIS використовує для персоналізації досвіду.",
+
+    accounts: "Акаунти",
+    trades: "Угоди",
+    totalPnl: "Загальний PnL",
+    winRate: "Win Rate",
+
+    lastLogin: "Останній вхід",
+    lastActivity: "Остання активність",
+    logins: "Входи",
+
+    personalInformation: "Особиста інформація",
+    editProfile: "Редагувати профіль",
+    profileImage: "Зображення профілю",
+    uploadAvatar: "Завантажити аватар",
+    uploadAvatarDescription:
+      "Завантажте зображення профілю у форматі JPG, PNG або WEBP. Максимальний розмір: 5MB.",
+    displayName: "Відображуване ім’я",
+    displayNamePlaceholder: "Відображуване ім’я",
+    username: "Ім’я користувача",
+    usernamePlaceholder: "Ім’я користувача",
+    workspaceName: "Назва workspace",
+    workspaceNamePlaceholder: "Назва workspace",
+    timezone: "Часовий пояс",
+    bio: "Біо",
+    bioPlaceholder:
+      "Коротко опишіть свій профіль трейдера...",
+
+    tradingIdentity: "Трейдингова ідентичність",
+    tradingPreferences: "Операційні налаштування",
+    tradingStyle: "Стиль трейдингу",
+    selectStyle: "Виберіть стиль",
+    favoriteMarket: "Улюблений ринок",
+    selectMarket: "Виберіть ринок",
+    preferredSession: "Бажана сесія",
+    selectSession: "Виберіть сесію",
+    riskPerTrade: "Ризик на угоду %",
+    preferredBroker: "Бажаний брокер",
+    preferredBrokerPlaceholder: "Брокер / Prop Firm",
+    setupStyle: "Стиль сетапу",
+    setupStylePlaceholder: "Breakout, Pullback, SMC...",
+    saveProfile: "Зберегти профіль",
+
+    completion: "Заповнення",
+    profileScore: "Оцінка профілю",
+    profileCompleted: "Профіль заповнено",
+
+    workspace: "Workspace",
+    accountAccess: "Доступ до акаунтів",
+    noLinkedAccounts: "Немає підключених акаунтів.",
+
+    activity: "Активність",
+    recentTrades: "Останні угоди",
+    noRecentTrades: "Немає останніх угод.",
+
+    access: "Доступ",
+    securityStatus: "Статус безпеки",
+    authentication: "Аутентифікація",
+    protected: "Захищено",
+    accountRole: "Роль акаунта",
+  },
+
+  ru: {
+    never: "Никогда",
+    online: "Онлайн",
+    offline: "Офлайн",
+    complete: "Заполнено",
+    open: "Открыть",
+
+    profileCenter: "Центр профиля",
+    traderProfile: "Профиль трейдера",
+    profileDescription:
+      "Управляйте личностью, операционными настройками, стилем трейдинга и персональной информацией, которую VOLTIS использует для персонализации опыта.",
+
+    accounts: "Аккаунты",
+    trades: "Сделки",
+    totalPnl: "Общий PnL",
+    winRate: "Win Rate",
+
+    lastLogin: "Последний вход",
+    lastActivity: "Последняя активность",
+    logins: "Входы",
+
+    personalInformation: "Личная информация",
+    editProfile: "Редактировать профиль",
+    profileImage: "Изображение профиля",
+    uploadAvatar: "Загрузить аватар",
+    uploadAvatarDescription:
+      "Загрузите изображение профиля в формате JPG, PNG или WEBP. Максимальный размер: 5MB.",
+    displayName: "Отображаемое имя",
+    displayNamePlaceholder: "Отображаемое имя",
+    username: "Имя пользователя",
+    usernamePlaceholder: "Имя пользователя",
+    workspaceName: "Название workspace",
+    workspaceNamePlaceholder: "Название workspace",
+    timezone: "Часовой пояс",
+    bio: "Био",
+    bioPlaceholder:
+      "Кратко опишите свой профиль трейдера...",
+
+    tradingIdentity: "Трейдинговая идентичность",
+    tradingPreferences: "Операционные настройки",
+    tradingStyle: "Стиль трейдинга",
+    selectStyle: "Выберите стиль",
+    favoriteMarket: "Любимый рынок",
+    selectMarket: "Выберите рынок",
+    preferredSession: "Предпочитаемая сессия",
+    selectSession: "Выберите сессию",
+    riskPerTrade: "Риск на сделку %",
+    preferredBroker: "Предпочитаемый брокер",
+    preferredBrokerPlaceholder: "Брокер / Prop Firm",
+    setupStyle: "Стиль сетапа",
+    setupStylePlaceholder: "Breakout, Pullback, SMC...",
+    saveProfile: "Сохранить профиль",
+
+    completion: "Заполнение",
+    profileScore: "Оценка профиля",
+    profileCompleted: "Профиль заполнен",
+
+    workspace: "Workspace",
+    accountAccess: "Доступ к аккаунтам",
+    noLinkedAccounts: "Нет подключенных аккаунтов.",
+
+    activity: "Активность",
+    recentTrades: "Последние сделки",
+    noRecentTrades: "Нет последних сделок.",
+
+    access: "Доступ",
+    securityStatus: "Статус безопасности",
+    authentication: "Аутентификация",
+    protected: "Защищено",
+    accountRole: "Роль аккаунта",
+  },
+
+  es: {
+    never: "Nunca",
+    online: "Online",
+    offline: "Offline",
+    complete: "Completo",
+    open: "Abrir",
+
+    profileCenter: "Centro de perfil",
+    traderProfile: "Perfil del trader",
+    profileDescription:
+      "Gestiona identidad, preferencias operativas, estilo de trading e información personal usada por VOLTIS para personalizar la experiencia.",
+
+    accounts: "Cuentas",
+    trades: "Trades",
+    totalPnl: "PnL total",
+    winRate: "Win Rate",
+
+    lastLogin: "Último login",
+    lastActivity: "Última actividad",
+    logins: "Logins",
+
+    personalInformation: "Información personal",
+    editProfile: "Editar perfil",
+    profileImage: "Imagen de perfil",
+    uploadAvatar: "Subir avatar",
+    uploadAvatarDescription:
+      "Sube una imagen de perfil en formato JPG, PNG o WEBP. Tamaño máximo: 5MB.",
+    displayName: "Nombre visible",
+    displayNamePlaceholder: "Nombre visible",
+    username: "Usuario",
+    usernamePlaceholder: "Usuario",
+    workspaceName: "Nombre del workspace",
+    workspaceNamePlaceholder: "Nombre del workspace",
+    timezone: "Zona horaria",
+    bio: "Bio",
+    bioPlaceholder:
+      "Describe brevemente tu perfil como trader...",
+
+    tradingIdentity: "Identidad de trading",
+    tradingPreferences: "Preferencias operativas",
+    tradingStyle: "Estilo de trading",
+    selectStyle: "Selecciona estilo",
+    favoriteMarket: "Mercado favorito",
+    selectMarket: "Selecciona mercado",
+    preferredSession: "Sesión preferida",
+    selectSession: "Selecciona sesión",
+    riskPerTrade: "Riesgo por trade %",
+    preferredBroker: "Broker preferido",
+    preferredBrokerPlaceholder: "Broker / Prop Firm",
+    setupStyle: "Estilo de setup",
+    setupStylePlaceholder: "Breakout, Pullback, SMC...",
+    saveProfile: "Guardar perfil",
+
+    completion: "Completado",
+    profileScore: "Puntuación del perfil",
+    profileCompleted: "Perfil completado",
+
+    workspace: "Workspace",
+    accountAccess: "Acceso a cuentas",
+    noLinkedAccounts: "No hay cuentas vinculadas.",
+
+    activity: "Actividad",
+    recentTrades: "Trades recientes",
+    noRecentTrades: "No hay trades recientes.",
+
+    access: "Acceso",
+    securityStatus: "Estado de seguridad",
+    authentication: "Autenticación",
+    protected: "Protegido",
+    accountRole: "Rol de cuenta",
+  },
+
+  fr: {
+    never: "Jamais",
+    online: "En ligne",
+    offline: "Hors ligne",
+    complete: "Complet",
+    open: "Ouvrir",
+
+    profileCenter: "Centre du profil",
+    traderProfile: "Profil trader",
+    profileDescription:
+      "Gérez l’identité, les préférences opérationnelles, le style de trading et les informations personnelles utilisées par VOLTIS pour personnaliser l’expérience.",
+
+    accounts: "Comptes",
+    trades: "Trades",
+    totalPnl: "PnL total",
+    winRate: "Win Rate",
+
+    lastLogin: "Dernière connexion",
+    lastActivity: "Dernière activité",
+    logins: "Connexions",
+
+    personalInformation: "Informations personnelles",
+    editProfile: "Modifier le profil",
+    profileImage: "Image de profil",
+    uploadAvatar: "Téléverser un avatar",
+    uploadAvatarDescription:
+      "Téléversez une image de profil au format JPG, PNG ou WEBP. Taille maximale : 5MB.",
+    displayName: "Nom affiché",
+    displayNamePlaceholder: "Nom affiché",
+    username: "Nom d’utilisateur",
+    usernamePlaceholder: "Nom d’utilisateur",
+    workspaceName: "Nom du workspace",
+    workspaceNamePlaceholder: "Nom du workspace",
+    timezone: "Fuseau horaire",
+    bio: "Bio",
+    bioPlaceholder:
+      "Décrivez brièvement votre profil de trader...",
+
+    tradingIdentity: "Identité de trading",
+    tradingPreferences: "Préférences opérationnelles",
+    tradingStyle: "Style de trading",
+    selectStyle: "Sélectionner un style",
+    favoriteMarket: "Marché préféré",
+    selectMarket: "Sélectionner un marché",
+    preferredSession: "Session préférée",
+    selectSession: "Sélectionner une session",
+    riskPerTrade: "Risque par trade %",
+    preferredBroker: "Broker préféré",
+    preferredBrokerPlaceholder: "Broker / Prop Firm",
+    setupStyle: "Style de setup",
+    setupStylePlaceholder: "Breakout, Pullback, SMC...",
+    saveProfile: "Enregistrer le profil",
+
+    completion: "Complétion",
+    profileScore: "Score du profil",
+    profileCompleted: "Profil complété",
+
+    workspace: "Workspace",
+    accountAccess: "Accès aux comptes",
+    noLinkedAccounts: "Aucun compte lié.",
+
+    activity: "Activité",
+    recentTrades: "Trades récents",
+    noRecentTrades: "Aucun trade récent.",
+
+    access: "Accès",
+    securityStatus: "Statut de sécurité",
+    authentication: "Authentification",
+    protected: "Protégé",
+    accountRole: "Rôle du compte",
+  },
+
+  de: {
+    never: "Nie",
+    online: "Online",
+    offline: "Offline",
+    complete: "Vollständig",
+    open: "Öffnen",
+
+    profileCenter: "Profil-Center",
+    traderProfile: "Trader-Profil",
+    profileDescription:
+      "Verwalte Identität, operative Präferenzen, Trading-Stil und persönliche Informationen, die VOLTIS zur Personalisierung der Erfahrung nutzt.",
+
+    accounts: "Konten",
+    trades: "Trades",
+    totalPnl: "Gesamt-PnL",
+    winRate: "Win Rate",
+
+    lastLogin: "Letzter Login",
+    lastActivity: "Letzte Aktivität",
+    logins: "Logins",
+
+    personalInformation: "Persönliche Informationen",
+    editProfile: "Profil bearbeiten",
+    profileImage: "Profilbild",
+    uploadAvatar: "Avatar hochladen",
+    uploadAvatarDescription:
+      "Lade ein Profilbild im JPG-, PNG- oder WEBP-Format hoch. Maximale Größe: 5MB.",
+    displayName: "Anzeigename",
+    displayNamePlaceholder: "Anzeigename",
+    username: "Benutzername",
+    usernamePlaceholder: "Benutzername",
+    workspaceName: "Workspace-Name",
+    workspaceNamePlaceholder: "Workspace-Name",
+    timezone: "Zeitzone",
+    bio: "Bio",
+    bioPlaceholder:
+      "Beschreibe kurz dein Trader-Profil...",
+
+    tradingIdentity: "Trading-Identität",
+    tradingPreferences: "Operative Präferenzen",
+    tradingStyle: "Trading-Stil",
+    selectStyle: "Stil auswählen",
+    favoriteMarket: "Bevorzugter Markt",
+    selectMarket: "Markt auswählen",
+    preferredSession: "Bevorzugte Session",
+    selectSession: "Session auswählen",
+    riskPerTrade: "Risiko pro Trade %",
+    preferredBroker: "Bevorzugter Broker",
+    preferredBrokerPlaceholder: "Broker / Prop Firm",
+    setupStyle: "Setup-Stil",
+    setupStylePlaceholder: "Breakout, Pullback, SMC...",
+    saveProfile: "Profil speichern",
+
+    completion: "Vollständigkeit",
+    profileScore: "Profil-Score",
+    profileCompleted: "Profil vervollständigt",
+
+    workspace: "Workspace",
+    accountAccess: "Kontozugriff",
+    noLinkedAccounts: "Keine verknüpften Konten.",
+
+    activity: "Aktivität",
+    recentTrades: "Aktuelle Trades",
+    noRecentTrades: "Keine aktuellen Trades.",
+
+    access: "Zugriff",
+    securityStatus: "Sicherheitsstatus",
+    authentication: "Authentifizierung",
+    protected: "Geschützt",
+    accountRole: "Kontorolle",
+  },
+};
 
 function getInitials(name: string) {
   return name
@@ -95,6 +663,10 @@ export default async function ProfilePage({
     redirect("/login");
   }
 
+  const appLanguage = normalizeAppLanguage(user.appLanguage);
+  const t = labels[appLanguage];
+  const currency = user.defaultCurrency ?? "USD";
+
   const displayName = user.name || user.username;
   const initials = getInitials(displayName);
 
@@ -116,14 +688,6 @@ export default async function ProfilePage({
 
   const wins = allTrades.filter(
     (trade) => trade.outcome === "win"
-  ).length;
-
-  const losses = allTrades.filter(
-    (trade) => trade.outcome === "loss"
-  ).length;
-
-  const breakEven = allTrades.filter(
-    (trade) => trade.outcome === "be"
   ).length;
 
   const winRate =
@@ -153,21 +717,45 @@ export default async function ProfilePage({
     100
   );
 
+  const formatCurrency = (value: number) =>
+    formatCurrencyByLanguage(
+      value,
+      currency,
+      appLanguage
+    );
+
+  const formatDateTime = (date?: Date | null) => {
+    if (!date) {
+      return t.never;
+    }
+
+    return formatDateTimeByLanguage(
+      date,
+      appLanguage
+    );
+  };
+
+  const formatShortDate = (date: Date) =>
+    formatDateByLanguage(
+      date,
+      appLanguage
+    );
+
   const statCards = [
     {
-      label: "Accounts",
+      label: t.accounts,
       value: totalAccounts,
       tone: "text-white",
       icon: Wallet,
     },
     {
-      label: "Trades",
+      label: t.trades,
       value: totalTrades,
       tone: "text-white",
       icon: LineChart,
     },
     {
-      label: "Total PnL",
+      label: t.totalPnl,
       value: formatCurrency(totalPnl),
       tone:
         totalPnl >= 0
@@ -176,7 +764,7 @@ export default async function ProfilePage({
       icon: TrendingUp,
     },
     {
-      label: "Win Rate",
+      label: t.winRate,
       value: `${winRate.toFixed(2)}%`,
       tone:
         winRate >= 50
@@ -192,16 +780,16 @@ export default async function ProfilePage({
 
       <div className="mb-8">
         <p className="text-sm text-green-400">
-          Profile Center
+          {t.profileCenter}
         </p>
 
         <h1 className="mt-2 flex items-center gap-3 text-3xl font-bold sm:text-4xl">
           <User className="text-green-400" />
-          Trader Profile
+          {t.traderProfile}
         </h1>
 
         <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-400">
-          Gestisci identità, preferenze operative, stile di trading e informazioni personali usate da VOLTIS per personalizzare l’esperienza.
+          {t.profileDescription}
         </p>
       </div>
 
@@ -231,11 +819,11 @@ export default async function ProfilePage({
 
                 <span
                   className={`rounded-xl px-3 py-1 text-xs font-black uppercase tracking-[0.16em] ${online
-                    ? "bg-green-500/10 text-green-400"
-                    : "bg-white/10 text-gray-400"
+                      ? "bg-green-500/10 text-green-400"
+                      : "bg-white/10 text-gray-400"
                     }`}
                 >
-                  {online ? "Online" : "Offline"}
+                  {online ? t.online : t.offline}
                 </span>
               </div>
 
@@ -249,7 +837,7 @@ export default async function ProfilePage({
                 </span>
 
                 <span className="rounded-xl bg-green-500/10 px-3 py-1 text-xs font-bold text-green-400">
-                  {profileCompletion}% Complete
+                  {profileCompletion}% {t.complete}
                 </span>
               </div>
             </div>
@@ -258,27 +846,27 @@ export default async function ProfilePage({
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:w-[520px]">
             <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
               <p className="text-xs text-gray-500">
-                Last Login
+                {t.lastLogin}
               </p>
 
               <h3 className="mt-2 text-sm font-bold text-white">
-                {formatDate(user.lastLoginAt)}
+                {formatDateTime(user.lastLoginAt)}
               </h3>
             </div>
 
             <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
               <p className="text-xs text-gray-500">
-                Last Activity
+                {t.lastActivity}
               </p>
 
               <h3 className="mt-2 text-sm font-bold text-white">
-                {formatDate(user.lastActivityAt)}
+                {formatDateTime(user.lastActivityAt)}
               </h3>
             </div>
 
             <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
               <p className="text-xs text-gray-500">
-                Logins
+                {t.logins}
               </p>
 
               <h3 className="mt-2 text-sm font-bold text-white">
@@ -321,24 +909,24 @@ export default async function ProfilePage({
         >
           <div className="mb-6">
             <p className="text-sm text-gray-400">
-              Personal Information
+              {t.personalInformation}
             </p>
 
             <h2 className="mt-1 text-2xl font-bold">
-              Edit Profile
+              {t.editProfile}
             </h2>
 
             <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-5">
               <p className="text-sm text-gray-400">
-                Profile Image
+                {t.profileImage}
               </p>
 
               <h3 className="mt-2 text-lg font-bold">
-                Upload avatar
+                {t.uploadAvatar}
               </h3>
 
               <p className="mt-2 text-sm text-gray-500">
-                Carica un’immagine profilo in formato JPG, PNG o WEBP. Dimensione massima: 5MB.
+                {t.uploadAvatarDescription}
               </p>
 
               <input
@@ -353,26 +941,26 @@ export default async function ProfilePage({
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
               <p className="mb-2 text-sm text-gray-400">
-                Display Name
+                {t.displayName}
               </p>
 
               <input
                 name="name"
                 defaultValue={user.name || ""}
-                placeholder="Nome visualizzato"
+                placeholder={t.displayNamePlaceholder}
                 className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
               />
             </div>
 
             <div>
               <p className="mb-2 text-sm text-gray-400">
-                Username
+                {t.username}
               </p>
 
               <input
                 name="username"
                 defaultValue={user.username}
-                placeholder="Username"
+                placeholder={t.usernamePlaceholder}
                 className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
                 required
               />
@@ -380,20 +968,20 @@ export default async function ProfilePage({
 
             <div>
               <p className="mb-2 text-sm text-gray-400">
-                Workspace Name
+                {t.workspaceName}
               </p>
 
               <input
                 name="workspaceName"
                 defaultValue={user.workspaceName || ""}
-                placeholder="Nome workspace"
+                placeholder={t.workspaceNamePlaceholder}
                 className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
               />
             </div>
 
             <div>
               <p className="mb-2 text-sm text-gray-400">
-                Timezone
+                {t.timezone}
               </p>
 
               <input
@@ -406,13 +994,13 @@ export default async function ProfilePage({
 
             <div className="md:col-span-2">
               <p className="mb-2 text-sm text-gray-400">
-                Bio
+                {t.bio}
               </p>
 
               <textarea
                 name="bio"
                 defaultValue={user.bio || ""}
-                placeholder="Descrivi brevemente il tuo profilo da trader..."
+                placeholder={t.bioPlaceholder}
                 className="min-h-[120px] w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
               />
             </div>
@@ -420,18 +1008,18 @@ export default async function ProfilePage({
 
           <div className="mt-8">
             <p className="text-sm text-gray-400">
-              Trading Identity
+              {t.tradingIdentity}
             </p>
 
             <h2 className="mt-1 text-2xl font-bold">
-              Trading Preferences
+              {t.tradingPreferences}
             </h2>
           </div>
 
           <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
               <p className="mb-2 text-sm text-gray-400">
-                Trading Style
+                {t.tradingStyle}
               </p>
 
               <select
@@ -440,7 +1028,7 @@ export default async function ProfilePage({
                 className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
               >
                 <option value="">
-                  Seleziona stile
+                  {t.selectStyle}
                 </option>
 
                 <option value="Scalping">
@@ -463,7 +1051,7 @@ export default async function ProfilePage({
 
             <div>
               <p className="mb-2 text-sm text-gray-400">
-                Favorite Market
+                {t.favoriteMarket}
               </p>
 
               <select
@@ -472,7 +1060,7 @@ export default async function ProfilePage({
                 className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
               >
                 <option value="">
-                  Seleziona mercato
+                  {t.selectMarket}
                 </option>
 
                 <option value="Forex">
@@ -499,7 +1087,7 @@ export default async function ProfilePage({
 
             <div>
               <p className="mb-2 text-sm text-gray-400">
-                Preferred Session
+                {t.preferredSession}
               </p>
 
               <select
@@ -508,7 +1096,7 @@ export default async function ProfilePage({
                 className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
               >
                 <option value="">
-                  Seleziona sessione
+                  {t.selectSession}
                 </option>
 
                 <option value="Asia">
@@ -531,7 +1119,7 @@ export default async function ProfilePage({
 
             <div>
               <p className="mb-2 text-sm text-gray-400">
-                Risk Per Trade %
+                {t.riskPerTrade}
               </p>
 
               <input
@@ -546,26 +1134,26 @@ export default async function ProfilePage({
 
             <div>
               <p className="mb-2 text-sm text-gray-400">
-                Preferred Broker
+                {t.preferredBroker}
               </p>
 
               <input
                 name="preferredBroker"
                 defaultValue={user.preferredBroker || ""}
-                placeholder="Broker / Prop Firm"
+                placeholder={t.preferredBrokerPlaceholder}
                 className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
               />
             </div>
 
             <div>
               <p className="mb-2 text-sm text-gray-400">
-                Setup Style
+                {t.setupStyle}
               </p>
 
               <input
                 name="setupStyle"
                 defaultValue={user.setupStyle || ""}
-                placeholder="Breakout, Pullback, SMC..."
+                placeholder={t.setupStylePlaceholder}
                 className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
               />
             </div>
@@ -575,7 +1163,7 @@ export default async function ProfilePage({
             type="submit"
             className="mt-6 rounded-2xl bg-green-500 px-6 py-4 font-bold text-black transition hover:bg-green-400"
           >
-            Save Profile
+            {t.saveProfile}
           </button>
         </form>
 
@@ -589,18 +1177,18 @@ export default async function ProfilePage({
 
               <div>
                 <p className="text-sm text-gray-400">
-                  Completion
+                  {t.completion}
                 </p>
 
                 <h2 className="text-2xl font-bold">
-                  Profile Score
+                  {t.profileScore}
                 </h2>
               </div>
             </div>
 
             <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
               <p className="text-sm text-gray-400">
-                Profile completed
+                {t.profileCompleted}
               </p>
 
               <h3 className="mt-2 text-4xl font-black text-green-400">
@@ -627,11 +1215,11 @@ export default async function ProfilePage({
 
               <div>
                 <p className="text-sm text-gray-400">
-                  Workspace
+                  {t.workspace}
                 </p>
 
                 <h2 className="text-2xl font-bold">
-                  Account Access
+                  {t.accountAccess}
                 </h2>
               </div>
             </div>
@@ -656,14 +1244,14 @@ export default async function ProfilePage({
                       </div>
 
                       <span className="rounded-xl bg-white/10 px-3 py-1 text-xs font-bold text-gray-300">
-                        Open
+                        {t.open}
                       </span>
                     </div>
                   </Link>
                 ))
               ) : (
                 <div className="rounded-2xl border border-white/10 bg-black/20 p-5 text-sm text-gray-400">
-                  Nessun account collegato.
+                  {t.noLinkedAccounts}
                 </div>
               )}
             </div>
@@ -678,11 +1266,11 @@ export default async function ProfilePage({
 
               <div>
                 <p className="text-sm text-gray-400">
-                  Activity
+                  {t.activity}
                 </p>
 
                 <h2 className="text-2xl font-bold">
-                  Recent Trades
+                  {t.recentTrades}
                 </h2>
               </div>
             </div>
@@ -701,14 +1289,14 @@ export default async function ProfilePage({
                         </p>
 
                         <p className="mt-1 text-xs text-gray-500">
-                          {new Date(trade.openDate).toLocaleDateString("it-IT")}
+                          {formatShortDate(trade.openDate)}
                         </p>
                       </div>
 
                       <span
                         className={`rounded-xl px-3 py-1 text-xs font-bold ${(trade.resultUsd || 0) >= 0
-                          ? "bg-green-500/10 text-green-400"
-                          : "bg-red-500/10 text-red-400"
+                            ? "bg-green-500/10 text-green-400"
+                            : "bg-red-500/10 text-red-400"
                           }`}
                       >
                         {formatCurrency(trade.resultUsd || 0)}
@@ -718,7 +1306,7 @@ export default async function ProfilePage({
                 ))
               ) : (
                 <div className="rounded-2xl border border-white/10 bg-black/20 p-5 text-sm text-gray-400">
-                  Nessun trade recente.
+                  {t.noRecentTrades}
                 </div>
               )}
             </div>
@@ -733,11 +1321,11 @@ export default async function ProfilePage({
 
               <div>
                 <p className="text-sm text-gray-400">
-                  Access
+                  {t.access}
                 </p>
 
                 <h2 className="text-2xl font-bold">
-                  Security Status
+                  {t.securityStatus}
                 </h2>
               </div>
             </div>
@@ -745,17 +1333,17 @@ export default async function ProfilePage({
             <div className="space-y-3">
               <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                 <p className="text-sm text-gray-400">
-                  Authentication
+                  {t.authentication}
                 </p>
 
                 <h3 className="mt-1 font-bold text-white">
-                  Protected
+                  {t.protected}
                 </h3>
               </div>
 
               <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                 <p className="text-sm text-gray-400">
-                  Account Role
+                  {t.accountRole}
                 </p>
 
                 <h3 className="mt-1 font-bold text-white">

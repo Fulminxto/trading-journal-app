@@ -12,6 +12,12 @@ import {
   updateUserPermissions,
 } from "./actions";
 
+import {
+  formatAdminDate,
+  formatAdminDateTime,
+  getAdminI18n,
+} from "./AdminI18n";
+
 export default async function AdminPage() {
   const session = await auth();
 
@@ -28,6 +34,10 @@ export default async function AdminPage() {
   if (!currentUser || currentUser.role !== "FOUNDER") {
     redirect("/accounts");
   }
+
+  const { language, t } = getAdminI18n(
+    currentUser.appLanguage
+  );
 
   const users = await prisma.user.findMany({
     include: {
@@ -46,11 +56,11 @@ export default async function AdminPage() {
     <div>
       <div className="mb-10">
         <p className="text-sm text-gray-400">
-          Platform control
+          {t.platformControl}
         </p>
 
         <h1 className="mt-2 text-4xl font-bold">
-          Admin Panel
+          {t.adminPanel}
         </h1>
       </div>
 
@@ -60,7 +70,7 @@ export default async function AdminPage() {
       >
         <input
           name="username"
-          placeholder="Username"
+          placeholder={t.username}
           className="rounded-xl bg-zinc-900 p-3"
           required
         />
@@ -68,21 +78,21 @@ export default async function AdminPage() {
         <input
           name="password"
           type="password"
-          placeholder="Password"
+          placeholder={t.password}
           className="rounded-xl bg-zinc-900 p-3"
           required
         />
 
         <input
           name="name"
-          placeholder="Nome"
+          placeholder={t.name}
           className="rounded-xl bg-zinc-900 p-3"
         />
 
         <select
           name="role"
           defaultValue="MEMBER"
-          aria-label="New user role"
+          aria-label={t.newUserRole}
           className="rounded-xl bg-zinc-900 p-3"
         >
           <option value="MEMBER">MEMBER</option>
@@ -95,7 +105,7 @@ export default async function AdminPage() {
           type="submit"
           className="rounded-xl bg-green-500 p-3 font-bold text-black md:col-span-4"
         >
-          Create User
+          {t.createUser}
         </button>
       </form>
 
@@ -130,54 +140,66 @@ export default async function AdminPage() {
 
                     {isOnline ? (
                       <span className="rounded-xl bg-green-500/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] text-green-400">
-                        Online
+                        {t.online}
                       </span>
                     ) : (
                       <span className="rounded-xl bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] text-gray-400">
-                        Offline
+                        {t.offline}
                       </span>
                     )}
 
                     {isFrozen && (
                       <span className="rounded-xl bg-yellow-500/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] text-yellow-300">
-                        Frozen
+                        {t.frozen}
                       </span>
                     )}
                   </div>
 
                   <p className="mt-1 text-sm text-gray-400">
-                    {user.name || "No name"}
+                    {user.name || t.noName}
                   </p>
 
                   <p className="mt-2 text-xs text-gray-500">
-                    Created:{" "}
-                    {new Date(user.createdAt).toLocaleDateString("it-IT")}
+                    {t.created}:{" "}
+                    {formatAdminDate(
+                      user.createdAt,
+                      language
+                    )}
                   </p>
 
                   {user.loginCount > 0 && (
                     <p className="mt-1 text-xs text-gray-500">
-                      Logins: {user.loginCount}
+                      {t.logins}: {user.loginCount}
                     </p>
                   )}
 
                   {user.lastLoginAt && (
                     <p className="mt-1 text-xs text-gray-500">
-                      Last login:{" "}
-                      {new Date(user.lastLoginAt).toLocaleString("it-IT")}
+                      {t.lastLogin}:{" "}
+                      {formatAdminDateTime(
+                        user.lastLoginAt,
+                        language
+                      )}
                     </p>
                   )}
 
                   {user.lastActivityAt && (
                     <p className="mt-1 text-xs text-gray-500">
-                      Last activity:{" "}
-                      {new Date(user.lastActivityAt).toLocaleString("it-IT")}
+                      {t.lastActivity}:{" "}
+                      {formatAdminDateTime(
+                        user.lastActivityAt,
+                        language
+                      )}
                     </p>
                   )}
 
                   {user.lastSeenAt && (
                     <p className="mt-1 text-xs text-gray-500">
-                      Last seen:{" "}
-                      {new Date(user.lastSeenAt).toLocaleString("it-IT")}
+                      {t.lastSeen}:{" "}
+                      {formatAdminDateTime(
+                        user.lastSeenAt,
+                        language
+                      )}
                     </p>
                   )}
                 </div>
@@ -185,7 +207,7 @@ export default async function AdminPage() {
                 <div className="flex flex-col gap-3">
                   {isSelfFounder ? (
                     <div className="rounded-xl bg-green-500/10 px-4 py-2 text-sm font-semibold text-green-400">
-                      FOUNDER · System Admin
+                      {t.founderSystemAdmin}
                     </div>
                   ) : (
                     <form
@@ -201,7 +223,7 @@ export default async function AdminPage() {
                       <select
                         name="role"
                         defaultValue={user.role}
-                        aria-label="User role"
+                        aria-label={t.userRole}
                         className="rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-sm"
                       >
                         <option value="FOUNDER">FOUNDER</option>
@@ -214,7 +236,7 @@ export default async function AdminPage() {
                         type="submit"
                         className="rounded-xl bg-green-500/10 px-3 py-2 text-sm font-semibold text-green-400 hover:bg-green-500/20"
                       >
-                        Save
+                        {t.save}
                       </button>
                     </form>
                   )}
@@ -234,7 +256,7 @@ export default async function AdminPage() {
                               type="submit"
                               className="rounded-xl bg-green-500/10 px-3 py-2 text-sm font-semibold text-green-400 hover:bg-green-500/20"
                             >
-                              Unfreeze
+                              {t.unfreeze}
                             </button>
                           </form>
                         ) : (
@@ -249,7 +271,7 @@ export default async function AdminPage() {
                               type="submit"
                               className="rounded-xl bg-yellow-500/10 px-3 py-2 text-sm font-semibold text-yellow-300 hover:bg-yellow-500/20"
                             >
-                              Freeze
+                              {t.freeze}
                             </button>
                           </form>
                         )}
@@ -265,7 +287,7 @@ export default async function AdminPage() {
                             type="submit"
                             className="rounded-xl bg-red-500/10 px-3 py-2 text-sm font-semibold text-red-400 hover:bg-red-500/20"
                           >
-                            Delete
+                            {t.delete}
                           </button>
                         </form>
                       </>
@@ -286,7 +308,7 @@ export default async function AdminPage() {
                   />
 
                   <p className="mb-3 text-sm font-semibold text-gray-300">
-                    Global Permissions
+                    {t.globalPermissions}
                   </p>
 
                   <div className="grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
@@ -296,7 +318,7 @@ export default async function AdminPage() {
                         name="canCreatePersonalAccounts"
                         defaultChecked={user.canCreatePersonalAccounts}
                       />
-                      Create Personal Accounts
+                      {t.createPersonalAccounts}
                     </label>
 
                     <label className="flex items-center gap-2 text-sm">
@@ -305,7 +327,7 @@ export default async function AdminPage() {
                         name="canCreateSharedAccounts"
                         defaultChecked={user.canCreateSharedAccounts}
                       />
-                      Create Shared Accounts
+                      {t.createSharedAccounts}
                     </label>
 
                     <label className="flex items-center gap-2 text-sm">
@@ -314,7 +336,7 @@ export default async function AdminPage() {
                         name="canArchiveOwnAccounts"
                         defaultChecked={user.canArchiveOwnAccounts}
                       />
-                      Archive Own Accounts
+                      {t.archiveOwnAccounts}
                     </label>
 
                     <label className="flex items-center gap-2 text-sm">
@@ -323,7 +345,7 @@ export default async function AdminPage() {
                         name="canDeleteOwnAccounts"
                         defaultChecked={user.canDeleteOwnAccounts}
                       />
-                      Delete Own Accounts
+                      {t.deleteOwnAccounts}
                     </label>
 
                     <label className="flex items-center gap-2 text-sm">
@@ -332,7 +354,7 @@ export default async function AdminPage() {
                         name="canUseCopilot"
                         defaultChecked={user.canUseCopilot}
                       />
-                      Use Copilot
+                      {t.useCopilot}
                     </label>
 
                     <label className="flex items-center gap-2 text-sm">
@@ -341,7 +363,7 @@ export default async function AdminPage() {
                         name="canViewAnalytics"
                         defaultChecked={user.canViewAnalytics}
                       />
-                      View Analytics
+                      {t.viewAnalytics}
                     </label>
 
                     <label className="flex items-center gap-2 text-sm">
@@ -350,7 +372,7 @@ export default async function AdminPage() {
                         name="canViewReports"
                         defaultChecked={user.canViewReports}
                       />
-                      View Reports
+                      {t.viewReports}
                     </label>
 
                     <label className="flex items-center gap-2 text-sm">
@@ -359,7 +381,7 @@ export default async function AdminPage() {
                         name="canManageUsers"
                         defaultChecked={user.canManageUsers}
                       />
-                      Manage Users
+                      {t.manageUsers}
                     </label>
 
                     <label className="flex items-center gap-2 text-sm">
@@ -368,7 +390,7 @@ export default async function AdminPage() {
                         name="canManageSystem"
                         defaultChecked={user.canManageSystem}
                       />
-                      Manage System
+                      {t.manageSystem}
                     </label>
                   </div>
 
@@ -376,7 +398,7 @@ export default async function AdminPage() {
                     type="submit"
                     className="mt-4 rounded-xl bg-blue-500/10 px-4 py-2 text-sm font-semibold text-blue-400 hover:bg-blue-500/20"
                   >
-                    Save Permissions
+                    {t.savePermissions}
                   </button>
                 </form>
               )}
@@ -394,7 +416,7 @@ export default async function AdminPage() {
                 <input
                   name="password"
                   type="password"
-                  placeholder="Nuova password"
+                  placeholder={t.newPassword}
                   className="rounded-xl bg-zinc-900 p-3"
                   required
                 />
@@ -403,14 +425,14 @@ export default async function AdminPage() {
                   type="submit"
                   className="rounded-xl bg-white/10 px-4 py-3 text-sm font-semibold hover:bg-white/20"
                 >
-                  Reset Password
+                  {t.resetPassword}
                 </button>
               </form>
 
               {user.memberships.length > 0 && (
                 <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4">
                   <p className="mb-3 text-sm font-semibold text-gray-300">
-                    Account Memberships
+                    {t.accountMemberships}
                   </p>
 
                   <div className="flex flex-wrap gap-2">
@@ -419,7 +441,8 @@ export default async function AdminPage() {
                         key={membership.id}
                         className="rounded-xl bg-white/10 px-3 py-2 text-xs text-gray-300"
                       >
-                        {membership.tradingAccount.name} · {membership.role}
+                        {membership.tradingAccount.name} ·{" "}
+                        {membership.role}
                       </div>
                     ))}
                   </div>
