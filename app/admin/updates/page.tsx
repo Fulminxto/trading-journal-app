@@ -1,4 +1,4 @@
-import {
+﻿import {
   Megaphone,
   Wrench,
   Sparkles,
@@ -40,7 +40,7 @@ export default async function AdminUpdatesPage({
 
   if (
     !user ||
-    (user.role !== "MANAGER" &&
+    (user.role !== "FOUNDER" &&
       user.role !== "ADMIN")
   ) {
     redirect("/");
@@ -251,3 +251,4 @@ export default async function AdminUpdatesPage({
     </>
   );
 }
+

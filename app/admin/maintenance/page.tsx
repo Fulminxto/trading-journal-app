@@ -1,4 +1,4 @@
-import {
+﻿import {
   ShieldAlert,
   AlertTriangle,
   Wrench,
@@ -35,7 +35,7 @@ export default async function MaintenancePage({
 
   if (
     !user ||
-    (user.role !== "MANAGER" &&
+    (user.role !== "FOUNDER" &&
       user.role !== "ADMIN")
   ) {
     redirect("/");
@@ -201,3 +201,4 @@ export default async function MaintenancePage({
     </>
   );
 }
+
