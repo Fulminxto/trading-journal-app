@@ -1925,6 +1925,7 @@ export default async function AnalyticsPage({
         )}
         profitFactor={profitFactor.toFixed(2)}
         bestWinStreak={bestWinStreak}
+        appLanguage={language}
       />
 
       <PerformanceInsights
@@ -1932,12 +1933,14 @@ export default async function AnalyticsPage({
         averageRR={averageRR}
         totalPnl={totalPnl}
         bestSymbol={bestSymbol?.[0]}
+        appLanguage={language}
       />
 
       <div className="mt-8">
         <WeekdayHeatmap
           data={weekdayHeatmapData}
-        />
+        appLanguage={language}
+      />
       </div>
 
       <div className="mt-8">
@@ -1955,25 +1958,29 @@ export default async function AnalyticsPage({
       <div className="mt-8">
         <ExecutionQualityHeatmap
           data={executionHeatmapData}
-        />
+        appLanguage={language}
+      />
       </div>
 
       <div className="mt-8">
         <SetupQualityHeatmap
           data={setupHeatmapData}
-        />
+        appLanguage={language}
+      />
       </div>
 
       <div className="mt-8">
         <BehavioralRiskHeatmap
           data={behavioralRiskHeatmapData}
-        />
+        appLanguage={language}
+      />
       </div>
 
       <div className="mt-8">
         <RiskConcentrationMatrix
           risks={riskConcentrationData}
-        />
+        appLanguage={language}
+      />
       </div>
 
       <div className="mt-8">
@@ -2042,6 +2049,7 @@ export default async function AnalyticsPage({
             ) / Math.max(trades.length, 1)
           )
         }
+        appLanguage={language}
       />
 
       <div className="grid grid-cols-1 gap-8 xl:grid-cols-2">
@@ -2051,7 +2059,8 @@ export default async function AnalyticsPage({
           mostTraded={mostTraded}
           currency={account.currency}
           formatCurrency={formatCurrency}
-        />
+        appLanguage={language}
+      />
       </div>
 
       <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
@@ -2182,7 +2191,8 @@ export default async function AnalyticsPage({
                 trade.session === "Asian"
             ).length
           }
-        />
+        appLanguage={language}
+      />
       </div>
 
       <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
@@ -2718,6 +2728,9 @@ export default async function AnalyticsPage({
     </div>
   );
 }
+
+
+
 
 
 
