@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DIRECT_URL")
 }
 
 enum Role {
@@ -66,7 +67,7 @@ model User {
 
   defaultCurrency    String   @default("USD")
 
-  appLanguage     String @default("it")
+  appLanguage     String @default("en")
   themePreference String @default("dark")
   accentColor     String @default("green")
   appIconVariant  String @default("classic")
