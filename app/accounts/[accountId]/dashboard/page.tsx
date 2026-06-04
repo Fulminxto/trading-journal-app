@@ -1200,7 +1200,7 @@ export default async function DashboardPage({
           </div>
 
           {chartData.length > 0 ? (
-            <EquityChart data={chartData} />
+            <EquityChart data={chartData} language={language} />
           ) : (
             <div className="flex min-h-[260px] items-center justify-center rounded-2xl border border-dashed border-white/10 bg-black/10 p-8 text-center text-sm text-gray-400">
               {t.noTradesEquity}

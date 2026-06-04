@@ -913,7 +913,7 @@ export default async function EquityPage({
 
           {chartData.length > 0 ? (
             <div className="min-w-0">
-              <EquityChart data={chartData} />
+              <EquityChart data={chartData} language={language} />
             </div>
           ) : (
             <div className="flex min-h-[280px] items-center justify-center rounded-2xl border border-dashed border-white/10 bg-black/20 p-8 text-center text-sm leading-6 text-gray-400">

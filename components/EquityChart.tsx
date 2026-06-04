@@ -12,6 +12,11 @@ import {
 } from "recharts";
 
 import EmptyState from "@/components/EmptyState";
+import {
+  formatCurrencyByLanguage,
+  normalizeAppLanguage,
+  type AppLanguage,
+} from "@/lib/i18n";
 
 type EquityPoint = {
   date: string;
@@ -20,16 +25,23 @@ type EquityPoint = {
 
 type Props = {
   data: EquityPoint[];
+  language?: string;
 };
 
-function formatMoney(value: number) {
-  return `$${value.toLocaleString("en-US", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
-}
+const tooltipLabels: Record<
+  AppLanguage,
+  { equity: string; date: string }
+> = {
+  en: { equity: "Equity", date: "Date:" },
+  it: { equity: "Equity", date: "Data:" },
+  uk: { equity: "Equity", date: "Дата:" },
+  ru: { equity: "Equity", date: "Дата:" },
+  es: { equity: "Equity", date: "Fecha:" },
+  fr: { equity: "Equity", date: "Date :" },
+  de: { equity: "Equity", date: "Datum:" },
+};
 
-export default function EquityChart({ data }: Props) {
+export default function EquityChart({ data, language }: Props) {
   const hasData = data.length > 0;
 
   if (!hasData) {
@@ -44,6 +56,9 @@ export default function EquityChart({ data }: Props) {
   const firstEquity = data[0]?.equity || 0;
   const lastEquity = data[data.length - 1]?.equity || 0;
   const isPositive = lastEquity >= firstEquity;
+
+  const lang = normalizeAppLanguage(language);
+  const tl = tooltipLabels[lang];
 
   const mainColor = isPositive ? "#22c55e" : "#ef4444";
   const glowColor = isPositive
@@ -107,7 +122,7 @@ export default function EquityChart({ data }: Props) {
             axisLine={false}
             width={82}
             tickFormatter={(value) =>
-              formatMoney(Number(value))
+              formatCurrencyByLanguage(Number(value), "USD", lang)
             }
           />
 
@@ -117,10 +132,10 @@ export default function EquityChart({ data }: Props) {
               strokeWidth: 1,
             }}
             formatter={(value) => [
-              formatMoney(Number(value)),
-              "Equity",
+              formatCurrencyByLanguage(Number(value), "USD", lang),
+              tl.equity,
             ]}
-            labelFormatter={(label) => `Date: ${label}`}
+            labelFormatter={(label) => `${tl.date} ${label}`}
             contentStyle={{
               backgroundColor: "rgba(7,11,20,0.94)",
               border: "1px solid rgba(255,255,255,0.12)",
