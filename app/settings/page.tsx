@@ -780,7 +780,7 @@ export default async function SettingsPage({
   return (
     <div className="space-y-10">
       <SettingsHardRefresh />
-      <GlobalToast status={query.toast} />
+      <GlobalToast status={query.toast} language={language} />
 
       <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,197,94,0.14),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(34,211,238,0.08),transparent_35%)]" />
