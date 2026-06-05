@@ -40,21 +40,21 @@ const labels: Record<AppLanguage, Labels> = {
   },
   uk: {
     eyebrow: "Execution Pattern Engine",
-    title: "Поведінкові patterns",
+    title: "Поведінкові патерни",
     lowConfidence: "Низька confidence",
     weakSetups: "Слабкі setups",
-    impulsiveTrades: "Імпульсивні trades",
+    impulsiveTrades: "Імпульсивні угоди",
     description:
-      "Цей блок визначає patterns низької confidence, слабких setups та імпульсивної торгівлі, щоб покращити дисципліну прийняття рішень.",
+      "Цей блок визначає патерни низької confidence, слабких setups та імпульсивної торгівлі, щоб покращити дисципліну прийняття рішень.",
   },
   ru: {
     eyebrow: "Execution Pattern Engine",
-    title: "Поведенческие patterns",
+    title: "Поведенческие паттерны",
     lowConfidence: "Низкая confidence",
     weakSetups: "Слабые setups",
-    impulsiveTrades: "Импульсивные trades",
+    impulsiveTrades: "Импульсивные сделки",
     description:
-      "Этот блок определяет patterns низкой confidence, слабых setups и импульсивной торговли, чтобы улучшить дисциплину принятия решений.",
+      "Этот блок определяет паттерны низкой confidence, слабых setups и импульсивной торговли, чтобы улучшить дисциплину принятия решений.",
   },
   es: {
     eyebrow: "Execution Pattern Engine",

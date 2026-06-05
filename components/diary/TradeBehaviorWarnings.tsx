@@ -44,24 +44,24 @@ const labels: Record<string, Labels> = {
   uk: {
     eyebrow: "Behavior Intelligence",
     title: "Trade Behavior Warnings",
-    warningsActive: "Активні warning",
+    warningsActive: "Активні попередження",
     stable: "Стабільно",
     weakExecution: "Слабке execution",
-    emotionalTrades: "Емоційні trade",
+    emotionalTrades: "Емоційні угоди",
     highQuality: "Висока якість",
     description:
-      "VOLTIS відстежує емоційні trade, слабке execution та якість setup, щоб знаходити behavioral patterns, які можуть погіршити performance.",
+      "VOLTIS відстежує емоційні угоди, слабке execution та якість setup, щоб знаходити поведінкові патерни, які можуть погіршити performance.",
   },
   ru: {
     eyebrow: "Behavior Intelligence",
     title: "Trade Behavior Warnings",
-    warningsActive: "Активные warning",
+    warningsActive: "Активные предупреждения",
     stable: "Стабильно",
     weakExecution: "Слабое execution",
-    emotionalTrades: "Эмоциональные trade",
+    emotionalTrades: "Эмоциональные сделки",
     highQuality: "Высокое качество",
     description:
-      "VOLTIS отслеживает эмоциональные trade, слабое execution и качество setup, чтобы находить behavioral patterns, которые могут ухудшить performance.",
+      "VOLTIS отслеживает эмоциональные сделки, слабое execution и качество setup, чтобы находить поведенческие паттерны, которые могут ухудшить performance.",
   },
   es: {
     eyebrow: "Behavior Intelligence",
