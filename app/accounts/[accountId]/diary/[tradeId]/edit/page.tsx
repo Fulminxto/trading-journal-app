@@ -348,7 +348,7 @@ export default async function EditTradePage({
   }
 
   const isManager =
-    String(membership.role) === "MANAGER";
+    membership.role === "MANAGER";
 
   const canEditTrades =
     isManager || membership.canEditTrades;

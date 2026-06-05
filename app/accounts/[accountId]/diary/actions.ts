@@ -161,7 +161,7 @@ async function getAccess(
   }
 
   const isManager =
-    String(membership.role) === "MANAGER";
+    membership.role === "MANAGER";
 
   const isMutatingAction =
     options?.requireCreateTrades ||
@@ -176,7 +176,7 @@ async function getAccess(
   }
 
   if (
-    String(membership.role) === "VIEWER" &&
+    membership.role === "VIEWER" &&
     !options?.allowViewer
   ) {
     redirect(`/accounts/${accountId}/dashboard`);

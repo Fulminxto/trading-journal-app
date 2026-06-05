@@ -864,7 +864,7 @@ export default async function DiaryPage({
   }
 
   const isManager =
-    String(membership.role) === "MANAGER";
+    membership.role === "MANAGER";
 
   const canCreateTrades = Boolean(
     isManager || membership.canCreateTrades
