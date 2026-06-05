@@ -104,6 +104,20 @@ function getOutcome(value: unknown) {
     return null;
 }
 
+function getDirection(value: unknown) {
+    const direction = getString(value).toUpperCase();
+
+    if (direction === "BUY" || direction === "LONG") {
+        return "LONG" as const;
+    }
+
+    if (direction === "SELL" || direction === "SHORT") {
+        return "SHORT" as const;
+    }
+
+    return null;
+}
+
 function isSourceAllowedForMode({
     integrationMode,
     source,
@@ -322,7 +336,7 @@ export async function POST(request: NextRequest) {
     );
 
     const symbol = getString(payload.symbol);
-    const direction = getString(payload.direction);
+    const direction = getDirection(payload.direction);
     const openDate = getDate(payload.openDate);
 
     if (
@@ -336,7 +350,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
             {
                 error:
-                    "Missing required fields: tradingAccountId, source, externalTradeId, symbol, direction, openDate",
+                    "Missing or invalid required fields: tradingAccountId, source, externalTradeId, symbol, direction (must be BUY/SELL/LONG/SHORT), openDate",
             },
             {
                 status: 400,
