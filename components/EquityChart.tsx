@@ -41,14 +41,29 @@ const tooltipLabels: Record<
   de: { equity: "Equity", date: "Datum:" },
 };
 
+const emptyLabels: Record<
+  AppLanguage,
+  { title: string; description: string }
+> = {
+  en: { title: "No equity data yet", description: "Start tracking executions to generate your equity curve and performance analytics." },
+  it: { title: "Nessun dato equity", description: "Inizia a registrare trade per generare la curva equity e le analisi di performance." },
+  uk: { title: "Немає даних equity", description: "Почніть записувати угоди для побудови кривої equity та аналітики." },
+  ru: { title: "Нет данных equity", description: "Начните записывать сделки для построения кривой equity и аналитики." },
+  es: { title: "Sin datos de equity", description: "Empieza a registrar operaciones para generar tu curva de equity y analítica." },
+  fr: { title: "Aucune donnée equity", description: "Commencez à enregistrer des trades pour générer votre courbe equity et vos analyses." },
+  de: { title: "Keine Equity-Daten", description: "Beginne mit der Aufzeichnung von Trades, um deine Equity-Kurve zu erstellen." },
+};
+
 export default function EquityChart({ data, language }: Props) {
   const hasData = data.length > 0;
 
   if (!hasData) {
+    const lang = normalizeAppLanguage(language);
+    const el = emptyLabels[lang];
     return (
       <EmptyState
-        title="No equity data yet"
-        description="Start tracking executions to generate your equity curve and performance analytics."
+        title={el.title}
+        description={el.description}
       />
     );
   }

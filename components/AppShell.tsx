@@ -195,7 +195,7 @@ export default function AppShell({
       <main className="relative min-h-screen flex-1 overflow-x-hidden">
         <div className="pointer-events-none fixed right-4 top-4 z-40 lg:right-8 lg:top-6">
           <div className="pointer-events-auto flex items-start gap-3">
-            <NotificationBell />
+            <NotificationBell language={appLanguage} />
 
             <div ref={profileRef} className="relative">
               <button

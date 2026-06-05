@@ -2,8 +2,26 @@
 
 import { Bell } from "lucide-react";
 import { useEffect, useState } from "react";
+import {
+  normalizeAppLanguage,
+  type AppLanguage,
+} from "@/lib/i18n";
 
-export default function NotificationBell() {
+const bellLabels: Record<AppLanguage, string> = {
+  en: "Notifications",
+  it: "Notifiche",
+  uk: "Сповіщення",
+  ru: "Уведомления",
+  es: "Notificaciones",
+  fr: "Notifications",
+  de: "Benachrichtigungen",
+};
+
+export default function NotificationBell({
+  language,
+}: {
+  language?: string;
+}) {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -22,11 +40,13 @@ export default function NotificationBell() {
     loadUnreadCount();
   }, []);
 
+  const label = bellLabels[normalizeAppLanguage(language)];
+
   return (
     <a
       href="/notifications"
-      aria-label="Notifications"
-      title="Notifications"
+      aria-label={label}
+      title={label}
       className="relative rounded-2xl border border-white/10 bg-[#071018]/80 p-3 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:bg-[#071018]"
     >
       <Bell size={18} />

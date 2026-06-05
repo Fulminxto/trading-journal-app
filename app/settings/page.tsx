@@ -1352,7 +1352,7 @@ export default async function SettingsPage({
           </p>
 
           <div className="mt-4">
-            <ReopenOnboardingButton />
+            <ReopenOnboardingButton language={language} />
           </div>
         </div>
       </div>
