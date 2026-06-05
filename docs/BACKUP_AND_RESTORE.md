@@ -89,19 +89,24 @@ Procedura consigliata:
 
 1. creare un nuovo progetto Supabase di test
 2. configurare le variabili ambiente su un ambiente separato
-3. ripristinare il file .sql sul nuovo database
+3. ripristinare il file .sql sul nuovo database con lo script ufficiale
 4. testare login, account, trades, dashboard, permessi e pagine principali
 5. solo dopo valutare eventuale ripristino reale
 
-Comando indicativo per restore con psql:
+### Script ufficiale di restore
 
-$psql = "C:\Program Files\PostgreSQL\18\bin\psql.exe"
-$databaseUrl = "INSERIRE_DATABASE_URL_DEL_DATABASE_DI_DESTINAZIONE"
-$backupFile = ".\backups\NOME_BACKUP.sql"
+Eseguire dalla root del progetto:
 
-& $psql "$databaseUrl" -f "$backupFile"
+powershell -ExecutionPolicy Bypass -File .\scripts\restore-supabase.ps1 -BackupFile ".\backups\NOME_BACKUP.sql"
 
-Non usare questo comando sul database principale senza backup aggiornato e senza test.
+Lo script:
+- verifica che psql.exe sia installato
+- legge DIRECT_URL dal .env (connessione diretta, non pooler)
+- mostra host di destinazione e dimensione del file
+- chiede conferma esplicita digitando "CONFERMA" prima di procedere
+- segnala errore se il restore fallisce
+
+Non eseguire il restore sul database principale senza un backup aggiornato e senza aver testato su un ambiente separato.
 
 ---
 
