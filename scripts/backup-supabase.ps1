@@ -5,14 +5,16 @@ if (-not $pgDump) {
     exit 1
 }
 
-$directUrlLine = Get-Content .\.env | Where-Object { $_ -match "^DIRECT_URL=" } | Select-Object -First 1
+# Il backup usa il pooler session mode (porta 5432) perché l'host diretto Supabase
+# non è raggiungibile da reti senza IPv6. Non sostituire con l'host diretto.
+$backupUrlLine = Get-Content .\.env | Where-Object { $_ -match "^BACKUP_DATABASE_URL=" } | Select-Object -First 1
 
-if (-not $directUrlLine) {
-    Write-Error "DIRECT_URL non trovato nel file .env. pg_dump richiede una connessione diretta (non il pooler). Aggiungi DIRECT_URL nel .env prima di eseguire il backup."
+if (-not $backupUrlLine) {
+    Write-Error "BACKUP_DATABASE_URL non trovato nel file .env. Aggiungi la variabile con l'URL del pooler Supabase in session mode (porta 5432, es. postgresql://postgres.xxx:password@aws-0-eu-west-1.pooler.supabase.com:5432/postgres). Non usare l'host diretto db.xxx.supabase.co."
     exit 1
 }
 
-$directUrl = $directUrlLine -replace "^DIRECT_URL=", ""
+$directUrl = $backupUrlLine -replace "^BACKUP_DATABASE_URL=", ""
 $directUrl = $directUrl.Trim('"').Trim("'")
 
 New-Item -ItemType Directory -Force .\backups | Out-Null
