@@ -242,6 +242,7 @@ export async function createAccount(formData: FormData) {
       canViewReports: true,
       canViewCopilot: true,
       canViewMembers: true,
+      // Reserved for future feature: member/role management by MANAGER. Do not remove.
       canManageMembers: true,
       canManageRoles: true,
       canManageAccount: true,

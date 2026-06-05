@@ -155,6 +155,7 @@ model AccountMember {
   canViewCopilot    Boolean @default(true)
   canViewMembers    Boolean @default(true)
 
+  // Reserved for future feature: member/role management by MANAGER. Do not remove.
   canManageMembers  Boolean @default(false)
   canManageRoles    Boolean @default(false)
   canManageAccount  Boolean @default(false)
