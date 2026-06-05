@@ -1,6 +1,9 @@
 param (
     [Parameter(Mandatory=$false)]
-    [string]$BackupFile
+    [string]$BackupFile,
+
+    [Parameter(Mandatory=$false)]
+    [string]$TargetUrl
 )
 
 # 1. Cerca psql.exe
@@ -11,16 +14,27 @@ if (-not $psql) {
     exit 1
 }
 
-# 2. Legge DIRECT_URL dal .env
-$directUrlLine = Get-Content .\.env | Where-Object { $_ -match "^DIRECT_URL=" } | Select-Object -First 1
+# 2. Determina l'URL di destinazione
+if ($TargetUrl -eq "PROMPT") {
+    Write-Host ""
+    Write-Host "Inserisci l'URL del database di destinazione." -ForegroundColor Cyan
+    Write-Host "(La password non verra' salvata nella cronologia del terminale.)" -ForegroundColor Cyan
+    $directUrl = Read-Host "Target URL"
+    if (-not $directUrl) {
+        Write-Error "URL non inserito. Operazione annullata."
+        exit 1
+    }
+} else {
+    $directUrlLine = Get-Content .\.env | Where-Object { $_ -match "^DIRECT_URL=" } | Select-Object -First 1
 
-if (-not $directUrlLine) {
-    Write-Error "DIRECT_URL non trovato nel file .env. Il restore richiede una connessione diretta. Aggiungi DIRECT_URL nel .env prima di eseguire il restore."
-    exit 1
+    if (-not $directUrlLine) {
+        Write-Error "DIRECT_URL non trovato nel file .env. Il restore richiede una connessione diretta. Aggiungi DIRECT_URL nel .env prima di eseguire il restore."
+        exit 1
+    }
+
+    $directUrl = $directUrlLine -replace "^DIRECT_URL=", ""
+    $directUrl = $directUrl.Trim('"').Trim("'")
 }
-
-$directUrl = $directUrlLine -replace "^DIRECT_URL=", ""
-$directUrl = $directUrl.Trim('"').Trim("'")
 
 # 3. Verifica parametro file di backup
 if (-not $BackupFile) {
