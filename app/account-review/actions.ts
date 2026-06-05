@@ -34,18 +34,14 @@ function getLimitedString(
   );
 }
 
-function normalizeUsername(value: string) {
-  return value.trim().toLowerCase();
-}
-
 export async function submitAccountReview(
   formData: FormData
 ) {
   const session = await auth();
 
-  const username = normalizeUsername(
-    getString(formData, "username")
-  );
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
 
   const message = getLimitedString(
     formData,
@@ -57,19 +53,11 @@ export async function submitAccountReview(
     redirect("/account-review?toast=error");
   }
 
-  const user = session?.user?.id
-    ? await prisma.user.findUnique({
-      where: {
-        id: session.user.id,
-      },
-    })
-    : username
-      ? await prisma.user.findUnique({
-        where: {
-          username,
-        },
-      })
-      : null;
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+  });
 
   if (!user) {
     redirect("/account-review?toast=created");
