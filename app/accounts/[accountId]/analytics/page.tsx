@@ -2421,7 +2421,7 @@ export default async function AnalyticsPage({
                       </div>
                     </div>
 
-                    <div className="flex gap-6">
+                    <div className="flex flex-wrap gap-6">
                       <div>
                         <p className="text-xs text-gray-500">
                           {t.wr}
@@ -2564,7 +2564,7 @@ export default async function AnalyticsPage({
                     </p>
                   </div>
 
-                  <div className="flex gap-6">
+                  <div className="flex flex-wrap gap-6">
                     <div>
                       <p className="text-xs text-gray-500">
                         {t.wr}
