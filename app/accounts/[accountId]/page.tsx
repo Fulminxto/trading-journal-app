@@ -1244,7 +1244,7 @@ export default async function AccountPage({
               {t.selectedAccount}
             </p>
 
-            <h1 className="mt-3 text-5xl font-black tracking-tight text-white sm:text-6xl">
+            <h1 className="mt-3 text-3xl font-black tracking-tight break-words text-white sm:text-6xl">
               {account.name}
             </h1>
 

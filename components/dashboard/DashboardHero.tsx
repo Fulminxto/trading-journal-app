@@ -40,7 +40,7 @@ export default function DashboardHero({
               </p>
             </div>
 
-            <h1 className="mt-6 text-5xl font-black tracking-tight text-white xl:text-7xl">
+            <h1 className="mt-6 text-3xl font-black tracking-tight break-words text-white sm:text-5xl xl:text-7xl">
               {accountName}
             </h1>
 
@@ -49,7 +49,7 @@ export default function DashboardHero({
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 xl:min-w-[460px]">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:min-w-[460px]">
             <div className="rounded-3xl border border-green-500/10 bg-green-500/[0.06] p-5 backdrop-blur-xl">
               <p className="text-sm text-gray-400">
                 {t.currentEquity}
