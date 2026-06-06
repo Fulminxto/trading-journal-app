@@ -2,22 +2,25 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function POST() {
   const session = await auth();
 
   if (!session?.user?.id) {
     return NextResponse.json(
-      { count: 0 },
+      { error: "Unauthorized" },
       { status: 401 }
     );
   }
 
-  const count = await prisma.notification.count({
+  await prisma.notification.updateMany({
     where: {
       userId: session.user.id,
       read: false,
     },
+    data: {
+      read: true,
+    },
   });
 
-  return NextResponse.json({ count });
+  return NextResponse.json({ success: true, unreadCount: 0 });
 }

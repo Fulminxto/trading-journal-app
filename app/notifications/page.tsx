@@ -13,6 +13,8 @@ import {
     type AppLanguage,
 } from "@/lib/i18n";
 
+import { getNotificationTypeLabel } from "@/lib/notifications";
+
 type NotificationsCopy = {
     eyebrow: string;
     title: string;
@@ -263,7 +265,7 @@ export default async function NotificationsPage() {
                                         )}
 
                                         <span className="rounded-xl bg-white/10 px-3 py-1 text-xs font-bold text-gray-300">
-                                            {notification.type}
+                                            {getNotificationTypeLabel(notification.type, appLanguage)}
                                         </span>
                                     </div>
 
