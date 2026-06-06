@@ -1053,8 +1053,8 @@ export default async function EquityPage({
                     className="rounded-2xl border border-white/10 bg-black/20 p-4"
                   >
                     <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="font-bold text-white">
+                      <div className="min-w-0">
+                        <p className="truncate font-bold text-white">
                           {trade.symbol || t.unknownSymbol}
                         </p>
 
@@ -1068,7 +1068,7 @@ export default async function EquityPage({
                       </div>
 
                       <p
-                        className={`font-black ${getResultTone(
+                        className={`shrink-0 font-black ${getResultTone(
                           result
                         )}`}
                       >

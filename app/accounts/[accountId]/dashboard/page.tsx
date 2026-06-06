@@ -1410,8 +1410,8 @@ export default async function DashboardPage({
                   key={trade.id}
                   className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/10 p-4"
                 >
-                  <div>
-                    <p className="font-bold text-white">
+                  <div className="min-w-0">
+                    <p className="truncate font-bold text-white">
                       {trade.symbol || t.unknownSymbol}
                     </p>
 
@@ -1422,7 +1422,7 @@ export default async function DashboardPage({
                     </p>
                   </div>
 
-                  <div className="text-right">
+                  <div className="shrink-0 text-right">
                     <p
                       className={`font-bold ${getResultTone(
                         trade.resultUsd || 0

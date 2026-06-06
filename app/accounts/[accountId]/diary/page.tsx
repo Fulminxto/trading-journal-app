@@ -2060,7 +2060,7 @@ export default async function DiaryPage({
 
               <div className="relative z-10">
                 <div className="flex items-start justify-between gap-4">
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-xs uppercase tracking-[0.18em] text-gray-500">
                       {formatDateByLanguage(
                         trade.openDate,
@@ -2068,7 +2068,7 @@ export default async function DiaryPage({
                       )} {trade.openTime || ""}
                     </p>
 
-                    <h3 className="mt-2 text-2xl font-black text-white">
+                    <h3 className="mt-2 truncate text-2xl font-black text-white">
                       {trade.symbol}
                     </h3>
 
@@ -2080,7 +2080,7 @@ export default async function DiaryPage({
                   </div>
 
                   <span
-                    className={`rounded-2xl px-3 py-2 text-xs font-black ${trade.direction === "LONG"
+                    className={`shrink-0 rounded-2xl px-3 py-2 text-xs font-black ${trade.direction === "LONG"
                         ? "bg-green-500/10 text-green-400"
                         : "bg-red-500/10 text-red-400"
                       }`}
