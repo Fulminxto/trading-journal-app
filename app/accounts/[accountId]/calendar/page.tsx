@@ -928,7 +928,7 @@ export default async function CalendarPage({
               {t.monthlyPerformanceView}
             </p>
 
-            <h1 className="mt-3 text-5xl font-black capitalize tracking-tight text-white sm:text-6xl">
+            <h1 className="mt-3 text-3xl font-black capitalize tracking-tight break-words text-white sm:text-6xl">
               {monthLabel}
             </h1>
 
