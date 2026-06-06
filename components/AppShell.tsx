@@ -193,7 +193,16 @@ export default function AppShell({
       />
 
       <main className="relative min-h-screen flex-1 overflow-x-hidden">
-        <div className="pointer-events-none fixed right-4 top-4 z-40 lg:right-8 lg:top-6">
+        <div className="fixed inset-x-0 top-0 z-40 flex items-center justify-between gap-3 border-b border-white/10 bg-[#071018]/80 px-4 pb-3 pt-[calc(env(safe-area-inset-top)+0.75rem)] backdrop-blur-xl lg:inset-x-auto lg:right-8 lg:top-6 lg:border-none lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0 lg:pointer-events-none lg:backdrop-blur-none">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            aria-label={t.openSidebar}
+            title={t.openSidebar}
+            className="rounded-2xl border border-white/10 bg-white/5 p-2 lg:hidden"
+          >
+            <Menu size={20} />
+          </button>
+
           <div className="pointer-events-auto flex items-start gap-3">
             <NotificationBell language={appLanguage} />
 
@@ -318,18 +327,7 @@ export default function AppShell({
           </div>
         </div>
 
-        <div className="sticky top-0 z-30 flex items-center px-4 pt-4 lg:hidden">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            aria-label={t.openSidebar}
-            title={t.openSidebar}
-            className="rounded-2xl border border-white/10 bg-white/5 p-2"
-          >
-            <Menu size={20} />
-          </button>
-        </div>
-
-        <div className="p-4 pt-16 sm:p-6 sm:pt-18 lg:p-8 lg:pt-14">
+        <div className="p-4 pt-[calc(env(safe-area-inset-top)+5rem)] sm:p-6 sm:pt-[calc(env(safe-area-inset-top)+5.5rem)] lg:p-8 lg:pt-14">
           {children}
 
           <footer className="mt-16 hidden border-t border-white/5 pt-6 text-center print:hidden">
