@@ -3,6 +3,7 @@ import {
     ArrowLeft,
     Clock3,
     Radio,
+    UserPlus,
     Users,
 } from "lucide-react";
 import Link from "next/link";
@@ -15,6 +16,8 @@ import {
     getLocaleFromLanguage,
     type AppLanguage,
 } from "@/lib/i18n";
+import { InviteMemberForm, CancelInviteButton } from "./invite-form";
+import { MemberManagementActions } from "./member-actions";
 
 type MembersLabels = {
     never: string;
@@ -57,6 +60,37 @@ type MembersLabels = {
     activeThisWeekStatus: string;
     inactiveStatus: string;
     notAvailable: string;
+    // Management
+    teamManagementSection: string;
+    managementSectionLabel: string;
+    inviteMemberHeading: string;
+    usernamePlaceholder: string;
+    sendInvite: string;
+    pendingInvitesHeading: string;
+    noPendingInvites: string;
+    cancelInvite: string;
+    invitedAs: string;
+    changeRoleLabel: string;
+    saveRole: string;
+    permissionsLabel: string;
+    savePermissions: string;
+    removeMemberLabel: string;
+    confirmRemove: string;
+    confirmYes: string;
+    cancelConfirm: string;
+    youBadge: string;
+    creatorBadge: string;
+    lastManagerNote: string;
+    roleManager: string;
+    roleMember: string;
+    roleViewer: string;
+    perm_canCreateTrades: string;
+    perm_canEditTrades: string;
+    perm_canDeleteTrades: string;
+    perm_canViewAnalytics: string;
+    perm_canViewReports: string;
+    perm_canViewCopilot: string;
+    perm_canViewMembers: string;
 };
 
 const labels: Record<AppLanguage, MembersLabels> = {
@@ -97,12 +131,42 @@ const labels: Record<AppLanguage, MembersLabels> = {
         viewMemberTrades: "Vedi trade membro",
         memberAnalytics: "Analytics membro",
         openWorkspace: "Apri workspace",
-        backToAccount: "Torna all’account",
+        backToAccount: "Torna all'account",
         onlineStatus: "Online ora",
         activeTodayStatus: "Attivo oggi",
         activeThisWeekStatus: "Attivo questa settimana",
         inactiveStatus: "Inattivo",
         notAvailable: "N/D",
+        teamManagementSection: "Gestione team",
+        managementSectionLabel: "Gestione",
+        inviteMemberHeading: "Invita membro",
+        usernamePlaceholder: "Username",
+        sendInvite: "Invia invito",
+        pendingInvitesHeading: "Inviti in attesa",
+        noPendingInvites: "Nessun invito in attesa.",
+        cancelInvite: "Annulla invito",
+        invitedAs: "Invitato come",
+        changeRoleLabel: "Cambia ruolo",
+        saveRole: "Salva ruolo",
+        permissionsLabel: "Permessi operativi",
+        savePermissions: "Salva permessi",
+        removeMemberLabel: "Rimuovi membro",
+        confirmRemove: "Sei sicuro? L'azione è irreversibile.",
+        confirmYes: "Sì, rimuovi",
+        cancelConfirm: "Annulla",
+        youBadge: "Tu",
+        creatorBadge: "Creatore",
+        lastManagerNote: "Unico Manager — impossibile retrocedere.",
+        roleManager: "Manager",
+        roleMember: "Membro",
+        roleViewer: "Osservatore",
+        perm_canCreateTrades: "Inserisci trade",
+        perm_canEditTrades: "Modifica trade",
+        perm_canDeleteTrades: "Elimina trade",
+        perm_canViewAnalytics: "Analytics",
+        perm_canViewReports: "Report",
+        perm_canViewCopilot: "Copilot",
+        perm_canViewMembers: "Vedi team",
     },
     en: {
         never: "Never",
@@ -147,6 +211,36 @@ const labels: Record<AppLanguage, MembersLabels> = {
         activeThisWeekStatus: "Active This Week",
         inactiveStatus: "Inactive",
         notAvailable: "N/A",
+        teamManagementSection: "Team management",
+        managementSectionLabel: "Manage",
+        inviteMemberHeading: "Invite member",
+        usernamePlaceholder: "Username",
+        sendInvite: "Send invite",
+        pendingInvitesHeading: "Pending invites",
+        noPendingInvites: "No pending invites.",
+        cancelInvite: "Cancel invite",
+        invitedAs: "Invited as",
+        changeRoleLabel: "Change role",
+        saveRole: "Save role",
+        permissionsLabel: "Permissions",
+        savePermissions: "Save permissions",
+        removeMemberLabel: "Remove member",
+        confirmRemove: "Are you sure? This cannot be undone.",
+        confirmYes: "Yes, remove",
+        cancelConfirm: "Cancel",
+        youBadge: "You",
+        creatorBadge: "Creator",
+        lastManagerNote: "Only Manager — cannot be demoted.",
+        roleManager: "Manager",
+        roleMember: "Member",
+        roleViewer: "Viewer",
+        perm_canCreateTrades: "Create trades",
+        perm_canEditTrades: "Edit trades",
+        perm_canDeleteTrades: "Delete trades",
+        perm_canViewAnalytics: "Analytics",
+        perm_canViewReports: "Reports",
+        perm_canViewCopilot: "Copilot",
+        perm_canViewMembers: "View team",
     },
     uk: {
         never: "Ніколи",
@@ -191,6 +285,36 @@ const labels: Record<AppLanguage, MembersLabels> = {
         activeThisWeekStatus: "Активний цього тижня",
         inactiveStatus: "Неактивний",
         notAvailable: "Н/Д",
+        teamManagementSection: "Управління командою",
+        managementSectionLabel: "Управління",
+        inviteMemberHeading: "Запросити учасника",
+        usernamePlaceholder: "Username",
+        sendInvite: "Надіслати запрошення",
+        pendingInvitesHeading: "Запрошення в очікуванні",
+        noPendingInvites: "Немає запрошень в очікуванні.",
+        cancelInvite: "Скасувати запрошення",
+        invitedAs: "Запрошений як",
+        changeRoleLabel: "Змінити роль",
+        saveRole: "Зберегти роль",
+        permissionsLabel: "Операційні дозволи",
+        savePermissions: "Зберегти дозволи",
+        removeMemberLabel: "Видалити учасника",
+        confirmRemove: "Ви впевнені? Цю дію не можна скасувати.",
+        confirmYes: "Так, видалити",
+        cancelConfirm: "Скасувати",
+        youBadge: "Ти",
+        creatorBadge: "Творець",
+        lastManagerNote: "Єдиний Manager — неможливо понизити.",
+        roleManager: "Менеджер",
+        roleMember: "Учасник",
+        roleViewer: "Спостерігач",
+        perm_canCreateTrades: "Вносити угоди",
+        perm_canEditTrades: "Редагувати угоди",
+        perm_canDeleteTrades: "Видаляти угоди",
+        perm_canViewAnalytics: "Аналітика",
+        perm_canViewReports: "Звіти",
+        perm_canViewCopilot: "Copilot",
+        perm_canViewMembers: "Переглядати команду",
     },
     ru: {
         never: "Никогда",
@@ -235,6 +359,36 @@ const labels: Record<AppLanguage, MembersLabels> = {
         activeThisWeekStatus: "Активен на этой неделе",
         inactiveStatus: "Неактивен",
         notAvailable: "Н/Д",
+        teamManagementSection: "Управление командой",
+        managementSectionLabel: "Управление",
+        inviteMemberHeading: "Пригласить участника",
+        usernamePlaceholder: "Username",
+        sendInvite: "Отправить приглашение",
+        pendingInvitesHeading: "Ожидающие приглашения",
+        noPendingInvites: "Нет ожидающих приглашений.",
+        cancelInvite: "Отменить приглашение",
+        invitedAs: "Приглашён как",
+        changeRoleLabel: "Изменить роль",
+        saveRole: "Сохранить роль",
+        permissionsLabel: "Операционные разрешения",
+        savePermissions: "Сохранить разрешения",
+        removeMemberLabel: "Удалить участника",
+        confirmRemove: "Вы уверены? Это действие необратимо.",
+        confirmYes: "Да, удалить",
+        cancelConfirm: "Отмена",
+        youBadge: "Вы",
+        creatorBadge: "Создатель",
+        lastManagerNote: "Единственный Manager — нельзя понизить.",
+        roleManager: "Менеджер",
+        roleMember: "Участник",
+        roleViewer: "Наблюдатель",
+        perm_canCreateTrades: "Вносить сделки",
+        perm_canEditTrades: "Редактировать сделки",
+        perm_canDeleteTrades: "Удалять сделки",
+        perm_canViewAnalytics: "Аналитика",
+        perm_canViewReports: "Отчёты",
+        perm_canViewCopilot: "Copilot",
+        perm_canViewMembers: "Просматривать команду",
     },
     es: {
         never: "Nunca",
@@ -279,16 +433,46 @@ const labels: Record<AppLanguage, MembersLabels> = {
         activeThisWeekStatus: "Activo esta semana",
         inactiveStatus: "Inactivo",
         notAvailable: "N/D",
+        teamManagementSection: "Gestión del equipo",
+        managementSectionLabel: "Gestión",
+        inviteMemberHeading: "Invitar miembro",
+        usernamePlaceholder: "Usuario",
+        sendInvite: "Enviar invitación",
+        pendingInvitesHeading: "Invitaciones pendientes",
+        noPendingInvites: "Sin invitaciones pendientes.",
+        cancelInvite: "Cancelar invitación",
+        invitedAs: "Invitado como",
+        changeRoleLabel: "Cambiar rol",
+        saveRole: "Guardar rol",
+        permissionsLabel: "Permisos operativos",
+        savePermissions: "Guardar permisos",
+        removeMemberLabel: "Eliminar miembro",
+        confirmRemove: "¿Estás seguro? Esta acción es irreversible.",
+        confirmYes: "Sí, eliminar",
+        cancelConfirm: "Cancelar",
+        youBadge: "Tú",
+        creatorBadge: "Creador",
+        lastManagerNote: "Único Manager — no se puede degradar.",
+        roleManager: "Manager",
+        roleMember: "Miembro",
+        roleViewer: "Observador",
+        perm_canCreateTrades: "Crear trades",
+        perm_canEditTrades: "Editar trades",
+        perm_canDeleteTrades: "Eliminar trades",
+        perm_canViewAnalytics: "Analytics",
+        perm_canViewReports: "Informes",
+        perm_canViewCopilot: "Copilot",
+        perm_canViewMembers: "Ver equipo",
     },
     fr: {
         never: "Jamais",
         accountMembers: "Membres du compte",
         membersActivity: "Activité des membres",
         description:
-            "Surveille la présence, l’activité et la contribution opérationnelle des membres dans ce compte partagé.",
+            "Surveille la présence, l'activité et la contribution opérationnelle des membres dans ce compte partagé.",
         members: "Membres",
         onlineNow: "En ligne maintenant",
-        activeToday: "Actifs aujourd’hui",
+        activeToday: "Actifs aujourd'hui",
         totalTrades: "Trades totaux",
         lastTrade: "Dernier trade",
         noTrades: "Aucun trade",
@@ -300,7 +484,7 @@ const labels: Record<AppLanguage, MembersLabels> = {
         accountStatus: "Statut du compte",
         live: "Live",
         quiet: "Calme",
-        presenceSnapshot: "Snapshot de présence et d’activité.",
+        presenceSnapshot: "Snapshot de présence et d'activité.",
         leaderboard: "Classement",
         mostActiveMembers: "Membres les plus actifs",
         topFive: "Top 5",
@@ -308,10 +492,10 @@ const labels: Record<AppLanguage, MembersLabels> = {
         onlineMembers: "Membres en ligne",
         activeNow: "Actif maintenant",
         noOnlineMembers: "Aucun membre en ligne maintenant.",
-        memberOverview: "Vue d’ensemble des membres",
+        memberOverview: "Vue d'ensemble des membres",
         accountTeam: "Équipe du compte",
         activityProfile:
-            "Profil d’activité basé sur la présence, la dernière activité et la contribution trading dans ce compte.",
+            "Profil d'activité basé sur la présence, la dernière activité et la contribution trading dans ce compte.",
         lastActivity: "Dernière activité",
         lastLogin: "Dernière connexion",
         viewMemberTrades: "Voir les trades du membre",
@@ -319,10 +503,40 @@ const labels: Record<AppLanguage, MembersLabels> = {
         openWorkspace: "Ouvrir le workspace",
         backToAccount: "Retour au compte",
         onlineStatus: "En ligne maintenant",
-        activeTodayStatus: "Actif aujourd’hui",
+        activeTodayStatus: "Actif aujourd'hui",
         activeThisWeekStatus: "Actif cette semaine",
         inactiveStatus: "Inactif",
         notAvailable: "N/D",
+        teamManagementSection: "Gestion de l'équipe",
+        managementSectionLabel: "Gestion",
+        inviteMemberHeading: "Inviter un membre",
+        usernamePlaceholder: "Nom d'utilisateur",
+        sendInvite: "Envoyer l'invitation",
+        pendingInvitesHeading: "Invitations en attente",
+        noPendingInvites: "Aucune invitation en attente.",
+        cancelInvite: "Annuler l'invitation",
+        invitedAs: "Invité comme",
+        changeRoleLabel: "Changer le rôle",
+        saveRole: "Enregistrer le rôle",
+        permissionsLabel: "Permissions opérationnelles",
+        savePermissions: "Enregistrer les permissions",
+        removeMemberLabel: "Supprimer le membre",
+        confirmRemove: "Êtes-vous sûr ? Cette action est irréversible.",
+        confirmYes: "Oui, supprimer",
+        cancelConfirm: "Annuler",
+        youBadge: "Vous",
+        creatorBadge: "Créateur",
+        lastManagerNote: "Seul Manager — impossible de rétrograder.",
+        roleManager: "Manager",
+        roleMember: "Membre",
+        roleViewer: "Observateur",
+        perm_canCreateTrades: "Créer des trades",
+        perm_canEditTrades: "Modifier des trades",
+        perm_canDeleteTrades: "Supprimer des trades",
+        perm_canViewAnalytics: "Analytics",
+        perm_canViewReports: "Rapports",
+        perm_canViewCopilot: "Copilot",
+        perm_canViewMembers: "Voir l'équipe",
     },
     de: {
         never: "Nie",
@@ -367,6 +581,36 @@ const labels: Record<AppLanguage, MembersLabels> = {
         activeThisWeekStatus: "Diese Woche aktiv",
         inactiveStatus: "Inaktiv",
         notAvailable: "N/A",
+        teamManagementSection: "Team-Verwaltung",
+        managementSectionLabel: "Verwaltung",
+        inviteMemberHeading: "Mitglied einladen",
+        usernamePlaceholder: "Benutzername",
+        sendInvite: "Einladung senden",
+        pendingInvitesHeading: "Ausstehende Einladungen",
+        noPendingInvites: "Keine ausstehenden Einladungen.",
+        cancelInvite: "Einladung stornieren",
+        invitedAs: "Eingeladen als",
+        changeRoleLabel: "Rolle ändern",
+        saveRole: "Rolle speichern",
+        permissionsLabel: "Betriebsberechtigungen",
+        savePermissions: "Berechtigungen speichern",
+        removeMemberLabel: "Mitglied entfernen",
+        confirmRemove: "Bist du sicher? Diese Aktion kann nicht rückgängig gemacht werden.",
+        confirmYes: "Ja, entfernen",
+        cancelConfirm: "Abbrechen",
+        youBadge: "Du",
+        creatorBadge: "Ersteller",
+        lastManagerNote: "Einziger Manager — kann nicht heruntergestuft werden.",
+        roleManager: "Manager",
+        roleMember: "Mitglied",
+        roleViewer: "Beobachter",
+        perm_canCreateTrades: "Trades erstellen",
+        perm_canEditTrades: "Trades bearbeiten",
+        perm_canDeleteTrades: "Trades löschen",
+        perm_canViewAnalytics: "Analytics",
+        perm_canViewReports: "Berichte",
+        perm_canViewCopilot: "Copilot",
+        perm_canViewMembers: "Team ansehen",
     },
 };
 
@@ -510,6 +754,9 @@ export default async function MembersPage({
     const language = normalizeAppLanguage(membership.user.appLanguage);
     const t = labels[language] ?? labels.en;
 
+    const currentUserId = membership.userId;
+    const accountCreatorId = membership.tradingAccount.createdById ?? "";
+
     await prisma.user.update({
         where: {
             id: session.user.id,
@@ -547,6 +794,18 @@ export default async function MembersPage({
             },
         ],
     });
+
+    const managerCount = members.filter((m) => m.role === "MANAGER").length;
+
+    const pendingInvites = membership.canManageMembers
+        ? await prisma.accountInvite.findMany({
+              where: { tradingAccountId: accountId },
+              include: {
+                  invitedUser: { select: { username: true, name: true } },
+              },
+              orderBy: { createdAt: "desc" },
+          })
+        : [];
 
     const membersWithStats = await Promise.all(
         members.map(async (member) => {
@@ -628,6 +887,7 @@ export default async function MembersPage({
 
     return (
         <div className="space-y-8">
+            {/* Hero */}
             <section className="relative overflow-hidden rounded-[36px] border border-white/10 bg-white/[0.03] p-8 md:p-10">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(34,197,94,0.08),transparent_30%)]" />
 
@@ -679,6 +939,84 @@ export default async function MembersPage({
                 </div>
             </section>
 
+            {/* Team Management — only for canManageMembers */}
+            {membership.canManageMembers && (
+                <section className="space-y-5">
+                    <div>
+                        <p className="text-sm text-gray-400">{t.managementSectionLabel}</p>
+                        <h2 className="mt-1 flex items-center gap-3 text-3xl font-black text-white">
+                            <UserPlus size={28} className="text-cyan-400" />
+                            {t.teamManagementSection}
+                        </h2>
+                    </div>
+
+                    <div className="grid gap-6 xl:grid-cols-2">
+                        {/* Invite form */}
+                        <div className="rounded-[32px] border border-white/10 bg-white/[0.03] p-7">
+                            <p className="mb-5 text-sm font-bold uppercase tracking-[0.15em] text-gray-400">
+                                {t.inviteMemberHeading}
+                            </p>
+                            <InviteMemberForm
+                                accountId={accountId}
+                                canManageRoles={membership.canManageRoles}
+                                t={{
+                                    usernamePlaceholder: t.usernamePlaceholder,
+                                    sendInvite: t.sendInvite,
+                                    roleManager: t.roleManager,
+                                    roleMember: t.roleMember,
+                                    roleViewer: t.roleViewer,
+                                }}
+                            />
+                        </div>
+
+                        {/* Pending invites */}
+                        <div className="rounded-[32px] border border-white/10 bg-white/[0.03] p-7">
+                            <div className="mb-5 flex items-center justify-between gap-4">
+                                <p className="text-sm font-bold uppercase tracking-[0.15em] text-gray-400">
+                                    {t.pendingInvitesHeading}
+                                </p>
+                                {pendingInvites.length > 0 && (
+                                    <div className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-3 py-1 text-xs font-black text-yellow-300">
+                                        {pendingInvites.length}
+                                    </div>
+                                )}
+                            </div>
+
+                            {pendingInvites.length === 0 ? (
+                                <div className="rounded-2xl border border-white/10 bg-black/20 p-5 text-sm text-gray-500">
+                                    {t.noPendingInvites}
+                                </div>
+                            ) : (
+                                <div className="space-y-3">
+                                    {pendingInvites.map((invite) => (
+                                        <div
+                                            key={invite.id}
+                                            className="flex items-center justify-between gap-4 rounded-2xl border border-yellow-500/20 bg-yellow-500/10 p-4"
+                                        >
+                                            <div className="min-w-0">
+                                                <p className="truncate font-bold text-white">
+                                                    {invite.invitedUser.name ??
+                                                        invite.invitedUser.username}
+                                                </p>
+                                                <p className="mt-1 text-xs text-gray-400">
+                                                    {t.invitedAs} · {invite.role}
+                                                </p>
+                                            </div>
+                                            <CancelInviteButton
+                                                accountId={accountId}
+                                                inviteId={invite.id}
+                                                label={t.cancelInvite}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* Quick stats */}
             <section className="grid grid-cols-1 gap-4 md:grid-cols-4">
                 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
                     <p className="text-sm text-gray-400">{t.lastTrade}</p>
@@ -723,6 +1061,7 @@ export default async function MembersPage({
                 </div>
             </section>
 
+            {/* Leaderboard + Online */}
             <section className="grid items-stretch gap-6 xl:grid-cols-2">
                 <div className="rounded-[32px] border border-white/10 bg-white/[0.03] p-7">
                     <div className="flex items-center justify-between gap-4">
@@ -812,6 +1151,7 @@ export default async function MembersPage({
                 </div>
             </section>
 
+            {/* Account Team */}
             <section className="space-y-5">
                 <div>
                     <p className="text-sm text-gray-400">{t.memberOverview}</p>
@@ -823,6 +1163,13 @@ export default async function MembersPage({
                 <div className="grid gap-6">
                     {membersWithStats.map((member) => {
                         const activity = getActivityStatus(member.user.lastActivityAt, t);
+                        const isMe = member.userId === currentUserId;
+                        const isCreator = member.userId === accountCreatorId;
+                        const isLastManager =
+                            member.role === "MANAGER" && managerCount === 1;
+                        const canManageThisMember =
+                            !isMe &&
+                            (membership.canManageMembers || membership.canManageRoles);
 
                         return (
                             <div
@@ -850,6 +1197,18 @@ export default async function MembersPage({
                                             >
                                                 {member.role}
                                             </div>
+
+                                            {isMe && (
+                                                <div className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-xs font-black uppercase tracking-[0.15em] text-cyan-300">
+                                                    {t.youBadge}
+                                                </div>
+                                            )}
+
+                                            {isCreator && (
+                                                <div className="rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1 text-xs font-black uppercase tracking-[0.15em] text-purple-300">
+                                                    {t.creatorBadge}
+                                                </div>
+                                            )}
                                         </div>
 
                                         <p className="mt-4 max-w-3xl text-sm leading-6 text-gray-400">
@@ -932,6 +1291,60 @@ export default async function MembersPage({
                                         {t.openWorkspace}
                                     </Link>
                                 </div>
+
+                                {/* Per-member management — hidden on own card */}
+                                {canManageThisMember && (
+                                    <MemberManagementActions
+                                        key={`${member.userId}-${member.role}-${[
+                                            member.canCreateTrades,
+                                            member.canEditTrades,
+                                            member.canDeleteTrades,
+                                            member.canViewAnalytics,
+                                            member.canViewReports,
+                                            member.canViewCopilot,
+                                            member.canViewMembers,
+                                        ]
+                                            .map((v) => (v ? "1" : "0"))
+                                            .join("")}`}
+                                        accountId={accountId}
+                                        targetUserId={member.userId}
+                                        currentRole={member.role}
+                                        currentPerms={{
+                                            canCreateTrades: member.canCreateTrades,
+                                            canEditTrades: member.canEditTrades,
+                                            canDeleteTrades: member.canDeleteTrades,
+                                            canViewAnalytics: member.canViewAnalytics,
+                                            canViewReports: member.canViewReports,
+                                            canViewCopilot: member.canViewCopilot,
+                                            canViewMembers: member.canViewMembers,
+                                        }}
+                                        canManageRoles={membership.canManageRoles}
+                                        canManageMembers={membership.canManageMembers}
+                                        isCreator={isCreator}
+                                        isLastManager={isLastManager}
+                                        t={{
+                                            changeRoleLabel: t.changeRoleLabel,
+                                            saveRole: t.saveRole,
+                                            permissionsLabel: t.permissionsLabel,
+                                            savePermissions: t.savePermissions,
+                                            removeMemberLabel: t.removeMemberLabel,
+                                            confirmRemove: t.confirmRemove,
+                                            confirmYes: t.confirmYes,
+                                            cancelConfirm: t.cancelConfirm,
+                                            lastManagerNote: t.lastManagerNote,
+                                            roleManager: t.roleManager,
+                                            roleMember: t.roleMember,
+                                            roleViewer: t.roleViewer,
+                                            perm_canCreateTrades: t.perm_canCreateTrades,
+                                            perm_canEditTrades: t.perm_canEditTrades,
+                                            perm_canDeleteTrades: t.perm_canDeleteTrades,
+                                            perm_canViewAnalytics: t.perm_canViewAnalytics,
+                                            perm_canViewReports: t.perm_canViewReports,
+                                            perm_canViewCopilot: t.perm_canViewCopilot,
+                                            perm_canViewMembers: t.perm_canViewMembers,
+                                        }}
+                                    />
+                                )}
                             </div>
                         );
                     })}

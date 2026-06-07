@@ -72,6 +72,7 @@ type AccountHubLabels = {
   intelligenceSectionDescription: string;
   managementSectionTitle: string;
   managementSectionDescription: string;
+  manageTeam: string;
 
   cards: {
     dashboard: HubCardText;
@@ -128,6 +129,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     managementSectionTitle: "Management",
     managementSectionDescription:
       "Gestione di membri, workspace, regole e integrazioni.",
+    manageTeam: "Gestisci team",
 
     cards: {
       dashboard: {
@@ -237,6 +239,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     managementSectionTitle: "Management",
     managementSectionDescription:
       "Management of members, workspace, rules and integrations.",
+    manageTeam: "Manage team",
 
     cards: {
       dashboard: {
@@ -346,6 +349,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     managementSectionTitle: "Керування",
     managementSectionDescription:
       "Керування учасниками, workspace, правилами та інтеграціями.",
+    manageTeam: "Керувати командою",
 
     cards: {
       dashboard: {
@@ -455,6 +459,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     managementSectionTitle: "Управление",
     managementSectionDescription:
       "Управление участниками, workspace, правилами и интеграциями.",
+    manageTeam: "Управление командой",
 
     cards: {
       dashboard: {
@@ -564,6 +569,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     managementSectionTitle: "Gestión",
     managementSectionDescription:
       "Gestión de miembros, workspace, reglas e integraciones.",
+    manageTeam: "Gestionar equipo",
 
     cards: {
       dashboard: {
@@ -673,6 +679,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     managementSectionTitle: "Gestion",
     managementSectionDescription:
       "Gestion des membres, workspace, règles et intégrations.",
+    manageTeam: "Gérer l'équipe",
 
     cards: {
       dashboard: {
@@ -782,6 +789,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     managementSectionTitle: "Management",
     managementSectionDescription:
       "Verwaltung von Mitgliedern, Workspace, Regeln und Integrationen.",
+    manageTeam: "Team verwalten",
 
     cards: {
       dashboard: {
@@ -1035,6 +1043,9 @@ export default async function AccountPage({
   const canManageAccount =
     isManager || membership.canManageAccount;
 
+  const canManageMembers =
+    isManager || membership.canManageMembers;
+
   const currency = account.currency || "USD";
   const initialBalance = account.initialBalance || 0;
 
@@ -1251,6 +1262,16 @@ export default async function AccountPage({
             <p className="mt-6 max-w-3xl text-base leading-7 text-gray-400">
               {t.heroDescription}
             </p>
+
+            {canManageMembers && (
+              <Link
+                href={`/accounts/${account.id}/members`}
+                className="mt-6 inline-flex items-center gap-2 rounded-2xl border border-green-500/20 bg-green-500/10 px-5 py-3 text-sm font-bold text-green-300 transition hover:bg-green-500/20"
+              >
+                <Users size={16} />
+                {t.manageTeam}
+              </Link>
+            )}
 
             {isArchived && (
               <div className="mt-6 rounded-2xl border border-yellow-500/20 bg-yellow-500/10 p-5 text-sm leading-6 text-yellow-100">
