@@ -292,11 +292,21 @@ async function recalculateEquity(accountId: string) {
   }
 }
 
-function getTradeFormData(formData: FormData) {
+async function getTradeFormData(formData: FormData) {
+  const strategyId = getString(formData, "strategyId") || null;
+  let strategy: string | null = null;
+  if (strategyId) {
+    const strat = await prisma.strategy.findFirst({
+      where: { id: strategyId },
+      select: { name: true },
+    });
+    strategy = strat?.name ?? null;
+  }
   return {
     openTime: getLimitedString(formData, "openTime", 20),
     reason: getLimitedString(formData, "reason", 1000),
-    strategy: getLimitedString(formData, "strategy", 120),
+    strategy,
+    strategyId,
 
     symbol:
       getLimitedString(formData, "symbol", 30) ||
@@ -375,7 +385,7 @@ export async function createAccountTrade(
     redirect(`/accounts/${accountId}/diary`);
   }
 
-  const tradeData = getTradeFormData(formData);
+  const tradeData = await getTradeFormData(formData);
 
   const trade = await prisma.trade.create({
     data: {
@@ -434,7 +444,7 @@ export async function updateAccountTrade(
     redirect(`/accounts/${accountId}/diary`);
   }
 
-  const tradeData = getTradeFormData(formData);
+  const tradeData = await getTradeFormData(formData);
 
   const trade = await prisma.trade.update({
     where: {

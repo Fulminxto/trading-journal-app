@@ -44,6 +44,7 @@ type EditTradeLabels = {
   resultUsd: string;
   notes: string;
   saveChanges: string;
+  noStrategyOption: string;
 };
 
 const editTradeLabels: Record<
@@ -82,6 +83,7 @@ const editTradeLabels: Record<
     resultUsd: "Result $",
     notes: "Note",
     saveChanges: "Salva modifiche",
+    noStrategyOption: "— Nessuna strategia dal Playbook —",
   },
 
   en: {
@@ -116,6 +118,7 @@ const editTradeLabels: Record<
     resultUsd: "Result $",
     notes: "Notes",
     saveChanges: "Save changes",
+    noStrategyOption: "— No Playbook strategy —",
   },
 
   uk: {
@@ -150,6 +153,7 @@ const editTradeLabels: Record<
     resultUsd: "Result $",
     notes: "Нотатки",
     saveChanges: "Зберегти зміни",
+    noStrategyOption: "— Без стратегії Playbook —",
   },
 
   ru: {
@@ -184,6 +188,7 @@ const editTradeLabels: Record<
     resultUsd: "Result $",
     notes: "Заметки",
     saveChanges: "Сохранить изменения",
+    noStrategyOption: "— Без стратегии Playbook —",
   },
 
   es: {
@@ -218,6 +223,7 @@ const editTradeLabels: Record<
     resultUsd: "Result $",
     notes: "Notas",
     saveChanges: "Guardar cambios",
+    noStrategyOption: "— Sin estrategia del Playbook —",
   },
 
   fr: {
@@ -252,6 +258,7 @@ const editTradeLabels: Record<
     resultUsd: "Result $",
     notes: "Notes",
     saveChanges: "Enregistrer les modifications",
+    noStrategyOption: "— Aucune stratégie Playbook —",
   },
 
   de: {
@@ -286,6 +293,7 @@ const editTradeLabels: Record<
     resultUsd: "Result $",
     notes: "Notizen",
     saveChanges: "Änderungen speichern",
+    noStrategyOption: "— Keine Playbook-Strategie —",
   },
 };
 
@@ -388,6 +396,12 @@ export default async function EditTradePage({
   );
 
   const t = editTradeLabels[language];
+
+  const strategies = await prisma.strategy.findMany({
+    where: { tradingAccountId: accountId },
+    orderBy: { name: "asc" },
+    select: { id: true, name: true },
+  });
 
   const isImportedTrade =
     trade.source !== "manual";
@@ -523,12 +537,18 @@ export default async function EditTradePage({
           className="rounded-xl bg-zinc-900 p-3"
         />
 
-        <input
-          name="strategy"
-          defaultValue={trade.strategy || ""}
-          placeholder={t.strategy}
+        <select
+          name="strategyId"
+          defaultValue={trade.strategyId ?? ""}
           className="rounded-xl bg-zinc-900 p-3"
-        />
+        >
+          <option value="">{t.noStrategyOption}</option>
+          {strategies.map((s) => (
+            <option key={s.id} value={s.id}>
+              {s.name}
+            </option>
+          ))}
+        </select>
 
         <select
           name="symbol"

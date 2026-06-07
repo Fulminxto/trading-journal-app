@@ -64,6 +64,8 @@ type DiaryLabels = {
   allStatuses: string;
   allTraders: string;
   strategy: string;
+  allStrategies: string;
+  noStrategy: string;
   applyFilters: string;
 
   newTradeEyebrow: string;
@@ -154,6 +156,8 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     allStatuses: "Tutti gli stati",
     allTraders: "Tutti i trader",
     strategy: "Strategia",
+    allStrategies: "— Tutte le strategie —",
+    noStrategy: "— Nessuna strategia —",
     applyFilters: "Applica filtri",
 
     newTradeEyebrow: "Nuova operazione",
@@ -244,6 +248,8 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     allStatuses: "All statuses",
     allTraders: "All traders",
     strategy: "Strategy",
+    allStrategies: "— All strategies —",
+    noStrategy: "— No strategy —",
     applyFilters: "Apply filters",
 
     newTradeEyebrow: "New operation",
@@ -332,6 +338,8 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     allStatuses: "Усі статуси",
     allTraders: "Усі трейдери",
     strategy: "Стратегія",
+    allStrategies: "— Усі стратегії —",
+    noStrategy: "— Без стратегії —",
     applyFilters: "Застосувати фільтри",
     newTradeEyebrow: "Нова операція",
     newTradeTitle: "Додати угоду",
@@ -416,6 +424,8 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     allStatuses: "Все статусы",
     allTraders: "Все трейдеры",
     strategy: "Стратегия",
+    allStrategies: "— Все стратегии —",
+    noStrategy: "— Без стратегии —",
     applyFilters: "Применить фильтры",
     newTradeEyebrow: "Новая операция",
     newTradeTitle: "Добавить сделку",
@@ -500,6 +510,8 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     allStatuses: "Todos los estados",
     allTraders: "Todos los traders",
     strategy: "Estrategia",
+    allStrategies: "— Todas las estrategias —",
+    noStrategy: "— Sin estrategia —",
     applyFilters: "Aplicar filtros",
     newTradeEyebrow: "Nueva operación",
     newTradeTitle: "Añadir trade",
@@ -584,6 +596,8 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     allStatuses: "Tous les statuts",
     allTraders: "Tous les traders",
     strategy: "Stratégie",
+    allStrategies: "— Toutes les stratégies —",
+    noStrategy: "— Aucune stratégie —",
     applyFilters: "Appliquer les filtres",
     newTradeEyebrow: "Nouvelle opération",
     newTradeTitle: "Ajouter un trade",
@@ -668,6 +682,8 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     allStatuses: "Alle Status",
     allTraders: "Alle Trader",
     strategy: "Strategie",
+    allStrategies: "— Alle Strategien —",
+    noStrategy: "— Keine Strategie —",
     applyFilters: "Filter anwenden",
     newTradeEyebrow: "Neue Operation",
     newTradeTitle: "Trade hinzufügen",
@@ -796,7 +812,7 @@ export default async function DiaryPage({
     symbol?: string;
     outcome?: string;
     direction?: string;
-    strategy?: string;
+    strategyId?: string;
     trader?: string;
     from?: string;
     to?: string;
@@ -932,11 +948,8 @@ export default async function DiaryPage({
     where.createdById = selectedTraderId;
   }
 
-  if (filters.strategy) {
-    where.strategy = {
-      contains: filters.strategy,
-      mode: "insensitive",
-    };
+  if (filters.strategyId) {
+    where.strategyId = filters.strategyId;
   }
 
   if (filters.from || filters.to) {
@@ -987,16 +1000,11 @@ export default async function DiaryPage({
     new Set(allTrades.map((trade) => trade.symbol))
   ).sort();
 
-  const strategies = Array.from(
-    new Set(
-      allTrades
-        .map((trade) => trade.strategy)
-        .filter(
-          (strategy): strategy is string =>
-            Boolean(strategy)
-        )
-    )
-  ).sort();
+  const strategies = await prisma.strategy.findMany({
+    where: { tradingAccountId: accountId },
+    orderBy: { name: "asc" },
+    select: { id: true, name: true },
+  });
 
   const totalTrades = trades.length;
 
@@ -1061,7 +1069,7 @@ export default async function DiaryPage({
     Boolean(filters.source) ||
     Boolean(filters.needsReview) ||
     Boolean(selectedTraderId) ||
-    Boolean(filters.strategy) ||
+    Boolean(filters.strategyId) ||
     Boolean(filters.from) ||
     Boolean(filters.to);
 
@@ -1591,22 +1599,18 @@ export default async function DiaryPage({
             </select>
           )}
 
-          <input
-            name="strategy"
-            defaultValue={filters.strategy || ""}
-            list="strategy-list"
-            placeholder={t.strategy}
+          <select
+            name="strategyId"
+            defaultValue={filters.strategyId || ""}
             className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          />
-
-          <datalist id="strategy-list">
-            {strategies.map((strategy) => (
-              <option
-                key={strategy}
-                value={strategy}
-              />
+          >
+            <option value="">{t.allStrategies}</option>
+            {strategies.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
             ))}
-          </datalist>
+          </select>
 
           <input
             name="from"
@@ -1668,11 +1672,17 @@ export default async function DiaryPage({
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
             />
 
-            <input
-              name="strategy"
-              placeholder={t.strategy}
+            <select
+              name="strategyId"
               className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            />
+            >
+              <option value="">{t.noStrategy}</option>
+              {strategies.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
 
             <select
               name="symbol"
