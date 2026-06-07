@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import {
   Activity,
   BarChart3,
+  BookMarked,
   BookOpen,
   Bot,
   CalendarDays,
@@ -87,6 +88,7 @@ type AccountHubLabels = {
     workspace: HubCardText;
     rules: HubCardText;
     integrations: HubCardText;
+    playbook: HubCardText;
   };
 };
 
@@ -204,6 +206,12 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
         description:
           "Configura MT5, broker sync, modalità di import e stato delle integrazioni automatiche.",
       },
+      playbook: {
+        title: "Playbook",
+        eyebrow: "Strategie",
+        description:
+          "Crea e gestisci le strategie operative, collegale ai trade e analizza le performance per setup.",
+      },
     },
   },
 
@@ -313,6 +321,12 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
         eyebrow: "Sync",
         description:
           "Configure MT5, broker sync, import modes and automatic integration status.",
+      },
+      playbook: {
+        title: "Playbook",
+        eyebrow: "Strategies",
+        description:
+          "Create and manage your trading strategies, link them to trades and analyse performance by setup.",
       },
     },
   },
@@ -424,6 +438,12 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
         description:
           "Налаштовуйте MT5, broker sync, режими імпорту та статус автоматичних інтеграцій.",
       },
+      playbook: {
+        title: "Playbook",
+        eyebrow: "Стратегії",
+        description:
+          "Створюйте та керуйте торговими стратегіями, пов'язуйте їх з угодами та аналізуйте ефективність.",
+      },
     },
   },
 
@@ -533,6 +553,12 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
         eyebrow: "Sync",
         description:
           "Настраивайте MT5, broker sync, режимы импорта и статус автоматических интеграций.",
+      },
+      playbook: {
+        title: "Playbook",
+        eyebrow: "Стратегии",
+        description:
+          "Создавайте и управляйте торговыми стратегиями, связывайте их со сделками и анализируйте результаты.",
       },
     },
   },
@@ -644,6 +670,12 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
         description:
           "Configura MT5, broker sync, modos de importación y estado de integraciones automáticas.",
       },
+      playbook: {
+        title: "Playbook",
+        eyebrow: "Estrategias",
+        description:
+          "Crea y gestiona tus estrategias operativas, vincúlalas a los trades y analiza el rendimiento por setup.",
+      },
     },
   },
 
@@ -754,6 +786,12 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
         description:
           "Configurez MT5, broker sync, modes d’import et état des intégrations automatiques.",
       },
+      playbook: {
+        title: "Playbook",
+        eyebrow: "Stratégies",
+        description:
+          "Créez et gérez vos stratégies de trading, liez-les aux trades et analysez la performance par setup.",
+      },
     },
   },
 
@@ -863,6 +901,12 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
         eyebrow: "Sync",
         description:
           "Konfiguriere MT5, broker sync, Importmodi und Status automatischer Integrationen.",
+      },
+      playbook: {
+        title: "Playbook",
+        eyebrow: "Strategien",
+        description:
+          "Erstellen und verwalten Sie Ihre Handelsstrategien, verknüpfen Sie sie mit Trades und analysieren Sie die Leistung.",
       },
     },
   },
@@ -1204,6 +1248,14 @@ export default async function AccountPage({
       show: canManageAccount && !isArchived,
       accentClass:
         "bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.12),transparent_38%)]",
+    },
+    {
+      href: `/accounts/${account.id}/playbook`,
+      ...t.cards.playbook,
+      icon: BookMarked,
+      show: !isArchived,
+      accentClass:
+        "bg-[radial-gradient(circle_at_top_right,rgba(250,204,21,0.12),transparent_38%)]",
     },
   ];
 
