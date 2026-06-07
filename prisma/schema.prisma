@@ -131,6 +131,7 @@ model TradingAccount {
   trades         Trade[]
   sessions       TradingSession[]
   goals          TradingGoal[]
+  strategies     Strategy[]
 
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
@@ -201,6 +202,8 @@ model Trade {
   openTime         String?
   reason           String?
   strategy         String?
+  strategyId       String?
+  strategyRef      Strategy?      @relation(fields: [strategyId], references: [id], onDelete: SetNull)
   symbol           String
   direction        String
   amount           Float?
@@ -248,10 +251,28 @@ model Trade {
   updatedAt        DateTime @updatedAt
   
   @@index([tradingAccountId])
+  @@index([strategyId])
   @@index([source])
   @@index([syncStatus])
   @@index([needsReview])
   @@index([externalTradeId])
+}
+
+model Strategy {
+  id               String         @id @default(cuid())
+  tradingAccountId String
+  name             String
+  description      String?
+  color            String?
+  isActive         Boolean        @default(true)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  tradingAccount   TradingAccount @relation(fields: [tradingAccountId], references: [id], onDelete: Cascade)
+  trades           Trade[]
+
+  @@unique([tradingAccountId, name])
+  @@index([tradingAccountId])
 }
 
 model CopilotMessage {
