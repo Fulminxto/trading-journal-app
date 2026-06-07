@@ -80,7 +80,9 @@ model User {
   sessionLockAlerts     Boolean @default(true)
   dailyTradingReminder  Boolean @default(false)
 
-  memberships   AccountMember[]
+  memberships     AccountMember[]
+  sentInvites     AccountInvite[] @relation("InvitedBy")
+  receivedInvites AccountInvite[] @relation("InvitedUser")
   createdTrades Trade[]
   createdSessions TradingSession[]
 
@@ -125,6 +127,7 @@ model TradingAccount {
   lastSyncedAt     DateTime?
 
   members        AccountMember[]
+  invites        AccountInvite[]
   trades         Trade[]
   sessions       TradingSession[]
   goals          TradingGoal[]
@@ -166,6 +169,23 @@ model AccountMember {
   createdAt        DateTime @default(now())
 
   @@unique([userId, tradingAccountId])
+}
+
+model AccountInvite {
+  id               String     @id @default(cuid())
+  tradingAccountId String
+  invitedUserId    String
+  invitedByUserId  String
+  role             MemberRole @default(MEMBER)
+  createdAt        DateTime   @default(now())
+
+  tradingAccount TradingAccount @relation(fields: [tradingAccountId], references: [id], onDelete: Cascade)
+  invitedUser    User           @relation("InvitedUser", fields: [invitedUserId], references: [id], onDelete: Cascade)
+  invitedBy      User           @relation("InvitedBy", fields: [invitedByUserId], references: [id], onDelete: Cascade)
+
+  @@unique([invitedUserId, tradingAccountId])
+  @@index([tradingAccountId])
+  @@index([invitedUserId])
 }
 
 model Trade {
