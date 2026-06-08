@@ -1,6 +1,7 @@
 ﻿import { Prisma } from "@prisma/client";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { PlayCircle } from "lucide-react";
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -2004,7 +2005,15 @@ export default async function DiaryPage({
                 </td>
 
                 <td className="p-4">
-                  {canEditTrades || canDeleteTrades ? (
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href={`/accounts/${accountId}/diary/${trade.id}/replay`}
+                      className="inline-flex items-center justify-center rounded-xl bg-indigo-500/10 p-2 text-indigo-400 hover:bg-indigo-500/20"
+                      title="Replay"
+                    >
+                      <PlayCircle size={15} />
+                    </Link>
+                    {canEditTrades || canDeleteTrades ? (
                     <div className="flex gap-3">
                       {canEditTrades && (
                         <Link
@@ -2037,6 +2046,7 @@ export default async function DiaryPage({
                       {t.readOnly}
                     </span>
                   )}
+                  </div>
                 </td>
               </tr>
             ))}
@@ -2232,36 +2242,40 @@ export default async function DiaryPage({
                   </div>
                 )}
 
-                {(canEditTrades || canDeleteTrades) && (
-                  <div className="mt-4 flex gap-3">
-                    {canEditTrades && (
-                      <Link
-                        href={`/accounts/${accountId}/diary/${trade.id}/edit`}
-                        className="flex-1 rounded-xl bg-white/10 px-3 py-3 text-center text-sm hover:bg-white/20"
+                <div className="mt-4 flex gap-3">
+                  <Link
+                    href={`/accounts/${accountId}/diary/${trade.id}/replay`}
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-indigo-500/10 px-3 py-3 text-sm text-indigo-400 hover:bg-indigo-500/20"
+                  >
+                    <PlayCircle size={14} />
+                    Replay
+                  </Link>
+                  {canEditTrades && (
+                    <Link
+                      href={`/accounts/${accountId}/diary/${trade.id}/edit`}
+                      className="flex-1 rounded-xl bg-white/10 px-3 py-3 text-center text-sm hover:bg-white/20"
+                    >
+                      {t.edit}
+                    </Link>
+                  )}
+                  {canDeleteTrades && (
+                    <form
+                      action={deleteAccountTrade.bind(
+                        null,
+                        accountId,
+                        trade.id
+                      )}
+                      className="flex-1"
+                    >
+                      <button
+                        type="submit"
+                        className="w-full rounded-xl bg-red-500/10 px-3 py-3 text-sm text-red-400 hover:bg-red-500/20"
                       >
-                        {t.edit}
-                      </Link>
-                    )}
-
-                    {canDeleteTrades && (
-                      <form
-                        action={deleteAccountTrade.bind(
-                          null,
-                          accountId,
-                          trade.id
-                        )}
-                        className="flex-1"
-                      >
-                        <button
-                          type="submit"
-                          className="w-full rounded-xl bg-red-500/10 px-3 py-3 text-sm text-red-400 hover:bg-red-500/20"
-                        >
-                          {t.delete}
-                        </button>
-                      </form>
-                    )}
-                  </div>
-                )}
+                        {t.delete}
+                      </button>
+                    </form>
+                  )}
+                </div>
               </div>
             </div>
           ))
