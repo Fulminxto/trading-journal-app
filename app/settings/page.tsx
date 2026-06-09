@@ -73,6 +73,15 @@ type SettingsLabels = {
   sessionLockAlertsDescription: string;
   dailyReminderLabel: string;
   dailyReminderDescription: string;
+  notificationsEnabledDescription: string;
+  notifyTradeActivityLabel: string;
+  notifyTradeActivityDescription: string;
+  notifyAccountActivityLabel: string;
+  notifyAccountActivityDescription: string;
+  notifyPlatformUpdatesLabel: string;
+  notifyPlatformUpdatesDescription: string;
+  notifySupportLabel: string;
+  notifySupportDescription: string;
   enabled: string;
   disabled: string;
 
@@ -170,6 +179,15 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     sessionLockAlertsDescription: "Notifiche quando il rischio operativo è elevato.",
     dailyReminderLabel: "Reminder giornaliero",
     dailyReminderDescription: "Promemoria quotidiano per completare il diario operativo.",
+    notificationsEnabledDescription: "Se disattivato, non riceverai nessuna notifica in-app, indipendentemente dalle categorie.",
+    notifyTradeActivityLabel: "Attività di trading",
+    notifyTradeActivityDescription: "Trade creati, modificati, eliminati, importati e sincronizzati.",
+    notifyAccountActivityLabel: "Account & Membri",
+    notifyAccountActivityDescription: "Inviti, cambi di ruolo, rimozioni e revisioni dell'account.",
+    notifyPlatformUpdatesLabel: "Aggiornamenti piattaforma",
+    notifyPlatformUpdatesDescription: "Release note e manutenzioni programmate.",
+    notifySupportLabel: "Supporto",
+    notifySupportDescription: "Ticket di supporto aperti o aggiornati.",
     enabled: "Attivo",
     disabled: "Disattivo",
     saveSettings: "Salva impostazioni",
@@ -258,6 +276,15 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     sessionLockAlertsDescription: "Notifications for elevated operational risk.",
     dailyReminderLabel: "Daily reminder",
     dailyReminderDescription: "Daily reminder to complete trading records.",
+    notificationsEnabledDescription: "When off, you will receive no in-app notifications regardless of category settings.",
+    notifyTradeActivityLabel: "Trade activity",
+    notifyTradeActivityDescription: "Trades created, updated, deleted, imported and synced.",
+    notifyAccountActivityLabel: "Account & Members",
+    notifyAccountActivityDescription: "Invites, role changes, removals and account reviews.",
+    notifyPlatformUpdatesLabel: "Platform updates",
+    notifyPlatformUpdatesDescription: "Release notes and scheduled maintenance.",
+    notifySupportLabel: "Support",
+    notifySupportDescription: "Support tickets opened or updated.",
     enabled: "Enabled",
     disabled: "Disabled",
     saveSettings: "Save settings",
@@ -346,6 +373,15 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     sessionLockAlertsDescription: "Сповіщення при підвищеному операційному ризику.",
     dailyReminderLabel: "Щоденне нагадування",
     dailyReminderDescription: "Щоденне нагадування заповнити торговий журнал.",
+    notificationsEnabledDescription: "Якщо вимкнено, ви не отримуватимете жодних сповіщень у застосунку, незалежно від категорій.",
+    notifyTradeActivityLabel: "Торгова активність",
+    notifyTradeActivityDescription: "Угоди створені, оновлені, видалені, імпортовані та синхронізовані.",
+    notifyAccountActivityLabel: "Акаунт та учасники",
+    notifyAccountActivityDescription: "Запрошення, зміни ролей, видалення та перевірки акаунту.",
+    notifyPlatformUpdatesLabel: "Оновлення платформи",
+    notifyPlatformUpdatesDescription: "Примітки до випусків та планові технічні роботи.",
+    notifySupportLabel: "Підтримка",
+    notifySupportDescription: "Тікети підтримки відкриті або оновлені.",
     enabled: "Увімкнено",
     disabled: "Вимкнено",
     saveSettings: "Зберегти налаштування",
@@ -434,6 +470,15 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     sessionLockAlertsDescription: "Уведомления при повышенном операционном риске.",
     dailyReminderLabel: "Ежедневное напоминание",
     dailyReminderDescription: "Ежедневное напоминание заполнить торговый журнал.",
+    notificationsEnabledDescription: "Если выключено, вы не будете получать никаких уведомлений в приложении, независимо от категорий.",
+    notifyTradeActivityLabel: "Торговая активность",
+    notifyTradeActivityDescription: "Сделки созданные, обновлённые, удалённые, импортированные и синхронизированные.",
+    notifyAccountActivityLabel: "Аккаунт и участники",
+    notifyAccountActivityDescription: "Приглашения, изменения ролей, удаления и проверки аккаунта.",
+    notifyPlatformUpdatesLabel: "Обновления платформы",
+    notifyPlatformUpdatesDescription: "Примечания к выпускам и плановые технические работы.",
+    notifySupportLabel: "Поддержка",
+    notifySupportDescription: "Тикеты поддержки открытые или обновлённые.",
     enabled: "Включено",
     disabled: "Выключено",
     saveSettings: "Сохранить настройки",
@@ -522,6 +567,15 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     sessionLockAlertsDescription: "Notificaciones cuando el riesgo operativo es elevado.",
     dailyReminderLabel: "Recordatorio diario",
     dailyReminderDescription: "Recordatorio diario para completar el diario de trading.",
+    notificationsEnabledDescription: "Si está desactivado, no recibirás ninguna notificación in-app independientemente de las categorías.",
+    notifyTradeActivityLabel: "Actividad de trading",
+    notifyTradeActivityDescription: "Trades creados, modificados, eliminados, importados y sincronizados.",
+    notifyAccountActivityLabel: "Cuenta y Miembros",
+    notifyAccountActivityDescription: "Invitaciones, cambios de rol, bajas y revisiones de cuenta.",
+    notifyPlatformUpdatesLabel: "Actualizaciones de plataforma",
+    notifyPlatformUpdatesDescription: "Notas de versión y mantenimientos programados.",
+    notifySupportLabel: "Soporte",
+    notifySupportDescription: "Tickets de soporte abiertos o actualizados.",
     enabled: "Activado",
     disabled: "Desactivado",
     saveSettings: "Guardar ajustes",
@@ -610,6 +664,15 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     sessionLockAlertsDescription: "Notifications lorsque le risque opérationnel est élevé.",
     dailyReminderLabel: "Rappel quotidien",
     dailyReminderDescription: "Rappel quotidien pour compléter le journal de trading.",
+    notificationsEnabledDescription: "Si désactivé, vous ne recevrez aucune notification in-app, quelle que soit la catégorie.",
+    notifyTradeActivityLabel: "Activité de trading",
+    notifyTradeActivityDescription: "Trades créés, modifiés, supprimés, importés et synchronisés.",
+    notifyAccountActivityLabel: "Compte & Membres",
+    notifyAccountActivityDescription: "Invitations, changements de rôle, suppressions et révisions de compte.",
+    notifyPlatformUpdatesLabel: "Mises à jour plateforme",
+    notifyPlatformUpdatesDescription: "Notes de version et maintenances planifiées.",
+    notifySupportLabel: "Support",
+    notifySupportDescription: "Tickets d'assistance ouverts ou mis à jour.",
     enabled: "Activé",
     disabled: "Désactivé",
     saveSettings: "Enregistrer les paramètres",
@@ -698,6 +761,15 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     sessionLockAlertsDescription: "Benachrichtigungen bei erhöhtem operativem Risiko.",
     dailyReminderLabel: "Tägliche Erinnerung",
     dailyReminderDescription: "Tägliche Erinnerung zum Ausfüllen des Trading-Journals.",
+    notificationsEnabledDescription: "Wenn deaktiviert, erhältst du keine In-App-Benachrichtigungen, unabhängig von den Kategorien.",
+    notifyTradeActivityLabel: "Trading-Aktivität",
+    notifyTradeActivityDescription: "Trades erstellt, aktualisiert, gelöscht, importiert und synchronisiert.",
+    notifyAccountActivityLabel: "Konto & Mitglieder",
+    notifyAccountActivityDescription: "Einladungen, Rollenänderungen, Entfernungen und Kontoüberprüfungen.",
+    notifyPlatformUpdatesLabel: "Plattform-Updates",
+    notifyPlatformUpdatesDescription: "Release-Notes und geplante Wartungen.",
+    notifySupportLabel: "Support",
+    notifySupportDescription: "Support-Tickets geöffnet oder aktualisiert.",
     enabled: "Aktiviert",
     disabled: "Deaktiviert",
     saveSettings: "Einstellungen speichern",
@@ -1100,54 +1172,57 @@ export default async function SettingsPage({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <div className="rounded-2xl border border-green-500/20 bg-green-500/[0.04] p-5">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-sm text-gray-400">
-                    {t.inAppNotificationsLabel}
-                  </p>
+          {/* Master toggle */}
+          <label className="mb-4 flex cursor-pointer items-start justify-between gap-4 rounded-2xl border border-white/10 bg-black/20 p-5">
+            <div>
+              <p className="text-sm text-gray-400">
+                {t.inAppNotificationsLabel}
+              </p>
 
-                  <h3 className="mt-2 text-lg font-bold text-green-400">
-                    {t.inAppNotificationsValue}
-                  </h3>
+              <h3 className="mt-2 text-lg font-bold">
+                {user.notificationsEnabled
+                  ? t.enabled
+                  : t.disabled}
+              </h3>
 
-                  <p className="mt-2 text-sm text-gray-500">
-                    {t.inAppNotificationsDescription}
-                  </p>
-                </div>
-
-                <span className="rounded-xl bg-green-500/10 px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-green-400">
-                  {t.activeBadge}
-                </span>
-              </div>
+              <p className="mt-2 text-sm text-gray-500">
+                {t.notificationsEnabledDescription}
+              </p>
             </div>
 
+            <input
+              type="checkbox"
+              name="notificationsEnabled"
+              defaultChecked={user.notificationsEnabled}
+              className="mt-1 h-5 w-5 flex-shrink-0"
+            />
+          </label>
+
+          {/* Category cards */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-sm text-gray-400">
-                    {t.reviewRemindersLabel}
+                    {t.notifyTradeActivityLabel}
                   </p>
 
                   <h3 className="mt-2 text-lg font-bold">
-                    {user.reviewReminders
+                    {user.notifyTradeActivity
                       ? t.enabled
                       : t.disabled}
                   </h3>
 
                   <p className="mt-2 text-sm text-gray-500">
-                    {t.reviewRemindersDescription}
+                    {t.notifyTradeActivityDescription}
                   </p>
                 </div>
 
                 <input
                   type="checkbox"
-                  name="reviewReminders"
-                  defaultChecked={
-                    user.reviewReminders
-                  }
-                  className="mt-1 h-5 w-5"
+                  name="notifyTradeActivity"
+                  defaultChecked={user.notifyTradeActivity}
+                  className="mt-1 h-5 w-5 flex-shrink-0"
                 />
               </div>
             </label>
@@ -1156,27 +1231,25 @@ export default async function SettingsPage({
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-sm text-gray-400">
-                    {t.sessionLockAlertsLabel}
+                    {t.notifyAccountActivityLabel}
                   </p>
 
                   <h3 className="mt-2 text-lg font-bold">
-                    {user.sessionLockAlerts
+                    {user.notifyAccountActivity
                       ? t.enabled
                       : t.disabled}
                   </h3>
 
                   <p className="mt-2 text-sm text-gray-500">
-                    {t.sessionLockAlertsDescription}
+                    {t.notifyAccountActivityDescription}
                   </p>
                 </div>
 
                 <input
                   type="checkbox"
-                  name="sessionLockAlerts"
-                  defaultChecked={
-                    user.sessionLockAlerts
-                  }
-                  className="mt-1 h-5 w-5"
+                  name="notifyAccountActivity"
+                  defaultChecked={user.notifyAccountActivity}
+                  className="mt-1 h-5 w-5 flex-shrink-0"
                 />
               </div>
             </label>
@@ -1185,27 +1258,52 @@ export default async function SettingsPage({
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-sm text-gray-400">
-                    {t.dailyReminderLabel}
+                    {t.notifyPlatformUpdatesLabel}
                   </p>
 
                   <h3 className="mt-2 text-lg font-bold">
-                    {user.dailyTradingReminder
+                    {user.notifyPlatformUpdates
                       ? t.enabled
                       : t.disabled}
                   </h3>
 
                   <p className="mt-2 text-sm text-gray-500">
-                    {t.dailyReminderDescription}
+                    {t.notifyPlatformUpdatesDescription}
                   </p>
                 </div>
 
                 <input
                   type="checkbox"
-                  name="dailyTradingReminder"
-                  defaultChecked={
-                    user.dailyTradingReminder
-                  }
-                  className="mt-1 h-5 w-5"
+                  name="notifyPlatformUpdates"
+                  defaultChecked={user.notifyPlatformUpdates}
+                  className="mt-1 h-5 w-5 flex-shrink-0"
+                />
+              </div>
+            </label>
+
+            <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-sm text-gray-400">
+                    {t.notifySupportLabel}
+                  </p>
+
+                  <h3 className="mt-2 text-lg font-bold">
+                    {user.notifySupport
+                      ? t.enabled
+                      : t.disabled}
+                  </h3>
+
+                  <p className="mt-2 text-sm text-gray-500">
+                    {t.notifySupportDescription}
+                  </p>
+                </div>
+
+                <input
+                  type="checkbox"
+                  name="notifySupport"
+                  defaultChecked={user.notifySupport}
+                  className="mt-1 h-5 w-5 flex-shrink-0"
                 />
               </div>
             </label>
