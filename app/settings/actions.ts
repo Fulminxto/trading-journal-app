@@ -120,6 +120,21 @@ export async function updateSettings(
       "dailyTradingReminder"
     );
 
+  const notificationsEnabled =
+    getBoolean(formData, "notificationsEnabled");
+
+  const notifyTradeActivity =
+    getBoolean(formData, "notifyTradeActivity");
+
+  const notifyAccountActivity =
+    getBoolean(formData, "notifyAccountActivity");
+
+  const notifyPlatformUpdates =
+    getBoolean(formData, "notifyPlatformUpdates");
+
+  const notifySupport =
+    getBoolean(formData, "notifySupport");
+
   const before = {
     defaultCurrency:
       currentUser.defaultCurrency,
@@ -171,6 +186,12 @@ export async function updateSettings(
         reviewReminders,
         sessionLockAlerts,
         dailyTradingReminder,
+
+        notificationsEnabled,
+        notifyTradeActivity,
+        notifyAccountActivity,
+        notifyPlatformUpdates,
+        notifySupport,
       },
     });
 

@@ -80,6 +80,12 @@ model User {
   sessionLockAlerts     Boolean @default(true)
   dailyTradingReminder  Boolean @default(false)
 
+  notificationsEnabled  Boolean @default(true)
+  notifyTradeActivity   Boolean @default(true)
+  notifyAccountActivity Boolean @default(true)
+  notifyPlatformUpdates Boolean @default(true)
+  notifySupport         Boolean @default(true)
+
   memberships     AccountMember[]
   sentInvites     AccountInvite[] @relation("InvitedBy")
   receivedInvites AccountInvite[] @relation("InvitedUser")

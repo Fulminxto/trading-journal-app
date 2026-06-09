@@ -74,6 +74,30 @@ export async function createNotification({
   });
 }
 
+function getNotificationCategory(
+  type: string,
+): "trade" | "account" | "platform" | "support" | "always" {
+  if (
+    ["TRADE_CREATED", "TRADE_UPDATED", "TRADE_DELETED",
+     "TRADE_IMPORTED", "TRADE_SYNC_UPDATED"].includes(type)
+  ) return "trade";
+
+  if (
+    ["ACCOUNT_INVITE", "ACCOUNT_INVITE_ACCEPTED", "ACCOUNT_INVITE_DECLINED",
+     "MEMBER_REMOVED", "MEMBER_ROLE_CHANGED", "ACCOUNT_REVIEW_REQUESTED"].includes(type)
+  ) return "account";
+
+  if (
+    ["RELEASE_NOTE_PUBLISHED", "MAINTENANCE_UPDATED"].includes(type)
+  ) return "platform";
+
+  if (
+    ["SUPPORT_TICKET_CREATED", "SUPPORT_TICKET_UPDATED"].includes(type)
+  ) return "support";
+
+  return "always";
+}
+
 export async function notifyAccountMembers({
   accountId,
   actorId,
@@ -93,23 +117,40 @@ export async function notifyAccountMembers({
     where: {
       tradingAccountId: accountId,
       userId: actorId
-        ? {
-          not: actorId,
-        }
+        ? { not: actorId }
         : undefined,
     },
     select: {
       userId: true,
+      user: {
+        select: {
+          notificationsEnabled: true,
+          notifyTradeActivity: true,
+          notifyAccountActivity: true,
+          notifyPlatformUpdates: true,
+          notifySupport: true,
+        },
+      },
     },
   });
 
-  if (members.length === 0) {
-    return;
-  }
+  if (members.length === 0) return;
+
+  const category = getNotificationCategory(type);
+  const eligible = members.filter((m) => {
+    if (!m.user.notificationsEnabled) return false;
+    if (category === "trade")    return m.user.notifyTradeActivity;
+    if (category === "account")  return m.user.notifyAccountActivity;
+    if (category === "platform") return m.user.notifyPlatformUpdates;
+    if (category === "support")  return m.user.notifySupport;
+    return true;
+  });
+
+  if (eligible.length === 0) return;
 
   await prisma.notification.createMany({
-    data: members.map((member) => ({
-      userId: member.userId,
+    data: eligible.map((m) => ({
+      userId: m.userId,
       type,
       title,
       message,
@@ -133,27 +174,38 @@ export async function notifyFoundersAndAdmins({
 }) {
   const users = await prisma.user.findMany({
     where: {
-      role: {
-        in: ["FOUNDER", "ADMIN"],
-      },
+      role: { in: ["FOUNDER", "ADMIN"] },
       id: actorId
-        ? {
-          not: actorId,
-        }
+        ? { not: actorId }
         : undefined,
     },
     select: {
       id: true,
+      notificationsEnabled: true,
+      notifyTradeActivity: true,
+      notifyAccountActivity: true,
+      notifyPlatformUpdates: true,
+      notifySupport: true,
     },
   });
 
-  if (users.length === 0) {
-    return;
-  }
+  if (users.length === 0) return;
+
+  const category = getNotificationCategory(type);
+  const eligible = users.filter((u) => {
+    if (!u.notificationsEnabled) return false;
+    if (category === "trade")    return u.notifyTradeActivity;
+    if (category === "account")  return u.notifyAccountActivity;
+    if (category === "platform") return u.notifyPlatformUpdates;
+    if (category === "support")  return u.notifySupport;
+    return true;
+  });
+
+  if (eligible.length === 0) return;
 
   await prisma.notification.createMany({
-    data: users.map((user) => ({
-      userId: user.id,
+    data: eligible.map((u) => ({
+      userId: u.id,
       type,
       title,
       message,
