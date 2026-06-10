@@ -25,6 +25,7 @@ import MarketPsychologyEngine from "@/components/diary/MarketPsychologyEngine";
 import ConfidenceAnalyticsEngine from "@/components/diary/ConfidenceAnalyticsEngine";
 import BehavioralCorrelationEngine from "@/components/diary/BehavioralCorrelationEngine";
 import AIPerformanceTimeline from "@/components/diary/AIPerformanceTimeline";
+import MemberSelector from "@/components/MemberSelector";
 
 import {
   createAccountTrade,
@@ -1300,6 +1301,19 @@ export default async function DiaryPage({
 
   return (
     <div>
+      {isSharedAccount && (
+        <MemberSelector
+          members={accountMembers.map((m) => ({
+            id: m.user.id,
+            name: m.user.name,
+            username: m.user.username,
+          }))}
+          selectedMemberId={selectedTraderId}
+          accountId={accountId}
+          appLanguage={language}
+        />
+      )}
+
       <TradeQualityHero
         totalTrades={trades.length}
         averageExecution={averageExecution}
@@ -1578,27 +1592,6 @@ export default async function DiaryPage({
             <option value="">{t.allStatuses}</option>
             <option value="true">{t.needsReview}</option>
           </select>
-
-          {isSharedAccount && (
-            <select
-              name="trader"
-              defaultValue={selectedTraderId || ""}
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            >
-              <option value="">{t.allTraders}</option>
-
-              {accountMembers.map((member) => (
-                <option
-                  key={member.user.id}
-                  value={member.user.id}
-                >
-                  {member.user.name ||
-                    member.user.username ||
-                    t.unknownTrader}
-                </option>
-              ))}
-            </select>
-          )}
 
           <select
             name="strategyId"

@@ -6,6 +6,7 @@ import EquityChart from "@/components/EquityChart";
 import DashboardHero from "@/components/dashboard/DashboardHero";
 import DashboardStatCard from "@/components/dashboard/DashboardStatCard";
 import ConsistencyScoreCard from "@/components/dashboard/ConsistencyScoreCard";
+import MemberSelector from "@/components/MemberSelector";
 import {
   normalizeAppLanguage,
   type AppLanguage,
@@ -651,8 +652,10 @@ const dashboardLabels: Record<
 
 export default async function DashboardPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ accountId: string }>;
+  searchParams: Promise<{ member?: string }>;
 }) {
   const session = await auth();
 
@@ -661,26 +664,37 @@ export default async function DashboardPage({
   }
 
   const { accountId } = await params;
+  const filters = await searchParams;
+  const selectedMemberId = filters.member || undefined;
 
-  const membership =
-    await prisma.accountMember.findFirst({
+  const [membership, accountMembers] = await Promise.all([
+    prisma.accountMember.findFirst({
       where: {
         userId: session.user.id,
         tradingAccountId: accountId,
       },
-
       include: {
         tradingAccount: true,
       },
-    });
+    }),
+    prisma.accountMember.findMany({
+      where: { tradingAccountId: accountId },
+      include: { user: true },
+    }),
+  ]);
 
   if (!membership) {
     redirect("/accounts");
   }
 
+  const isSharedAccount = accountMembers.length > 1;
+
   const trades = await prisma.trade.findMany({
     where: {
       tradingAccountId: accountId,
+      ...(selectedMemberId
+        ? { createdById: selectedMemberId }
+        : {}),
     },
 
     orderBy: [
@@ -1042,6 +1056,19 @@ export default async function DashboardPage({
 
   return (
     <div>
+      {isSharedAccount && (
+        <MemberSelector
+          members={accountMembers.map((m) => ({
+            id: m.user.id,
+            name: m.user.name,
+            username: m.user.username,
+          }))}
+          selectedMemberId={selectedMemberId}
+          accountId={accountId}
+          appLanguage={language}
+        />
+      )}
+
       <DashboardHero
         accountName={account.name}
         currentEquity={formatCurrency(
