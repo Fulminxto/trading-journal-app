@@ -1,6 +1,7 @@
 "use server";
 
 import { randomUUID } from "crypto";
+import bcrypt from "bcryptjs";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
@@ -388,4 +389,82 @@ export async function updateProfile(
   });
 
   redirect("/profile?toast=success");
+}
+
+export async function changePassword(
+  formData: FormData
+) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
+
+  const currentUser =
+    await prisma.user.findUnique({
+      where: { id: session.user.id },
+    });
+
+  if (!currentUser) {
+    redirect("/login");
+  }
+
+  const currentPassword = getString(
+    formData,
+    "currentPassword"
+  );
+
+  const newPassword = getString(
+    formData,
+    "newPassword"
+  );
+
+  const confirmPassword = getString(
+    formData,
+    "confirmPassword"
+  );
+
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    redirect("/profile?toast=error");
+  }
+
+  const isCurrentValid = await bcrypt.compare(
+    currentPassword,
+    currentUser.passwordHash
+  );
+
+  if (!isCurrentValid) {
+    redirect("/profile?toast=wrong-current-password");
+  }
+
+  if (newPassword.length < 8) {
+    redirect("/profile?toast=password-too-short");
+  }
+
+  if (newPassword !== confirmPassword) {
+    redirect("/profile?toast=password-mismatch");
+  }
+
+  const passwordHash = await bcrypt.hash(
+    newPassword,
+    12
+  );
+
+  await prisma.user.update({
+    where: { id: session.user.id },
+    data: {
+      passwordHash,
+      failedLoginAttempts: 0,
+      lockedUntil: null,
+    },
+  });
+
+  await logActivity({
+    userId: session.user.id,
+    type: "PASSWORD_CHANGED",
+    title: "Password changed",
+    description: `${currentUser.username} changed their password`,
+  });
+
+  redirect("/profile?toast=password-changed");
 }

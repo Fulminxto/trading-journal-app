@@ -3,6 +3,7 @@
   BadgeCheck,
   Briefcase,
   Clock3,
+  KeyRound,
   LineChart,
   Shield,
   Target,
@@ -16,6 +17,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 
 import { updateProfile } from "./actions";
+import ChangePasswordForm from "./ChangePasswordForm";
 import GlobalToast from "@/components/GlobalToast";
 
 import {
@@ -87,6 +89,9 @@ type ProfileLabels = {
   activity: string;
   recentTrades: string;
   noRecentTrades: string;
+
+  security: string;
+  changePassword: string;
 
   access: string;
   securityStatus: string;
@@ -161,6 +166,9 @@ const labels: Record<AppLanguage, ProfileLabels> = {
     recentTrades: "Trade recenti",
     noRecentTrades: "Nessun trade recente.",
 
+    security: "Sicurezza",
+    changePassword: "Cambia password",
+
     access: "Accesso",
     securityStatus: "Stato sicurezza",
     authentication: "Autenticazione",
@@ -232,6 +240,9 @@ const labels: Record<AppLanguage, ProfileLabels> = {
     activity: "Activity",
     recentTrades: "Recent Trades",
     noRecentTrades: "No recent trades.",
+
+    security: "Security",
+    changePassword: "Change password",
 
     access: "Access",
     securityStatus: "Security Status",
@@ -305,6 +316,9 @@ const labels: Record<AppLanguage, ProfileLabels> = {
     recentTrades: "Останні угоди",
     noRecentTrades: "Немає останніх угод.",
 
+    security: "Безпека",
+    changePassword: "Змінити пароль",
+
     access: "Доступ",
     securityStatus: "Статус безпеки",
     authentication: "Аутентифікація",
@@ -376,6 +390,9 @@ const labels: Record<AppLanguage, ProfileLabels> = {
     activity: "Активность",
     recentTrades: "Последние сделки",
     noRecentTrades: "Нет последних сделок.",
+
+    security: "Безопасность",
+    changePassword: "Изменить пароль",
 
     access: "Доступ",
     securityStatus: "Статус безопасности",
@@ -449,6 +466,9 @@ const labels: Record<AppLanguage, ProfileLabels> = {
     recentTrades: "Trades recientes",
     noRecentTrades: "No hay trades recientes.",
 
+    security: "Seguridad",
+    changePassword: "Cambiar contraseña",
+
     access: "Acceso",
     securityStatus: "Estado de seguridad",
     authentication: "Autenticación",
@@ -521,6 +541,9 @@ const labels: Record<AppLanguage, ProfileLabels> = {
     recentTrades: "Trades récents",
     noRecentTrades: "Aucun trade récent.",
 
+    security: "Sécurité",
+    changePassword: "Changer le mot de passe",
+
     access: "Accès",
     securityStatus: "Statut de sécurité",
     authentication: "Authentification",
@@ -592,6 +615,9 @@ const labels: Record<AppLanguage, ProfileLabels> = {
     activity: "Aktivität",
     recentTrades: "Aktuelle Trades",
     noRecentTrades: "Keine aktuellen Trades.",
+
+    security: "Sicherheit",
+    changePassword: "Passwort ändern",
 
     access: "Zugriff",
     securityStatus: "Sicherheitsstatus",
@@ -1310,6 +1336,27 @@ export default async function ProfilePage({
                 </div>
               )}
             </div>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+            <div className="mb-5 flex items-center gap-3">
+              <KeyRound
+                size={22}
+                className="text-green-400"
+              />
+
+              <div>
+                <p className="text-sm text-gray-400">
+                  {t.security}
+                </p>
+
+                <h2 className="text-2xl font-bold">
+                  {t.changePassword}
+                </h2>
+              </div>
+            </div>
+
+            <ChangePasswordForm appLanguage={appLanguage} />
           </div>
 
           <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">

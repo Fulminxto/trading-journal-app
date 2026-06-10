@@ -163,6 +163,54 @@ const TOAST_MESSAGES: Record<string, MessageEntry> =
         de: "Benutzer erfolgreich gelöscht.",
       },
     },
+    "password-changed": {
+      type: "success",
+      messages: {
+        it: "Password cambiata con successo.",
+        en: "Password changed successfully.",
+        uk: "Пароль успішно змінено.",
+        ru: "Пароль успешно изменён.",
+        es: "Contraseña cambiada con éxito.",
+        fr: "Mot de passe changé avec succès.",
+        de: "Passwort erfolgreich geändert.",
+      },
+    },
+    "wrong-current-password": {
+      type: "error",
+      messages: {
+        it: "La password attuale non è corretta.",
+        en: "Current password is incorrect.",
+        uk: "Поточний пароль неправильний.",
+        ru: "Текущий пароль неверен.",
+        es: "La contraseña actual no es correcta.",
+        fr: "Le mot de passe actuel est incorrect.",
+        de: "Das aktuelle Passwort ist falsch.",
+      },
+    },
+    "password-mismatch": {
+      type: "error",
+      messages: {
+        it: "La nuova password e la conferma non coincidono.",
+        en: "New password and confirmation do not match.",
+        uk: "Новий пароль і підтвердження не збігаються.",
+        ru: "Новый пароль и подтверждение не совпадают.",
+        es: "La nueva contraseña y la confirmación no coinciden.",
+        fr: "Le nouveau mot de passe et la confirmation ne correspondent pas.",
+        de: "Neues Passwort und Bestätigung stimmen nicht überein.",
+      },
+    },
+    "password-too-short": {
+      type: "error",
+      messages: {
+        it: "La nuova password deve contenere almeno 8 caratteri.",
+        en: "New password must be at least 8 characters long.",
+        uk: "Новий пароль повинен містити щонайменше 8 символів.",
+        ru: "Новый пароль должен содержать не менее 8 символов.",
+        es: "La nueva contraseña debe tener al menos 8 caracteres.",
+        fr: "Le nouveau mot de passe doit contenir au moins 8 caractères.",
+        de: "Das neue Passwort muss mindestens 8 Zeichen lang sein.",
+      },
+    },
   };
 
 export default function GlobalToast({
