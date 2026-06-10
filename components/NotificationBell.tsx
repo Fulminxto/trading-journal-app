@@ -1,15 +1,20 @@
 "use client";
 
-import { Bell, CheckCheck } from "lucide-react";
+import { Bell, CheckCheck, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import {
   getLocaleFromLanguage,
   normalizeAppLanguage,
   type AppLanguage,
 } from "@/lib/i18n";
 import { getNotificationTypeLabel } from "@/lib/notifications";
+import {
+  acceptInvite,
+  declineInvite,
+} from "@/app/accounts/[accountId]/members/actions";
 
 type NotificationItem = {
   id: string;
@@ -81,6 +86,66 @@ const panelCopy: Record<AppLanguage, PanelCopy> = {
   },
 };
 
+type InviteCopy = {
+  accept: string;
+  decline: string;
+  declineSuccess: string;
+  acceptError: string;
+  declineError: string;
+};
+
+const inviteCopy: Record<AppLanguage, InviteCopy> = {
+  it: {
+    accept: "Accetta",
+    decline: "Rifiuta",
+    declineSuccess: "Invito rifiutato.",
+    acceptError: "Impossibile accettare l'invito. Riprova.",
+    declineError: "Impossibile rifiutare l'invito. Riprova.",
+  },
+  en: {
+    accept: "Accept",
+    decline: "Decline",
+    declineSuccess: "Invite declined.",
+    acceptError: "Could not accept invite. Try again.",
+    declineError: "Could not decline invite. Try again.",
+  },
+  uk: {
+    accept: "Прийняти",
+    decline: "Відхилити",
+    declineSuccess: "Запрошення відхилено.",
+    acceptError: "Не вдалося прийняти запрошення. Спробуйте ще раз.",
+    declineError: "Не вдалося відхилити запрошення. Спробуйте ще раз.",
+  },
+  ru: {
+    accept: "Принять",
+    decline: "Отклонить",
+    declineSuccess: "Приглашение отклонено.",
+    acceptError: "Не удалось принять приглашение. Попробуйте снова.",
+    declineError: "Не удалось отклонить приглашение. Попробуйте снова.",
+  },
+  es: {
+    accept: "Aceptar",
+    decline: "Rechazar",
+    declineSuccess: "Invitación rechazada.",
+    acceptError: "No se pudo aceptar la invitación. Inténtalo de nuevo.",
+    declineError: "No se pudo rechazar la invitación. Inténtalo de nuevo.",
+  },
+  fr: {
+    accept: "Accepter",
+    decline: "Refuser",
+    declineSuccess: "Invitation refusée.",
+    acceptError: "Impossible d'accepter l'invitation. Réessayez.",
+    declineError: "Impossible de refuser l'invitation. Réessayez.",
+  },
+  de: {
+    accept: "Annehmen",
+    decline: "Ablehnen",
+    declineSuccess: "Einladung abgelehnt.",
+    acceptError: "Einladung konnte nicht angenommen werden. Versuche es erneut.",
+    declineError: "Einladung konnte nicht abgelehnt werden. Versuche es erneut.",
+  },
+};
+
 const RELATIVE_TIME_UNITS: {
   unit: Intl.RelativeTimeFormatUnit;
   ms: number;
@@ -110,6 +175,13 @@ function formatRelativeTime(value: string, locale: string) {
   return formatter.format(Math.round(diffMs / 1000), "second");
 }
 
+function extractAccountId(link: string | null): string | null {
+  if (!link) return null;
+  // link format: /accounts/{accountId}/members
+  const parts = link.split("/");
+  return parts[2] || null;
+}
+
 export default function NotificationBell({
   language,
 }: {
@@ -119,12 +191,14 @@ export default function NotificationBell({
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingInvite, setLoadingInvite] = useState<string | null>(null);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
 
   const appLanguage = normalizeAppLanguage(language);
   const t = panelCopy[appLanguage];
+  const ti = inviteCopy[appLanguage];
   const locale = getLocaleFromLanguage(appLanguage);
 
   async function fetchNotifications() {
@@ -221,6 +295,25 @@ export default function NotificationBell({
     }
   }
 
+  async function markNotificationRead(notification: NotificationItem) {
+    if (notification.read) return;
+
+    setNotifications((current) =>
+      current.map((item) =>
+        item.id === notification.id ? { ...item, read: true } : item
+      )
+    );
+    setCount((current) => Math.max(0, current - 1));
+
+    try {
+      await fetch(`/api/notifications/${notification.id}/read`, {
+        method: "POST",
+      });
+    } catch {
+      // Optimistic state stands.
+    }
+  }
+
   async function handleNotificationClick(
     notification: NotificationItem
   ) {
@@ -253,6 +346,50 @@ export default function NotificationBell({
 
     if (notification.link) {
       router.push(notification.link);
+    }
+  }
+
+  async function handleAccept(notification: NotificationItem) {
+    const accountId = extractAccountId(notification.link);
+
+    if (!accountId || loadingInvite) return;
+
+    setLoadingInvite(notification.id);
+
+    try {
+      await markNotificationRead(notification);
+      await acceptInvite(accountId);
+      // acceptInvite redirects to the account dashboard — page navigates away.
+    } catch {
+      setLoadingInvite(null);
+      toast.error(ti.acceptError);
+    }
+  }
+
+  async function handleDecline(notification: NotificationItem) {
+    const accountId = extractAccountId(notification.link);
+
+    if (!accountId || loadingInvite) return;
+
+    setLoadingInvite(notification.id);
+
+    try {
+      const result = await declineInvite(accountId);
+
+      if (result?.error) {
+        toast.error(ti.declineError);
+        return;
+      }
+
+      await markNotificationRead(notification);
+      setNotifications((current) =>
+        current.filter((n) => n.id !== notification.id)
+      );
+      toast.success(ti.declineSuccess);
+    } catch {
+      toast.error(ti.declineError);
+    } finally {
+      setLoadingInvite(null);
     }
   }
 
@@ -303,41 +440,101 @@ export default function NotificationBell({
               </div>
             ) : notifications.length > 0 ? (
               <div className="divide-y divide-white/5">
-                {notifications.map((notification) => (
-                  <button
-                    key={notification.id}
-                    type="button"
-                    onClick={() => handleNotificationClick(notification)}
-                    className={`flex w-full flex-col gap-1.5 px-4 py-3 text-left transition-colors hover:bg-white/5 ${
-                      notification.read ? "" : "bg-green-500/[0.04]"
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      {!notification.read && (
-                        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-green-400" />
-                      )}
-
-                      <span className="rounded-lg bg-white/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-gray-300">
-                        {getNotificationTypeLabel(
-                          notification.type,
-                          appLanguage
+                {notifications.map((notification) =>
+                  notification.type === "ACCOUNT_INVITE" ? (
+                    <div
+                      key={notification.id}
+                      className={`flex flex-col gap-1.5 px-4 py-3 ${
+                        notification.read ? "" : "bg-green-500/[0.04]"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        {!notification.read && (
+                          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-green-400" />
                         )}
-                      </span>
 
-                      <span className="ml-auto shrink-0 text-[11px] text-gray-500">
-                        {formatRelativeTime(notification.createdAt, locale)}
-                      </span>
+                        <span className="rounded-lg bg-white/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-gray-300">
+                          {getNotificationTypeLabel(
+                            notification.type,
+                            appLanguage
+                          )}
+                        </span>
+
+                        <span className="ml-auto shrink-0 text-[11px] text-gray-500">
+                          {formatRelativeTime(notification.createdAt, locale)}
+                        </span>
+                      </div>
+
+                      <p className="text-sm font-semibold text-white">
+                        {notification.title}
+                      </p>
+
+                      <p className="line-clamp-2 text-xs text-gray-400">
+                        {notification.message}
+                      </p>
+
+                      <div className="mt-1 flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleAccept(notification)}
+                          disabled={loadingInvite === notification.id}
+                          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-green-500 px-3 py-2 text-xs font-bold text-black transition hover:bg-green-400 disabled:opacity-60"
+                        >
+                          {loadingInvite === notification.id ? (
+                            <Loader2 size={12} className="animate-spin" />
+                          ) : null}
+                          {ti.accept}
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleDecline(notification)}
+                          disabled={loadingInvite === notification.id}
+                          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-white/10 px-3 py-2 text-xs font-bold text-gray-300 transition hover:bg-white/5 disabled:opacity-60"
+                        >
+                          {loadingInvite === notification.id ? (
+                            <Loader2 size={12} className="animate-spin" />
+                          ) : null}
+                          {ti.decline}
+                        </button>
+                      </div>
                     </div>
+                  ) : (
+                    <button
+                      key={notification.id}
+                      type="button"
+                      onClick={() => handleNotificationClick(notification)}
+                      className={`flex w-full flex-col gap-1.5 px-4 py-3 text-left transition-colors hover:bg-white/5 ${
+                        notification.read ? "" : "bg-green-500/[0.04]"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        {!notification.read && (
+                          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-green-400" />
+                        )}
 
-                    <p className="text-sm font-semibold text-white">
-                      {notification.title}
-                    </p>
+                        <span className="rounded-lg bg-white/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-gray-300">
+                          {getNotificationTypeLabel(
+                            notification.type,
+                            appLanguage
+                          )}
+                        </span>
 
-                    <p className="line-clamp-2 text-xs text-gray-400">
-                      {notification.message}
-                    </p>
-                  </button>
-                ))}
+                        <span className="ml-auto shrink-0 text-[11px] text-gray-500">
+                          {formatRelativeTime(notification.createdAt, locale)}
+                        </span>
+                      </div>
+
+                      <p className="text-sm font-semibold text-white">
+                        {notification.title}
+                      </p>
+
+                      <p className="line-clamp-2 text-xs text-gray-400">
+                        {notification.message}
+                      </p>
+                    </button>
+                  )
+                )}
               </div>
             ) : (
               <div className="p-8 text-center text-sm text-gray-500">
