@@ -36,8 +36,9 @@ export const metadata: Metadata = {
     ],
     apple: [
       {
-        url: "/icons/voltis.svg",
-        type: "image/svg+xml",
+        url: "/icons/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
       },
     ],
   },
