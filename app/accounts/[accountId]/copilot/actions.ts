@@ -7,6 +7,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { analyzeCopilotMemory } from "@/lib/copilot/copilot-memory";
+import { buildCopilotSystem } from "@/lib/copilot";
+import { composeAnalysis } from "@/lib/copilot/analysis-composer";
+import { normalizeAppLanguage } from "@/lib/i18n";
 
 const MAX_COPILOT_MESSAGE_LENGTH = 1200;
 
@@ -564,6 +567,119 @@ export async function sendCopilotMessage(
             winRate,
             behavioralRisk,
             disciplineScore,
+        },
+    });
+
+    revalidatePath(
+        `/accounts/${tradingAccountId}/copilot`
+    );
+}
+
+export async function generateAnalysis(
+    formData: FormData
+) {
+    const tradingAccountId = getString(
+        formData,
+        "tradingAccountId"
+    );
+
+    if (!tradingAccountId) return;
+
+    const membership =
+        await getCopilotAccess(tradingAccountId);
+
+    const [trades, currentUser] = await Promise.all([
+        prisma.trade.findMany({
+            where: { tradingAccountId },
+        }),
+        prisma.user.findUnique({
+            where: { id: membership.userId },
+            select: { appLanguage: true },
+        }),
+    ]);
+
+    const memorySnapshot =
+        await analyzeCopilotMemory(tradingAccountId);
+
+    const system = buildCopilotSystem({
+        trades,
+        copilotMemories: memorySnapshot.memories,
+    });
+
+    const analysisText = composeAnalysis(
+        {
+            totalTrades: system.analytics.totalTrades,
+            winRate: system.analytics.winRate,
+            disciplineScore:
+                system.analytics.disciplineScore,
+            behavioralRisk:
+                system.analytics.behavioralRisk,
+            weakExecutionTrades:
+                system.analytics.weakExecutionTrades,
+            emotionalTrades:
+                system.analytics.emotionalTrades,
+            lowConfidenceTrades:
+                system.analytics.lowConfidenceTrades,
+            lossStreak: system.analytics.lossStreak,
+            winStreak: system.analytics.winStreak,
+            revengeRiskTrades:
+                system.patternMetrics.revengeRiskTrades,
+            weakTimeTrades:
+                system.patternMetrics.weakTimeTrades,
+            executionDecay:
+                system.stability.executionDecay,
+            confidenceDecay:
+                system.stability.confidenceDecay,
+            behavioralDrift:
+                system.stability.behavioralDrift,
+            emotionalVolatility:
+                system.stability.emotionalVolatility,
+            emotionalInstabilityScore:
+                system.stability.emotionalInstabilityScore,
+            supervisorLevel:
+                system.stability.supervisorLevel,
+            averageExecution:
+                system.review.averageExecution,
+            averageConfidence:
+                system.review.averageConfidence,
+            reviewScore: system.review.reviewScore,
+            consistencyScore: system.consistencyScore,
+            consistencyLabel: system.consistencyLabel,
+            recoveryDetected: system.recoveryDetected,
+            recoveryScore: system.recoveryScore,
+            recoveryLabel: system.recoveryLabel,
+            sessionLocked:
+                system.sessionLock.sessionLocked,
+            reviewRequired:
+                system.sessionLock.reviewRequired,
+            coachingTone:
+                system.adaptiveCoaching.tone,
+            escalationLevel:
+                system.riskEscalation.escalationLevel,
+        },
+        normalizeAppLanguage(currentUser?.appLanguage)
+    );
+
+    await prisma.copilotMessage.create({
+        data: {
+            tradingAccountId,
+            role: "assistant",
+            content: analysisText,
+        },
+    });
+
+    await logActivity({
+        userId: membership.userId,
+        accountId: tradingAccountId,
+        type: "COPILOT_MESSAGE_SENT",
+        title: "Analysis generated",
+        description: `${membership.userId} requested a full analysis`,
+        metadata: {
+            totalTrades: system.analytics.totalTrades,
+            disciplineScore:
+                system.analytics.disciplineScore,
+            behavioralRisk:
+                system.analytics.behavioralRisk,
         },
     });
 

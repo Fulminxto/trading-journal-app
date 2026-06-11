@@ -27,6 +27,7 @@ import RecoveryStatusCard from "@/components/copilot/RecoveryStatusCard";
 
 import { buildCopilotSystem } from "@/lib/copilot";
 import { analyzeCopilotMemory } from "@/lib/copilot/copilot-memory";
+import { generateAnalysis } from "./actions";
 import {
     getArrayCount,
     getCopilotLabels,
@@ -667,12 +668,78 @@ const summaryText =
                 appLanguage={appLanguage}
             />
 
+            <AnalyzeButton
+                accountId={accountId}
+                appLanguage={appLanguage}
+            />
+
             <CopilotConversationCard
                 copilotMessages={translatedCopilotMessages}
                 accountId={accountId}
                 appLanguage={appLanguage}
             />
         </div>
+    );
+}
+
+const ANALYZE_LABELS: Record<string, string> = {
+    it: "Analizza il mio andamento",
+    en: "Analyze my performance",
+    uk: "Проаналізувати мій прогрес",
+    ru: "Проанализировать мой прогресс",
+    es: "Analizar mi rendimiento",
+    fr: "Analyser mes performances",
+    de: "Meine Performance analysieren",
+};
+
+function AnalyzeButton({
+    accountId,
+    appLanguage,
+}: {
+    accountId: string;
+    appLanguage?: string | null;
+}) {
+    const label =
+        ANALYZE_LABELS[appLanguage ?? "en"] ??
+        "Analyze my performance";
+
+    return (
+        <form action={generateAnalysis}>
+            <input
+                type="hidden"
+                name="tradingAccountId"
+                value={accountId}
+            />
+
+            <button
+                type="submit"
+                className="w-full rounded-[28px] border border-blue-500/30 bg-blue-500/10 px-6 py-5 text-left transition hover:border-blue-400/50 hover:bg-blue-500/20"
+            >
+                <p className="text-xs uppercase tracking-[0.2em] text-blue-400">
+                    VOLTIS Analyst
+                </p>
+
+                <p className="mt-2 text-lg font-black text-white">
+                    {label}
+                </p>
+
+                <p className="mt-1 text-xs text-gray-500">
+                    ↩ {appLanguage === "it"
+                        ? "Genera analisi completa basata su tutti i tuoi trade"
+                        : appLanguage === "uk"
+                        ? "Генерувати повний аналіз на основі всіх угод"
+                        : appLanguage === "ru"
+                        ? "Сгенерировать полный анализ на основе всех сделок"
+                        : appLanguage === "es"
+                        ? "Generar análisis completo basado en todas tus operaciones"
+                        : appLanguage === "fr"
+                        ? "Générer une analyse complète basée sur tous vos trades"
+                        : appLanguage === "de"
+                        ? "Vollständige Analyse basierend auf allen Trades generieren"
+                        : "Generate full analysis based on all your trades"}
+                </p>
+            </button>
+        </form>
     );
 }
 
