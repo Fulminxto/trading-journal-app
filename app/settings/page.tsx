@@ -13,6 +13,7 @@
 import { redirect } from "next/navigation";
 
 import GlobalToast from "@/components/GlobalToast";
+import PushNotificationsPanel from "@/components/PushNotificationsPanel";
 import ReopenOnboardingButton from "@/components/ReopenOnboardingButton";
 import SettingsHardRefresh from "@/components/SettingsHardRefresh";
 import { auth } from "@/lib/auth";
@@ -1317,6 +1318,11 @@ export default async function SettingsPage({
           {t.saveSettings}
         </button>
       </form>
+
+      <PushNotificationsPanel
+        initialEnabled={user.pushNotificationsEnabled}
+        language={language}
+      />
 
       <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
         <div className="mb-6 flex items-center gap-3">

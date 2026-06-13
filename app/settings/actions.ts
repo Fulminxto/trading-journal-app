@@ -240,3 +240,18 @@ export async function updateSettings(
 
   redirect(`/settings?toast=success&refresh=${Date.now()}`);
 }
+
+export async function updatePushEnabled(
+  enabled: boolean
+) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    return;
+  }
+
+  await prisma.user.update({
+    where: { id: session.user.id },
+    data: { pushNotificationsEnabled: enabled },
+  });
+}

@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { sendPushToUser } from "@/lib/push";
 
 type LogActivityParams = {
   userId?: string | null;
@@ -63,15 +64,31 @@ export async function createNotification({
   message,
   link,
 }: CreateNotificationParams) {
-  await prisma.notification.create({
-    data: {
-      userId,
-      type,
+  const [, user] = await Promise.all([
+    prisma.notification.create({
+      data: {
+        userId,
+        type,
+        title,
+        message,
+        link: link || null,
+      },
+    }),
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: { pushNotificationsEnabled: true },
+    }),
+  ]);
+
+  if (user?.pushNotificationsEnabled) {
+    await sendPushToUser(userId, {
       title,
-      message,
-      link: link || null,
-    },
-  });
+      body: message,
+      url: link,
+    }).catch((err) =>
+      console.error("[push] createNotification:", err)
+    );
+  }
 }
 
 function getNotificationCategory(
@@ -129,6 +146,7 @@ export async function notifyAccountMembers({
           notifyAccountActivity: true,
           notifyPlatformUpdates: true,
           notifySupport: true,
+          pushNotificationsEnabled: true,
         },
       },
     },
@@ -157,6 +175,25 @@ export async function notifyAccountMembers({
       link: link || null,
     })),
   });
+
+  // Push notifications — non-blocking, never fail the in-app notification
+  const pushTargets = eligible.filter(
+    (m) => m.user.pushNotificationsEnabled
+  );
+  await Promise.allSettled(
+    pushTargets.map((m) =>
+      sendPushToUser(m.userId, {
+        title,
+        body: message,
+        url: link,
+      }).catch((err) =>
+        console.error(
+          `[push] notifyAccountMembers userId=${m.userId}:`,
+          err
+        )
+      )
+    )
+  );
 }
 
 export async function notifyFoundersAndAdmins({
@@ -186,6 +223,7 @@ export async function notifyFoundersAndAdmins({
       notifyAccountActivity: true,
       notifyPlatformUpdates: true,
       notifySupport: true,
+      pushNotificationsEnabled: true,
     },
   });
 
@@ -212,4 +250,22 @@ export async function notifyFoundersAndAdmins({
       link: link || null,
     })),
   });
+
+  const pushTargets = eligible.filter(
+    (u) => u.pushNotificationsEnabled
+  );
+  await Promise.allSettled(
+    pushTargets.map((u) =>
+      sendPushToUser(u.id, {
+        title,
+        body: message,
+        url: link,
+      }).catch((err) =>
+        console.error(
+          `[push] notifyFoundersAndAdmins userId=${u.id}:`,
+          err
+        )
+      )
+    )
+  );
 }
