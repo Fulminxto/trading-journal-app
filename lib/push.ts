@@ -1,12 +1,6 @@
 import webpush from "web-push";
 import { prisma } from "@/lib/prisma";
 
-webpush.setVapidDetails(
-  process.env.VAPID_SUBJECT ?? "",
-  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? "",
-  process.env.VAPID_PRIVATE_KEY ?? "",
-);
-
 type PushPayload = {
   title: string;
   body: string;
@@ -17,6 +11,17 @@ export async function sendPushToUser(
   userId: string,
   payload: PushPayload
 ): Promise<void> {
+  const subject = process.env.VAPID_SUBJECT;
+  const publicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+  const privateKey = process.env.VAPID_PRIVATE_KEY;
+
+  if (!subject || !publicKey || !privateKey) {
+    console.warn("[push] VAPID env vars missing — skipping push notification");
+    return;
+  }
+
+  webpush.setVapidDetails(subject, publicKey, privateKey);
+
   const subscriptions =
     await prisma.pushSubscription.findMany({
       where: { userId },
