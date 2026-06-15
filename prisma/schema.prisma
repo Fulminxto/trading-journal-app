@@ -74,6 +74,9 @@ model User {
 
   compactMode        Boolean  @default(false)
   performanceBlur    Boolean  @default(false)
+  email              String?  @unique
+  twoFactorEnabled   Boolean  @default(false)
+
   emailNotifications Boolean  @default(false)
 
   reviewReminders       Boolean @default(true)
@@ -88,6 +91,8 @@ model User {
 
   pushNotificationsEnabled Boolean @default(false)
   pushSubscriptions        PushSubscription[]
+
+  twoFactorCodes           TwoFactorCode[]
 
   memberships     AccountMember[]
   sentInvites     AccountInvite[] @relation("InvitedBy")
@@ -512,6 +517,25 @@ model PushSubscription {
   updatedAt   DateTime @updatedAt
 
   @@index([userId])
+}
+
+model TwoFactorCode {
+  id             String   @id @default(cuid())
+
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  preAuthToken   String   @unique
+  codeHash       String
+  expiresAt      DateTime
+  attempts       Int      @default(0)
+  used           Boolean  @default(false)
+
+  createdAt      DateTime @default(now())
+
+  @@index([userId])
+  @@index([preAuthToken])
+  @@index([expiresAt])
 }
 
 enum AccountType {

@@ -15,6 +15,7 @@ import { redirect } from "next/navigation";
 import GlobalToast from "@/components/GlobalToast";
 import PushNotificationsPanel from "@/components/PushNotificationsPanel";
 import ReopenOnboardingButton from "@/components/ReopenOnboardingButton";
+import TwoFactorPanel from "@/components/TwoFactorPanel";
 import SettingsHardRefresh from "@/components/SettingsHardRefresh";
 import { auth } from "@/lib/auth";
 import {
@@ -1431,6 +1432,12 @@ export default async function SettingsPage({
           </div>
         </div>
       </div>
+
+      <TwoFactorPanel
+        initialEmail={user.email ?? null}
+        initialEnabled={user.twoFactorEnabled}
+        language={language}
+      />
 
       <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
         <div className="mb-6 flex items-center gap-3">
