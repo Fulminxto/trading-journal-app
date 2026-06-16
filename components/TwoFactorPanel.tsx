@@ -327,9 +327,11 @@ export default function TwoFactorPanel({
                       setEmailInput(email);
                       setIsEditingEmail(false);
                     }}
+                    aria-label="Annulla modifica email"
+                    title="Annulla modifica email"
                     className="rounded-xl border border-white/10 p-2 text-gray-500 transition hover:text-white"
                   >
-                    <X size={16} />
+                    <X size={16} aria-hidden="true" />
                   </button>
                 )}
               </div>
@@ -383,11 +385,10 @@ export default function TwoFactorPanel({
               type="button"
               onClick={handleToggle2FA}
               disabled={loadingToggle || !email}
-              className={`mt-4 rounded-xl px-4 py-2 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-40 ${
-                twoFactorEnabled
+              className={`mt-4 rounded-xl px-4 py-2 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-40 ${twoFactorEnabled
                   ? "border border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20"
                   : "bg-accent text-black hover:bg-accent-bright"
-              }`}
+                }`}
             >
               {twoFactorEnabled ? t.disableBtn : t.enableBtn}
             </button>
@@ -397,11 +398,10 @@ export default function TwoFactorPanel({
 
       {message && (
         <p
-          className={`mt-4 rounded-2xl border p-3 text-sm ${
-            message.type === "success"
+          className={`mt-4 rounded-2xl border p-3 text-sm ${message.type === "success"
               ? "border-accent/10 bg-accent/10 text-accent"
               : "border-red-500/10 bg-red-500/10 text-red-400"
-          }`}
+            }`}
         >
           {message.text}
         </p>
