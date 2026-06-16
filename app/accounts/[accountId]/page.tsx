@@ -104,9 +104,9 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     selectedAccount: "Account selezionato",
     archived: "Archiviato",
     archivedMessage:
-      "Questo account è archiviato. Puoi consultare lo storico, ma le funzioni operative e di gestione sono limitate.",
+      "Questo account Ã¨ archiviato. Puoi consultare lo storico, ma le funzioni operative e di gestione sono limitate.",
     heroDescription:
-      "Centro operativo dell’account. Da qui puoi accedere rapidamente a performance, diario, analytics, report, team e impostazioni operative.",
+      "Centro operativo dellâ€™account. Da qui puoi accedere rapidamente a performance, diario, analytics, report, team e impostazioni operative.",
 
     currentEquity: "Current Equity",
     totalPnl: "Total PnL",
@@ -124,7 +124,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
 
     coreSectionTitle: "Core workspace",
     coreSectionDescription:
-      "Le aree principali per leggere e gestire l’andamento dell’account.",
+      "Le aree principali per leggere e gestire lâ€™andamento dellâ€™account.",
     intelligenceSectionTitle: "Intelligence layer",
     intelligenceSectionDescription:
       "Analisi, report, sessioni e supporto operativo avanzato.",
@@ -138,19 +138,19 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
         title: "Dashboard",
         eyebrow: "Overview",
         description:
-          "Vista principale dell’account: equity, performance, target e stato operativo generale.",
+          "Vista principale dellâ€™account: equity, performance, target e stato operativo generale.",
       },
       diary: {
         title: "Trading Diary",
         eyebrow: "Execution",
         description:
-          "Consulta, inserisci e revisiona le operazioni con dati, note, sessioni e qualità esecutiva.",
+          "Consulta, inserisci e revisiona le operazioni con dati, note, sessioni e qualitÃ  esecutiva.",
       },
       calendar: {
         title: "Calendar",
         eyebrow: "Daily view",
         description:
-          "Leggi la performance giornaliera e individua i giorni migliori, peggiori e più stabili.",
+          "Leggi la performance giornaliera e individua i giorni migliori, peggiori e piÃ¹ stabili.",
       },
       equity: {
         title: "Equity",
@@ -162,13 +162,13 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
         title: "Analytics",
         eyebrow: "Intelligence",
         description:
-          "Analisi avanzata su simboli, sessioni, psicologia, qualità esecutiva e pattern ricorrenti.",
+          "Analisi avanzata su simboli, sessioni, psicologia, qualitÃ  esecutiva e pattern ricorrenti.",
       },
       reports: {
         title: "Reports",
         eyebrow: "Review",
         description:
-          "Riepiloghi professionali per leggere risultati, punti forti, criticità e focus operativo.",
+          "Riepiloghi professionali per leggere risultati, punti forti, criticitÃ  e focus operativo.",
       },
       sessions: {
         title: "Sessions",
@@ -186,25 +186,25 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
         title: "Members",
         eyebrow: "Team",
         description:
-          "Controlla membri, ruoli, performance individuali, attività e accessi dell’account.",
+          "Controlla membri, ruoli, performance individuali, attivitÃ  e accessi dellâ€™account.",
       },
       workspace: {
         title: "Workspace",
         eyebrow: "Command room",
         description:
-          "Osserva presenza live, attività del team, leaderboard e segnali collaborativi.",
+          "Osserva presenza live, attivitÃ  del team, leaderboard e segnali collaborativi.",
       },
       rules: {
         title: "Rules & Goals",
         eyebrow: "Control",
         description:
-          "Gestisci obiettivi, regole operative, limiti e struttura di controllo dell’account.",
+          "Gestisci obiettivi, regole operative, limiti e struttura di controllo dellâ€™account.",
       },
       integrations: {
         title: "Integrations",
         eyebrow: "Sync",
         description:
-          "Configura MT5, broker sync, modalità di import e stato delle integrazioni automatiche.",
+          "Configura MT5, broker sync, modalitÃ  di import e stato delle integrazioni automatiche.",
       },
       playbook: {
         title: "Playbook",
@@ -240,7 +240,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
 
     coreSectionTitle: "Core workspace",
     coreSectionDescription:
-      "The main areas to read and manage the account’s progress.",
+      "The main areas to read and manage the accountâ€™s progress.",
     intelligenceSectionTitle: "Intelligence layer",
     intelligenceSectionDescription:
       "Analytics, reports, sessions and advanced operational support.",
@@ -332,233 +332,233 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
   },
 
   uk: {
-    hubBadge: "Центр акаунта",
-    selectedAccount: "Обраний акаунт",
-    archived: "Архівовано",
+    hubBadge: "Ð¦ÐµÐ½Ñ‚Ñ€ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°",
+    selectedAccount: "ÐžÐ±Ñ€Ð°Ð½Ð¸Ð¹ Ð°ÐºÐ°ÑƒÐ½Ñ‚",
+    archived: "ÐÑ€Ñ…Ñ–Ð²Ð¾Ð²Ð°Ð½Ð¾",
     archivedMessage:
-      "Цей акаунт архівовано. Ви можете переглядати історію, але операційні та управлінські функції обмежені.",
+      "Ð¦ÐµÐ¹ Ð°ÐºÐ°ÑƒÐ½Ñ‚ Ð°Ñ€Ñ…Ñ–Ð²Ð¾Ð²Ð°Ð½Ð¾. Ð’Ð¸ Ð¼Ð¾Ð¶ÐµÑ‚Ðµ Ð¿ÐµÑ€ÐµÐ³Ð»ÑÐ´Ð°Ñ‚Ð¸ Ñ–ÑÑ‚Ð¾Ñ€Ñ–ÑŽ, Ð°Ð»Ðµ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ñ– Ñ‚Ð° ÑƒÐ¿Ñ€Ð°Ð²Ð»Ñ–Ð½ÑÑŒÐºÑ– Ñ„ÑƒÐ½ÐºÑ†Ñ–Ñ— Ð¾Ð±Ð¼ÐµÐ¶ÐµÐ½Ñ–.",
     heroDescription:
-      "Операційний центр акаунта. Звідси можна швидко перейти до performance, щоденника, аналітики, звітів, команди та операційних налаштувань.",
+      "ÐžÐ¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð¸Ð¹ Ñ†ÐµÐ½Ñ‚Ñ€ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°. Ð—Ð²Ñ–Ð´ÑÐ¸ Ð¼Ð¾Ð¶Ð½Ð° ÑˆÐ²Ð¸Ð´ÐºÐ¾ Ð¿ÐµÑ€ÐµÐ¹Ñ‚Ð¸ Ð´Ð¾ performance, Ñ‰Ð¾Ð´ÐµÐ½Ð½Ð¸ÐºÐ°, Ð°Ð½Ð°Ð»Ñ–Ñ‚Ð¸ÐºÐ¸, Ð·Ð²Ñ–Ñ‚Ñ–Ð², ÐºÐ¾Ð¼Ð°Ð½Ð´Ð¸ Ñ‚Ð° Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð¸Ñ… Ð½Ð°Ð»Ð°ÑˆÑ‚ÑƒÐ²Ð°Ð½ÑŒ.",
 
-    currentEquity: "Поточний equity",
-    totalPnl: "Загальний PnL",
+    currentEquity: "ÐŸÐ¾Ñ‚Ð¾Ñ‡Ð½Ð¸Ð¹ equity",
+    totalPnl: "Ð—Ð°Ð³Ð°Ð»ÑŒÐ½Ð¸Ð¹ PnL",
     winRate: "Win Rate",
-    totalTrades: "Усього угод",
+    totalTrades: "Ð£ÑÑŒÐ¾Ð³Ð¾ ÑƒÐ³Ð¾Ð´",
 
-    initialBalance: "Початковий баланс",
-    targetProgress: "Прогрес цілі",
-    needsReview: "Потребує перегляду",
-    members: "Учасники",
+    initialBalance: "ÐŸÐ¾Ñ‡Ð°Ñ‚ÐºÐ¾Ð²Ð¸Ð¹ Ð±Ð°Ð»Ð°Ð½Ñ",
+    targetProgress: "ÐŸÑ€Ð¾Ð³Ñ€ÐµÑ Ñ†Ñ–Ð»Ñ–",
+    needsReview: "ÐŸÐ¾Ñ‚Ñ€ÐµÐ±ÑƒÑ” Ð¿ÐµÑ€ÐµÐ³Ð»ÑÐ´Ñƒ",
+    members: "Ð£Ñ‡Ð°ÑÐ½Ð¸ÐºÐ¸",
 
-    accountType: "Тип акаунта",
-    profitTarget: "Ціль прибутку",
-    maxDrawdown: "Макс. drawdown",
+    accountType: "Ð¢Ð¸Ð¿ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°",
+    profitTarget: "Ð¦Ñ–Ð»ÑŒ Ð¿Ñ€Ð¸Ð±ÑƒÑ‚ÐºÑƒ",
+    maxDrawdown: "ÐœÐ°ÐºÑ. drawdown",
 
-    coreSectionTitle: "Основний workspace",
+    coreSectionTitle: "ÐžÑÐ½Ð¾Ð²Ð½Ð¸Ð¹ workspace",
     coreSectionDescription:
-      "Головні розділи для читання та керування розвитком акаунта.",
-    intelligenceSectionTitle: "Інтелектуальний шар",
+      "Ð“Ð¾Ð»Ð¾Ð²Ð½Ñ– Ñ€Ð¾Ð·Ð´Ñ–Ð»Ð¸ Ð´Ð»Ñ Ñ‡Ð¸Ñ‚Ð°Ð½Ð½Ñ Ñ‚Ð° ÐºÐµÑ€ÑƒÐ²Ð°Ð½Ð½Ñ Ñ€Ð¾Ð·Ð²Ð¸Ñ‚ÐºÐ¾Ð¼ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°.",
+    intelligenceSectionTitle: "Ð†Ð½Ñ‚ÐµÐ»ÐµÐºÑ‚ÑƒÐ°Ð»ÑŒÐ½Ð¸Ð¹ ÑˆÐ°Ñ€",
     intelligenceSectionDescription:
-      "Аналітика, звіти, сесії та просунута операційна підтримка.",
-    managementSectionTitle: "Керування",
+      "ÐÐ½Ð°Ð»Ñ–Ñ‚Ð¸ÐºÐ°, Ð·Ð²Ñ–Ñ‚Ð¸, ÑÐµÑÑ–Ñ— Ñ‚Ð° Ð¿Ñ€Ð¾ÑÑƒÐ½ÑƒÑ‚Ð° Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð° Ð¿Ñ–Ð´Ñ‚Ñ€Ð¸Ð¼ÐºÐ°.",
+    managementSectionTitle: "ÐšÐµÑ€ÑƒÐ²Ð°Ð½Ð½Ñ",
     managementSectionDescription:
-      "Керування учасниками, workspace, правилами та інтеграціями.",
-    manageTeam: "Керувати командою",
+      "ÐšÐµÑ€ÑƒÐ²Ð°Ð½Ð½Ñ ÑƒÑ‡Ð°ÑÐ½Ð¸ÐºÐ°Ð¼Ð¸, workspace, Ð¿Ñ€Ð°Ð²Ð¸Ð»Ð°Ð¼Ð¸ Ñ‚Ð° Ñ–Ð½Ñ‚ÐµÐ³Ñ€Ð°Ñ†Ñ–ÑÐ¼Ð¸.",
+    manageTeam: "ÐšÐµÑ€ÑƒÐ²Ð°Ñ‚Ð¸ ÐºÐ¾Ð¼Ð°Ð½Ð´Ð¾ÑŽ",
 
     cards: {
       dashboard: {
         title: "Dashboard",
-        eyebrow: "Огляд",
+        eyebrow: "ÐžÐ³Ð»ÑÐ´",
         description:
-          "Головний вигляд акаунта: equity, performance, цілі та загальний операційний стан.",
+          "Ð“Ð¾Ð»Ð¾Ð²Ð½Ð¸Ð¹ Ð²Ð¸Ð³Ð»ÑÐ´ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°: equity, performance, Ñ†Ñ–Ð»Ñ– Ñ‚Ð° Ð·Ð°Ð³Ð°Ð»ÑŒÐ½Ð¸Ð¹ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð¸Ð¹ ÑÑ‚Ð°Ð½.",
       },
       diary: {
-        title: "Торговий щоденник",
-        eyebrow: "Виконання",
+        title: "Ð¢Ð¾Ñ€Ð³Ð¾Ð²Ð¸Ð¹ Ñ‰Ð¾Ð´ÐµÐ½Ð½Ð¸Ðº",
+        eyebrow: "Ð’Ð¸ÐºÐ¾Ð½Ð°Ð½Ð½Ñ",
         description:
-          "Переглядайте, додавайте та аналізуйте угоди з даними, нотатками, сесіями та якістю виконання.",
+          "ÐŸÐµÑ€ÐµÐ³Ð»ÑÐ´Ð°Ð¹Ñ‚Ðµ, Ð´Ð¾Ð´Ð°Ð²Ð°Ð¹Ñ‚Ðµ Ñ‚Ð° Ð°Ð½Ð°Ð»Ñ–Ð·ÑƒÐ¹Ñ‚Ðµ ÑƒÐ³Ð¾Ð´Ð¸ Ð· Ð´Ð°Ð½Ð¸Ð¼Ð¸, Ð½Ð¾Ñ‚Ð°Ñ‚ÐºÐ°Ð¼Ð¸, ÑÐµÑÑ–ÑÐ¼Ð¸ Ñ‚Ð° ÑÐºÑ–ÑÑ‚ÑŽ Ð²Ð¸ÐºÐ¾Ð½Ð°Ð½Ð½Ñ.",
       },
       calendar: {
-        title: "Календар",
-        eyebrow: "Денний огляд",
+        title: "ÐšÐ°Ð»ÐµÐ½Ð´Ð°Ñ€",
+        eyebrow: "Ð”ÐµÐ½Ð½Ð¸Ð¹ Ð¾Ð³Ð»ÑÐ´",
         description:
-          "Читайте денну performance та знаходьте найкращі, найгірші й найстабільніші дні.",
+          "Ð§Ð¸Ñ‚Ð°Ð¹Ñ‚Ðµ Ð´ÐµÐ½Ð½Ñƒ performance Ñ‚Ð° Ð·Ð½Ð°Ñ…Ð¾Ð´ÑŒÑ‚Ðµ Ð½Ð°Ð¹ÐºÑ€Ð°Ñ‰Ñ–, Ð½Ð°Ð¹Ð³Ñ–Ñ€ÑˆÑ– Ð¹ Ð½Ð°Ð¹ÑÑ‚Ð°Ð±Ñ–Ð»ÑŒÐ½Ñ–ÑˆÑ– Ð´Ð½Ñ–.",
       },
       equity: {
         title: "Equity",
-        eyebrow: "Капітал",
+        eyebrow: "ÐšÐ°Ð¿Ñ–Ñ‚Ð°Ð»",
         description:
-          "Відстежуйте equity curve, drawdown, зростання акаунта та рух капіталу.",
+          "Ð’Ñ–Ð´ÑÑ‚ÐµÐ¶ÑƒÐ¹Ñ‚Ðµ equity curve, drawdown, Ð·Ñ€Ð¾ÑÑ‚Ð°Ð½Ð½Ñ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð° Ñ‚Ð° Ñ€ÑƒÑ… ÐºÐ°Ð¿Ñ–Ñ‚Ð°Ð»Ñƒ.",
       },
       analytics: {
-        title: "Аналітика",
+        title: "ÐÐ½Ð°Ð»Ñ–Ñ‚Ð¸ÐºÐ°",
         eyebrow: "Intelligence",
         description:
-          "Просунута аналітика символів, сесій, психології, якості виконання та повторюваних патернів.",
+          "ÐŸÑ€Ð¾ÑÑƒÐ½ÑƒÑ‚Ð° Ð°Ð½Ð°Ð»Ñ–Ñ‚Ð¸ÐºÐ° ÑÐ¸Ð¼Ð²Ð¾Ð»Ñ–Ð², ÑÐµÑÑ–Ð¹, Ð¿ÑÐ¸Ñ…Ð¾Ð»Ð¾Ð³Ñ–Ñ—, ÑÐºÐ¾ÑÑ‚Ñ– Ð²Ð¸ÐºÐ¾Ð½Ð°Ð½Ð½Ñ Ñ‚Ð° Ð¿Ð¾Ð²Ñ‚Ð¾Ñ€ÑŽÐ²Ð°Ð½Ð¸Ñ… Ð¿Ð°Ñ‚ÐµÑ€Ð½Ñ–Ð².",
       },
       reports: {
-        title: "Звіти",
+        title: "Ð—Ð²Ñ–Ñ‚Ð¸",
         eyebrow: "Review",
         description:
-          "Професійні підсумки для читання результатів, сильних сторін, проблем і операційного фокусу.",
+          "ÐŸÑ€Ð¾Ñ„ÐµÑÑ–Ð¹Ð½Ñ– Ð¿Ñ–Ð´ÑÑƒÐ¼ÐºÐ¸ Ð´Ð»Ñ Ñ‡Ð¸Ñ‚Ð°Ð½Ð½Ñ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ñ–Ð², ÑÐ¸Ð»ÑŒÐ½Ð¸Ñ… ÑÑ‚Ð¾Ñ€Ñ–Ð½, Ð¿Ñ€Ð¾Ð±Ð»ÐµÐ¼ Ñ– Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð¾Ð³Ð¾ Ñ„Ð¾ÐºÑƒÑÑƒ.",
       },
       sessions: {
-        title: "Сесії",
-        eyebrow: "Планування",
+        title: "Ð¡ÐµÑÑ–Ñ—",
+        eyebrow: "ÐŸÐ»Ð°Ð½ÑƒÐ²Ð°Ð½Ð½Ñ",
         description:
-          "Плануйте та переглядайте сесії з контекстом, дисципліною та pre/post-market фокусом.",
+          "ÐŸÐ»Ð°Ð½ÑƒÐ¹Ñ‚Ðµ Ñ‚Ð° Ð¿ÐµÑ€ÐµÐ³Ð»ÑÐ´Ð°Ð¹Ñ‚Ðµ ÑÐµÑÑ–Ñ— Ð· ÐºÐ¾Ð½Ñ‚ÐµÐºÑÑ‚Ð¾Ð¼, Ð´Ð¸ÑÑ†Ð¸Ð¿Ð»Ñ–Ð½Ð¾ÑŽ Ñ‚Ð° pre/post-market Ñ„Ð¾ÐºÑƒÑÐ¾Ð¼.",
       },
       copilot: {
         title: "Copilot",
         eyebrow: "AI layer",
         description:
-          "Операційна пам’ять, поведінкові патерни, сигнали ризику та підтримка рішень.",
+          "ÐžÐ¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð° Ð¿Ð°Ð¼â€™ÑÑ‚ÑŒ, Ð¿Ð¾Ð²ÐµÐ´Ñ–Ð½ÐºÐ¾Ð²Ñ– Ð¿Ð°Ñ‚ÐµÑ€Ð½Ð¸, ÑÐ¸Ð³Ð½Ð°Ð»Ð¸ Ñ€Ð¸Ð·Ð¸ÐºÑƒ Ñ‚Ð° Ð¿Ñ–Ð´Ñ‚Ñ€Ð¸Ð¼ÐºÐ° Ñ€Ñ–ÑˆÐµÐ½ÑŒ.",
       },
       members: {
-        title: "Учасники",
-        eyebrow: "Команда",
+        title: "Ð£Ñ‡Ð°ÑÐ½Ð¸ÐºÐ¸",
+        eyebrow: "ÐšÐ¾Ð¼Ð°Ð½Ð´Ð°",
         description:
-          "Контролюйте учасників, ролі, індивідуальну performance, активність і доступи.",
+          "ÐšÐ¾Ð½Ñ‚Ñ€Ð¾Ð»ÑŽÐ¹Ñ‚Ðµ ÑƒÑ‡Ð°ÑÐ½Ð¸ÐºÑ–Ð², Ñ€Ð¾Ð»Ñ–, Ñ–Ð½Ð´Ð¸Ð²Ñ–Ð´ÑƒÐ°Ð»ÑŒÐ½Ñƒ performance, Ð°ÐºÑ‚Ð¸Ð²Ð½Ñ–ÑÑ‚ÑŒ Ñ– Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð¸.",
       },
       workspace: {
         title: "Workspace",
         eyebrow: "Command room",
         description:
-          "Спостерігайте live presence, активність команди, leaderboard та колаборативні сигнали.",
+          "Ð¡Ð¿Ð¾ÑÑ‚ÐµÑ€Ñ–Ð³Ð°Ð¹Ñ‚Ðµ live presence, Ð°ÐºÑ‚Ð¸Ð²Ð½Ñ–ÑÑ‚ÑŒ ÐºÐ¾Ð¼Ð°Ð½Ð´Ð¸, leaderboard Ñ‚Ð° ÐºÐ¾Ð»Ð°Ð±Ð¾Ñ€Ð°Ñ‚Ð¸Ð²Ð½Ñ– ÑÐ¸Ð³Ð½Ð°Ð»Ð¸.",
       },
       rules: {
-        title: "Правила та цілі",
-        eyebrow: "Контроль",
+        title: "ÐŸÑ€Ð°Ð²Ð¸Ð»Ð° Ñ‚Ð° Ñ†Ñ–Ð»Ñ–",
+        eyebrow: "ÐšÐ¾Ð½Ñ‚Ñ€Ð¾Ð»ÑŒ",
         description:
-          "Керуйте цілями, операційними правилами, лімітами та структурою контролю акаунта.",
+          "ÐšÐµÑ€ÑƒÐ¹Ñ‚Ðµ Ñ†Ñ–Ð»ÑÐ¼Ð¸, Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð¸Ð¼Ð¸ Ð¿Ñ€Ð°Ð²Ð¸Ð»Ð°Ð¼Ð¸, Ð»Ñ–Ð¼Ñ–Ñ‚Ð°Ð¼Ð¸ Ñ‚Ð° ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ð¾ÑŽ ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»ÑŽ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°.",
       },
       integrations: {
-        title: "Інтеграції",
+        title: "Ð†Ð½Ñ‚ÐµÐ³Ñ€Ð°Ñ†Ñ–Ñ—",
         eyebrow: "Sync",
         description:
-          "Налаштовуйте MT5, broker sync, режими імпорту та статус автоматичних інтеграцій.",
+          "ÐÐ°Ð»Ð°ÑˆÑ‚Ð¾Ð²ÑƒÐ¹Ñ‚Ðµ MT5, broker sync, Ñ€ÐµÐ¶Ð¸Ð¼Ð¸ Ñ–Ð¼Ð¿Ð¾Ñ€Ñ‚Ñƒ Ñ‚Ð° ÑÑ‚Ð°Ñ‚ÑƒÑ Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡Ð½Ð¸Ñ… Ñ–Ð½Ñ‚ÐµÐ³Ñ€Ð°Ñ†Ñ–Ð¹.",
       },
       playbook: {
         title: "Playbook",
-        eyebrow: "Стратегії",
+        eyebrow: "Ð¡Ñ‚Ñ€Ð°Ñ‚ÐµÐ³Ñ–Ñ—",
         description:
-          "Створюйте та керуйте торговими стратегіями, пов'язуйте їх з угодами та аналізуйте ефективність.",
+          "Ð¡Ñ‚Ð²Ð¾Ñ€ÑŽÐ¹Ñ‚Ðµ Ñ‚Ð° ÐºÐµÑ€ÑƒÐ¹Ñ‚Ðµ Ñ‚Ð¾Ñ€Ð³Ð¾Ð²Ð¸Ð¼Ð¸ ÑÑ‚Ñ€Ð°Ñ‚ÐµÐ³Ñ–ÑÐ¼Ð¸, Ð¿Ð¾Ð²'ÑÐ·ÑƒÐ¹Ñ‚Ðµ Ñ—Ñ… Ð· ÑƒÐ³Ð¾Ð´Ð°Ð¼Ð¸ Ñ‚Ð° Ð°Ð½Ð°Ð»Ñ–Ð·ÑƒÐ¹Ñ‚Ðµ ÐµÑ„ÐµÐºÑ‚Ð¸Ð²Ð½Ñ–ÑÑ‚ÑŒ.",
       },
     },
   },
 
   ru: {
-    hubBadge: "Центр аккаунта",
-    selectedAccount: "Выбранный аккаунт",
-    archived: "Архивирован",
+    hubBadge: "Ð¦ÐµÐ½Ñ‚Ñ€ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°",
+    selectedAccount: "Ð’Ñ‹Ð±Ñ€Ð°Ð½Ð½Ñ‹Ð¹ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚",
+    archived: "ÐÑ€Ñ…Ð¸Ð²Ð¸Ñ€Ð¾Ð²Ð°Ð½",
     archivedMessage:
-      "Этот аккаунт архивирован. Вы можете просматривать историю, но операционные и управленческие функции ограничены.",
+      "Ð­Ñ‚Ð¾Ñ‚ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚ Ð°Ñ€Ñ…Ð¸Ð²Ð¸Ñ€Ð¾Ð²Ð°Ð½. Ð’Ñ‹ Ð¼Ð¾Ð¶ÐµÑ‚Ðµ Ð¿Ñ€Ð¾ÑÐ¼Ð°Ñ‚Ñ€Ð¸Ð²Ð°Ñ‚ÑŒ Ð¸ÑÑ‚Ð¾Ñ€Ð¸ÑŽ, Ð½Ð¾ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ñ‹Ðµ Ð¸ ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ñ‡ÐµÑÐºÐ¸Ðµ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸ Ð¾Ð³Ñ€Ð°Ð½Ð¸Ñ‡ÐµÐ½Ñ‹.",
     heroDescription:
-      "Операционный центр аккаунта. Отсюда можно быстро перейти к performance, дневнику, аналитике, отчетам, команде и операционным настройкам.",
+      "ÐžÐ¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ñ‹Ð¹ Ñ†ÐµÐ½Ñ‚Ñ€ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°. ÐžÑ‚ÑÑŽÐ´Ð° Ð¼Ð¾Ð¶Ð½Ð¾ Ð±Ñ‹ÑÑ‚Ñ€Ð¾ Ð¿ÐµÑ€ÐµÐ¹Ñ‚Ð¸ Ðº performance, Ð´Ð½ÐµÐ²Ð½Ð¸ÐºÑƒ, Ð°Ð½Ð°Ð»Ð¸Ñ‚Ð¸ÐºÐµ, Ð¾Ñ‚Ñ‡ÐµÑ‚Ð°Ð¼, ÐºÐ¾Ð¼Ð°Ð½Ð´Ðµ Ð¸ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ñ‹Ð¼ Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ°Ð¼.",
 
-    currentEquity: "Текущий equity",
-    totalPnl: "Общий PnL",
+    currentEquity: "Ð¢ÐµÐºÑƒÑ‰Ð¸Ð¹ equity",
+    totalPnl: "ÐžÐ±Ñ‰Ð¸Ð¹ PnL",
     winRate: "Win Rate",
-    totalTrades: "Всего сделок",
+    totalTrades: "Ð’ÑÐµÐ³Ð¾ ÑÐ´ÐµÐ»Ð¾Ðº",
 
-    initialBalance: "Начальный баланс",
-    targetProgress: "Прогресс цели",
-    needsReview: "Требует проверки",
-    members: "Участники",
+    initialBalance: "ÐÐ°Ñ‡Ð°Ð»ÑŒÐ½Ñ‹Ð¹ Ð±Ð°Ð»Ð°Ð½Ñ",
+    targetProgress: "ÐŸÑ€Ð¾Ð³Ñ€ÐµÑÑ Ñ†ÐµÐ»Ð¸",
+    needsReview: "Ð¢Ñ€ÐµÐ±ÑƒÐµÑ‚ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ¸",
+    members: "Ð£Ñ‡Ð°ÑÑ‚Ð½Ð¸ÐºÐ¸",
 
-    accountType: "Тип аккаунта",
-    profitTarget: "Цель прибыли",
-    maxDrawdown: "Макс. drawdown",
+    accountType: "Ð¢Ð¸Ð¿ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°",
+    profitTarget: "Ð¦ÐµÐ»ÑŒ Ð¿Ñ€Ð¸Ð±Ñ‹Ð»Ð¸",
+    maxDrawdown: "ÐœÐ°ÐºÑ. drawdown",
 
-    coreSectionTitle: "Основной workspace",
+    coreSectionTitle: "ÐžÑÐ½Ð¾Ð²Ð½Ð¾Ð¹ workspace",
     coreSectionDescription:
-      "Главные разделы для анализа и управления прогрессом аккаунта.",
-    intelligenceSectionTitle: "Интеллектуальный слой",
+      "Ð“Ð»Ð°Ð²Ð½Ñ‹Ðµ Ñ€Ð°Ð·Ð´ÐµÐ»Ñ‹ Ð´Ð»Ñ Ð°Ð½Ð°Ð»Ð¸Ð·Ð° Ð¸ ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ñ Ð¿Ñ€Ð¾Ð³Ñ€ÐµÑÑÐ¾Ð¼ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°.",
+    intelligenceSectionTitle: "Ð˜Ð½Ñ‚ÐµÐ»Ð»ÐµÐºÑ‚ÑƒÐ°Ð»ÑŒÐ½Ñ‹Ð¹ ÑÐ»Ð¾Ð¹",
     intelligenceSectionDescription:
-      "Аналитика, отчеты, сессии и продвинутая операционная поддержка.",
-    managementSectionTitle: "Управление",
+      "ÐÐ½Ð°Ð»Ð¸Ñ‚Ð¸ÐºÐ°, Ð¾Ñ‚Ñ‡ÐµÑ‚Ñ‹, ÑÐµÑÑÐ¸Ð¸ Ð¸ Ð¿Ñ€Ð¾Ð´Ð²Ð¸Ð½ÑƒÑ‚Ð°Ñ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ð°Ñ Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶ÐºÐ°.",
+    managementSectionTitle: "Ð£Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ",
     managementSectionDescription:
-      "Управление участниками, workspace, правилами и интеграциями.",
-    manageTeam: "Управление командой",
+      "Ð£Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ ÑƒÑ‡Ð°ÑÑ‚Ð½Ð¸ÐºÐ°Ð¼Ð¸, workspace, Ð¿Ñ€Ð°Ð²Ð¸Ð»Ð°Ð¼Ð¸ Ð¸ Ð¸Ð½Ñ‚ÐµÐ³Ñ€Ð°Ñ†Ð¸ÑÐ¼Ð¸.",
+    manageTeam: "Ð£Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ ÐºÐ¾Ð¼Ð°Ð½Ð´Ð¾Ð¹",
 
     cards: {
       dashboard: {
         title: "Dashboard",
-        eyebrow: "Обзор",
+        eyebrow: "ÐžÐ±Ð·Ð¾Ñ€",
         description:
-          "Главный вид аккаунта: equity, performance, цели и общий операционный статус.",
+          "Ð“Ð»Ð°Ð²Ð½Ñ‹Ð¹ Ð²Ð¸Ð´ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°: equity, performance, Ñ†ÐµÐ»Ð¸ Ð¸ Ð¾Ð±Ñ‰Ð¸Ð¹ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ñ‹Ð¹ ÑÑ‚Ð°Ñ‚ÑƒÑ.",
       },
       diary: {
-        title: "Торговый дневник",
-        eyebrow: "Исполнение",
+        title: "Ð¢Ð¾Ñ€Ð³Ð¾Ð²Ñ‹Ð¹ Ð´Ð½ÐµÐ²Ð½Ð¸Ðº",
+        eyebrow: "Ð˜ÑÐ¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ",
         description:
-          "Просматривайте, добавляйте и анализируйте сделки с данными, заметками, сессиями и качеством исполнения.",
+          "ÐŸÑ€Ð¾ÑÐ¼Ð°Ñ‚Ñ€Ð¸Ð²Ð°Ð¹Ñ‚Ðµ, Ð´Ð¾Ð±Ð°Ð²Ð»ÑÐ¹Ñ‚Ðµ Ð¸ Ð°Ð½Ð°Ð»Ð¸Ð·Ð¸Ñ€ÑƒÐ¹Ñ‚Ðµ ÑÐ´ÐµÐ»ÐºÐ¸ Ñ Ð´Ð°Ð½Ð½Ñ‹Ð¼Ð¸, Ð·Ð°Ð¼ÐµÑ‚ÐºÐ°Ð¼Ð¸, ÑÐµÑÑÐ¸ÑÐ¼Ð¸ Ð¸ ÐºÐ°Ñ‡ÐµÑÑ‚Ð²Ð¾Ð¼ Ð¸ÑÐ¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ.",
       },
       calendar: {
-        title: "Календарь",
-        eyebrow: "Дневной обзор",
+        title: "ÐšÐ°Ð»ÐµÐ½Ð´Ð°Ñ€ÑŒ",
+        eyebrow: "Ð”Ð½ÐµÐ²Ð½Ð¾Ð¹ Ð¾Ð±Ð·Ð¾Ñ€",
         description:
-          "Читайте дневную performance и находите лучшие, худшие и самые стабильные дни.",
+          "Ð§Ð¸Ñ‚Ð°Ð¹Ñ‚Ðµ Ð´Ð½ÐµÐ²Ð½ÑƒÑŽ performance Ð¸ Ð½Ð°Ñ…Ð¾Ð´Ð¸Ñ‚Ðµ Ð»ÑƒÑ‡ÑˆÐ¸Ðµ, Ñ…ÑƒÐ´ÑˆÐ¸Ðµ Ð¸ ÑÐ°Ð¼Ñ‹Ðµ ÑÑ‚Ð°Ð±Ð¸Ð»ÑŒÐ½Ñ‹Ðµ Ð´Ð½Ð¸.",
       },
       equity: {
         title: "Equity",
-        eyebrow: "Капитал",
+        eyebrow: "ÐšÐ°Ð¿Ð¸Ñ‚Ð°Ð»",
         description:
-          "Отслеживайте equity curve, drawdown, рост аккаунта и движение капитала.",
+          "ÐžÑ‚ÑÐ»ÐµÐ¶Ð¸Ð²Ð°Ð¹Ñ‚Ðµ equity curve, drawdown, Ñ€Ð¾ÑÑ‚ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð° Ð¸ Ð´Ð²Ð¸Ð¶ÐµÐ½Ð¸Ðµ ÐºÐ°Ð¿Ð¸Ñ‚Ð°Ð»Ð°.",
       },
       analytics: {
-        title: "Аналитика",
+        title: "ÐÐ½Ð°Ð»Ð¸Ñ‚Ð¸ÐºÐ°",
         eyebrow: "Intelligence",
         description:
-          "Продвинутая аналитика символов, сессий, психологии, качества исполнения и повторяющихся паттернов.",
+          "ÐŸÑ€Ð¾Ð´Ð²Ð¸Ð½ÑƒÑ‚Ð°Ñ Ð°Ð½Ð°Ð»Ð¸Ñ‚Ð¸ÐºÐ° ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð², ÑÐµÑÑÐ¸Ð¹, Ð¿ÑÐ¸Ñ…Ð¾Ð»Ð¾Ð³Ð¸Ð¸, ÐºÐ°Ñ‡ÐµÑÑ‚Ð²Ð° Ð¸ÑÐ¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ Ð¸ Ð¿Ð¾Ð²Ñ‚Ð¾Ñ€ÑÑŽÑ‰Ð¸Ñ…ÑÑ Ð¿Ð°Ñ‚Ñ‚ÐµÑ€Ð½Ð¾Ð².",
       },
       reports: {
-        title: "Отчеты",
+        title: "ÐžÑ‚Ñ‡ÐµÑ‚Ñ‹",
         eyebrow: "Review",
         description:
-          "Профессиональные сводки для анализа результатов, сильных сторон, проблем и операционного фокуса.",
+          "ÐŸÑ€Ð¾Ñ„ÐµÑÑÐ¸Ð¾Ð½Ð°Ð»ÑŒÐ½Ñ‹Ðµ ÑÐ²Ð¾Ð´ÐºÐ¸ Ð´Ð»Ñ Ð°Ð½Ð°Ð»Ð¸Ð·Ð° Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ð¾Ð², ÑÐ¸Ð»ÑŒÐ½Ñ‹Ñ… ÑÑ‚Ð¾Ñ€Ð¾Ð½, Ð¿Ñ€Ð¾Ð±Ð»ÐµÐ¼ Ð¸ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ð¾Ð³Ð¾ Ñ„Ð¾ÐºÑƒÑÐ°.",
       },
       sessions: {
-        title: "Сессии",
-        eyebrow: "Планирование",
+        title: "Ð¡ÐµÑÑÐ¸Ð¸",
+        eyebrow: "ÐŸÐ»Ð°Ð½Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ",
         description:
-          "Планируйте и пересматривайте сессии с контекстом, дисциплиной и pre/post-market фокусом.",
+          "ÐŸÐ»Ð°Ð½Ð¸Ñ€ÑƒÐ¹Ñ‚Ðµ Ð¸ Ð¿ÐµÑ€ÐµÑÐ¼Ð°Ñ‚Ñ€Ð¸Ð²Ð°Ð¹Ñ‚Ðµ ÑÐµÑÑÐ¸Ð¸ Ñ ÐºÐ¾Ð½Ñ‚ÐµÐºÑÑ‚Ð¾Ð¼, Ð´Ð¸ÑÑ†Ð¸Ð¿Ð»Ð¸Ð½Ð¾Ð¹ Ð¸ pre/post-market Ñ„Ð¾ÐºÑƒÑÐ¾Ð¼.",
       },
       copilot: {
         title: "Copilot",
         eyebrow: "AI layer",
         description:
-          "Операционная память, поведенческие паттерны, сигналы риска и поддержка решений.",
+          "ÐžÐ¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ð°Ñ Ð¿Ð°Ð¼ÑÑ‚ÑŒ, Ð¿Ð¾Ð²ÐµÐ´ÐµÐ½Ñ‡ÐµÑÐºÐ¸Ðµ Ð¿Ð°Ñ‚Ñ‚ÐµÑ€Ð½Ñ‹, ÑÐ¸Ð³Ð½Ð°Ð»Ñ‹ Ñ€Ð¸ÑÐºÐ° Ð¸ Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶ÐºÐ° Ñ€ÐµÑˆÐµÐ½Ð¸Ð¹.",
       },
       members: {
-        title: "Участники",
-        eyebrow: "Команда",
+        title: "Ð£Ñ‡Ð°ÑÑ‚Ð½Ð¸ÐºÐ¸",
+        eyebrow: "ÐšÐ¾Ð¼Ð°Ð½Ð´Ð°",
         description:
-          "Контролируйте участников, роли, индивидуальную performance, активность и доступы.",
+          "ÐšÐ¾Ð½Ñ‚Ñ€Ð¾Ð»Ð¸Ñ€ÑƒÐ¹Ñ‚Ðµ ÑƒÑ‡Ð°ÑÑ‚Ð½Ð¸ÐºÐ¾Ð², Ñ€Ð¾Ð»Ð¸, Ð¸Ð½Ð´Ð¸Ð²Ð¸Ð´ÑƒÐ°Ð»ÑŒÐ½ÑƒÑŽ performance, Ð°ÐºÑ‚Ð¸Ð²Ð½Ð¾ÑÑ‚ÑŒ Ð¸ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ñ‹.",
       },
       workspace: {
         title: "Workspace",
         eyebrow: "Command room",
         description:
-          "Следите за live presence, активностью команды, leaderboard и collaborative signals.",
+          "Ð¡Ð»ÐµÐ´Ð¸Ñ‚Ðµ Ð·Ð° live presence, Ð°ÐºÑ‚Ð¸Ð²Ð½Ð¾ÑÑ‚ÑŒÑŽ ÐºÐ¾Ð¼Ð°Ð½Ð´Ñ‹, leaderboard Ð¸ collaborative signals.",
       },
       rules: {
-        title: "Правила и цели",
-        eyebrow: "Контроль",
+        title: "ÐŸÑ€Ð°Ð²Ð¸Ð»Ð° Ð¸ Ñ†ÐµÐ»Ð¸",
+        eyebrow: "ÐšÐ¾Ð½Ñ‚Ñ€Ð¾Ð»ÑŒ",
         description:
-          "Управляйте целями, операционными правилами, лимитами и структурой контроля аккаунта.",
+          "Ð£Ð¿Ñ€Ð°Ð²Ð»ÑÐ¹Ñ‚Ðµ Ñ†ÐµÐ»ÑÐ¼Ð¸, Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ñ‹Ð¼Ð¸ Ð¿Ñ€Ð°Ð²Ð¸Ð»Ð°Ð¼Ð¸, Ð»Ð¸Ð¼Ð¸Ñ‚Ð°Ð¼Ð¸ Ð¸ ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ð¾Ð¹ ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»Ñ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°.",
       },
       integrations: {
-        title: "Интеграции",
+        title: "Ð˜Ð½Ñ‚ÐµÐ³Ñ€Ð°Ñ†Ð¸Ð¸",
         eyebrow: "Sync",
         description:
-          "Настраивайте MT5, broker sync, режимы импорта и статус автоматических интеграций.",
+          "ÐÐ°ÑÑ‚Ñ€Ð°Ð¸Ð²Ð°Ð¹Ñ‚Ðµ MT5, broker sync, Ñ€ÐµÐ¶Ð¸Ð¼Ñ‹ Ð¸Ð¼Ð¿Ð¾Ñ€Ñ‚Ð° Ð¸ ÑÑ‚Ð°Ñ‚ÑƒÑ Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸Ñ… Ð¸Ð½Ñ‚ÐµÐ³Ñ€Ð°Ñ†Ð¸Ð¹.",
       },
       playbook: {
         title: "Playbook",
-        eyebrow: "Стратегии",
+        eyebrow: "Ð¡Ñ‚Ñ€Ð°Ñ‚ÐµÐ³Ð¸Ð¸",
         description:
-          "Создавайте и управляйте торговыми стратегиями, связывайте их со сделками и анализируйте результаты.",
+          "Ð¡Ð¾Ð·Ð´Ð°Ð²Ð°Ð¹Ñ‚Ðµ Ð¸ ÑƒÐ¿Ñ€Ð°Ð²Ð»ÑÐ¹Ñ‚Ðµ Ñ‚Ð¾Ñ€Ð³Ð¾Ð²Ñ‹Ð¼Ð¸ ÑÑ‚Ñ€Ð°Ñ‚ÐµÐ³Ð¸ÑÐ¼Ð¸, ÑÐ²ÑÐ·Ñ‹Ð²Ð°Ð¹Ñ‚Ðµ Ð¸Ñ… ÑÐ¾ ÑÐ´ÐµÐ»ÐºÐ°Ð¼Ð¸ Ð¸ Ð°Ð½Ð°Ð»Ð¸Ð·Ð¸Ñ€ÑƒÐ¹Ñ‚Ðµ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ñ‹.",
       },
     },
   },
@@ -568,9 +568,9 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     selectedAccount: "Cuenta seleccionada",
     archived: "Archivada",
     archivedMessage:
-      "Esta cuenta está archivada. Puedes consultar el histórico, pero las funciones operativas y de gestión están limitadas.",
+      "Esta cuenta estÃ¡ archivada. Puedes consultar el histÃ³rico, pero las funciones operativas y de gestiÃ³n estÃ¡n limitadas.",
     heroDescription:
-      "Centro operativo de la cuenta. Desde aquí puedes acceder rápidamente a performance, diario, analítica, informes, equipo y ajustes operativos.",
+      "Centro operativo de la cuenta. Desde aquÃ­ puedes acceder rÃ¡pidamente a performance, diario, analÃ­tica, informes, equipo y ajustes operativos.",
 
     currentEquity: "Equity actual",
     totalPnl: "PnL total",
@@ -579,22 +579,22 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
 
     initialBalance: "Balance inicial",
     targetProgress: "Progreso del objetivo",
-    needsReview: "Requiere revisión",
+    needsReview: "Requiere revisiÃ³n",
     members: "Miembros",
 
     accountType: "Tipo de cuenta",
     profitTarget: "Objetivo de beneficio",
-    maxDrawdown: "Drawdown máximo",
+    maxDrawdown: "Drawdown mÃ¡ximo",
 
     coreSectionTitle: "Workspace principal",
     coreSectionDescription:
-      "Las áreas principales para leer y gestionar el progreso de la cuenta.",
+      "Las Ã¡reas principales para leer y gestionar el progreso de la cuenta.",
     intelligenceSectionTitle: "Capa de inteligencia",
     intelligenceSectionDescription:
-      "Analítica, informes, sesiones y soporte operativo avanzado.",
-    managementSectionTitle: "Gestión",
+      "AnalÃ­tica, informes, sesiones y soporte operativo avanzado.",
+    managementSectionTitle: "GestiÃ³n",
     managementSectionDescription:
-      "Gestión de miembros, workspace, reglas e integraciones.",
+      "GestiÃ³n de miembros, workspace, reglas e integraciones.",
     manageTeam: "Gestionar equipo",
 
     cards: {
@@ -606,15 +606,15 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
       },
       diary: {
         title: "Diario de trading",
-        eyebrow: "Ejecución",
+        eyebrow: "EjecuciÃ³n",
         description:
-          "Consulta, introduce y revisa operaciones con datos, notas, sesiones y calidad de ejecución.",
+          "Consulta, introduce y revisa operaciones con datos, notas, sesiones y calidad de ejecuciÃ³n.",
       },
       calendar: {
         title: "Calendario",
         eyebrow: "Vista diaria",
         description:
-          "Lee la performance diaria e identifica los mejores, peores y más estables días.",
+          "Lee la performance diaria e identifica los mejores, peores y mÃ¡s estables dÃ­as.",
       },
       equity: {
         title: "Equity",
@@ -623,20 +623,20 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
           "Sigue equity curve, drawdown, crecimiento de la cuenta y movimiento progresivo del capital.",
       },
       analytics: {
-        title: "Analítica",
+        title: "AnalÃ­tica",
         eyebrow: "Intelligence",
         description:
-          "Análisis avanzado de símbolos, sesiones, psicología, calidad de ejecución y patrones recurrentes.",
+          "AnÃ¡lisis avanzado de sÃ­mbolos, sesiones, psicologÃ­a, calidad de ejecuciÃ³n y patrones recurrentes.",
       },
       reports: {
         title: "Informes",
         eyebrow: "Review",
         description:
-          "Resúmenes profesionales para leer resultados, fortalezas, debilidades y foco operativo.",
+          "ResÃºmenes profesionales para leer resultados, fortalezas, debilidades y foco operativo.",
       },
       sessions: {
         title: "Sesiones",
-        eyebrow: "Planificación",
+        eyebrow: "PlanificaciÃ³n",
         description:
           "Planifica y revisa sesiones operativas con contexto, disciplina y foco pre/post-market.",
       },
@@ -644,7 +644,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
         title: "Copilot",
         eyebrow: "AI layer",
         description:
-          "Memoria operativa, patrones de comportamiento, señales de riesgo y soporte de decisión.",
+          "Memoria operativa, patrones de comportamiento, seÃ±ales de riesgo y soporte de decisiÃ³n.",
       },
       members: {
         title: "Miembros",
@@ -656,37 +656,37 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
         title: "Workspace",
         eyebrow: "Command room",
         description:
-          "Observa presencia en vivo, actividad del equipo, leaderboard y señales colaborativas.",
+          "Observa presencia en vivo, actividad del equipo, leaderboard y seÃ±ales colaborativas.",
       },
       rules: {
         title: "Reglas y objetivos",
         eyebrow: "Control",
         description:
-          "Gestiona objetivos, reglas operativas, límites y estructura de control de la cuenta.",
+          "Gestiona objetivos, reglas operativas, lÃ­mites y estructura de control de la cuenta.",
       },
       integrations: {
         title: "Integraciones",
         eyebrow: "Sync",
         description:
-          "Configura MT5, broker sync, modos de importación y estado de integraciones automáticas.",
+          "Configura MT5, broker sync, modos de importaciÃ³n y estado de integraciones automÃ¡ticas.",
       },
       playbook: {
         title: "Playbook",
         eyebrow: "Estrategias",
         description:
-          "Crea y gestiona tus estrategias operativas, vincúlalas a los trades y analiza el rendimiento por setup.",
+          "Crea y gestiona tus estrategias operativas, vincÃºlalas a los trades y analiza el rendimiento por setup.",
       },
     },
   },
 
   fr: {
     hubBadge: "Centre du compte",
-    selectedAccount: "Compte sélectionné",
-    archived: "Archivé",
+    selectedAccount: "Compte sÃ©lectionnÃ©",
+    archived: "ArchivÃ©",
     archivedMessage:
-      "Ce compte est archivé. Vous pouvez consulter l’historique, mais les fonctions opérationnelles et de gestion sont limitées.",
+      "Ce compte est archivÃ©. Vous pouvez consulter lâ€™historique, mais les fonctions opÃ©rationnelles et de gestion sont limitÃ©es.",
     heroDescription:
-      "Centre opérationnel du compte. Depuis ici, accédez rapidement à la performance, au journal, aux analytics, aux rapports, à l’équipe et aux paramètres opérationnels.",
+      "Centre opÃ©rationnel du compte. Depuis ici, accÃ©dez rapidement Ã  la performance, au journal, aux analytics, aux rapports, Ã  lâ€™Ã©quipe et aux paramÃ¨tres opÃ©rationnels.",
 
     currentEquity: "Equity actuelle",
     totalPnl: "PnL total",
@@ -694,8 +694,8 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     totalTrades: "Trades totaux",
 
     initialBalance: "Solde initial",
-    targetProgress: "Progression de l’objectif",
-    needsReview: "À revoir",
+    targetProgress: "Progression de lâ€™objectif",
+    needsReview: "Ã€ revoir",
     members: "Membres",
 
     accountType: "Type de compte",
@@ -704,27 +704,27 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
 
     coreSectionTitle: "Workspace principal",
     coreSectionDescription:
-      "Les zones principales pour lire et gérer l’évolution du compte.",
-    intelligenceSectionTitle: "Couche d’intelligence",
+      "Les zones principales pour lire et gÃ©rer lâ€™Ã©volution du compte.",
+    intelligenceSectionTitle: "Couche dâ€™intelligence",
     intelligenceSectionDescription:
-      "Analytics, rapports, sessions et support opérationnel avancé.",
+      "Analytics, rapports, sessions et support opÃ©rationnel avancÃ©.",
     managementSectionTitle: "Gestion",
     managementSectionDescription:
-      "Gestion des membres, workspace, règles et intégrations.",
-    manageTeam: "Gérer l'équipe",
+      "Gestion des membres, workspace, rÃ¨gles et intÃ©grations.",
+    manageTeam: "GÃ©rer l'Ã©quipe",
 
     cards: {
       dashboard: {
         title: "Dashboard",
-        eyebrow: "Vue d’ensemble",
+        eyebrow: "Vue dâ€™ensemble",
         description:
-          "Vue principale du compte : equity, performance, objectifs et état opérationnel général.",
+          "Vue principale du compte : equity, performance, objectifs et Ã©tat opÃ©rationnel gÃ©nÃ©ral.",
       },
       diary: {
         title: "Journal de trading",
-        eyebrow: "Exécution",
+        eyebrow: "ExÃ©cution",
         description:
-          "Consultez, ajoutez et révisez les trades avec données, notes, sessions et qualité d’exécution.",
+          "Consultez, ajoutez et rÃ©visez les trades avec donnÃ©es, notes, sessions et qualitÃ© dâ€™exÃ©cution.",
       },
       calendar: {
         title: "Calendrier",
@@ -736,71 +736,71 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
         title: "Equity",
         eyebrow: "Capital",
         description:
-          "Suivez l’equity curve, le drawdown, la croissance du compte et l’évolution du capital.",
+          "Suivez lâ€™equity curve, le drawdown, la croissance du compte et lâ€™Ã©volution du capital.",
       },
       analytics: {
         title: "Analytics",
         eyebrow: "Intelligence",
         description:
-          "Analyse avancée des symboles, sessions, psychologie, qualité d’exécution et patterns récurrents.",
+          "Analyse avancÃ©e des symboles, sessions, psychologie, qualitÃ© dâ€™exÃ©cution et patterns rÃ©currents.",
       },
       reports: {
         title: "Rapports",
         eyebrow: "Review",
         description:
-          "Résumés professionnels pour lire les résultats, forces, faiblesses et focus opérationnel.",
+          "RÃ©sumÃ©s professionnels pour lire les rÃ©sultats, forces, faiblesses et focus opÃ©rationnel.",
       },
       sessions: {
         title: "Sessions",
         eyebrow: "Planification",
         description:
-          "Planifiez et révisez les sessions opérationnelles avec contexte, discipline et focus pre/post-market.",
+          "Planifiez et rÃ©visez les sessions opÃ©rationnelles avec contexte, discipline et focus pre/post-market.",
       },
       copilot: {
         title: "Copilot",
         eyebrow: "AI layer",
         description:
-          "Mémoire opérationnelle, patterns comportementaux, signaux de risque et aide à la décision.",
+          "MÃ©moire opÃ©rationnelle, patterns comportementaux, signaux de risque et aide Ã  la dÃ©cision.",
       },
       members: {
         title: "Membres",
-        eyebrow: "Équipe",
+        eyebrow: "Ã‰quipe",
         description:
-          "Contrôlez les membres, rôles, performance individuelle, activité et accès du compte.",
+          "ContrÃ´lez les membres, rÃ´les, performance individuelle, activitÃ© et accÃ¨s du compte.",
       },
       workspace: {
         title: "Workspace",
         eyebrow: "Command room",
         description:
-          "Observez la présence live, l’activité de l’équipe, le leaderboard et les signaux collaboratifs.",
+          "Observez la prÃ©sence live, lâ€™activitÃ© de lâ€™Ã©quipe, le leaderboard et les signaux collaboratifs.",
       },
       rules: {
-        title: "Règles et objectifs",
-        eyebrow: "Contrôle",
+        title: "RÃ¨gles et objectifs",
+        eyebrow: "ContrÃ´le",
         description:
-          "Gérez les objectifs, règles opérationnelles, limites et structure de contrôle du compte.",
+          "GÃ©rez les objectifs, rÃ¨gles opÃ©rationnelles, limites et structure de contrÃ´le du compte.",
       },
       integrations: {
-        title: "Intégrations",
+        title: "IntÃ©grations",
         eyebrow: "Sync",
         description:
-          "Configurez MT5, broker sync, modes d’import et état des intégrations automatiques.",
+          "Configurez MT5, broker sync, modes dâ€™import et Ã©tat des intÃ©grations automatiques.",
       },
       playbook: {
         title: "Playbook",
-        eyebrow: "Stratégies",
+        eyebrow: "StratÃ©gies",
         description:
-          "Créez et gérez vos stratégies de trading, liez-les aux trades et analysez la performance par setup.",
+          "CrÃ©ez et gÃ©rez vos stratÃ©gies de trading, liez-les aux trades et analysez la performance par setup.",
       },
     },
   },
 
   de: {
     hubBadge: "Konto-Hub",
-    selectedAccount: "Ausgewähltes Konto",
+    selectedAccount: "AusgewÃ¤hltes Konto",
     archived: "Archiviert",
     archivedMessage:
-      "Dieses Konto ist archiviert. Du kannst historische Daten ansehen, aber operative und administrative Funktionen sind eingeschränkt.",
+      "Dieses Konto ist archiviert. Du kannst historische Daten ansehen, aber operative und administrative Funktionen sind eingeschrÃ¤nkt.",
     heroDescription:
       "Operatives Zentrum des Kontos. Von hier aus erreichst du schnell Performance, Tagebuch, Analytics, Berichte, Team und operative Einstellungen.",
 
@@ -811,7 +811,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
 
     initialBalance: "Startkapital",
     targetProgress: "Ziel-Fortschritt",
-    needsReview: "Review nötig",
+    needsReview: "Review nÃ¶tig",
     members: "Mitglieder",
 
     accountType: "Kontotyp",
@@ -823,7 +823,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
       "Die wichtigsten Bereiche, um den Kontofortschritt zu lesen und zu verwalten.",
     intelligenceSectionTitle: "Intelligence layer",
     intelligenceSectionDescription:
-      "Analytics, Berichte, Sessions und erweiterte operative Unterstützung.",
+      "Analytics, Berichte, Sessions und erweiterte operative UnterstÃ¼tzung.",
     managementSectionTitle: "Management",
     managementSectionDescription:
       "Verwaltung von Mitgliedern, Workspace, Regeln und Integrationen.",
@@ -832,7 +832,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     cards: {
       dashboard: {
         title: "Dashboard",
-        eyebrow: "Überblick",
+        eyebrow: "Ãœberblick",
         description:
           "Hauptansicht des Kontos: equity, performance, Ziele und allgemeiner operativer Status.",
       },
@@ -840,13 +840,13 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
         title: "Trading-Tagebuch",
         eyebrow: "Execution",
         description:
-          "Prüfe, erfasse und verbessere Trades mit Daten, Notizen, Sessions und Ausführungsqualität.",
+          "PrÃ¼fe, erfasse und verbessere Trades mit Daten, Notizen, Sessions und AusfÃ¼hrungsqualitÃ¤t.",
       },
       calendar: {
         title: "Kalender",
         eyebrow: "Tagesansicht",
         description:
-          "Lies die tägliche Performance und erkenne beste, schlechteste und stabilste Tage.",
+          "Lies die tÃ¤gliche Performance und erkenne beste, schlechteste und stabilste Tage.",
       },
       equity: {
         title: "Equity",
@@ -858,37 +858,37 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
         title: "Analytics",
         eyebrow: "Intelligence",
         description:
-          "Erweiterte Analyse von Symbolen, Sessions, Psychologie, Ausführungsqualität und wiederkehrenden Mustern.",
+          "Erweiterte Analyse von Symbolen, Sessions, Psychologie, AusfÃ¼hrungsqualitÃ¤t und wiederkehrenden Mustern.",
       },
       reports: {
         title: "Berichte",
         eyebrow: "Review",
         description:
-          "Professionelle Zusammenfassungen zu Ergebnissen, Stärken, Schwächen und operativem Fokus.",
+          "Professionelle Zusammenfassungen zu Ergebnissen, StÃ¤rken, SchwÃ¤chen und operativem Fokus.",
       },
       sessions: {
         title: "Sessions",
         eyebrow: "Planung",
         description:
-          "Plane und überprüfe operative Sessions mit Kontext, Disziplin und pre/post-market Fokus.",
+          "Plane und Ã¼berprÃ¼fe operative Sessions mit Kontext, Disziplin und pre/post-market Fokus.",
       },
       copilot: {
         title: "Copilot",
         eyebrow: "AI layer",
         description:
-          "Operatives Gedächtnis, Verhaltensmuster, Risikosignale und Entscheidungsunterstützung.",
+          "Operatives GedÃ¤chtnis, Verhaltensmuster, Risikosignale und EntscheidungsunterstÃ¼tzung.",
       },
       members: {
         title: "Mitglieder",
         eyebrow: "Team",
         description:
-          "Kontrolliere Mitglieder, Rollen, individuelle Performance, Aktivität und Kontozugriffe.",
+          "Kontrolliere Mitglieder, Rollen, individuelle Performance, AktivitÃ¤t und Kontozugriffe.",
       },
       workspace: {
         title: "Workspace",
         eyebrow: "Command room",
         description:
-          "Beobachte Live-Präsenz, Teamaktivität, Leaderboard und kollaborative Signale.",
+          "Beobachte Live-PrÃ¤senz, TeamaktivitÃ¤t, Leaderboard und kollaborative Signale.",
       },
       rules: {
         title: "Regeln & Ziele",
@@ -906,7 +906,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
         title: "Playbook",
         eyebrow: "Strategien",
         description:
-          "Erstellen und verwalten Sie Ihre Handelsstrategien, verknüpfen Sie sie mit Trades und analysieren Sie die Leistung.",
+          "Erstellen und verwalten Sie Ihre Handelsstrategien, verknÃ¼pfen Sie sie mit Trades und analysieren Sie die Leistung.",
       },
     },
   },
@@ -959,7 +959,7 @@ function AccountHubCard({ card }: { card: HubCard }) {
             </h2>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-cyan-300">
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-accent-bright">
             <Icon size={20} />
           </div>
         </div>
@@ -1153,7 +1153,7 @@ export default async function AccountPage({
       icon: BarChart3,
       show: true,
       accentClass:
-        "bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.12),transparent_38%)]",
+        "bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_12%,transparent),transparent_38%)]",
     },
     {
       href: `/accounts/${account.id}/diary`,
@@ -1161,7 +1161,7 @@ export default async function AccountPage({
       icon: CandlestickChart,
       show: true,
       accentClass:
-        "bg-[radial-gradient(circle_at_top_right,rgba(34,197,94,0.12),transparent_38%)]",
+        "bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent)_12%,transparent),transparent_38%)]",
     },
     {
       href: `/accounts/${account.id}/calendar`,
@@ -1223,7 +1223,7 @@ export default async function AccountPage({
       icon: Users,
       show: canViewMembers,
       accentClass:
-        "bg-[radial-gradient(circle_at_top_right,rgba(34,197,94,0.12),transparent_38%)]",
+        "bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent)_12%,transparent),transparent_38%)]",
     },
     {
       href: `/accounts/${account.id}/workspace`,
@@ -1247,7 +1247,7 @@ export default async function AccountPage({
       icon: Zap,
       show: canManageAccount && !isArchived,
       accentClass:
-        "bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.12),transparent_38%)]",
+        "bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_12%,transparent),transparent_38%)]",
     },
     {
       href: `/accounts/${account.id}/playbook`,
@@ -1280,19 +1280,19 @@ export default async function AccountPage({
   return (
     <div className="space-y-10">
       <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.14),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(34,197,94,0.08),transparent_35%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_14%,transparent),transparent_35%),radial-gradient(circle_at_bottom_left,color-mix(in_srgb,var(--color-accent)_8%,transparent),transparent_35%)]" />
 
         <div className="relative z-10 grid gap-8 xl:grid-cols-5">
           <div className="xl:col-span-3">
             <div className="mb-6 flex flex-wrap items-center gap-3">
-              <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-300">
+              <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
                 {t.hubBadge}
               </span>
 
               <span
                 className={`rounded-full border px-4 py-2 text-xs font-black uppercase tracking-[0.18em] ${isArchived
                     ? "border-yellow-500/20 bg-yellow-500/10 text-yellow-300"
-                    : "border-green-500/20 bg-green-500/10 text-green-300"
+                    : "border-accent/20 bg-accent/10 text-green-300"
                   }`}
               >
                 {isArchived ? t.archived : account.status}
@@ -1318,7 +1318,7 @@ export default async function AccountPage({
             {canManageMembers && (
               <Link
                 href={`/accounts/${account.id}/members`}
-                className="mt-6 inline-flex items-center gap-2 rounded-2xl border border-green-500/20 bg-green-500/10 px-5 py-3 text-sm font-bold text-green-300 transition hover:bg-green-500/20"
+                className="mt-6 inline-flex items-center gap-2 rounded-2xl border border-accent/20 bg-accent/10 px-5 py-3 text-sm font-bold text-green-300 transition hover:bg-accent/20"
               >
                 <Users size={16} />
                 {t.manageTeam}
@@ -1368,7 +1368,7 @@ export default async function AccountPage({
             <StatCard
               label={t.totalTrades}
               value={totalTrades}
-              tone="text-cyan-300"
+              tone="text-accent-bright"
             />
           </div>
         </div>
@@ -1377,7 +1377,7 @@ export default async function AccountPage({
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <div className="flex items-center gap-3">
-            <Wallet className="text-green-400" size={22} />
+            <Wallet className="text-accent" size={22} />
             <p className="text-sm text-gray-400">
               {t.initialBalance}
             </p>
@@ -1394,13 +1394,13 @@ export default async function AccountPage({
 
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <div className="flex items-center gap-3">
-            <TrendingUp className="text-cyan-300" size={22} />
+            <TrendingUp className="text-accent-bright" size={22} />
             <p className="text-sm text-gray-400">
               {t.targetProgress}
             </p>
           </div>
 
-          <p className="mt-4 text-3xl font-black text-cyan-300">
+          <p className="mt-4 text-3xl font-black text-accent-bright">
             {account.profitTarget
               ? formatPercentByLanguage(
                 accountProgress,
@@ -1462,7 +1462,7 @@ export default async function AccountPage({
             {t.profitTarget}
           </p>
 
-          <p className="mt-3 text-2xl font-black text-green-400">
+          <p className="mt-3 text-2xl font-black text-accent">
             {formatOptionalPercent(
               account.profitTarget,
               language

@@ -1,4 +1,4 @@
-import {
+﻿import {
   ArrowLeft,
   Bug,
   Lightbulb,
@@ -112,7 +112,7 @@ export default async function AdminTicketPage({
                   <LifeBuoy className="text-cyan-300" />
                 )}
 
-                <p className="text-xs uppercase tracking-[0.15em] text-cyan-400">
+                <p className="text-xs uppercase tracking-[0.15em] text-accent-bright">
                   {valueLabel(
                     t,
                     "ticketType",
@@ -201,8 +201,8 @@ export default async function AdminTicketPage({
           </div>
 
           {ticket.adminNote && (
-            <div className="mt-8 rounded-[28px] border border-cyan-500/20 bg-cyan-500/10 p-6">
-              <p className="text-xs uppercase tracking-[0.15em] text-cyan-400">
+            <div className="mt-8 rounded-[28px] border border-accent-bright/20 bg-accent-bright/10 p-6">
+              <p className="text-xs uppercase tracking-[0.15em] text-accent-bright">
                 {t.adminResponse}
               </p>
 
@@ -228,9 +228,9 @@ export default async function AdminTicketPage({
             null,
             ticket.id
           )}
-          className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/10 p-8"
+          className="rounded-[36px] border border-accent-bright/20 bg-accent-bright/10 p-8"
         >
-          <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+          <p className="text-sm uppercase tracking-[0.2em] text-accent-bright">
             {t.ticketManagement}
           </p>
 
@@ -341,7 +341,7 @@ export default async function AdminTicketPage({
 
           <button
             type="submit"
-            className="mt-6 rounded-2xl bg-cyan-500 px-6 py-4 text-sm font-black uppercase tracking-[0.15em] text-black transition hover:bg-cyan-400"
+            className="mt-6 rounded-2xl bg-accent px-6 py-4 text-sm font-black uppercase tracking-[0.15em] text-white transition hover:bg-accent-bright"
           >
             {t.updateTicket}
           </button>

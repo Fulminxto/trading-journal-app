@@ -25,10 +25,10 @@ export default function PerformanceBreakdownCard({
 
   return (
     <div className="report-card relative overflow-hidden rounded-[36px] border border-white/10 bg-gradient-to-br from-[#071018] via-[#111827] to-black p-8">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.10),transparent_35%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_10%,transparent)_35%)]" />
 
       <div className="relative z-10">
-        <p className="text-sm uppercase tracking-[0.25em] text-cyan-400">
+        <p className="text-sm uppercase tracking-[0.25em] text-accent-bright">
           {t.performanceBreakdown}
         </p>
 

@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+﻿import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -47,7 +47,7 @@ export default async function AdminActivityPage() {
   return (
     <div>
       <div className="mb-10">
-        <p className="text-sm text-green-400">
+        <p className="text-sm text-accent">
           {t.platformIntelligence}
         </p>
 
@@ -81,7 +81,7 @@ export default async function AdminActivityPage() {
                     )}
 
                     {activity.account && (
-                      <span className="rounded-xl bg-green-500/10 px-3 py-1 text-xs font-bold text-green-400">
+                      <span className="rounded-xl bg-accent/10 px-3 py-1 text-xs font-bold text-accent">
                         {activity.account.name}
                       </span>
                     )}

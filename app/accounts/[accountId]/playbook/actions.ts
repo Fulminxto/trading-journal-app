@@ -1,4 +1,4 @@
-"use server";
+﻿"use server";
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -49,7 +49,7 @@ export async function createStrategy(
       },
     });
   } catch {
-    return { error: "Esiste già una strategia con questo nome." };
+    return { error: "Esiste giÃ  una strategia con questo nome." };
   }
 
   revalidatePath(`/accounts/${accountId}/playbook`);
@@ -94,7 +94,7 @@ export async function updateStrategy(
       },
     });
   } catch {
-    return { error: "Esiste già una strategia con questo nome." };
+    return { error: "Esiste giÃ  una strategia con questo nome." };
   }
 
   revalidatePath(`/accounts/${accountId}/playbook`);

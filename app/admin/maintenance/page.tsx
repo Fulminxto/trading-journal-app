@@ -57,7 +57,7 @@ export default async function MaintenancePage({
           </p>
 
           <h1 className="mt-2 flex items-center gap-3 text-4xl font-black text-white">
-            <ShieldAlert className="text-cyan-400" />
+            <ShieldAlert className="text-accent-bright" />
             {t.maintenanceMode}
           </h1>
 
@@ -95,9 +95,9 @@ export default async function MaintenancePage({
             </p>
           </div>
 
-          <div className="rounded-[32px] border border-cyan-500/20 bg-cyan-500/10 p-6">
+          <div className="rounded-[32px] border border-accent-bright/20 bg-accent-bright/10 p-6">
             <div className="flex items-center gap-3">
-              <Wrench className="text-cyan-300" />
+              <Wrench className="text-accent-bright" />
 
               <h2 className="text-xl font-black text-white">
                 {t.systemUpdates}
@@ -112,9 +112,9 @@ export default async function MaintenancePage({
 
         <form
           action={updateMaintenanceMode}
-          className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/10 p-8"
+          className="rounded-[36px] border border-accent-bright/20 bg-accent-bright/10 p-8"
         >
-          <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+          <p className="text-sm uppercase tracking-[0.2em] text-accent-bright">
             {t.maintenanceConfiguration}
           </p>
 
@@ -192,7 +192,7 @@ export default async function MaintenancePage({
 
           <button
             type="submit"
-            className="mt-6 rounded-2xl bg-cyan-500 px-6 py-4 text-sm font-black uppercase tracking-[0.15em] text-black transition hover:bg-cyan-400"
+            className="mt-6 rounded-2xl bg-accent px-6 py-4 text-sm font-black uppercase tracking-[0.15em] text-white transition hover:bg-accent-bright"
           >
             {t.saveMaintenanceSettings}
           </button>

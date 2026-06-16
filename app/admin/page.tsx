@@ -109,7 +109,7 @@ export default async function AdminPage() {
 
         <button
           type="submit"
-          className="rounded-xl bg-green-500 p-3 font-bold text-black md:col-span-4"
+          className="rounded-xl bg-accent p-3 font-bold text-white md:col-span-4"
         >
           {t.createUser}
         </button>
@@ -145,7 +145,7 @@ export default async function AdminPage() {
                     </h2>
 
                     {isOnline ? (
-                      <span className="rounded-xl bg-green-500/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] text-green-400">
+                      <span className="rounded-xl bg-accent/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] text-accent">
                         {t.online}
                       </span>
                     ) : (
@@ -212,7 +212,7 @@ export default async function AdminPage() {
 
                 <div className="flex flex-col gap-3">
                   {isSelfFounder ? (
-                    <div className="rounded-xl bg-green-500/10 px-4 py-2 text-sm font-semibold text-green-400">
+                    <div className="rounded-xl bg-accent/10 px-4 py-2 text-sm font-semibold text-accent">
                       {t.founderSystemAdmin}
                     </div>
                   ) : (
@@ -240,7 +240,7 @@ export default async function AdminPage() {
 
                       <button
                         type="submit"
-                        className="rounded-xl bg-green-500/10 px-3 py-2 text-sm font-semibold text-green-400 hover:bg-green-500/20"
+                        className="rounded-xl bg-accent/10 px-3 py-2 text-sm font-semibold text-accent hover:bg-accent/20"
                       >
                         {t.save}
                       </button>
@@ -260,7 +260,7 @@ export default async function AdminPage() {
 
                             <button
                               type="submit"
-                              className="rounded-xl bg-green-500/10 px-3 py-2 text-sm font-semibold text-green-400 hover:bg-green-500/20"
+                              className="rounded-xl bg-accent/10 px-3 py-2 text-sm font-semibold text-accent hover:bg-accent/20"
                             >
                               {t.unfreeze}
                             </button>

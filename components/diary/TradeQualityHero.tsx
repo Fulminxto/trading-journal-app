@@ -92,17 +92,17 @@ export default function TradeQualityHero({
   const t = labels[language] ?? labels.en;
 
   return (
-    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#070b14] via-[#0f1726] to-black p-8 shadow-2xl shadow-cyan-500/5">
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#070b14] via-[#0f1726] to-black p-8 shadow-2xl shadow-accent-bright/5">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.18),transparent_35%)]" />
 
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(34,211,238,0.10),transparent_35%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,color-mix(in_srgb,var(--color-accent-bright)_10%,transparent),transparent_35%)]" />
 
       <div className="relative z-10 flex flex-col gap-10 xl:flex-row xl:items-end xl:justify-between">
         <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2">
-            <div className="h-2 w-2 rounded-full bg-cyan-400" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2">
+            <div className="h-2 w-2 rounded-full bg-accent-bright" />
 
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-300">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent-bright">
               {t.eyebrow}
             </p>
           </div>
@@ -117,12 +117,12 @@ export default function TradeQualityHero({
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:min-w-[420px]">
-          <div className="rounded-3xl border border-cyan-500/10 bg-cyan-500/[0.06] p-5 backdrop-blur-xl">
+          <div className="rounded-3xl border border-accent-bright/10 bg-accent-bright/[0.06] p-5 backdrop-blur-xl">
             <p className="text-sm text-gray-400">
               {t.totalTrades}
             </p>
 
-            <h2 className="mt-3 text-4xl font-black text-cyan-400">
+            <h2 className="mt-3 text-4xl font-black text-accent-bright">
               {totalTrades}
             </h2>
           </div>
@@ -137,12 +137,12 @@ export default function TradeQualityHero({
             </h2>
           </div>
 
-          <div className="rounded-3xl border border-green-500/10 bg-green-500/[0.06] p-5 backdrop-blur-xl">
+          <div className="rounded-3xl border border-accent/10 bg-accent/[0.06] p-5 backdrop-blur-xl">
             <p className="text-sm text-gray-400">
               {t.confidence}
             </p>
 
-            <h2 className="mt-3 text-4xl font-black text-green-400">
+            <h2 className="mt-3 text-4xl font-black text-accent">
               {averageConfidence}/10
             </h2>
           </div>

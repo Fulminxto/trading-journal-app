@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+﻿import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -61,47 +61,47 @@ const notificationsCopy: Record<AppLanguage, NotificationsCopy> = {
     },
 
     uk: {
-        eyebrow: "Центр сповіщень",
-        title: "Сповіщення",
+        eyebrow: "Ð¦ÐµÐ½Ñ‚Ñ€ ÑÐ¿Ð¾Ð²Ñ–Ñ‰ÐµÐ½ÑŒ",
+        title: "Ð¡Ð¿Ð¾Ð²Ñ–Ñ‰ÐµÐ½Ð½Ñ",
         description:
-            "Тут знаходяться важливі оновлення щодо ваших акаунтів, угод і дозволів.",
-        markAllAsRead: "Позначити все як прочитане",
-        total: "Усього",
-        unread: "Непрочитані",
-        read: "Прочитані",
-        new: "Нове",
-        open: "Відкрити",
-        markAsRead: "Позначити як прочитане",
-        empty: "Поки що немає сповіщень.",
+            "Ð¢ÑƒÑ‚ Ð·Ð½Ð°Ñ…Ð¾Ð´ÑÑ‚ÑŒÑÑ Ð²Ð°Ð¶Ð»Ð¸Ð²Ñ– Ð¾Ð½Ð¾Ð²Ð»ÐµÐ½Ð½Ñ Ñ‰Ð¾Ð´Ð¾ Ð²Ð°ÑˆÐ¸Ñ… Ð°ÐºÐ°ÑƒÐ½Ñ‚Ñ–Ð², ÑƒÐ³Ð¾Ð´ Ñ– Ð´Ð¾Ð·Ð²Ð¾Ð»Ñ–Ð².",
+        markAllAsRead: "ÐŸÐ¾Ð·Ð½Ð°Ñ‡Ð¸Ñ‚Ð¸ Ð²ÑÐµ ÑÐº Ð¿Ñ€Ð¾Ñ‡Ð¸Ñ‚Ð°Ð½Ðµ",
+        total: "Ð£ÑÑŒÐ¾Ð³Ð¾",
+        unread: "ÐÐµÐ¿Ñ€Ð¾Ñ‡Ð¸Ñ‚Ð°Ð½Ñ–",
+        read: "ÐŸÑ€Ð¾Ñ‡Ð¸Ñ‚Ð°Ð½Ñ–",
+        new: "ÐÐ¾Ð²Ðµ",
+        open: "Ð’Ñ–Ð´ÐºÑ€Ð¸Ñ‚Ð¸",
+        markAsRead: "ÐŸÐ¾Ð·Ð½Ð°Ñ‡Ð¸Ñ‚Ð¸ ÑÐº Ð¿Ñ€Ð¾Ñ‡Ð¸Ñ‚Ð°Ð½Ðµ",
+        empty: "ÐŸÐ¾ÐºÐ¸ Ñ‰Ð¾ Ð½ÐµÐ¼Ð°Ñ” ÑÐ¿Ð¾Ð²Ñ–Ñ‰ÐµÐ½ÑŒ.",
     },
 
     ru: {
-        eyebrow: "Центр уведомлений",
-        title: "Уведомления",
+        eyebrow: "Ð¦ÐµÐ½Ñ‚Ñ€ ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ð¹",
+        title: "Ð£Ð²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ñ",
         description:
-            "Здесь находятся важные обновления по вашим аккаунтам, сделкам и разрешениям.",
-        markAllAsRead: "Отметить все как прочитанные",
-        total: "Всего",
-        unread: "Непрочитанные",
-        read: "Прочитанные",
-        new: "Новое",
-        open: "Открыть",
-        markAsRead: "Отметить как прочитанное",
-        empty: "Пока нет уведомлений.",
+            "Ð—Ð´ÐµÑÑŒ Ð½Ð°Ñ…Ð¾Ð´ÑÑ‚ÑÑ Ð²Ð°Ð¶Ð½Ñ‹Ðµ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ Ð¿Ð¾ Ð²Ð°ÑˆÐ¸Ð¼ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°Ð¼, ÑÐ´ÐµÐ»ÐºÐ°Ð¼ Ð¸ Ñ€Ð°Ð·Ñ€ÐµÑˆÐµÐ½Ð¸ÑÐ¼.",
+        markAllAsRead: "ÐžÑ‚Ð¼ÐµÑ‚Ð¸Ñ‚ÑŒ Ð²ÑÐµ ÐºÐ°Ðº Ð¿Ñ€Ð¾Ñ‡Ð¸Ñ‚Ð°Ð½Ð½Ñ‹Ðµ",
+        total: "Ð’ÑÐµÐ³Ð¾",
+        unread: "ÐÐµÐ¿Ñ€Ð¾Ñ‡Ð¸Ñ‚Ð°Ð½Ð½Ñ‹Ðµ",
+        read: "ÐŸÑ€Ð¾Ñ‡Ð¸Ñ‚Ð°Ð½Ð½Ñ‹Ðµ",
+        new: "ÐÐ¾Ð²Ð¾Ðµ",
+        open: "ÐžÑ‚ÐºÑ€Ñ‹Ñ‚ÑŒ",
+        markAsRead: "ÐžÑ‚Ð¼ÐµÑ‚Ð¸Ñ‚ÑŒ ÐºÐ°Ðº Ð¿Ñ€Ð¾Ñ‡Ð¸Ñ‚Ð°Ð½Ð½Ð¾Ðµ",
+        empty: "ÐŸÐ¾ÐºÐ° Ð½ÐµÑ‚ ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ð¹.",
     },
 
     es: {
         eyebrow: "Centro de notificaciones",
         title: "Notificaciones",
         description:
-            "Aquí encuentras actualizaciones importantes sobre tus cuentas, trades y permisos.",
-        markAllAsRead: "Marcar todo como leído",
+            "AquÃ­ encuentras actualizaciones importantes sobre tus cuentas, trades y permisos.",
+        markAllAsRead: "Marcar todo como leÃ­do",
         total: "Total",
-        unread: "No leídas",
-        read: "Leídas",
+        unread: "No leÃ­das",
+        read: "LeÃ­das",
         new: "Nueva",
         open: "Abrir",
-        markAsRead: "Marcar como leída",
+        markAsRead: "Marcar como leÃ­da",
         empty: "No hay notificaciones por ahora.",
     },
 
@@ -109,7 +109,7 @@ const notificationsCopy: Record<AppLanguage, NotificationsCopy> = {
         eyebrow: "Centre de notifications",
         title: "Notifications",
         description:
-            "Vous trouverez ici les mises à jour importantes concernant vos comptes, trades et permissions.",
+            "Vous trouverez ici les mises Ã  jour importantes concernant vos comptes, trades et permissions.",
         markAllAsRead: "Tout marquer comme lu",
         total: "Total",
         unread: "Non lues",
@@ -130,7 +130,7 @@ const notificationsCopy: Record<AppLanguage, NotificationsCopy> = {
         unread: "Ungelesen",
         read: "Gelesen",
         new: "Neu",
-        open: "Öffnen",
+        open: "Ã–ffnen",
         markAsRead: "Als gelesen markieren",
         empty: "Derzeit keine Benachrichtigungen.",
     },
@@ -188,7 +188,7 @@ export default async function NotificationsPage() {
         <div>
             <div className="mb-10 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                    <p className="text-sm text-green-400">
+                    <p className="text-sm text-accent">
                         {t.eyebrow}
                     </p>
 
@@ -205,7 +205,7 @@ export default async function NotificationsPage() {
                     <form action={markAllNotificationsAsRead}>
                         <button
                             type="submit"
-                            className="rounded-2xl bg-green-500 px-4 py-3 text-sm font-bold text-black hover:bg-green-400"
+                            className="rounded-2xl bg-accent px-4 py-3 text-sm font-bold text-white hover:bg-accent-bright"
                         >
                             {t.markAllAsRead}
                         </button>
@@ -239,7 +239,7 @@ export default async function NotificationsPage() {
                         {t.read}
                     </p>
 
-                    <h2 className="mt-2 text-3xl font-black text-green-400">
+                    <h2 className="mt-2 text-3xl font-black text-accent">
                         {notifications.length - unreadCount}
                     </h2>
                 </div>
@@ -252,14 +252,14 @@ export default async function NotificationsPage() {
                             key={notification.id}
                             className={`rounded-3xl border p-5 ${notification.read
                                     ? "border-white/10 bg-white/[0.03]"
-                                    : "border-green-500/20 bg-green-500/[0.06]"
+                                    : "border-accent/20 bg-accent/[0.06]"
                                 }`}
                         >
                             <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                                 <div>
                                     <div className="mb-2 flex flex-wrap items-center gap-2">
                                         {!notification.read && (
-                                            <span className="rounded-full bg-green-500 px-2 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-black">
+                                            <span className="rounded-full bg-accent px-2 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-white">
                                                 {t.new}
                                             </span>
                                         )}
@@ -304,7 +304,7 @@ export default async function NotificationsPage() {
 
                                             <button
                                                 type="submit"
-                                                className="rounded-xl bg-green-500/10 px-4 py-3 text-sm font-semibold text-green-400 hover:bg-green-500/20"
+                                                className="rounded-xl bg-accent/10 px-4 py-3 text-sm font-semibold text-accent hover:bg-accent/20"
                                             >
                                                 {t.markAsRead}
                                             </button>

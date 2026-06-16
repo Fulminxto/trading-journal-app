@@ -1,4 +1,4 @@
-﻿import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
@@ -314,7 +314,7 @@ function getTradeSourceLabel(
 
 function getTradeSourceClass(source?: string | null) {
   if (source === "mt5") {
-    return "border-cyan-500/20 bg-cyan-500/10 text-cyan-300";
+    return "border-accent-bright/20 bg-accent-bright/10 text-accent-bright";
   }
 
   if (source === "broker") {
@@ -467,7 +467,7 @@ export default async function EditTradePage({
               )}
 
               {trade.syncStatus === "reviewed" && (
-                <span className="rounded-xl border border-green-500/20 bg-green-500/10 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-green-400">
+                <span className="rounded-xl border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-accent">
                   {t.reviewed}
                 </span>
               )}
@@ -497,7 +497,7 @@ export default async function EditTradePage({
                 </p>
               </div>
 
-              <label className="flex items-center gap-3 rounded-2xl border border-green-500/20 bg-green-500/10 px-4 py-3 text-sm font-bold text-green-400">
+              <label className="flex items-center gap-3 rounded-2xl border border-accent/20 bg-accent/10 px-4 py-3 text-sm font-bold text-accent">
                 <input
                   type="checkbox"
                   name="markAsReviewed"
@@ -677,7 +677,7 @@ export default async function EditTradePage({
 
         <button
           type="submit"
-          className="rounded-xl bg-green-500 p-3 font-bold text-black sm:col-span-2 xl:col-span-4"
+          className="rounded-xl bg-accent p-3 font-bold text-white sm:col-span-2 xl:col-span-4"
         >
           {t.saveChanges}
         </button>

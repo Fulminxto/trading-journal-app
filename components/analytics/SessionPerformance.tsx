@@ -83,7 +83,7 @@ export default function SessionPerformance({
         <div className="rounded-2xl bg-black/20 p-4">
           <div className="flex items-center justify-between">
             <span className="text-gray-400">{t.london}</span>
-            <span className="font-bold text-cyan-400">{londonTrades}</span>
+            <span className="font-bold text-accent-bright">{londonTrades}</span>
           </div>
         </div>
 

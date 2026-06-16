@@ -187,10 +187,10 @@ export default async function LoginPage() {
   const t = loginCopy[appLanguage] ?? loginCopy.en;
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#050b10] px-4 py-10 text-white">
-      <div className="absolute left-1/2 top-1/2 h-[620px] w-[620px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-500/10 blur-[140px]" />
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-bg-deep px-4 py-10 text-white">
+      <div className="absolute left-1/2 top-1/2 h-[620px] w-[620px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/10 blur-[140px]" />
 
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,197,94,0.10),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(34,211,238,0.08),transparent_32%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,color-mix(in_srgb,var(--color-accent)_10%,transparent)_34%,transparent),radial-gradient(circle_at_bottom_right,color-mix(in_srgb,var(--color-accent-bright)_8%,transparent)_32%,transparent)]" />
 
       <div className="relative grid w-full max-w-6xl items-center gap-8 lg:grid-cols-2">
         <section className="hidden rounded-[2rem] border border-white/10 bg-white/[0.03] p-8 shadow-2xl backdrop-blur-xl lg:block">
@@ -204,7 +204,7 @@ export default async function LoginPage() {
             </div>
 
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.35em] text-green-400">
+              <p className="text-xs font-black uppercase tracking-[0.35em] text-accent-bright">
                 {t.eyebrow}
               </p>
 
@@ -223,19 +223,19 @@ export default async function LoginPage() {
           </p>
 
           <div className="mt-8 grid gap-4">
-            <div className="rounded-3xl border border-cyan-500/20 bg-cyan-500/10 p-5">
+            <div className="rounded-3xl border border-accent-bright/20 bg-accent-bright/10 p-5">
               <div className="mb-3 flex items-center gap-3">
                 <LockKeyhole
                   size={20}
-                  className="text-cyan-300"
+                  className="text-accent-bright"
                 />
 
-                <h2 className="font-black text-cyan-100">
+                <h2 className="font-black text-white">
                   {t.selectedAccess}
                 </h2>
               </div>
 
-              <p className="text-sm leading-6 text-cyan-100/80">
+              <p className="text-sm leading-6 text-white/70">
                 {t.selectedAccessDescription}
               </p>
             </div>
@@ -245,7 +245,7 @@ export default async function LoginPage() {
                 <div className="mb-3 flex items-center gap-3">
                   <ShieldCheck
                     size={20}
-                    className="text-green-400"
+                    className="text-accent"
                   />
 
                   <h2 className="font-black text-white">

@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
   Activity,
@@ -92,8 +92,8 @@ const rulesLabels: Record<AppLanguage, RulesLabels> = {
     accountControlCenter: "Centro controllo account",
     title: "Rules & Goals",
     description:
-      "Imposta gli obiettivi mensili, definisci i limiti dell’account e mantieni visibili le regole operative prima che la performance diventi emotiva.",
-    backToAccountHub: "Torna all’Account Hub",
+      "Imposta gli obiettivi mensili, definisci i limiti dellÃ¢â‚¬â„¢account e mantieni visibili le regole operative prima che la performance diventi emotiva.",
+    backToAccountHub: "Torna allÃ¢â‚¬â„¢Account Hub",
 
     monthlyPnl: "PnL mensile",
     winRate: "Win Rate",
@@ -139,17 +139,17 @@ const rulesLabels: Record<AppLanguage, RulesLabels> = {
       {
         title: "Rispetta i limiti di rischio",
         description:
-          "L’account deve rimanere dentro i limiti di drawdown e frequenza operativa.",
+          "LÃ¢â‚¬â„¢account deve rimanere dentro i limiti di drawdown e frequenza operativa.",
       },
       {
         title: "Fermati dopo errori emotivi",
         description:
-          "Se la qualità esecutiva cala, la priorità diventa protezione.",
+          "Se la qualitÃƒÂ  esecutiva cala, la prioritÃƒÂ  diventa protezione.",
       },
       {
         title: "Processo prima del profitto",
         description:
-          "L’obiettivo è proteggere la consistenza, non inseguire un singolo risultato.",
+          "LÃ¢â‚¬â„¢obiettivo ÃƒÂ¨ proteggere la consistenza, non inseguire un singolo risultato.",
       },
     ],
 
@@ -167,12 +167,12 @@ const rulesLabels: Record<AppLanguage, RulesLabels> = {
 
     controlSignals: "Segnali di controllo",
     riskGuardrails: "Guardrail di rischio",
-    busiestDay: "Giorno più intenso",
+    busiestDay: "Giorno piÃƒÂ¹ intenso",
     busiestDayDescription:
       "Numero massimo di trade aperti in un singolo giorno questo mese.",
     dailyLimitUsage: "Utilizzo limite giornaliero",
     dailyLimitUsageDescription:
-      "Calcolato sul giorno operativo più intenso.",
+      "Calcolato sul giorno operativo piÃƒÂ¹ intenso.",
     closedTrades: "Trade chiusi",
     closedTradesDescription:
       "Usati per calcolare il win rate attuale.",
@@ -267,181 +267,181 @@ const rulesLabels: Record<AppLanguage, RulesLabels> = {
   },
 
   uk: {
-    disciplineSystem: "Система дисципліни",
-    accountControlCenter: "Центр контролю акаунта",
-    title: "Правила та цілі",
+    disciplineSystem: "ÃÂ¡ÃÂ¸Ã‘ÂÃ‘â€šÃÂµÃÂ¼ÃÂ° ÃÂ´ÃÂ¸Ã‘ÂÃ‘â€ ÃÂ¸ÃÂ¿ÃÂ»Ã‘â€“ÃÂ½ÃÂ¸",
+    accountControlCenter: "ÃÂ¦ÃÂµÃÂ½Ã‘â€šÃ‘â‚¬ ÃÂºÃÂ¾ÃÂ½Ã‘â€šÃ‘â‚¬ÃÂ¾ÃÂ»Ã‘Å½ ÃÂ°ÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂ°",
+    title: "ÃÅ¸Ã‘â‚¬ÃÂ°ÃÂ²ÃÂ¸ÃÂ»ÃÂ° Ã‘â€šÃÂ° Ã‘â€ Ã‘â€“ÃÂ»Ã‘â€“",
     description:
-      "Встановлюй місячні цілі, визначай ліміти акаунта та тримай операційні правила видимими до того, як результат стане емоційним.",
-    backToAccountHub: "Назад до Account Hub",
+      "Ãâ€™Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ¾ÃÂ²ÃÂ»Ã‘Å½ÃÂ¹ ÃÂ¼Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ½Ã‘â€“ Ã‘â€ Ã‘â€“ÃÂ»Ã‘â€“, ÃÂ²ÃÂ¸ÃÂ·ÃÂ½ÃÂ°Ã‘â€¡ÃÂ°ÃÂ¹ ÃÂ»Ã‘â€“ÃÂ¼Ã‘â€“Ã‘â€šÃÂ¸ ÃÂ°ÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂ° Ã‘â€šÃÂ° Ã‘â€šÃ‘â‚¬ÃÂ¸ÃÂ¼ÃÂ°ÃÂ¹ ÃÂ¾ÃÂ¿ÃÂµÃ‘â‚¬ÃÂ°Ã‘â€ Ã‘â€“ÃÂ¹ÃÂ½Ã‘â€“ ÃÂ¿Ã‘â‚¬ÃÂ°ÃÂ²ÃÂ¸ÃÂ»ÃÂ° ÃÂ²ÃÂ¸ÃÂ´ÃÂ¸ÃÂ¼ÃÂ¸ÃÂ¼ÃÂ¸ ÃÂ´ÃÂ¾ Ã‘â€šÃÂ¾ÃÂ³ÃÂ¾, Ã‘ÂÃÂº Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€š Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂµ ÃÂµÃÂ¼ÃÂ¾Ã‘â€ Ã‘â€“ÃÂ¹ÃÂ½ÃÂ¸ÃÂ¼.",
+    backToAccountHub: "ÃÂÃÂ°ÃÂ·ÃÂ°ÃÂ´ ÃÂ´ÃÂ¾ Account Hub",
 
-    monthlyPnl: "Місячний PnL",
+    monthlyPnl: "ÃÅ“Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ¸ÃÂ¹ PnL",
     winRate: "Win Rate",
-    maxDrawdown: "Максимальний drawdown",
-    tradesThisMonth: "Trade цього місяця",
-    target: "Ціль",
-    limit: "Ліміт",
-    dailyLimit: "Денний ліміт",
+    maxDrawdown: "ÃÅ“ÃÂ°ÃÂºÃ‘ÂÃÂ¸ÃÂ¼ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¸ÃÂ¹ drawdown",
+    tradesThisMonth: "Trade Ã‘â€ Ã‘Å’ÃÂ¾ÃÂ³ÃÂ¾ ÃÂ¼Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€ Ã‘Â",
+    target: "ÃÂ¦Ã‘â€“ÃÂ»Ã‘Å’",
+    limit: "Ãâ€ºÃ‘â€“ÃÂ¼Ã‘â€“Ã‘â€š",
+    dailyLimit: "Ãâ€ÃÂµÃÂ½ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ»Ã‘â€“ÃÂ¼Ã‘â€“Ã‘â€š",
     noMonthlyProfitTarget:
-      "Місячну ціль прибутку не встановлено.",
-    noWinRateTarget: "Ціль win rate не встановлено.",
-    noDrawdownLimit: "Ліміт drawdown не встановлено.",
+      "ÃÅ“Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ½Ã‘Æ’ Ã‘â€ Ã‘â€“ÃÂ»Ã‘Å’ ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘Æ’Ã‘â€šÃÂºÃ‘Æ’ ÃÂ½ÃÂµ ÃÂ²Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ¾ÃÂ²ÃÂ»ÃÂµÃÂ½ÃÂ¾.",
+    noWinRateTarget: "ÃÂ¦Ã‘â€“ÃÂ»Ã‘Å’ win rate ÃÂ½ÃÂµ ÃÂ²Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ¾ÃÂ²ÃÂ»ÃÂµÃÂ½ÃÂ¾.",
+    noDrawdownLimit: "Ãâ€ºÃ‘â€“ÃÂ¼Ã‘â€“Ã‘â€š drawdown ÃÂ½ÃÂµ ÃÂ²Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ¾ÃÂ²ÃÂ»ÃÂµÃÂ½ÃÂ¾.",
     noDailyTradeLimit:
-      "Денний ліміт trade не встановлено.",
+      "Ãâ€ÃÂµÃÂ½ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ»Ã‘â€“ÃÂ¼Ã‘â€“Ã‘â€š trade ÃÂ½ÃÂµ ÃÂ²Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ¾ÃÂ²ÃÂ»ÃÂµÃÂ½ÃÂ¾.",
 
-    performanceTargets: "Цілі performance",
-    monthlyGoals: "Місячні цілі",
+    performanceTargets: "ÃÂ¦Ã‘â€“ÃÂ»Ã‘â€“ performance",
+    monthlyGoals: "ÃÅ“Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ½Ã‘â€“ Ã‘â€ Ã‘â€“ÃÂ»Ã‘â€“",
     monthlyProfitGoalPlaceholder:
-      "Місячна ціль прибутку",
+      "ÃÅ“Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ° Ã‘â€ Ã‘â€“ÃÂ»Ã‘Å’ ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘Æ’Ã‘â€šÃÂºÃ‘Æ’",
     monthlyWinRateGoalPlaceholder:
-      "Місячна ціль win rate %",
+      "ÃÅ“Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ° Ã‘â€ Ã‘â€“ÃÂ»Ã‘Å’ win rate %",
     maxDrawdownLimitPlaceholder:
-      "Ліміт максимального drawdown %",
+      "Ãâ€ºÃ‘â€“ÃÂ¼Ã‘â€“Ã‘â€š ÃÂ¼ÃÂ°ÃÂºÃ‘ÂÃÂ¸ÃÂ¼ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¾ÃÂ³ÃÂ¾ drawdown %",
     maxTradesPerDayPlaceholder:
-      "Максимум trade на день",
-    saveGoals: "Зберегти цілі",
+      "ÃÅ“ÃÂ°ÃÂºÃ‘ÂÃÂ¸ÃÂ¼Ã‘Æ’ÃÂ¼ trade ÃÂ½ÃÂ° ÃÂ´ÃÂµÃÂ½Ã‘Å’",
+    saveGoals: "Ãâ€”ÃÂ±ÃÂµÃ‘â‚¬ÃÂµÃÂ³Ã‘â€šÃÂ¸ Ã‘â€ Ã‘â€“ÃÂ»Ã‘â€“",
 
-    operatingFramework: "Операційний framework",
-    disciplineRules: "Правила дисципліни",
+    operatingFramework: "ÃÅ¾ÃÂ¿ÃÂµÃ‘â‚¬ÃÂ°Ã‘â€ Ã‘â€“ÃÂ¹ÃÂ½ÃÂ¸ÃÂ¹ framework",
+    disciplineRules: "ÃÅ¸Ã‘â‚¬ÃÂ°ÃÂ²ÃÂ¸ÃÂ»ÃÂ° ÃÂ´ÃÂ¸Ã‘ÂÃ‘â€ ÃÂ¸ÃÂ¿ÃÂ»Ã‘â€“ÃÂ½ÃÂ¸",
     rules: [
       {
-        title: "Без revenge trading",
+        title: "Ãâ€˜ÃÂµÃÂ· revenge trading",
         description:
-          "Не відкривай новий trade, щоб емоційно відіграти втрату.",
+          "ÃÂÃÂµ ÃÂ²Ã‘â€“ÃÂ´ÃÂºÃ‘â‚¬ÃÂ¸ÃÂ²ÃÂ°ÃÂ¹ ÃÂ½ÃÂ¾ÃÂ²ÃÂ¸ÃÂ¹ trade, Ã‘â€°ÃÂ¾ÃÂ± ÃÂµÃÂ¼ÃÂ¾Ã‘â€ Ã‘â€“ÃÂ¹ÃÂ½ÃÂ¾ ÃÂ²Ã‘â€“ÃÂ´Ã‘â€“ÃÂ³Ã‘â‚¬ÃÂ°Ã‘â€šÃÂ¸ ÃÂ²Ã‘â€šÃ‘â‚¬ÃÂ°Ã‘â€šÃ‘Æ’.",
       },
       {
-        title: "Без імпульсивних входів",
+        title: "Ãâ€˜ÃÂµÃÂ· Ã‘â€“ÃÂ¼ÃÂ¿Ã‘Æ’ÃÂ»Ã‘Å’Ã‘ÂÃÂ¸ÃÂ²ÃÂ½ÃÂ¸Ã‘â€¦ ÃÂ²Ã‘â€¦ÃÂ¾ÃÂ´Ã‘â€“ÃÂ²",
         description:
-          "Кожен вхід має мати валідний setup і чітку причину.",
+          "ÃÅ¡ÃÂ¾ÃÂ¶ÃÂµÃÂ½ ÃÂ²Ã‘â€¦Ã‘â€“ÃÂ´ ÃÂ¼ÃÂ°Ã‘â€ ÃÂ¼ÃÂ°Ã‘â€šÃÂ¸ ÃÂ²ÃÂ°ÃÂ»Ã‘â€“ÃÂ´ÃÂ½ÃÂ¸ÃÂ¹ setup Ã‘â€“ Ã‘â€¡Ã‘â€“Ã‘â€šÃÂºÃ‘Æ’ ÃÂ¿Ã‘â‚¬ÃÂ¸Ã‘â€¡ÃÂ¸ÃÂ½Ã‘Æ’.",
       },
       {
-        title: "Поважай ліміти ризику",
+        title: "ÃÅ¸ÃÂ¾ÃÂ²ÃÂ°ÃÂ¶ÃÂ°ÃÂ¹ ÃÂ»Ã‘â€“ÃÂ¼Ã‘â€“Ã‘â€šÃÂ¸ Ã‘â‚¬ÃÂ¸ÃÂ·ÃÂ¸ÃÂºÃ‘Æ’",
         description:
-          "Акаунт має залишатися в межах drawdown і частоти операцій.",
+          "ÃÂÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€š ÃÂ¼ÃÂ°Ã‘â€ ÃÂ·ÃÂ°ÃÂ»ÃÂ¸Ã‘Ë†ÃÂ°Ã‘â€šÃÂ¸Ã‘ÂÃ‘Â ÃÂ² ÃÂ¼ÃÂµÃÂ¶ÃÂ°Ã‘â€¦ drawdown Ã‘â€“ Ã‘â€¡ÃÂ°Ã‘ÂÃ‘â€šÃÂ¾Ã‘â€šÃÂ¸ ÃÂ¾ÃÂ¿ÃÂµÃ‘â‚¬ÃÂ°Ã‘â€ Ã‘â€“ÃÂ¹.",
       },
       {
-        title: "Зупинись після емоційних помилок",
+        title: "Ãâ€”Ã‘Æ’ÃÂ¿ÃÂ¸ÃÂ½ÃÂ¸Ã‘ÂÃ‘Å’ ÃÂ¿Ã‘â€“Ã‘ÂÃÂ»Ã‘Â ÃÂµÃÂ¼ÃÂ¾Ã‘â€ Ã‘â€“ÃÂ¹ÃÂ½ÃÂ¸Ã‘â€¦ ÃÂ¿ÃÂ¾ÃÂ¼ÃÂ¸ÃÂ»ÃÂ¾ÃÂº",
         description:
-          "Коли якість виконання падає, пріоритетом стає захист.",
+          "ÃÅ¡ÃÂ¾ÃÂ»ÃÂ¸ Ã‘ÂÃÂºÃ‘â€“Ã‘ÂÃ‘â€šÃ‘Å’ ÃÂ²ÃÂ¸ÃÂºÃÂ¾ÃÂ½ÃÂ°ÃÂ½ÃÂ½Ã‘Â ÃÂ¿ÃÂ°ÃÂ´ÃÂ°Ã‘â€, ÃÂ¿Ã‘â‚¬Ã‘â€“ÃÂ¾Ã‘â‚¬ÃÂ¸Ã‘â€šÃÂµÃ‘â€šÃÂ¾ÃÂ¼ Ã‘ÂÃ‘â€šÃÂ°Ã‘â€ ÃÂ·ÃÂ°Ã‘â€¦ÃÂ¸Ã‘ÂÃ‘â€š.",
       },
       {
-        title: "Процес перед прибутком",
+        title: "ÃÅ¸Ã‘â‚¬ÃÂ¾Ã‘â€ ÃÂµÃ‘Â ÃÂ¿ÃÂµÃ‘â‚¬ÃÂµÃÂ´ ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘Æ’Ã‘â€šÃÂºÃÂ¾ÃÂ¼",
         description:
-          "Ціль — захищати стабільність, а не гнатися за одним результатом.",
+          "ÃÂ¦Ã‘â€“ÃÂ»Ã‘Å’ Ã¢â‚¬â€ ÃÂ·ÃÂ°Ã‘â€¦ÃÂ¸Ã‘â€°ÃÂ°Ã‘â€šÃÂ¸ Ã‘ÂÃ‘â€šÃÂ°ÃÂ±Ã‘â€“ÃÂ»Ã‘Å’ÃÂ½Ã‘â€“Ã‘ÂÃ‘â€šÃ‘Å’, ÃÂ° ÃÂ½ÃÂµ ÃÂ³ÃÂ½ÃÂ°Ã‘â€šÃÂ¸Ã‘ÂÃ‘Â ÃÂ·ÃÂ° ÃÂ¾ÃÂ´ÃÂ½ÃÂ¸ÃÂ¼ Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃÂ¾ÃÂ¼.",
       },
     ],
 
-    profitProgress: "Прогрес прибутку",
-    monthlyTarget: "Місячна ціль",
-    currentProgress: "Поточний прогрес",
+    profitProgress: "ÃÅ¸Ã‘â‚¬ÃÂ¾ÃÂ³Ã‘â‚¬ÃÂµÃ‘Â ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘Æ’Ã‘â€šÃÂºÃ‘Æ’",
+    monthlyTarget: "ÃÅ“Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ° Ã‘â€ Ã‘â€“ÃÂ»Ã‘Å’",
+    currentProgress: "ÃÅ¸ÃÂ¾Ã‘â€šÃÂ¾Ã‘â€¡ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ¿Ã‘â‚¬ÃÂ¾ÃÂ³Ã‘â‚¬ÃÂµÃ‘Â",
     monthlyProfitTargetReached:
-      "Місячну ціль прибутку досягнуто.",
+      "ÃÅ“Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ½Ã‘Æ’ Ã‘â€ Ã‘â€“ÃÂ»Ã‘Å’ ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘Æ’Ã‘â€šÃÂºÃ‘Æ’ ÃÂ´ÃÂ¾Ã‘ÂÃ‘ÂÃÂ³ÃÂ½Ã‘Æ’Ã‘â€šÃÂ¾.",
     remainingToReachTarget:
-      "залишилось до досягнення цілі.",
+      "ÃÂ·ÃÂ°ÃÂ»ÃÂ¸Ã‘Ë†ÃÂ¸ÃÂ»ÃÂ¾Ã‘ÂÃ‘Å’ ÃÂ´ÃÂ¾ ÃÂ´ÃÂ¾Ã‘ÂÃ‘ÂÃÂ³ÃÂ½ÃÂµÃÂ½ÃÂ½Ã‘Â Ã‘â€ Ã‘â€“ÃÂ»Ã‘â€“.",
     setMonthlyProfitTarget:
-      "Встанови місячну ціль прибутку, щоб відстежувати прогрес.",
-    winRateProgress: "Прогрес Win Rate",
-    drawdownUsage: "Використання drawdown",
+      "Ãâ€™Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ¾ÃÂ²ÃÂ¸ ÃÂ¼Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ½Ã‘Æ’ Ã‘â€ Ã‘â€“ÃÂ»Ã‘Å’ ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘Æ’Ã‘â€šÃÂºÃ‘Æ’, Ã‘â€°ÃÂ¾ÃÂ± ÃÂ²Ã‘â€“ÃÂ´Ã‘ÂÃ‘â€šÃÂµÃÂ¶Ã‘Æ’ÃÂ²ÃÂ°Ã‘â€šÃÂ¸ ÃÂ¿Ã‘â‚¬ÃÂ¾ÃÂ³Ã‘â‚¬ÃÂµÃ‘Â.",
+    winRateProgress: "ÃÅ¸Ã‘â‚¬ÃÂ¾ÃÂ³Ã‘â‚¬ÃÂµÃ‘Â Win Rate",
+    drawdownUsage: "Ãâ€™ÃÂ¸ÃÂºÃÂ¾Ã‘â‚¬ÃÂ¸Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ½Ã‘Â drawdown",
 
-    controlSignals: "Контрольні сигнали",
-    riskGuardrails: "Захисні межі ризику",
-    busiestDay: "Найактивніший день",
+    controlSignals: "ÃÅ¡ÃÂ¾ÃÂ½Ã‘â€šÃ‘â‚¬ÃÂ¾ÃÂ»Ã‘Å’ÃÂ½Ã‘â€“ Ã‘ÂÃÂ¸ÃÂ³ÃÂ½ÃÂ°ÃÂ»ÃÂ¸",
+    riskGuardrails: "Ãâ€”ÃÂ°Ã‘â€¦ÃÂ¸Ã‘ÂÃÂ½Ã‘â€“ ÃÂ¼ÃÂµÃÂ¶Ã‘â€“ Ã‘â‚¬ÃÂ¸ÃÂ·ÃÂ¸ÃÂºÃ‘Æ’",
+    busiestDay: "ÃÂÃÂ°ÃÂ¹ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“Ã‘Ë†ÃÂ¸ÃÂ¹ ÃÂ´ÃÂµÃÂ½Ã‘Å’",
     busiestDayDescription:
-      "Максимальна кількість trade, відкритих за один день цього місяця.",
-    dailyLimitUsage: "Використання денного ліміту",
+      "ÃÅ“ÃÂ°ÃÂºÃ‘ÂÃÂ¸ÃÂ¼ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ° ÃÂºÃ‘â€“ÃÂ»Ã‘Å’ÃÂºÃ‘â€“Ã‘ÂÃ‘â€šÃ‘Å’ trade, ÃÂ²Ã‘â€“ÃÂ´ÃÂºÃ‘â‚¬ÃÂ¸Ã‘â€šÃÂ¸Ã‘â€¦ ÃÂ·ÃÂ° ÃÂ¾ÃÂ´ÃÂ¸ÃÂ½ ÃÂ´ÃÂµÃÂ½Ã‘Å’ Ã‘â€ Ã‘Å’ÃÂ¾ÃÂ³ÃÂ¾ ÃÂ¼Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€ Ã‘Â.",
+    dailyLimitUsage: "Ãâ€™ÃÂ¸ÃÂºÃÂ¾Ã‘â‚¬ÃÂ¸Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ½Ã‘Â ÃÂ´ÃÂµÃÂ½ÃÂ½ÃÂ¾ÃÂ³ÃÂ¾ ÃÂ»Ã‘â€“ÃÂ¼Ã‘â€“Ã‘â€šÃ‘Æ’",
     dailyLimitUsageDescription:
-      "Розраховано на основі найактивнішого торгового дня.",
-    closedTrades: "Закриті trade",
+      "ÃÂ ÃÂ¾ÃÂ·Ã‘â‚¬ÃÂ°Ã‘â€¦ÃÂ¾ÃÂ²ÃÂ°ÃÂ½ÃÂ¾ ÃÂ½ÃÂ° ÃÂ¾Ã‘ÂÃÂ½ÃÂ¾ÃÂ²Ã‘â€“ ÃÂ½ÃÂ°ÃÂ¹ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“Ã‘Ë†ÃÂ¾ÃÂ³ÃÂ¾ Ã‘â€šÃÂ¾Ã‘â‚¬ÃÂ³ÃÂ¾ÃÂ²ÃÂ¾ÃÂ³ÃÂ¾ ÃÂ´ÃÂ½Ã‘Â.",
+    closedTrades: "Ãâ€”ÃÂ°ÃÂºÃ‘â‚¬ÃÂ¸Ã‘â€šÃ‘â€“ trade",
     closedTradesDescription:
-      "Використовуються для розрахунку поточного win rate.",
+      "Ãâ€™ÃÂ¸ÃÂºÃÂ¾Ã‘â‚¬ÃÂ¸Ã‘ÂÃ‘â€šÃÂ¾ÃÂ²Ã‘Æ’Ã‘Å½Ã‘â€šÃ‘Å’Ã‘ÂÃ‘Â ÃÂ´ÃÂ»Ã‘Â Ã‘â‚¬ÃÂ¾ÃÂ·Ã‘â‚¬ÃÂ°Ã‘â€¦Ã‘Æ’ÃÂ½ÃÂºÃ‘Æ’ ÃÂ¿ÃÂ¾Ã‘â€šÃÂ¾Ã‘â€¡ÃÂ½ÃÂ¾ÃÂ³ÃÂ¾ win rate.",
   },
 
   ru: {
-    disciplineSystem: "Система дисциплины",
-    accountControlCenter: "Центр контроля аккаунта",
-    title: "Правила и цели",
+    disciplineSystem: "ÃÂ¡ÃÂ¸Ã‘ÂÃ‘â€šÃÂµÃÂ¼ÃÂ° ÃÂ´ÃÂ¸Ã‘ÂÃ‘â€ ÃÂ¸ÃÂ¿ÃÂ»ÃÂ¸ÃÂ½Ã‘â€¹",
+    accountControlCenter: "ÃÂ¦ÃÂµÃÂ½Ã‘â€šÃ‘â‚¬ ÃÂºÃÂ¾ÃÂ½Ã‘â€šÃ‘â‚¬ÃÂ¾ÃÂ»Ã‘Â ÃÂ°ÃÂºÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂ°",
+    title: "ÃÅ¸Ã‘â‚¬ÃÂ°ÃÂ²ÃÂ¸ÃÂ»ÃÂ° ÃÂ¸ Ã‘â€ ÃÂµÃÂ»ÃÂ¸",
     description:
-      "Устанавливай месячные цели, определяй лимиты аккаунта и держи операционные правила видимыми до того, как результат станет эмоциональным.",
-    backToAccountHub: "Назад в Account Hub",
+      "ÃÂ£Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ°ÃÂ²ÃÂ»ÃÂ¸ÃÂ²ÃÂ°ÃÂ¹ ÃÂ¼ÃÂµÃ‘ÂÃ‘ÂÃ‘â€¡ÃÂ½Ã‘â€¹ÃÂµ Ã‘â€ ÃÂµÃÂ»ÃÂ¸, ÃÂ¾ÃÂ¿Ã‘â‚¬ÃÂµÃÂ´ÃÂµÃÂ»Ã‘ÂÃÂ¹ ÃÂ»ÃÂ¸ÃÂ¼ÃÂ¸Ã‘â€šÃ‘â€¹ ÃÂ°ÃÂºÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂ° ÃÂ¸ ÃÂ´ÃÂµÃ‘â‚¬ÃÂ¶ÃÂ¸ ÃÂ¾ÃÂ¿ÃÂµÃ‘â‚¬ÃÂ°Ã‘â€ ÃÂ¸ÃÂ¾ÃÂ½ÃÂ½Ã‘â€¹ÃÂµ ÃÂ¿Ã‘â‚¬ÃÂ°ÃÂ²ÃÂ¸ÃÂ»ÃÂ° ÃÂ²ÃÂ¸ÃÂ´ÃÂ¸ÃÂ¼Ã‘â€¹ÃÂ¼ÃÂ¸ ÃÂ´ÃÂ¾ Ã‘â€šÃÂ¾ÃÂ³ÃÂ¾, ÃÂºÃÂ°ÃÂº Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€š Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂµÃ‘â€š Ã‘ÂÃÂ¼ÃÂ¾Ã‘â€ ÃÂ¸ÃÂ¾ÃÂ½ÃÂ°ÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂ¼.",
+    backToAccountHub: "ÃÂÃÂ°ÃÂ·ÃÂ°ÃÂ´ ÃÂ² Account Hub",
 
-    monthlyPnl: "Месячный PnL",
+    monthlyPnl: "ÃÅ“ÃÂµÃ‘ÂÃ‘ÂÃ‘â€¡ÃÂ½Ã‘â€¹ÃÂ¹ PnL",
     winRate: "Win Rate",
-    maxDrawdown: "Максимальный drawdown",
-    tradesThisMonth: "Trade за месяц",
-    target: "Цель",
-    limit: "Лимит",
-    dailyLimit: "Дневной лимит",
+    maxDrawdown: "ÃÅ“ÃÂ°ÃÂºÃ‘ÂÃÂ¸ÃÂ¼ÃÂ°ÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂ¹ drawdown",
+    tradesThisMonth: "Trade ÃÂ·ÃÂ° ÃÂ¼ÃÂµÃ‘ÂÃ‘ÂÃ‘â€ ",
+    target: "ÃÂ¦ÃÂµÃÂ»Ã‘Å’",
+    limit: "Ãâ€ºÃÂ¸ÃÂ¼ÃÂ¸Ã‘â€š",
+    dailyLimit: "Ãâ€ÃÂ½ÃÂµÃÂ²ÃÂ½ÃÂ¾ÃÂ¹ ÃÂ»ÃÂ¸ÃÂ¼ÃÂ¸Ã‘â€š",
     noMonthlyProfitTarget:
-      "Месячная цель прибыли не задана.",
-    noWinRateTarget: "Цель win rate не задана.",
-    noDrawdownLimit: "Лимит drawdown не задан.",
+      "ÃÅ“ÃÂµÃ‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ°Ã‘Â Ã‘â€ ÃÂµÃÂ»Ã‘Å’ ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘â€¹ÃÂ»ÃÂ¸ ÃÂ½ÃÂµ ÃÂ·ÃÂ°ÃÂ´ÃÂ°ÃÂ½ÃÂ°.",
+    noWinRateTarget: "ÃÂ¦ÃÂµÃÂ»Ã‘Å’ win rate ÃÂ½ÃÂµ ÃÂ·ÃÂ°ÃÂ´ÃÂ°ÃÂ½ÃÂ°.",
+    noDrawdownLimit: "Ãâ€ºÃÂ¸ÃÂ¼ÃÂ¸Ã‘â€š drawdown ÃÂ½ÃÂµ ÃÂ·ÃÂ°ÃÂ´ÃÂ°ÃÂ½.",
     noDailyTradeLimit:
-      "Дневной лимит trade не задан.",
+      "Ãâ€ÃÂ½ÃÂµÃÂ²ÃÂ½ÃÂ¾ÃÂ¹ ÃÂ»ÃÂ¸ÃÂ¼ÃÂ¸Ã‘â€š trade ÃÂ½ÃÂµ ÃÂ·ÃÂ°ÃÂ´ÃÂ°ÃÂ½.",
 
-    performanceTargets: "Цели performance",
-    monthlyGoals: "Месячные цели",
+    performanceTargets: "ÃÂ¦ÃÂµÃÂ»ÃÂ¸ performance",
+    monthlyGoals: "ÃÅ“ÃÂµÃ‘ÂÃ‘ÂÃ‘â€¡ÃÂ½Ã‘â€¹ÃÂµ Ã‘â€ ÃÂµÃÂ»ÃÂ¸",
     monthlyProfitGoalPlaceholder:
-      "Месячная цель прибыли",
+      "ÃÅ“ÃÂµÃ‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ°Ã‘Â Ã‘â€ ÃÂµÃÂ»Ã‘Å’ ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘â€¹ÃÂ»ÃÂ¸",
     monthlyWinRateGoalPlaceholder:
-      "Месячная цель win rate %",
+      "ÃÅ“ÃÂµÃ‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ°Ã‘Â Ã‘â€ ÃÂµÃÂ»Ã‘Å’ win rate %",
     maxDrawdownLimitPlaceholder:
-      "Лимит максимального drawdown %",
+      "Ãâ€ºÃÂ¸ÃÂ¼ÃÂ¸Ã‘â€š ÃÂ¼ÃÂ°ÃÂºÃ‘ÂÃÂ¸ÃÂ¼ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¾ÃÂ³ÃÂ¾ drawdown %",
     maxTradesPerDayPlaceholder:
-      "Максимум trade в день",
-    saveGoals: "Сохранить цели",
+      "ÃÅ“ÃÂ°ÃÂºÃ‘ÂÃÂ¸ÃÂ¼Ã‘Æ’ÃÂ¼ trade ÃÂ² ÃÂ´ÃÂµÃÂ½Ã‘Å’",
+    saveGoals: "ÃÂ¡ÃÂ¾Ã‘â€¦Ã‘â‚¬ÃÂ°ÃÂ½ÃÂ¸Ã‘â€šÃ‘Å’ Ã‘â€ ÃÂµÃÂ»ÃÂ¸",
 
-    operatingFramework: "Операционный framework",
-    disciplineRules: "Правила дисциплины",
+    operatingFramework: "ÃÅ¾ÃÂ¿ÃÂµÃ‘â‚¬ÃÂ°Ã‘â€ ÃÂ¸ÃÂ¾ÃÂ½ÃÂ½Ã‘â€¹ÃÂ¹ framework",
+    disciplineRules: "ÃÅ¸Ã‘â‚¬ÃÂ°ÃÂ²ÃÂ¸ÃÂ»ÃÂ° ÃÂ´ÃÂ¸Ã‘ÂÃ‘â€ ÃÂ¸ÃÂ¿ÃÂ»ÃÂ¸ÃÂ½Ã‘â€¹",
     rules: [
       {
-        title: "Без revenge trading",
+        title: "Ãâ€˜ÃÂµÃÂ· revenge trading",
         description:
-          "Не открывай новый trade, чтобы эмоционально отыграть убыток.",
+          "ÃÂÃÂµ ÃÂ¾Ã‘â€šÃÂºÃ‘â‚¬Ã‘â€¹ÃÂ²ÃÂ°ÃÂ¹ ÃÂ½ÃÂ¾ÃÂ²Ã‘â€¹ÃÂ¹ trade, Ã‘â€¡Ã‘â€šÃÂ¾ÃÂ±Ã‘â€¹ Ã‘ÂÃÂ¼ÃÂ¾Ã‘â€ ÃÂ¸ÃÂ¾ÃÂ½ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¾ ÃÂ¾Ã‘â€šÃ‘â€¹ÃÂ³Ã‘â‚¬ÃÂ°Ã‘â€šÃ‘Å’ Ã‘Æ’ÃÂ±Ã‘â€¹Ã‘â€šÃÂ¾ÃÂº.",
       },
       {
-        title: "Без импульсивных входов",
+        title: "Ãâ€˜ÃÂµÃÂ· ÃÂ¸ÃÂ¼ÃÂ¿Ã‘Æ’ÃÂ»Ã‘Å’Ã‘ÂÃÂ¸ÃÂ²ÃÂ½Ã‘â€¹Ã‘â€¦ ÃÂ²Ã‘â€¦ÃÂ¾ÃÂ´ÃÂ¾ÃÂ²",
         description:
-          "Каждый вход должен иметь валидный setup и ясную причину.",
+          "ÃÅ¡ÃÂ°ÃÂ¶ÃÂ´Ã‘â€¹ÃÂ¹ ÃÂ²Ã‘â€¦ÃÂ¾ÃÂ´ ÃÂ´ÃÂ¾ÃÂ»ÃÂ¶ÃÂµÃÂ½ ÃÂ¸ÃÂ¼ÃÂµÃ‘â€šÃ‘Å’ ÃÂ²ÃÂ°ÃÂ»ÃÂ¸ÃÂ´ÃÂ½Ã‘â€¹ÃÂ¹ setup ÃÂ¸ Ã‘ÂÃ‘ÂÃÂ½Ã‘Æ’Ã‘Å½ ÃÂ¿Ã‘â‚¬ÃÂ¸Ã‘â€¡ÃÂ¸ÃÂ½Ã‘Æ’.",
       },
       {
-        title: "Соблюдай лимиты риска",
+        title: "ÃÂ¡ÃÂ¾ÃÂ±ÃÂ»Ã‘Å½ÃÂ´ÃÂ°ÃÂ¹ ÃÂ»ÃÂ¸ÃÂ¼ÃÂ¸Ã‘â€šÃ‘â€¹ Ã‘â‚¬ÃÂ¸Ã‘ÂÃÂºÃÂ°",
         description:
-          "Аккаунт должен оставаться внутри лимитов drawdown и частоты сделок.",
+          "ÃÂÃÂºÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€š ÃÂ´ÃÂ¾ÃÂ»ÃÂ¶ÃÂµÃÂ½ ÃÂ¾Ã‘ÂÃ‘â€šÃÂ°ÃÂ²ÃÂ°Ã‘â€šÃ‘Å’Ã‘ÂÃ‘Â ÃÂ²ÃÂ½Ã‘Æ’Ã‘â€šÃ‘â‚¬ÃÂ¸ ÃÂ»ÃÂ¸ÃÂ¼ÃÂ¸Ã‘â€šÃÂ¾ÃÂ² drawdown ÃÂ¸ Ã‘â€¡ÃÂ°Ã‘ÂÃ‘â€šÃÂ¾Ã‘â€šÃ‘â€¹ Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂ¾ÃÂº.",
       },
       {
-        title: "Остановись после эмоциональных ошибок",
+        title: "ÃÅ¾Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ¾ÃÂ²ÃÂ¸Ã‘ÂÃ‘Å’ ÃÂ¿ÃÂ¾Ã‘ÂÃÂ»ÃÂµ Ã‘ÂÃÂ¼ÃÂ¾Ã‘â€ ÃÂ¸ÃÂ¾ÃÂ½ÃÂ°ÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹Ã‘â€¦ ÃÂ¾Ã‘Ë†ÃÂ¸ÃÂ±ÃÂ¾ÃÂº",
         description:
-          "Если качество execution падает, приоритетом становится защита.",
+          "Ãâ€¢Ã‘ÂÃÂ»ÃÂ¸ ÃÂºÃÂ°Ã‘â€¡ÃÂµÃ‘ÂÃ‘â€šÃÂ²ÃÂ¾ execution ÃÂ¿ÃÂ°ÃÂ´ÃÂ°ÃÂµÃ‘â€š, ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ¾Ã‘â‚¬ÃÂ¸Ã‘â€šÃÂµÃ‘â€šÃÂ¾ÃÂ¼ Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ¾ÃÂ²ÃÂ¸Ã‘â€šÃ‘ÂÃ‘Â ÃÂ·ÃÂ°Ã‘â€°ÃÂ¸Ã‘â€šÃÂ°.",
       },
       {
-        title: "Процесс перед прибылью",
+        title: "ÃÅ¸Ã‘â‚¬ÃÂ¾Ã‘â€ ÃÂµÃ‘ÂÃ‘Â ÃÂ¿ÃÂµÃ‘â‚¬ÃÂµÃÂ´ ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘â€¹ÃÂ»Ã‘Å’Ã‘Å½",
         description:
-          "Цель — защищать стабильность, а не гнаться за одним результатом.",
+          "ÃÂ¦ÃÂµÃÂ»Ã‘Å’ Ã¢â‚¬â€ ÃÂ·ÃÂ°Ã‘â€°ÃÂ¸Ã‘â€°ÃÂ°Ã‘â€šÃ‘Å’ Ã‘ÂÃ‘â€šÃÂ°ÃÂ±ÃÂ¸ÃÂ»Ã‘Å’ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘Å’, ÃÂ° ÃÂ½ÃÂµ ÃÂ³ÃÂ½ÃÂ°Ã‘â€šÃ‘Å’Ã‘ÂÃ‘Â ÃÂ·ÃÂ° ÃÂ¾ÃÂ´ÃÂ½ÃÂ¸ÃÂ¼ Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃÂ¾ÃÂ¼.",
       },
     ],
 
-    profitProgress: "Прогресс прибыли",
-    monthlyTarget: "Месячная цель",
-    currentProgress: "Текущий прогресс",
+    profitProgress: "ÃÅ¸Ã‘â‚¬ÃÂ¾ÃÂ³Ã‘â‚¬ÃÂµÃ‘ÂÃ‘Â ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘â€¹ÃÂ»ÃÂ¸",
+    monthlyTarget: "ÃÅ“ÃÂµÃ‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ°Ã‘Â Ã‘â€ ÃÂµÃÂ»Ã‘Å’",
+    currentProgress: "ÃÂ¢ÃÂµÃÂºÃ‘Æ’Ã‘â€°ÃÂ¸ÃÂ¹ ÃÂ¿Ã‘â‚¬ÃÂ¾ÃÂ³Ã‘â‚¬ÃÂµÃ‘ÂÃ‘Â",
     monthlyProfitTargetReached:
-      "Месячная цель прибыли достигнута.",
+      "ÃÅ“ÃÂµÃ‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ°Ã‘Â Ã‘â€ ÃÂµÃÂ»Ã‘Å’ ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘â€¹ÃÂ»ÃÂ¸ ÃÂ´ÃÂ¾Ã‘ÂÃ‘â€šÃÂ¸ÃÂ³ÃÂ½Ã‘Æ’Ã‘â€šÃÂ°.",
     remainingToReachTarget:
-      "осталось до достижения цели.",
+      "ÃÂ¾Ã‘ÂÃ‘â€šÃÂ°ÃÂ»ÃÂ¾Ã‘ÂÃ‘Å’ ÃÂ´ÃÂ¾ ÃÂ´ÃÂ¾Ã‘ÂÃ‘â€šÃÂ¸ÃÂ¶ÃÂµÃÂ½ÃÂ¸Ã‘Â Ã‘â€ ÃÂµÃÂ»ÃÂ¸.",
     setMonthlyProfitTarget:
-      "Установи месячную цель прибыли, чтобы отслеживать прогресс.",
-    winRateProgress: "Прогресс Win Rate",
-    drawdownUsage: "Использование drawdown",
+      "ÃÂ£Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ¾ÃÂ²ÃÂ¸ ÃÂ¼ÃÂµÃ‘ÂÃ‘ÂÃ‘â€¡ÃÂ½Ã‘Æ’Ã‘Å½ Ã‘â€ ÃÂµÃÂ»Ã‘Å’ ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘â€¹ÃÂ»ÃÂ¸, Ã‘â€¡Ã‘â€šÃÂ¾ÃÂ±Ã‘â€¹ ÃÂ¾Ã‘â€šÃ‘ÂÃÂ»ÃÂµÃÂ¶ÃÂ¸ÃÂ²ÃÂ°Ã‘â€šÃ‘Å’ ÃÂ¿Ã‘â‚¬ÃÂ¾ÃÂ³Ã‘â‚¬ÃÂµÃ‘ÂÃ‘Â.",
+    winRateProgress: "ÃÅ¸Ã‘â‚¬ÃÂ¾ÃÂ³Ã‘â‚¬ÃÂµÃ‘ÂÃ‘Â Win Rate",
+    drawdownUsage: "ÃËœÃ‘ÂÃÂ¿ÃÂ¾ÃÂ»Ã‘Å’ÃÂ·ÃÂ¾ÃÂ²ÃÂ°ÃÂ½ÃÂ¸ÃÂµ drawdown",
 
-    controlSignals: "Контрольные сигналы",
-    riskGuardrails: "Защитные рамки риска",
-    busiestDay: "Самый активный день",
+    controlSignals: "ÃÅ¡ÃÂ¾ÃÂ½Ã‘â€šÃ‘â‚¬ÃÂ¾ÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂµ Ã‘ÂÃÂ¸ÃÂ³ÃÂ½ÃÂ°ÃÂ»Ã‘â€¹",
+    riskGuardrails: "Ãâ€”ÃÂ°Ã‘â€°ÃÂ¸Ã‘â€šÃÂ½Ã‘â€¹ÃÂµ Ã‘â‚¬ÃÂ°ÃÂ¼ÃÂºÃÂ¸ Ã‘â‚¬ÃÂ¸Ã‘ÂÃÂºÃÂ°",
+    busiestDay: "ÃÂ¡ÃÂ°ÃÂ¼Ã‘â€¹ÃÂ¹ ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€¹ÃÂ¹ ÃÂ´ÃÂµÃÂ½Ã‘Å’",
     busiestDayDescription:
-      "Максимальное количество trade, открытых за один день в этом месяце.",
-    dailyLimitUsage: "Использование дневного лимита",
+      "ÃÅ“ÃÂ°ÃÂºÃ‘ÂÃÂ¸ÃÂ¼ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¾ÃÂµ ÃÂºÃÂ¾ÃÂ»ÃÂ¸Ã‘â€¡ÃÂµÃ‘ÂÃ‘â€šÃÂ²ÃÂ¾ trade, ÃÂ¾Ã‘â€šÃÂºÃ‘â‚¬Ã‘â€¹Ã‘â€šÃ‘â€¹Ã‘â€¦ ÃÂ·ÃÂ° ÃÂ¾ÃÂ´ÃÂ¸ÃÂ½ ÃÂ´ÃÂµÃÂ½Ã‘Å’ ÃÂ² Ã‘ÂÃ‘â€šÃÂ¾ÃÂ¼ ÃÂ¼ÃÂµÃ‘ÂÃ‘ÂÃ‘â€ ÃÂµ.",
+    dailyLimitUsage: "ÃËœÃ‘ÂÃÂ¿ÃÂ¾ÃÂ»Ã‘Å’ÃÂ·ÃÂ¾ÃÂ²ÃÂ°ÃÂ½ÃÂ¸ÃÂµ ÃÂ´ÃÂ½ÃÂµÃÂ²ÃÂ½ÃÂ¾ÃÂ³ÃÂ¾ ÃÂ»ÃÂ¸ÃÂ¼ÃÂ¸Ã‘â€šÃÂ°",
     dailyLimitUsageDescription:
-      "Рассчитано по самому активному торговому дню.",
-    closedTrades: "Закрытые trade",
+      "ÃÂ ÃÂ°Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ¸Ã‘â€šÃÂ°ÃÂ½ÃÂ¾ ÃÂ¿ÃÂ¾ Ã‘ÂÃÂ°ÃÂ¼ÃÂ¾ÃÂ¼Ã‘Æ’ ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¾ÃÂ¼Ã‘Æ’ Ã‘â€šÃÂ¾Ã‘â‚¬ÃÂ³ÃÂ¾ÃÂ²ÃÂ¾ÃÂ¼Ã‘Æ’ ÃÂ´ÃÂ½Ã‘Å½.",
+    closedTrades: "Ãâ€”ÃÂ°ÃÂºÃ‘â‚¬Ã‘â€¹Ã‘â€šÃ‘â€¹ÃÂµ trade",
     closedTradesDescription:
-      "Используются для расчета текущего win rate.",
+      "ÃËœÃ‘ÂÃÂ¿ÃÂ¾ÃÂ»Ã‘Å’ÃÂ·Ã‘Æ’Ã‘Å½Ã‘â€šÃ‘ÂÃ‘Â ÃÂ´ÃÂ»Ã‘Â Ã‘â‚¬ÃÂ°Ã‘ÂÃ‘â€¡ÃÂµÃ‘â€šÃÂ° Ã‘â€šÃÂµÃÂºÃ‘Æ’Ã‘â€°ÃÂµÃÂ³ÃÂ¾ win rate.",
   },
 
   es: {
@@ -449,22 +449,22 @@ const rulesLabels: Record<AppLanguage, RulesLabels> = {
     accountControlCenter: "Centro de control de cuenta",
     title: "Reglas y objetivos",
     description:
-      "Define objetivos mensuales, establece los límites de la cuenta y mantén visibles las reglas operativas antes de que el rendimiento se vuelva emocional.",
+      "Define objetivos mensuales, establece los lÃƒÂ­mites de la cuenta y mantÃƒÂ©n visibles las reglas operativas antes de que el rendimiento se vuelva emocional.",
     backToAccountHub: "Volver al Account Hub",
 
     monthlyPnl: "PnL mensual",
     winRate: "Win Rate",
-    maxDrawdown: "Drawdown máximo",
+    maxDrawdown: "Drawdown mÃƒÂ¡ximo",
     tradesThisMonth: "Trades este mes",
     target: "Objetivo",
-    limit: "Límite",
-    dailyLimit: "Límite diario",
+    limit: "LÃƒÂ­mite",
+    dailyLimit: "LÃƒÂ­mite diario",
     noMonthlyProfitTarget:
       "No hay objetivo mensual de beneficio.",
     noWinRateTarget: "No hay objetivo de win rate.",
-    noDrawdownLimit: "No hay límite de drawdown.",
+    noDrawdownLimit: "No hay lÃƒÂ­mite de drawdown.",
     noDailyTradeLimit:
-      "No hay límite diario de trades.",
+      "No hay lÃƒÂ­mite diario de trades.",
 
     performanceTargets: "Objetivos de rendimiento",
     monthlyGoals: "Objetivos mensuales",
@@ -473,9 +473,9 @@ const rulesLabels: Record<AppLanguage, RulesLabels> = {
     monthlyWinRateGoalPlaceholder:
       "Objetivo mensual de win rate %",
     maxDrawdownLimitPlaceholder:
-      "Límite máximo de drawdown %",
+      "LÃƒÂ­mite mÃƒÂ¡ximo de drawdown %",
     maxTradesPerDayPlaceholder:
-      "Máximo de trades por día",
+      "MÃƒÂ¡ximo de trades por dÃƒÂ­a",
     saveGoals: "Guardar objetivos",
 
     operatingFramework: "Marco operativo",
@@ -484,27 +484,27 @@ const rulesLabels: Record<AppLanguage, RulesLabels> = {
       {
         title: "Sin revenge trading",
         description:
-          "No abras un nuevo trade para recuperar emocionalmente una pérdida.",
+          "No abras un nuevo trade para recuperar emocionalmente una pÃƒÂ©rdida.",
       },
       {
         title: "Sin entradas impulsivas",
         description:
-          "Cada entrada debe venir de un setup válido y una razón clara.",
+          "Cada entrada debe venir de un setup vÃƒÂ¡lido y una razÃƒÂ³n clara.",
       },
       {
-        title: "Respeta los límites de riesgo",
+        title: "Respeta los lÃƒÂ­mites de riesgo",
         description:
-          "La cuenta debe mantenerse dentro de los límites de drawdown y frecuencia operativa.",
+          "La cuenta debe mantenerse dentro de los lÃƒÂ­mites de drawdown y frecuencia operativa.",
       },
       {
-        title: "Detente después de errores emocionales",
+        title: "Detente despuÃƒÂ©s de errores emocionales",
         description:
-          "Si la calidad de ejecución baja, la prioridad pasa a ser la protección.",
+          "Si la calidad de ejecuciÃƒÂ³n baja, la prioridad pasa a ser la protecciÃƒÂ³n.",
       },
       {
         title: "Proceso antes que beneficio",
         description:
-          "El objetivo es proteger la consistencia, no perseguir un único resultado.",
+          "El objetivo es proteger la consistencia, no perseguir un ÃƒÂºnico resultado.",
       },
     ],
 
@@ -520,26 +520,26 @@ const rulesLabels: Record<AppLanguage, RulesLabels> = {
     winRateProgress: "Progreso Win Rate",
     drawdownUsage: "Uso del drawdown",
 
-    controlSignals: "Señales de control",
+    controlSignals: "SeÃƒÂ±ales de control",
     riskGuardrails: "Guardrails de riesgo",
-    busiestDay: "Día más activo",
+    busiestDay: "DÃƒÂ­a mÃƒÂ¡s activo",
     busiestDayDescription:
-      "Máximo de trades abiertos en un solo día este mes.",
-    dailyLimitUsage: "Uso del límite diario",
+      "MÃƒÂ¡ximo de trades abiertos en un solo dÃƒÂ­a este mes.",
+    dailyLimitUsage: "Uso del lÃƒÂ­mite diario",
     dailyLimitUsageDescription:
-      "Basado en el día de trading más activo.",
+      "Basado en el dÃƒÂ­a de trading mÃƒÂ¡s activo.",
     closedTrades: "Trades cerrados",
     closedTradesDescription:
       "Usados para calcular el win rate actual.",
   },
 
   fr: {
-    disciplineSystem: "Système de discipline",
-    accountControlCenter: "Centre de contrôle du compte",
-    title: "Règles et objectifs",
+    disciplineSystem: "SystÃƒÂ¨me de discipline",
+    accountControlCenter: "Centre de contrÃƒÂ´le du compte",
+    title: "RÃƒÂ¨gles et objectifs",
     description:
-      "Définis les objectifs mensuels, fixe les limites du compte et garde les règles opérationnelles visibles avant que la performance devienne émotionnelle.",
-    backToAccountHub: "Retour à l’Account Hub",
+      "DÃƒÂ©finis les objectifs mensuels, fixe les limites du compte et garde les rÃƒÂ¨gles opÃƒÂ©rationnelles visibles avant que la performance devienne ÃƒÂ©motionnelle.",
+    backToAccountHub: "Retour ÃƒÂ  lÃ¢â‚¬â„¢Account Hub",
 
     monthlyPnl: "PnL mensuel",
     winRate: "Win Rate",
@@ -549,11 +549,11 @@ const rulesLabels: Record<AppLanguage, RulesLabels> = {
     limit: "Limite",
     dailyLimit: "Limite quotidienne",
     noMonthlyProfitTarget:
-      "Aucun objectif de profit mensuel défini.",
-    noWinRateTarget: "Aucun objectif de win rate défini.",
-    noDrawdownLimit: "Aucune limite de drawdown définie.",
+      "Aucun objectif de profit mensuel dÃƒÂ©fini.",
+    noWinRateTarget: "Aucun objectif de win rate dÃƒÂ©fini.",
+    noDrawdownLimit: "Aucune limite de drawdown dÃƒÂ©finie.",
     noDailyTradeLimit:
-      "Aucune limite quotidienne de trades définie.",
+      "Aucune limite quotidienne de trades dÃƒÂ©finie.",
 
     performanceTargets: "Objectifs de performance",
     monthlyGoals: "Objectifs mensuels",
@@ -567,33 +567,33 @@ const rulesLabels: Record<AppLanguage, RulesLabels> = {
       "Maximum de trades par jour",
     saveGoals: "Enregistrer les objectifs",
 
-    operatingFramework: "Cadre opérationnel",
-    disciplineRules: "Règles de discipline",
+    operatingFramework: "Cadre opÃƒÂ©rationnel",
+    disciplineRules: "RÃƒÂ¨gles de discipline",
     rules: [
       {
         title: "Pas de revenge trading",
         description:
-          "N’ouvre pas un nouveau trade pour récupérer émotionnellement une perte.",
+          "NÃ¢â‚¬â„¢ouvre pas un nouveau trade pour rÃƒÂ©cupÃƒÂ©rer ÃƒÂ©motionnellement une perte.",
       },
       {
-        title: "Pas d’entrées impulsives",
+        title: "Pas dÃ¢â‚¬â„¢entrÃƒÂ©es impulsives",
         description:
-          "Chaque entrée doit venir d’un setup valide et d’une raison claire.",
+          "Chaque entrÃƒÂ©e doit venir dÃ¢â‚¬â„¢un setup valide et dÃ¢â‚¬â„¢une raison claire.",
       },
       {
         title: "Respecte les limites de risque",
         description:
-          "Le compte doit rester dans les limites de drawdown et de fréquence opérationnelle.",
+          "Le compte doit rester dans les limites de drawdown et de frÃƒÂ©quence opÃƒÂ©rationnelle.",
       },
       {
-        title: "Arrête-toi après des erreurs émotionnelles",
+        title: "ArrÃƒÂªte-toi aprÃƒÂ¨s des erreurs ÃƒÂ©motionnelles",
         description:
-          "Si la qualité d’exécution baisse, la priorité devient la protection.",
+          "Si la qualitÃƒÂ© dÃ¢â‚¬â„¢exÃƒÂ©cution baisse, la prioritÃƒÂ© devient la protection.",
       },
       {
         title: "Le processus avant le profit",
         description:
-          "L’objectif est de protéger la constance, pas de courir après un seul résultat.",
+          "LÃ¢â‚¬â„¢objectif est de protÃƒÂ©ger la constance, pas de courir aprÃƒÂ¨s un seul rÃƒÂ©sultat.",
       },
     ],
 
@@ -603,23 +603,23 @@ const rulesLabels: Record<AppLanguage, RulesLabels> = {
     monthlyProfitTargetReached:
       "Objectif de profit mensuel atteint.",
     remainingToReachTarget:
-      "restant pour atteindre l’objectif.",
+      "restant pour atteindre lÃ¢â‚¬â„¢objectif.",
     setMonthlyProfitTarget:
-      "Définis un objectif de profit mensuel pour suivre la progression.",
+      "DÃƒÂ©finis un objectif de profit mensuel pour suivre la progression.",
     winRateProgress: "Progression Win Rate",
     drawdownUsage: "Utilisation du drawdown",
 
-    controlSignals: "Signaux de contrôle",
+    controlSignals: "Signaux de contrÃƒÂ´le",
     riskGuardrails: "Garde-fous de risque",
     busiestDay: "Jour le plus actif",
     busiestDayDescription:
-      "Nombre maximal de trades ouverts en une journée ce mois-ci.",
+      "Nombre maximal de trades ouverts en une journÃƒÂ©e ce mois-ci.",
     dailyLimitUsage: "Utilisation de la limite quotidienne",
     dailyLimitUsageDescription:
-      "Basé sur la journée de trading la plus active.",
-    closedTrades: "Trades clôturés",
+      "BasÃƒÂ© sur la journÃƒÂ©e de trading la plus active.",
+    closedTrades: "Trades clÃƒÂ´turÃƒÂ©s",
     closedTradesDescription:
-      "Utilisés pour calculer le win rate actuel.",
+      "UtilisÃƒÂ©s pour calculer le win rate actuel.",
   },
 
   de: {
@@ -628,7 +628,7 @@ const rulesLabels: Record<AppLanguage, RulesLabels> = {
     title: "Regeln & Ziele",
     description:
       "Setze monatliche Ziele, definiere Account-Limits und halte operative Regeln sichtbar, bevor Performance emotional wird.",
-    backToAccountHub: "Zurück zum Account Hub",
+    backToAccountHub: "ZurÃƒÂ¼ck zum Account Hub",
 
     monthlyPnl: "Monatlicher PnL",
     winRate: "Win Rate",
@@ -642,7 +642,7 @@ const rulesLabels: Record<AppLanguage, RulesLabels> = {
     noWinRateTarget: "Kein Win-Rate-Ziel gesetzt.",
     noDrawdownLimit: "Kein Drawdown-Limit gesetzt.",
     noDailyTradeLimit:
-      "Kein tägliches Trade-Limit gesetzt.",
+      "Kein tÃƒÂ¤gliches Trade-Limit gesetzt.",
 
     performanceTargets: "Performance-Ziele",
     monthlyGoals: "Monatliche Ziele",
@@ -662,7 +662,7 @@ const rulesLabels: Record<AppLanguage, RulesLabels> = {
       {
         title: "Kein Revenge Trading",
         description:
-          "Öffne keinen neuen Trade, um einen Verlust emotional zurückzuholen.",
+          "Ãƒâ€“ffne keinen neuen Trade, um einen Verlust emotional zurÃƒÂ¼ckzuholen.",
       },
       {
         title: "Keine impulsiven Einstiege",
@@ -677,12 +677,12 @@ const rulesLabels: Record<AppLanguage, RulesLabels> = {
       {
         title: "Nach emotionalen Fehlern stoppen",
         description:
-          "Wenn die Execution-Qualität fällt, wird Schutz zur Priorität.",
+          "Wenn die Execution-QualitÃƒÂ¤t fÃƒÂ¤llt, wird Schutz zur PrioritÃƒÂ¤t.",
       },
       {
         title: "Prozess vor Profit",
         description:
-          "Das Ziel ist, Konsistenz zu schützen, nicht ein einzelnes Ergebnis zu jagen.",
+          "Das Ziel ist, Konsistenz zu schÃƒÂ¼tzen, nicht ein einzelnes Ergebnis zu jagen.",
       },
     ],
 
@@ -702,7 +702,7 @@ const rulesLabels: Record<AppLanguage, RulesLabels> = {
     riskGuardrails: "Risiko-Leitplanken",
     busiestDay: "Aktivster Tag",
     busiestDayDescription:
-      "Maximale Anzahl an Trades, die diesen Monat an einem Tag eröffnet wurden.",
+      "Maximale Anzahl an Trades, die diesen Monat an einem Tag erÃƒÂ¶ffnet wurden.",
     dailyLimitUsage: "Nutzung des Tageslimits",
     dailyLimitUsageDescription:
       "Basierend auf dem aktivsten Trading-Tag.",
@@ -742,7 +742,7 @@ function getResultTone(value: number) {
 
 function ProgressBar({
   value,
-  tone = "bg-green-400",
+  tone = "bg-accent",
 }: {
   value: number;
   tone?: string;
@@ -784,7 +784,7 @@ function StatCard({
           </h2>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-cyan-300">
+        <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-accent-bright">
           <Icon size={20} />
         </div>
       </div>
@@ -991,7 +991,7 @@ export default async function RulesPage({
   return (
     <div className="space-y-10">
       <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(250,204,21,0.14),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(34,197,94,0.08),transparent_35%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(250,204,21,0.14),transparent_35%),radial-gradient(circle_at_bottom_left,color-mix(in_srgb,var(--color-accent)_8%,transparent),transparent_35%)]" />
 
         <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
           <div>
@@ -1097,7 +1097,7 @@ export default async function RulesPage({
               : t.noDailyTradeLimit
           }
           icon={Activity}
-          tone="text-cyan-300"
+          tone="text-accent-bright"
         />
       </section>
 
@@ -1120,7 +1120,7 @@ export default async function RulesPage({
               </h2>
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-green-400">
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-accent">
               <Gauge size={20} />
             </div>
           </div>
@@ -1179,7 +1179,7 @@ export default async function RulesPage({
 
             <button
               type="submit"
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-green-500 p-4 font-black text-black transition hover:bg-green-400"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-accent p-4 font-black text-white transition hover:bg-accent-bright"
             >
               <Save size={18} />
               {t.saveGoals}
@@ -1236,7 +1236,7 @@ export default async function RulesPage({
               </h2>
             </div>
 
-            <CalendarDays className="text-green-400" />
+            <CalendarDays className="text-accent" />
           </div>
 
           <div className="mt-6">
@@ -1378,7 +1378,7 @@ export default async function RulesPage({
               {t.closedTrades}
             </p>
 
-            <h3 className="mt-3 text-3xl font-black text-cyan-300">
+            <h3 className="mt-3 text-3xl font-black text-accent-bright">
               {closedTrades.length}
             </h3>
 

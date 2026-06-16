@@ -40,7 +40,7 @@ export default function ReportsNavigation({
           <a
             key={id}
             href={`#${id}`}
-            className="shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-gray-300 transition hover:border-cyan-400/40 hover:text-cyan-400"
+            className="shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-gray-300 transition hover:border-accent-bright/40 hover:text-accent-bright"
           >
             {t[id]}
           </a>

@@ -4,6 +4,7 @@ import type {
   Metadata,
   Viewport,
 } from "next";
+import { Inter } from "next/font/google";
 
 import { Toaster } from "sonner";
 
@@ -15,6 +16,13 @@ import {
   normalizeAppLanguage,
   type AppLanguage,
 } from "@/lib/i18n";
+import { resolveAccent } from "@/lib/accent-colors";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "VOLTIS",
@@ -192,6 +200,12 @@ export default async function RootLayout({
 
   const t = rootLabels[language] ?? rootLabels.en;
 
+  const accent = resolveAccent(currentUser?.accentColor);
+  const accentStyle = {
+    "--color-accent": accent.accent,
+    "--color-accent-bright": accent.bright,
+  } as React.CSSProperties;
+
   if (currentUser) {
     try {
       await prisma.user.update({
@@ -234,8 +248,8 @@ export default async function RootLayout({
 
   if (shouldShowMaintenance) {
     return (
-      <html lang={language}>
-        <body className="bg-[#050b10] text-white">
+      <html lang={language} className={inter.variable} style={accentStyle}>
+        <body className="text-white">
           <PWARegister />
 
           <div className="flex min-h-screen items-center justify-center p-8">
@@ -267,8 +281,8 @@ export default async function RootLayout({
     currentUser?.role !== "FOUNDER"
   ) {
     return (
-      <html lang={language}>
-        <body className="bg-[#050b10] text-white">
+      <html lang={language} className={inter.variable} style={accentStyle}>
+        <body className="text-white">
           <PWARegister />
 
           <div className="flex min-h-screen items-center justify-center p-8">
@@ -303,8 +317,8 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={language}>
-      <body className="bg-[#050b10] text-white">
+    <html lang={language} className={inter.variable} style={accentStyle}>
+      <body className="text-white">
         <PWARegister />
 
         <Toaster

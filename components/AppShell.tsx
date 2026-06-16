@@ -215,7 +215,7 @@ export default function AppShell({
                 title={t.openProfileMenu}
                 className="flex items-center gap-2 rounded-2xl border border-white/10 bg-[#071018]/80 px-3 py-2 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:bg-[#071018]"
               >
-                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-green-500/10 text-[11px] font-bold text-green-400">
+                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-accent/10 text-[11px] font-bold text-accent">
                   {initials}
                 </div>
 
@@ -234,7 +234,7 @@ export default function AppShell({
                 <div className="absolute right-0 mt-3 w-60 overflow-hidden rounded-2xl border border-white/10 bg-[#071018] shadow-2xl">
                   <div className="border-b border-white/10 p-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-500/10 text-sm font-bold text-green-400">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/10 text-sm font-bold text-accent">
                         {initials}
                       </div>
 

@@ -164,7 +164,7 @@ export default function TradeBehaviorWarnings({
               {t.highQuality}
             </p>
 
-            <h3 className="mt-3 text-4xl font-black text-green-400">
+            <h3 className="mt-3 text-4xl font-black text-accent">
               {highQualityTrades}
             </h3>
           </div>

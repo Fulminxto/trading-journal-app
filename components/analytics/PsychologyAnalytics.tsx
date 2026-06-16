@@ -83,7 +83,7 @@ export default function PsychologyAnalytics({
         <div className="rounded-2xl bg-black/20 p-4">
           <div className="flex items-center justify-between">
             <span className="text-gray-400">{t.confidence}</span>
-            <span className="font-bold text-cyan-400">{averageConfidence}/10</span>
+            <span className="font-bold text-accent-bright">{averageConfidence}/10</span>
           </div>
         </div>
 

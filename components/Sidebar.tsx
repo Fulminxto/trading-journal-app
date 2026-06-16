@@ -714,7 +714,7 @@ export default function Sidebar({
                   ? "justify-center px-3 py-3"
                   : "gap-3 px-4 py-3"
                   } ${active
-                    ? "bg-green-400/10 text-green-400"
+                    ? "bg-accent/10 text-accent"
                     : "text-gray-300 hover:bg-white/5 hover:text-white"
                   }`}
               >

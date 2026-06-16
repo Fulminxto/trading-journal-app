@@ -14,7 +14,7 @@ export default function PrintReportButton({
     <button
       type="button"
       onClick={() => window.print()}
-      className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-5 py-3 text-sm font-bold uppercase tracking-[0.16em] text-cyan-300 transition hover:border-cyan-400/40 hover:bg-cyan-500/20"
+      className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-5 py-3 text-sm font-bold uppercase tracking-[0.16em] text-accent-bright transition hover:border-accent-bright/40 hover:bg-accent-bright/20"
     >
       {t.exportPdf}
     </button>

@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+﻿import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -9,7 +9,7 @@ import {
 } from "@/lib/i18n";
 import { ArrowLeft, Pencil } from "lucide-react";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Types Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
 type ReplayLabels = {
   backToDiary: string;
@@ -99,13 +99,13 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     swap: "Swap",
     fees: "Fees",
     equityAfter: "Equity post-trade",
-    noData: "—",
+    noData: "Ã¢â‚¬â€",
     motivationTitle: "Motivazione & Setup",
     strategyLabel: "Strategia",
     reasonLabel: "Motivazione",
-    setupQualityLabel: "Qualità del setup",
+    setupQualityLabel: "QualitÃƒÂ  del setup",
     executionTitle: "Esecuzione",
-    executionRatingLabel: "Qualità esecuzione",
+    executionRatingLabel: "QualitÃƒÂ  esecuzione",
     confidenceLabel: "Confidenza",
     emotionalStateLabel: "Stato emotivo",
     calm: "Calmo",
@@ -152,7 +152,7 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     swap: "Swap",
     fees: "Fees",
     equityAfter: "Equity after",
-    noData: "—",
+    noData: "Ã¢â‚¬â€",
     motivationTitle: "Motivation & Setup",
     strategyLabel: "Strategy",
     reasonLabel: "Motivation",
@@ -173,110 +173,110 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     notesLabel: "Notes",
   },
   uk: {
-    backToDiary: "До щоденника",
-    editTrade: "Редагувати",
+    backToDiary: "Ãâ€ÃÂ¾ Ã‘â€°ÃÂ¾ÃÂ´ÃÂµÃÂ½ÃÂ½ÃÂ¸ÃÂºÃÂ°",
+    editTrade: "ÃÂ ÃÂµÃÂ´ÃÂ°ÃÂ³Ã‘Æ’ÃÂ²ÃÂ°Ã‘â€šÃÂ¸",
     badge: "Trade Replay",
-    openTrade: "Відкрита угода",
+    openTrade: "Ãâ€™Ã‘â€“ÃÂ´ÃÂºÃ‘â‚¬ÃÂ¸Ã‘â€šÃÂ° Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ÃÂ°",
     long: "LONG",
     short: "SHORT",
     win: "WIN",
     loss: "LOSS",
-    be: "Беззбитково",
-    anatomyTitle: "Анатомія ціни",
-    timelineTitle: "Хронологія",
-    performanceTitle: "Результати",
-    entryLabel: "ВХІД",
-    exitLabel: "ВИХІД",
+    be: "Ãâ€˜ÃÂµÃÂ·ÃÂ·ÃÂ±ÃÂ¸Ã‘â€šÃÂºÃÂ¾ÃÂ²ÃÂ¾",
+    anatomyTitle: "ÃÂÃÂ½ÃÂ°Ã‘â€šÃÂ¾ÃÂ¼Ã‘â€“Ã‘Â Ã‘â€ Ã‘â€“ÃÂ½ÃÂ¸",
+    timelineTitle: "ÃÂ¥Ã‘â‚¬ÃÂ¾ÃÂ½ÃÂ¾ÃÂ»ÃÂ¾ÃÂ³Ã‘â€“Ã‘Â",
+    performanceTitle: "ÃÂ ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃÂ¸",
+    entryLabel: "Ãâ€™ÃÂ¥Ãâ€ Ãâ€",
+    exitLabel: "Ãâ€™ÃËœÃÂ¥Ãâ€ Ãâ€",
     slLabel: "SL",
     tpLabel: "TP",
-    noPriceData: "Дані про ціни недоступні",
-    openDate: "Відкрито",
-    closeDate: "Закрито",
-    duration: "Тривалість",
-    session: "Сесія",
-    daysAbbr: "д",
-    hoursAbbr: "г",
-    minsAbbr: "хв",
-    plannedRR: "Плановий R:R",
-    actualRR: "Реальний R:R",
-    resultUsd: "Результат",
-    resultPct: "Результат %",
-    commission: "Комісія",
-    swap: "Своп",
-    fees: "Збори",
-    equityAfter: "Equity після",
-    noData: "—",
-    motivationTitle: "Мотивація & Налаштування",
-    strategyLabel: "Стратегія",
-    reasonLabel: "Мотивація",
-    setupQualityLabel: "Якість налаштування",
-    executionTitle: "Виконання",
-    executionRatingLabel: "Якість виконання",
-    confidenceLabel: "Впевненість",
-    emotionalStateLabel: "Емоційний стан",
-    calm: "Спокійний",
-    focused: "Зосереджений",
-    confident: "Впевнений",
-    tired: "Втомлений",
-    stressed: "Напружений",
-    impulsive: "Імпульсивний",
-    reviewTitle: "Огляд",
-    mistakesLabel: "Помилки",
-    lessonsLabel: "Засвоєні уроки",
-    notesLabel: "Нотатки",
+    noPriceData: "Ãâ€ÃÂ°ÃÂ½Ã‘â€“ ÃÂ¿Ã‘â‚¬ÃÂ¾ Ã‘â€ Ã‘â€“ÃÂ½ÃÂ¸ ÃÂ½ÃÂµÃÂ´ÃÂ¾Ã‘ÂÃ‘â€šÃ‘Æ’ÃÂ¿ÃÂ½Ã‘â€“",
+    openDate: "Ãâ€™Ã‘â€“ÃÂ´ÃÂºÃ‘â‚¬ÃÂ¸Ã‘â€šÃÂ¾",
+    closeDate: "Ãâ€”ÃÂ°ÃÂºÃ‘â‚¬ÃÂ¸Ã‘â€šÃÂ¾",
+    duration: "ÃÂ¢Ã‘â‚¬ÃÂ¸ÃÂ²ÃÂ°ÃÂ»Ã‘â€“Ã‘ÂÃ‘â€šÃ‘Å’",
+    session: "ÃÂ¡ÃÂµÃ‘ÂÃ‘â€“Ã‘Â",
+    daysAbbr: "ÃÂ´",
+    hoursAbbr: "ÃÂ³",
+    minsAbbr: "Ã‘â€¦ÃÂ²",
+    plannedRR: "ÃÅ¸ÃÂ»ÃÂ°ÃÂ½ÃÂ¾ÃÂ²ÃÂ¸ÃÂ¹ R:R",
+    actualRR: "ÃÂ ÃÂµÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¸ÃÂ¹ R:R",
+    resultUsd: "ÃÂ ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€š",
+    resultPct: "ÃÂ ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€š %",
+    commission: "ÃÅ¡ÃÂ¾ÃÂ¼Ã‘â€“Ã‘ÂÃ‘â€“Ã‘Â",
+    swap: "ÃÂ¡ÃÂ²ÃÂ¾ÃÂ¿",
+    fees: "Ãâ€”ÃÂ±ÃÂ¾Ã‘â‚¬ÃÂ¸",
+    equityAfter: "Equity ÃÂ¿Ã‘â€“Ã‘ÂÃÂ»Ã‘Â",
+    noData: "Ã¢â‚¬â€",
+    motivationTitle: "ÃÅ“ÃÂ¾Ã‘â€šÃÂ¸ÃÂ²ÃÂ°Ã‘â€ Ã‘â€“Ã‘Â & ÃÂÃÂ°ÃÂ»ÃÂ°Ã‘Ë†Ã‘â€šÃ‘Æ’ÃÂ²ÃÂ°ÃÂ½ÃÂ½Ã‘Â",
+    strategyLabel: "ÃÂ¡Ã‘â€šÃ‘â‚¬ÃÂ°Ã‘â€šÃÂµÃÂ³Ã‘â€“Ã‘Â",
+    reasonLabel: "ÃÅ“ÃÂ¾Ã‘â€šÃÂ¸ÃÂ²ÃÂ°Ã‘â€ Ã‘â€“Ã‘Â",
+    setupQualityLabel: "ÃÂ¯ÃÂºÃ‘â€“Ã‘ÂÃ‘â€šÃ‘Å’ ÃÂ½ÃÂ°ÃÂ»ÃÂ°Ã‘Ë†Ã‘â€šÃ‘Æ’ÃÂ²ÃÂ°ÃÂ½ÃÂ½Ã‘Â",
+    executionTitle: "Ãâ€™ÃÂ¸ÃÂºÃÂ¾ÃÂ½ÃÂ°ÃÂ½ÃÂ½Ã‘Â",
+    executionRatingLabel: "ÃÂ¯ÃÂºÃ‘â€“Ã‘ÂÃ‘â€šÃ‘Å’ ÃÂ²ÃÂ¸ÃÂºÃÂ¾ÃÂ½ÃÂ°ÃÂ½ÃÂ½Ã‘Â",
+    confidenceLabel: "Ãâ€™ÃÂ¿ÃÂµÃÂ²ÃÂ½ÃÂµÃÂ½Ã‘â€“Ã‘ÂÃ‘â€šÃ‘Å’",
+    emotionalStateLabel: "Ãâ€¢ÃÂ¼ÃÂ¾Ã‘â€ Ã‘â€“ÃÂ¹ÃÂ½ÃÂ¸ÃÂ¹ Ã‘ÂÃ‘â€šÃÂ°ÃÂ½",
+    calm: "ÃÂ¡ÃÂ¿ÃÂ¾ÃÂºÃ‘â€“ÃÂ¹ÃÂ½ÃÂ¸ÃÂ¹",
+    focused: "Ãâ€”ÃÂ¾Ã‘ÂÃÂµÃ‘â‚¬ÃÂµÃÂ´ÃÂ¶ÃÂµÃÂ½ÃÂ¸ÃÂ¹",
+    confident: "Ãâ€™ÃÂ¿ÃÂµÃÂ²ÃÂ½ÃÂµÃÂ½ÃÂ¸ÃÂ¹",
+    tired: "Ãâ€™Ã‘â€šÃÂ¾ÃÂ¼ÃÂ»ÃÂµÃÂ½ÃÂ¸ÃÂ¹",
+    stressed: "ÃÂÃÂ°ÃÂ¿Ã‘â‚¬Ã‘Æ’ÃÂ¶ÃÂµÃÂ½ÃÂ¸ÃÂ¹",
+    impulsive: "Ãâ€ ÃÂ¼ÃÂ¿Ã‘Æ’ÃÂ»Ã‘Å’Ã‘ÂÃÂ¸ÃÂ²ÃÂ½ÃÂ¸ÃÂ¹",
+    reviewTitle: "ÃÅ¾ÃÂ³ÃÂ»Ã‘ÂÃÂ´",
+    mistakesLabel: "ÃÅ¸ÃÂ¾ÃÂ¼ÃÂ¸ÃÂ»ÃÂºÃÂ¸",
+    lessonsLabel: "Ãâ€”ÃÂ°Ã‘ÂÃÂ²ÃÂ¾Ã‘â€ÃÂ½Ã‘â€“ Ã‘Æ’Ã‘â‚¬ÃÂ¾ÃÂºÃÂ¸",
+    notesLabel: "ÃÂÃÂ¾Ã‘â€šÃÂ°Ã‘â€šÃÂºÃÂ¸",
   },
   ru: {
-    backToDiary: "К дневнику",
-    editTrade: "Редактировать",
+    backToDiary: "ÃÅ¡ ÃÂ´ÃÂ½ÃÂµÃÂ²ÃÂ½ÃÂ¸ÃÂºÃ‘Æ’",
+    editTrade: "ÃÂ ÃÂµÃÂ´ÃÂ°ÃÂºÃ‘â€šÃÂ¸Ã‘â‚¬ÃÂ¾ÃÂ²ÃÂ°Ã‘â€šÃ‘Å’",
     badge: "Trade Replay",
-    openTrade: "Открытая сделка",
+    openTrade: "ÃÅ¾Ã‘â€šÃÂºÃ‘â‚¬Ã‘â€¹Ã‘â€šÃÂ°Ã‘Â Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂºÃÂ°",
     long: "LONG",
     short: "SHORT",
     win: "WIN",
     loss: "LOSS",
-    be: "Безубыток",
-    anatomyTitle: "Анатомия цены",
-    timelineTitle: "Хронология",
-    performanceTitle: "Результаты",
-    entryLabel: "ВХОД",
-    exitLabel: "ВЫХОД",
+    be: "Ãâ€˜ÃÂµÃÂ·Ã‘Æ’ÃÂ±Ã‘â€¹Ã‘â€šÃÂ¾ÃÂº",
+    anatomyTitle: "ÃÂÃÂ½ÃÂ°Ã‘â€šÃÂ¾ÃÂ¼ÃÂ¸Ã‘Â Ã‘â€ ÃÂµÃÂ½Ã‘â€¹",
+    timelineTitle: "ÃÂ¥Ã‘â‚¬ÃÂ¾ÃÂ½ÃÂ¾ÃÂ»ÃÂ¾ÃÂ³ÃÂ¸Ã‘Â",
+    performanceTitle: "ÃÂ ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃ‘â€¹",
+    entryLabel: "Ãâ€™ÃÂ¥ÃÅ¾Ãâ€",
+    exitLabel: "Ãâ€™ÃÂ«ÃÂ¥ÃÅ¾Ãâ€",
     slLabel: "SL",
     tpLabel: "TP",
-    noPriceData: "Ценовые данные недоступны",
-    openDate: "Открыто",
-    closeDate: "Закрыто",
-    duration: "Длительность",
-    session: "Сессия",
-    daysAbbr: "д",
-    hoursAbbr: "ч",
-    minsAbbr: "мин",
-    plannedRR: "Плановый R:R",
-    actualRR: "Реальный R:R",
-    resultUsd: "Результат",
-    resultPct: "Результат %",
-    commission: "Комиссия",
-    swap: "Своп",
-    fees: "Сборы",
-    equityAfter: "Equity после",
-    noData: "—",
-    motivationTitle: "Мотивация & Подготовка",
-    strategyLabel: "Стратегия",
-    reasonLabel: "Мотивация",
-    setupQualityLabel: "Качество сетапа",
-    executionTitle: "Исполнение",
-    executionRatingLabel: "Качество исполнения",
-    confidenceLabel: "Уверенность",
-    emotionalStateLabel: "Эмоциональное состояние",
-    calm: "Спокойный",
-    focused: "Сосредоточенный",
-    confident: "Уверенный",
-    tired: "Уставший",
-    stressed: "Напряжённый",
-    impulsive: "Импульсивный",
-    reviewTitle: "Анализ",
-    mistakesLabel: "Ошибки",
-    lessonsLabel: "Извлечённые уроки",
-    notesLabel: "Заметки",
+    noPriceData: "ÃÂ¦ÃÂµÃÂ½ÃÂ¾ÃÂ²Ã‘â€¹ÃÂµ ÃÂ´ÃÂ°ÃÂ½ÃÂ½Ã‘â€¹ÃÂµ ÃÂ½ÃÂµÃÂ´ÃÂ¾Ã‘ÂÃ‘â€šÃ‘Æ’ÃÂ¿ÃÂ½Ã‘â€¹",
+    openDate: "ÃÅ¾Ã‘â€šÃÂºÃ‘â‚¬Ã‘â€¹Ã‘â€šÃÂ¾",
+    closeDate: "Ãâ€”ÃÂ°ÃÂºÃ‘â‚¬Ã‘â€¹Ã‘â€šÃÂ¾",
+    duration: "Ãâ€ÃÂ»ÃÂ¸Ã‘â€šÃÂµÃÂ»Ã‘Å’ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘Å’",
+    session: "ÃÂ¡ÃÂµÃ‘ÂÃ‘ÂÃÂ¸Ã‘Â",
+    daysAbbr: "ÃÂ´",
+    hoursAbbr: "Ã‘â€¡",
+    minsAbbr: "ÃÂ¼ÃÂ¸ÃÂ½",
+    plannedRR: "ÃÅ¸ÃÂ»ÃÂ°ÃÂ½ÃÂ¾ÃÂ²Ã‘â€¹ÃÂ¹ R:R",
+    actualRR: "ÃÂ ÃÂµÃÂ°ÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂ¹ R:R",
+    resultUsd: "ÃÂ ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€š",
+    resultPct: "ÃÂ ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€š %",
+    commission: "ÃÅ¡ÃÂ¾ÃÂ¼ÃÂ¸Ã‘ÂÃ‘ÂÃÂ¸Ã‘Â",
+    swap: "ÃÂ¡ÃÂ²ÃÂ¾ÃÂ¿",
+    fees: "ÃÂ¡ÃÂ±ÃÂ¾Ã‘â‚¬Ã‘â€¹",
+    equityAfter: "Equity ÃÂ¿ÃÂ¾Ã‘ÂÃÂ»ÃÂµ",
+    noData: "Ã¢â‚¬â€",
+    motivationTitle: "ÃÅ“ÃÂ¾Ã‘â€šÃÂ¸ÃÂ²ÃÂ°Ã‘â€ ÃÂ¸Ã‘Â & ÃÅ¸ÃÂ¾ÃÂ´ÃÂ³ÃÂ¾Ã‘â€šÃÂ¾ÃÂ²ÃÂºÃÂ°",
+    strategyLabel: "ÃÂ¡Ã‘â€šÃ‘â‚¬ÃÂ°Ã‘â€šÃÂµÃÂ³ÃÂ¸Ã‘Â",
+    reasonLabel: "ÃÅ“ÃÂ¾Ã‘â€šÃÂ¸ÃÂ²ÃÂ°Ã‘â€ ÃÂ¸Ã‘Â",
+    setupQualityLabel: "ÃÅ¡ÃÂ°Ã‘â€¡ÃÂµÃ‘ÂÃ‘â€šÃÂ²ÃÂ¾ Ã‘ÂÃÂµÃ‘â€šÃÂ°ÃÂ¿ÃÂ°",
+    executionTitle: "ÃËœÃ‘ÂÃÂ¿ÃÂ¾ÃÂ»ÃÂ½ÃÂµÃÂ½ÃÂ¸ÃÂµ",
+    executionRatingLabel: "ÃÅ¡ÃÂ°Ã‘â€¡ÃÂµÃ‘ÂÃ‘â€šÃÂ²ÃÂ¾ ÃÂ¸Ã‘ÂÃÂ¿ÃÂ¾ÃÂ»ÃÂ½ÃÂµÃÂ½ÃÂ¸Ã‘Â",
+    confidenceLabel: "ÃÂ£ÃÂ²ÃÂµÃ‘â‚¬ÃÂµÃÂ½ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘Å’",
+    emotionalStateLabel: "ÃÂ­ÃÂ¼ÃÂ¾Ã‘â€ ÃÂ¸ÃÂ¾ÃÂ½ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¾ÃÂµ Ã‘ÂÃÂ¾Ã‘ÂÃ‘â€šÃÂ¾Ã‘ÂÃÂ½ÃÂ¸ÃÂµ",
+    calm: "ÃÂ¡ÃÂ¿ÃÂ¾ÃÂºÃÂ¾ÃÂ¹ÃÂ½Ã‘â€¹ÃÂ¹",
+    focused: "ÃÂ¡ÃÂ¾Ã‘ÂÃ‘â‚¬ÃÂµÃÂ´ÃÂ¾Ã‘â€šÃÂ¾Ã‘â€¡ÃÂµÃÂ½ÃÂ½Ã‘â€¹ÃÂ¹",
+    confident: "ÃÂ£ÃÂ²ÃÂµÃ‘â‚¬ÃÂµÃÂ½ÃÂ½Ã‘â€¹ÃÂ¹",
+    tired: "ÃÂ£Ã‘ÂÃ‘â€šÃÂ°ÃÂ²Ã‘Ë†ÃÂ¸ÃÂ¹",
+    stressed: "ÃÂÃÂ°ÃÂ¿Ã‘â‚¬Ã‘ÂÃÂ¶Ã‘â€˜ÃÂ½ÃÂ½Ã‘â€¹ÃÂ¹",
+    impulsive: "ÃËœÃÂ¼ÃÂ¿Ã‘Æ’ÃÂ»Ã‘Å’Ã‘ÂÃÂ¸ÃÂ²ÃÂ½Ã‘â€¹ÃÂ¹",
+    reviewTitle: "ÃÂÃÂ½ÃÂ°ÃÂ»ÃÂ¸ÃÂ·",
+    mistakesLabel: "ÃÅ¾Ã‘Ë†ÃÂ¸ÃÂ±ÃÂºÃÂ¸",
+    lessonsLabel: "ÃËœÃÂ·ÃÂ²ÃÂ»ÃÂµÃ‘â€¡Ã‘â€˜ÃÂ½ÃÂ½Ã‘â€¹ÃÂµ Ã‘Æ’Ã‘â‚¬ÃÂ¾ÃÂºÃÂ¸",
+    notesLabel: "Ãâ€”ÃÂ°ÃÂ¼ÃÂµÃ‘â€šÃÂºÃÂ¸",
   },
   es: {
     backToDiary: "Volver al diario",
@@ -288,8 +288,8 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     win: "WIN",
     loss: "LOSS",
     be: "Sin resultado",
-    anatomyTitle: "Anatomía del precio",
-    timelineTitle: "Cronología",
+    anatomyTitle: "AnatomÃƒÂ­a del precio",
+    timelineTitle: "CronologÃƒÂ­a",
     performanceTitle: "Rendimiento",
     entryLabel: "ENTRADA",
     exitLabel: "SALIDA",
@@ -298,8 +298,8 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     noPriceData: "Datos de precio no disponibles",
     openDate: "Apertura",
     closeDate: "Cierre",
-    duration: "Duración",
-    session: "Sesión",
+    duration: "DuraciÃƒÂ³n",
+    session: "SesiÃƒÂ³n",
     daysAbbr: "d",
     hoursAbbr: "h",
     minsAbbr: "m",
@@ -307,17 +307,17 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     actualRR: "R:R real",
     resultUsd: "Resultado",
     resultPct: "Resultado %",
-    commission: "Comisión",
+    commission: "ComisiÃƒÂ³n",
     swap: "Swap",
     fees: "Tasas",
-    equityAfter: "Equity después",
-    noData: "—",
-    motivationTitle: "Motivación & Setup",
+    equityAfter: "Equity despuÃƒÂ©s",
+    noData: "Ã¢â‚¬â€",
+    motivationTitle: "MotivaciÃƒÂ³n & Setup",
     strategyLabel: "Estrategia",
-    reasonLabel: "Motivación",
+    reasonLabel: "MotivaciÃƒÂ³n",
     setupQualityLabel: "Calidad del setup",
-    executionTitle: "Ejecución",
-    executionRatingLabel: "Calidad de ejecución",
+    executionTitle: "EjecuciÃƒÂ³n",
+    executionRatingLabel: "Calidad de ejecuciÃƒÂ³n",
     confidenceLabel: "Confianza",
     emotionalStateLabel: "Estado emocional",
     calm: "Tranquilo",
@@ -326,7 +326,7 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     tired: "Cansado",
     stressed: "Estresado",
     impulsive: "Impulsivo",
-    reviewTitle: "Revisión",
+    reviewTitle: "RevisiÃƒÂ³n",
     mistakesLabel: "Errores",
     lessonsLabel: "Lecciones aprendidas",
     notesLabel: "Notas",
@@ -340,52 +340,52 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     short: "SHORT",
     win: "WIN",
     loss: "LOSS",
-    be: "Sans résultat",
+    be: "Sans rÃƒÂ©sultat",
     anatomyTitle: "Anatomie du prix",
     timelineTitle: "Chronologie",
     performanceTitle: "Performance",
-    entryLabel: "ENTRÉE",
+    entryLabel: "ENTRÃƒâ€°E",
     exitLabel: "SORTIE",
     slLabel: "SL",
     tpLabel: "TP",
-    noPriceData: "Données de prix non disponibles",
+    noPriceData: "DonnÃƒÂ©es de prix non disponibles",
     openDate: "Ouverture",
-    closeDate: "Clôture",
-    duration: "Durée",
+    closeDate: "ClÃƒÂ´ture",
+    duration: "DurÃƒÂ©e",
     session: "Session",
     daysAbbr: "j",
     hoursAbbr: "h",
     minsAbbr: "m",
-    plannedRR: "R:R planifié",
-    actualRR: "R:R réel",
-    resultUsd: "Résultat",
-    resultPct: "Résultat %",
+    plannedRR: "R:R planifiÃƒÂ©",
+    actualRR: "R:R rÃƒÂ©el",
+    resultUsd: "RÃƒÂ©sultat",
+    resultPct: "RÃƒÂ©sultat %",
     commission: "Commission",
     swap: "Swap",
     fees: "Frais",
-    equityAfter: "Equity après",
-    noData: "—",
+    equityAfter: "Equity aprÃƒÂ¨s",
+    noData: "Ã¢â‚¬â€",
     motivationTitle: "Motivation & Setup",
-    strategyLabel: "Stratégie",
+    strategyLabel: "StratÃƒÂ©gie",
     reasonLabel: "Motivation",
-    setupQualityLabel: "Qualité du setup",
-    executionTitle: "Exécution",
-    executionRatingLabel: "Qualité d'exécution",
+    setupQualityLabel: "QualitÃƒÂ© du setup",
+    executionTitle: "ExÃƒÂ©cution",
+    executionRatingLabel: "QualitÃƒÂ© d'exÃƒÂ©cution",
     confidenceLabel: "Confiance",
-    emotionalStateLabel: "État émotionnel",
+    emotionalStateLabel: "Ãƒâ€°tat ÃƒÂ©motionnel",
     calm: "Calme",
-    focused: "Concentré",
+    focused: "ConcentrÃƒÂ©",
     confident: "Confiant",
-    tired: "Fatigué",
-    stressed: "Stressé",
+    tired: "FatiguÃƒÂ©",
+    stressed: "StressÃƒÂ©",
     impulsive: "Impulsif",
     reviewTitle: "Bilan",
     mistakesLabel: "Erreurs",
-    lessonsLabel: "Leçons apprises",
+    lessonsLabel: "LeÃƒÂ§ons apprises",
     notesLabel: "Notes",
   },
   de: {
-    backToDiary: "Zurück zum Tagebuch",
+    backToDiary: "ZurÃƒÂ¼ck zum Tagebuch",
     editTrade: "Bearbeiten",
     badge: "Trade Replay",
     openTrade: "Offener Trade",
@@ -401,8 +401,8 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     exitLabel: "AUSSTIEG",
     slLabel: "SL",
     tpLabel: "TP",
-    noPriceData: "Preisdaten nicht verfügbar",
-    openDate: "Eröffnet",
+    noPriceData: "Preisdaten nicht verfÃƒÂ¼gbar",
+    openDate: "ErÃƒÂ¶ffnet",
     closeDate: "Geschlossen",
     duration: "Dauer",
     session: "Session",
@@ -415,21 +415,21 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     resultPct: "Ergebnis %",
     commission: "Provision",
     swap: "Swap",
-    fees: "Gebühren",
+    fees: "GebÃƒÂ¼hren",
     equityAfter: "Equity danach",
-    noData: "—",
+    noData: "Ã¢â‚¬â€",
     motivationTitle: "Motivation & Setup",
     strategyLabel: "Strategie",
     reasonLabel: "Motivation",
-    setupQualityLabel: "Setup-Qualität",
-    executionTitle: "Ausführung",
-    executionRatingLabel: "Ausführungsqualität",
+    setupQualityLabel: "Setup-QualitÃƒÂ¤t",
+    executionTitle: "AusfÃƒÂ¼hrung",
+    executionRatingLabel: "AusfÃƒÂ¼hrungsqualitÃƒÂ¤t",
     confidenceLabel: "Vertrauen",
     emotionalStateLabel: "Emotionaler Zustand",
     calm: "Ruhig",
     focused: "Fokussiert",
     confident: "Selbstsicher",
-    tired: "Müde",
+    tired: "MÃƒÂ¼de",
     stressed: "Gestresst",
     impulsive: "Impulsiv",
     reviewTitle: "Auswertung",
@@ -439,7 +439,7 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
   },
 };
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Helpers Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
 function formatPrice(p: number): string {
   const a = Math.abs(p);
@@ -513,7 +513,7 @@ function emotionStyle(state: string): string {
   const styles: Record<string, string> = {
     calm: "border-blue-500/20 bg-blue-500/10 text-blue-300",
     focused: "border-indigo-500/20 bg-indigo-500/10 text-indigo-300",
-    confident: "border-green-500/20 bg-green-500/10 text-green-300",
+    confident: "border-accent/20 bg-accent/10 text-green-300",
     tired: "border-yellow-500/20 bg-yellow-500/10 text-yellow-300",
     stressed: "border-orange-500/20 bg-orange-500/10 text-orange-300",
     impulsive: "border-red-500/20 bg-red-500/10 text-red-300",
@@ -532,7 +532,7 @@ function emotionLabel(state: string, t: ReplayLabels): string {
   return state;
 }
 
-// ─── SVG Price Anatomy ────────────────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ SVG Price Anatomy Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
 function PriceAnatomySVG({
   entry,
@@ -591,7 +591,7 @@ function PriceAnatomySVG({
       style={{ display: "block", maxHeight: "240px" }}
       aria-hidden="true"
     >
-      {/* Risk zone: entry ↔ SL */}
+      {/* Risk zone: entry Ã¢â€ â€ SL */}
       {sy !== null && (
         <rect
           x={lx}
@@ -602,14 +602,14 @@ function PriceAnatomySVG({
         />
       )}
 
-      {/* Reward zone: entry ↔ TP */}
+      {/* Reward zone: entry Ã¢â€ â€ TP */}
       {ty !== null && (
         <rect
           x={lx}
           y={Math.min(ey, ty)}
           width={dw}
           height={Math.abs(ey - ty)}
-          fill="rgba(34,197,94,0.10)"
+          fill="color-mix(in_srgb,var(--color-accent)_10%,transparent)"
         />
       )}
 
@@ -688,7 +688,7 @@ function PriceAnatomySVG({
   );
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Page Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
 export default async function TradeReplayPage({
   params,
@@ -719,12 +719,12 @@ export default async function TradeReplayPage({
   const t = pageLabels[language];
   const currency = membership.tradingAccount.currency ?? "USD";
 
-  // ── Derived values ──────────────────────────────────────────────────────
+  // Ã¢â€â‚¬Ã¢â€â‚¬ Derived values Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
   const isLong = trade.direction?.toLowerCase() === "long";
   const directionLabel = isLong ? t.long : t.short;
   const directionClass = isLong
-    ? "border-green-500/30 bg-green-500/10 text-green-300"
+    ? "border-green-500/30 bg-accent/10 text-green-300"
     : "border-red-500/30 bg-red-500/10 text-red-300";
 
   const outcomeLabel =
@@ -734,7 +734,7 @@ export default async function TradeReplayPage({
 
   const outcomeClass =
     trade.outcome === "win"
-      ? "border-green-500/30 bg-green-500/10 text-green-300"
+      ? "border-green-500/30 bg-accent/10 text-green-300"
       : trade.outcome === "loss"
         ? "border-red-500/30 bg-red-500/10 text-red-300"
         : trade.outcome === "be"
@@ -754,7 +754,7 @@ export default async function TradeReplayPage({
     trade.outcome,
   );
 
-  // ── Price level grid ────────────────────────────────────────────────────
+  // Ã¢â€â‚¬Ã¢â€â‚¬ Price level grid Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
   const entry = trade.openingPrice;
 
@@ -799,7 +799,7 @@ export default async function TradeReplayPage({
     },
   ];
 
-  // ── Performance metrics ─────────────────────────────────────────────────
+  // Ã¢â€â‚¬Ã¢â€â‚¬ Performance metrics Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
   const perfMetrics = [
     {
@@ -816,7 +816,7 @@ export default async function TradeReplayPage({
         actualRR !== null
           ? actualRR === 0
             ? "0"
-            : `${actualRR < 0 ? "−" : ""}1 : ${Math.abs(actualRR).toFixed(2)}`
+            : `${actualRR < 0 ? "Ã¢Ë†â€™" : ""}1 : ${Math.abs(actualRR).toFixed(2)}`
           : t.noData,
       color:
         actualRR === null
@@ -877,7 +877,7 @@ export default async function TradeReplayPage({
     },
   ];
 
-  // ── Render ───────────────────────────────────────────────────────────────
+  // Ã¢â€â‚¬Ã¢â€â‚¬ Render Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
   return (
     <div className="space-y-6">
@@ -1187,7 +1187,7 @@ export default async function TradeReplayPage({
                   {Array.from({ length: 10 }, (_, i) => (
                     <span
                       key={i}
-                      className={`h-1.5 flex-1 rounded-full ${i < trade.confidence! ? "bg-cyan-400" : "bg-white/10"}`}
+                      className={`h-1.5 flex-1 rounded-full ${i < trade.confidence! ? "bg-accent-bright" : "bg-white/10"}`}
                     />
                   ))}
                 </div>
@@ -1231,8 +1231,8 @@ export default async function TradeReplayPage({
             )}
           </div>
 
-          <div className="rounded-2xl border border-green-500/15 bg-green-500/[0.04] p-5">
-            <p className="text-[10px] font-black uppercase tracking-[0.15em] text-green-400">
+          <div className="rounded-2xl border border-green-500/15  param($m) $m.Value -replace 'green-500', 'accent'  p-5">
+            <p className="text-[10px] font-black uppercase tracking-[0.15em] text-accent">
               {t.lessonsLabel}
             </p>
             {trade.lessonsLearned ? (

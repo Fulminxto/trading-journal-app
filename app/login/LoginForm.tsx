@@ -235,7 +235,7 @@ export default function LoginForm({
           autoComplete="one-time-code"
           autoFocus
           required
-          className="w-full rounded-2xl border border-white/10 bg-black/30 p-4 text-center text-xl tracking-[0.5em] outline-none transition placeholder:text-gray-600 focus:border-green-500/50 focus:bg-black/40"
+          className="w-full rounded-2xl border border-white/10 bg-black/30 p-4 text-center text-xl tracking-[0.5em] outline-none transition placeholder:text-gray-600 focus:border-accent/50 focus:bg-black/40"
         />
 
         {error && (
@@ -247,7 +247,7 @@ export default function LoginForm({
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-2xl bg-green-500 p-4 font-bold text-black shadow-[0_0_30px_rgba(34,197,94,0.18)] transition hover:bg-green-400 disabled:opacity-50"
+          className="w-full rounded-2xl bg-accent p-4 font-bold text-black shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)] transition hover:bg-accent-bright disabled:opacity-50"
         >
           {t.otpSubmit}
         </button>
@@ -272,7 +272,7 @@ export default function LoginForm({
       <input
         name="username"
         placeholder={t.usernamePlaceholder}
-        className="w-full rounded-2xl border border-white/10 bg-black/30 p-4 outline-none transition placeholder:text-gray-600 focus:border-green-500/50 focus:bg-black/40"
+        className="w-full rounded-2xl border border-white/10 bg-black/30 p-4 outline-none transition placeholder:text-gray-600 focus:border-accent/50 focus:bg-black/40"
         required
       />
 
@@ -281,7 +281,7 @@ export default function LoginForm({
           name="password"
           type={showPassword ? "text" : "password"}
           placeholder={t.passwordPlaceholder}
-          className="w-full rounded-2xl border border-white/10 bg-black/30 p-4 pr-12 outline-none transition placeholder:text-gray-600 focus:border-green-500/50 focus:bg-black/40"
+          className="w-full rounded-2xl border border-white/10 bg-black/30 p-4 pr-12 outline-none transition placeholder:text-gray-600 focus:border-accent/50 focus:bg-black/40"
           required
         />
 
@@ -305,7 +305,7 @@ export default function LoginForm({
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-2xl bg-green-500 p-4 font-bold text-black shadow-[0_0_30px_rgba(34,197,94,0.18)] transition hover:bg-green-400 disabled:opacity-50"
+        className="w-full rounded-2xl bg-accent p-4 font-bold text-black shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)] transition hover:bg-accent-bright disabled:opacity-50"
       >
         {t.submit}
       </button>

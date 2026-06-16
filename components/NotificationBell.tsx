@@ -420,7 +420,7 @@ export default function NotificationBell({
               <button
                 type="button"
                 onClick={handleMarkAllAsRead}
-                className="flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-green-400 transition-colors hover:bg-green-500/10"
+                className="flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-accent transition-colors hover:bg-accent/10"
               >
                 <CheckCheck size={14} />
                 {t.markAllAsRead}
@@ -445,12 +445,12 @@ export default function NotificationBell({
                     <div
                       key={notification.id}
                       className={`flex flex-col gap-1.5 px-4 py-3 ${
-                        notification.read ? "" : "bg-green-500/[0.04]"
+                        notification.read ? "" : "bg-accent/[0.04]"
                       }`}
                     >
                       <div className="flex items-center gap-2">
                         {!notification.read && (
-                          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-green-400" />
+                          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
                         )}
 
                         <span className="rounded-lg bg-white/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-gray-300">
@@ -478,7 +478,7 @@ export default function NotificationBell({
                           type="button"
                           onClick={() => handleAccept(notification)}
                           disabled={loadingInvite === notification.id}
-                          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-green-500 px-3 py-2 text-xs font-bold text-black transition hover:bg-green-400 disabled:opacity-60"
+                          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-accent px-3 py-2 text-xs font-bold text-black transition hover:bg-accent-bright disabled:opacity-60"
                         >
                           {loadingInvite === notification.id ? (
                             <Loader2 size={12} className="animate-spin" />
@@ -505,12 +505,12 @@ export default function NotificationBell({
                       type="button"
                       onClick={() => handleNotificationClick(notification)}
                       className={`flex w-full flex-col gap-1.5 px-4 py-3 text-left transition-colors hover:bg-white/5 ${
-                        notification.read ? "" : "bg-green-500/[0.04]"
+                        notification.read ? "" : "bg-accent/[0.04]"
                       }`}
                     >
                       <div className="flex items-center gap-2">
                         {!notification.read && (
-                          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-green-400" />
+                          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
                         )}
 
                         <span className="rounded-lg bg-white/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-gray-300">

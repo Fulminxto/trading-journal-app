@@ -54,7 +54,7 @@ function StatCard({
           </h2>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-cyan-300">
+        <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-accent-bright">
           <Icon size={20} />
         </div>
       </div>
@@ -234,17 +234,17 @@ export default async function SessionsPage({
   const lastSession = sessions[0];
 
   const inputClass =
-    "w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-cyan-500/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-cyan-500/10";
+    "w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-accent-bright/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-accent-bright/10";
 
   return (
     <div className="space-y-10">
       <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.14),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.08),transparent_35%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_14%,transparent),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.08),transparent_35%)]" />
 
         <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <div className="mb-6 flex flex-wrap items-center gap-3">
-              <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-300">
+              <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
                 {t.page.workspaceBadge}
               </span>
 
@@ -287,7 +287,7 @@ export default async function SessionsPage({
           value={sessions.length}
           description={t.page.totalSessionsDescription}
           icon={CalendarDays}
-          tone="text-cyan-300"
+          tone="text-accent-bright"
         />
 
         <StatCard
@@ -317,7 +317,7 @@ export default async function SessionsPage({
           )}
           description={t.page.highQualitySessionsDescription}
           icon={TrendingUp}
-          tone="text-green-400"
+          tone="text-accent"
         />
       </section>
 
@@ -325,7 +325,7 @@ export default async function SessionsPage({
         <SessionInsightCard
           title={t.page.focusedSessions}
           value={focusedSessions}
-          tone="text-cyan-400"
+          tone="text-accent-bright"
           description={t.page.focusedSessionsDescription}
         />
 
@@ -339,7 +339,7 @@ export default async function SessionsPage({
         <SessionInsightCard
           title={t.page.highScoreSessions}
           value={highScoreSessions}
-          tone="text-green-400"
+          tone="text-accent"
           description={t.page.highScoreSessionsDescription}
         />
       </section>
@@ -379,7 +379,7 @@ export default async function SessionsPage({
           )}
           className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl"
         >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.08),transparent_35%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_8%,transparent),transparent_35%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.06),transparent_35%)]" />
 
           <div className="relative z-10">
@@ -398,7 +398,7 @@ export default async function SessionsPage({
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-cyan-300">
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-accent-bright">
                 <ClipboardList size={22} />
               </div>
             </div>
@@ -523,7 +523,7 @@ export default async function SessionsPage({
 
                 <button
                   type="submit"
-                  className="flex h-full min-h-[52px] items-center justify-center gap-2 rounded-2xl bg-green-500 px-5 py-4 font-black text-black transition hover:bg-green-400"
+                  className="flex h-full min-h-[52px] items-center justify-center gap-2 rounded-2xl bg-accent px-5 py-4 font-black text-white transition hover:bg-accent-bright"
                 >
                   <Save size={18} />
                   {t.page.saveSession}
@@ -571,9 +571,9 @@ export default async function SessionsPage({
             return (
               <div
                 key={tradingSession.id}
-                className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl transition-all duration-300 hover:border-cyan-500/20 hover:bg-white/[0.06]"
+                className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl transition-all duration-300 hover:border-accent-bright/20 hover:bg-white/[0.06]"
               >
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.06),transparent_35%)] opacity-0 transition group-hover:opacity-100" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_6%,transparent),transparent_35%)] opacity-0 transition group-hover:opacity-100" />
 
                 <div className="relative z-10">
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -680,8 +680,8 @@ export default async function SessionsPage({
                   </div>
 
                   {tradingSession.sessionReview && (
-                    <div className="mt-5 rounded-2xl border border-green-500/10 bg-green-500/[0.03] p-4">
-                      <p className="text-sm text-green-400">
+                    <div className="mt-5 rounded-2xl border border-accent/10  param($m) $m.Value -replace 'green-500', 'accent'  p-4">
+                      <p className="text-sm text-accent">
                         {t.page.sessionReview}
                       </p>
 

@@ -433,7 +433,7 @@ export default async function AccountsPage() {
 
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-bold transition group-hover:text-green-400">
+              <h2 className="text-2xl font-bold transition group-hover:text-accent">
                 {account.name}
               </h2>
 
@@ -444,7 +444,7 @@ export default async function AccountsPage() {
 
             <ArrowRight
               size={20}
-              className="mt-1 text-gray-600 transition group-hover:translate-x-1 group-hover:text-green-400"
+              className="mt-1 text-gray-600 transition group-hover:translate-x-1 group-hover:text-accent"
             />
           </div>
 
@@ -486,7 +486,7 @@ export default async function AccountsPage() {
 
               <p
                 className={`font-bold ${winRate >= 50
-                    ? "text-green-400"
+                    ? "text-accent"
                     : "text-red-400"
                   }`}
               >
@@ -516,7 +516,7 @@ export default async function AccountsPage() {
 
             <p
               className={`mt-1 text-2xl font-bold ${accountPnl >= 0
-                  ? "text-green-400"
+                  ? "text-accent"
                   : "text-red-400"
                 }`}
             >
@@ -532,7 +532,7 @@ export default async function AccountsPage() {
         <div className="mt-5 flex gap-3">
           <Link
             href={`/accounts/${account.id}`}
-            className="flex-1 rounded-2xl bg-green-500 px-4 py-3 text-center text-sm font-bold text-black hover:bg-green-400"
+            className="flex-1 rounded-2xl bg-accent px-4 py-3 text-center text-sm font-bold text-white hover:bg-accent-bright"
           >
             {t.openAccount}
           </Link>
@@ -544,11 +544,11 @@ export default async function AccountsPage() {
   return (
     <div>
       <div className="relative mb-10 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] p-8">
-        <div className="absolute right-0 top-0 h-64 w-64 rounded-full bg-green-500/10 blur-3xl" />
+        <div className="absolute right-0 top-0 h-64 w-64 rounded-full bg-accent/10 blur-3xl" />
 
         <div className="relative flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-sm text-green-400">
+            <p className="text-sm text-accent">
               {t.overviewEyebrow}
             </p>
 
@@ -566,7 +566,7 @@ export default async function AccountsPage() {
           <div className="flex flex-wrap gap-3">
             <Link
               href="/accounts/manage"
-              className="inline-flex items-center gap-2 rounded-2xl bg-green-500 px-4 py-3 text-sm font-bold text-black hover:bg-green-400"
+              className="inline-flex items-center gap-2 rounded-2xl bg-accent px-4 py-3 text-sm font-bold text-white hover:bg-accent-bright"
             >
               <Settings size={16} />
               {t.manageAccounts}
@@ -621,7 +621,7 @@ export default async function AccountsPage() {
             {t.active}
           </p>
 
-          <h2 className="mt-2 text-3xl font-bold text-green-400">
+          <h2 className="mt-2 text-3xl font-bold text-accent">
             {formatNumberByLanguage(
               activeMemberships.length,
               language
@@ -649,7 +649,7 @@ export default async function AccountsPage() {
 
           <h2
             className={`mt-2 text-3xl font-bold ${totalPnl >= 0
-                ? "text-green-400"
+                ? "text-accent"
                 : "text-red-400"
               }`}
           >

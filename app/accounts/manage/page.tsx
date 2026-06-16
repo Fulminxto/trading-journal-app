@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+﻿import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
@@ -80,7 +80,7 @@ const manageAccountsLabels: Record<
         personalWorkspace: "Personal workspace",
         title: "Gestisci i miei account",
         description:
-            "Gestisci solo gli account creati da te o dove hai ruolo Manager. La gestione globale della piattaforma rimane separata nell’area Admin.",
+            "Gestisci solo gli account creati da te o dove hai ruolo Manager. La gestione globale della piattaforma rimane separata nellâ€™area Admin.",
 
         myAccounts: "I miei account",
         totalTrades: "Trade totali",
@@ -99,7 +99,7 @@ const manageAccountsLabels: Record<
         dangerZone: "Zona pericolosa",
         deleteAccountTitle: "Elimina account definitivamente",
         deleteAccountDescription:
-            "Questa azione non può essere annullata.",
+            "Questa azione non puÃ² essere annullata.",
         deletePermanently: "Elimina definitivamente",
 
         noAccountsInSection:
@@ -197,53 +197,53 @@ const manageAccountsLabels: Record<
     },
 
     uk: {
-        personalWorkspace: "Особистий workspace",
-        title: "Керування моїми акаунтами",
+        personalWorkspace: "ÐžÑÐ¾Ð±Ð¸ÑÑ‚Ð¸Ð¹ workspace",
+        title: "ÐšÐµÑ€ÑƒÐ²Ð°Ð½Ð½Ñ Ð¼Ð¾Ñ—Ð¼Ð¸ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°Ð¼Ð¸",
         description:
-            "Керуйте лише акаунтами, які створили ви, або тими, де у вас роль Manager. Глобальне керування платформою залишається окремо в зоні Admin.",
+            "ÐšÐµÑ€ÑƒÐ¹Ñ‚Ðµ Ð»Ð¸ÑˆÐµ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°Ð¼Ð¸, ÑÐºÑ– ÑÑ‚Ð²Ð¾Ñ€Ð¸Ð»Ð¸ Ð²Ð¸, Ð°Ð±Ð¾ Ñ‚Ð¸Ð¼Ð¸, Ð´Ðµ Ñƒ Ð²Ð°Ñ Ñ€Ð¾Ð»ÑŒ Manager. Ð“Ð»Ð¾Ð±Ð°Ð»ÑŒÐ½Ðµ ÐºÐµÑ€ÑƒÐ²Ð°Ð½Ð½Ñ Ð¿Ð»Ð°Ñ‚Ñ„Ð¾Ñ€Ð¼Ð¾ÑŽ Ð·Ð°Ð»Ð¸ÑˆÐ°Ñ”Ñ‚ÑŒÑÑ Ð¾ÐºÑ€ÐµÐ¼Ð¾ Ð² Ð·Ð¾Ð½Ñ– Admin.",
 
-        myAccounts: "Мої акаунти",
-        totalTrades: "Усього угод",
-        totalPnl: "Загальний PnL",
+        myAccounts: "ÐœÐ¾Ñ— Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð¸",
+        totalTrades: "Ð£ÑÑŒÐ¾Ð³Ð¾ ÑƒÐ³Ð¾Ð´",
+        totalPnl: "Ð—Ð°Ð³Ð°Ð»ÑŒÐ½Ð¸Ð¹ PnL",
 
-        createdBy: "Створено",
-        system: "Система",
-        openAccount: "Відкрити акаунт",
-        balance: "Баланс",
+        createdBy: "Ð¡Ñ‚Ð²Ð¾Ñ€ÐµÐ½Ð¾",
+        system: "Ð¡Ð¸ÑÑ‚ÐµÐ¼Ð°",
+        openAccount: "Ð’Ñ–Ð´ÐºÑ€Ð¸Ñ‚Ð¸ Ð°ÐºÐ°ÑƒÐ½Ñ‚",
+        balance: "Ð‘Ð°Ð»Ð°Ð½Ñ",
         pnl: "PnL",
-        trades: "Угоди",
-        members: "Учасники",
+        trades: "Ð£Ð³Ð¾Ð´Ð¸",
+        members: "Ð£Ñ‡Ð°ÑÐ½Ð¸ÐºÐ¸",
 
-        archive: "Архівувати",
-        restore: "Відновити",
-        dangerZone: "Небезпечна зона",
-        deleteAccountTitle: "Видалити акаунт назавжди",
+        archive: "ÐÑ€Ñ…Ñ–Ð²ÑƒÐ²Ð°Ñ‚Ð¸",
+        restore: "Ð’Ñ–Ð´Ð½Ð¾Ð²Ð¸Ñ‚Ð¸",
+        dangerZone: "ÐÐµÐ±ÐµÐ·Ð¿ÐµÑ‡Ð½Ð° Ð·Ð¾Ð½Ð°",
+        deleteAccountTitle: "Ð’Ð¸Ð´Ð°Ð»Ð¸Ñ‚Ð¸ Ð°ÐºÐ°ÑƒÐ½Ñ‚ Ð½Ð°Ð·Ð°Ð²Ð¶Ð´Ð¸",
         deleteAccountDescription:
-            "Цю дію неможливо скасувати.",
-        deletePermanently: "Видалити назавжди",
+            "Ð¦ÑŽ Ð´Ñ–ÑŽ Ð½ÐµÐ¼Ð¾Ð¶Ð»Ð¸Ð²Ð¾ ÑÐºÐ°ÑÑƒÐ²Ð°Ñ‚Ð¸.",
+        deletePermanently: "Ð’Ð¸Ð´Ð°Ð»Ð¸Ñ‚Ð¸ Ð½Ð°Ð·Ð°Ð²Ð¶Ð´Ð¸",
 
         noAccountsInSection:
-            "У цій секції немає акаунтів.",
-        activeAccounts: "Активні акаунти",
-        inactiveWorkspace: "Неактивний workspace",
-        archivedAccounts: "Архівовані акаунти",
-        accountsSuffix: "Акаунти",
+            "Ð£ Ñ†Ñ–Ð¹ ÑÐµÐºÑ†Ñ–Ñ— Ð½ÐµÐ¼Ð°Ñ” Ð°ÐºÐ°ÑƒÐ½Ñ‚Ñ–Ð².",
+        activeAccounts: "ÐÐºÑ‚Ð¸Ð²Ð½Ñ– Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð¸",
+        inactiveWorkspace: "ÐÐµÐ°ÐºÑ‚Ð¸Ð²Ð½Ð¸Ð¹ workspace",
+        archivedAccounts: "ÐÑ€Ñ…Ñ–Ð²Ð¾Ð²Ð°Ð½Ñ– Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð¸",
+        accountsSuffix: "ÐÐºÐ°ÑƒÐ½Ñ‚Ð¸",
 
-        createAccountTitle: "Створити новий акаунт",
-        accountNamePlaceholder: "Назва акаунта",
-        accountTypeAria: "Тип акаунта",
-        initialBalancePlaceholder: "Початковий баланс",
-        currencyPlaceholder: "Валюта",
-        brokerPlaceholder: "Брокер / Prop Firm",
-        phasePlaceholder: "Фаза",
-        profitTargetPlaceholder: "Ціль прибутку %",
-        maxDrawdownPlaceholder: "Макс. drawdown %",
-        dailyDrawdownPlaceholder: "Денний drawdown %",
-        createAccount: "Створити акаунт",
+        createAccountTitle: "Ð¡Ñ‚Ð²Ð¾Ñ€Ð¸Ñ‚Ð¸ Ð½Ð¾Ð²Ð¸Ð¹ Ð°ÐºÐ°ÑƒÐ½Ñ‚",
+        accountNamePlaceholder: "ÐÐ°Ð·Ð²Ð° Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°",
+        accountTypeAria: "Ð¢Ð¸Ð¿ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ð°",
+        initialBalancePlaceholder: "ÐŸÐ¾Ñ‡Ð°Ñ‚ÐºÐ¾Ð²Ð¸Ð¹ Ð±Ð°Ð»Ð°Ð½Ñ",
+        currencyPlaceholder: "Ð’Ð°Ð»ÑŽÑ‚Ð°",
+        brokerPlaceholder: "Ð‘Ñ€Ð¾ÐºÐµÑ€ / Prop Firm",
+        phasePlaceholder: "Ð¤Ð°Ð·Ð°",
+        profitTargetPlaceholder: "Ð¦Ñ–Ð»ÑŒ Ð¿Ñ€Ð¸Ð±ÑƒÑ‚ÐºÑƒ %",
+        maxDrawdownPlaceholder: "ÐœÐ°ÐºÑ. drawdown %",
+        dailyDrawdownPlaceholder: "Ð”ÐµÐ½Ð½Ð¸Ð¹ drawdown %",
+        createAccount: "Ð¡Ñ‚Ð²Ð¾Ñ€Ð¸Ñ‚Ð¸ Ð°ÐºÐ°ÑƒÐ½Ñ‚",
 
         statuses: {
-            ACTIVE: "АКТИВНИЙ",
-            ARCHIVED: "АРХІВОВАНИЙ",
+            ACTIVE: "ÐÐšÐ¢Ð˜Ð’ÐÐ˜Ð™",
+            ARCHIVED: "ÐÐ Ð¥Ð†Ð’ÐžÐ’ÐÐÐ˜Ð™",
         },
 
         accountTypes: {
@@ -257,53 +257,53 @@ const manageAccountsLabels: Record<
     },
 
     ru: {
-        personalWorkspace: "Личный workspace",
-        title: "Управление моими аккаунтами",
+        personalWorkspace: "Ð›Ð¸Ñ‡Ð½Ñ‹Ð¹ workspace",
+        title: "Ð£Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð¼Ð¾Ð¸Ð¼Ð¸ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°Ð¼Ð¸",
         description:
-            "Управляйте только аккаунтами, созданными вами, или теми, где у вас роль Manager. Глобальное управление платформой остается отдельно в зоне Admin.",
+            "Ð£Ð¿Ñ€Ð°Ð²Ð»ÑÐ¹Ñ‚Ðµ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°Ð¼Ð¸, ÑÐ¾Ð·Ð´Ð°Ð½Ð½Ñ‹Ð¼Ð¸ Ð²Ð°Ð¼Ð¸, Ð¸Ð»Ð¸ Ñ‚ÐµÐ¼Ð¸, Ð³Ð´Ðµ Ñƒ Ð²Ð°Ñ Ñ€Ð¾Ð»ÑŒ Manager. Ð“Ð»Ð¾Ð±Ð°Ð»ÑŒÐ½Ð¾Ðµ ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð¿Ð»Ð°Ñ‚Ñ„Ð¾Ñ€Ð¼Ð¾Ð¹ Ð¾ÑÑ‚Ð°ÐµÑ‚ÑÑ Ð¾Ñ‚Ð´ÐµÐ»ÑŒÐ½Ð¾ Ð² Ð·Ð¾Ð½Ðµ Admin.",
 
-        myAccounts: "Мои аккаунты",
-        totalTrades: "Всего сделок",
-        totalPnl: "Общий PnL",
+        myAccounts: "ÐœÐ¾Ð¸ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ñ‹",
+        totalTrades: "Ð’ÑÐµÐ³Ð¾ ÑÐ´ÐµÐ»Ð¾Ðº",
+        totalPnl: "ÐžÐ±Ñ‰Ð¸Ð¹ PnL",
 
-        createdBy: "Создано",
-        system: "Система",
-        openAccount: "Открыть аккаунт",
-        balance: "Баланс",
+        createdBy: "Ð¡Ð¾Ð·Ð´Ð°Ð½Ð¾",
+        system: "Ð¡Ð¸ÑÑ‚ÐµÐ¼Ð°",
+        openAccount: "ÐžÑ‚ÐºÑ€Ñ‹Ñ‚ÑŒ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚",
+        balance: "Ð‘Ð°Ð»Ð°Ð½Ñ",
         pnl: "PnL",
-        trades: "Сделки",
-        members: "Участники",
+        trades: "Ð¡Ð´ÐµÐ»ÐºÐ¸",
+        members: "Ð£Ñ‡Ð°ÑÑ‚Ð½Ð¸ÐºÐ¸",
 
-        archive: "Архивировать",
-        restore: "Восстановить",
-        dangerZone: "Опасная зона",
-        deleteAccountTitle: "Удалить аккаунт навсегда",
+        archive: "ÐÑ€Ñ…Ð¸Ð²Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ",
+        restore: "Ð’Ð¾ÑÑÑ‚Ð°Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ",
+        dangerZone: "ÐžÐ¿Ð°ÑÐ½Ð°Ñ Ð·Ð¾Ð½Ð°",
+        deleteAccountTitle: "Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚ Ð½Ð°Ð²ÑÐµÐ³Ð´Ð°",
         deleteAccountDescription:
-            "Это действие нельзя отменить.",
-        deletePermanently: "Удалить навсегда",
+            "Ð­Ñ‚Ð¾ Ð´ÐµÐ¹ÑÑ‚Ð²Ð¸Ðµ Ð½ÐµÐ»ÑŒÐ·Ñ Ð¾Ñ‚Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ.",
+        deletePermanently: "Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ Ð½Ð°Ð²ÑÐµÐ³Ð´Ð°",
 
         noAccountsInSection:
-            "В этой секции нет аккаунтов.",
-        activeAccounts: "Активные аккаунты",
-        inactiveWorkspace: "Неактивный workspace",
-        archivedAccounts: "Архивированные аккаунты",
-        accountsSuffix: "Аккаунты",
+            "Ð’ ÑÑ‚Ð¾Ð¹ ÑÐµÐºÑ†Ð¸Ð¸ Ð½ÐµÑ‚ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð¾Ð².",
+        activeAccounts: "ÐÐºÑ‚Ð¸Ð²Ð½Ñ‹Ðµ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ñ‹",
+        inactiveWorkspace: "ÐÐµÐ°ÐºÑ‚Ð¸Ð²Ð½Ñ‹Ð¹ workspace",
+        archivedAccounts: "ÐÑ€Ñ…Ð¸Ð²Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ñ‹Ðµ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ñ‹",
+        accountsSuffix: "ÐÐºÐºÐ°ÑƒÐ½Ñ‚Ñ‹",
 
-        createAccountTitle: "Создать новый аккаунт",
-        accountNamePlaceholder: "Название аккаунта",
-        accountTypeAria: "Тип аккаунта",
-        initialBalancePlaceholder: "Начальный баланс",
-        currencyPlaceholder: "Валюта",
-        brokerPlaceholder: "Брокер / Prop Firm",
-        phasePlaceholder: "Фаза",
-        profitTargetPlaceholder: "Цель прибыли %",
-        maxDrawdownPlaceholder: "Макс. drawdown %",
-        dailyDrawdownPlaceholder: "Дневной drawdown %",
-        createAccount: "Создать аккаунт",
+        createAccountTitle: "Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ Ð½Ð¾Ð²Ñ‹Ð¹ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚",
+        accountNamePlaceholder: "ÐÐ°Ð·Ð²Ð°Ð½Ð¸Ðµ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°",
+        accountTypeAria: "Ð¢Ð¸Ð¿ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°",
+        initialBalancePlaceholder: "ÐÐ°Ñ‡Ð°Ð»ÑŒÐ½Ñ‹Ð¹ Ð±Ð°Ð»Ð°Ð½Ñ",
+        currencyPlaceholder: "Ð’Ð°Ð»ÑŽÑ‚Ð°",
+        brokerPlaceholder: "Ð‘Ñ€Ð¾ÐºÐµÑ€ / Prop Firm",
+        phasePlaceholder: "Ð¤Ð°Ð·Ð°",
+        profitTargetPlaceholder: "Ð¦ÐµÐ»ÑŒ Ð¿Ñ€Ð¸Ð±Ñ‹Ð»Ð¸ %",
+        maxDrawdownPlaceholder: "ÐœÐ°ÐºÑ. drawdown %",
+        dailyDrawdownPlaceholder: "Ð”Ð½ÐµÐ²Ð½Ð¾Ð¹ drawdown %",
+        createAccount: "Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚",
 
         statuses: {
-            ACTIVE: "АКТИВНЫЙ",
-            ARCHIVED: "АРХИВИРОВАН",
+            ACTIVE: "ÐÐšÐ¢Ð˜Ð’ÐÐ«Ð™",
+            ARCHIVED: "ÐÐ Ð¥Ð˜Ð’Ð˜Ð ÐžÐ’ÐÐ",
         },
 
         accountTypes: {
@@ -320,7 +320,7 @@ const manageAccountsLabels: Record<
         personalWorkspace: "Workspace personal",
         title: "Gestionar mis cuentas",
         description:
-            "Gestiona solo las cuentas creadas por ti o donde tienes el rol Manager. La gestión global de la plataforma permanece separada en el área Admin.",
+            "Gestiona solo las cuentas creadas por ti o donde tienes el rol Manager. La gestiÃ³n global de la plataforma permanece separada en el Ã¡rea Admin.",
 
         myAccounts: "Mis cuentas",
         totalTrades: "Trades totales",
@@ -339,11 +339,11 @@ const manageAccountsLabels: Record<
         dangerZone: "Zona peligrosa",
         deleteAccountTitle: "Eliminar cuenta permanentemente",
         deleteAccountDescription:
-            "Esta acción no se puede deshacer.",
+            "Esta acciÃ³n no se puede deshacer.",
         deletePermanently: "Eliminar permanentemente",
 
         noAccountsInSection:
-            "No hay cuentas en esta sección.",
+            "No hay cuentas en esta secciÃ³n.",
         activeAccounts: "Cuentas activas",
         inactiveWorkspace: "Workspace inactivo",
         archivedAccounts: "Cuentas archivadas",
@@ -357,7 +357,7 @@ const manageAccountsLabels: Record<
         brokerPlaceholder: "Broker / Prop Firm",
         phasePlaceholder: "Fase",
         profitTargetPlaceholder: "Objetivo de beneficio %",
-        maxDrawdownPlaceholder: "Drawdown máximo %",
+        maxDrawdownPlaceholder: "Drawdown mÃ¡ximo %",
         dailyDrawdownPlaceholder: "Drawdown diario %",
         createAccount: "Crear cuenta",
 
@@ -378,16 +378,16 @@ const manageAccountsLabels: Record<
 
     fr: {
         personalWorkspace: "Workspace personnel",
-        title: "Gérer mes comptes",
+        title: "GÃ©rer mes comptes",
         description:
-            "Gérez uniquement les comptes créés par vous ou ceux où vous avez le rôle Manager. La gestion globale de la plateforme reste séparée dans la zone Admin.",
+            "GÃ©rez uniquement les comptes crÃ©Ã©s par vous ou ceux oÃ¹ vous avez le rÃ´le Manager. La gestion globale de la plateforme reste sÃ©parÃ©e dans la zone Admin.",
 
         myAccounts: "Mes comptes",
         totalTrades: "Trades totaux",
         totalPnl: "PnL total",
 
-        createdBy: "Créé par",
-        system: "Système",
+        createdBy: "CrÃ©Ã© par",
+        system: "SystÃ¨me",
         openAccount: "Ouvrir le compte",
         balance: "Balance",
         pnl: "PnL",
@@ -397,19 +397,19 @@ const manageAccountsLabels: Record<
         archive: "Archiver",
         restore: "Restaurer",
         dangerZone: "Zone dangereuse",
-        deleteAccountTitle: "Supprimer le compte définitivement",
+        deleteAccountTitle: "Supprimer le compte dÃ©finitivement",
         deleteAccountDescription:
-            "Cette action ne peut pas être annulée.",
-        deletePermanently: "Supprimer définitivement",
+            "Cette action ne peut pas Ãªtre annulÃ©e.",
+        deletePermanently: "Supprimer dÃ©finitivement",
 
         noAccountsInSection:
             "Aucun compte dans cette section.",
         activeAccounts: "Comptes actifs",
         inactiveWorkspace: "Workspace inactif",
-        archivedAccounts: "Comptes archivés",
+        archivedAccounts: "Comptes archivÃ©s",
         accountsSuffix: "Comptes",
 
-        createAccountTitle: "Créer un nouveau compte",
+        createAccountTitle: "CrÃ©er un nouveau compte",
         accountNamePlaceholder: "Nom du compte",
         accountTypeAria: "Type de compte",
         initialBalancePlaceholder: "Balance initiale",
@@ -419,11 +419,11 @@ const manageAccountsLabels: Record<
         profitTargetPlaceholder: "Objectif de profit %",
         maxDrawdownPlaceholder: "Drawdown maximum %",
         dailyDrawdownPlaceholder: "Drawdown quotidien %",
-        createAccount: "Créer le compte",
+        createAccount: "CrÃ©er le compte",
 
         statuses: {
             ACTIVE: "ACTIF",
-            ARCHIVED: "ARCHIVÉ",
+            ARCHIVED: "ARCHIVÃ‰",
         },
 
         accountTypes: {
@@ -437,7 +437,7 @@ const manageAccountsLabels: Record<
     },
 
     de: {
-        personalWorkspace: "Persönlicher Workspace",
+        personalWorkspace: "PersÃ¶nlicher Workspace",
         title: "Meine Konten verwalten",
         description:
             "Verwalte nur Konten, die von dir erstellt wurden oder bei denen du die Manager-Rolle hast. Die globale Plattformverwaltung bleibt separat im Admin-Bereich.",
@@ -448,7 +448,7 @@ const manageAccountsLabels: Record<
 
         createdBy: "Erstellt von",
         system: "System",
-        openAccount: "Konto öffnen",
+        openAccount: "Konto Ã¶ffnen",
         balance: "Balance",
         pnl: "PnL",
         trades: "Trades",
@@ -457,10 +457,10 @@ const manageAccountsLabels: Record<
         archive: "Archivieren",
         restore: "Wiederherstellen",
         dangerZone: "Gefahrenzone",
-        deleteAccountTitle: "Konto dauerhaft löschen",
+        deleteAccountTitle: "Konto dauerhaft lÃ¶schen",
         deleteAccountDescription:
-            "Diese Aktion kann nicht rückgängig gemacht werden.",
-        deletePermanently: "Dauerhaft löschen",
+            "Diese Aktion kann nicht rÃ¼ckgÃ¤ngig gemacht werden.",
+        deletePermanently: "Dauerhaft lÃ¶schen",
 
         noAccountsInSection:
             "Keine Konten in diesem Abschnitt.",
@@ -473,12 +473,12 @@ const manageAccountsLabels: Record<
         accountNamePlaceholder: "Kontoname",
         accountTypeAria: "Kontotyp",
         initialBalancePlaceholder: "Anfangsbalance",
-        currencyPlaceholder: "Währung",
+        currencyPlaceholder: "WÃ¤hrung",
         brokerPlaceholder: "Broker / Prop Firm",
         phasePlaceholder: "Phase",
         profitTargetPlaceholder: "Gewinnziel %",
         maxDrawdownPlaceholder: "Max. Drawdown %",
-        dailyDrawdownPlaceholder: "Täglicher Drawdown %",
+        dailyDrawdownPlaceholder: "TÃ¤glicher Drawdown %",
         createAccount: "Konto erstellen",
 
         statuses: {
@@ -499,7 +499,7 @@ const manageAccountsLabels: Record<
 
 function getResultTone(value: number) {
     if (value >= 0) {
-        return "text-green-400";
+        return "text-accent";
     }
 
     return "text-red-400";
@@ -640,7 +640,7 @@ export default async function ManageMyAccountsPage() {
                             <span
                                 className={`rounded-xl px-3 py-1 text-xs font-bold ${isArchived
                                         ? "bg-yellow-500/10 text-yellow-300"
-                                        : "bg-green-500/10 text-green-400"
+                                        : "bg-accent/10 text-accent"
                                     }`}
                             >
                                 {
@@ -669,7 +669,7 @@ export default async function ManageMyAccountsPage() {
 
                     <a
                         href={`/accounts/${account.id}`}
-                        className="rounded-2xl bg-green-500 px-4 py-3 text-center text-sm font-black text-black hover:bg-green-400"
+                        className="rounded-2xl bg-accent px-4 py-3 text-center text-sm font-black text-white hover:bg-accent-bright"
                     >
                         {t.openAccount}
                     </a>
@@ -829,7 +829,7 @@ export default async function ManageMyAccountsPage() {
     ) => {
         const badgeClass =
             tone === "green"
-                ? "bg-green-500/10 text-green-400"
+                ? "bg-accent/10 text-accent"
                 : tone === "yellow"
                     ? "bg-yellow-500/10 text-yellow-300"
                     : "bg-white/10 text-gray-300";
@@ -868,7 +868,7 @@ export default async function ManageMyAccountsPage() {
     return (
         <div>
             <div className="mb-10">
-                <p className="text-sm text-green-400">
+                <p className="text-sm text-accent">
                     {t.personalWorkspace}
                 </p>
 
@@ -1019,7 +1019,7 @@ export default async function ManageMyAccountsPage() {
 
                     <button
                         type="submit"
-                        className="rounded-2xl bg-green-500 p-4 font-bold text-black hover:bg-green-400 md:col-span-2 xl:col-span-4"
+                        className="rounded-2xl bg-accent p-4 font-bold text-white hover:bg-accent-bright md:col-span-2 xl:col-span-4"
                     >
                         {t.createAccount}
                     </button>

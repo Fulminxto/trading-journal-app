@@ -21,7 +21,7 @@ export default function SupportSkeleton() {
         {[
           "border-red-500/20 bg-red-500/[0.04]",
           "border-yellow-500/20 bg-yellow-500/[0.04]",
-          "border-cyan-500/20 bg-cyan-500/[0.04]",
+          "border-accent-bright/20 bg-accent-bright/[0.04]",
         ].map((cls, i) => (
           <div key={i} className={`rounded-[32px] border p-6 ${cls}`}>
             <div className="mb-4 h-10 w-10 rounded-2xl bg-white/10" />
@@ -35,7 +35,7 @@ export default function SupportSkeleton() {
       </div>
 
       {/* New ticket form */}
-      <div className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/[0.02] p-8">
+      <div className="rounded-[36px] border border-accent-bright/20 bg-accent-bright/[0.02] p-8">
         <div className="mb-6 h-7 w-1/3 rounded-xl bg-white/10" />
         <div className="space-y-4">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

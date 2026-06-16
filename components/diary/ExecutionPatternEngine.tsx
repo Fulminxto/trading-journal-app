@@ -133,7 +133,7 @@ export default function ExecutionPatternEngine({
               {t.impulsiveTrades}
             </p>
 
-            <h3 className="mt-3 text-4xl font-black text-cyan-400">
+            <h3 className="mt-3 text-4xl font-black text-accent-bright">
               {impulsiveTrades}
             </h3>
           </div>

@@ -857,17 +857,17 @@ export default async function SettingsPage({
       <GlobalToast status={query.toast} language={language} />
 
       <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,197,94,0.14),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(34,211,238,0.08),transparent_35%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent)_14%,transparent)_35%),radial-gradient(circle_at_bottom_left,color-mix(in_srgb,var(--color-accent-bright)_8%,transparent)_35%)]" />
 
         <div className="relative z-10 flex items-start justify-between gap-6">
           <div>
-            <p className="text-sm text-green-400">
+            <p className="text-sm text-accent">
               {t.platformEyebrow}
             </p>
 
             <h1 className="mt-3 flex items-center gap-3 text-4xl font-black tracking-tight text-white sm:text-6xl">
               <Settings
-                className="hidden text-green-400 sm:block"
+                className="hidden text-accent sm:block"
                 size={46}
               />
               {t.title}
@@ -888,7 +888,7 @@ export default async function SettingsPage({
           <div className="mb-6 flex items-center gap-3">
             <Globe
               size={22}
-              className="text-green-400"
+              className="text-accent"
             />
 
             <div>
@@ -915,7 +915,7 @@ export default async function SettingsPage({
               <select
                 name="appLanguage"
                 defaultValue={language}
-                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-accent/40"
               >
                 {LANGUAGE_OPTIONS.map((option) => (
                   <option
@@ -942,7 +942,7 @@ export default async function SettingsPage({
                 defaultValue={
                   user.defaultCurrency ?? "USD"
                 }
-                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-accent/40"
               >
                 <option value="USD">
                   USD — US Dollar
@@ -965,7 +965,7 @@ export default async function SettingsPage({
           <div className="mb-6 flex items-center gap-3">
             <Palette
               size={22}
-              className="text-green-400"
+              className="text-accent"
             />
 
             <div>
@@ -998,7 +998,7 @@ export default async function SettingsPage({
                 defaultValue={
                   user.themePreference ?? "dark"
                 }
-                className="mt-4 w-full rounded-xl border border-white/10 bg-zinc-900 p-3 text-sm outline-none focus:border-green-500/40"
+                className="mt-4 w-full rounded-xl border border-white/10 bg-zinc-900 p-3 text-sm outline-none focus:border-accent/40"
               >
                 <option value="dark">Dark</option>
                 <option value="light">Light</option>
@@ -1024,7 +1024,7 @@ export default async function SettingsPage({
                 defaultValue={
                   user.accentColor ?? "green"
                 }
-                className="mt-4 w-full rounded-xl border border-white/10 bg-zinc-900 p-3 text-sm outline-none focus:border-green-500/40"
+                className="mt-4 w-full rounded-xl border border-white/10 bg-zinc-900 p-3 text-sm outline-none focus:border-accent/40"
               >
                 <option value="green">
                   VOLTIS Green
@@ -1098,7 +1098,7 @@ export default async function SettingsPage({
           <div className="mb-6 flex items-center gap-3">
             <Smartphone
               size={22}
-              className="text-green-400"
+              className="text-accent"
             />
 
             <div>
@@ -1131,7 +1131,7 @@ export default async function SettingsPage({
                 defaultValue={
                   user.appIconVariant ?? "classic"
                 }
-                className="mt-4 w-full rounded-xl border border-white/10 bg-zinc-900 p-3 text-sm outline-none focus:border-green-500/40"
+                className="mt-4 w-full rounded-xl border border-white/10 bg-zinc-900 p-3 text-sm outline-none focus:border-accent/40"
               >
                 <option value="classic">Classic</option>
                 <option value="dark">Dark</option>
@@ -1140,12 +1140,12 @@ export default async function SettingsPage({
               </select>
             </label>
 
-            <div className="rounded-2xl border border-green-500/20 bg-green-500/[0.04] p-5">
+            <div className="rounded-2xl border border-accent/20 bg-accent/[0.04] p-5">
               <p className="text-sm text-gray-400">
                 {t.pwaStatusLabel}
               </p>
 
-              <h3 className="mt-2 text-lg font-bold text-green-400">
+              <h3 className="mt-2 text-lg font-bold text-accent">
                 {t.pwaStatusValue}
               </h3>
 
@@ -1160,7 +1160,7 @@ export default async function SettingsPage({
           <div className="mb-6 flex items-center gap-3">
             <Bell
               size={22}
-              className="text-green-400"
+              className="text-accent"
             />
 
             <div>
@@ -1314,7 +1314,7 @@ export default async function SettingsPage({
 
         <button
           type="submit"
-          className="rounded-2xl bg-green-500 px-6 py-4 font-bold text-black transition hover:bg-green-400"
+          className="rounded-2xl bg-accent px-6 py-4 font-bold text-black transition hover:bg-accent-bright"
         >
           {t.saveSettings}
         </button>
@@ -1329,7 +1329,7 @@ export default async function SettingsPage({
         <div className="mb-6 flex items-center gap-3">
           <Download
             size={22}
-            className="text-green-400"
+            className="text-accent"
           />
 
           <div>
@@ -1388,7 +1388,7 @@ export default async function SettingsPage({
         <div className="mb-6 flex items-center gap-3">
           <ShieldAlert
             size={22}
-            className="text-green-400"
+            className="text-accent"
           />
 
           <div>
@@ -1443,7 +1443,7 @@ export default async function SettingsPage({
         <div className="mb-6 flex items-center gap-3">
           <BookOpen
             size={22}
-            className="text-green-400"
+            className="text-accent"
           />
 
           <div>
@@ -1473,7 +1473,7 @@ export default async function SettingsPage({
           <div className="mb-6 flex items-center gap-3">
             <LifeBuoy
               size={22}
-              className="text-green-400"
+              className="text-accent"
             />
 
             <div>

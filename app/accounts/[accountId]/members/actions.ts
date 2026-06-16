@@ -1,4 +1,4 @@
-"use server";
+﻿"use server";
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -12,7 +12,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import type { MemberRole } from "@prisma/client";
 
-// ─── Helper ───────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Helper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 async function getMembership(accountId: string) {
   const session = await auth();
@@ -28,7 +28,7 @@ async function getMembership(accountId: string) {
   return { membership, userId: session.user.id };
 }
 
-// ─── 1. inviteMember ──────────────────────────────────────────────────────────
+// â”€â”€â”€ 1. inviteMember â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export async function inviteMember(
   accountId: string,
@@ -77,7 +77,7 @@ export async function inviteMember(
     where: { userId: targetUser.id, tradingAccountId: accountId },
   });
   if (existing) {
-    return { error: "L'utente è già membro di questo account." };
+    return { error: "L'utente Ã¨ giÃ  membro di questo account." };
   }
 
   // Already has a pending invite?
@@ -85,7 +85,7 @@ export async function inviteMember(
     where: { invitedUserId: targetUser.id, tradingAccountId: accountId },
   });
   if (existingInvite) {
-    return { error: "Esiste già un invito pendente per questo utente." };
+    return { error: "Esiste giÃ  un invito pendente per questo utente." };
   }
 
   await prisma.accountInvite.create({
@@ -118,7 +118,7 @@ export async function inviteMember(
   return {};
 }
 
-// ─── 2. cancelInvite ─────────────────────────────────────────────────────────
+// â”€â”€â”€ 2. cancelInvite â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export async function cancelInvite(
   accountId: string,
@@ -141,7 +141,7 @@ export async function cancelInvite(
   return {};
 }
 
-// ─── 3. acceptInvite ─────────────────────────────────────────────────────────
+// â”€â”€â”€ 3. acceptInvite â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const DEFAULT_PERMISSIONS: Record<MemberRole, Record<string, boolean>> = {
   MANAGER: {
@@ -234,7 +234,7 @@ export async function acceptInvite(
   redirect(`/accounts/${accountId}/dashboard`);
 }
 
-// ─── 4. declineInvite ────────────────────────────────────────────────────────
+// â”€â”€â”€ 4. declineInvite â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export async function declineInvite(
   accountId: string
@@ -276,7 +276,7 @@ export async function declineInvite(
   return {};
 }
 
-// ─── 5. removeMember ─────────────────────────────────────────────────────────
+// â”€â”€â”€ 5. removeMember â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export async function removeMember(
   accountId: string,
@@ -325,7 +325,7 @@ export async function removeMember(
   return {};
 }
 
-// ─── 6. changeMemberRole ─────────────────────────────────────────────────────
+// â”€â”€â”€ 6. changeMemberRole â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export async function changeMemberRole(
   accountId: string,
@@ -375,7 +375,7 @@ export async function changeMemberRole(
   return {};
 }
 
-// ─── 7. updateMemberPermissions ──────────────────────────────────────────────
+// â”€â”€â”€ 7. updateMemberPermissions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const ALLOWED_PERMISSION_KEYS = [
   "canCreateTrades",
@@ -409,7 +409,7 @@ export async function updateMemberPermissions(
   });
   if (!target) return { error: "Membro non trovato." };
 
-  // Strip any canManage* keys — those cannot be toggled via this action
+  // Strip any canManage* keys â€” those cannot be toggled via this action
   const safePermissions: Partial<Record<AllowedPermissionKey, boolean>> = {};
   for (const key of ALLOWED_PERMISSION_KEYS) {
     if (key in permissions && typeof permissions[key] === "boolean") {

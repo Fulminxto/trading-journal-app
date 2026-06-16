@@ -1,4 +1,4 @@
-import {
+﻿import {
     Activity,
     ArrowLeft,
     Clock3,
@@ -97,9 +97,9 @@ const labels: Record<AppLanguage, MembersLabels> = {
     it: {
         never: "Mai",
         accountMembers: "Membri account",
-        membersActivity: "Attività membri",
+        membersActivity: "AttivitÃƒÂ  membri",
         description:
-            "Monitora presenza, attività e contributo operativo dei membri dentro questo account condiviso.",
+            "Monitora presenza, attivitÃƒÂ  e contributo operativo dei membri dentro questo account condiviso.",
         members: "Membri",
         onlineNow: "Online ora",
         activeToday: "Attivi oggi",
@@ -107,16 +107,16 @@ const labels: Record<AppLanguage, MembersLabels> = {
         lastTrade: "Ultimo trade",
         noTrades: "Nessun trade",
         latestTradeDescription: "Ultimo trade registrato in questo account.",
-        mostActive: "Più attivo",
+        mostActive: "PiÃƒÂ¹ attivo",
         basedOnInsertedTrades: "Basato sui trade inseriti.",
         livePresence: "Presenza live",
         activeLastFiveMinutes: "Attivi negli ultimi 5 minuti.",
         accountStatus: "Stato account",
         live: "Live",
         quiet: "Silenzioso",
-        presenceSnapshot: "Snapshot di presenza e attività.",
+        presenceSnapshot: "Snapshot di presenza e attivitÃƒÂ .",
         leaderboard: "Leaderboard",
-        mostActiveMembers: "Membri più attivi",
+        mostActiveMembers: "Membri piÃƒÂ¹ attivi",
         topFive: "Top 5",
         trades: "trade",
         onlineMembers: "Membri online",
@@ -125,8 +125,8 @@ const labels: Record<AppLanguage, MembersLabels> = {
         memberOverview: "Panoramica membri",
         accountTeam: "Team account",
         activityProfile:
-            "Profilo attività basato su presenza, ultima attività e contributo operativo dentro questo account.",
-        lastActivity: "Ultima attività",
+            "Profilo attivitÃƒÂ  basato su presenza, ultima attivitÃƒÂ  e contributo operativo dentro questo account.",
+        lastActivity: "Ultima attivitÃƒÂ ",
         lastLogin: "Ultimo login",
         viewMemberTrades: "Vedi trade membro",
         memberAnalytics: "Analytics membro",
@@ -151,12 +151,12 @@ const labels: Record<AppLanguage, MembersLabels> = {
         permissionsLabel: "Permessi operativi",
         savePermissions: "Salva permessi",
         removeMemberLabel: "Rimuovi membro",
-        confirmRemove: "Sei sicuro? L'azione è irreversibile.",
-        confirmYes: "Sì, rimuovi",
+        confirmRemove: "Sei sicuro? L'azione ÃƒÂ¨ irreversibile.",
+        confirmYes: "SÃƒÂ¬, rimuovi",
         cancelConfirm: "Annulla",
         youBadge: "Tu",
         creatorBadge: "Creatore",
-        lastManagerNote: "Unico Manager — impossibile retrocedere.",
+        lastManagerNote: "Unico Manager Ã¢â‚¬â€ impossibile retrocedere.",
         roleManager: "Manager",
         roleMember: "Membro",
         roleViewer: "Osservatore",
@@ -230,7 +230,7 @@ const labels: Record<AppLanguage, MembersLabels> = {
         cancelConfirm: "Cancel",
         youBadge: "You",
         creatorBadge: "Creator",
-        lastManagerNote: "Only Manager — cannot be demoted.",
+        lastManagerNote: "Only Manager Ã¢â‚¬â€ cannot be demoted.",
         roleManager: "Manager",
         roleMember: "Member",
         roleViewer: "Viewer",
@@ -243,176 +243,176 @@ const labels: Record<AppLanguage, MembersLabels> = {
         perm_canViewMembers: "View team",
     },
     uk: {
-        never: "Ніколи",
-        accountMembers: "Учасники акаунта",
-        membersActivity: "Активність учасників",
+        never: "ÃÂÃ‘â€“ÃÂºÃÂ¾ÃÂ»ÃÂ¸",
+        accountMembers: "ÃÂ£Ã‘â€¡ÃÂ°Ã‘ÂÃÂ½ÃÂ¸ÃÂºÃÂ¸ ÃÂ°ÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂ°",
+        membersActivity: "ÃÂÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“Ã‘ÂÃ‘â€šÃ‘Å’ Ã‘Æ’Ã‘â€¡ÃÂ°Ã‘ÂÃÂ½ÃÂ¸ÃÂºÃ‘â€“ÃÂ²",
         description:
-            "Моніторинг присутності, активності та операційного внеску учасників у цьому спільному акаунті.",
-        members: "Учасники",
-        onlineNow: "Онлайн зараз",
-        activeToday: "Активні сьогодні",
-        totalTrades: "Усього угод",
-        lastTrade: "Остання угода",
-        noTrades: "Немає угод",
-        latestTradeDescription: "Остання угода в цьому акаунті.",
-        mostActive: "Найактивніший",
-        basedOnInsertedTrades: "На основі внесених угод.",
-        livePresence: "Онлайн-присутність",
-        activeLastFiveMinutes: "Активні протягом останніх 5 хвилин.",
-        accountStatus: "Статус акаунта",
+            "ÃÅ“ÃÂ¾ÃÂ½Ã‘â€“Ã‘â€šÃÂ¾Ã‘â‚¬ÃÂ¸ÃÂ½ÃÂ³ ÃÂ¿Ã‘â‚¬ÃÂ¸Ã‘ÂÃ‘Æ’Ã‘â€šÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘â€“, ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘â€“ Ã‘â€šÃÂ° ÃÂ¾ÃÂ¿ÃÂµÃ‘â‚¬ÃÂ°Ã‘â€ Ã‘â€“ÃÂ¹ÃÂ½ÃÂ¾ÃÂ³ÃÂ¾ ÃÂ²ÃÂ½ÃÂµÃ‘ÂÃÂºÃ‘Æ’ Ã‘Æ’Ã‘â€¡ÃÂ°Ã‘ÂÃÂ½ÃÂ¸ÃÂºÃ‘â€“ÃÂ² Ã‘Æ’ Ã‘â€ Ã‘Å’ÃÂ¾ÃÂ¼Ã‘Æ’ Ã‘ÂÃÂ¿Ã‘â€“ÃÂ»Ã‘Å’ÃÂ½ÃÂ¾ÃÂ¼Ã‘Æ’ ÃÂ°ÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃ‘â€“.",
+        members: "ÃÂ£Ã‘â€¡ÃÂ°Ã‘ÂÃÂ½ÃÂ¸ÃÂºÃÂ¸",
+        onlineNow: "ÃÅ¾ÃÂ½ÃÂ»ÃÂ°ÃÂ¹ÃÂ½ ÃÂ·ÃÂ°Ã‘â‚¬ÃÂ°ÃÂ·",
+        activeToday: "ÃÂÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“ Ã‘ÂÃ‘Å’ÃÂ¾ÃÂ³ÃÂ¾ÃÂ´ÃÂ½Ã‘â€“",
+        totalTrades: "ÃÂ£Ã‘ÂÃ‘Å’ÃÂ¾ÃÂ³ÃÂ¾ Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´",
+        lastTrade: "ÃÅ¾Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ½Ã‘Â Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ÃÂ°",
+        noTrades: "ÃÂÃÂµÃÂ¼ÃÂ°Ã‘â€ Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´",
+        latestTradeDescription: "ÃÅ¾Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ½Ã‘Â Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ÃÂ° ÃÂ² Ã‘â€ Ã‘Å’ÃÂ¾ÃÂ¼Ã‘Æ’ ÃÂ°ÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃ‘â€“.",
+        mostActive: "ÃÂÃÂ°ÃÂ¹ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“Ã‘Ë†ÃÂ¸ÃÂ¹",
+        basedOnInsertedTrades: "ÃÂÃÂ° ÃÂ¾Ã‘ÂÃÂ½ÃÂ¾ÃÂ²Ã‘â€“ ÃÂ²ÃÂ½ÃÂµÃ‘ÂÃÂµÃÂ½ÃÂ¸Ã‘â€¦ Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´.",
+        livePresence: "ÃÅ¾ÃÂ½ÃÂ»ÃÂ°ÃÂ¹ÃÂ½-ÃÂ¿Ã‘â‚¬ÃÂ¸Ã‘ÂÃ‘Æ’Ã‘â€šÃÂ½Ã‘â€“Ã‘ÂÃ‘â€šÃ‘Å’",
+        activeLastFiveMinutes: "ÃÂÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“ ÃÂ¿Ã‘â‚¬ÃÂ¾Ã‘â€šÃ‘ÂÃÂ³ÃÂ¾ÃÂ¼ ÃÂ¾Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ½Ã‘â€“Ã‘â€¦ 5 Ã‘â€¦ÃÂ²ÃÂ¸ÃÂ»ÃÂ¸ÃÂ½.",
+        accountStatus: "ÃÂ¡Ã‘â€šÃÂ°Ã‘â€šÃ‘Æ’Ã‘Â ÃÂ°ÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂ°",
         live: "Live",
-        quiet: "Тихо",
-        presenceSnapshot: "Знімок присутності та активності.",
-        leaderboard: "Рейтинг",
-        mostActiveMembers: "Найактивніші учасники",
-        topFive: "Топ 5",
-        trades: "угод",
-        onlineMembers: "Учасники онлайн",
-        activeNow: "Активний зараз",
-        noOnlineMembers: "Зараз немає учасників онлайн.",
-        memberOverview: "Огляд учасників",
-        accountTeam: "Команда акаунта",
+        quiet: "ÃÂ¢ÃÂ¸Ã‘â€¦ÃÂ¾",
+        presenceSnapshot: "Ãâ€”ÃÂ½Ã‘â€“ÃÂ¼ÃÂ¾ÃÂº ÃÂ¿Ã‘â‚¬ÃÂ¸Ã‘ÂÃ‘Æ’Ã‘â€šÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘â€“ Ã‘â€šÃÂ° ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘â€“.",
+        leaderboard: "ÃÂ ÃÂµÃÂ¹Ã‘â€šÃÂ¸ÃÂ½ÃÂ³",
+        mostActiveMembers: "ÃÂÃÂ°ÃÂ¹ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“Ã‘Ë†Ã‘â€“ Ã‘Æ’Ã‘â€¡ÃÂ°Ã‘ÂÃÂ½ÃÂ¸ÃÂºÃÂ¸",
+        topFive: "ÃÂ¢ÃÂ¾ÃÂ¿ 5",
+        trades: "Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´",
+        onlineMembers: "ÃÂ£Ã‘â€¡ÃÂ°Ã‘ÂÃÂ½ÃÂ¸ÃÂºÃÂ¸ ÃÂ¾ÃÂ½ÃÂ»ÃÂ°ÃÂ¹ÃÂ½",
+        activeNow: "ÃÂÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ·ÃÂ°Ã‘â‚¬ÃÂ°ÃÂ·",
+        noOnlineMembers: "Ãâ€”ÃÂ°Ã‘â‚¬ÃÂ°ÃÂ· ÃÂ½ÃÂµÃÂ¼ÃÂ°Ã‘â€ Ã‘Æ’Ã‘â€¡ÃÂ°Ã‘ÂÃÂ½ÃÂ¸ÃÂºÃ‘â€“ÃÂ² ÃÂ¾ÃÂ½ÃÂ»ÃÂ°ÃÂ¹ÃÂ½.",
+        memberOverview: "ÃÅ¾ÃÂ³ÃÂ»Ã‘ÂÃÂ´ Ã‘Æ’Ã‘â€¡ÃÂ°Ã‘ÂÃÂ½ÃÂ¸ÃÂºÃ‘â€“ÃÂ²",
+        accountTeam: "ÃÅ¡ÃÂ¾ÃÂ¼ÃÂ°ÃÂ½ÃÂ´ÃÂ° ÃÂ°ÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂ°",
         activityProfile:
-            "Профіль активності на основі присутності, останньої активності та торгового внеску в цьому акаунті.",
-        lastActivity: "Остання активність",
-        lastLogin: "Останній вхід",
-        viewMemberTrades: "Переглянути угоди учасника",
-        memberAnalytics: "Аналітика учасника",
-        openWorkspace: "Відкрити workspace",
-        backToAccount: "Назад до акаунта",
-        onlineStatus: "Онлайн зараз",
-        activeTodayStatus: "Активний сьогодні",
-        activeThisWeekStatus: "Активний цього тижня",
-        inactiveStatus: "Неактивний",
-        notAvailable: "Н/Д",
-        teamManagementSection: "Управління командою",
-        managementSectionLabel: "Управління",
-        inviteMemberHeading: "Запросити учасника",
+            "ÃÅ¸Ã‘â‚¬ÃÂ¾Ã‘â€žÃ‘â€“ÃÂ»Ã‘Å’ ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘â€“ ÃÂ½ÃÂ° ÃÂ¾Ã‘ÂÃÂ½ÃÂ¾ÃÂ²Ã‘â€“ ÃÂ¿Ã‘â‚¬ÃÂ¸Ã‘ÂÃ‘Æ’Ã‘â€šÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘â€“, ÃÂ¾Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ½Ã‘Å’ÃÂ¾Ã‘â€” ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘â€“ Ã‘â€šÃÂ° Ã‘â€šÃÂ¾Ã‘â‚¬ÃÂ³ÃÂ¾ÃÂ²ÃÂ¾ÃÂ³ÃÂ¾ ÃÂ²ÃÂ½ÃÂµÃ‘ÂÃÂºÃ‘Æ’ ÃÂ² Ã‘â€ Ã‘Å’ÃÂ¾ÃÂ¼Ã‘Æ’ ÃÂ°ÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃ‘â€“.",
+        lastActivity: "ÃÅ¾Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ½Ã‘Â ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“Ã‘ÂÃ‘â€šÃ‘Å’",
+        lastLogin: "ÃÅ¾Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ½Ã‘â€“ÃÂ¹ ÃÂ²Ã‘â€¦Ã‘â€“ÃÂ´",
+        viewMemberTrades: "ÃÅ¸ÃÂµÃ‘â‚¬ÃÂµÃÂ³ÃÂ»Ã‘ÂÃÂ½Ã‘Æ’Ã‘â€šÃÂ¸ Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ÃÂ¸ Ã‘Æ’Ã‘â€¡ÃÂ°Ã‘ÂÃÂ½ÃÂ¸ÃÂºÃÂ°",
+        memberAnalytics: "ÃÂÃÂ½ÃÂ°ÃÂ»Ã‘â€“Ã‘â€šÃÂ¸ÃÂºÃÂ° Ã‘Æ’Ã‘â€¡ÃÂ°Ã‘ÂÃÂ½ÃÂ¸ÃÂºÃÂ°",
+        openWorkspace: "Ãâ€™Ã‘â€“ÃÂ´ÃÂºÃ‘â‚¬ÃÂ¸Ã‘â€šÃÂ¸ workspace",
+        backToAccount: "ÃÂÃÂ°ÃÂ·ÃÂ°ÃÂ´ ÃÂ´ÃÂ¾ ÃÂ°ÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂ°",
+        onlineStatus: "ÃÅ¾ÃÂ½ÃÂ»ÃÂ°ÃÂ¹ÃÂ½ ÃÂ·ÃÂ°Ã‘â‚¬ÃÂ°ÃÂ·",
+        activeTodayStatus: "ÃÂÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¸ÃÂ¹ Ã‘ÂÃ‘Å’ÃÂ¾ÃÂ³ÃÂ¾ÃÂ´ÃÂ½Ã‘â€“",
+        activeThisWeekStatus: "ÃÂÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¸ÃÂ¹ Ã‘â€ Ã‘Å’ÃÂ¾ÃÂ³ÃÂ¾ Ã‘â€šÃÂ¸ÃÂ¶ÃÂ½Ã‘Â",
+        inactiveStatus: "ÃÂÃÂµÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¸ÃÂ¹",
+        notAvailable: "ÃÂ/Ãâ€",
+        teamManagementSection: "ÃÂ£ÃÂ¿Ã‘â‚¬ÃÂ°ÃÂ²ÃÂ»Ã‘â€“ÃÂ½ÃÂ½Ã‘Â ÃÂºÃÂ¾ÃÂ¼ÃÂ°ÃÂ½ÃÂ´ÃÂ¾Ã‘Å½",
+        managementSectionLabel: "ÃÂ£ÃÂ¿Ã‘â‚¬ÃÂ°ÃÂ²ÃÂ»Ã‘â€“ÃÂ½ÃÂ½Ã‘Â",
+        inviteMemberHeading: "Ãâ€”ÃÂ°ÃÂ¿Ã‘â‚¬ÃÂ¾Ã‘ÂÃÂ¸Ã‘â€šÃÂ¸ Ã‘Æ’Ã‘â€¡ÃÂ°Ã‘ÂÃÂ½ÃÂ¸ÃÂºÃÂ°",
         usernamePlaceholder: "Username",
-        sendInvite: "Надіслати запрошення",
-        pendingInvitesHeading: "Запрошення в очікуванні",
-        noPendingInvites: "Немає запрошень в очікуванні.",
-        cancelInvite: "Скасувати запрошення",
-        invitedAs: "Запрошений як",
-        changeRoleLabel: "Змінити роль",
-        saveRole: "Зберегти роль",
-        permissionsLabel: "Операційні дозволи",
-        savePermissions: "Зберегти дозволи",
-        removeMemberLabel: "Видалити учасника",
-        confirmRemove: "Ви впевнені? Цю дію не можна скасувати.",
-        confirmYes: "Так, видалити",
-        cancelConfirm: "Скасувати",
-        youBadge: "Ти",
-        creatorBadge: "Творець",
-        lastManagerNote: "Єдиний Manager — неможливо понизити.",
-        roleManager: "Менеджер",
-        roleMember: "Учасник",
-        roleViewer: "Спостерігач",
-        perm_canCreateTrades: "Вносити угоди",
-        perm_canEditTrades: "Редагувати угоди",
-        perm_canDeleteTrades: "Видаляти угоди",
-        perm_canViewAnalytics: "Аналітика",
-        perm_canViewReports: "Звіти",
+        sendInvite: "ÃÂÃÂ°ÃÂ´Ã‘â€“Ã‘ÂÃÂ»ÃÂ°Ã‘â€šÃÂ¸ ÃÂ·ÃÂ°ÃÂ¿Ã‘â‚¬ÃÂ¾Ã‘Ë†ÃÂµÃÂ½ÃÂ½Ã‘Â",
+        pendingInvitesHeading: "Ãâ€”ÃÂ°ÃÂ¿Ã‘â‚¬ÃÂ¾Ã‘Ë†ÃÂµÃÂ½ÃÂ½Ã‘Â ÃÂ² ÃÂ¾Ã‘â€¡Ã‘â€“ÃÂºÃ‘Æ’ÃÂ²ÃÂ°ÃÂ½ÃÂ½Ã‘â€“",
+        noPendingInvites: "ÃÂÃÂµÃÂ¼ÃÂ°Ã‘â€ ÃÂ·ÃÂ°ÃÂ¿Ã‘â‚¬ÃÂ¾Ã‘Ë†ÃÂµÃÂ½Ã‘Å’ ÃÂ² ÃÂ¾Ã‘â€¡Ã‘â€“ÃÂºÃ‘Æ’ÃÂ²ÃÂ°ÃÂ½ÃÂ½Ã‘â€“.",
+        cancelInvite: "ÃÂ¡ÃÂºÃÂ°Ã‘ÂÃ‘Æ’ÃÂ²ÃÂ°Ã‘â€šÃÂ¸ ÃÂ·ÃÂ°ÃÂ¿Ã‘â‚¬ÃÂ¾Ã‘Ë†ÃÂµÃÂ½ÃÂ½Ã‘Â",
+        invitedAs: "Ãâ€”ÃÂ°ÃÂ¿Ã‘â‚¬ÃÂ¾Ã‘Ë†ÃÂµÃÂ½ÃÂ¸ÃÂ¹ Ã‘ÂÃÂº",
+        changeRoleLabel: "Ãâ€”ÃÂ¼Ã‘â€“ÃÂ½ÃÂ¸Ã‘â€šÃÂ¸ Ã‘â‚¬ÃÂ¾ÃÂ»Ã‘Å’",
+        saveRole: "Ãâ€”ÃÂ±ÃÂµÃ‘â‚¬ÃÂµÃÂ³Ã‘â€šÃÂ¸ Ã‘â‚¬ÃÂ¾ÃÂ»Ã‘Å’",
+        permissionsLabel: "ÃÅ¾ÃÂ¿ÃÂµÃ‘â‚¬ÃÂ°Ã‘â€ Ã‘â€“ÃÂ¹ÃÂ½Ã‘â€“ ÃÂ´ÃÂ¾ÃÂ·ÃÂ²ÃÂ¾ÃÂ»ÃÂ¸",
+        savePermissions: "Ãâ€”ÃÂ±ÃÂµÃ‘â‚¬ÃÂµÃÂ³Ã‘â€šÃÂ¸ ÃÂ´ÃÂ¾ÃÂ·ÃÂ²ÃÂ¾ÃÂ»ÃÂ¸",
+        removeMemberLabel: "Ãâ€™ÃÂ¸ÃÂ´ÃÂ°ÃÂ»ÃÂ¸Ã‘â€šÃÂ¸ Ã‘Æ’Ã‘â€¡ÃÂ°Ã‘ÂÃÂ½ÃÂ¸ÃÂºÃÂ°",
+        confirmRemove: "Ãâ€™ÃÂ¸ ÃÂ²ÃÂ¿ÃÂµÃÂ²ÃÂ½ÃÂµÃÂ½Ã‘â€“? ÃÂ¦Ã‘Å½ ÃÂ´Ã‘â€“Ã‘Å½ ÃÂ½ÃÂµ ÃÂ¼ÃÂ¾ÃÂ¶ÃÂ½ÃÂ° Ã‘ÂÃÂºÃÂ°Ã‘ÂÃ‘Æ’ÃÂ²ÃÂ°Ã‘â€šÃÂ¸.",
+        confirmYes: "ÃÂ¢ÃÂ°ÃÂº, ÃÂ²ÃÂ¸ÃÂ´ÃÂ°ÃÂ»ÃÂ¸Ã‘â€šÃÂ¸",
+        cancelConfirm: "ÃÂ¡ÃÂºÃÂ°Ã‘ÂÃ‘Æ’ÃÂ²ÃÂ°Ã‘â€šÃÂ¸",
+        youBadge: "ÃÂ¢ÃÂ¸",
+        creatorBadge: "ÃÂ¢ÃÂ²ÃÂ¾Ã‘â‚¬ÃÂµÃ‘â€ Ã‘Å’",
+        lastManagerNote: "Ãâ€žÃÂ´ÃÂ¸ÃÂ½ÃÂ¸ÃÂ¹ Manager Ã¢â‚¬â€ ÃÂ½ÃÂµÃÂ¼ÃÂ¾ÃÂ¶ÃÂ»ÃÂ¸ÃÂ²ÃÂ¾ ÃÂ¿ÃÂ¾ÃÂ½ÃÂ¸ÃÂ·ÃÂ¸Ã‘â€šÃÂ¸.",
+        roleManager: "ÃÅ“ÃÂµÃÂ½ÃÂµÃÂ´ÃÂ¶ÃÂµÃ‘â‚¬",
+        roleMember: "ÃÂ£Ã‘â€¡ÃÂ°Ã‘ÂÃÂ½ÃÂ¸ÃÂº",
+        roleViewer: "ÃÂ¡ÃÂ¿ÃÂ¾Ã‘ÂÃ‘â€šÃÂµÃ‘â‚¬Ã‘â€“ÃÂ³ÃÂ°Ã‘â€¡",
+        perm_canCreateTrades: "Ãâ€™ÃÂ½ÃÂ¾Ã‘ÂÃÂ¸Ã‘â€šÃÂ¸ Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ÃÂ¸",
+        perm_canEditTrades: "ÃÂ ÃÂµÃÂ´ÃÂ°ÃÂ³Ã‘Æ’ÃÂ²ÃÂ°Ã‘â€šÃÂ¸ Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ÃÂ¸",
+        perm_canDeleteTrades: "Ãâ€™ÃÂ¸ÃÂ´ÃÂ°ÃÂ»Ã‘ÂÃ‘â€šÃÂ¸ Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ÃÂ¸",
+        perm_canViewAnalytics: "ÃÂÃÂ½ÃÂ°ÃÂ»Ã‘â€“Ã‘â€šÃÂ¸ÃÂºÃÂ°",
+        perm_canViewReports: "Ãâ€”ÃÂ²Ã‘â€“Ã‘â€šÃÂ¸",
         perm_canViewCopilot: "Copilot",
-        perm_canViewMembers: "Переглядати команду",
+        perm_canViewMembers: "ÃÅ¸ÃÂµÃ‘â‚¬ÃÂµÃÂ³ÃÂ»Ã‘ÂÃÂ´ÃÂ°Ã‘â€šÃÂ¸ ÃÂºÃÂ¾ÃÂ¼ÃÂ°ÃÂ½ÃÂ´Ã‘Æ’",
     },
     ru: {
-        never: "Никогда",
-        accountMembers: "Участники аккаунта",
-        membersActivity: "Активность участников",
+        never: "ÃÂÃÂ¸ÃÂºÃÂ¾ÃÂ³ÃÂ´ÃÂ°",
+        accountMembers: "ÃÂ£Ã‘â€¡ÃÂ°Ã‘ÂÃ‘â€šÃÂ½ÃÂ¸ÃÂºÃÂ¸ ÃÂ°ÃÂºÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂ°",
+        membersActivity: "ÃÂÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘Å’ Ã‘Æ’Ã‘â€¡ÃÂ°Ã‘ÂÃ‘â€šÃÂ½ÃÂ¸ÃÂºÃÂ¾ÃÂ²",
         description:
-            "Мониторинг присутствия, активности и операционного вклада участников в этом общем аккаунте.",
-        members: "Участники",
-        onlineNow: "Онлайн сейчас",
-        activeToday: "Активны сегодня",
-        totalTrades: "Всего сделок",
-        lastTrade: "Последняя сделка",
-        noTrades: "Нет сделок",
-        latestTradeDescription: "Последняя сделка в этом аккаунте.",
-        mostActive: "Самый активный",
-        basedOnInsertedTrades: "На основе внесенных сделок.",
-        livePresence: "Онлайн-присутствие",
-        activeLastFiveMinutes: "Активны за последние 5 минут.",
-        accountStatus: "Статус аккаунта",
+            "ÃÅ“ÃÂ¾ÃÂ½ÃÂ¸Ã‘â€šÃÂ¾Ã‘â‚¬ÃÂ¸ÃÂ½ÃÂ³ ÃÂ¿Ã‘â‚¬ÃÂ¸Ã‘ÂÃ‘Æ’Ã‘â€šÃ‘ÂÃ‘â€šÃÂ²ÃÂ¸Ã‘Â, ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃÂ¸ ÃÂ¸ ÃÂ¾ÃÂ¿ÃÂµÃ‘â‚¬ÃÂ°Ã‘â€ ÃÂ¸ÃÂ¾ÃÂ½ÃÂ½ÃÂ¾ÃÂ³ÃÂ¾ ÃÂ²ÃÂºÃÂ»ÃÂ°ÃÂ´ÃÂ° Ã‘Æ’Ã‘â€¡ÃÂ°Ã‘ÂÃ‘â€šÃÂ½ÃÂ¸ÃÂºÃÂ¾ÃÂ² ÃÂ² Ã‘ÂÃ‘â€šÃÂ¾ÃÂ¼ ÃÂ¾ÃÂ±Ã‘â€°ÃÂµÃÂ¼ ÃÂ°ÃÂºÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂµ.",
+        members: "ÃÂ£Ã‘â€¡ÃÂ°Ã‘ÂÃ‘â€šÃÂ½ÃÂ¸ÃÂºÃÂ¸",
+        onlineNow: "ÃÅ¾ÃÂ½ÃÂ»ÃÂ°ÃÂ¹ÃÂ½ Ã‘ÂÃÂµÃÂ¹Ã‘â€¡ÃÂ°Ã‘Â",
+        activeToday: "ÃÂÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€¹ Ã‘ÂÃÂµÃÂ³ÃÂ¾ÃÂ´ÃÂ½Ã‘Â",
+        totalTrades: "Ãâ€™Ã‘ÂÃÂµÃÂ³ÃÂ¾ Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂ¾ÃÂº",
+        lastTrade: "ÃÅ¸ÃÂ¾Ã‘ÂÃÂ»ÃÂµÃÂ´ÃÂ½Ã‘ÂÃ‘Â Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂºÃÂ°",
+        noTrades: "ÃÂÃÂµÃ‘â€š Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂ¾ÃÂº",
+        latestTradeDescription: "ÃÅ¸ÃÂ¾Ã‘ÂÃÂ»ÃÂµÃÂ´ÃÂ½Ã‘ÂÃ‘Â Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂºÃÂ° ÃÂ² Ã‘ÂÃ‘â€šÃÂ¾ÃÂ¼ ÃÂ°ÃÂºÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂµ.",
+        mostActive: "ÃÂ¡ÃÂ°ÃÂ¼Ã‘â€¹ÃÂ¹ ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€¹ÃÂ¹",
+        basedOnInsertedTrades: "ÃÂÃÂ° ÃÂ¾Ã‘ÂÃÂ½ÃÂ¾ÃÂ²ÃÂµ ÃÂ²ÃÂ½ÃÂµÃ‘ÂÃÂµÃÂ½ÃÂ½Ã‘â€¹Ã‘â€¦ Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂ¾ÃÂº.",
+        livePresence: "ÃÅ¾ÃÂ½ÃÂ»ÃÂ°ÃÂ¹ÃÂ½-ÃÂ¿Ã‘â‚¬ÃÂ¸Ã‘ÂÃ‘Æ’Ã‘â€šÃ‘ÂÃ‘â€šÃÂ²ÃÂ¸ÃÂµ",
+        activeLastFiveMinutes: "ÃÂÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€¹ ÃÂ·ÃÂ° ÃÂ¿ÃÂ¾Ã‘ÂÃÂ»ÃÂµÃÂ´ÃÂ½ÃÂ¸ÃÂµ 5 ÃÂ¼ÃÂ¸ÃÂ½Ã‘Æ’Ã‘â€š.",
+        accountStatus: "ÃÂ¡Ã‘â€šÃÂ°Ã‘â€šÃ‘Æ’Ã‘Â ÃÂ°ÃÂºÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂ°",
         live: "Live",
-        quiet: "Тихо",
-        presenceSnapshot: "Снимок присутствия и активности.",
-        leaderboard: "Рейтинг",
-        mostActiveMembers: "Самые активные участники",
-        topFive: "Топ 5",
-        trades: "сделок",
-        onlineMembers: "Участники онлайн",
-        activeNow: "Активен сейчас",
-        noOnlineMembers: "Сейчас нет участников онлайн.",
-        memberOverview: "Обзор участников",
-        accountTeam: "Команда аккаунта",
+        quiet: "ÃÂ¢ÃÂ¸Ã‘â€¦ÃÂ¾",
+        presenceSnapshot: "ÃÂ¡ÃÂ½ÃÂ¸ÃÂ¼ÃÂ¾ÃÂº ÃÂ¿Ã‘â‚¬ÃÂ¸Ã‘ÂÃ‘Æ’Ã‘â€šÃ‘ÂÃ‘â€šÃÂ²ÃÂ¸Ã‘Â ÃÂ¸ ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃÂ¸.",
+        leaderboard: "ÃÂ ÃÂµÃÂ¹Ã‘â€šÃÂ¸ÃÂ½ÃÂ³",
+        mostActiveMembers: "ÃÂ¡ÃÂ°ÃÂ¼Ã‘â€¹ÃÂµ ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€¹ÃÂµ Ã‘Æ’Ã‘â€¡ÃÂ°Ã‘ÂÃ‘â€šÃÂ½ÃÂ¸ÃÂºÃÂ¸",
+        topFive: "ÃÂ¢ÃÂ¾ÃÂ¿ 5",
+        trades: "Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂ¾ÃÂº",
+        onlineMembers: "ÃÂ£Ã‘â€¡ÃÂ°Ã‘ÂÃ‘â€šÃÂ½ÃÂ¸ÃÂºÃÂ¸ ÃÂ¾ÃÂ½ÃÂ»ÃÂ°ÃÂ¹ÃÂ½",
+        activeNow: "ÃÂÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂµÃÂ½ Ã‘ÂÃÂµÃÂ¹Ã‘â€¡ÃÂ°Ã‘Â",
+        noOnlineMembers: "ÃÂ¡ÃÂµÃÂ¹Ã‘â€¡ÃÂ°Ã‘Â ÃÂ½ÃÂµÃ‘â€š Ã‘Æ’Ã‘â€¡ÃÂ°Ã‘ÂÃ‘â€šÃÂ½ÃÂ¸ÃÂºÃÂ¾ÃÂ² ÃÂ¾ÃÂ½ÃÂ»ÃÂ°ÃÂ¹ÃÂ½.",
+        memberOverview: "ÃÅ¾ÃÂ±ÃÂ·ÃÂ¾Ã‘â‚¬ Ã‘Æ’Ã‘â€¡ÃÂ°Ã‘ÂÃ‘â€šÃÂ½ÃÂ¸ÃÂºÃÂ¾ÃÂ²",
+        accountTeam: "ÃÅ¡ÃÂ¾ÃÂ¼ÃÂ°ÃÂ½ÃÂ´ÃÂ° ÃÂ°ÃÂºÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂ°",
         activityProfile:
-            "Профиль активности на основе присутствия, последней активности и торгового вклада в этом аккаунте.",
-        lastActivity: "Последняя активность",
-        lastLogin: "Последний вход",
-        viewMemberTrades: "Смотреть сделки участника",
-        memberAnalytics: "Аналитика участника",
-        openWorkspace: "Открыть workspace",
-        backToAccount: "Назад к аккаунту",
-        onlineStatus: "Онлайн сейчас",
-        activeTodayStatus: "Активен сегодня",
-        activeThisWeekStatus: "Активен на этой неделе",
-        inactiveStatus: "Неактивен",
-        notAvailable: "Н/Д",
-        teamManagementSection: "Управление командой",
-        managementSectionLabel: "Управление",
-        inviteMemberHeading: "Пригласить участника",
+            "ÃÅ¸Ã‘â‚¬ÃÂ¾Ã‘â€žÃÂ¸ÃÂ»Ã‘Å’ ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃÂ¸ ÃÂ½ÃÂ° ÃÂ¾Ã‘ÂÃÂ½ÃÂ¾ÃÂ²ÃÂµ ÃÂ¿Ã‘â‚¬ÃÂ¸Ã‘ÂÃ‘Æ’Ã‘â€šÃ‘ÂÃ‘â€šÃÂ²ÃÂ¸Ã‘Â, ÃÂ¿ÃÂ¾Ã‘ÂÃÂ»ÃÂµÃÂ´ÃÂ½ÃÂµÃÂ¹ ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃÂ¸ ÃÂ¸ Ã‘â€šÃÂ¾Ã‘â‚¬ÃÂ³ÃÂ¾ÃÂ²ÃÂ¾ÃÂ³ÃÂ¾ ÃÂ²ÃÂºÃÂ»ÃÂ°ÃÂ´ÃÂ° ÃÂ² Ã‘ÂÃ‘â€šÃÂ¾ÃÂ¼ ÃÂ°ÃÂºÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂµ.",
+        lastActivity: "ÃÅ¸ÃÂ¾Ã‘ÂÃÂ»ÃÂµÃÂ´ÃÂ½Ã‘ÂÃ‘Â ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘Å’",
+        lastLogin: "ÃÅ¸ÃÂ¾Ã‘ÂÃÂ»ÃÂµÃÂ´ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ²Ã‘â€¦ÃÂ¾ÃÂ´",
+        viewMemberTrades: "ÃÂ¡ÃÂ¼ÃÂ¾Ã‘â€šÃ‘â‚¬ÃÂµÃ‘â€šÃ‘Å’ Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂºÃÂ¸ Ã‘Æ’Ã‘â€¡ÃÂ°Ã‘ÂÃ‘â€šÃÂ½ÃÂ¸ÃÂºÃÂ°",
+        memberAnalytics: "ÃÂÃÂ½ÃÂ°ÃÂ»ÃÂ¸Ã‘â€šÃÂ¸ÃÂºÃÂ° Ã‘Æ’Ã‘â€¡ÃÂ°Ã‘ÂÃ‘â€šÃÂ½ÃÂ¸ÃÂºÃÂ°",
+        openWorkspace: "ÃÅ¾Ã‘â€šÃÂºÃ‘â‚¬Ã‘â€¹Ã‘â€šÃ‘Å’ workspace",
+        backToAccount: "ÃÂÃÂ°ÃÂ·ÃÂ°ÃÂ´ ÃÂº ÃÂ°ÃÂºÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃ‘Æ’",
+        onlineStatus: "ÃÅ¾ÃÂ½ÃÂ»ÃÂ°ÃÂ¹ÃÂ½ Ã‘ÂÃÂµÃÂ¹Ã‘â€¡ÃÂ°Ã‘Â",
+        activeTodayStatus: "ÃÂÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂµÃÂ½ Ã‘ÂÃÂµÃÂ³ÃÂ¾ÃÂ´ÃÂ½Ã‘Â",
+        activeThisWeekStatus: "ÃÂÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂµÃÂ½ ÃÂ½ÃÂ° Ã‘ÂÃ‘â€šÃÂ¾ÃÂ¹ ÃÂ½ÃÂµÃÂ´ÃÂµÃÂ»ÃÂµ",
+        inactiveStatus: "ÃÂÃÂµÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂµÃÂ½",
+        notAvailable: "ÃÂ/Ãâ€",
+        teamManagementSection: "ÃÂ£ÃÂ¿Ã‘â‚¬ÃÂ°ÃÂ²ÃÂ»ÃÂµÃÂ½ÃÂ¸ÃÂµ ÃÂºÃÂ¾ÃÂ¼ÃÂ°ÃÂ½ÃÂ´ÃÂ¾ÃÂ¹",
+        managementSectionLabel: "ÃÂ£ÃÂ¿Ã‘â‚¬ÃÂ°ÃÂ²ÃÂ»ÃÂµÃÂ½ÃÂ¸ÃÂµ",
+        inviteMemberHeading: "ÃÅ¸Ã‘â‚¬ÃÂ¸ÃÂ³ÃÂ»ÃÂ°Ã‘ÂÃÂ¸Ã‘â€šÃ‘Å’ Ã‘Æ’Ã‘â€¡ÃÂ°Ã‘ÂÃ‘â€šÃÂ½ÃÂ¸ÃÂºÃÂ°",
         usernamePlaceholder: "Username",
-        sendInvite: "Отправить приглашение",
-        pendingInvitesHeading: "Ожидающие приглашения",
-        noPendingInvites: "Нет ожидающих приглашений.",
-        cancelInvite: "Отменить приглашение",
-        invitedAs: "Приглашён как",
-        changeRoleLabel: "Изменить роль",
-        saveRole: "Сохранить роль",
-        permissionsLabel: "Операционные разрешения",
-        savePermissions: "Сохранить разрешения",
-        removeMemberLabel: "Удалить участника",
-        confirmRemove: "Вы уверены? Это действие необратимо.",
-        confirmYes: "Да, удалить",
-        cancelConfirm: "Отмена",
-        youBadge: "Вы",
-        creatorBadge: "Создатель",
-        lastManagerNote: "Единственный Manager — нельзя понизить.",
-        roleManager: "Менеджер",
-        roleMember: "Участник",
-        roleViewer: "Наблюдатель",
-        perm_canCreateTrades: "Вносить сделки",
-        perm_canEditTrades: "Редактировать сделки",
-        perm_canDeleteTrades: "Удалять сделки",
-        perm_canViewAnalytics: "Аналитика",
-        perm_canViewReports: "Отчёты",
+        sendInvite: "ÃÅ¾Ã‘â€šÃÂ¿Ã‘â‚¬ÃÂ°ÃÂ²ÃÂ¸Ã‘â€šÃ‘Å’ ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ³ÃÂ»ÃÂ°Ã‘Ë†ÃÂµÃÂ½ÃÂ¸ÃÂµ",
+        pendingInvitesHeading: "ÃÅ¾ÃÂ¶ÃÂ¸ÃÂ´ÃÂ°Ã‘Å½Ã‘â€°ÃÂ¸ÃÂµ ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ³ÃÂ»ÃÂ°Ã‘Ë†ÃÂµÃÂ½ÃÂ¸Ã‘Â",
+        noPendingInvites: "ÃÂÃÂµÃ‘â€š ÃÂ¾ÃÂ¶ÃÂ¸ÃÂ´ÃÂ°Ã‘Å½Ã‘â€°ÃÂ¸Ã‘â€¦ ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ³ÃÂ»ÃÂ°Ã‘Ë†ÃÂµÃÂ½ÃÂ¸ÃÂ¹.",
+        cancelInvite: "ÃÅ¾Ã‘â€šÃÂ¼ÃÂµÃÂ½ÃÂ¸Ã‘â€šÃ‘Å’ ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ³ÃÂ»ÃÂ°Ã‘Ë†ÃÂµÃÂ½ÃÂ¸ÃÂµ",
+        invitedAs: "ÃÅ¸Ã‘â‚¬ÃÂ¸ÃÂ³ÃÂ»ÃÂ°Ã‘Ë†Ã‘â€˜ÃÂ½ ÃÂºÃÂ°ÃÂº",
+        changeRoleLabel: "ÃËœÃÂ·ÃÂ¼ÃÂµÃÂ½ÃÂ¸Ã‘â€šÃ‘Å’ Ã‘â‚¬ÃÂ¾ÃÂ»Ã‘Å’",
+        saveRole: "ÃÂ¡ÃÂ¾Ã‘â€¦Ã‘â‚¬ÃÂ°ÃÂ½ÃÂ¸Ã‘â€šÃ‘Å’ Ã‘â‚¬ÃÂ¾ÃÂ»Ã‘Å’",
+        permissionsLabel: "ÃÅ¾ÃÂ¿ÃÂµÃ‘â‚¬ÃÂ°Ã‘â€ ÃÂ¸ÃÂ¾ÃÂ½ÃÂ½Ã‘â€¹ÃÂµ Ã‘â‚¬ÃÂ°ÃÂ·Ã‘â‚¬ÃÂµÃ‘Ë†ÃÂµÃÂ½ÃÂ¸Ã‘Â",
+        savePermissions: "ÃÂ¡ÃÂ¾Ã‘â€¦Ã‘â‚¬ÃÂ°ÃÂ½ÃÂ¸Ã‘â€šÃ‘Å’ Ã‘â‚¬ÃÂ°ÃÂ·Ã‘â‚¬ÃÂµÃ‘Ë†ÃÂµÃÂ½ÃÂ¸Ã‘Â",
+        removeMemberLabel: "ÃÂ£ÃÂ´ÃÂ°ÃÂ»ÃÂ¸Ã‘â€šÃ‘Å’ Ã‘Æ’Ã‘â€¡ÃÂ°Ã‘ÂÃ‘â€šÃÂ½ÃÂ¸ÃÂºÃÂ°",
+        confirmRemove: "Ãâ€™Ã‘â€¹ Ã‘Æ’ÃÂ²ÃÂµÃ‘â‚¬ÃÂµÃÂ½Ã‘â€¹? ÃÂ­Ã‘â€šÃÂ¾ ÃÂ´ÃÂµÃÂ¹Ã‘ÂÃ‘â€šÃÂ²ÃÂ¸ÃÂµ ÃÂ½ÃÂµÃÂ¾ÃÂ±Ã‘â‚¬ÃÂ°Ã‘â€šÃÂ¸ÃÂ¼ÃÂ¾.",
+        confirmYes: "Ãâ€ÃÂ°, Ã‘Æ’ÃÂ´ÃÂ°ÃÂ»ÃÂ¸Ã‘â€šÃ‘Å’",
+        cancelConfirm: "ÃÅ¾Ã‘â€šÃÂ¼ÃÂµÃÂ½ÃÂ°",
+        youBadge: "Ãâ€™Ã‘â€¹",
+        creatorBadge: "ÃÂ¡ÃÂ¾ÃÂ·ÃÂ´ÃÂ°Ã‘â€šÃÂµÃÂ»Ã‘Å’",
+        lastManagerNote: "Ãâ€¢ÃÂ´ÃÂ¸ÃÂ½Ã‘ÂÃ‘â€šÃÂ²ÃÂµÃÂ½ÃÂ½Ã‘â€¹ÃÂ¹ Manager Ã¢â‚¬â€ ÃÂ½ÃÂµÃÂ»Ã‘Å’ÃÂ·Ã‘Â ÃÂ¿ÃÂ¾ÃÂ½ÃÂ¸ÃÂ·ÃÂ¸Ã‘â€šÃ‘Å’.",
+        roleManager: "ÃÅ“ÃÂµÃÂ½ÃÂµÃÂ´ÃÂ¶ÃÂµÃ‘â‚¬",
+        roleMember: "ÃÂ£Ã‘â€¡ÃÂ°Ã‘ÂÃ‘â€šÃÂ½ÃÂ¸ÃÂº",
+        roleViewer: "ÃÂÃÂ°ÃÂ±ÃÂ»Ã‘Å½ÃÂ´ÃÂ°Ã‘â€šÃÂµÃÂ»Ã‘Å’",
+        perm_canCreateTrades: "Ãâ€™ÃÂ½ÃÂ¾Ã‘ÂÃÂ¸Ã‘â€šÃ‘Å’ Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂºÃÂ¸",
+        perm_canEditTrades: "ÃÂ ÃÂµÃÂ´ÃÂ°ÃÂºÃ‘â€šÃÂ¸Ã‘â‚¬ÃÂ¾ÃÂ²ÃÂ°Ã‘â€šÃ‘Å’ Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂºÃÂ¸",
+        perm_canDeleteTrades: "ÃÂ£ÃÂ´ÃÂ°ÃÂ»Ã‘ÂÃ‘â€šÃ‘Å’ Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂºÃÂ¸",
+        perm_canViewAnalytics: "ÃÂÃÂ½ÃÂ°ÃÂ»ÃÂ¸Ã‘â€šÃÂ¸ÃÂºÃÂ°",
+        perm_canViewReports: "ÃÅ¾Ã‘â€šÃ‘â€¡Ã‘â€˜Ã‘â€šÃ‘â€¹",
         perm_canViewCopilot: "Copilot",
-        perm_canViewMembers: "Просматривать команду",
+        perm_canViewMembers: "ÃÅ¸Ã‘â‚¬ÃÂ¾Ã‘ÂÃÂ¼ÃÂ°Ã‘â€šÃ‘â‚¬ÃÂ¸ÃÂ²ÃÂ°Ã‘â€šÃ‘Å’ ÃÂºÃÂ¾ÃÂ¼ÃÂ°ÃÂ½ÃÂ´Ã‘Æ’",
     },
     es: {
         never: "Nunca",
         accountMembers: "Miembros de la cuenta",
         membersActivity: "Actividad de miembros",
         description:
-            "Monitoriza presencia, actividad y contribución operativa de los miembros dentro de esta cuenta compartida.",
+            "Monitoriza presencia, actividad y contribuciÃƒÂ³n operativa de los miembros dentro de esta cuenta compartida.",
         members: "Miembros",
         onlineNow: "Online ahora",
         activeToday: "Activos hoy",
         totalTrades: "Trades totales",
-        lastTrade: "Último trade",
+        lastTrade: "ÃƒÅ¡ltimo trade",
         noTrades: "Sin trades",
-        latestTradeDescription: "Último trade en esta cuenta.",
-        mostActive: "Más activo",
+        latestTradeDescription: "ÃƒÅ¡ltimo trade en esta cuenta.",
+        mostActive: "MÃƒÂ¡s activo",
         basedOnInsertedTrades: "Basado en los trades insertados.",
         livePresence: "Presencia en vivo",
-        activeLastFiveMinutes: "Activos en los últimos 5 minutos.",
+        activeLastFiveMinutes: "Activos en los ÃƒÂºltimos 5 minutos.",
         accountStatus: "Estado de cuenta",
         live: "Live",
         quiet: "Silencioso",
         presenceSnapshot: "Snapshot de presencia y actividad.",
-        leaderboard: "Clasificación",
-        mostActiveMembers: "Miembros más activos",
+        leaderboard: "ClasificaciÃƒÂ³n",
+        mostActiveMembers: "Miembros mÃƒÂ¡s activos",
         topFive: "Top 5",
         trades: "trades",
         onlineMembers: "Miembros online",
@@ -421,9 +421,9 @@ const labels: Record<AppLanguage, MembersLabels> = {
         memberOverview: "Resumen de miembros",
         accountTeam: "Equipo de cuenta",
         activityProfile:
-            "Perfil de actividad basado en presencia, última actividad y contribución de trades dentro de esta cuenta.",
-        lastActivity: "Última actividad",
-        lastLogin: "Último login",
+            "Perfil de actividad basado en presencia, ÃƒÂºltima actividad y contribuciÃƒÂ³n de trades dentro de esta cuenta.",
+        lastActivity: "ÃƒÅ¡ltima actividad",
+        lastLogin: "ÃƒÅ¡ltimo login",
         viewMemberTrades: "Ver trades del miembro",
         memberAnalytics: "Analytics del miembro",
         openWorkspace: "Abrir workspace",
@@ -433,26 +433,26 @@ const labels: Record<AppLanguage, MembersLabels> = {
         activeThisWeekStatus: "Activo esta semana",
         inactiveStatus: "Inactivo",
         notAvailable: "N/D",
-        teamManagementSection: "Gestión del equipo",
-        managementSectionLabel: "Gestión",
+        teamManagementSection: "GestiÃƒÂ³n del equipo",
+        managementSectionLabel: "GestiÃƒÂ³n",
         inviteMemberHeading: "Invitar miembro",
         usernamePlaceholder: "Usuario",
-        sendInvite: "Enviar invitación",
+        sendInvite: "Enviar invitaciÃƒÂ³n",
         pendingInvitesHeading: "Invitaciones pendientes",
         noPendingInvites: "Sin invitaciones pendientes.",
-        cancelInvite: "Cancelar invitación",
+        cancelInvite: "Cancelar invitaciÃƒÂ³n",
         invitedAs: "Invitado como",
         changeRoleLabel: "Cambiar rol",
         saveRole: "Guardar rol",
         permissionsLabel: "Permisos operativos",
         savePermissions: "Guardar permisos",
         removeMemberLabel: "Eliminar miembro",
-        confirmRemove: "¿Estás seguro? Esta acción es irreversible.",
-        confirmYes: "Sí, eliminar",
+        confirmRemove: "Ã‚Â¿EstÃƒÂ¡s seguro? Esta acciÃƒÂ³n es irreversible.",
+        confirmYes: "SÃƒÂ­, eliminar",
         cancelConfirm: "Cancelar",
-        youBadge: "Tú",
+        youBadge: "TÃƒÂº",
         creatorBadge: "Creador",
-        lastManagerNote: "Único Manager — no se puede degradar.",
+        lastManagerNote: "ÃƒÅ¡nico Manager Ã¢â‚¬â€ no se puede degradar.",
         roleManager: "Manager",
         roleMember: "Miembro",
         roleViewer: "Observador",
@@ -467,24 +467,24 @@ const labels: Record<AppLanguage, MembersLabels> = {
     fr: {
         never: "Jamais",
         accountMembers: "Membres du compte",
-        membersActivity: "Activité des membres",
+        membersActivity: "ActivitÃƒÂ© des membres",
         description:
-            "Surveille la présence, l'activité et la contribution opérationnelle des membres dans ce compte partagé.",
+            "Surveille la prÃƒÂ©sence, l'activitÃƒÂ© et la contribution opÃƒÂ©rationnelle des membres dans ce compte partagÃƒÂ©.",
         members: "Membres",
         onlineNow: "En ligne maintenant",
         activeToday: "Actifs aujourd'hui",
         totalTrades: "Trades totaux",
         lastTrade: "Dernier trade",
         noTrades: "Aucun trade",
-        latestTradeDescription: "Dernier trade enregistré dans ce compte.",
+        latestTradeDescription: "Dernier trade enregistrÃƒÂ© dans ce compte.",
         mostActive: "Le plus actif",
-        basedOnInsertedTrades: "Basé sur les trades saisis.",
-        livePresence: "Présence en direct",
-        activeLastFiveMinutes: "Actifs au cours des 5 dernières minutes.",
+        basedOnInsertedTrades: "BasÃƒÂ© sur les trades saisis.",
+        livePresence: "PrÃƒÂ©sence en direct",
+        activeLastFiveMinutes: "Actifs au cours des 5 derniÃƒÂ¨res minutes.",
         accountStatus: "Statut du compte",
         live: "Live",
         quiet: "Calme",
-        presenceSnapshot: "Snapshot de présence et d'activité.",
+        presenceSnapshot: "Snapshot de prÃƒÂ©sence et d'activitÃƒÂ©.",
         leaderboard: "Classement",
         mostActiveMembers: "Membres les plus actifs",
         topFive: "Top 5",
@@ -493,11 +493,11 @@ const labels: Record<AppLanguage, MembersLabels> = {
         activeNow: "Actif maintenant",
         noOnlineMembers: "Aucun membre en ligne maintenant.",
         memberOverview: "Vue d'ensemble des membres",
-        accountTeam: "Équipe du compte",
+        accountTeam: "Ãƒâ€°quipe du compte",
         activityProfile:
-            "Profil d'activité basé sur la présence, la dernière activité et la contribution trading dans ce compte.",
-        lastActivity: "Dernière activité",
-        lastLogin: "Dernière connexion",
+            "Profil d'activitÃƒÂ© basÃƒÂ© sur la prÃƒÂ©sence, la derniÃƒÂ¨re activitÃƒÂ© et la contribution trading dans ce compte.",
+        lastActivity: "DerniÃƒÂ¨re activitÃƒÂ©",
+        lastLogin: "DerniÃƒÂ¨re connexion",
         viewMemberTrades: "Voir les trades du membre",
         memberAnalytics: "Analytics du membre",
         openWorkspace: "Ouvrir le workspace",
@@ -507,7 +507,7 @@ const labels: Record<AppLanguage, MembersLabels> = {
         activeThisWeekStatus: "Actif cette semaine",
         inactiveStatus: "Inactif",
         notAvailable: "N/D",
-        teamManagementSection: "Gestion de l'équipe",
+        teamManagementSection: "Gestion de l'ÃƒÂ©quipe",
         managementSectionLabel: "Gestion",
         inviteMemberHeading: "Inviter un membre",
         usernamePlaceholder: "Nom d'utilisateur",
@@ -515,35 +515,35 @@ const labels: Record<AppLanguage, MembersLabels> = {
         pendingInvitesHeading: "Invitations en attente",
         noPendingInvites: "Aucune invitation en attente.",
         cancelInvite: "Annuler l'invitation",
-        invitedAs: "Invité comme",
-        changeRoleLabel: "Changer le rôle",
-        saveRole: "Enregistrer le rôle",
-        permissionsLabel: "Permissions opérationnelles",
+        invitedAs: "InvitÃƒÂ© comme",
+        changeRoleLabel: "Changer le rÃƒÂ´le",
+        saveRole: "Enregistrer le rÃƒÂ´le",
+        permissionsLabel: "Permissions opÃƒÂ©rationnelles",
         savePermissions: "Enregistrer les permissions",
         removeMemberLabel: "Supprimer le membre",
-        confirmRemove: "Êtes-vous sûr ? Cette action est irréversible.",
+        confirmRemove: "ÃƒÅ tes-vous sÃƒÂ»r ? Cette action est irrÃƒÂ©versible.",
         confirmYes: "Oui, supprimer",
         cancelConfirm: "Annuler",
         youBadge: "Vous",
-        creatorBadge: "Créateur",
-        lastManagerNote: "Seul Manager — impossible de rétrograder.",
+        creatorBadge: "CrÃƒÂ©ateur",
+        lastManagerNote: "Seul Manager Ã¢â‚¬â€ impossible de rÃƒÂ©trograder.",
         roleManager: "Manager",
         roleMember: "Membre",
         roleViewer: "Observateur",
-        perm_canCreateTrades: "Créer des trades",
+        perm_canCreateTrades: "CrÃƒÂ©er des trades",
         perm_canEditTrades: "Modifier des trades",
         perm_canDeleteTrades: "Supprimer des trades",
         perm_canViewAnalytics: "Analytics",
         perm_canViewReports: "Rapports",
         perm_canViewCopilot: "Copilot",
-        perm_canViewMembers: "Voir l'équipe",
+        perm_canViewMembers: "Voir l'ÃƒÂ©quipe",
     },
     de: {
         never: "Nie",
         accountMembers: "Kontomitglieder",
-        membersActivity: "Mitgliederaktivität",
+        membersActivity: "MitgliederaktivitÃƒÂ¤t",
         description:
-            "Überwache Präsenz, Aktivität und operativen Beitrag der Mitglieder in diesem gemeinsamen Konto.",
+            "ÃƒÅ“berwache PrÃƒÂ¤senz, AktivitÃƒÂ¤t und operativen Beitrag der Mitglieder in diesem gemeinsamen Konto.",
         members: "Mitglieder",
         onlineNow: "Jetzt online",
         activeToday: "Heute aktiv",
@@ -553,12 +553,12 @@ const labels: Record<AppLanguage, MembersLabels> = {
         latestTradeDescription: "Letzter Trade in diesem Konto.",
         mostActive: "Aktivstes Mitglied",
         basedOnInsertedTrades: "Basierend auf eingetragenen Trades.",
-        livePresence: "Live-Präsenz",
+        livePresence: "Live-PrÃƒÂ¤senz",
         activeLastFiveMinutes: "Aktiv in den letzten 5 Minuten.",
         accountStatus: "Kontostatus",
         live: "Live",
         quiet: "Ruhig",
-        presenceSnapshot: "Snapshot von Präsenz und Aktivität.",
+        presenceSnapshot: "Snapshot von PrÃƒÂ¤senz und AktivitÃƒÂ¤t.",
         leaderboard: "Leaderboard",
         mostActiveMembers: "Aktivste Mitglieder",
         topFive: "Top 5",
@@ -566,16 +566,16 @@ const labels: Record<AppLanguage, MembersLabels> = {
         onlineMembers: "Online-Mitglieder",
         activeNow: "Jetzt aktiv",
         noOnlineMembers: "Derzeit keine Mitglieder online.",
-        memberOverview: "Mitgliederübersicht",
+        memberOverview: "MitgliederÃƒÂ¼bersicht",
         accountTeam: "Kontoteam",
         activityProfile:
-            "Aktivitätsprofil basierend auf Login-Präsenz, letzter Aktivität und Trade-Beitrag in diesem Konto.",
-        lastActivity: "Letzte Aktivität",
+            "AktivitÃƒÂ¤tsprofil basierend auf Login-PrÃƒÂ¤senz, letzter AktivitÃƒÂ¤t und Trade-Beitrag in diesem Konto.",
+        lastActivity: "Letzte AktivitÃƒÂ¤t",
         lastLogin: "Letzter Login",
         viewMemberTrades: "Trades des Mitglieds ansehen",
         memberAnalytics: "Mitglieder-Analytics",
-        openWorkspace: "Workspace öffnen",
-        backToAccount: "Zurück zum Konto",
+        openWorkspace: "Workspace ÃƒÂ¶ffnen",
+        backToAccount: "ZurÃƒÂ¼ck zum Konto",
         onlineStatus: "Jetzt online",
         activeTodayStatus: "Heute aktiv",
         activeThisWeekStatus: "Diese Woche aktiv",
@@ -590,23 +590,23 @@ const labels: Record<AppLanguage, MembersLabels> = {
         noPendingInvites: "Keine ausstehenden Einladungen.",
         cancelInvite: "Einladung stornieren",
         invitedAs: "Eingeladen als",
-        changeRoleLabel: "Rolle ändern",
+        changeRoleLabel: "Rolle ÃƒÂ¤ndern",
         saveRole: "Rolle speichern",
         permissionsLabel: "Betriebsberechtigungen",
         savePermissions: "Berechtigungen speichern",
         removeMemberLabel: "Mitglied entfernen",
-        confirmRemove: "Bist du sicher? Diese Aktion kann nicht rückgängig gemacht werden.",
+        confirmRemove: "Bist du sicher? Diese Aktion kann nicht rÃƒÂ¼ckgÃƒÂ¤ngig gemacht werden.",
         confirmYes: "Ja, entfernen",
         cancelConfirm: "Abbrechen",
         youBadge: "Du",
         creatorBadge: "Ersteller",
-        lastManagerNote: "Einziger Manager — kann nicht heruntergestuft werden.",
+        lastManagerNote: "Einziger Manager Ã¢â‚¬â€ kann nicht heruntergestuft werden.",
         roleManager: "Manager",
         roleMember: "Mitglied",
         roleViewer: "Beobachter",
         perm_canCreateTrades: "Trades erstellen",
         perm_canEditTrades: "Trades bearbeiten",
-        perm_canDeleteTrades: "Trades löschen",
+        perm_canDeleteTrades: "Trades lÃƒÂ¶schen",
         perm_canViewAnalytics: "Analytics",
         perm_canViewReports: "Berichte",
         perm_canViewCopilot: "Copilot",
@@ -664,16 +664,16 @@ function getActivityStatus(
     if (minutes <= 5) {
         return {
             label: t.onlineStatus,
-            color: "bg-green-500/10 text-green-300 border-green-500/20",
-            dot: "bg-green-400",
+            color: "bg-accent/10 text-green-300 border-accent/20",
+            dot: "bg-accent",
         };
     }
 
     if (days < 1) {
         return {
             label: t.activeTodayStatus,
-            color: "bg-cyan-500/10 text-cyan-300 border-cyan-500/20",
-            dot: "bg-cyan-400",
+            color: "bg-accent-bright/10 text-accent-bright border-accent-bright/20",
+            dot: "bg-accent-bright",
         };
     }
 
@@ -703,11 +703,11 @@ function isOnline(lastActivityAt: Date | null) {
 
 function getRoleTone(role: string) {
     if (role === "MANAGER") {
-        return "border-green-500/20 bg-green-500/10 text-green-300";
+        return "border-accent/20 bg-accent/10 text-green-300";
     }
 
     if (role === "MEMBER") {
-        return "border-cyan-500/20 bg-cyan-500/10 text-cyan-300";
+        return "border-accent-bright/20 bg-accent-bright/10 text-accent-bright";
     }
 
     if (role === "VIEWER") {
@@ -889,11 +889,11 @@ export default async function MembersPage({
         <div className="space-y-8">
             {/* Hero */}
             <section className="relative overflow-hidden rounded-[36px] border border-white/10 bg-white/[0.03] p-8 md:p-10">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(34,197,94,0.08),transparent_30%)]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,color-mix(in_srgb,var(--color-accent-bright)_12%,transparent),transparent_35%),radial-gradient(circle_at_bottom_right,color-mix(in_srgb,var(--color-accent)_8%,transparent),transparent_30%)]" />
 
                 <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
                     <div>
-                        <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-cyan-300">
+                        <div className="inline-flex items-center gap-2 rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-accent-bright">
                             <Users size={14} />
                             {t.accountMembers}
                         </div>
@@ -915,16 +915,16 @@ export default async function MembersPage({
                             </p>
                         </div>
 
-                        <div className="rounded-3xl border border-green-500/20 bg-green-500/10 p-5">
+                        <div className="rounded-3xl border border-accent/20 bg-accent/10 p-5">
                             <p className="text-sm text-gray-400">{t.onlineNow}</p>
-                            <p className="mt-3 text-3xl font-black text-green-400">
+                            <p className="mt-3 text-3xl font-black text-accent">
                                 {onlineMembers.length}
                             </p>
                         </div>
 
-                        <div className="rounded-3xl border border-cyan-500/20 bg-cyan-500/10 p-5">
+                        <div className="rounded-3xl border border-accent-bright/20 bg-accent-bright/10 p-5">
                             <p className="text-sm text-gray-400">{t.activeToday}</p>
-                            <p className="mt-3 text-3xl font-black text-cyan-300">
+                            <p className="mt-3 text-3xl font-black text-accent-bright">
                                 {activeToday.length}
                             </p>
                         </div>
@@ -939,13 +939,13 @@ export default async function MembersPage({
                 </div>
             </section>
 
-            {/* Team Management — only for canManageMembers */}
+            {/* Team Management Ã¢â‚¬â€ only for canManageMembers */}
             {membership.canManageMembers && (
                 <section className="space-y-5">
                     <div>
                         <p className="text-sm text-gray-400">{t.managementSectionLabel}</p>
                         <h2 className="mt-1 flex items-center gap-3 text-3xl font-black text-white">
-                            <UserPlus size={28} className="text-cyan-400" />
+                            <UserPlus size={28} className="text-accent-bright" />
                             {t.teamManagementSection}
                         </h2>
                     </div>
@@ -999,7 +999,7 @@ export default async function MembersPage({
                                                         invite.invitedUser.username}
                                                 </p>
                                                 <p className="mt-1 text-xs text-gray-400">
-                                                    {t.invitedAs} · {invite.role}
+                                                    {t.invitedAs} Ã‚Â· {invite.role}
                                                 </p>
                                             </div>
                                             <CancelInviteButton
@@ -1040,7 +1040,7 @@ export default async function MembersPage({
 
                 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
                     <p className="text-sm text-gray-400">{t.livePresence}</p>
-                    <p className="mt-3 text-2xl font-black text-green-400">
+                    <p className="mt-3 text-2xl font-black text-accent">
                         {members.length > 0
                             ? `${Math.round((onlineMembers.length / members.length) * 100)}%`
                             : "0%"}
@@ -1052,7 +1052,7 @@ export default async function MembersPage({
 
                 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
                     <p className="text-sm text-gray-400">{t.accountStatus}</p>
-                    <p className="mt-3 text-2xl font-black text-cyan-300">
+                    <p className="mt-3 text-2xl font-black text-accent-bright">
                         {onlineMembers.length > 0 ? t.live : t.quiet}
                     </p>
                     <p className="mt-2 text-xs text-gray-500">
@@ -1072,7 +1072,7 @@ export default async function MembersPage({
                             </h2>
                         </div>
 
-                        <div className="rounded-full border border-green-500/20 bg-green-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.15em] text-green-300">
+                        <div className="rounded-full border border-accent/20 bg-accent/10 px-4 py-2 text-xs font-black uppercase tracking-[0.15em] text-green-300">
                             {t.topFive}
                         </div>
                     </div>
@@ -1084,7 +1084,7 @@ export default async function MembersPage({
                                 className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/20 p-4"
                             >
                                 <div className="flex items-center gap-4">
-                                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-green-500/10 text-lg font-black text-green-400">
+                                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-accent/10 text-lg font-black text-accent">
                                         #{index + 1}
                                     </div>
 
@@ -1118,7 +1118,7 @@ export default async function MembersPage({
                             </h2>
                         </div>
 
-                        <div className="rounded-full border border-green-500/20 bg-green-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.15em] text-green-300">
+                        <div className="rounded-full border border-accent/20 bg-accent/10 px-4 py-2 text-xs font-black uppercase tracking-[0.15em] text-green-300">
                             {onlineMembers.length} {t.onlineNow}
                         </div>
                     </div>
@@ -1128,7 +1128,7 @@ export default async function MembersPage({
                             onlineMembers.map((member) => (
                                 <div
                                     key={member.id}
-                                    className="flex items-center justify-between gap-4 rounded-2xl border border-green-500/20 bg-green-500/10 p-4"
+                                    className="flex items-center justify-between gap-4 rounded-2xl border border-accent/20 bg-accent/10 p-4"
                                 >
                                     <div>
                                         <p className="text-lg font-black text-white">
@@ -1139,7 +1139,7 @@ export default async function MembersPage({
                                         </p>
                                     </div>
 
-                                    <Radio className="text-green-400" />
+                                    <Radio className="text-accent" />
                                 </div>
                             ))
                         ) : (
@@ -1199,7 +1199,7 @@ export default async function MembersPage({
                                             </div>
 
                                             {isMe && (
-                                                <div className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-xs font-black uppercase tracking-[0.15em] text-cyan-300">
+                                                <div className="rounded-full border border-accent-bright/30 bg-accent-bright/10 px-3 py-1 text-xs font-black uppercase tracking-[0.15em] text-accent-bright">
                                                     {t.youBadge}
                                                 </div>
                                             )}
@@ -1216,7 +1216,7 @@ export default async function MembersPage({
                                         </p>
                                     </div>
 
-                                    <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/10 px-5 py-3 text-sm font-black uppercase tracking-[0.15em] text-cyan-300">
+                                    <div className="rounded-2xl border border-accent-bright/20 bg-accent-bright/10 px-5 py-3 text-sm font-black uppercase tracking-[0.15em] text-accent-bright">
                                         {member.totalTrades} {t.trades}
                                     </div>
                                 </div>
@@ -1224,7 +1224,7 @@ export default async function MembersPage({
                                 <div className="mt-7 grid gap-4 md:grid-cols-3">
                                     <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
                                         <div className="flex items-center gap-3">
-                                            <Clock3 size={18} className="text-cyan-400" />
+                                            <Clock3 size={18} className="text-accent-bright" />
                                             <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
                                                 {t.lastActivity}
                                             </p>
@@ -1240,7 +1240,7 @@ export default async function MembersPage({
 
                                     <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
                                         <div className="flex items-center gap-3">
-                                            <Clock3 size={18} className="text-cyan-400" />
+                                            <Clock3 size={18} className="text-accent-bright" />
                                             <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
                                                 {t.lastLogin}
                                             </p>
@@ -1252,14 +1252,14 @@ export default async function MembersPage({
 
                                     <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
                                         <div className="flex items-center gap-3">
-                                            <Activity size={18} className="text-cyan-400" />
+                                            <Activity size={18} className="text-accent-bright" />
                                             <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
                                                 {t.lastTrade}
                                             </p>
                                         </div>
                                         <p className="mt-4 text-lg font-black text-white">
                                             {member.lastTrade
-                                                ? `${member.lastTrade.symbol} · ${formatDate(
+                                                ? `${member.lastTrade.symbol} Ã‚Â· ${formatDate(
                                                     member.lastTrade.openDate,
                                                     language,
                                                     t
@@ -1272,7 +1272,7 @@ export default async function MembersPage({
                                 <div className="mt-6 flex flex-wrap gap-3">
                                     <Link
                                         href={`/accounts/${accountId}/diary?member=${member.userId}`}
-                                        className="rounded-2xl border border-cyan-500/20 bg-cyan-500/10 px-5 py-3 text-sm font-bold text-cyan-300 transition hover:bg-cyan-500/20"
+                                        className="rounded-2xl border border-accent-bright/20 bg-accent-bright/10 px-5 py-3 text-sm font-bold text-accent-bright transition hover:bg-accent-bright/20"
                                     >
                                         {t.viewMemberTrades}
                                     </Link>
@@ -1292,7 +1292,7 @@ export default async function MembersPage({
                                     </Link>
                                 </div>
 
-                                {/* Per-member management — hidden on own card */}
+                                {/* Per-member management Ã¢â‚¬â€ hidden on own card */}
                                 {canManageThisMember && (
                                     <MemberManagementActions
                                         key={`${member.userId}-${member.role}-${[

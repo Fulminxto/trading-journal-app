@@ -91,25 +91,25 @@ const stepVisuals: {
 }[] = [
     {
       icon: Lock,
-      accent: "text-cyan-300",
+      accent: "text-accent-bright",
       cards: [
         {
           icon: ShieldCheck,
-          tone: "text-cyan-300",
+          tone: "text-accent-bright",
         },
         {
           icon: Sparkles,
-          tone: "text-green-400",
+          tone: "text-accent",
         },
       ],
     },
     {
       icon: Target,
-      accent: "text-green-400",
+      accent: "text-accent",
       cards: [
         {
           icon: BarChart3,
-          tone: "text-cyan-300",
+          tone: "text-accent-bright",
         },
         {
           icon: ShieldCheck,
@@ -117,7 +117,7 @@ const stepVisuals: {
         },
         {
           icon: CheckCircle2,
-          tone: "text-green-400",
+          tone: "text-accent",
         },
       ],
     },
@@ -131,35 +131,35 @@ const stepVisuals: {
         },
         {
           icon: ShieldCheck,
-          tone: "text-green-400",
+          tone: "text-accent",
         },
         {
           icon: BookOpen,
-          tone: "text-cyan-300",
+          tone: "text-accent-bright",
         },
       ],
     },
     {
       icon: Layers3,
-      accent: "text-cyan-300",
+      accent: "text-accent-bright",
       cards: [
         {
           icon: Layers3,
-          tone: "text-cyan-300",
+          tone: "text-accent-bright",
         },
         {
           icon: BarChart3,
-          tone: "text-green-400",
+          tone: "text-accent",
         },
       ],
     },
     {
       icon: BookOpen,
-      accent: "text-green-400",
+      accent: "text-accent",
       cards: [
         {
           icon: BookOpen,
-          tone: "text-green-400",
+          tone: "text-accent",
         },
         {
           icon: CalendarDays,
@@ -181,7 +181,7 @@ const stepVisuals: {
         },
         {
           icon: FileText,
-          tone: "text-cyan-300",
+          tone: "text-accent-bright",
         },
         {
           icon: ListChecks,
@@ -191,29 +191,29 @@ const stepVisuals: {
     },
     {
       icon: Bot,
-      accent: "text-cyan-300",
+      accent: "text-accent-bright",
       cards: [
         {
           icon: Gauge,
-          tone: "text-green-400",
+          tone: "text-accent",
         },
         {
           icon: Bot,
-          tone: "text-cyan-300",
+          tone: "text-accent-bright",
         },
       ],
     },
     {
       icon: Users,
-      accent: "text-green-400",
+      accent: "text-accent",
       cards: [
         {
           icon: Users,
-          tone: "text-green-400",
+          tone: "text-accent",
         },
         {
           icon: Zap,
-          tone: "text-cyan-300",
+          tone: "text-accent-bright",
         },
         {
           icon: SettingsIcon,
@@ -223,11 +223,11 @@ const stepVisuals: {
     },
     {
       icon: Sparkles,
-      accent: "text-cyan-300",
+      accent: "text-accent-bright",
       cards: [
         {
           icon: BookOpen,
-          tone: "text-green-400",
+          tone: "text-accent",
         },
         {
           icon: BarChart3,
@@ -235,7 +235,7 @@ const stepVisuals: {
         },
         {
           icon: ShieldCheck,
-          tone: "text-cyan-300",
+          tone: "text-accent-bright",
         },
       ],
     },
@@ -1902,7 +1902,7 @@ function closeOnboarding() {
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 p-4 backdrop-blur-md">
       <div className="relative max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-[36px] border border-white/10 bg-[#071018] p-6 shadow-2xl sm:p-8">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.14),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(34,197,94,0.08),transparent_35%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_14%,transparent)_35%),radial-gradient(circle_at_bottom_left,color-mix(in_srgb,var(--color-accent)_8%,transparent)_35%)]" />
 
         <button
           onClick={closeOnboarding}
@@ -1915,7 +1915,7 @@ function closeOnboarding() {
         <div className="relative z-10">
           <div className="mb-8">
             <div className="mb-5 flex flex-wrap items-center gap-3">
-              <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-300">
+              <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
                 {copy.privateAccess}
               </span>
 
@@ -1933,7 +1933,7 @@ function closeOnboarding() {
 
             <div className="h-2 overflow-hidden rounded-full bg-white/10">
               <div
-                className="h-full rounded-full bg-cyan-300 transition-all duration-300"
+                className="h-full rounded-full bg-accent-bright transition-all duration-300"
                 style={{
                   width: `${progress}%`,
                 }}
@@ -1965,8 +1965,8 @@ function closeOnboarding() {
               </p>
 
               {step.spotlight && (
-                <div className="mt-7 rounded-3xl border border-cyan-500/20 bg-cyan-500/10 p-5">
-                  <p className="text-sm font-semibold leading-7 text-cyan-100">
+                <div className="mt-7 rounded-3xl border border-accent-bright/20 bg-accent-bright/10 p-5">
+                  <p className="text-sm font-semibold leading-7 text-white">
                     {step.spotlight}
                   </p>
                 </div>
@@ -1992,7 +1992,7 @@ function closeOnboarding() {
                         </div>
 
                         <CheckCircle2
-                          className="text-green-400"
+                          className="text-accent"
                           size={18}
                         />
                       </div>
@@ -2023,7 +2023,7 @@ function closeOnboarding() {
 
             <button
               onClick={goNext}
-              className="flex items-center justify-center gap-2 rounded-2xl bg-green-500 px-6 py-4 text-sm font-black text-black transition hover:bg-green-400"
+              className="flex items-center justify-center gap-2 rounded-2xl bg-accent px-6 py-4 text-sm font-black text-white transition hover:bg-accent-bright"
             >
               {currentStep ===
                 copy.steps.length - 1

@@ -436,20 +436,20 @@ export default function PushNotificationsPanel({
 
   if (status === "active") {
     return (
-      <div className="rounded-3xl border border-green-500/20 bg-green-500/[0.04] p-6">
+      <div className="rounded-3xl border border-accent/20 bg-accent/[0.04] p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
             <BellRing
               size={22}
-              className="mt-1 flex-shrink-0 text-green-400"
+              className="mt-1 flex-shrink-0 text-accent"
             />
 
             <div>
-              <p className="text-sm text-green-400">
+              <p className="text-sm text-accent">
                 {t.eyebrow}
               </p>
 
-              <h3 className="mt-1 text-lg font-bold text-green-300">
+              <h3 className="mt-1 text-lg font-bold text-accent-bright">
                 {t.activeTitle}
               </h3>
 
@@ -506,7 +506,7 @@ export default function PushNotificationsPanel({
         <button
           onClick={handleEnable}
           disabled={busy}
-          className="flex-shrink-0 rounded-xl bg-green-500 px-4 py-2 text-sm font-bold text-black transition hover:bg-green-400 disabled:opacity-50"
+          className="flex-shrink-0 rounded-xl bg-accent px-4 py-2 text-sm font-bold text-black transition hover:bg-accent-bright disabled:opacity-50"
         >
           {busy ? (
             <Loader2

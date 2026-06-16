@@ -249,7 +249,7 @@ export default async function ActivitiesPage() {
     return (
         <div>
             <div className="mb-10">
-                <p className="text-sm text-green-400">
+                <p className="text-sm text-accent">
                     {t.eyebrow}
                 </p>
 
@@ -282,7 +282,7 @@ export default async function ActivitiesPage() {
                                             </span>
 
                                             {activity.account && (
-                                                <span className="rounded-xl bg-green-500/10 px-3 py-1 text-xs font-bold text-green-400">
+                                                <span className="rounded-xl bg-accent/10 px-3 py-1 text-xs font-bold text-accent">
                                                     {activity.account.name}
                                                 </span>
                                             )}
@@ -327,7 +327,7 @@ export default async function ActivitiesPage() {
                                                                 )}
                                                             </span>
 
-                                                            <span className="rounded-lg bg-green-500/10 px-2 py-1 text-xs font-bold text-green-300">
+                                                            <span className="rounded-lg bg-accent/10 px-2 py-1 text-xs font-bold text-green-300">
                                                                 {formatValue(
                                                                     change.after,
                                                                     t

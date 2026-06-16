@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+﻿import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
@@ -98,7 +98,7 @@ export default async function AdminAccountsPage() {
               <span
                 className={`rounded-xl px-3 py-1 text-xs font-bold ${isArchived
                     ? "bg-yellow-500/10 text-yellow-300"
-                    : "bg-green-500/10 text-green-400"
+                    : "bg-accent/10 text-accent"
                   }`}
               >
                 {valueLabel(
@@ -110,7 +110,7 @@ export default async function AdminAccountsPage() {
             </div>
 
             <p className="mt-2 text-sm text-gray-400">
-              {account.type} · {t.createdBy}{" "}
+              {account.type} Â· {t.createdBy}{" "}
               <span className="text-gray-200">
                 {account.createdBy?.username || t.system}
               </span>
@@ -142,7 +142,7 @@ export default async function AdminAccountsPage() {
                   {t.profitTarget}
                 </p>
 
-                <h3 className="mt-2 font-bold text-green-400">
+                <h3 className="mt-2 font-bold text-accent">
                   {account.profitTarget
                     ? `${account.profitTarget}%`
                     : "-"}
@@ -176,7 +176,7 @@ export default async function AdminAccountsPage() {
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <div className="rounded-2xl bg-green-500/10 px-4 py-2 text-sm font-semibold text-green-400">
+            <div className="rounded-2xl bg-accent/10 px-4 py-2 text-sm font-semibold text-accent">
               {account.currency}
             </div>
 
@@ -186,7 +186,7 @@ export default async function AdminAccountsPage() {
 
             <div
               className={`rounded-2xl px-4 py-2 text-sm font-semibold ${totalPnl >= 0
-                  ? "bg-green-500/10 text-green-400"
+                  ? "bg-accent/10 text-accent"
                   : "bg-red-500/10 text-red-400"
                 }`}
             >
@@ -208,7 +208,7 @@ export default async function AdminAccountsPage() {
           <div className="flex flex-wrap gap-3">
             <a
               href={`/accounts/${account.id}`}
-              className="rounded-xl bg-green-500 px-4 py-3 text-sm font-bold text-black hover:bg-green-400"
+              className="rounded-xl bg-accent px-4 py-3 text-sm font-bold text-white hover:bg-accent-bright"
             >
               {t.openAccount}
             </a>
@@ -345,14 +345,14 @@ export default async function AdminAccountsPage() {
 
                     <button
                       type="submit"
-                      className="rounded-xl bg-green-500/10 px-3 py-2 text-sm font-semibold text-green-400 hover:bg-green-500/20"
+                      className="rounded-xl bg-accent/10 px-3 py-2 text-sm font-semibold text-accent hover:bg-accent/20"
                     >
                       {t.updateRole}
                     </button>
                   </form>
 
                   {isAccountManager ? (
-                    <div className="rounded-xl border border-green-500/20 bg-green-500/10 p-3 text-sm text-green-300">
+                    <div className="rounded-xl border border-green-500/20 bg-accent/10 p-3 text-sm text-green-300">
                       {t.fullAccountAccess}
                     </div>
                   ) : (
@@ -620,7 +620,7 @@ export default async function AdminAccountsPage() {
 
         <button
           type="submit"
-          className="rounded-2xl bg-green-500 p-4 font-bold text-black md:col-span-2 xl:col-span-4"
+          className="rounded-2xl bg-accent p-4 font-bold text-white md:col-span-2 xl:col-span-4"
         >
           {t.createAccount}
         </button>
@@ -639,7 +639,7 @@ export default async function AdminAccountsPage() {
               </h2>
             </div>
 
-            <span className="rounded-xl bg-green-500/10 px-3 py-2 text-sm font-bold text-green-400">
+            <span className="rounded-xl bg-accent/10 px-3 py-2 text-sm font-bold text-accent">
               {activeAccounts.length}
             </span>
           </div>

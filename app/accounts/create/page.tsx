@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+﻿import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -61,35 +61,35 @@ const labels: Record<AppLanguage, CreateAccountLabels> =
     },
     uk: {
       eyebrow: "Workspace",
-      title: "Створити торговий акаунт",
+      title: "Ð¡Ñ‚Ð²Ð¾Ñ€Ð¸Ñ‚Ð¸ Ñ‚Ð¾Ñ€Ð³Ð¾Ð²Ð¸Ð¹ Ð°ÐºÐ°ÑƒÐ½Ñ‚",
       description:
-        "Створіть новий особистий або спільний торговий акаунт у VOLTIS.",
-      accountNamePlaceholder: "Назва акаунту",
-      initialBalancePlaceholder: "Початковий баланс",
-      currencyPlaceholder: "Валюта",
-      brokerPlaceholder: "Брокер / Prop Firm",
-      phasePlaceholder: "Фаза",
+        "Ð¡Ñ‚Ð²Ð¾Ñ€Ñ–Ñ‚ÑŒ Ð½Ð¾Ð²Ð¸Ð¹ Ð¾ÑÐ¾Ð±Ð¸ÑÑ‚Ð¸Ð¹ Ð°Ð±Ð¾ ÑÐ¿Ñ–Ð»ÑŒÐ½Ð¸Ð¹ Ñ‚Ð¾Ñ€Ð³Ð¾Ð²Ð¸Ð¹ Ð°ÐºÐ°ÑƒÐ½Ñ‚ Ñƒ VOLTIS.",
+      accountNamePlaceholder: "ÐÐ°Ð·Ð²Ð° Ð°ÐºÐ°ÑƒÐ½Ñ‚Ñƒ",
+      initialBalancePlaceholder: "ÐŸÐ¾Ñ‡Ð°Ñ‚ÐºÐ¾Ð²Ð¸Ð¹ Ð±Ð°Ð»Ð°Ð½Ñ",
+      currencyPlaceholder: "Ð’Ð°Ð»ÑŽÑ‚Ð°",
+      brokerPlaceholder: "Ð‘Ñ€Ð¾ÐºÐµÑ€ / Prop Firm",
+      phasePlaceholder: "Ð¤Ð°Ð·Ð°",
       profitTargetPlaceholder: "Profit Target %",
       maxDrawdownPlaceholder: "Max Drawdown %",
       dailyDrawdownPlaceholder: "Daily Drawdown %",
-      cancelButton: "Скасувати",
-      createButton: "Створити акаунт",
+      cancelButton: "Ð¡ÐºÐ°ÑÑƒÐ²Ð°Ñ‚Ð¸",
+      createButton: "Ð¡Ñ‚Ð²Ð¾Ñ€Ð¸Ñ‚Ð¸ Ð°ÐºÐ°ÑƒÐ½Ñ‚",
     },
     ru: {
       eyebrow: "Workspace",
-      title: "Создать торговый аккаунт",
+      title: "Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ Ñ‚Ð¾Ñ€Ð³Ð¾Ð²Ñ‹Ð¹ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚",
       description:
-        "Создайте новый личный или совместный торговый аккаунт в VOLTIS.",
-      accountNamePlaceholder: "Название аккаунта",
-      initialBalancePlaceholder: "Начальный баланс",
-      currencyPlaceholder: "Валюта",
-      brokerPlaceholder: "Брокер / Prop Firm",
-      phasePlaceholder: "Фаза",
+        "Ð¡Ð¾Ð·Ð´Ð°Ð¹Ñ‚Ðµ Ð½Ð¾Ð²Ñ‹Ð¹ Ð»Ð¸Ñ‡Ð½Ñ‹Ð¹ Ð¸Ð»Ð¸ ÑÐ¾Ð²Ð¼ÐµÑÑ‚Ð½Ñ‹Ð¹ Ñ‚Ð¾Ñ€Ð³Ð¾Ð²Ñ‹Ð¹ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚ Ð² VOLTIS.",
+      accountNamePlaceholder: "ÐÐ°Ð·Ð²Ð°Ð½Ð¸Ðµ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°",
+      initialBalancePlaceholder: "ÐÐ°Ñ‡Ð°Ð»ÑŒÐ½Ñ‹Ð¹ Ð±Ð°Ð»Ð°Ð½Ñ",
+      currencyPlaceholder: "Ð’Ð°Ð»ÑŽÑ‚Ð°",
+      brokerPlaceholder: "Ð‘Ñ€Ð¾ÐºÐµÑ€ / Prop Firm",
+      phasePlaceholder: "Ð¤Ð°Ð·Ð°",
       profitTargetPlaceholder: "Profit Target %",
       maxDrawdownPlaceholder: "Max Drawdown %",
       dailyDrawdownPlaceholder: "Daily Drawdown %",
-      cancelButton: "Отмена",
-      createButton: "Создать аккаунт",
+      cancelButton: "ÐžÑ‚Ð¼ÐµÐ½Ð°",
+      createButton: "Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚",
     },
     es: {
       eyebrow: "Workspace",
@@ -109,9 +109,9 @@ const labels: Record<AppLanguage, CreateAccountLabels> =
     },
     fr: {
       eyebrow: "Workspace",
-      title: "Créer un compte de trading",
+      title: "CrÃ©er un compte de trading",
       description:
-        "Créez un nouveau compte de trading personnel ou partagé dans VOLTIS.",
+        "CrÃ©ez un nouveau compte de trading personnel ou partagÃ© dans VOLTIS.",
       accountNamePlaceholder: "Nom du compte",
       initialBalancePlaceholder: "Solde initial",
       currencyPlaceholder: "Devise",
@@ -121,16 +121,16 @@ const labels: Record<AppLanguage, CreateAccountLabels> =
       maxDrawdownPlaceholder: "Max Drawdown %",
       dailyDrawdownPlaceholder: "Daily Drawdown %",
       cancelButton: "Annuler",
-      createButton: "Créer le compte",
+      createButton: "CrÃ©er le compte",
     },
     de: {
       eyebrow: "Workspace",
       title: "Trading-Konto erstellen",
       description:
-        "Erstelle ein neues persönliches oder gemeinsames Trading-Konto in VOLTIS.",
+        "Erstelle ein neues persÃ¶nliches oder gemeinsames Trading-Konto in VOLTIS.",
       accountNamePlaceholder: "Kontoname",
       initialBalancePlaceholder: "Anfangssaldo",
-      currencyPlaceholder: "Währung",
+      currencyPlaceholder: "WÃ¤hrung",
       brokerPlaceholder: "Broker / Prop Firm",
       phasePlaceholder: "Phase",
       profitTargetPlaceholder: "Profit Target %",
@@ -293,7 +293,7 @@ export default async function CreateAccountPage() {
 
           <button
             type="submit"
-            className="flex-1 rounded-2xl bg-green-500 px-6 py-4 text-sm font-bold text-black hover:bg-green-400"
+            className="flex-1 rounded-2xl bg-accent px-6 py-4 text-sm font-bold text-white hover:bg-accent-bright"
           >
             {t.createButton}
           </button>

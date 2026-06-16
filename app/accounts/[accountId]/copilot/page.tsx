@@ -1,4 +1,4 @@
-﻿import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
@@ -306,7 +306,7 @@ const summaryText =
             <section className="rounded-[36px] border border-white/10 bg-white/[0.035] p-6 backdrop-blur-xl sm:p-8">
                 <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                     <div>
-                        <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+                        <p className="text-sm uppercase tracking-[0.2em] text-accent-bright">
                             {t.page.controlRoom}
                         </p>
 
@@ -319,7 +319,7 @@ const summaryText =
                         </p>
                     </div>
 
-                    <div className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-cyan-300">
+                    <div className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-accent-bright">
                         {membership.tradingAccount.name}
                     </div>
                 </div>
@@ -377,7 +377,7 @@ const summaryText =
             <section className="rounded-[36px] border border-white/10 bg-black/30 p-6 backdrop-blur-xl sm:p-8">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+                        <p className="text-sm uppercase tracking-[0.2em] text-accent-bright">
                             {t.page.reviewTimeline}
                         </p>
 
@@ -386,7 +386,7 @@ const summaryText =
                         </h2>
                     </div>
 
-                    <div className="w-fit rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-cyan-300">
+                    <div className="w-fit rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-accent-bright">
                         {translatedReviewNotes.length} {t.common.notes}
                     </div>
                 </div>
@@ -406,7 +406,7 @@ const summaryText =
                             >
                                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                                     <div>
-                                        <p className="text-sm uppercase tracking-[0.15em] text-cyan-400">
+                                        <p className="text-sm uppercase tracking-[0.15em] text-accent-bright">
                                             {note.title}
                                         </p>
 
@@ -553,10 +553,10 @@ const summaryText =
                 </div>
             </section>
 
-            <section className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/[0.05] p-6 backdrop-blur-xl sm:p-8">
+            <section className="rounded-[36px] border border-accent-bright/20 bg-accent-bright/[0.05] p-6 backdrop-blur-xl sm:p-8">
                 <div className="grid gap-6 xl:grid-cols-2">
                     <div>
-                        <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+                        <p className="text-sm uppercase tracking-[0.2em] text-accent-bright">
                             {t.page.aiSummary}
                         </p>
 

@@ -102,7 +102,7 @@ export default function PerformanceIntelligence({
 
         <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
           <p className="text-sm text-gray-400">{t.bestWinStreak}</p>
-          <h3 className="mt-2 text-2xl font-bold text-cyan-400">{bestWinStreak}</h3>
+          <h3 className="mt-2 text-2xl font-bold text-accent-bright">{bestWinStreak}</h3>
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-black/20 p-5">

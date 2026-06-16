@@ -93,10 +93,10 @@ export default function TradePerformanceClusters({
 
   return (
     <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.08),transparent_35%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_8%,transparent),transparent_35%)]" />
 
       <div className="relative z-10">
-        <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+        <p className="text-sm uppercase tracking-[0.2em] text-accent-bright">
           {t.eyebrow}
         </p>
 
@@ -111,14 +111,14 @@ export default function TradePerformanceClusters({
                 {t.strongTrades}
               </p>
 
-              <span className="font-bold text-green-400">
+              <span className="font-bold text-accent">
                 {strongTrades}
               </span>
             </div>
 
             <div className="h-3 overflow-hidden rounded-full bg-white/10">
               <div
-                className="h-full rounded-full bg-green-400"
+                className="h-full rounded-full bg-accent"
                 style={{
                   width: `${Math.min(
                     strongTrades * 10,
@@ -135,14 +135,14 @@ export default function TradePerformanceClusters({
                 {t.averageTrades}
               </p>
 
-              <span className="font-bold text-cyan-400">
+              <span className="font-bold text-accent-bright">
                 {averageTrades}
               </span>
             </div>
 
             <div className="h-3 overflow-hidden rounded-full bg-white/10">
               <div
-                className="h-full rounded-full bg-cyan-400"
+                className="h-full rounded-full bg-accent-bright"
                 style={{
                   width: `${Math.min(
                     averageTrades * 10,

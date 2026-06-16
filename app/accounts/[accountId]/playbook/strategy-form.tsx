@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useActionState, useEffect, useRef, useState, useTransition } from "react";
 import { createStrategy, updateStrategy, deleteStrategy } from "./actions";
@@ -85,12 +85,12 @@ export function CreateStrategyForm({
           maxLength={80}
           autoComplete="off"
           disabled={isPending}
-          className="flex-1 rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white placeholder-gray-500 outline-none focus:border-cyan-500/40 disabled:opacity-50"
+          className="flex-1 rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white placeholder-gray-500 outline-none focus:border-accent-bright/40 disabled:opacity-50"
         />
         <button
           type="submit"
           disabled={isPending}
-          className="shrink-0 rounded-2xl border border-cyan-500/20 bg-cyan-500/10 px-5 py-3 text-sm font-bold text-cyan-300 transition hover:bg-cyan-500/20 disabled:opacity-50"
+          className="shrink-0 rounded-2xl border border-accent-bright/20 bg-accent-bright/10 px-5 py-3 text-sm font-bold text-accent-bright transition hover:bg-accent-bright/20 disabled:opacity-50"
         >
           {t.createButton}
         </button>
@@ -101,7 +101,7 @@ export function CreateStrategyForm({
         maxLength={300}
         rows={2}
         disabled={isPending}
-        className="w-full resize-none rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white placeholder-gray-500 outline-none focus:border-cyan-500/40 disabled:opacity-50"
+        className="w-full resize-none rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white placeholder-gray-500 outline-none focus:border-accent-bright/40 disabled:opacity-50"
       />
       <div>
         <p className="mb-2 text-xs uppercase tracking-[0.15em] text-gray-500">
@@ -176,7 +176,7 @@ export function StrategyCardActions({
             required
             maxLength={80}
             disabled={isPendingEdit}
-            className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none focus:border-cyan-500/40 disabled:opacity-50"
+            className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none focus:border-accent-bright/40 disabled:opacity-50"
           />
           <textarea
             name="description"
@@ -184,7 +184,7 @@ export function StrategyCardActions({
             maxLength={300}
             rows={2}
             disabled={isPendingEdit}
-            className="w-full resize-none rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white placeholder-gray-500 outline-none focus:border-cyan-500/40 disabled:opacity-50"
+            className="w-full resize-none rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white placeholder-gray-500 outline-none focus:border-accent-bright/40 disabled:opacity-50"
           />
           <ColorPicker value={color} onChange={setColor} />
           <div className="flex flex-wrap gap-3">

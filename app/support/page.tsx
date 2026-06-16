@@ -1,4 +1,4 @@
-import {
+﻿import {
     LifeBuoy,
     Bug,
     MessageSquareWarning,
@@ -71,7 +71,7 @@ const supportLabels: Record<
             "Segnala problemi tecnici o comportamenti anomali dell'applicazione.",
         requestFeatureTitle: "Richiedi funzione",
         requestFeatureDescription:
-            "Suggerisci nuove funzionalità o miglioramenti per VOLTIS.",
+            "Suggerisci nuove funzionalitÃ  o miglioramenti per VOLTIS.",
         contactSupportTitle: "Contatta supporto",
         contactSupportDescription:
             "Contatta direttamente il supporto operativo.",
@@ -149,91 +149,91 @@ const supportLabels: Record<
     },
 
     uk: {
-        eyebrow: "Підтримка & Help Center",
-        title: "Центр підтримки",
+        eyebrow: "ÐŸÑ–Ð´Ñ‚Ñ€Ð¸Ð¼ÐºÐ° & Help Center",
+        title: "Ð¦ÐµÐ½Ñ‚Ñ€ Ð¿Ñ–Ð´Ñ‚Ñ€Ð¸Ð¼ÐºÐ¸",
         description:
-            "Зверніться до підтримки VOLTIS щодо проблем, запитів або операційного фідбеку.",
+            "Ð—Ð²ÐµÑ€Ð½Ñ–Ñ‚ÑŒÑÑ Ð´Ð¾ Ð¿Ñ–Ð´Ñ‚Ñ€Ð¸Ð¼ÐºÐ¸ VOLTIS Ñ‰Ð¾Ð´Ð¾ Ð¿Ñ€Ð¾Ð±Ð»ÐµÐ¼, Ð·Ð°Ð¿Ð¸Ñ‚Ñ–Ð² Ð°Ð±Ð¾ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð¾Ð³Ð¾ Ñ„Ñ–Ð´Ð±ÐµÐºÑƒ.",
 
-        reportBugTitle: "Повідомити про помилку",
+        reportBugTitle: "ÐŸÐ¾Ð²Ñ–Ð´Ð¾Ð¼Ð¸Ñ‚Ð¸ Ð¿Ñ€Ð¾ Ð¿Ð¾Ð¼Ð¸Ð»ÐºÑƒ",
         reportBugDescription:
-            "Повідомте про технічні проблеми або нетипову поведінку застосунку.",
-        requestFeatureTitle: "Запропонувати функцію",
+            "ÐŸÐ¾Ð²Ñ–Ð´Ð¾Ð¼Ñ‚Ðµ Ð¿Ñ€Ð¾ Ñ‚ÐµÑ…Ð½Ñ–Ñ‡Ð½Ñ– Ð¿Ñ€Ð¾Ð±Ð»ÐµÐ¼Ð¸ Ð°Ð±Ð¾ Ð½ÐµÑ‚Ð¸Ð¿Ð¾Ð²Ñƒ Ð¿Ð¾Ð²ÐµÐ´Ñ–Ð½ÐºÑƒ Ð·Ð°ÑÑ‚Ð¾ÑÑƒÐ½ÐºÑƒ.",
+        requestFeatureTitle: "Ð—Ð°Ð¿Ñ€Ð¾Ð¿Ð¾Ð½ÑƒÐ²Ð°Ñ‚Ð¸ Ñ„ÑƒÐ½ÐºÑ†Ñ–ÑŽ",
         requestFeatureDescription:
-            "Запропонуйте нові функції або покращення для VOLTIS.",
-        contactSupportTitle: "Зв’язатися з підтримкою",
+            "Ð—Ð°Ð¿Ñ€Ð¾Ð¿Ð¾Ð½ÑƒÐ¹Ñ‚Ðµ Ð½Ð¾Ð²Ñ– Ñ„ÑƒÐ½ÐºÑ†Ñ–Ñ— Ð°Ð±Ð¾ Ð¿Ð¾ÐºÑ€Ð°Ñ‰ÐµÐ½Ð½Ñ Ð´Ð»Ñ VOLTIS.",
+        contactSupportTitle: "Ð—Ð²â€™ÑÐ·Ð°Ñ‚Ð¸ÑÑ Ð· Ð¿Ñ–Ð´Ñ‚Ñ€Ð¸Ð¼ÐºÐ¾ÑŽ",
         contactSupportDescription:
-            "Зв’яжіться безпосередньо з операційною підтримкою.",
+            "Ð—Ð²â€™ÑÐ¶Ñ–Ñ‚ÑŒÑÑ Ð±ÐµÐ·Ð¿Ð¾ÑÐµÑ€ÐµÐ´Ð½ÑŒÐ¾ Ð· Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð¾ÑŽ Ð¿Ñ–Ð´Ñ‚Ñ€Ð¸Ð¼ÐºÐ¾ÑŽ.",
 
-        newTicketEyebrow: "Новий запит підтримки",
-        newTicketTitle: "Надіслати запит",
-        typeBug: "Повідомити про помилку",
-        typeFeature: "Запропонувати функцію",
-        typeSupport: "Зв’язатися з підтримкою",
-        subjectPlaceholder: "Тема",
+        newTicketEyebrow: "ÐÐ¾Ð²Ð¸Ð¹ Ð·Ð°Ð¿Ð¸Ñ‚ Ð¿Ñ–Ð´Ñ‚Ñ€Ð¸Ð¼ÐºÐ¸",
+        newTicketTitle: "ÐÐ°Ð´Ñ–ÑÐ»Ð°Ñ‚Ð¸ Ð·Ð°Ð¿Ð¸Ñ‚",
+        typeBug: "ÐŸÐ¾Ð²Ñ–Ð´Ð¾Ð¼Ð¸Ñ‚Ð¸ Ð¿Ñ€Ð¾ Ð¿Ð¾Ð¼Ð¸Ð»ÐºÑƒ",
+        typeFeature: "Ð—Ð°Ð¿Ñ€Ð¾Ð¿Ð¾Ð½ÑƒÐ²Ð°Ñ‚Ð¸ Ñ„ÑƒÐ½ÐºÑ†Ñ–ÑŽ",
+        typeSupport: "Ð—Ð²â€™ÑÐ·Ð°Ñ‚Ð¸ÑÑ Ð· Ð¿Ñ–Ð´Ñ‚Ñ€Ð¸Ð¼ÐºÐ¾ÑŽ",
+        subjectPlaceholder: "Ð¢ÐµÐ¼Ð°",
         messagePlaceholder:
-            "Опишіть проблему або запит...",
-        submitTicket: "Надіслати ticket",
+            "ÐžÐ¿Ð¸ÑˆÑ–Ñ‚ÑŒ Ð¿Ñ€Ð¾Ð±Ð»ÐµÐ¼Ñƒ Ð°Ð±Ð¾ Ð·Ð°Ð¿Ð¸Ñ‚...",
+        submitTicket: "ÐÐ°Ð´Ñ–ÑÐ»Ð°Ñ‚Ð¸ ticket",
 
-        ticketsEyebrow: "Запити підтримки",
-        ticketsTitle: "Історія запитів",
-        newTicketButton: "Новий ticket",
-        noTickets: "Запитів поки немає.",
-        adminResponse: "Відповідь адміністратора",
-        resolvedAt: "Вирішено",
+        ticketsEyebrow: "Ð—Ð°Ð¿Ð¸Ñ‚Ð¸ Ð¿Ñ–Ð´Ñ‚Ñ€Ð¸Ð¼ÐºÐ¸",
+        ticketsTitle: "Ð†ÑÑ‚Ð¾Ñ€Ñ–Ñ Ð·Ð°Ð¿Ð¸Ñ‚Ñ–Ð²",
+        newTicketButton: "ÐÐ¾Ð²Ð¸Ð¹ ticket",
+        noTickets: "Ð—Ð°Ð¿Ð¸Ñ‚Ñ–Ð² Ð¿Ð¾ÐºÐ¸ Ð½ÐµÐ¼Ð°Ñ”.",
+        adminResponse: "Ð’Ñ–Ð´Ð¿Ð¾Ð²Ñ–Ð´ÑŒ Ð°Ð´Ð¼Ñ–Ð½Ñ–ÑÑ‚Ñ€Ð°Ñ‚Ð¾Ñ€Ð°",
+        resolvedAt: "Ð’Ð¸Ñ€Ñ–ÑˆÐµÐ½Ð¾",
 
-        statusOpen: "Відкрито",
-        statusInProgress: "В роботі",
-        statusResolved: "Вирішено",
-        statusClosed: "Закрито",
-        priorityLow: "Низький",
-        priorityMedium: "Середній",
-        priorityHigh: "Високий",
-        priorityUrgent: "Терміновий",
-        unknown: "Н/Д",
+        statusOpen: "Ð’Ñ–Ð´ÐºÑ€Ð¸Ñ‚Ð¾",
+        statusInProgress: "Ð’ Ñ€Ð¾Ð±Ð¾Ñ‚Ñ–",
+        statusResolved: "Ð’Ð¸Ñ€Ñ–ÑˆÐµÐ½Ð¾",
+        statusClosed: "Ð—Ð°ÐºÑ€Ð¸Ñ‚Ð¾",
+        priorityLow: "ÐÐ¸Ð·ÑŒÐºÐ¸Ð¹",
+        priorityMedium: "Ð¡ÐµÑ€ÐµÐ´Ð½Ñ–Ð¹",
+        priorityHigh: "Ð’Ð¸ÑÐ¾ÐºÐ¸Ð¹",
+        priorityUrgent: "Ð¢ÐµÑ€Ð¼Ñ–Ð½Ð¾Ð²Ð¸Ð¹",
+        unknown: "Ð/Ð”",
     },
 
     ru: {
-        eyebrow: "Поддержка & Help Center",
-        title: "Центр поддержки",
+        eyebrow: "ÐŸÐ¾Ð´Ð´ÐµÑ€Ð¶ÐºÐ° & Help Center",
+        title: "Ð¦ÐµÐ½Ñ‚Ñ€ Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶ÐºÐ¸",
         description:
-            "Свяжитесь с поддержкой VOLTIS по вопросам, запросам или операционной обратной связи.",
+            "Ð¡Ð²ÑÐ¶Ð¸Ñ‚ÐµÑÑŒ Ñ Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶ÐºÐ¾Ð¹ VOLTIS Ð¿Ð¾ Ð²Ð¾Ð¿Ñ€Ð¾ÑÐ°Ð¼, Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°Ð¼ Ð¸Ð»Ð¸ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ð¾Ð¹ Ð¾Ð±Ñ€Ð°Ñ‚Ð½Ð¾Ð¹ ÑÐ²ÑÐ·Ð¸.",
 
-        reportBugTitle: "Сообщить об ошибке",
+        reportBugTitle: "Ð¡Ð¾Ð¾Ð±Ñ‰Ð¸Ñ‚ÑŒ Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐµ",
         reportBugDescription:
-            "Сообщите о технических проблемах или необычном поведении приложения.",
-        requestFeatureTitle: "Предложить функцию",
+            "Ð¡Ð¾Ð¾Ð±Ñ‰Ð¸Ñ‚Ðµ Ð¾ Ñ‚ÐµÑ…Ð½Ð¸Ñ‡ÐµÑÐºÐ¸Ñ… Ð¿Ñ€Ð¾Ð±Ð»ÐµÐ¼Ð°Ñ… Ð¸Ð»Ð¸ Ð½ÐµÐ¾Ð±Ñ‹Ñ‡Ð½Ð¾Ð¼ Ð¿Ð¾Ð²ÐµÐ´ÐµÐ½Ð¸Ð¸ Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ñ.",
+        requestFeatureTitle: "ÐŸÑ€ÐµÐ´Ð»Ð¾Ð¶Ð¸Ñ‚ÑŒ Ñ„ÑƒÐ½ÐºÑ†Ð¸ÑŽ",
         requestFeatureDescription:
-            "Предложите новые функции или улучшения для VOLTIS.",
-        contactSupportTitle: "Связаться с поддержкой",
+            "ÐŸÑ€ÐµÐ´Ð»Ð¾Ð¶Ð¸Ñ‚Ðµ Ð½Ð¾Ð²Ñ‹Ðµ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸ Ð¸Ð»Ð¸ ÑƒÐ»ÑƒÑ‡ÑˆÐµÐ½Ð¸Ñ Ð´Ð»Ñ VOLTIS.",
+        contactSupportTitle: "Ð¡Ð²ÑÐ·Ð°Ñ‚ÑŒÑÑ Ñ Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶ÐºÐ¾Ð¹",
         contactSupportDescription:
-            "Свяжитесь напрямую с операционной поддержкой.",
+            "Ð¡Ð²ÑÐ¶Ð¸Ñ‚ÐµÑÑŒ Ð½Ð°Ð¿Ñ€ÑÐ¼ÑƒÑŽ Ñ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ð¾Ð¹ Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶ÐºÐ¾Ð¹.",
 
-        newTicketEyebrow: "Новый запрос поддержки",
-        newTicketTitle: "Отправить запрос",
-        typeBug: "Сообщить об ошибке",
-        typeFeature: "Предложить функцию",
-        typeSupport: "Связаться с поддержкой",
-        subjectPlaceholder: "Тема",
+        newTicketEyebrow: "ÐÐ¾Ð²Ñ‹Ð¹ Ð·Ð°Ð¿Ñ€Ð¾Ñ Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶ÐºÐ¸",
+        newTicketTitle: "ÐžÑ‚Ð¿Ñ€Ð°Ð²Ð¸Ñ‚ÑŒ Ð·Ð°Ð¿Ñ€Ð¾Ñ",
+        typeBug: "Ð¡Ð¾Ð¾Ð±Ñ‰Ð¸Ñ‚ÑŒ Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐµ",
+        typeFeature: "ÐŸÑ€ÐµÐ´Ð»Ð¾Ð¶Ð¸Ñ‚ÑŒ Ñ„ÑƒÐ½ÐºÑ†Ð¸ÑŽ",
+        typeSupport: "Ð¡Ð²ÑÐ·Ð°Ñ‚ÑŒÑÑ Ñ Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶ÐºÐ¾Ð¹",
+        subjectPlaceholder: "Ð¢ÐµÐ¼Ð°",
         messagePlaceholder:
-            "Опишите проблему или запрос...",
-        submitTicket: "Отправить ticket",
+            "ÐžÐ¿Ð¸ÑˆÐ¸Ñ‚Ðµ Ð¿Ñ€Ð¾Ð±Ð»ÐµÐ¼Ñƒ Ð¸Ð»Ð¸ Ð·Ð°Ð¿Ñ€Ð¾Ñ...",
+        submitTicket: "ÐžÑ‚Ð¿Ñ€Ð°Ð²Ð¸Ñ‚ÑŒ ticket",
 
-        ticketsEyebrow: "Запросы поддержки",
-        ticketsTitle: "История запросов",
-        newTicketButton: "Новый ticket",
-        noTickets: "Запросов пока нет.",
-        adminResponse: "Ответ администратора",
-        resolvedAt: "Решено",
+        ticketsEyebrow: "Ð—Ð°Ð¿Ñ€Ð¾ÑÑ‹ Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶ÐºÐ¸",
+        ticketsTitle: "Ð˜ÑÑ‚Ð¾Ñ€Ð¸Ñ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ¾Ð²",
+        newTicketButton: "ÐÐ¾Ð²Ñ‹Ð¹ ticket",
+        noTickets: "Ð—Ð°Ð¿Ñ€Ð¾ÑÐ¾Ð² Ð¿Ð¾ÐºÐ° Ð½ÐµÑ‚.",
+        adminResponse: "ÐžÑ‚Ð²ÐµÑ‚ Ð°Ð´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ‚Ð¾Ñ€Ð°",
+        resolvedAt: "Ð ÐµÑˆÐµÐ½Ð¾",
 
-        statusOpen: "Открыт",
-        statusInProgress: "В работе",
-        statusResolved: "Решен",
-        statusClosed: "Закрыт",
-        priorityLow: "Низкий",
-        priorityMedium: "Средний",
-        priorityHigh: "Высокий",
-        priorityUrgent: "Срочный",
-        unknown: "Н/Д",
+        statusOpen: "ÐžÑ‚ÐºÑ€Ñ‹Ñ‚",
+        statusInProgress: "Ð’ Ñ€Ð°Ð±Ð¾Ñ‚Ðµ",
+        statusResolved: "Ð ÐµÑˆÐµÐ½",
+        statusClosed: "Ð—Ð°ÐºÑ€Ñ‹Ñ‚",
+        priorityLow: "ÐÐ¸Ð·ÐºÐ¸Ð¹",
+        priorityMedium: "Ð¡Ñ€ÐµÐ´Ð½Ð¸Ð¹",
+        priorityHigh: "Ð’Ñ‹ÑÐ¾ÐºÐ¸Ð¹",
+        priorityUrgent: "Ð¡Ñ€Ð¾Ñ‡Ð½Ñ‹Ð¹",
+        unknown: "Ð/Ð”",
     },
 
     es: {
@@ -244,8 +244,8 @@ const supportLabels: Record<
 
         reportBugTitle: "Reportar bug",
         reportBugDescription:
-            "Informa problemas técnicos o comportamientos anómalos de la aplicación.",
-        requestFeatureTitle: "Solicitar función",
+            "Informa problemas tÃ©cnicos o comportamientos anÃ³malos de la aplicaciÃ³n.",
+        requestFeatureTitle: "Solicitar funciÃ³n",
         requestFeatureDescription:
             "Sugiere nuevas funciones o mejoras para VOLTIS.",
         contactSupportTitle: "Contactar soporte",
@@ -255,7 +255,7 @@ const supportLabels: Record<
         newTicketEyebrow: "Nuevo ticket de soporte",
         newTicketTitle: "Enviar una solicitud",
         typeBug: "Reportar bug",
-        typeFeature: "Solicitar función",
+        typeFeature: "Solicitar funciÃ³n",
         typeSupport: "Contactar soporte",
         subjectPlaceholder: "Asunto",
         messagePlaceholder:
@@ -284,39 +284,39 @@ const supportLabels: Record<
         eyebrow: "Support & Help Center",
         title: "Centre de support",
         description:
-            "Contactez le support VOLTIS pour des problèmes, demandes ou retours opérationnels.",
+            "Contactez le support VOLTIS pour des problÃ¨mes, demandes ou retours opÃ©rationnels.",
 
         reportBugTitle: "Signaler un bug",
         reportBugDescription:
-            "Signalez des problèmes techniques ou des comportements anormaux de l’application.",
-        requestFeatureTitle: "Demander une fonctionnalité",
+            "Signalez des problÃ¨mes techniques ou des comportements anormaux de lâ€™application.",
+        requestFeatureTitle: "Demander une fonctionnalitÃ©",
         requestFeatureDescription:
-            "Suggérez de nouvelles fonctionnalités ou améliorations pour VOLTIS.",
+            "SuggÃ©rez de nouvelles fonctionnalitÃ©s ou amÃ©liorations pour VOLTIS.",
         contactSupportTitle: "Contacter le support",
         contactSupportDescription:
-            "Contactez directement le support opérationnel.",
+            "Contactez directement le support opÃ©rationnel.",
 
         newTicketEyebrow: "Nouveau ticket support",
         newTicketTitle: "Envoyer une demande",
         typeBug: "Signaler un bug",
-        typeFeature: "Demander une fonctionnalité",
+        typeFeature: "Demander une fonctionnalitÃ©",
         typeSupport: "Contacter le support",
         subjectPlaceholder: "Objet",
         messagePlaceholder:
-            "Décrivez le problème ou la demande...",
+            "DÃ©crivez le problÃ¨me ou la demande...",
         submitTicket: "Envoyer le ticket",
 
         ticketsEyebrow: "Tickets support",
         ticketsTitle: "Historique des tickets",
         newTicketButton: "Nouveau ticket",
-        noTickets: "Aucun ticket présent.",
-        adminResponse: "Réponse admin",
-        resolvedAt: "Résolu le",
+        noTickets: "Aucun ticket prÃ©sent.",
+        adminResponse: "RÃ©ponse admin",
+        resolvedAt: "RÃ©solu le",
 
         statusOpen: "Ouvert",
         statusInProgress: "En cours",
-        statusResolved: "Résolu",
-        statusClosed: "Fermé",
+        statusResolved: "RÃ©solu",
+        statusClosed: "FermÃ©",
         priorityLow: "Basse",
         priorityMedium: "Moyenne",
         priorityHigh: "Haute",
@@ -332,10 +332,10 @@ const supportLabels: Record<
 
         reportBugTitle: "Bug melden",
         reportBugDescription:
-            "Melde technische Probleme oder ungewöhnliches Verhalten der Anwendung.",
+            "Melde technische Probleme oder ungewÃ¶hnliches Verhalten der Anwendung.",
         requestFeatureTitle: "Funktion anfragen",
         requestFeatureDescription:
-            "Schlage neue Funktionen oder Verbesserungen für VOLTIS vor.",
+            "Schlage neue Funktionen oder Verbesserungen fÃ¼r VOLTIS vor.",
         contactSupportTitle: "Support kontaktieren",
         contactSupportDescription:
             "Kontaktiere direkt den operativen Support.",
@@ -355,11 +355,11 @@ const supportLabels: Record<
         newTicketButton: "Neues Ticket",
         noTickets: "Keine Tickets vorhanden.",
         adminResponse: "Admin-Antwort",
-        resolvedAt: "Gelöst am",
+        resolvedAt: "GelÃ¶st am",
 
         statusOpen: "Offen",
         statusInProgress: "In Bearbeitung",
-        statusResolved: "Gelöst",
+        statusResolved: "GelÃ¶st",
         statusClosed: "Geschlossen",
         priorityLow: "Niedrig",
         priorityMedium: "Mittel",
@@ -504,7 +504,7 @@ export default async function SupportPage({
                     </p>
 
                     <h1 className="mt-2 flex items-center gap-3 text-4xl font-black text-white">
-                        <LifeBuoy className="text-cyan-400" />
+                        <LifeBuoy className="text-accent-bright" />
                         {t.title}
                     </h1>
 
@@ -542,9 +542,9 @@ export default async function SupportPage({
                         </p>
                     </div>
 
-                    <div className="rounded-[32px] border border-cyan-500/20 bg-cyan-500/10 p-6">
+                    <div className="rounded-[32px] border border-accent-bright/20 bg-accent-bright/10 p-6">
                         <div className="flex items-center gap-3">
-                            <MessageSquareWarning className="text-cyan-300" />
+                            <MessageSquareWarning className="text-accent-bright" />
 
                             <h2 className="text-xl font-black text-white">
                                 {t.contactSupportTitle}
@@ -560,9 +560,9 @@ export default async function SupportPage({
                 <form
                     id="new-support-ticket"
                     action={createSupportTicket}
-                    className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/10 p-8"
+                    className="rounded-[36px] border border-accent-bright/20 bg-accent-bright/10 p-8"
                 >
-                    <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+                    <p className="text-sm uppercase tracking-[0.2em] text-accent-bright">
                         {t.newTicketEyebrow}
                     </p>
 
@@ -606,7 +606,7 @@ export default async function SupportPage({
 
                     <button
                         type="submit"
-                        className="mt-6 rounded-2xl bg-cyan-500 px-6 py-4 text-sm font-black uppercase tracking-[0.15em] text-black transition hover:bg-cyan-400"
+                        className="mt-6 rounded-2xl bg-accent px-6 py-4 text-sm font-black uppercase tracking-[0.15em] text-white transition hover:bg-accent-bright"
                     >
                         {t.submitTicket}
                     </button>
@@ -615,7 +615,7 @@ export default async function SupportPage({
                 <div className="rounded-[36px] border border-white/10 bg-white/[0.03] p-8">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+                            <p className="text-sm uppercase tracking-[0.2em] text-accent-bright">
                                 {t.ticketsEyebrow}
                             </p>
 
@@ -626,7 +626,7 @@ export default async function SupportPage({
 
                         <a
                             href="#new-support-ticket"
-                            className="rounded-2xl border border-cyan-500/20 bg-cyan-500/10 px-5 py-3 text-sm font-bold text-cyan-300 transition hover:bg-cyan-500/20"
+                            className="rounded-2xl border border-accent-bright/20 bg-accent-bright/10 px-5 py-3 text-sm font-bold text-accent-bright transition hover:bg-accent-bright/20"
                         >
                             {t.newTicketButton}
                         </a>
@@ -647,7 +647,7 @@ export default async function SupportPage({
                                 >
                                     <div className="flex items-start justify-between gap-4">
                                         <div>
-                                            <p className="text-xs uppercase tracking-[0.15em] text-cyan-400">
+                                            <p className="text-xs uppercase tracking-[0.15em] text-accent-bright">
                                                 {getTypeLabel(ticket.type, t)}
                                             </p>
 
@@ -665,15 +665,15 @@ export default async function SupportPage({
                                                 {getStatusLabel(ticket.status, t)}
                                             </div>
 
-                                            <div className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-cyan-300">
+                                            <div className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-accent-bright">
                                                 {getPriorityLabel(ticket.priority, t)}
                                             </div>
                                         </div>
                                     </div>
 
                                     {ticket.adminNote && (
-                                        <div className="mt-6 rounded-2xl border border-cyan-500/20 bg-cyan-500/10 p-5">
-                                            <p className="text-xs uppercase tracking-[0.15em] text-cyan-400">
+                                        <div className="mt-6 rounded-2xl border border-accent-bright/20 bg-accent-bright/10 p-5">
+                                            <p className="text-xs uppercase tracking-[0.15em] text-accent-bright">
                                                 {t.adminResponse}
                                             </p>
 

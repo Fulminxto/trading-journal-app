@@ -18,11 +18,11 @@ export default function DashboardSkeleton() {
           </div>
 
           <div className="grid grid-cols-2 gap-4 xl:min-w-[460px]">
-            <div className="rounded-3xl border border-green-500/10 bg-green-500/[0.06] p-5">
+            <div className="rounded-3xl border border-accent/10 bg-accent/[0.06] p-5">
               <div className="h-3 w-20 rounded bg-white/10" />
               <div className="mt-3 h-10 w-3/4 rounded-xl bg-white/10" />
             </div>
-            <div className="rounded-3xl border border-cyan-500/10 bg-cyan-500/[0.06] p-5">
+            <div className="rounded-3xl border border-accent-bright/10 bg-accent-bright/[0.06] p-5">
               <div className="h-3 w-20 rounded bg-white/10" />
               <div className="mt-3 h-10 w-3/4 rounded-xl bg-white/10" />
             </div>

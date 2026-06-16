@@ -286,7 +286,7 @@ export default function TwoFactorPanel({
   return (
     <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
       <div className="mb-6 flex items-center gap-3">
-        <KeyRound size={22} className="text-green-400" />
+        <KeyRound size={22} className="text-accent" />
 
         <div>
           <p className="text-sm text-gray-400">{t.eyebrow}</p>
@@ -308,14 +308,14 @@ export default function TwoFactorPanel({
                 placeholder={t.emailPlaceholder}
                 required
                 autoFocus
-                className="w-full rounded-xl border border-white/10 bg-zinc-900 p-3 text-sm outline-none transition placeholder:text-gray-600 focus:border-green-500/50"
+                className="w-full rounded-xl border border-white/10 bg-zinc-900 p-3 text-sm outline-none transition placeholder:text-gray-600 focus:border-accent/50"
               />
 
               <div className="flex gap-2">
                 <button
                   type="submit"
                   disabled={loadingEmail}
-                  className="rounded-xl bg-green-500 px-4 py-2 text-sm font-bold text-black transition hover:bg-green-400 disabled:opacity-50"
+                  className="rounded-xl bg-accent px-4 py-2 text-sm font-bold text-black transition hover:bg-accent-bright disabled:opacity-50"
                 >
                   {t.emailSaveBtn}
                 </button>
@@ -361,7 +361,7 @@ export default function TwoFactorPanel({
           <p className="text-sm text-gray-400">{t.twoFactorLabel}</p>
 
           <h3
-            className={`mt-2 text-lg font-bold ${twoFactorEnabled ? "text-green-400" : "text-white"}`}
+            className={`mt-2 text-lg font-bold ${twoFactorEnabled ? "text-accent" : "text-white"}`}
           >
             {twoFactorEnabled ? t.enabled : t.disabled}
           </h3>
@@ -386,7 +386,7 @@ export default function TwoFactorPanel({
               className={`mt-4 rounded-xl px-4 py-2 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-40 ${
                 twoFactorEnabled
                   ? "border border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20"
-                  : "bg-green-500 text-black hover:bg-green-400"
+                  : "bg-accent text-black hover:bg-accent-bright"
               }`}
             >
               {twoFactorEnabled ? t.disableBtn : t.enableBtn}
@@ -399,7 +399,7 @@ export default function TwoFactorPanel({
         <p
           className={`mt-4 rounded-2xl border p-3 text-sm ${
             message.type === "success"
-              ? "border-green-500/10 bg-green-500/10 text-green-400"
+              ? "border-accent/10 bg-accent/10 text-accent"
               : "border-red-500/10 bg-red-500/10 text-red-400"
           }`}
         >

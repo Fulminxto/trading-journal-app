@@ -1,4 +1,4 @@
-import { getSessionsCopy } from "./SessionI18n";
+﻿import { getSessionsCopy } from "./SessionI18n";
 
 type Props = {
   lowScoreSessions: number;
@@ -43,7 +43,7 @@ export default function ExecutionIntelligence({
               {t.insights.reviewRate}
             </p>
 
-            <h3 className="mt-3 text-4xl font-black text-cyan-400">
+            <h3 className="mt-3 text-4xl font-black text-accent-bright">
               {reviewRate}%
             </h3>
           </div>
@@ -53,7 +53,7 @@ export default function ExecutionIntelligence({
               {t.insights.highQuality}
             </p>
 
-            <h3 className="mt-3 text-4xl font-black text-green-400">
+            <h3 className="mt-3 text-4xl font-black text-accent">
               {highScoreSessions}
             </h3>
           </div>

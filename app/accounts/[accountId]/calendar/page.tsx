@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
   CalendarDays,
@@ -74,8 +74,8 @@ const calendarLabels: Record<
     currentMonth: "Mese corrente",
     monthlyPerformanceView: "Vista performance mensile",
     heroDescription:
-      "Una vista giorno per giorno della performance, dell’attività di trading e della consistenza mensile. Usala per individuare giornate forti, giornate deboli e periodi in cui la disciplina richiede più attenzione.",
-    backToAccountHub: "Torna all’Account Hub",
+      "Una vista giorno per giorno della performance, dellÃ¢â‚¬â„¢attivitÃƒÂ  di trading e della consistenza mensile. Usala per individuare giornate forti, giornate deboli e periodi in cui la disciplina richiede piÃƒÂ¹ attenzione.",
+    backToAccountHub: "Torna allÃ¢â‚¬â„¢Account Hub",
     previousMonth: "Mese precedente",
     nextMonth: "Mese successivo",
 
@@ -105,7 +105,7 @@ const calendarLabels: Record<
 
     monthlySummary: "Riepilogo mensile",
     whatThisMonthShows: "Cosa mostra questo mese",
-    activity: "Attività",
+    activity: "AttivitÃƒÂ ",
     activityDescription:
       "Giorni con almeno un trade registrato.",
     direction: "Direzione",
@@ -170,105 +170,105 @@ const calendarLabels: Record<
   },
 
   uk: {
-    tradingCalendar: "Торговий календар",
-    currentMonth: "Поточний місяць",
-    monthlyPerformanceView: "Місячний огляд результатів",
+    tradingCalendar: "ÃÂ¢ÃÂ¾Ã‘â‚¬ÃÂ³ÃÂ¾ÃÂ²ÃÂ¸ÃÂ¹ ÃÂºÃÂ°ÃÂ»ÃÂµÃÂ½ÃÂ´ÃÂ°Ã‘â‚¬",
+    currentMonth: "ÃÅ¸ÃÂ¾Ã‘â€šÃÂ¾Ã‘â€¡ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ¼Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€ Ã‘Å’",
+    monthlyPerformanceView: "ÃÅ“Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ¾ÃÂ³ÃÂ»Ã‘ÂÃÂ´ Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃ‘â€“ÃÂ²",
     heroDescription:
-      "Погляд день за днем на результативність, торгову активність і місячну стабільність. Використовуй це, щоб бачити сильні дні, слабкі дні та періоди, коли дисципліні потрібно більше уваги.",
-    backToAccountHub: "Назад до Account Hub",
-    previousMonth: "Попередній місяць",
-    nextMonth: "Наступний місяць",
+      "ÃÅ¸ÃÂ¾ÃÂ³ÃÂ»Ã‘ÂÃÂ´ ÃÂ´ÃÂµÃÂ½Ã‘Å’ ÃÂ·ÃÂ° ÃÂ´ÃÂ½ÃÂµÃÂ¼ ÃÂ½ÃÂ° Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“Ã‘ÂÃ‘â€šÃ‘Å’, Ã‘â€šÃÂ¾Ã‘â‚¬ÃÂ³ÃÂ¾ÃÂ²Ã‘Æ’ ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“Ã‘ÂÃ‘â€šÃ‘Å’ Ã‘â€“ ÃÂ¼Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ½Ã‘Æ’ Ã‘ÂÃ‘â€šÃÂ°ÃÂ±Ã‘â€“ÃÂ»Ã‘Å’ÃÂ½Ã‘â€“Ã‘ÂÃ‘â€šÃ‘Å’. Ãâ€™ÃÂ¸ÃÂºÃÂ¾Ã‘â‚¬ÃÂ¸Ã‘ÂÃ‘â€šÃÂ¾ÃÂ²Ã‘Æ’ÃÂ¹ Ã‘â€ ÃÂµ, Ã‘â€°ÃÂ¾ÃÂ± ÃÂ±ÃÂ°Ã‘â€¡ÃÂ¸Ã‘â€šÃÂ¸ Ã‘ÂÃÂ¸ÃÂ»Ã‘Å’ÃÂ½Ã‘â€“ ÃÂ´ÃÂ½Ã‘â€“, Ã‘ÂÃÂ»ÃÂ°ÃÂ±ÃÂºÃ‘â€“ ÃÂ´ÃÂ½Ã‘â€“ Ã‘â€šÃÂ° ÃÂ¿ÃÂµÃ‘â‚¬Ã‘â€“ÃÂ¾ÃÂ´ÃÂ¸, ÃÂºÃÂ¾ÃÂ»ÃÂ¸ ÃÂ´ÃÂ¸Ã‘ÂÃ‘â€ ÃÂ¸ÃÂ¿ÃÂ»Ã‘â€“ÃÂ½Ã‘â€“ ÃÂ¿ÃÂ¾Ã‘â€šÃ‘â‚¬Ã‘â€“ÃÂ±ÃÂ½ÃÂ¾ ÃÂ±Ã‘â€“ÃÂ»Ã‘Å’Ã‘Ë†ÃÂµ Ã‘Æ’ÃÂ²ÃÂ°ÃÂ³ÃÂ¸.",
+    backToAccountHub: "ÃÂÃÂ°ÃÂ·ÃÂ°ÃÂ´ ÃÂ´ÃÂ¾ Account Hub",
+    previousMonth: "ÃÅ¸ÃÂ¾ÃÂ¿ÃÂµÃ‘â‚¬ÃÂµÃÂ´ÃÂ½Ã‘â€“ÃÂ¹ ÃÂ¼Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€ Ã‘Å’",
+    nextMonth: "ÃÂÃÂ°Ã‘ÂÃ‘â€šÃ‘Æ’ÃÂ¿ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ¼Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€ Ã‘Å’",
 
-    monthlyPnl: "Місячний PnL",
-    activeDays: "активних днів",
-    trades: "угод",
-    averageDaily: "Середній день",
+    monthlyPnl: "ÃÅ“Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ¸ÃÂ¹ PnL",
+    activeDays: "ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¸Ã‘â€¦ ÃÂ´ÃÂ½Ã‘â€“ÃÂ²",
+    trades: "Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´",
+    averageDaily: "ÃÂ¡ÃÂµÃ‘â‚¬ÃÂµÃÂ´ÃÂ½Ã‘â€“ÃÂ¹ ÃÂ´ÃÂµÃÂ½Ã‘Å’",
     averageDailyDescription:
-      "Середній PnL лише за активні торгові дні.",
-    bestDay: "Найкращий день",
-    worstDay: "Найгірший день",
-    positiveDays: "Позитивні дні",
-    negativeDays: "Негативні дні",
-    flatDays: "Нейтральні дні",
+      "ÃÂ¡ÃÂµÃ‘â‚¬ÃÂµÃÂ´ÃÂ½Ã‘â€“ÃÂ¹ PnL ÃÂ»ÃÂ¸Ã‘Ë†ÃÂµ ÃÂ·ÃÂ° ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“ Ã‘â€šÃÂ¾Ã‘â‚¬ÃÂ³ÃÂ¾ÃÂ²Ã‘â€“ ÃÂ´ÃÂ½Ã‘â€“.",
+    bestDay: "ÃÂÃÂ°ÃÂ¹ÃÂºÃ‘â‚¬ÃÂ°Ã‘â€°ÃÂ¸ÃÂ¹ ÃÂ´ÃÂµÃÂ½Ã‘Å’",
+    worstDay: "ÃÂÃÂ°ÃÂ¹ÃÂ³Ã‘â€“Ã‘â‚¬Ã‘Ë†ÃÂ¸ÃÂ¹ ÃÂ´ÃÂµÃÂ½Ã‘Å’",
+    positiveDays: "ÃÅ¸ÃÂ¾ÃÂ·ÃÂ¸Ã‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“ ÃÂ´ÃÂ½Ã‘â€“",
+    negativeDays: "ÃÂÃÂµÃÂ³ÃÂ°Ã‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“ ÃÂ´ÃÂ½Ã‘â€“",
+    flatDays: "ÃÂÃÂµÃÂ¹Ã‘â€šÃ‘â‚¬ÃÂ°ÃÂ»Ã‘Å’ÃÂ½Ã‘â€“ ÃÂ´ÃÂ½Ã‘â€“",
     avgTradesPerActiveDay:
-      "Середня кількість угод / активний день",
+      "ÃÂ¡ÃÂµÃ‘â‚¬ÃÂµÃÂ´ÃÂ½Ã‘Â ÃÂºÃ‘â€“ÃÂ»Ã‘Å’ÃÂºÃ‘â€“Ã‘ÂÃ‘â€šÃ‘Å’ Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ / ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ´ÃÂµÃÂ½Ã‘Å’",
 
-    calendarMatrix: "Матриця календаря",
+    calendarMatrix: "ÃÅ“ÃÂ°Ã‘â€šÃ‘â‚¬ÃÂ¸Ã‘â€ Ã‘Â ÃÂºÃÂ°ÃÂ»ÃÂµÃÂ½ÃÂ´ÃÂ°Ã‘â‚¬Ã‘Â",
     monthPerformance: (monthName) =>
-      `Результати за ${monthName}`,
-    profit: "Прибуток",
-    loss: "Збиток",
-    noResult: "Без результату",
+      `ÃÂ ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃÂ¸ ÃÂ·ÃÂ° ${monthName}`,
+    profit: "ÃÅ¸Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘Æ’Ã‘â€šÃÂ¾ÃÂº",
+    loss: "Ãâ€”ÃÂ±ÃÂ¸Ã‘â€šÃÂ¾ÃÂº",
+    noResult: "Ãâ€˜ÃÂµÃÂ· Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃ‘Æ’",
 
     winsShort: "W",
     lossesShort: "L",
     beShort: "BE",
 
-    monthlySummary: "Місячний підсумок",
-    whatThisMonthShows: "Що показує цей місяць",
-    activity: "Активність",
+    monthlySummary: "ÃÅ“Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ¿Ã‘â€“ÃÂ´Ã‘ÂÃ‘Æ’ÃÂ¼ÃÂ¾ÃÂº",
+    whatThisMonthShows: "ÃÂ©ÃÂ¾ ÃÂ¿ÃÂ¾ÃÂºÃÂ°ÃÂ·Ã‘Æ’Ã‘â€ Ã‘â€ ÃÂµÃÂ¹ ÃÂ¼Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€ Ã‘Å’",
+    activity: "ÃÂÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“Ã‘ÂÃ‘â€šÃ‘Å’",
     activityDescription:
-      "Дні з принаймні однією записаною угодою.",
-    direction: "Напрям",
-    positive: "Позитивний",
-    negative: "Негативний",
-    flat: "Нейтральний",
+      "Ãâ€ÃÂ½Ã‘â€“ ÃÂ· ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ½ÃÂ°ÃÂ¹ÃÂ¼ÃÂ½Ã‘â€“ ÃÂ¾ÃÂ´ÃÂ½Ã‘â€“Ã‘â€Ã‘Å½ ÃÂ·ÃÂ°ÃÂ¿ÃÂ¸Ã‘ÂÃÂ°ÃÂ½ÃÂ¾Ã‘Å½ Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ÃÂ¾Ã‘Å½.",
+    direction: "ÃÂÃÂ°ÃÂ¿Ã‘â‚¬Ã‘ÂÃÂ¼",
+    positive: "ÃÅ¸ÃÂ¾ÃÂ·ÃÂ¸Ã‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¸ÃÂ¹",
+    negative: "ÃÂÃÂµÃÂ³ÃÂ°Ã‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¸ÃÂ¹",
+    flat: "ÃÂÃÂµÃÂ¹Ã‘â€šÃ‘â‚¬ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¸ÃÂ¹",
     directionDescription:
-      "На основі загального місячного PnL.",
-    totalTrades: "Усього угод",
+      "ÃÂÃÂ° ÃÂ¾Ã‘ÂÃÂ½ÃÂ¾ÃÂ²Ã‘â€“ ÃÂ·ÃÂ°ÃÂ³ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¾ÃÂ³ÃÂ¾ ÃÂ¼Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ¾ÃÂ³ÃÂ¾ PnL.",
+    totalTrades: "ÃÂ£Ã‘ÂÃ‘Å’ÃÂ¾ÃÂ³ÃÂ¾ Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´",
     totalTradesDescription:
-      "Загальна кількість операцій, відкритих протягом цього місяця.",
+      "Ãâ€”ÃÂ°ÃÂ³ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ° ÃÂºÃ‘â€“ÃÂ»Ã‘Å’ÃÂºÃ‘â€“Ã‘ÂÃ‘â€šÃ‘Å’ ÃÂ¾ÃÂ¿ÃÂµÃ‘â‚¬ÃÂ°Ã‘â€ Ã‘â€“ÃÂ¹, ÃÂ²Ã‘â€“ÃÂ´ÃÂºÃ‘â‚¬ÃÂ¸Ã‘â€šÃÂ¸Ã‘â€¦ ÃÂ¿Ã‘â‚¬ÃÂ¾Ã‘â€šÃ‘ÂÃÂ³ÃÂ¾ÃÂ¼ Ã‘â€ Ã‘Å’ÃÂ¾ÃÂ³ÃÂ¾ ÃÂ¼Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€ Ã‘Â.",
   },
 
   ru: {
-    tradingCalendar: "Торговый календар",
-    currentMonth: "Текущий месяц",
-    monthlyPerformanceView: "Месячный обзор результатов",
+    tradingCalendar: "ÃÂ¢ÃÂ¾Ã‘â‚¬ÃÂ³ÃÂ¾ÃÂ²Ã‘â€¹ÃÂ¹ ÃÂºÃÂ°ÃÂ»ÃÂµÃÂ½ÃÂ´ÃÂ°Ã‘â‚¬",
+    currentMonth: "ÃÂ¢ÃÂµÃÂºÃ‘Æ’Ã‘â€°ÃÂ¸ÃÂ¹ ÃÂ¼ÃÂµÃ‘ÂÃ‘ÂÃ‘â€ ",
+    monthlyPerformanceView: "ÃÅ“ÃÂµÃ‘ÂÃ‘ÂÃ‘â€¡ÃÂ½Ã‘â€¹ÃÂ¹ ÃÂ¾ÃÂ±ÃÂ·ÃÂ¾Ã‘â‚¬ Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃÂ¾ÃÂ²",
     heroDescription:
-      "Помесячный и подневный взгляд на результативность, торговую активность и стабильность. Используй его, чтобы видеть сильные дни, слабые дни и периоды, где дисциплине нужно больше внимания.",
-    backToAccountHub: "Назад в Account Hub",
-    previousMonth: "Предыдущий месяц",
-    nextMonth: "Следующий месяц",
+      "ÃÅ¸ÃÂ¾ÃÂ¼ÃÂµÃ‘ÂÃ‘ÂÃ‘â€¡ÃÂ½Ã‘â€¹ÃÂ¹ ÃÂ¸ ÃÂ¿ÃÂ¾ÃÂ´ÃÂ½ÃÂµÃÂ²ÃÂ½Ã‘â€¹ÃÂ¹ ÃÂ²ÃÂ·ÃÂ³ÃÂ»Ã‘ÂÃÂ´ ÃÂ½ÃÂ° Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘Å’, Ã‘â€šÃÂ¾Ã‘â‚¬ÃÂ³ÃÂ¾ÃÂ²Ã‘Æ’Ã‘Å½ ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘Å’ ÃÂ¸ Ã‘ÂÃ‘â€šÃÂ°ÃÂ±ÃÂ¸ÃÂ»Ã‘Å’ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘Å’. ÃËœÃ‘ÂÃÂ¿ÃÂ¾ÃÂ»Ã‘Å’ÃÂ·Ã‘Æ’ÃÂ¹ ÃÂµÃÂ³ÃÂ¾, Ã‘â€¡Ã‘â€šÃÂ¾ÃÂ±Ã‘â€¹ ÃÂ²ÃÂ¸ÃÂ´ÃÂµÃ‘â€šÃ‘Å’ Ã‘ÂÃÂ¸ÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂµ ÃÂ´ÃÂ½ÃÂ¸, Ã‘ÂÃÂ»ÃÂ°ÃÂ±Ã‘â€¹ÃÂµ ÃÂ´ÃÂ½ÃÂ¸ ÃÂ¸ ÃÂ¿ÃÂµÃ‘â‚¬ÃÂ¸ÃÂ¾ÃÂ´Ã‘â€¹, ÃÂ³ÃÂ´ÃÂµ ÃÂ´ÃÂ¸Ã‘ÂÃ‘â€ ÃÂ¸ÃÂ¿ÃÂ»ÃÂ¸ÃÂ½ÃÂµ ÃÂ½Ã‘Æ’ÃÂ¶ÃÂ½ÃÂ¾ ÃÂ±ÃÂ¾ÃÂ»Ã‘Å’Ã‘Ë†ÃÂµ ÃÂ²ÃÂ½ÃÂ¸ÃÂ¼ÃÂ°ÃÂ½ÃÂ¸Ã‘Â.",
+    backToAccountHub: "ÃÂÃÂ°ÃÂ·ÃÂ°ÃÂ´ ÃÂ² Account Hub",
+    previousMonth: "ÃÅ¸Ã‘â‚¬ÃÂµÃÂ´Ã‘â€¹ÃÂ´Ã‘Æ’Ã‘â€°ÃÂ¸ÃÂ¹ ÃÂ¼ÃÂµÃ‘ÂÃ‘ÂÃ‘â€ ",
+    nextMonth: "ÃÂ¡ÃÂ»ÃÂµÃÂ´Ã‘Æ’Ã‘Å½Ã‘â€°ÃÂ¸ÃÂ¹ ÃÂ¼ÃÂµÃ‘ÂÃ‘ÂÃ‘â€ ",
 
-    monthlyPnl: "Месячный PnL",
-    activeDays: "активных дней",
-    trades: "сделок",
-    averageDaily: "Средний день",
+    monthlyPnl: "ÃÅ“ÃÂµÃ‘ÂÃ‘ÂÃ‘â€¡ÃÂ½Ã‘â€¹ÃÂ¹ PnL",
+    activeDays: "ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€¹Ã‘â€¦ ÃÂ´ÃÂ½ÃÂµÃÂ¹",
+    trades: "Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂ¾ÃÂº",
+    averageDaily: "ÃÂ¡Ã‘â‚¬ÃÂµÃÂ´ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ´ÃÂµÃÂ½Ã‘Å’",
     averageDailyDescription:
-      "Средний PnL только по активным торговым дням.",
-    bestDay: "Лучший день",
-    worstDay: "Худший день",
-    positiveDays: "Положительные дни",
-    negativeDays: "Отрицательные дни",
-    flatDays: "Нейтральные дни",
+      "ÃÂ¡Ã‘â‚¬ÃÂµÃÂ´ÃÂ½ÃÂ¸ÃÂ¹ PnL Ã‘â€šÃÂ¾ÃÂ»Ã‘Å’ÃÂºÃÂ¾ ÃÂ¿ÃÂ¾ ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€¹ÃÂ¼ Ã‘â€šÃÂ¾Ã‘â‚¬ÃÂ³ÃÂ¾ÃÂ²Ã‘â€¹ÃÂ¼ ÃÂ´ÃÂ½Ã‘ÂÃÂ¼.",
+    bestDay: "Ãâ€ºÃ‘Æ’Ã‘â€¡Ã‘Ë†ÃÂ¸ÃÂ¹ ÃÂ´ÃÂµÃÂ½Ã‘Å’",
+    worstDay: "ÃÂ¥Ã‘Æ’ÃÂ´Ã‘Ë†ÃÂ¸ÃÂ¹ ÃÂ´ÃÂµÃÂ½Ã‘Å’",
+    positiveDays: "ÃÅ¸ÃÂ¾ÃÂ»ÃÂ¾ÃÂ¶ÃÂ¸Ã‘â€šÃÂµÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂµ ÃÂ´ÃÂ½ÃÂ¸",
+    negativeDays: "ÃÅ¾Ã‘â€šÃ‘â‚¬ÃÂ¸Ã‘â€ ÃÂ°Ã‘â€šÃÂµÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂµ ÃÂ´ÃÂ½ÃÂ¸",
+    flatDays: "ÃÂÃÂµÃÂ¹Ã‘â€šÃ‘â‚¬ÃÂ°ÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂµ ÃÂ´ÃÂ½ÃÂ¸",
     avgTradesPerActiveDay:
-      "Среднее число сделок / активный день",
+      "ÃÂ¡Ã‘â‚¬ÃÂµÃÂ´ÃÂ½ÃÂµÃÂµ Ã‘â€¡ÃÂ¸Ã‘ÂÃÂ»ÃÂ¾ Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂ¾ÃÂº / ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€¹ÃÂ¹ ÃÂ´ÃÂµÃÂ½Ã‘Å’",
 
-    calendarMatrix: "Матрица календаря",
+    calendarMatrix: "ÃÅ“ÃÂ°Ã‘â€šÃ‘â‚¬ÃÂ¸Ã‘â€ ÃÂ° ÃÂºÃÂ°ÃÂ»ÃÂµÃÂ½ÃÂ´ÃÂ°Ã‘â‚¬Ã‘Â",
     monthPerformance: (monthName) =>
-      `Результаты за ${monthName}`,
-    profit: "Прибыль",
-    loss: "Убыток",
-    noResult: "Без результата",
+      `ÃÂ ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃ‘â€¹ ÃÂ·ÃÂ° ${monthName}`,
+    profit: "ÃÅ¸Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘â€¹ÃÂ»Ã‘Å’",
+    loss: "ÃÂ£ÃÂ±Ã‘â€¹Ã‘â€šÃÂ¾ÃÂº",
+    noResult: "Ãâ€˜ÃÂµÃÂ· Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃÂ°",
 
     winsShort: "W",
     lossesShort: "L",
     beShort: "BE",
 
-    monthlySummary: "Месячная сводка",
-    whatThisMonthShows: "Что показывает этот месяц",
-    activity: "Активность",
+    monthlySummary: "ÃÅ“ÃÂµÃ‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ°Ã‘Â Ã‘ÂÃÂ²ÃÂ¾ÃÂ´ÃÂºÃÂ°",
+    whatThisMonthShows: "ÃÂ§Ã‘â€šÃÂ¾ ÃÂ¿ÃÂ¾ÃÂºÃÂ°ÃÂ·Ã‘â€¹ÃÂ²ÃÂ°ÃÂµÃ‘â€š Ã‘ÂÃ‘â€šÃÂ¾Ã‘â€š ÃÂ¼ÃÂµÃ‘ÂÃ‘ÂÃ‘â€ ",
+    activity: "ÃÂÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘Å’",
     activityDescription:
-      "Дни с хотя бы одной записанной сделкой.",
-    direction: "Направление",
-    positive: "Положительно",
-    negative: "Отрицательно",
-    flat: "Нейтрально",
+      "Ãâ€ÃÂ½ÃÂ¸ Ã‘Â Ã‘â€¦ÃÂ¾Ã‘â€šÃ‘Â ÃÂ±Ã‘â€¹ ÃÂ¾ÃÂ´ÃÂ½ÃÂ¾ÃÂ¹ ÃÂ·ÃÂ°ÃÂ¿ÃÂ¸Ã‘ÂÃÂ°ÃÂ½ÃÂ½ÃÂ¾ÃÂ¹ Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂºÃÂ¾ÃÂ¹.",
+    direction: "ÃÂÃÂ°ÃÂ¿Ã‘â‚¬ÃÂ°ÃÂ²ÃÂ»ÃÂµÃÂ½ÃÂ¸ÃÂµ",
+    positive: "ÃÅ¸ÃÂ¾ÃÂ»ÃÂ¾ÃÂ¶ÃÂ¸Ã‘â€šÃÂµÃÂ»Ã‘Å’ÃÂ½ÃÂ¾",
+    negative: "ÃÅ¾Ã‘â€šÃ‘â‚¬ÃÂ¸Ã‘â€ ÃÂ°Ã‘â€šÃÂµÃÂ»Ã‘Å’ÃÂ½ÃÂ¾",
+    flat: "ÃÂÃÂµÃÂ¹Ã‘â€šÃ‘â‚¬ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¾",
     directionDescription:
-      "Основано на общем месячном PnL.",
-    totalTrades: "Всего сделок",
+      "ÃÅ¾Ã‘ÂÃÂ½ÃÂ¾ÃÂ²ÃÂ°ÃÂ½ÃÂ¾ ÃÂ½ÃÂ° ÃÂ¾ÃÂ±Ã‘â€°ÃÂµÃÂ¼ ÃÂ¼ÃÂµÃ‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ¾ÃÂ¼ PnL.",
+    totalTrades: "Ãâ€™Ã‘ÂÃÂµÃÂ³ÃÂ¾ Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂ¾ÃÂº",
     totalTradesDescription:
-      "Общее количество операций, открытых в течение этого месяца.",
+      "ÃÅ¾ÃÂ±Ã‘â€°ÃÂµÃÂµ ÃÂºÃÂ¾ÃÂ»ÃÂ¸Ã‘â€¡ÃÂµÃ‘ÂÃ‘â€šÃÂ²ÃÂ¾ ÃÂ¾ÃÂ¿ÃÂµÃ‘â‚¬ÃÂ°Ã‘â€ ÃÂ¸ÃÂ¹, ÃÂ¾Ã‘â€šÃÂºÃ‘â‚¬Ã‘â€¹Ã‘â€šÃ‘â€¹Ã‘â€¦ ÃÂ² Ã‘â€šÃÂµÃ‘â€¡ÃÂµÃÂ½ÃÂ¸ÃÂµ Ã‘ÂÃ‘â€šÃÂ¾ÃÂ³ÃÂ¾ ÃÂ¼ÃÂµÃ‘ÂÃ‘ÂÃ‘â€ ÃÂ°.",
   },
 
   es: {
@@ -276,30 +276,30 @@ const calendarLabels: Record<
     currentMonth: "Mes actual",
     monthlyPerformanceView: "Vista de rendimiento mensual",
     heroDescription:
-      "Una vista día a día del rendimiento, la actividad de trading y la consistencia mensual. Úsala para detectar días fuertes, días débiles y periodos donde la disciplina necesita más atención.",
+      "Una vista dÃƒÂ­a a dÃƒÂ­a del rendimiento, la actividad de trading y la consistencia mensual. ÃƒÅ¡sala para detectar dÃƒÂ­as fuertes, dÃƒÂ­as dÃƒÂ©biles y periodos donde la disciplina necesita mÃƒÂ¡s atenciÃƒÂ³n.",
     backToAccountHub: "Volver al Account Hub",
     previousMonth: "Mes anterior",
     nextMonth: "Mes siguiente",
 
     monthlyPnl: "PnL mensual",
-    activeDays: "días activos",
+    activeDays: "dÃƒÂ­as activos",
     trades: "trades",
     averageDaily: "Media diaria",
     averageDailyDescription:
-      "PnL medio calculado solo en días de trading activos.",
-    bestDay: "Mejor día",
-    worstDay: "Peor día",
-    positiveDays: "Días positivos",
-    negativeDays: "Días negativos",
-    flatDays: "Días flat",
+      "PnL medio calculado solo en dÃƒÂ­as de trading activos.",
+    bestDay: "Mejor dÃƒÂ­a",
+    worstDay: "Peor dÃƒÂ­a",
+    positiveDays: "DÃƒÂ­as positivos",
+    negativeDays: "DÃƒÂ­as negativos",
+    flatDays: "DÃƒÂ­as flat",
     avgTradesPerActiveDay:
-      "Media trades / día activo",
+      "Media trades / dÃƒÂ­a activo",
 
     calendarMatrix: "Matriz del calendario",
     monthPerformance: (monthName) =>
       `Rendimiento de ${monthName}`,
     profit: "Ganancia",
-    loss: "Pérdida",
+    loss: "PÃƒÂ©rdida",
     noResult: "Sin resultado",
 
     winsShort: "W",
@@ -307,11 +307,11 @@ const calendarLabels: Record<
     beShort: "BE",
 
     monthlySummary: "Resumen mensual",
-    whatThisMonthShows: "Qué muestra este mes",
+    whatThisMonthShows: "QuÃƒÂ© muestra este mes",
     activity: "Actividad",
     activityDescription:
-      "Días con al menos un trade registrado.",
-    direction: "Dirección",
+      "DÃƒÂ­as con al menos un trade registrado.",
+    direction: "DirecciÃƒÂ³n",
     positive: "Positivo",
     negative: "Negativo",
     flat: "Flat",
@@ -327,9 +327,9 @@ const calendarLabels: Record<
     currentMonth: "Mois actuel",
     monthlyPerformanceView: "Vue de performance mensuelle",
     heroDescription:
-      "Une vue jour par jour de la performance, de l’activité de trading et de la régularité mensuelle. Utilise-la pour repérer les jours forts, les jours faibles et les périodes où la discipline demande plus d’attention.",
-    backToAccountHub: "Retour à l’Account Hub",
-    previousMonth: "Mois précédent",
+      "Une vue jour par jour de la performance, de lÃ¢â‚¬â„¢activitÃƒÂ© de trading et de la rÃƒÂ©gularitÃƒÂ© mensuelle. Utilise-la pour repÃƒÂ©rer les jours forts, les jours faibles et les pÃƒÂ©riodes oÃƒÂ¹ la discipline demande plus dÃ¢â‚¬â„¢attention.",
+    backToAccountHub: "Retour ÃƒÂ  lÃ¢â‚¬â„¢Account Hub",
+    previousMonth: "Mois prÃƒÂ©cÃƒÂ©dent",
     nextMonth: "Mois suivant",
 
     monthlyPnl: "PnL mensuel",
@@ -337,11 +337,11 @@ const calendarLabels: Record<
     trades: "trades",
     averageDaily: "Moyenne quotidienne",
     averageDailyDescription:
-      "PnL moyen calculé uniquement sur les jours de trading actifs.",
+      "PnL moyen calculÃƒÂ© uniquement sur les jours de trading actifs.",
     bestDay: "Meilleur jour",
     worstDay: "Pire jour",
     positiveDays: "Jours positifs",
-    negativeDays: "Jours négatifs",
+    negativeDays: "Jours nÃƒÂ©gatifs",
     flatDays: "Jours flat",
     avgTradesPerActiveDay:
       "Moy. trades / jour actif",
@@ -351,26 +351,26 @@ const calendarLabels: Record<
       `Performance de ${monthName}`,
     profit: "Profit",
     loss: "Perte",
-    noResult: "Aucun résultat",
+    noResult: "Aucun rÃƒÂ©sultat",
 
     winsShort: "W",
     lossesShort: "L",
     beShort: "BE",
 
-    monthlySummary: "Résumé mensuel",
+    monthlySummary: "RÃƒÂ©sumÃƒÂ© mensuel",
     whatThisMonthShows: "Ce que montre ce mois",
-    activity: "Activité",
+    activity: "ActivitÃƒÂ©",
     activityDescription:
-      "Jours avec au moins un trade enregistré.",
+      "Jours avec au moins un trade enregistrÃƒÂ©.",
     direction: "Direction",
     positive: "Positif",
-    negative: "Négatif",
+    negative: "NÃƒÂ©gatif",
     flat: "Flat",
     directionDescription:
-      "Basé sur le PnL mensuel total.",
+      "BasÃƒÂ© sur le PnL mensuel total.",
     totalTrades: "Trades totaux",
     totalTradesDescription:
-      "Nombre total d’opérations ouvertes durant ce mois.",
+      "Nombre total dÃ¢â‚¬â„¢opÃƒÂ©rations ouvertes durant ce mois.",
   },
 
   de: {
@@ -378,24 +378,24 @@ const calendarLabels: Record<
     currentMonth: "Aktueller Monat",
     monthlyPerformanceView: "Monatliche Performance-Ansicht",
     heroDescription:
-      "Eine Tagesansicht von Performance, Trading-Aktivität und monatlicher Konstanz. Nutze sie, um starke Tage, schwache Tage und Phasen zu erkennen, in denen Disziplin mehr Aufmerksamkeit braucht.",
-    backToAccountHub: "Zurück zum Account Hub",
+      "Eine Tagesansicht von Performance, Trading-AktivitÃƒÂ¤t und monatlicher Konstanz. Nutze sie, um starke Tage, schwache Tage und Phasen zu erkennen, in denen Disziplin mehr Aufmerksamkeit braucht.",
+    backToAccountHub: "ZurÃƒÂ¼ck zum Account Hub",
     previousMonth: "Vorheriger Monat",
-    nextMonth: "Nächster Monat",
+    nextMonth: "NÃƒÂ¤chster Monat",
 
     monthlyPnl: "Monatlicher PnL",
     activeDays: "aktive Tage",
     trades: "Trades",
     averageDaily: "Tagesdurchschnitt",
     averageDailyDescription:
-      "Durchschnittlicher PnL nur über aktive Trading-Tage.",
+      "Durchschnittlicher PnL nur ÃƒÂ¼ber aktive Trading-Tage.",
     bestDay: "Bester Tag",
     worstDay: "Schlechtester Tag",
     positiveDays: "Positive Tage",
     negativeDays: "Negative Tage",
     flatDays: "Flat-Tage",
     avgTradesPerActiveDay:
-      "Ø Trades / aktiver Tag",
+      "ÃƒËœ Trades / aktiver Tag",
 
     calendarMatrix: "Kalendermatrix",
     monthPerformance: (monthName) =>
@@ -408,9 +408,9 @@ const calendarLabels: Record<
     lossesShort: "L",
     beShort: "BE",
 
-    monthlySummary: "Monatsübersicht",
+    monthlySummary: "MonatsÃƒÂ¼bersicht",
     whatThisMonthShows: "Was dieser Monat zeigt",
-    activity: "Aktivität",
+    activity: "AktivitÃƒÂ¤t",
     activityDescription:
       "Tage mit mindestens einem eingetragenen Trade.",
     direction: "Richtung",
@@ -421,7 +421,7 @@ const calendarLabels: Record<
       "Basierend auf dem gesamten monatlichen PnL.",
     totalTrades: "Gesamt-Trades",
     totalTradesDescription:
-      "Gesamtzahl der in diesem Monat eröffneten Operationen.",
+      "Gesamtzahl der in diesem Monat erÃƒÂ¶ffneten Operationen.",
   },
 };
 
@@ -904,12 +904,12 @@ export default async function CalendarPage({
   return (
     <div className="space-y-10">
       <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,197,94,0.12),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(34,211,238,0.08),transparent_35%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent)_12%,transparent),transparent_35%),radial-gradient(circle_at_bottom_left,color-mix(in_srgb,var(--color-accent-bright)_8%,transparent),transparent_35%)]" />
 
         <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <div className="mb-6 flex flex-wrap items-center gap-3">
-              <span className="rounded-full border border-green-500/20 bg-green-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-green-300">
+              <span className="rounded-full border border-accent/20 bg-accent/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-green-300">
                 {t.tradingCalendar}
               </span>
 
@@ -918,7 +918,7 @@ export default async function CalendarPage({
               </span>
 
               {isCurrentMonth && (
-                <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-300">
+                <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
                   {t.currentMonth}
                 </span>
               )}
@@ -970,7 +970,7 @@ export default async function CalendarPage({
         <StatCard
           label={t.monthlyPnl}
           value={formattedTotalMonthPnl}
-          description={`${activeDays} ${t.activeDays} · ${totalMonthTrades} ${t.trades}`}
+          description={`${activeDays} ${t.activeDays} Ã‚Â· ${totalMonthTrades} ${t.trades}`}
           tone={getResultTone(totalMonthPnl)}
         />
 
@@ -985,7 +985,7 @@ export default async function CalendarPage({
           label={t.bestDay}
           value={formattedBestDay}
           description={bestDayLabel}
-          tone="text-green-400"
+          tone="text-accent"
         />
 
         <StatCard
@@ -1000,7 +1000,7 @@ export default async function CalendarPage({
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <div className="flex items-center gap-3">
             <TrendingUp
-              className="text-green-400"
+              className="text-accent"
               size={21}
             />
             <p className="text-sm text-gray-400">
@@ -1008,7 +1008,7 @@ export default async function CalendarPage({
             </p>
           </div>
 
-          <h2 className="mt-4 text-3xl font-black text-green-400">
+          <h2 className="mt-4 text-3xl font-black text-accent">
             {positiveDays}
           </h2>
         </div>
@@ -1048,7 +1048,7 @@ export default async function CalendarPage({
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <div className="flex items-center gap-3">
             <Flame
-              className="text-cyan-300"
+              className="text-accent-bright"
               size={21}
             />
             <p className="text-sm text-gray-400">
@@ -1056,7 +1056,7 @@ export default async function CalendarPage({
             </p>
           </div>
 
-          <h2 className="mt-4 text-3xl font-black text-cyan-300">
+          <h2 className="mt-4 text-3xl font-black text-accent-bright">
             {formatNumber(
               averageTradesPerActiveDay,
               language
@@ -1083,7 +1083,7 @@ export default async function CalendarPage({
             <div className="flex items-center gap-2">
               <CircleDot
                 size={14}
-                className="text-green-400"
+                className="text-accent"
               />
               {t.profit}
             </div>
@@ -1168,7 +1168,7 @@ export default async function CalendarPage({
                   <div
                     key={day}
                     className={`group relative min-h-[150px] border-r border-b border-white/10 p-4 transition-all duration-300 last:border-r-0 hover:z-10 hover:scale-[1.02] ${positive
-                        ? "bg-green-500/10"
+                        ? "bg-accent/10"
                         : negative
                           ? "bg-red-500/10"
                           : "bg-transparent"
@@ -1187,7 +1187,7 @@ export default async function CalendarPage({
                   >
                     <div
                       className={`pointer-events-none absolute inset-0 opacity-0 blur-2xl transition duration-500 group-hover:opacity-100 ${positive
-                          ? "bg-green-500/10"
+                          ? "bg-accent/10"
                           : negative
                             ? "bg-red-500/10"
                             : "bg-white/5"
@@ -1206,7 +1206,7 @@ export default async function CalendarPage({
 
                       <div
                         className={`h-2.5 w-2.5 rounded-full ${positive
-                            ? "bg-green-400"
+                            ? "bg-accent"
                             : negative
                               ? "bg-red-400"
                               : "bg-gray-500"
@@ -1265,7 +1265,7 @@ export default async function CalendarPage({
       <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
         <div className="mb-6 flex items-center gap-3">
           <CalendarDays
-            className="text-cyan-300"
+            className="text-accent-bright"
             size={22}
           />
 
@@ -1318,7 +1318,7 @@ export default async function CalendarPage({
               {t.totalTrades}
             </p>
 
-            <h3 className="mt-3 text-3xl font-black text-cyan-300">
+            <h3 className="mt-3 text-3xl font-black text-accent-bright">
               {totalMonthTrades}
             </h3>
 

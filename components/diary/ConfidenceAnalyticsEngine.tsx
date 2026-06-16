@@ -127,10 +127,10 @@ export default function ConfidenceAnalyticsEngine({
 
   return (
     <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.10),transparent_35%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_10%,transparent),transparent_35%)]" />
 
       <div className="relative z-10">
-        <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+        <p className="text-sm uppercase tracking-[0.2em] text-accent-bright">
           {t.eyebrow}
         </p>
 
@@ -144,7 +144,7 @@ export default function ConfidenceAnalyticsEngine({
               {t.highConfidence}
             </p>
 
-            <h3 className="mt-3 text-4xl font-black text-green-400">
+            <h3 className="mt-3 text-4xl font-black text-accent">
               {highConfidenceTrades}
             </h3>
           </div>
@@ -164,7 +164,7 @@ export default function ConfidenceAnalyticsEngine({
               {t.confidenceStatus}
             </p>
 
-            <h3 className="mt-3 text-2xl font-black text-cyan-400">
+            <h3 className="mt-3 text-2xl font-black text-accent-bright">
               {confidenceStatus}
             </h3>
           </div>

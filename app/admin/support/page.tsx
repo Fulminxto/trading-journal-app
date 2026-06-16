@@ -58,7 +58,7 @@ export default async function AdminSupportPage() {
                 </p>
 
                 <h1 className="mt-2 flex items-center gap-3 text-4xl font-black text-white">
-                    <LifeBuoy className="text-cyan-400" />
+                    <LifeBuoy className="text-accent-bright" />
                     {t.supportManagement}
                 </h1>
             </div>
@@ -94,7 +94,7 @@ export default async function AdminSupportPage() {
                     </h2>
                 </div>
 
-                <div className="rounded-[32px] border border-cyan-500/20 bg-cyan-500/10 p-6">
+                <div className="rounded-[32px] border border-accent-bright/20 bg-accent-bright/10 p-6">
                     <p className="text-sm text-cyan-200">
                         {t.openTickets}
                     </p>
@@ -122,7 +122,7 @@ export default async function AdminSupportPage() {
                         <Link
                             key={ticket.id}
                             href={`/admin/support/${ticket.id}`}
-                            className="block rounded-[32px] border border-white/10 bg-white/[0.03] p-8 transition hover:border-cyan-500/30 hover:bg-cyan-500/[0.03]"
+                            className="block rounded-[32px] border border-white/10 bg-white/[0.03] p-8 transition hover:border-accent-bright/30 hover:bg-accent-bright/[0.03]"
                         >
                             <div className="flex items-start justify-between gap-4">
                                 <div>
@@ -133,7 +133,7 @@ export default async function AdminSupportPage() {
                                             <Lightbulb className="text-yellow-300" />
                                         )}
 
-                                        <p className="text-xs uppercase tracking-[0.15em] text-cyan-400">
+                                        <p className="text-xs uppercase tracking-[0.15em] text-accent-bright">
                                             {valueLabel(
                                                 t,
                                                 "ticketType",

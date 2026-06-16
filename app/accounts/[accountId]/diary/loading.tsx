@@ -1,4 +1,4 @@
-import DiarySkeleton from "@/components/skeletons/DiarySkeleton";
+﻿import DiarySkeleton from "@/components/skeletons/DiarySkeleton";
 
 export default function DiaryLoading() {
   return <DiarySkeleton />;

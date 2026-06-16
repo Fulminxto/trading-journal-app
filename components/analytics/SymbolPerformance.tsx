@@ -106,11 +106,11 @@ export default function SymbolPerformance({
           </p>
 
           <div className="mt-2 flex items-center justify-between">
-            <h3 className="text-xl font-bold text-green-400">
+            <h3 className="text-xl font-bold text-accent">
               {bestSymbol?.[0] || "-"}
             </h3>
 
-            <p className="font-semibold text-green-400">
+            <p className="font-semibold text-accent">
               {bestSymbol
                 ? formatCurrency(bestSymbol[1].pnl, currency)
                 : "-"}

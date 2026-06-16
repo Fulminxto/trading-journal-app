@@ -49,11 +49,11 @@ export default function ExecutiveSummaryCard({
 
   return (
     <div className="report-card relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#050b10] via-[#0d1726] to-black p-10">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.10),transparent_35%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_10%,transparent)_35%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.08),transparent_35%)]" />
 
       <div className="relative z-10">
-        <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">
+        <p className="text-sm uppercase tracking-[0.3em] text-accent-bright">
           {t.executiveSummary}
         </p>
 
@@ -86,7 +86,7 @@ export default function ExecutiveSummaryCard({
               {t.winRate}
             </p>
 
-            <h3 className="mt-4 text-4xl font-black text-cyan-400">
+            <h3 className="mt-4 text-4xl font-black text-accent-bright">
               {winRate}%
             </h3>
           </div>

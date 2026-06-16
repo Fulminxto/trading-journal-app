@@ -68,7 +68,7 @@ export default async function AdminUpdatesPage({
           </p>
 
           <h1 className="mt-2 flex items-center gap-3 text-4xl font-black text-white">
-            <Megaphone className="text-cyan-400" />
+            <Megaphone className="text-accent-bright" />
             {t.releaseNotes}
           </h1>
 
@@ -79,9 +79,9 @@ export default async function AdminUpdatesPage({
 
         <form
           action={createReleaseNote}
-          className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/10 p-8"
+          className="rounded-[36px] border border-accent-bright/20 bg-accent-bright/10 p-8"
         >
-          <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+          <p className="text-sm uppercase tracking-[0.2em] text-accent-bright">
             {t.newAppUpdate}
           </p>
 
@@ -153,7 +153,7 @@ export default async function AdminUpdatesPage({
 
           <button
             type="submit"
-            className="mt-6 rounded-2xl bg-cyan-500 px-6 py-4 text-sm font-black uppercase tracking-[0.15em] text-black transition hover:bg-cyan-400"
+            className="mt-6 rounded-2xl bg-accent px-6 py-4 text-sm font-black uppercase tracking-[0.15em] text-white transition hover:bg-accent-bright"
           >
             {t.createUpdate}
           </button>
@@ -161,7 +161,7 @@ export default async function AdminUpdatesPage({
 
         <div className="rounded-[36px] border border-white/10 bg-white/[0.03] p-8">
           <div>
-            <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+            <p className="text-sm uppercase tracking-[0.2em] text-accent-bright">
               {t.updateHistory}
             </p>
 
@@ -197,9 +197,9 @@ export default async function AdminUpdatesPage({
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <div className="flex items-center gap-3">
-                          <Icon className="text-cyan-400" />
+                          <Icon className="text-accent-bright" />
 
-                          <p className="text-xs uppercase tracking-[0.15em] text-cyan-400">
+                          <p className="text-xs uppercase tracking-[0.15em] text-accent-bright">
                             {valueLabel(
                               t,
                               "updateType",
@@ -232,7 +232,7 @@ export default async function AdminUpdatesPage({
                             : t.draft}
                         </div>
 
-                        <div className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-cyan-300">
+                        <div className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-accent-bright">
                           {valueLabel(
                             t,
                             "priority",

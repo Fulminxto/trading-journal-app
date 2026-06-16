@@ -73,7 +73,7 @@ export default function MemberSelector({
       <select
         value={selectedMemberId || ""}
         onChange={handleChange}
-        className="rounded-2xl border border-white/10 bg-zinc-900 px-4 py-2 text-sm outline-none focus:border-green-500/40"
+        className="rounded-2xl border border-white/10 bg-zinc-900 px-4 py-2 text-sm outline-none focus:border-accent/40"
       >
         <option value="">{allLabel[lang]}</option>
 

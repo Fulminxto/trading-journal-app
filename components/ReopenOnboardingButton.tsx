@@ -33,7 +33,7 @@ export default function ReopenOnboardingButton({
   return (
     <button
       onClick={reopenOnboarding}
-      className="mt-5 rounded-2xl bg-green-500 px-5 py-3 font-bold text-black transition hover:bg-green-400"
+      className="mt-5 rounded-2xl bg-accent px-5 py-3 font-bold text-black transition hover:bg-accent-bright"
     >
       {label}
     </button>

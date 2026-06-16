@@ -51,7 +51,7 @@ const memberPerformanceLabels: Record<
     win: "win",
     loss: "loss",
     operatingFocus: "Focus operativo",
-    mostUsedInstrument: "Strumento più utilizzato",
+    mostUsedInstrument: "Strumento piÃ¹ utilizzato",
     noSymbol: "N/D",
   },
 
@@ -74,63 +74,63 @@ const memberPerformanceLabels: Record<
   },
 
   uk: {
-    memberPerformance: "Результативність учасника",
+    memberPerformance: "Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ð¸Ð²Ð½Ñ–ÑÑ‚ÑŒ ÑƒÑ‡Ð°ÑÐ½Ð¸ÐºÐ°",
     description:
-      "Індивідуальний операційний аналіз цього учасника в обраному акаунті.",
-    back: "Назад",
-    totalTrades: "Усього угод",
-    winRate: "Відсоток виграшів",
-    totalPnl: "Загальний PnL",
-    bestSymbol: "Найкращий символ",
-    bestTrade: "Найкраща угода",
+      "Ð†Ð½Ð´Ð¸Ð²Ñ–Ð´ÑƒÐ°Ð»ÑŒÐ½Ð¸Ð¹ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð¸Ð¹ Ð°Ð½Ð°Ð»Ñ–Ð· Ñ†ÑŒÐ¾Ð³Ð¾ ÑƒÑ‡Ð°ÑÐ½Ð¸ÐºÐ° Ð² Ð¾Ð±Ñ€Ð°Ð½Ð¾Ð¼Ñƒ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ñ–.",
+    back: "ÐÐ°Ð·Ð°Ð´",
+    totalTrades: "Ð£ÑÑŒÐ¾Ð³Ð¾ ÑƒÐ³Ð¾Ð´",
+    winRate: "Ð’Ñ–Ð´ÑÐ¾Ñ‚Ð¾Ðº Ð²Ð¸Ð³Ñ€Ð°ÑˆÑ–Ð²",
+    totalPnl: "Ð—Ð°Ð³Ð°Ð»ÑŒÐ½Ð¸Ð¹ PnL",
+    bestSymbol: "ÐÐ°Ð¹ÐºÑ€Ð°Ñ‰Ð¸Ð¹ ÑÐ¸Ð¼Ð²Ð¾Ð»",
+    bestTrade: "ÐÐ°Ð¹ÐºÑ€Ð°Ñ‰Ð° ÑƒÐ³Ð¾Ð´Ð°",
     winLoss: "Win / Loss",
     win: "win",
     loss: "loss",
-    operatingFocus: "Операційний фокус",
-    mostUsedInstrument: "Найчастіше використаний інструмент",
-    noSymbol: "Н/Д",
+    operatingFocus: "ÐžÐ¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð¸Ð¹ Ñ„Ð¾ÐºÑƒÑ",
+    mostUsedInstrument: "ÐÐ°Ð¹Ñ‡Ð°ÑÑ‚Ñ–ÑˆÐµ Ð²Ð¸ÐºÐ¾Ñ€Ð¸ÑÑ‚Ð°Ð½Ð¸Ð¹ Ñ–Ð½ÑÑ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚",
+    noSymbol: "Ð/Ð”",
   },
 
   ru: {
-    memberPerformance: "Результативность участника",
+    memberPerformance: "Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ð¸Ð²Ð½Ð¾ÑÑ‚ÑŒ ÑƒÑ‡Ð°ÑÑ‚Ð½Ð¸ÐºÐ°",
     description:
-      "Индивидуальный операционный анализ этого участника в выбранном аккаунте.",
-    back: "Назад",
-    totalTrades: "Всего сделок",
-    winRate: "Процент выигрышей",
-    totalPnl: "Общий PnL",
-    bestSymbol: "Лучший символ",
-    bestTrade: "Лучшая сделка",
+      "Ð˜Ð½Ð´Ð¸Ð²Ð¸Ð´ÑƒÐ°Ð»ÑŒÐ½Ñ‹Ð¹ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ñ‹Ð¹ Ð°Ð½Ð°Ð»Ð¸Ð· ÑÑ‚Ð¾Ð³Ð¾ ÑƒÑ‡Ð°ÑÑ‚Ð½Ð¸ÐºÐ° Ð² Ð²Ñ‹Ð±Ñ€Ð°Ð½Ð½Ð¾Ð¼ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ðµ.",
+    back: "ÐÐ°Ð·Ð°Ð´",
+    totalTrades: "Ð’ÑÐµÐ³Ð¾ ÑÐ´ÐµÐ»Ð¾Ðº",
+    winRate: "ÐŸÑ€Ð¾Ñ†ÐµÐ½Ñ‚ Ð²Ñ‹Ð¸Ð³Ñ€Ñ‹ÑˆÐµÐ¹",
+    totalPnl: "ÐžÐ±Ñ‰Ð¸Ð¹ PnL",
+    bestSymbol: "Ð›ÑƒÑ‡ÑˆÐ¸Ð¹ ÑÐ¸Ð¼Ð²Ð¾Ð»",
+    bestTrade: "Ð›ÑƒÑ‡ÑˆÐ°Ñ ÑÐ´ÐµÐ»ÐºÐ°",
     winLoss: "Win / Loss",
     win: "win",
     loss: "loss",
-    operatingFocus: "Операционный фокус",
-    mostUsedInstrument: "Самый используемый инструмент",
-    noSymbol: "Н/Д",
+    operatingFocus: "ÐžÐ¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ñ‹Ð¹ Ñ„Ð¾ÐºÑƒÑ",
+    mostUsedInstrument: "Ð¡Ð°Ð¼Ñ‹Ð¹ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÐ¼Ñ‹Ð¹ Ð¸Ð½ÑÑ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚",
+    noSymbol: "Ð/Ð”",
   },
 
   es: {
     memberPerformance: "Rendimiento del miembro",
     description:
-      "Análisis operativo individual de este miembro en la cuenta seleccionada.",
-    back: "Atrás",
+      "AnÃ¡lisis operativo individual de este miembro en la cuenta seleccionada.",
+    back: "AtrÃ¡s",
     totalTrades: "Trades totales",
     winRate: "Win rate",
     totalPnl: "PnL total",
-    bestSymbol: "Mejor símbolo",
+    bestSymbol: "Mejor sÃ­mbolo",
     bestTrade: "Mejor trade",
     winLoss: "Win / Loss",
     win: "win",
     loss: "loss",
     operatingFocus: "Enfoque operativo",
-    mostUsedInstrument: "Instrumento más utilizado",
+    mostUsedInstrument: "Instrumento mÃ¡s utilizado",
     noSymbol: "N/D",
   },
 
   fr: {
     memberPerformance: "Performance du membre",
     description:
-      "Analyse opérationnelle individuelle de ce membre sur le compte sélectionné.",
+      "Analyse opÃ©rationnelle individuelle de ce membre sur le compte sÃ©lectionnÃ©.",
     back: "Retour",
     totalTrades: "Trades totaux",
     winRate: "Win rate",
@@ -140,16 +140,16 @@ const memberPerformanceLabels: Record<
     winLoss: "Win / Loss",
     win: "win",
     loss: "loss",
-    operatingFocus: "Focus opérationnel",
-    mostUsedInstrument: "Instrument le plus utilisé",
+    operatingFocus: "Focus opÃ©rationnel",
+    mostUsedInstrument: "Instrument le plus utilisÃ©",
     noSymbol: "N/A",
   },
 
   de: {
     memberPerformance: "Mitglieder-Performance",
     description:
-      "Individuelle operative Analyse dieses Mitglieds im ausgewählten Konto.",
-    back: "Zurück",
+      "Individuelle operative Analyse dieses Mitglieds im ausgewÃ¤hlten Konto.",
+    back: "ZurÃ¼ck",
     totalTrades: "Trades gesamt",
     winRate: "Win Rate",
     totalPnl: "Gesamt-PnL",
@@ -318,7 +318,7 @@ export default async function MemberPerformancePage({
           </p>
 
           <h1 className="mt-2 flex items-center gap-3 text-4xl font-black text-white">
-            <BarChart3 className="text-cyan-400" />
+            <BarChart3 className="text-accent-bright" />
             {member.name || member.username}
           </h1>
 
@@ -364,7 +364,7 @@ export default async function MemberPerformancePage({
 
           <p
             className={`mt-4 text-3xl font-black ${totalPnl >= 0
-                ? "text-cyan-300"
+                ? "text-accent-bright"
                 : "text-red-300"
               }`}
           >
@@ -388,14 +388,14 @@ export default async function MemberPerformancePage({
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <div className="rounded-[32px] border border-cyan-500/20 bg-cyan-500/10 p-6">
-          <Trophy className="text-cyan-300" />
+        <div className="rounded-[32px] border border-accent-bright/20 bg-accent-bright/10 p-6">
+          <Trophy className="text-accent-bright" />
 
           <h2 className="mt-4 text-2xl font-black text-white">
             {t.bestTrade}
           </h2>
 
-          <p className="mt-4 text-3xl font-black text-cyan-300">
+          <p className="mt-4 text-3xl font-black text-accent-bright">
             {formatCurrencyByLanguage(
               bestTrade,
               currency,
@@ -405,19 +405,19 @@ export default async function MemberPerformancePage({
         </div>
 
         <div className="rounded-[32px] border border-white/10 bg-white/[0.03] p-6">
-          <Activity className="text-cyan-300" />
+          <Activity className="text-accent-bright" />
 
           <h2 className="mt-4 text-2xl font-black text-white">
             {t.winLoss}
           </h2>
 
           <p className="mt-4 text-sm text-gray-300">
-            {wins} {t.win} · {losses} {t.loss}
+            {wins} {t.win} Â· {losses} {t.loss}
           </p>
         </div>
 
         <div className="rounded-[32px] border border-white/10 bg-white/[0.03] p-6">
-          <Target className="text-cyan-300" />
+          <Target className="text-accent-bright" />
 
           <h2 className="mt-4 text-2xl font-black text-white">
             {t.operatingFocus}

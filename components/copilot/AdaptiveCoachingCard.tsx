@@ -20,8 +20,8 @@ export default function AdaptiveCoachingCard({
   const t = getCopilotLabels(appLanguage);
 
   return (
-    <div className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/10 p-8">
-      <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+    <div className="rounded-[36px] border border-accent-bright/20 bg-accent-bright/10 p-8">
+      <p className="text-sm uppercase tracking-[0.2em] text-accent-bright">
         {t.components.adaptiveCoaching.eyebrow}
       </p>
 

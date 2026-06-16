@@ -123,7 +123,7 @@ export default function TraderIdentityEngine({
               {t.strength}
             </p>
 
-            <h3 className="mt-3 text-2xl font-black text-green-400">
+            <h3 className="mt-3 text-2xl font-black text-accent">
               {strength}
             </h3>
           </div>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
@@ -36,41 +36,41 @@ const labels: Record<AppLanguage, ChangePasswordLabels> = {
     hide: "Hide password",
   },
   uk: {
-    currentPassword: "Поточний пароль",
-    newPassword: "Новий пароль",
-    confirmPassword: "Підтвердіть новий пароль",
-    submit: "Оновити пароль",
-    show: "Показати пароль",
-    hide: "Сховати пароль",
+    currentPassword: "ÐŸÐ¾Ñ‚Ð¾Ñ‡Ð½Ð¸Ð¹ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ",
+    newPassword: "ÐÐ¾Ð²Ð¸Ð¹ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ",
+    confirmPassword: "ÐŸÑ–Ð´Ñ‚Ð²ÐµÑ€Ð´Ñ–Ñ‚ÑŒ Ð½Ð¾Ð²Ð¸Ð¹ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ",
+    submit: "ÐžÐ½Ð¾Ð²Ð¸Ñ‚Ð¸ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ",
+    show: "ÐŸÐ¾ÐºÐ°Ð·Ð°Ñ‚Ð¸ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ",
+    hide: "Ð¡Ñ…Ð¾Ð²Ð°Ñ‚Ð¸ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ",
   },
   ru: {
-    currentPassword: "Текущий пароль",
-    newPassword: "Новый пароль",
-    confirmPassword: "Подтвердите новый пароль",
-    submit: "Обновить пароль",
-    show: "Показать пароль",
-    hide: "Скрыть пароль",
+    currentPassword: "Ð¢ÐµÐºÑƒÑ‰Ð¸Ð¹ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ",
+    newPassword: "ÐÐ¾Ð²Ñ‹Ð¹ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ",
+    confirmPassword: "ÐŸÐ¾Ð´Ñ‚Ð²ÐµÑ€Ð´Ð¸Ñ‚Ðµ Ð½Ð¾Ð²Ñ‹Ð¹ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ",
+    submit: "ÐžÐ±Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ",
+    show: "ÐŸÐ¾ÐºÐ°Ð·Ð°Ñ‚ÑŒ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ",
+    hide: "Ð¡ÐºÑ€Ñ‹Ñ‚ÑŒ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ",
   },
   es: {
-    currentPassword: "Contraseña actual",
-    newPassword: "Nueva contraseña",
-    confirmPassword: "Confirmar nueva contraseña",
-    submit: "Actualizar contraseña",
-    show: "Mostrar contraseña",
-    hide: "Ocultar contraseña",
+    currentPassword: "ContraseÃ±a actual",
+    newPassword: "Nueva contraseÃ±a",
+    confirmPassword: "Confirmar nueva contraseÃ±a",
+    submit: "Actualizar contraseÃ±a",
+    show: "Mostrar contraseÃ±a",
+    hide: "Ocultar contraseÃ±a",
   },
   fr: {
     currentPassword: "Mot de passe actuel",
     newPassword: "Nouveau mot de passe",
     confirmPassword: "Confirmer le nouveau mot de passe",
-    submit: "Mettre à jour le mot de passe",
+    submit: "Mettre Ã  jour le mot de passe",
     show: "Afficher le mot de passe",
     hide: "Masquer le mot de passe",
   },
   de: {
     currentPassword: "Aktuelles Passwort",
     newPassword: "Neues Passwort",
-    confirmPassword: "Neues Passwort bestätigen",
+    confirmPassword: "Neues Passwort bestÃ¤tigen",
     submit: "Passwort aktualisieren",
     show: "Passwort anzeigen",
     hide: "Passwort ausblenden",
@@ -142,7 +142,7 @@ export default function ChangePasswordForm({
 
       <button
         type="submit"
-        className="w-full rounded-2xl bg-green-500 p-4 font-bold text-black transition hover:bg-green-400"
+        className="w-full rounded-2xl bg-accent p-4 font-bold text-white transition hover:bg-accent-bright"
       >
         {t.submit}
       </button>

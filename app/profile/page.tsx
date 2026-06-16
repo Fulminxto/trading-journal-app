@@ -785,7 +785,7 @@ export default async function ProfilePage({
       value: formatCurrency(totalPnl),
       tone:
         totalPnl >= 0
-          ? "text-green-400"
+          ? "text-accent"
           : "text-red-400",
       icon: TrendingUp,
     },
@@ -794,7 +794,7 @@ export default async function ProfilePage({
       value: `${winRate.toFixed(2)}%`,
       tone:
         winRate >= 50
-          ? "text-green-400"
+          ? "text-accent"
           : "text-red-400",
       icon: Target,
     },
@@ -805,12 +805,12 @@ export default async function ProfilePage({
       <GlobalToast status={query.toast} />
 
       <div className="mb-8">
-        <p className="text-sm text-green-400">
+        <p className="text-sm text-accent">
           {t.profileCenter}
         </p>
 
         <h1 className="mt-2 flex items-center gap-3 text-3xl font-bold sm:text-4xl">
-          <User className="text-green-400" />
+          <User className="text-accent" />
           {t.traderProfile}
         </h1>
 
@@ -822,7 +822,7 @@ export default async function ProfilePage({
       <div className="mb-8 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] p-6">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-5">
-            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-[2rem] border border-green-500/20 bg-green-500/10">
+            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-[2rem] border border-green-500/20 bg-accent/10">
               {user.image ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -831,7 +831,7 @@ export default async function ProfilePage({
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="text-3xl font-black text-green-400">
+                <div className="text-3xl font-black text-accent">
                   {initials}
                 </div>
               )}
@@ -845,7 +845,7 @@ export default async function ProfilePage({
 
                 <span
                   className={`rounded-xl px-3 py-1 text-xs font-black uppercase tracking-[0.16em] ${online
-                      ? "bg-green-500/10 text-green-400"
+                      ? "bg-accent/10 text-accent"
                       : "bg-white/10 text-gray-400"
                     }`}
                 >
@@ -862,7 +862,7 @@ export default async function ProfilePage({
                   {user.role}
                 </span>
 
-                <span className="rounded-xl bg-green-500/10 px-3 py-1 text-xs font-bold text-green-400">
+                <span className="rounded-xl bg-accent/10 px-3 py-1 text-xs font-bold text-accent">
                   {profileCompletion}% {t.complete}
                 </span>
               </div>
@@ -912,7 +912,7 @@ export default async function ProfilePage({
               key={card.label}
               className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
             >
-              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-green-400">
+              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-accent">
                 <Icon size={20} />
               </div>
 
@@ -959,7 +959,7 @@ export default async function ProfilePage({
                 type="file"
                 name="profileImage"
                 accept="image/jpeg,image/png,image/webp"
-                className="mt-4 w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 text-sm text-gray-300 outline-none file:mr-4 file:rounded-xl file:border-0 file:bg-green-500 file:px-4 file:py-2 file:font-bold file:text-black hover:file:bg-green-400"
+                className="mt-4 w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 text-sm text-gray-300 outline-none file:mr-4 file:rounded-xl file:border-0 file:bg-accent file:px-4 file:py-2 file:font-bold file:text-white hover:file:bg-accent-bright"
               />
             </div>
           </div>
@@ -1187,7 +1187,7 @@ export default async function ProfilePage({
 
           <button
             type="submit"
-            className="mt-6 rounded-2xl bg-green-500 px-6 py-4 font-bold text-black transition hover:bg-green-400"
+            className="mt-6 rounded-2xl bg-accent px-6 py-4 font-bold text-white transition hover:bg-accent-bright"
           >
             {t.saveProfile}
           </button>
@@ -1198,7 +1198,7 @@ export default async function ProfilePage({
             <div className="mb-5 flex items-center gap-3">
               <BadgeCheck
                 size={22}
-                className="text-green-400"
+                className="text-accent"
               />
 
               <div>
@@ -1217,13 +1217,13 @@ export default async function ProfilePage({
                 {t.profileCompleted}
               </p>
 
-              <h3 className="mt-2 text-4xl font-black text-green-400">
+              <h3 className="mt-2 text-4xl font-black text-accent">
                 {profileCompletion}%
               </h3>
 
               <div className="mt-4 h-2 rounded-full bg-white/10">
                 <div
-                  className="h-2 rounded-full bg-green-500"
+                  className="h-2 rounded-full bg-accent"
                   style={{
                     width: `${profileCompletion}%`,
                   }}
@@ -1236,7 +1236,7 @@ export default async function ProfilePage({
             <div className="mb-5 flex items-center gap-3">
               <Briefcase
                 size={22}
-                className="text-green-400"
+                className="text-accent"
               />
 
               <div>
@@ -1287,7 +1287,7 @@ export default async function ProfilePage({
             <div className="mb-5 flex items-center gap-3">
               <Clock3
                 size={22}
-                className="text-green-400"
+                className="text-accent"
               />
 
               <div>
@@ -1321,7 +1321,7 @@ export default async function ProfilePage({
 
                       <span
                         className={`rounded-xl px-3 py-1 text-xs font-bold ${(trade.resultUsd || 0) >= 0
-                            ? "bg-green-500/10 text-green-400"
+                            ? "bg-accent/10 text-accent"
                             : "bg-red-500/10 text-red-400"
                           }`}
                       >
@@ -1342,7 +1342,7 @@ export default async function ProfilePage({
             <div className="mb-5 flex items-center gap-3">
               <KeyRound
                 size={22}
-                className="text-green-400"
+                className="text-accent"
               />
 
               <div>
@@ -1363,7 +1363,7 @@ export default async function ProfilePage({
             <div className="mb-5 flex items-center gap-3">
               <Shield
                 size={22}
-                className="text-green-400"
+                className="text-accent"
               />
 
               <div>

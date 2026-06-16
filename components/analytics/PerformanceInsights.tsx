@@ -79,7 +79,7 @@ export default function PerformanceInsights({
           {insights.map((insight) => (
             <div
               key={insight.title}
-              className="group rounded-3xl border border-white/10 bg-black/20 p-5 transition-all duration-300 hover:border-cyan-500/20 hover:bg-white/[0.04]"
+              className="group rounded-3xl border border-white/10 bg-black/20 p-5 transition-all duration-300 hover:border-accent-bright/20 hover:bg-white/[0.04]"
             >
               <div className="flex items-start justify-between gap-4">
                 <p className="font-bold text-white">

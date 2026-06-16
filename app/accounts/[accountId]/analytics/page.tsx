@@ -1,4 +1,4 @@
-﻿import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
@@ -1846,7 +1846,7 @@ export default async function AnalyticsPage({
             {t.grossProfit}
           </p>
 
-          <h2 className="mt-2 text-2xl font-black text-green-400">
+          <h2 className="mt-2 text-2xl font-black text-accent">
             {formatCurrency(
               grossProfit,
               account.currency
@@ -1897,7 +1897,7 @@ export default async function AnalyticsPage({
         </p>
 
         <h1 className="mt-2 flex items-center gap-3 text-3xl font-bold sm:text-4xl">
-          <BarChart3 className="text-green-400" />
+          <BarChart3 className="text-accent" />
           {t.analyticsTitle}
         </h1>
       </div>
@@ -2088,7 +2088,7 @@ export default async function AnalyticsPage({
 
             <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
               <div
-                className="h-full rounded-full bg-green-400"
+                className="h-full rounded-full bg-accent"
                 style={{
                   width: `${Math.min(
                     longWinRate,
@@ -2098,7 +2098,7 @@ export default async function AnalyticsPage({
               />
             </div>
 
-            <p className="mt-2 text-sm text-green-400">
+            <p className="mt-2 text-sm text-accent">
               {longWinRate.toFixed(2)}%
               {t.winrate}
             </p>
@@ -2150,7 +2150,7 @@ export default async function AnalyticsPage({
               {t.bestTrade}
             </p>
 
-            <h3 className="mt-2 text-2xl font-bold text-green-400">
+            <h3 className="mt-2 text-2xl font-bold text-accent">
               {formatCurrency(
                 bestTrade,
                 account.currency
@@ -2212,7 +2212,7 @@ export default async function AnalyticsPage({
               {t.wins}
             </p>
 
-            <p className="font-bold text-green-400">
+            <p className="font-bold text-accent">
               {wins.length}
             </p>
           </div>
@@ -2322,7 +2322,7 @@ export default async function AnalyticsPage({
 
                   <div
                     className={`rounded-xl px-3 py-1 text-xs font-bold ${Number(wr) >= 50
-                      ? "bg-green-500/10 text-green-400"
+                      ? "bg-accent/10 text-accent"
                       : "bg-red-500/10 text-red-400"
                       }`}
                   >
@@ -2346,7 +2346,7 @@ export default async function AnalyticsPage({
                       {t.wins}
                     </p>
 
-                    <p className="font-bold text-green-400">
+                    <p className="font-bold text-accent">
                       {stats.wins}
                     </p>
                   </div>
@@ -2405,7 +2405,7 @@ export default async function AnalyticsPage({
                   >
                     <div>
                       <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-green-500/10 font-bold text-green-400">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-accent/10 font-bold text-accent">
                           #{index + 1}
                         </div>
 
@@ -2437,7 +2437,7 @@ export default async function AnalyticsPage({
                           {t.wins}
                         </p>
 
-                        <p className="font-bold text-green-400">
+                        <p className="font-bold text-accent">
                           {trader.wins}
                         </p>
                       </div>
@@ -2482,11 +2482,11 @@ export default async function AnalyticsPage({
               {t.bestMonth}
             </p>
 
-            <h3 className="mt-2 text-lg font-bold text-green-400">
+            <h3 className="mt-2 text-lg font-bold text-accent">
               {bestMonth?.[0] || "-"}
             </h3>
 
-            <p className="mt-1 text-sm text-green-400">
+            <p className="mt-1 text-sm text-accent">
               {bestMonth
                 ? formatCurrency(
                   bestMonth[1].pnl,
@@ -2520,7 +2520,7 @@ export default async function AnalyticsPage({
               {t.greenMonths}
             </p>
 
-            <h3 className="mt-2 text-2xl font-bold text-green-400">
+            <h3 className="mt-2 text-2xl font-bold text-accent">
               {greenMonths}
             </h3>
           </div>
@@ -2585,7 +2585,7 @@ export default async function AnalyticsPage({
                         {t.wins}
                       </p>
 
-                      <p className="font-bold text-green-400">
+                      <p className="font-bold text-accent">
                         {stats.wins}
                       </p>
                     </div>
@@ -2675,7 +2675,7 @@ export default async function AnalyticsPage({
 
                   <div
                     className={`rounded-xl px-3 py-1 text-xs font-bold ${stateWinRate >= 50
-                      ? "bg-green-500/10 text-green-400"
+                      ? "bg-accent/10 text-accent"
                       : "bg-red-500/10 text-red-400"
                       }`}
                   >
@@ -2699,7 +2699,7 @@ export default async function AnalyticsPage({
                       {t.wins}
                     </p>
 
-                    <p className="font-bold text-green-400">
+                    <p className="font-bold text-accent">
                       {stats.wins}
                     </p>
                   </div>

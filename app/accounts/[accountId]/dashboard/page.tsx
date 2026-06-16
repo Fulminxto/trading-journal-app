@@ -1,4 +1,4 @@
-﻿import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
@@ -1176,7 +1176,7 @@ export default async function DashboardPage({
             {t.profitTarget}
           </p>
 
-          <h2 className="mt-2 text-3xl font-bold text-green-400">
+          <h2 className="mt-2 text-3xl font-bold text-accent">
             {account.profitTarget
               ? formatPercent(
                 account.profitTarget
@@ -1248,7 +1248,7 @@ export default async function DashboardPage({
 
           <div className="mt-5 h-3 overflow-hidden rounded-full bg-white/10">
             <div
-              className="h-full rounded-full bg-green-400"
+              className="h-full rounded-full bg-accent"
               style={{
                 width: `${targetProgress}%`,
               }}
@@ -1271,7 +1271,7 @@ export default async function DashboardPage({
 
             <div className="flex items-center justify-between gap-4">
               <span>{t.target}</span>
-              <span className="text-green-400">
+              <span className="text-accent">
                 {account.profitTarget
                   ? formatPercent(
                     account.profitTarget
@@ -1320,7 +1320,7 @@ export default async function DashboardPage({
 
           <p className="mt-3 text-sm text-gray-400">
             {t.last} {recentTrades.length} {t.trades} ·{" "}
-            <span className="text-green-400">
+            <span className="text-accent">
               {lastFiveWins}{t.winsShort}
             </span>{" "}
             /{" "}
@@ -1358,13 +1358,13 @@ export default async function DashboardPage({
             <div>
               <div className="mb-1 flex justify-between text-gray-400">
                 <span>{t.wins}</span>
-                <span className="text-green-400">
+                <span className="text-accent">
                   {formatPercent(winRate)}
                 </span>
               </div>
               <div className="h-2 overflow-hidden rounded-full bg-white/10">
                 <div
-                  className="h-full rounded-full bg-green-400"
+                  className="h-full rounded-full bg-accent"
                   style={{
                     width: `${Math.min(
                       100,
@@ -1531,7 +1531,7 @@ export default async function DashboardPage({
               </p>
               <p className="mt-1">
                 {t.scoreCurrentlyAt}{" "}
-                <span className="text-green-400">
+                <span className="text-accent">
                   {consistencyScore}/100
                 </span>
                 .

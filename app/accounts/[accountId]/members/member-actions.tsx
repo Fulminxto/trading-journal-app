@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useTransition } from "react";
 import {
@@ -134,7 +134,7 @@ export function MemberManagementActions({
                             value={selectedRole}
                             onChange={(e) => setSelectedRole(e.target.value as MemberRole)}
                             disabled={isPending}
-                            className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none focus:border-cyan-500/40 disabled:opacity-50"
+                            className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none focus:border-accent-bright/40 disabled:opacity-50"
                         >
                             <option value="MANAGER">{t.roleManager}</option>
                             <option value="MEMBER">{t.roleMember}</option>

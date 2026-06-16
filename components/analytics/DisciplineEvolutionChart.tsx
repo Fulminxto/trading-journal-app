@@ -22,10 +22,10 @@ export default function DisciplineEvolutionChart({
 }: Props) {
   return (
     <div className="relative h-[360px] overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,197,94,0.10),transparent_35%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent)_10%,transparent)_35%)]" />
 
       <div className="relative z-10 mb-6">
-        <p className="text-sm uppercase tracking-[0.2em] text-green-400">
+        <p className="text-sm uppercase tracking-[0.2em] text-accent">
           Discipline Evolution
         </p>
 

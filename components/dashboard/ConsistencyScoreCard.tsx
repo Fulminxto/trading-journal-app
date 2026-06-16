@@ -130,12 +130,12 @@ export default function ConsistencyScoreCard({
 
   return (
     <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-[#0b1220] via-[#111827] to-black p-6">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.12),transparent_35%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_12%,transparent),transparent_35%)]" />
 
       <div className="relative z-10">
         <div className="flex items-start justify-between">
           <div>
-            <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+            <p className="text-sm uppercase tracking-[0.2em] text-accent-bright">
               {t.eyebrow}
             </p>
 
@@ -165,7 +165,7 @@ export default function ConsistencyScoreCard({
 
         <div className="mt-8 h-3 overflow-hidden rounded-full bg-white/10">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-violet-500 transition-all duration-500"
+            className="h-full rounded-full bg-gradient-to-r from-accent-bright to-violet-500 transition-all duration-500"
             style={{
               width: `${score}%`,
             }}

@@ -1,4 +1,4 @@
-import {
+﻿import {
   getDiaryLabels,
   type DiaryI18nProps,
 } from "./DiaryI18n";
@@ -37,10 +37,10 @@ export default function AdaptiveCoachingLayer({
 
   return (
     <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-[#071014] via-[#0b1720] to-black p-8">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.14),transparent_35%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_14%,transparent),transparent_35%)]" />
 
       <div className="relative z-10">
-        <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+        <p className="text-sm uppercase tracking-[0.2em] text-accent-bright">
           {t.adaptiveCoaching}
         </p>
 
@@ -54,7 +54,7 @@ export default function AdaptiveCoachingLayer({
               {t.mainGuidance}
             </p>
 
-            <h3 className="mt-3 text-xl font-black text-cyan-400">
+            <h3 className="mt-3 text-xl font-black text-accent-bright">
               {mainAdvice}
             </h3>
           </div>

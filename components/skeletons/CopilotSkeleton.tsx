@@ -134,7 +134,7 @@ export default function CopilotSkeleton() {
       </div>
 
       {/* AI Summary */}
-      <div className="rounded-[36px] border border-cyan-500/20 bg-cyan-500/[0.05] p-8">
+      <div className="rounded-[36px] border border-accent-bright/20 bg-accent-bright/[0.05] p-8">
         <Block className="mb-3 h-3 w-28" />
         <Block className="h-9 w-1/2" />
         <div className="mt-6 grid gap-6 xl:grid-cols-2">

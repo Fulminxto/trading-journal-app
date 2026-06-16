@@ -31,7 +31,7 @@ export default function WeeklyReportCard({
 
   return (
     <div className="rounded-[32px] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl">
-      <p className="text-sm uppercase tracking-[0.2em] text-cyan-400">
+      <p className="text-sm uppercase tracking-[0.2em] text-accent-bright">
         {t.weeklyIntelligence}
       </p>
 
@@ -45,7 +45,7 @@ export default function WeeklyReportCard({
             {t.trades}
           </p>
 
-          <h3 className="mt-3 text-4xl font-black text-cyan-400">
+          <h3 className="mt-3 text-4xl font-black text-accent-bright">
             {totalTrades}
           </h3>
         </div>
@@ -96,7 +96,7 @@ export default function WeeklyReportCard({
             {t.consistency}
           </p>
 
-          <h3 className="mt-3 text-xl font-black text-cyan-400">
+          <h3 className="mt-3 text-xl font-black text-accent-bright">
             {consistencyText}
           </h3>
         </div>
