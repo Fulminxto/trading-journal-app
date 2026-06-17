@@ -79,8 +79,8 @@ export async function updateSettings(
   const accentColor =
     getAllowedValue(
       getString(formData, "accentColor"),
-      ["green", "blue", "purple", "amber", "red"],
-      "green"
+      ["blue", "violet", "teal", "amber", "coral", "platinum"],
+      "blue"
     );
 
   const appIconVariant =

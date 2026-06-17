@@ -17,12 +17,14 @@ import PushNotificationsPanel from "@/components/PushNotificationsPanel";
 import ReopenOnboardingButton from "@/components/ReopenOnboardingButton";
 import TwoFactorPanel from "@/components/TwoFactorPanel";
 import SettingsHardRefresh from "@/components/SettingsHardRefresh";
+import AccentColorPicker from "@/components/AccentColorPicker";
 import { auth } from "@/lib/auth";
 import {
   LANGUAGE_OPTIONS,
   normalizeAppLanguage,
   type AppLanguage,
 } from "@/lib/i18n";
+import { normalizeAccentKey } from "@/lib/accent-colors";
 import { prisma } from "@/lib/prisma";
 
 import { updateSettings } from "./actions";
@@ -47,6 +49,12 @@ type SettingsLabels = {
   accentLabel: string;
   accentTitle: string;
   accentDescription: string;
+  accentBlue: string;
+  accentViolet: string;
+  accentTeal: string;
+  accentAmber: string;
+  accentCoral: string;
+  accentPlatinum: string;
   compactLabel: string;
   compactTitle: string;
   compactDescription: string;
@@ -155,6 +163,12 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     accentLabel: "Colore principale",
     accentTitle: "Identità visiva",
     accentDescription: "Colore principale della piattaforma.",
+    accentBlue: "Azzurro elettrico",
+    accentViolet: "Viola",
+    accentTeal: "Verde acqua",
+    accentAmber: "Ambra",
+    accentCoral: "Corallo",
+    accentPlatinum: "Platino",
     compactLabel: "Modalità compatta",
     compactTitle: "Layout minimale",
     compactDescription: "Riduce la densità visiva dell’interfaccia.",
@@ -252,6 +266,12 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     accentLabel: "Accent color",
     accentTitle: "Visual identity",
     accentDescription: "Main color of the platform.",
+    accentBlue: "Electric blue",
+    accentViolet: "Violet",
+    accentTeal: "Teal",
+    accentAmber: "Amber",
+    accentCoral: "Coral",
+    accentPlatinum: "Platinum",
     compactLabel: "Compact mode",
     compactTitle: "Minimal layout",
     compactDescription: "Reduces the visual density of the interface.",
@@ -349,6 +369,12 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     accentLabel: "Акцентний колір",
     accentTitle: "Візуальна ідентичність",
     accentDescription: "Основний колір платформи.",
+    accentBlue: "Електричний синій",
+    accentViolet: "Фіолетовий",
+    accentTeal: "Бірюзовий",
+    accentAmber: "Бурштиновий",
+    accentCoral: "Коралевий",
+    accentPlatinum: "Платиновий",
     compactLabel: "Компактний режим",
     compactTitle: "Мінімальний макет",
     compactDescription: "Зменшує візуальну щільність інтерфейсу.",
@@ -446,6 +472,12 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     accentLabel: "Акцентный цвет",
     accentTitle: "Визуальная идентичность",
     accentDescription: "Основной цвет платформы.",
+    accentBlue: "Электрический синий",
+    accentViolet: "Фиолетовый",
+    accentTeal: "Бирюзовый",
+    accentAmber: "Янтарный",
+    accentCoral: "Коралловый",
+    accentPlatinum: "Платиновый",
     compactLabel: "Компактный режим",
     compactTitle: "Минимальный макет",
     compactDescription: "Уменьшает визуальную плотность интерфейса.",
@@ -543,6 +575,12 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     accentLabel: "Color principal",
     accentTitle: "Identidad visual",
     accentDescription: "Color principal de la plataforma.",
+    accentBlue: "Azul eléctrico",
+    accentViolet: "Violeta",
+    accentTeal: "Verde agua",
+    accentAmber: "Ámbar",
+    accentCoral: "Coral",
+    accentPlatinum: "Platino",
     compactLabel: "Modo compacto",
     compactTitle: "Diseño minimalista",
     compactDescription: "Reduce la densidad visual de la interfaz.",
@@ -640,6 +678,12 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     accentLabel: "Couleur principale",
     accentTitle: "Identité visuelle",
     accentDescription: "Couleur principale de la plateforme.",
+    accentBlue: "Bleu électrique",
+    accentViolet: "Violet",
+    accentTeal: "Sarcelle",
+    accentAmber: "Ambre",
+    accentCoral: "Corail",
+    accentPlatinum: "Platine",
     compactLabel: "Mode compact",
     compactTitle: "Mise en page minimale",
     compactDescription: "Réduit la densité visuelle de l’interface.",
@@ -737,6 +781,12 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     accentLabel: "Akzentfarbe",
     accentTitle: "Visuelle Identität",
     accentDescription: "Hauptfarbe der Plattform.",
+    accentBlue: "Elektrischblau",
+    accentViolet: "Violett",
+    accentTeal: "Blaugrün",
+    accentAmber: "Bernstein",
+    accentCoral: "Koralle",
+    accentPlatinum: "Platin",
     compactLabel: "Kompakter Modus",
     compactTitle: "Minimaler Aufbau",
     compactDescription: "Reduziert die visuelle Dichte der Oberfläche.",
@@ -979,7 +1029,33 @@ export default async function SettingsPage({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-sm text-gray-400">
+              {t.accentLabel}
+            </p>
+
+            <h3 className="mt-2 text-lg font-bold">
+              {t.accentTitle}
+            </h3>
+
+            <p className="mt-2 text-sm text-gray-500">
+              {t.accentDescription}
+            </p>
+
+            <AccentColorPicker
+              currentAccent={normalizeAccentKey(user.accentColor)}
+              labels={[
+                t.accentBlue,
+                t.accentViolet,
+                t.accentTeal,
+                t.accentAmber,
+                t.accentCoral,
+                t.accentPlatinum,
+              ]}
+            />
+          </div>
+
+          <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
             <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
               <p className="text-sm text-gray-400">
                 {t.themeLabel}
@@ -1003,40 +1079,6 @@ export default async function SettingsPage({
                 <option value="dark">Dark</option>
                 <option value="light">Light</option>
                 <option value="system">System</option>
-              </select>
-            </label>
-
-            <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
-              <p className="text-sm text-gray-400">
-                {t.accentLabel}
-              </p>
-
-              <h3 className="mt-2 text-lg font-bold">
-                {t.accentTitle}
-              </h3>
-
-              <p className="mt-2 text-sm text-gray-500">
-                {t.accentDescription}
-              </p>
-
-              <select
-                name="accentColor"
-                defaultValue={
-                  user.accentColor ?? "green"
-                }
-                className="mt-4 w-full rounded-xl border border-white/10 bg-zinc-900 p-3 text-sm outline-none focus:border-accent/40"
-              >
-                <option value="green">
-                  VOLTIS Green
-                </option>
-                <option value="blue">
-                  Electric Blue
-                </option>
-                <option value="purple">
-                  Premium Purple
-                </option>
-                <option value="amber">Amber</option>
-                <option value="red">Red</option>
               </select>
             </label>
 
