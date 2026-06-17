@@ -703,7 +703,7 @@ export default async function AccountsPage() {
         </div>
       </div>
 
-      <div className="mb-5 flex items-center justify-between">
+      <div className="mb-8 flex items-center justify-between">
         <div>
           <p className="text-sm text-gray-400">
             {t.workspaceEyebrow}
@@ -716,7 +716,7 @@ export default async function AccountsPage() {
       </div>
 
       {activeMemberships.length > 0 ? (
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
           {activeMemberships.map(renderAccountCard)}
         </div>
       ) : (
@@ -744,7 +744,7 @@ export default async function AccountsPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
             {archivedMemberships.map(renderAccountCard)}
           </div>
         </div>

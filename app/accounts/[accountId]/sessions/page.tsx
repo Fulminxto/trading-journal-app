@@ -237,7 +237,7 @@ export default async function SessionsPage({
     "w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-accent-bright/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-accent-bright/10";
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-12">
       <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_14%,transparent),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.08),transparent_35%)]" />
 

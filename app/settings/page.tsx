@@ -902,7 +902,7 @@ export default async function SettingsPage({
   const t = settingsLabels[language];
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-12">
       <SettingsHardRefresh />
       <GlobalToast status={query.toast} language={language} />
 

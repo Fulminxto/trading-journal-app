@@ -1840,7 +1840,7 @@ export default async function AnalyticsPage({
         appLanguage={language}
       />
 
-      <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="mb-8 mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             {t.grossProfit}

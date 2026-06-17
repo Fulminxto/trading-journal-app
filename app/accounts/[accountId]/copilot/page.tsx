@@ -279,7 +279,7 @@ const summaryText =
                     : t.page.summaryDeveloping;
 
     return (
-        <div className="space-y-10">
+        <div className="space-y-12">
             <CopilotHero appLanguage={appLanguage} />
 
             <section className="space-y-4">

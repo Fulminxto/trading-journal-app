@@ -841,7 +841,7 @@ export default async function EquityPage({
   ];
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-12">
       <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_14%,transparent),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.08),transparent_35%)]" />
 
