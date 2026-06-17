@@ -83,12 +83,16 @@ export async function updateSettings(
       "blue"
     );
 
-  const appIconVariant =
-    getAllowedValue(
-      getString(formData, "appIconVariant"),
-      ["classic", "dark", "premium", "minimal"],
-      "classic"
-    );
+  const VALID_ICON_VARIANTS = [
+    "classic", "circuit", "inverse", "low-poly", "mono", "glass", "violet",
+  ];
+  // legacy values (dark/premium/minimal) never shipped — collapse to classic
+  const rawIconVariant = getString(formData, "appIconVariant");
+  const appIconVariant = getAllowedValue(
+    rawIconVariant,
+    VALID_ICON_VARIANTS,
+    "classic"
+  );
 
   const compactMode =
     getBoolean(

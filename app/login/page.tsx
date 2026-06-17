@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { Zap, LockKeyhole, ShieldCheck, Sparkles } from "lucide-react";
+import { LockKeyhole, ShieldCheck, Sparkles } from "lucide-react";
 
 import { auth } from "@/lib/auth";
 import LoginForm from "./LoginForm";
@@ -196,10 +196,12 @@ export default async function LoginPage() {
         <section className="hidden rounded-[2rem] border border-white/10 bg-white/[0.03] p-8 shadow-2xl backdrop-blur-xl lg:block">
           <div className="mb-8 flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03]">
-              <Zap
-                size={22}
-                strokeWidth={2.3}
-                className="text-white"
+              <img
+                src="/icons/variants/classic/icon.svg"
+                alt="VOLTIS"
+                width={22}
+                height={22}
+                className="object-contain"
               />
             </div>
 
@@ -281,10 +283,12 @@ export default async function LoginPage() {
         <section className="mx-auto w-full max-w-md rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 shadow-2xl backdrop-blur-xl">
           <div className="mb-8 text-center">
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-3xl border border-white/10 bg-white/[0.03]">
-              <Zap
-                size={26}
-                strokeWidth={2.3}
-                className="text-white"
+              <img
+                src="/icons/variants/classic/icon.svg"
+                alt="VOLTIS"
+                width={26}
+                height={26}
+                className="object-contain"
               />
             </div>
 

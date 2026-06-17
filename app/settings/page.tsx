@@ -178,8 +178,8 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     appExperienceEyebrow: "Esperienza app",
     appExperienceTitle: "Icona & Installazione",
     iconVariantLabel: "Variante icona app",
-    iconVariantTitle: "Stile schermata home",
-    iconVariantDescription: "Scegli la variante dell’icona dell’app. La PWA userà questa preferenza nella fase finale.",
+    iconVariantTitle: "Variante del logo",
+    iconVariantDescription: "Scegli la variante del logo visualizzata nell’app.",
     pwaStatusLabel: "Stato PWA",
     pwaStatusValue: "Pianificato",
     pwaStatusDescription: "L’installazione come app su desktop, mobile e tablet verrà completata nel blocco PWA.",
@@ -281,8 +281,8 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     appExperienceEyebrow: "App experience",
     appExperienceTitle: "Icon & Installation",
     iconVariantLabel: "App icon variant",
-    iconVariantTitle: "Home screen style",
-    iconVariantDescription: "Choose the app icon variant. The PWA will use this preference in the final phase.",
+    iconVariantTitle: "Logo variant",
+    iconVariantDescription: "Choose the logo variant displayed inside the app.",
     pwaStatusLabel: "PWA status",
     pwaStatusValue: "Planned",
     pwaStatusDescription: "Installation as an app on desktop, mobile and tablet will be completed in the PWA block.",
@@ -384,8 +384,8 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     appExperienceEyebrow: "Досвід застосунку",
     appExperienceTitle: "Іконка та встановлення",
     iconVariantLabel: "Варіант іконки застосунку",
-    iconVariantTitle: "Стиль домашнього екрана",
-    iconVariantDescription: "Оберіть варіант іконки. PWA використає це налаштування на фінальному етапі.",
+    iconVariantTitle: "Варіант логотипу",
+    iconVariantDescription: "Оберіть варіант логотипу, що відображається в застосунку.",
     pwaStatusLabel: "Статус PWA",
     pwaStatusValue: "Заплановано",
     pwaStatusDescription: "Встановлення як застосунку на desktop, mobile і tablet буде завершено в блоці PWA.",
@@ -487,8 +487,8 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     appExperienceEyebrow: "Опыт приложения",
     appExperienceTitle: "Иконка и установка",
     iconVariantLabel: "Вариант иконки приложения",
-    iconVariantTitle: "Стиль домашнего экрана",
-    iconVariantDescription: "Выберите вариант иконки. PWA использует эту настройку на финальном этапе.",
+    iconVariantTitle: "Вариант логотипа",
+    iconVariantDescription: "Выберите вариант логотипа, отображаемого в приложении.",
     pwaStatusLabel: "Статус PWA",
     pwaStatusValue: "Запланировано",
     pwaStatusDescription: "Установка как приложения на desktop, mobile и tablet будет завершена в блоке PWA.",
@@ -590,8 +590,8 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     appExperienceEyebrow: "Experiencia de app",
     appExperienceTitle: "Icono e instalación",
     iconVariantLabel: "Variante del icono",
-    iconVariantTitle: "Estilo de pantalla de inicio",
-    iconVariantDescription: "Elige la variante del icono. La PWA usará esta preferencia en la fase final.",
+    iconVariantTitle: "Variante del logo",
+    iconVariantDescription: "Elige la variante del logo que se muestra dentro de la app.",
     pwaStatusLabel: "Estado PWA",
     pwaStatusValue: "Planificado",
     pwaStatusDescription: "La instalación como app en desktop, mobile y tablet se completará en el bloque PWA.",
@@ -693,8 +693,8 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     appExperienceEyebrow: "Expérience app",
     appExperienceTitle: "Icône et installation",
     iconVariantLabel: "Variante de l’icône",
-    iconVariantTitle: "Style écran d’accueil",
-    iconVariantDescription: "Choisissez la variante de l’icône. La PWA utilisera cette préférence lors de la phase finale.",
+    iconVariantTitle: "Variante du logo",
+    iconVariantDescription: "Choisissez la variante du logo affichée dans l’app.",
     pwaStatusLabel: "Statut PWA",
     pwaStatusValue: "Planifié",
     pwaStatusDescription: "L’installation comme app sur desktop, mobile et tablet sera complétée dans le bloc PWA.",
@@ -796,8 +796,8 @@ const settingsLabels: Record<AppLanguage, SettingsLabels> = {
     appExperienceEyebrow: "App-Erlebnis",
     appExperienceTitle: "Icon & Installation",
     iconVariantLabel: "App-Icon-Variante",
-    iconVariantTitle: "Home-Screen-Stil",
-    iconVariantDescription: "Wähle die Icon-Variante. Die PWA nutzt diese Präferenz in der finalen Phase.",
+    iconVariantTitle: "Logo-Variante",
+    iconVariantDescription: "Wähle die Logo-Variante, die in der App angezeigt wird.",
     pwaStatusLabel: "PWA-Status",
     pwaStatusValue: "Geplant",
     pwaStatusDescription: "Die Installation als App auf Desktop, Mobile und Tablet wird im PWA-Block abgeschlossen.",
@@ -1176,9 +1176,12 @@ export default async function SettingsPage({
                 className="mt-4 w-full rounded-xl border border-white/10 bg-zinc-900 p-3 text-sm outline-none focus:border-accent/40"
               >
                 <option value="classic">Classic</option>
-                <option value="dark">Dark</option>
-                <option value="premium">Premium</option>
-                <option value="minimal">Minimal</option>
+                <option value="circuit">Circuit</option>
+                <option value="inverse">Inverse</option>
+                <option value="low-poly">Low-Poly</option>
+                <option value="mono">Mono</option>
+                <option value="glass">Glass</option>
+                <option value="violet">Violet</option>
               </select>
             </label>
 

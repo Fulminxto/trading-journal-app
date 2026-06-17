@@ -26,6 +26,7 @@ type AppShellUser = {
   username: string;
   role: string;
   appLanguage?: string | null;
+  appIconVariant?: string | null;
 } | null;
 
 type AppShellLabels = {
@@ -190,6 +191,7 @@ export default function AppShell({
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
         appLanguage={user?.appLanguage}
+        iconVariant={user?.appIconVariant ?? "classic"}
       />
 
       <main className="relative min-h-screen flex-1 overflow-x-hidden">

@@ -19,7 +19,6 @@ import {
   ArrowLeftRight,
   X,
   BarChart3,
-  Zap,
   Bot,
   FileText,
   Megaphone,
@@ -31,6 +30,11 @@ import {
   normalizeAppLanguage,
   type AppLanguage,
 } from "@/lib/i18n";
+
+import {
+  getIconVariant,
+  type IconVariantId,
+} from "@/lib/icon-variants";
 
 type AccountPermissions = {
   role: string;
@@ -68,6 +72,7 @@ type SidebarProps = {
   open?: boolean;
   onClose?: () => void;
   appLanguage?: string | null;
+  iconVariant?: string | null;
 };
 
 type SidebarLabels = {
@@ -437,6 +442,7 @@ export default function Sidebar({
   open = false,
   onClose,
   appLanguage,
+  iconVariant,
 }: SidebarProps) {
   const pathname = usePathname();
 
@@ -445,6 +451,10 @@ export default function Sidebar({
 
   const t =
     sidebarLabels[language] ?? sidebarLabels.en;
+
+  const logoSrc = getIconVariant(
+    (iconVariant as IconVariantId | null | undefined) ?? "classic"
+  ).svg;
 
   const [collapsed, setCollapsed] =
     useState(true);
@@ -654,10 +664,12 @@ export default function Sidebar({
               }`}
           >
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/5 bg-white/[0.02] transition-all duration-300 group-hover:bg-white/[0.05]">
-              <Zap
-                size={17}
-                strokeWidth={2.4}
-                className="text-white"
+              <img
+                src={logoSrc}
+                alt="VOLTIS"
+                width={26}
+                height={26}
+                className="object-contain"
               />
             </div>
 
