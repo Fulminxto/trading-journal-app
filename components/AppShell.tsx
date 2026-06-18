@@ -195,7 +195,7 @@ export default function AppShell({
       />
 
       <main className="relative min-h-screen flex-1 overflow-x-hidden">
-        <div className="fixed inset-x-0 top-0 z-40 flex items-center justify-between gap-3 border-b border-white/10 bg-[#0C1430] px-4 pb-3 pt-[calc(env(safe-area-inset-top)+1.5rem)] backdrop-blur-xl lg:inset-x-auto lg:right-8 lg:top-6 lg:border-none lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0 lg:pointer-events-none lg:backdrop-blur-none">
+        <div className="fixed inset-x-0 top-0 z-40 flex items-center justify-between gap-3 border-b border-white/10 bg-[#0C1430] px-4 pb-3 pt-[calc(env(safe-area-inset-top)+0.75rem)] backdrop-blur-xl lg:inset-x-auto lg:right-8 lg:top-6 lg:border-none lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0 lg:pointer-events-none lg:backdrop-blur-none">
           <button
             onClick={() => setSidebarOpen(true)}
             aria-label={t.openSidebar}
@@ -329,7 +329,7 @@ export default function AppShell({
           </div>
         </div>
 
-        <div className="p-4 pt-[calc(env(safe-area-inset-top)+5.75rem)] sm:p-6 sm:pt-[calc(env(safe-area-inset-top)+6.25rem)] lg:p-8 lg:pt-14">
+        <div className="p-4 pt-[calc(env(safe-area-inset-top)+5rem)] sm:p-6 sm:pt-[calc(env(safe-area-inset-top)+5.5rem)] lg:p-8 lg:pt-14">
           {children}
 
           <footer className="mt-16 hidden border-t border-white/5 pt-6 text-center print:hidden">
