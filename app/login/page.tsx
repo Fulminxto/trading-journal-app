@@ -187,7 +187,7 @@ export default async function LoginPage() {
   const t = loginCopy[appLanguage] ?? loginCopy.en;
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#0C1430] px-4 py-10 text-white">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#0C1430] px-4 py-10 text-white" style={{ paddingTop: "calc(env(safe-area-inset-top) + 2.5rem)" }}>
       <div className="absolute left-1/2 top-1/2 h-[620px] w-[620px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/10 blur-[140px]" />
 
       <div className="absolute inset-x-0 bottom-0 bg-[radial-gradient(circle_at_top,color-mix(in_srgb,var(--color-accent)_10%,transparent)_34%,transparent),radial-gradient(circle_at_bottom_right,color-mix(in_srgb,var(--color-accent-bright)_8%,transparent)_32%,transparent)]" style={{ top: "env(safe-area-inset-top)" }} />
