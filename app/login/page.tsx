@@ -195,15 +195,13 @@ export default async function LoginPage() {
       <div className="relative grid w-full max-w-6xl items-center gap-8 lg:grid-cols-2">
         <section className="hidden rounded-[2rem] border border-white/10 bg-white/[0.03] p-8 shadow-2xl backdrop-blur-xl lg:block">
           <div className="mb-8 flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03]">
-              <img
-                src="/icons/variants/classic/icon.svg"
-                alt="VOLTIS"
-                width={22}
-                height={22}
-                className="object-contain"
-              />
-            </div>
+            <img
+              src="/icons/variants/classic/icon.svg"
+              alt="VOLTIS"
+              width={40}
+              height={40}
+              className="h-10 w-10 object-contain"
+            />
 
             <div>
               <p className="text-xs font-black uppercase tracking-[0.35em] text-accent-bright">
@@ -282,15 +280,13 @@ export default async function LoginPage() {
 
         <section className="mx-auto w-full max-w-md rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 shadow-2xl backdrop-blur-xl">
           <div className="mb-8 text-center">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-3xl border border-white/10 bg-white/[0.03]">
-              <img
-                src="/icons/variants/classic/icon.svg"
-                alt="VOLTIS"
-                width={26}
-                height={26}
-                className="object-contain"
-              />
-            </div>
+            <img
+              src="/icons/variants/classic/icon.svg"
+              alt="VOLTIS"
+              width={56}
+              height={56}
+              className="mx-auto h-14 w-14 object-contain"
+            />
 
             <p className="mt-6 text-xs uppercase tracking-[0.45em] text-gray-500">
               {t.eyebrow}

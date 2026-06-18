@@ -663,15 +663,13 @@ export default function Sidebar({
               : "gap-3"
               }`}
           >
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/5 bg-white/[0.02] transition-all duration-300 group-hover:bg-white/[0.05]">
-              <img
-                src={logoSrc}
-                alt="VOLTIS"
-                width={26}
-                height={26}
-                className="object-contain"
-              />
-            </div>
+            <img
+              src={logoSrc}
+              alt="VOLTIS"
+              width={40}
+              height={40}
+              className="h-10 w-10 shrink-0 object-contain"
+            />
 
             {!isCollapsed && (
               <div>
