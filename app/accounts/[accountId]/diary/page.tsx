@@ -1300,7 +1300,7 @@ export default async function DiaryPage({
   ).length;
 
   return (
-    <div>
+    <div className="space-y-12">
       {isSharedAccount && (
         <MemberSelector
           members={accountMembers.map((m) => ({
@@ -1321,114 +1321,90 @@ export default async function DiaryPage({
         appLanguage={language}
       />
 
-      <div className="mt-8">
-        <TradeDisciplineScore score={disciplineScore} appLanguage={language} />
-      </div>
+      <TradeDisciplineScore score={disciplineScore} appLanguage={language} />
 
-      <div className="mt-8">
-        <TradeQualityIntelligence
-          highQualityTrades={highQualityTrades}
-          weakExecutionTrades={weakExecutionTrades}
-          emotionalTrades={emotionalTrades}
-          appLanguage={language}
-        />
-      </div>
+      <TradeQualityIntelligence
+        highQualityTrades={highQualityTrades}
+        weakExecutionTrades={weakExecutionTrades}
+        emotionalTrades={emotionalTrades}
+        appLanguage={language}
+      />
 
-      <div className="mt-8">
-        <TradeBehaviorWarnings
-          weakExecutionTrades={weakExecutionTrades}
-          emotionalTrades={emotionalTrades}
-          highQualityTrades={highQualityTrades}
-          appLanguage={language}
-        />
-      </div>
+      <TradeBehaviorWarnings
+        weakExecutionTrades={weakExecutionTrades}
+        emotionalTrades={emotionalTrades}
+        highQualityTrades={highQualityTrades}
+        appLanguage={language}
+      />
 
-      <div className="mt-8">
-        <TradePerformanceClusters
-          strongTrades={strongTrades}
-          averageTrades={averageTrades}
-          weakTrades={weakTrades}
-          appLanguage={language}
-        />
-      </div>
+      <TradePerformanceClusters
+        strongTrades={strongTrades}
+        averageTrades={averageTrades}
+        weakTrades={weakTrades}
+        appLanguage={language}
+      />
 
-      <div className="mt-8">
-        <EdgeDetectionEngine
-          bestSetup={bestSetup}
-          weakSetupCount={weakSetupTrades}
-          strongTradeCount={strongTrades}
-          appLanguage={language}
-        />
-      </div>
+      <EdgeDetectionEngine
+        bestSetup={bestSetup}
+        weakSetupCount={weakSetupTrades}
+        strongTradeCount={strongTrades}
+        appLanguage={language}
+      />
 
-      <div className="mt-8">
-        <TraderIdentityEngine
-          traderType={traderType}
-          strength={traderStrength}
-          weakness={traderWeakness}
-          appLanguage={language}
-        />
-      </div>
+      <TraderIdentityEngine
+        traderType={traderType}
+        strength={traderStrength}
+        weakness={traderWeakness}
+        appLanguage={language}
+      />
 
-      <div className="mt-8">
-        <AdaptiveCoachingLayer
-          disciplineScore={disciplineScore}
-          traderType={traderType}
-          weakness={traderWeakness}
-          weakExecutionTrades={weakExecutionTrades}
-          emotionalTrades={emotionalTrades}
-          appLanguage={language}
-        />
-      </div>
+      <AdaptiveCoachingLayer
+        disciplineScore={disciplineScore}
+        traderType={traderType}
+        weakness={traderWeakness}
+        weakExecutionTrades={weakExecutionTrades}
+        emotionalTrades={emotionalTrades}
+        appLanguage={language}
+      />
 
-      <div className="mt-8">
-        <MarketPsychologyEngine
-          emotionalTrades={emotionalTrades}
-          lowConfidenceTrades={lowConfidenceTrades}
-          highQualityTrades={highQualityTrades}
-          appLanguage={language}
-        />
-      </div>
+      <MarketPsychologyEngine
+        emotionalTrades={emotionalTrades}
+        lowConfidenceTrades={lowConfidenceTrades}
+        highQualityTrades={highQualityTrades}
+        appLanguage={language}
+      />
 
-      <div className="mt-8">
-        <ConfidenceAnalyticsEngine
-          lowConfidenceTrades={lowConfidenceTrades}
-          highConfidenceTrades={highConfidenceTrades}
-          highQualityTrades={highQualityTrades}
-          appLanguage={language}
-        />
-      </div>
+      <ConfidenceAnalyticsEngine
+        lowConfidenceTrades={lowConfidenceTrades}
+        highConfidenceTrades={highConfidenceTrades}
+        highQualityTrades={highQualityTrades}
+        appLanguage={language}
+      />
 
-      <div className="mt-8">
-        <BehavioralCorrelationEngine
-          emotionalTrades={emotionalTrades}
-          weakExecutionTrades={weakExecutionTrades}
-          lowConfidenceTrades={lowConfidenceTrades}
-          totalTrades={trades.length}
-          appLanguage={language}
-        />
-      </div>
+      <BehavioralCorrelationEngine
+        emotionalTrades={emotionalTrades}
+        weakExecutionTrades={weakExecutionTrades}
+        lowConfidenceTrades={lowConfidenceTrades}
+        totalTrades={trades.length}
+        appLanguage={language}
+      />
 
-      <div className="mt-8">
-        <AIPerformanceTimeline
-          totalTrades={trades.length}
-          highQualityTrades={highQualityTrades}
-          weakExecutionTrades={weakExecutionTrades}
-          disciplineScore={disciplineScore}
-          appLanguage={language}
-        />
-      </div>
+      <AIPerformanceTimeline
+        totalTrades={trades.length}
+        highQualityTrades={highQualityTrades}
+        weakExecutionTrades={weakExecutionTrades}
+        disciplineScore={disciplineScore}
+        appLanguage={language}
+      />
 
-      <div className="mt-8">
-        <ExecutionPatternEngine
-          lowConfidenceTrades={lowConfidenceTrades}
-          weakSetupTrades={weakSetupTrades}
-          impulsiveTrades={impulsiveTrades}
-          appLanguage={language}
-        />
-      </div>
+      <ExecutionPatternEngine
+        lowConfidenceTrades={lowConfidenceTrades}
+        weakSetupTrades={weakSetupTrades}
+        impulsiveTrades={impulsiveTrades}
+        appLanguage={language}
+      />
 
-      <div className="mb-8 mt-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <p className="text-sm text-gray-400">
             {t.operationalRegister}
@@ -1493,7 +1469,7 @@ export default async function DiaryPage({
         </div>
       </div>
 
-      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-8">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-8">
         {statCards.map((stat) => (
           <div
             key={stat.label}
@@ -1632,7 +1608,7 @@ export default async function DiaryPage({
       {canCreateTrades && (
         <form
           action={createAccountTrade.bind(null, accountId)}
-          className="mb-10 rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+          className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
         >
           <div className="mb-6">
             <p className="text-sm text-gray-400">
@@ -1859,7 +1835,7 @@ export default async function DiaryPage({
         </form>
       )}
 
-      <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
           <p className="text-sm text-gray-400">
             {t.historyEyebrow}

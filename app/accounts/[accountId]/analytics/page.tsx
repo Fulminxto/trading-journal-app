@@ -1827,8 +1827,7 @@ export default async function AnalyticsPage({
   });
 
   return (
-    <div>
-
+    <div className="space-y-12">
       <AnalyticsHero
         accountName={account.name}
         totalPnl={formatCurrency(
@@ -1840,7 +1839,7 @@ export default async function AnalyticsPage({
         appLanguage={language}
       />
 
-      <div className="mb-8 mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             {t.grossProfit}
@@ -1891,7 +1890,7 @@ export default async function AnalyticsPage({
         </div>
       </div>
 
-      <div className="mb-8">
+      <div>
         <p className="text-sm text-gray-400">
           {t.advancedStatsEyebrow}
         </p>
@@ -1902,7 +1901,7 @@ export default async function AnalyticsPage({
         </h1>
       </div>
 
-      <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         {cards.map((card) => (
           <AnalyticsStatCard
             key={card.label}
@@ -1936,90 +1935,64 @@ export default async function AnalyticsPage({
         appLanguage={language}
       />
 
-      <div className="mt-8">
-        <WeekdayHeatmap
-          data={weekdayHeatmapData}
+      <WeekdayHeatmap
+        data={weekdayHeatmapData}
         appLanguage={language}
       />
-      </div>
 
-      <div className="mt-8">
-        <EmotionalStateHeatmap
-          data={emotionalStateHeatmapData}
+      <EmotionalStateHeatmap
+        data={emotionalStateHeatmapData}
         appLanguage={language}
       />
-      </div>
 
-      <div className="mt-8">
-        <ConfidencePerformanceHeatmap
-          data={confidenceHeatmapData}
+      <ConfidencePerformanceHeatmap
+        data={confidenceHeatmapData}
         appLanguage={language}
       />
-      </div>
 
-      <div className="mt-8">
-        <ExecutionQualityHeatmap
-          data={executionHeatmapData}
+      <ExecutionQualityHeatmap
+        data={executionHeatmapData}
         appLanguage={language}
       />
-      </div>
 
-      <div className="mt-8">
-        <SetupQualityHeatmap
-          data={setupHeatmapData}
+      <SetupQualityHeatmap
+        data={setupHeatmapData}
         appLanguage={language}
       />
-      </div>
 
-      <div className="mt-8">
-        <BehavioralRiskHeatmap
-          data={behavioralRiskHeatmapData}
+      <BehavioralRiskHeatmap
+        data={behavioralRiskHeatmapData}
         appLanguage={language}
       />
-      </div>
 
-      <div className="mt-8">
-        <RiskConcentrationMatrix
-          risks={riskConcentrationData}
+      <RiskConcentrationMatrix
+        risks={riskConcentrationData}
         appLanguage={language}
       />
-      </div>
 
-      <div className="mt-8">
-        <ExecutionTrendChart
-          data={executionTrendData}
-        />
-      </div>
+      <ExecutionTrendChart
+        data={executionTrendData}
+      />
 
-      <div className="mt-8">
-        <ConfidenceEvolutionChart
-          data={confidenceEvolutionData}
-        />
-      </div>
+      <ConfidenceEvolutionChart
+        data={confidenceEvolutionData}
+      />
 
-      <div className="mt-8">
-        <EmotionalTimelineChart
-          data={emotionalTimelineData}
-        />
-      </div>
+      <EmotionalTimelineChart
+        data={emotionalTimelineData}
+      />
 
-      <div className="mt-8">
-        <DisciplineEvolutionChart
-          data={disciplineEvolutionData}
-        />
-      </div>
+      <DisciplineEvolutionChart
+        data={disciplineEvolutionData}
+      />
 
-      <div className="mt-8">
-        <ConsistencyCurveChart
-          data={consistencyCurveData}
-        />
-      </div>
+      <ConsistencyCurveChart
+        data={consistencyCurveData}
+      />
 
-      <div className="mt-8">
-        <PsychologicalStabilityCurve
-          data={psychologicalStabilityData}
-        />
-      </div>
+      <PsychologicalStabilityCurve
+        data={psychologicalStabilityData}
+      />
 
       <PsychologyAnalytics
         averageConfidence={
