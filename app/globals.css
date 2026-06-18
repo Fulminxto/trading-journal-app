@@ -270,13 +270,13 @@ input[type="number"] {
   }
 
   .pdf-only {
-    background: #050b10 !important;
+    background: #0C1430 !important;
   }
 
   .pdf-only section,
   .pdf-only div,
   .pdf-only footer {
-    background: #050b10 !important;
+    background: #0C1430 !important;
     border-color: rgba(255, 255, 255, 0.25) !important;
   }
 

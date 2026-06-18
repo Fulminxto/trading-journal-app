@@ -184,7 +184,7 @@ export default function AppShell({
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-[#050b10] text-white">
+    <div className="flex min-h-screen bg-[#0C1430] text-white">
       <OnboardingModal appLanguage={user?.appLanguage} />
 
       <Sidebar
@@ -195,7 +195,7 @@ export default function AppShell({
       />
 
       <main className="relative min-h-screen flex-1 overflow-x-hidden">
-        <div className="fixed inset-x-0 top-0 z-40 flex items-center justify-between gap-3 border-b border-white/10 bg-[#071018]/80 px-4 pb-3 pt-[calc(env(safe-area-inset-top)+0.75rem)] backdrop-blur-xl lg:inset-x-auto lg:right-8 lg:top-6 lg:border-none lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0 lg:pointer-events-none lg:backdrop-blur-none">
+        <div className="fixed inset-x-0 top-0 z-40 flex items-center justify-between gap-3 border-b border-white/10 bg-[#0C1430] px-4 pb-3 pt-[calc(env(safe-area-inset-top)+0.75rem)] backdrop-blur-xl lg:inset-x-auto lg:right-8 lg:top-6 lg:border-none lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0 lg:pointer-events-none lg:backdrop-blur-none">
           <button
             onClick={() => setSidebarOpen(true)}
             aria-label={t.openSidebar}

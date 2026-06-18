@@ -75,7 +75,7 @@ export default function ConfidenceEvolutionChart({
               activeDot={{
                 r: 6,
                 fill: "#a855f7",
-                stroke: "#050b10",
+                stroke: "#0C1430",
                 strokeWidth: 3,
               }}
             />

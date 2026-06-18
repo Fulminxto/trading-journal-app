@@ -75,7 +75,7 @@ export default function DisciplineEvolutionChart({
               activeDot={{
                 r: 6,
                 fill: "#22c55e",
-                stroke: "#050b10",
+                stroke: "#0C1430",
                 strokeWidth: 3,
               }}
             />

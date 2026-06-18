@@ -127,7 +127,7 @@ export default async function AccountReviewPage({
     <>
       <GlobalToast status={query.toast} />
 
-      <div className="flex min-h-screen items-center justify-center bg-[#050b10] p-8 text-white">
+      <div className="flex min-h-screen items-center justify-center bg-[#0C1430] p-8 text-white">
         <form
           action={submitAccountReview}
           className="w-full max-w-2xl rounded-[40px] border border-yellow-500/20 bg-yellow-500/10 p-10 backdrop-blur-xl"

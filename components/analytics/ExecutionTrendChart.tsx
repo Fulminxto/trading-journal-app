@@ -75,7 +75,7 @@ export default function ExecutionTrendChart({
               activeDot={{
                 r: 6,
                 fill: "#22d3ee",
-                stroke: "#050b10",
+                stroke: "#0C1430",
                 strokeWidth: 3,
               }}
             />

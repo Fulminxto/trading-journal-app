@@ -39,7 +39,7 @@ export default function PDFCompactReport({
     const t = getReportLabels(appLanguage);
 
     return (
-        <div className="pdf-only pdf-page min-h-0 bg-[#050b10] p-4 text-white">
+        <div className="pdf-only pdf-page min-h-0 bg-[#0C1430] p-4 text-white">
             <section className="mb-6 border-b border-gray-300 pb-4">
                 <p className="text-xs uppercase tracking-[0.3em] text-gray-300">
                     {t.voltisIntelligenceReport}

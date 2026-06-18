@@ -182,7 +182,7 @@ export default function EquityChart({ data, language }: Props) {
             dot={false}
             activeDot={{
               r: 6,
-              stroke: "#050b10",
+              stroke: "#0C1430",
               strokeWidth: 3,
               fill: mainColor,
             }}

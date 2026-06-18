@@ -612,7 +612,7 @@ export default async function ReportsPage({
           : t.focusProtectEdge;
 
   return (
-    <div className="space-y-12 print:space-y-0 print:bg-[#050b10]">
+    <div className="space-y-12 print:space-y-0 print:bg-[#0C1430]">
       <PDFCompactReport
         appLanguage={language}
         currency={currency}

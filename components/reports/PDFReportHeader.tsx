@@ -25,7 +25,7 @@ export default function PDFReportHeader({
   );
 
   return (
-    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#050b10] via-[#0f1726] to-black p-10">
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#0C1430] via-[#0f1726] to-black p-10">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_12%,transparent)_35%)]" />
 
       <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
