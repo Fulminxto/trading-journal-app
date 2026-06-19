@@ -205,7 +205,7 @@ export default function AppShell({
             <Menu size={20} />
           </button>
 
-          <div className="pointer-events-auto flex items-start gap-3">
+          <div className="pointer-events-auto flex items-center gap-3">
             <NotificationBell language={appLanguage} />
 
             <div ref={profileRef} className="relative">
@@ -217,7 +217,7 @@ export default function AppShell({
                 title={t.openProfileMenu}
                 className="flex items-center sm:gap-2 sm:rounded-2xl sm:border sm:border-white/10 sm:bg-[#071018]/80 sm:px-3 sm:py-2 sm:shadow-2xl sm:backdrop-blur-xl sm:transition-all sm:duration-300 sm:hover:bg-[#071018]"
               >
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent/10 text-[11px] font-bold text-accent">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-accent/10 text-[12px] font-bold text-accent">
                   {initials}
                 </div>
 
