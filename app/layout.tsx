@@ -38,13 +38,18 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/icons/voltis.svg",
+        url: "/icons/variants/classic/icon.svg",
         type: "image/svg+xml",
+      },
+      {
+        url: "/icons/variants/classic/icon-256.png",
+        sizes: "256x256",
+        type: "image/png",
       },
     ],
     apple: [
       {
-        url: "/icons/apple-touch-icon.png",
+        url: "/icons/variants/classic/icon-256.png",
         sizes: "180x180",
         type: "image/png",
       },
