@@ -822,7 +822,7 @@ export default async function ProfilePage({
       <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] p-6">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-5">
-            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-[2rem] border border-green-500/20 bg-accent/10">
+            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-green-500/20 bg-accent/10">
               {user.image ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img

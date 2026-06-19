@@ -481,7 +481,7 @@ export default function PushNotificationsPanel({
   // idle
   return (
     <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-start gap-3">
           <BellRing
             size={22}
@@ -506,7 +506,7 @@ export default function PushNotificationsPanel({
         <button
           onClick={handleEnable}
           disabled={busy}
-          className="flex-shrink-0 rounded-xl bg-accent px-4 py-2 text-sm font-bold text-black transition hover:bg-accent-bright disabled:opacity-50"
+          className="w-full rounded-xl bg-accent px-4 py-2 text-sm font-bold text-black transition hover:bg-accent-bright disabled:opacity-50 sm:w-auto sm:flex-shrink-0"
         >
           {busy ? (
             <Loader2

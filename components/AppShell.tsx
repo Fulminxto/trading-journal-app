@@ -195,7 +195,7 @@ export default function AppShell({
       />
 
       <main className="relative min-h-screen flex-1 overflow-x-hidden">
-        <div className="fixed inset-x-0 top-0 z-40 flex items-center justify-between gap-3 border-b border-white/10 bg-[#0C1430] px-4 pb-3 pt-[calc(env(safe-area-inset-top)+0.75rem)] backdrop-blur-xl lg:inset-x-auto lg:right-8 lg:top-6 lg:border-none lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0 lg:pointer-events-none lg:backdrop-blur-none">
+        <div className="fixed inset-x-0 top-0 z-40 flex items-center justify-between gap-3 border-b border-white/10 bg-[#0C1430] px-4 pb-3 pt-[calc(env(safe-area-inset-top)+0.25rem)] backdrop-blur-xl lg:inset-x-auto lg:right-8 lg:top-6 lg:border-none lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0 lg:pointer-events-none lg:backdrop-blur-none">
           <button
             onClick={() => setSidebarOpen(true)}
             aria-label={t.openSidebar}
@@ -215,9 +215,9 @@ export default function AppShell({
                 }
                 aria-label={t.openProfileMenu}
                 title={t.openProfileMenu}
-                className="flex items-center gap-2 rounded-2xl border border-white/10 bg-[#071018]/80 px-3 py-2 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:bg-[#071018]"
+                className="flex items-center sm:gap-2 sm:rounded-2xl sm:border sm:border-white/10 sm:bg-[#071018]/80 sm:px-3 sm:py-2 sm:shadow-2xl sm:backdrop-blur-xl sm:transition-all sm:duration-300 sm:hover:bg-[#071018]"
               >
-                <div className="flex h-8 w-8 items-center justify-center text-[11px] font-bold text-accent sm:rounded-xl sm:bg-accent/10">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent/10 text-[11px] font-bold text-accent">
                   {initials}
                 </div>
 
@@ -236,7 +236,7 @@ export default function AppShell({
                 <div className="absolute right-0 mt-3 w-60 overflow-hidden rounded-2xl border border-white/10 bg-[#071018] shadow-2xl">
                   <div className="border-b border-white/10 p-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/10 text-sm font-bold text-accent">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/10 text-sm font-bold text-accent">
                         {initials}
                       </div>
 

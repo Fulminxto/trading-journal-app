@@ -1900,7 +1900,7 @@ function closeOnboarding() {
     100;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#0C1430]/90 p-4 backdrop-blur-md">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#071018]/95 p-4 backdrop-blur-md">
       <div className="relative max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-[36px] border border-white/10 bg-[#071018] p-6 shadow-2xl sm:p-8">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_8%,transparent)_50%,transparent),radial-gradient(ellipse_at_bottom_left,color-mix(in_srgb,var(--color-accent)_8%,transparent)_50%,transparent)]" />
 
