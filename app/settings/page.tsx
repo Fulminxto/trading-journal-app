@@ -13,6 +13,7 @@
 import { redirect } from "next/navigation";
 
 import GlobalToast from "@/components/GlobalToast";
+import ToggleSwitch from "@/components/ToggleSwitch";
 import PushNotificationsPanel from "@/components/PushNotificationsPanel";
 import ReopenOnboardingButton from "@/components/ReopenOnboardingButton";
 import TwoFactorPanel from "@/components/TwoFactorPanel";
@@ -1082,7 +1083,7 @@ export default async function SettingsPage({
               </select>
             </label>
 
-            <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-sm text-gray-400">
@@ -1098,16 +1099,14 @@ export default async function SettingsPage({
                   </p>
                 </div>
 
-                <input
-                  type="checkbox"
+                <ToggleSwitch
                   name="compactMode"
-                  defaultChecked={user.compactMode}
-                  className="mt-1 h-5 w-5"
+                  checked={!!user.compactMode}
                 />
               </div>
-            </label>
+            </div>
 
-            <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-sm text-gray-400">
@@ -1123,16 +1122,12 @@ export default async function SettingsPage({
                   </p>
                 </div>
 
-                <input
-                  type="checkbox"
+                <ToggleSwitch
                   name="performanceBlur"
-                  defaultChecked={
-                    user.performanceBlur
-                  }
-                  className="mt-1 h-5 w-5"
+                  checked={!!user.performanceBlur}
                 />
               </div>
-            </label>
+            </div>
           </div>
         </div>
 
@@ -1220,7 +1215,7 @@ export default async function SettingsPage({
           </div>
 
           {/* Master toggle */}
-          <label className="mb-4 flex cursor-pointer items-start justify-between gap-4 rounded-2xl border border-white/10 bg-black/20 p-5">
+          <div className="mb-4 flex items-start justify-between gap-4 rounded-2xl border border-white/10 bg-black/20 p-5">
             <div>
               <p className="text-sm text-gray-400">
                 {t.inAppNotificationsLabel}
@@ -1237,17 +1232,15 @@ export default async function SettingsPage({
               </p>
             </div>
 
-            <input
-              type="checkbox"
+            <ToggleSwitch
               name="notificationsEnabled"
-              defaultChecked={user.notificationsEnabled}
-              className="mt-1 h-5 w-5 flex-shrink-0"
+              checked={!!user.notificationsEnabled}
             />
-          </label>
+          </div>
 
           {/* Category cards */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-sm text-gray-400">
@@ -1265,16 +1258,14 @@ export default async function SettingsPage({
                   </p>
                 </div>
 
-                <input
-                  type="checkbox"
+                <ToggleSwitch
                   name="notifyTradeActivity"
-                  defaultChecked={user.notifyTradeActivity}
-                  className="mt-1 h-5 w-5 flex-shrink-0"
+                  checked={!!user.notifyTradeActivity}
                 />
               </div>
-            </label>
+            </div>
 
-            <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-sm text-gray-400">
@@ -1292,16 +1283,14 @@ export default async function SettingsPage({
                   </p>
                 </div>
 
-                <input
-                  type="checkbox"
+                <ToggleSwitch
                   name="notifyAccountActivity"
-                  defaultChecked={user.notifyAccountActivity}
-                  className="mt-1 h-5 w-5 flex-shrink-0"
+                  checked={!!user.notifyAccountActivity}
                 />
               </div>
-            </label>
+            </div>
 
-            <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-sm text-gray-400">
@@ -1319,16 +1308,14 @@ export default async function SettingsPage({
                   </p>
                 </div>
 
-                <input
-                  type="checkbox"
+                <ToggleSwitch
                   name="notifyPlatformUpdates"
-                  defaultChecked={user.notifyPlatformUpdates}
-                  className="mt-1 h-5 w-5 flex-shrink-0"
+                  checked={!!user.notifyPlatformUpdates}
                 />
               </div>
-            </label>
+            </div>
 
-            <label className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-sm text-gray-400">
@@ -1346,14 +1333,12 @@ export default async function SettingsPage({
                   </p>
                 </div>
 
-                <input
-                  type="checkbox"
+                <ToggleSwitch
                   name="notifySupport"
-                  defaultChecked={user.notifySupport}
-                  className="mt-1 h-5 w-5 flex-shrink-0"
+                  checked={!!user.notifySupport}
                 />
               </div>
-            </label>
+            </div>
           </div>
         </div>
 

@@ -19,13 +19,6 @@ function getString(
   return value.trim();
 }
 
-function getBoolean(
-  formData: FormData,
-  key: string
-) {
-  return formData.get(key) === "on";
-}
-
 function getAllowedValue(
   value: string,
   allowedValues: string[],
@@ -94,51 +87,6 @@ export async function updateSettings(
     "classic"
   );
 
-  const compactMode =
-    getBoolean(
-      formData,
-      "compactMode"
-    );
-
-  const performanceBlur =
-    getBoolean(
-      formData,
-      "performanceBlur"
-    );
-
-  const reviewReminders =
-    getBoolean(
-      formData,
-      "reviewReminders"
-    );
-
-  const sessionLockAlerts =
-    getBoolean(
-      formData,
-      "sessionLockAlerts"
-    );
-
-  const dailyTradingReminder =
-    getBoolean(
-      formData,
-      "dailyTradingReminder"
-    );
-
-  const notificationsEnabled =
-    getBoolean(formData, "notificationsEnabled");
-
-  const notifyTradeActivity =
-    getBoolean(formData, "notifyTradeActivity");
-
-  const notifyAccountActivity =
-    getBoolean(formData, "notifyAccountActivity");
-
-  const notifyPlatformUpdates =
-    getBoolean(formData, "notifyPlatformUpdates");
-
-  const notifySupport =
-    getBoolean(formData, "notifySupport");
-
   const before = {
     defaultCurrency:
       currentUser.defaultCurrency,
@@ -154,21 +102,6 @@ export async function updateSettings(
 
     appIconVariant:
       currentUser.appIconVariant,
-
-    compactMode:
-      currentUser.compactMode,
-
-    performanceBlur:
-      currentUser.performanceBlur,
-
-    reviewReminders:
-      currentUser.reviewReminders,
-
-    sessionLockAlerts:
-      currentUser.sessionLockAlerts,
-
-    dailyTradingReminder:
-      currentUser.dailyTradingReminder,
   };
 
   const updatedUser =
@@ -183,19 +116,6 @@ export async function updateSettings(
         themePreference,
         accentColor,
         appIconVariant,
-
-        compactMode,
-        performanceBlur,
-
-        reviewReminders,
-        sessionLockAlerts,
-        dailyTradingReminder,
-
-        notificationsEnabled,
-        notifyTradeActivity,
-        notifyAccountActivity,
-        notifyPlatformUpdates,
-        notifySupport,
       },
     });
 
@@ -214,21 +134,6 @@ export async function updateSettings(
 
     appIconVariant:
       updatedUser.appIconVariant,
-
-    compactMode:
-      updatedUser.compactMode,
-
-    performanceBlur:
-      updatedUser.performanceBlur,
-
-    reviewReminders:
-      updatedUser.reviewReminders,
-
-    sessionLockAlerts:
-      updatedUser.sessionLockAlerts,
-
-    dailyTradingReminder:
-      updatedUser.dailyTradingReminder,
   };
 
   await logActivity({
@@ -257,5 +162,35 @@ export async function updatePushEnabled(
   await prisma.user.update({
     where: { id: session.user.id },
     data: { pushNotificationsEnabled: enabled },
+  });
+}
+
+const TOGGLE_WHITELIST = [
+  "compactMode",
+  "performanceBlur",
+  "notificationsEnabled",
+  "notifyTradeActivity",
+  "notifyAccountActivity",
+  "notifyPlatformUpdates",
+  "notifySupport",
+] as const;
+
+export async function updateToggle(
+  field: string,
+  value: boolean
+) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    return;
+  }
+
+  if (!(TOGGLE_WHITELIST as readonly string[]).includes(field)) {
+    return;
+  }
+
+  await prisma.user.update({
+    where: { id: session.user.id },
+    data: { [field]: value },
   });
 }
