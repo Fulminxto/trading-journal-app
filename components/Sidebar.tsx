@@ -641,7 +641,7 @@ export default function Sidebar({
         onMouseLeave={() =>
           setCollapsed(true)
         }
-        className={`fixed left-0 top-0 z-50 h-screen overflow-y-auto border-r border-white/10 bg-[#071018] p-4 transition-all duration-500 ease-out lg:sticky lg:z-40 ${isCollapsed
+        className={`fixed left-0 top-0 z-50 h-screen overflow-y-auto border-r border-white/10 bg-[#071018] p-4 pt-[calc(env(safe-area-inset-top)+1rem)] transition-all duration-500 ease-out lg:sticky lg:z-40 lg:pt-4 ${isCollapsed
           ? "w-[88px]"
           : "w-72 lg:w-64"
           } ${open
@@ -666,9 +666,9 @@ export default function Sidebar({
             <img
               src={logoSrc}
               alt="VOLTIS"
-              width={40}
-              height={40}
-              className="h-10 w-10 shrink-0 object-contain"
+              width={44}
+              height={44}
+              className="h-11 w-11 shrink-0 object-contain"
             />
 
             {!isCollapsed && (
@@ -696,7 +696,9 @@ export default function Sidebar({
           )}
         </div>
 
-        <nav className="mt-10 flex flex-col gap-3 text-sm">
+        <div className="mt-4 border-t border-white/[0.06]" />
+
+        <nav className="mt-6 flex flex-col gap-3 text-sm">
           {permissionsLoading &&
             accountId &&
             !isAdminArea &&
