@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { logActivity } from "@/lib/activity";
 import { normalizeAppLanguage } from "@/lib/i18n";
@@ -193,4 +194,6 @@ export async function updateToggle(
     where: { id: session.user.id },
     data: { [field]: value },
   });
+
+  revalidatePath("/settings");
 }
