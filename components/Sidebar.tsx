@@ -1,12 +1,15 @@
 ﻿"use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   useEffect,
   useMemo,
   useState,
+  useTransition,
 } from "react";
+
+import VoltisLightningLoader from "@/components/VoltisLightningLoader";
 
 import {
   LayoutDashboard,
@@ -445,6 +448,9 @@ export default function Sidebar({
   iconVariant,
 }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [pendingHref, setPendingHref] = useState<string | null>(null);
 
   const language =
     normalizeAppLanguage(appLanguage);
@@ -657,7 +663,13 @@ export default function Sidebar({
         >
           <Link
             href="/accounts"
-            onClick={onClose}
+            onClick={(e) => {
+              if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+              e.preventDefault();
+              onClose?.();
+              setPendingHref("/accounts");
+              startTransition(() => router.push("/accounts"));
+            }}
             className={`group flex items-center transition-all duration-500 ${isCollapsed
               ? "justify-center"
               : "gap-3"
@@ -716,12 +728,20 @@ export default function Sidebar({
               );
 
             const Icon = link.icon;
+            const isThisPending =
+              isPending && pendingHref === link.href;
 
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                onClick={onClose}
+                onClick={(e) => {
+                  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                  e.preventDefault();
+                  onClose?.();
+                  setPendingHref(link.href);
+                  startTransition(() => router.push(link.href));
+                }}
                 className={`group flex items-center rounded-xl transition ${isCollapsed
                   ? "justify-center px-3 py-3"
                   : "gap-3 px-4 py-3"
@@ -730,7 +750,11 @@ export default function Sidebar({
                     : "text-gray-300 hover:bg-white/5 hover:text-white"
                   }`}
               >
-                <Icon size={18} />
+                {isThisPending ? (
+                  <VoltisLightningLoader size={18} />
+                ) : (
+                  <Icon size={18} />
+                )}
 
                 {!isCollapsed && (
                   <span>{link.label}</span>

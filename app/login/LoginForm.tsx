@@ -4,6 +4,8 @@ import { Eye, EyeOff } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 
+import VoltisLightningLoader from "@/components/VoltisLightningLoader";
+
 import {
   normalizeAppLanguage,
   type AppLanguage,
@@ -175,9 +177,8 @@ export default function LoginForm({
         callbackUrl: "/accounts",
       });
 
-      setLoading(false);
-
       if (result?.error) {
+        setLoading(false);
         setError(t.invalidCredentials);
         return;
       }
@@ -209,9 +210,8 @@ export default function LoginForm({
       callbackUrl: "/accounts",
     });
 
-    setLoading(false);
-
     if (result?.error) {
+      setLoading(false);
       setError(t.invalidOtp);
       return;
     }
@@ -247,9 +247,15 @@ export default function LoginForm({
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-2xl bg-accent p-4 font-bold text-black shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)] transition hover:bg-accent-bright disabled:opacity-50"
+          className="flex w-full items-center justify-center rounded-2xl bg-accent p-4 font-bold text-black shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)] transition hover:bg-accent-bright disabled:opacity-50"
         >
-          {t.otpSubmit}
+          {loading ? (
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#060A1A]">
+              <VoltisLightningLoader size={24} />
+            </span>
+          ) : (
+            t.otpSubmit
+          )}
         </button>
 
         <button
@@ -305,9 +311,15 @@ export default function LoginForm({
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-2xl bg-accent p-4 font-bold text-black shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)] transition hover:bg-accent-bright disabled:opacity-50"
+        className="flex w-full items-center justify-center rounded-2xl bg-accent p-4 font-bold text-black shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)] transition hover:bg-accent-bright disabled:opacity-50"
       >
-        {t.submit}
+        {loading ? (
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#060A1A]">
+            <VoltisLightningLoader size={24} />
+          </span>
+        ) : (
+          t.submit
+        )}
       </button>
     </form>
   );
