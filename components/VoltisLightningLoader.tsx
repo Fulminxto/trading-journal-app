@@ -175,7 +175,7 @@ export default function VoltisLightningLoader({
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[#0C1430]">
+    <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-[#0C1430]">
       <div className="loader-fade-in flex flex-col items-center gap-5">
         <canvas ref={canvasRef} className="block" />
         <p className="text-xs uppercase tracking-[0.45em] text-[#5f7099]">
