@@ -647,7 +647,7 @@ export default function Sidebar({
         onMouseLeave={() =>
           setCollapsed(true)
         }
-        className={`fixed left-0 top-0 z-50 h-screen overflow-y-auto border-r border-white/10 bg-[#071018] p-4 pt-[calc(env(safe-area-inset-top)+1rem)] transition-all duration-500 ease-out lg:sticky lg:z-40 lg:pt-4 ${isCollapsed
+        className={`fixed left-0 top-0 z-50 flex h-screen flex-col overflow-y-auto border-r border-white/10 bg-[#071018] p-4 pt-[calc(env(safe-area-inset-top)+1rem)] transition-all duration-500 ease-out lg:sticky lg:z-40 lg:pt-4 ${isCollapsed
           ? "w-[88px]"
           : "w-72 lg:w-64"
           } ${open
@@ -710,7 +710,7 @@ export default function Sidebar({
 
         <div className="mt-4 border-t border-white/[0.06]" />
 
-        <nav className="mt-6 flex flex-col gap-3 text-sm">
+        <nav className="mt-6 flex flex-1 flex-col gap-3 text-sm">
           {permissionsLoading &&
             accountId &&
             !isAdminArea &&
@@ -723,9 +723,8 @@ export default function Sidebar({
           {links.map((link) => {
             const active =
               pathname === link.href ||
-              pathname.startsWith(
-                `${link.href}/`
-              );
+              (link.href !== "/accounts" &&
+                pathname.startsWith(`${link.href}/`));
 
             const Icon = link.icon;
             const isThisPending =
@@ -763,6 +762,20 @@ export default function Sidebar({
             );
           })}
         </nav>
+
+        {!isCollapsed && (
+          <div className="mt-4 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+            <div className="border-t border-white/[0.06]" />
+            <div className="pt-3 text-center">
+              <p className="text-[9px] uppercase tracking-[0.28em] text-white/[0.18]">
+                Private Trading OS
+              </p>
+              <p className="mt-1 text-[8px] tracking-wider text-white/[0.12]">
+                v0.1.0
+              </p>
+            </div>
+          </div>
+        )}
       </aside>
     </>
   );
