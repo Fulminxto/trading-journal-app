@@ -1,7 +1,9 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTransition } from "react";
 import { normalizeAppLanguage, type AppLanguage } from "@/lib/i18n";
+import VoltisLightningLoader from "@/components/VoltisLightningLoader";
 
 type Member = {
   id: string;
@@ -44,45 +46,78 @@ export default function MemberSelector({
   const router = useRouter();
   const searchParams = useSearchParams();
   const lang = normalizeAppLanguage(appLanguage);
+  const [isPending, startTransition] = useTransition();
 
-  function handleChange(
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) {
-    const params = new URLSearchParams(
-      searchParams.toString()
-    );
-
-    if (e.target.value) {
-      params.set("member", e.target.value);
+  function handleSelect(memberId: string) {
+    const params = new URLSearchParams(searchParams.toString());
+    if (memberId) {
+      params.set("member", memberId);
     } else {
       params.delete("member");
     }
-
-    // Remove trader param to avoid conflict with diary's dual-param logic
     params.delete("trader");
-
-    router.push(`?${params.toString()}`);
+    startTransition(() => router.push(`?${params.toString()}`));
   }
 
+  const allInitial = allLabel[lang][0].toUpperCase();
+
   return (
-    <div className="mb-6 flex items-center gap-3">
-      <p className="shrink-0 text-sm text-gray-400">
-        {showLabel[lang]}
-      </p>
+    <div className="mb-6 flex flex-wrap items-center gap-3">
+      <p className="shrink-0 text-sm text-gray-400">{showLabel[lang]}</p>
 
-      <select
-        value={selectedMemberId || ""}
-        onChange={handleChange}
-        className="rounded-2xl border border-white/10 bg-zinc-900 px-4 py-2 text-sm outline-none focus:border-accent/40"
+      {isPending && <VoltisLightningLoader size={20} />}
+
+      <div
+        className={`flex flex-wrap gap-2 ${isPending ? "pointer-events-none opacity-50" : ""}`}
       >
-        <option value="">{allLabel[lang]}</option>
+        <button
+          onClick={() => handleSelect("")}
+          className={`flex items-center gap-2 rounded-2xl border px-3 py-1.5 text-sm transition ${
+            !selectedMemberId
+              ? "border-accent/30 bg-accent/10 text-accent"
+              : "border-white/10 text-gray-400 hover:bg-white/5 hover:text-white"
+          }`}
+        >
+          <span
+            className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
+              !selectedMemberId
+                ? "bg-accent/20 text-accent"
+                : "bg-white/10 text-gray-400"
+            }`}
+          >
+            {allInitial}
+          </span>
+          <span>{allLabel[lang]}</span>
+        </button>
 
-        {members.map((member) => (
-          <option key={member.id} value={member.id}>
-            {member.name || member.username}
-          </option>
-        ))}
-      </select>
+        {members.map((member) => {
+          const isActive = selectedMemberId === member.id;
+          const displayName = member.name || member.username;
+          const initial = displayName[0].toUpperCase();
+          return (
+            <button
+              key={member.id}
+              onClick={() => handleSelect(member.id)}
+              className={`flex items-center gap-2 rounded-2xl border px-3 py-1.5 text-sm transition ${
+                isActive
+                  ? "border-accent/30 bg-accent/10 text-accent"
+                  : "border-white/10 text-gray-400 hover:bg-white/5 hover:text-white"
+              }`}
+            >
+              <span
+                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
+                  isActive
+                    ? "bg-accent/20 text-accent"
+                    : "bg-white/10 text-gray-400"
+                }`}
+              >
+                {initial}
+              </span>
+              <span>{displayName}</span>
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
