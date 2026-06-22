@@ -17,6 +17,12 @@ import {
   getLocaleFromLanguage,
   normalizeAppLanguage,
 } from "@/lib/i18n";
+import ScopeBar from "@/components/ScopeBar";
+import {
+  parseScopeParams,
+  getPeriodRange,
+  getPeriodSuffix,
+} from "@/lib/scope";
 
 import { createTradingSession } from "./actions";
 import SessionsHero from "@/components/sessions/SessionsHero";
@@ -108,9 +114,15 @@ function formatDate(
 
 export default async function SessionsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{
     accountId: string;
+  }>;
+  searchParams: Promise<{
+    member?: string;
+    period?: string;
+    ref?: string;
   }>;
 }) {
   const session = await auth();
@@ -120,6 +132,12 @@ export default async function SessionsPage({
   }
 
   const { accountId } = await params;
+  const filters = await searchParams;
+  const selectedMemberId = filters.member || undefined;
+  const { period, ref } = parseScopeParams({
+    period: filters.period,
+    ref: filters.ref,
+  });
 
   const membership =
     await prisma.accountMember.findFirst({
@@ -150,18 +168,28 @@ export default async function SessionsPage({
     redirect(`/accounts/${accountId}/dashboard`);
   }
 
-  const currentUser = await prisma.user.update({
-    where: {
-      id: session.user.id,
-    },
-    data: {
-      lastSeenAt: new Date(),
-      lastActivityAt: new Date(),
-    },
-    select: {
-      appLanguage: true,
-    },
-  });
+  const [currentUser, accountMembers] =
+    await Promise.all([
+      prisma.user.update({
+        where: {
+          id: session.user.id,
+        },
+        data: {
+          lastSeenAt: new Date(),
+          lastActivityAt: new Date(),
+        },
+        select: {
+          appLanguage: true,
+          timezone: true,
+        },
+      }),
+      prisma.accountMember.findMany({
+        where: { tradingAccountId: accountId },
+        include: { user: true },
+      }),
+    ]);
+
+  const isSharedAccount = accountMembers.length > 1;
 
   const appLanguage = normalizeAppLanguage(
     currentUser.appLanguage
@@ -177,6 +205,9 @@ export default async function SessionsPage({
     await prisma.tradingSession.findMany({
       where: {
         tradingAccountId: accountId,
+        ...(selectedMemberId
+          ? { createdById: selectedMemberId }
+          : {}),
       },
 
       orderBy: {
@@ -184,60 +215,98 @@ export default async function SessionsPage({
       },
     });
 
+  const dateRange = getPeriodRange(
+    period,
+    ref,
+    currentUser.timezone ?? undefined
+  );
+
+  const periodSessions = dateRange
+    ? sessions.filter(
+        (s) =>
+          s.date >= dateRange.gte &&
+          s.date < dateRange.lte
+      )
+    : sessions;
+
+  const periodSuffix = getPeriodSuffix(
+    period,
+    ref,
+    appLanguage
+  );
+
   const averageScore =
-    sessions.length > 0
+    periodSessions.length > 0
       ? Math.round(
-        sessions.reduce(
+        periodSessions.reduce(
           (acc, tradingSession) =>
             acc +
             (tradingSession.finalScore || 0),
           0
-        ) / sessions.length
+        ) / periodSessions.length
       )
       : 0;
 
-  const focusedSessions = sessions.filter(
+  const focusedSessions = periodSessions.filter(
     (tradingSession) =>
       tradingSession.focus &&
       tradingSession.focus.length > 10
   ).length;
 
-  const reviewedSessions = sessions.filter(
+  const reviewedSessions = periodSessions.filter(
     (tradingSession) =>
       tradingSession.sessionReview &&
       tradingSession.sessionReview.length > 10
   ).length;
 
-  const highScoreSessions = sessions.filter(
+  const highScoreSessions = periodSessions.filter(
     (tradingSession) =>
       (tradingSession.finalScore || 0) >= 8
   ).length;
 
-  const lowScoreSessions = sessions.filter(
+  const lowScoreSessions = periodSessions.filter(
     (tradingSession) =>
       (tradingSession.finalScore || 0) <= 4
   ).length;
 
   const pendingReviews =
-    sessions.length - reviewedSessions;
+    periodSessions.length - reviewedSessions;
 
   const reviewCompletionRate =
-    sessions.length > 0
-      ? (reviewedSessions / sessions.length) * 100
+    periodSessions.length > 0
+      ? (reviewedSessions / periodSessions.length) * 100
       : 0;
 
   const highScoreRate =
-    sessions.length > 0
-      ? (highScoreSessions / sessions.length) * 100
+    periodSessions.length > 0
+      ? (highScoreSessions / periodSessions.length) * 100
       : 0;
 
-  const lastSession = sessions[0];
+  const lastSession = periodSessions[0];
 
   const inputClass =
     "w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-accent-bright/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-accent-bright/10";
 
+  const members = isSharedAccount
+    ? accountMembers.map((m) => ({
+        id: m.userId,
+        name: m.user.name ?? null,
+        username: m.user.username,
+        image: m.user.image ?? null,
+      }))
+    : undefined;
+
   return (
     <div className="space-y-12">
+      <ScopeBar
+        members={members}
+        selectedMemberId={selectedMemberId}
+        currentPeriod={period}
+        currentRef={ref}
+        appLanguage={appLanguage}
+        accountId={accountId}
+      />
+
       <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_14%,transparent),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.08),transparent_35%)]" />
 
@@ -276,22 +345,22 @@ export default async function SessionsPage({
       </section>
 
       <SessionsHero
-        totalSessions={sessions.length}
+        totalSessions={periodSessions.length}
         averageScore={averageScore}
         appLanguage={appLanguage}
       />
 
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <StatCard
-          title={t.page.totalSessions}
-          value={sessions.length}
+          title={`${t.page.totalSessions}${periodSuffix}`}
+          value={periodSessions.length}
           description={t.page.totalSessionsDescription}
           icon={CalendarDays}
           tone="text-accent-bright"
         />
 
         <StatCard
-          title={t.page.averageScore}
+          title={`${t.page.averageScore}${periodSuffix}`}
           value={`${averageScore}/10`}
           description={t.page.averageScoreDescription}
           icon={Star}
@@ -299,7 +368,7 @@ export default async function SessionsPage({
         />
 
         <StatCard
-          title={t.page.reviewCompletion}
+          title={`${t.page.reviewCompletion}${periodSuffix}`}
           value={formatPercent(
             reviewCompletionRate,
             appLanguage
@@ -310,7 +379,7 @@ export default async function SessionsPage({
         />
 
         <StatCard
-          title={t.page.highQualitySessions}
+          title={`${t.page.highQualitySessions}${periodSuffix}`}
           value={formatPercent(
             highScoreRate,
             appLanguage
@@ -367,7 +436,7 @@ export default async function SessionsPage({
         lowScoreSessions={lowScoreSessions}
         highScoreSessions={highScoreSessions}
         reviewedSessions={reviewedSessions}
-        totalSessions={sessions.length}
+        totalSessions={periodSessions.length}
         appLanguage={appLanguage}
       />
 
@@ -558,12 +627,12 @@ export default async function SessionsPage({
           )}
         </div>
 
-        {sessions.length === 0 ? (
+        {periodSessions.length === 0 ? (
           <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-10 text-center text-gray-500">
             {t.page.emptySessions}
           </div>
         ) : (
-          sessions.map((tradingSession) => {
+          periodSessions.map((tradingSession) => {
             const hasFinalScore =
               tradingSession.finalScore !== null &&
               tradingSession.finalScore !== undefined;
