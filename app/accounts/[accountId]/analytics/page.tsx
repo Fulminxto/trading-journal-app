@@ -37,6 +37,12 @@ import {
   normalizeAppLanguage,
   type AppLanguage,
 } from "@/lib/i18n";
+import ScopeBar from "@/components/ScopeBar";
+import {
+  parseScopeParams,
+  getPeriodRange,
+  getPeriodSuffix,
+} from "@/lib/scope";
 
 function getBestWinStreak(
   trades: {
@@ -686,10 +692,10 @@ const analyticsLabels: Record<
 
 export default async function AnalyticsPage({
   params,
+  searchParams,
 }: {
-  params: Promise<{
-    accountId: string;
-  }>;
+  params: Promise<{ accountId: string }>;
+  searchParams: Promise<{ member?: string; period?: string; ref?: string }>;
 }) {
   const session = await auth();
 
@@ -698,6 +704,12 @@ export default async function AnalyticsPage({
   }
 
   const { accountId } = await params;
+  const filters = await searchParams;
+  const selectedMemberId = filters.member || undefined;
+  const { period, ref } = parseScopeParams({
+    period: filters.period,
+    ref: filters.ref,
+  });
 
   const membership =
     await prisma.accountMember.findFirst({
@@ -736,6 +748,7 @@ export default async function AnalyticsPage({
     },
     select: {
       appLanguage: true,
+      timezone: true,
     },
   });
 
@@ -773,6 +786,7 @@ export default async function AnalyticsPage({
   const trades = await prisma.trade.findMany({
     where: {
       tradingAccountId: accountId,
+      ...(selectedMemberId ? { createdById: selectedMemberId } : {}),
     },
 
     include: {
@@ -784,29 +798,45 @@ export default async function AnalyticsPage({
     },
   });
 
-  const totalTrades = trades.length;
+  const dateRange = getPeriodRange(
+    period,
+    ref,
+    currentUser?.timezone ?? undefined,
+  );
 
-  const wins = trades.filter(
+  const periodTrades = dateRange
+    ? trades.filter(
+        (trade) =>
+          trade.openDate >= dateRange.gte &&
+          trade.openDate < dateRange.lte,
+      )
+    : trades;
+
+  const periodSuffix = getPeriodSuffix(period, ref, language);
+
+  const totalTrades = periodTrades.length;
+
+  const wins = periodTrades.filter(
     (trade) => trade.outcome === "win"
   );
 
-  const losses = trades.filter(
+  const losses = periodTrades.filter(
     (trade) => trade.outcome === "loss"
   );
 
-  const longTrades = trades.filter(
+  const longTrades = periodTrades.filter(
     (trade) =>
       trade.direction?.toLowerCase() ===
       "long"
   );
 
-  const shortTrades = trades.filter(
+  const shortTrades = periodTrades.filter(
     (trade) =>
       trade.direction?.toLowerCase() ===
       "short"
   );
 
-  const totalPnl = trades.reduce(
+  const totalPnl = periodTrades.reduce(
     (acc, trade) =>
       acc + (trade.resultUsd || 0),
     0
@@ -842,22 +872,22 @@ export default async function AnalyticsPage({
         : 0;
 
   const bestWinStreak =
-    getBestWinStreak(trades);
+    getBestWinStreak(periodTrades);
 
   const averageRR =
-    trades.length > 0
-      ? trades.reduce(
+    periodTrades.length > 0
+      ? periodTrades.reduce(
         (acc, trade) =>
           acc +
           (trade.riskReward || 0),
         0
-      ) / trades.length
+      ) / periodTrades.length
       : 0;
 
   const bestTrade =
-    trades.length > 0
+    periodTrades.length > 0
       ? Math.max(
-        ...trades.map(
+        ...periodTrades.map(
           (trade) =>
             trade.resultUsd || 0
         )
@@ -865,9 +895,9 @@ export default async function AnalyticsPage({
       : 0;
 
   const worstTrade =
-    trades.length > 0
+    periodTrades.length > 0
       ? Math.min(
-        ...trades.map(
+        ...periodTrades.map(
           (trade) =>
             trade.resultUsd || 0
         )
@@ -882,7 +912,7 @@ export default async function AnalyticsPage({
     }
   > = {};
 
-  for (const trade of trades) {
+  for (const trade of periodTrades) {
     const symbol = trade.symbol;
 
     if (!symbolStats[symbol]) {
@@ -924,7 +954,7 @@ export default async function AnalyticsPage({
     }
   > = {};
 
-  for (const trade of trades) {
+  for (const trade of periodTrades) {
     if (!trade.mistakes) {
       continue;
     }
@@ -961,7 +991,7 @@ export default async function AnalyticsPage({
     }
   > = {};
 
-  for (const trade of trades) {
+  for (const trade of periodTrades) {
     if (!trade.emotionalState) {
       continue;
     }
@@ -1030,7 +1060,7 @@ export default async function AnalyticsPage({
     }
   > = {};
 
-  for (const trade of trades) {
+  for (const trade of periodTrades) {
     const month = new Date(
       trade.openDate
     ).toLocaleDateString(locale, {
@@ -1065,7 +1095,7 @@ export default async function AnalyticsPage({
     }
   > = {};
 
-  for (const trade of trades) {
+  for (const trade of periodTrades) {
     if (!trade.session) {
       continue;
     }
@@ -1108,7 +1138,7 @@ export default async function AnalyticsPage({
     },
   };
 
-  for (const trade of trades) {
+  for (const trade of periodTrades) {
     if (!trade.setupQuality) {
       continue;
     }
@@ -1224,7 +1254,7 @@ export default async function AnalyticsPage({
     }
   > = {};
 
-  for (const trade of trades) {
+  for (const trade of periodTrades) {
     const traderId =
       trade.createdById;
 
@@ -1277,14 +1307,14 @@ export default async function AnalyticsPage({
 
   const cards = [
     {
-      label: t.totalTrades,
+      label: t.totalTrades + periodSuffix,
       value: totalTrades,
       tone: "text-white",
       icon: BarChart3,
     },
 
     {
-      label: t.winRate,
+      label: t.winRate + periodSuffix,
       value: `${winRate.toFixed(2)}%`,
       tone:
         winRate >= 50
@@ -1294,14 +1324,14 @@ export default async function AnalyticsPage({
     },
 
     {
-      label: t.averageRR,
+      label: t.averageRR + periodSuffix,
       value: averageRR.toFixed(2),
       tone: "text-yellow-400",
       icon: CandlestickChart,
     },
 
     {
-      label: t.totalPnl,
+      label: t.totalPnl + periodSuffix,
       value: formatCurrency(
         totalPnl,
         account.currency
@@ -1327,7 +1357,7 @@ export default async function AnalyticsPage({
     Sat: 0,
   };
 
-  trades.forEach((trade) => {
+  periodTrades.forEach((trade) => {
     const date = new Date(trade.openDate);
 
     const day = date.toLocaleDateString(
@@ -1354,7 +1384,7 @@ export default async function AnalyticsPage({
     pnl,
   }));
 
-  const emotionalStateMap = trades.reduce(
+  const emotionalStateMap = periodTrades.reduce(
     (acc, trade) => {
       const emotion =
         trade.emotionalState || t.traderFallback;
@@ -1392,12 +1422,12 @@ export default async function AnalyticsPage({
   const confidenceHeatmapData = [
     {
       level: t.lowConfidence,
-      count: trades.filter(
+      count: periodTrades.filter(
         (trade) =>
           (trade.confidence || 0) > 0 &&
           (trade.confidence || 0) <= 4
       ).length,
-      pnl: trades
+      pnl: periodTrades
         .filter(
           (trade) =>
             (trade.confidence || 0) > 0 &&
@@ -1411,12 +1441,12 @@ export default async function AnalyticsPage({
     },
     {
       level: t.mediumConfidence,
-      count: trades.filter(
+      count: periodTrades.filter(
         (trade) =>
           (trade.confidence || 0) >= 5 &&
           (trade.confidence || 0) <= 7
       ).length,
-      pnl: trades
+      pnl: periodTrades
         .filter(
           (trade) =>
             (trade.confidence || 0) >= 5 &&
@@ -1430,11 +1460,11 @@ export default async function AnalyticsPage({
     },
     {
       level: t.highConfidence,
-      count: trades.filter(
+      count: periodTrades.filter(
         (trade) =>
           (trade.confidence || 0) >= 8
       ).length,
-      pnl: trades
+      pnl: periodTrades
         .filter(
           (trade) =>
             (trade.confidence || 0) >= 8
@@ -1450,12 +1480,12 @@ export default async function AnalyticsPage({
   const executionHeatmapData = [
     {
       level: t.weakExecution,
-      count: trades.filter(
+      count: periodTrades.filter(
         (trade) =>
           (trade.executionRating || 0) > 0 &&
           (trade.executionRating || 0) <= 4
       ).length,
-      pnl: trades
+      pnl: periodTrades
         .filter(
           (trade) =>
             (trade.executionRating || 0) > 0 &&
@@ -1469,12 +1499,12 @@ export default async function AnalyticsPage({
     },
     {
       level: t.averageExecution,
-      count: trades.filter(
+      count: periodTrades.filter(
         (trade) =>
           (trade.executionRating || 0) >= 5 &&
           (trade.executionRating || 0) <= 7
       ).length,
-      pnl: trades
+      pnl: periodTrades
         .filter(
           (trade) =>
             (trade.executionRating || 0) >= 5 &&
@@ -1488,11 +1518,11 @@ export default async function AnalyticsPage({
     },
     {
       level: t.eliteExecution,
-      count: trades.filter(
+      count: periodTrades.filter(
         (trade) =>
           (trade.executionRating || 0) >= 8
       ).length,
-      pnl: trades
+      pnl: periodTrades
         .filter(
           (trade) =>
             (trade.executionRating || 0) >= 8
@@ -1508,12 +1538,12 @@ export default async function AnalyticsPage({
   const setupHeatmapData = [
     {
       level: t.weakSetup,
-      count: trades.filter(
+      count: periodTrades.filter(
         (trade) =>
           (trade.setupQuality || 0) > 0 &&
           (trade.setupQuality || 0) <= 4
       ).length,
-      pnl: trades
+      pnl: periodTrades
         .filter(
           (trade) =>
             (trade.setupQuality || 0) > 0 &&
@@ -1527,12 +1557,12 @@ export default async function AnalyticsPage({
     },
     {
       level: t.averageSetup,
-      count: trades.filter(
+      count: periodTrades.filter(
         (trade) =>
           (trade.setupQuality || 0) >= 5 &&
           (trade.setupQuality || 0) <= 7
       ).length,
-      pnl: trades
+      pnl: periodTrades
         .filter(
           (trade) =>
             (trade.setupQuality || 0) >= 5 &&
@@ -1546,11 +1576,11 @@ export default async function AnalyticsPage({
     },
     {
       level: t.eliteSetup,
-      count: trades.filter(
+      count: periodTrades.filter(
         (trade) =>
           (trade.setupQuality || 0) >= 8
       ).length,
-      pnl: trades
+      pnl: periodTrades
         .filter(
           (trade) =>
             (trade.setupQuality || 0) >= 8
@@ -1584,25 +1614,25 @@ export default async function AnalyticsPage({
     return "low";
   }
 
-  const lowConfidenceCount = trades.filter(
+  const lowConfidenceCount = periodTrades.filter(
     (trade) =>
       (trade.confidence || 0) > 0 &&
       (trade.confidence || 0) <= 4
   ).length;
 
-  const weakExecutionCount = trades.filter(
+  const weakExecutionCount = periodTrades.filter(
     (trade) =>
       (trade.executionRating || 0) > 0 &&
       (trade.executionRating || 0) <= 4
   ).length;
 
-  const weakSetupCount = trades.filter(
+  const weakSetupCount = periodTrades.filter(
     (trade) =>
       (trade.setupQuality || 0) > 0 &&
       (trade.setupQuality || 0) <= 4
   ).length;
 
-  const emotionalCount = trades.filter(
+  const emotionalCount = periodTrades.filter(
     (trade) =>
       trade.emotionalState &&
       trade.emotionalState.length > 0
@@ -1647,9 +1677,9 @@ export default async function AnalyticsPage({
     {
       label: t.psychology,
       value:
-        trades.length > 0
+        periodTrades.length > 0
           ? Math.round(
-            (emotionalCount / trades.length) *
+            (emotionalCount / periodTrades.length) *
             100
           )
           : 0,
@@ -1657,10 +1687,10 @@ export default async function AnalyticsPage({
     {
       label: t.confidence,
       value:
-        trades.length > 0
+        periodTrades.length > 0
           ? Math.round(
             (lowConfidenceCount /
-              trades.length) *
+              periodTrades.length) *
             100
           )
           : 0,
@@ -1668,10 +1698,10 @@ export default async function AnalyticsPage({
     {
       label: t.execution,
       value:
-        trades.length > 0
+        periodTrades.length > 0
           ? Math.round(
             (weakExecutionCount /
-              trades.length) *
+              periodTrades.length) *
             100
           )
           : 0,
@@ -1679,16 +1709,16 @@ export default async function AnalyticsPage({
     {
       label: t.setupQuality,
       value:
-        trades.length > 0
+        periodTrades.length > 0
           ? Math.round(
-            (weakSetupCount / trades.length) *
+            (weakSetupCount / periodTrades.length) *
             100
           )
           : 0,
     },
   ];
 
-  const executionTrendData = trades
+  const executionTrendData = periodTrades
     .filter(
       (trade) =>
         typeof trade.executionRating === "number"
@@ -1704,7 +1734,7 @@ export default async function AnalyticsPage({
       execution: trade.executionRating || 0,
     }));
 
-  const confidenceEvolutionData = trades
+  const confidenceEvolutionData = periodTrades
     .filter(
       (trade) =>
         typeof trade.confidence === "number"
@@ -1720,7 +1750,7 @@ export default async function AnalyticsPage({
       confidence: trade.confidence || 0,
     }));
 
-  const emotionalTimelineData = trades
+  const emotionalTimelineData = periodTrades
     .filter(
       (trade) =>
         trade.emotionalState &&
@@ -1737,7 +1767,7 @@ export default async function AnalyticsPage({
       emotional: 1,
     }));
 
-  const disciplineEvolutionData = trades
+  const disciplineEvolutionData = periodTrades
     .filter(
       (trade) =>
         typeof trade.executionRating === "number" ||
@@ -1767,7 +1797,7 @@ export default async function AnalyticsPage({
       };
     });
 
-  const consistencyCurveData = trades.map((trade) => {
+  const consistencyCurveData = periodTrades.map((trade) => {
     const execution =
       trade.executionRating || 0;
 
@@ -1795,7 +1825,7 @@ export default async function AnalyticsPage({
     };
   });
 
-  const psychologicalStabilityData = trades.map((trade) => {
+  const psychologicalStabilityData = periodTrades.map((trade) => {
     const confidence =
       trade.confidence || 0;
 
@@ -1828,6 +1858,23 @@ export default async function AnalyticsPage({
 
   return (
     <div className="space-y-12">
+      <ScopeBar
+        accountId={accountId}
+        members={
+          isSharedAccount
+            ? accountMembers.map((m) => ({
+                id: m.user.id,
+                name: m.user.name,
+                username: m.user.username,
+              }))
+            : undefined
+        }
+        selectedMemberId={selectedMemberId}
+        currentPeriod={period}
+        currentRef={ref}
+        appLanguage={language}
+      />
+
       <AnalyticsHero
         accountName={account.name}
         totalPnl={formatCurrency(
@@ -1835,14 +1882,14 @@ export default async function AnalyticsPage({
           account.currency
         )}
         winRate={winRate}
-        totalTrades={trades.length}
+        totalTrades={periodTrades.length}
         appLanguage={language}
       />
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
-            {t.grossProfit}
+            {t.grossProfit + periodSuffix}
           </p>
 
           <h2 className="mt-2 text-2xl font-black text-accent">
@@ -1855,7 +1902,7 @@ export default async function AnalyticsPage({
 
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
-            {t.grossLoss}
+            {t.grossLoss + periodSuffix}
           </p>
 
           <h2 className="mt-2 text-2xl font-black text-red-400">
@@ -1868,7 +1915,7 @@ export default async function AnalyticsPage({
 
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
-            {t.profitFactor}
+            {t.profitFactor + periodSuffix}
           </p>
 
           <h2 className={`mt-2 text-2xl font-black ${profitFactor >= 1
@@ -1881,7 +1928,7 @@ export default async function AnalyticsPage({
 
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
-            {t.bestWinStreak}
+            {t.bestWinStreak + periodSuffix}
           </p>
 
           <h2 className="mt-2 text-2xl font-black text-white">
@@ -1997,31 +2044,31 @@ export default async function AnalyticsPage({
       <PsychologyAnalytics
         averageConfidence={
           Math.round(
-            trades.reduce(
+            periodTrades.reduce(
               (acc, trade) =>
                 acc + (trade.confidence || 0),
               0
-            ) / Math.max(trades.length, 1)
+            ) / Math.max(periodTrades.length, 1)
           )
         }
         averageExecution={
           Math.round(
-            trades.reduce(
+            periodTrades.reduce(
               (acc, trade) =>
                 acc +
                 (trade.executionRating || 0),
               0
-            ) / Math.max(trades.length, 1)
+            ) / Math.max(periodTrades.length, 1)
           )
         }
         averageSetupQuality={
           Math.round(
-            trades.reduce(
+            periodTrades.reduce(
               (acc, trade) =>
                 acc +
                 (trade.setupQuality || 0),
               0
-            ) / Math.max(trades.length, 1)
+            ) / Math.max(periodTrades.length, 1)
           )
         }
         appLanguage={language}
@@ -2149,19 +2196,19 @@ export default async function AnalyticsPage({
       <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
         <SessionPerformance
           londonTrades={
-            trades.filter(
+            periodTrades.filter(
               (trade) =>
                 trade.session === "London"
             ).length
           }
           newYorkTrades={
-            trades.filter(
+            periodTrades.filter(
               (trade) =>
                 trade.session === "New York"
             ).length
           }
           asianTrades={
-            trades.filter(
+            periodTrades.filter(
               (trade) =>
                 trade.session === "Asian"
             ).length
@@ -2206,7 +2253,7 @@ export default async function AnalyticsPage({
             </p>
 
             <p className="font-bold text-yellow-400">
-              {trades.filter(
+              {periodTrades.filter(
                 (trade) =>
                   trade.outcome === "be"
               ).length}
