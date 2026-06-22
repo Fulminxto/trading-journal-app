@@ -6,11 +6,16 @@ import EquityChart from "@/components/EquityChart";
 import DashboardHero from "@/components/dashboard/DashboardHero";
 import DashboardStatCard from "@/components/dashboard/DashboardStatCard";
 import ConsistencyScoreCard from "@/components/dashboard/ConsistencyScoreCard";
-import MemberSelector from "@/components/MemberSelector";
+import ScopeBar from "@/components/ScopeBar";
 import {
   normalizeAppLanguage,
   type AppLanguage,
 } from "@/lib/i18n";
+import {
+  parseScopeParams,
+  getPeriodRange,
+  getPeriodSuffix,
+} from "@/lib/scope";
 
 function formatCurrency(
   value: number,
@@ -655,7 +660,7 @@ export default async function DashboardPage({
   searchParams,
 }: {
   params: Promise<{ accountId: string }>;
-  searchParams: Promise<{ member?: string }>;
+  searchParams: Promise<{ member?: string; period?: string; ref?: string }>;
 }) {
   const session = await auth();
 
@@ -716,6 +721,7 @@ export default async function DashboardPage({
       },
       select: {
         appLanguage: true,
+        timezone: true,
       },
     });
 
@@ -727,35 +733,60 @@ export default async function DashboardPage({
     dashboardLabels[language] ??
     dashboardLabels.en;
 
+  // ── Scope (period + trader filter) ─────────────────────────────────────────
+  const { period, ref } = parseScopeParams({
+    period: filters.period,
+    ref: filters.ref,
+  });
+
+  const dateRange = getPeriodRange(
+    period,
+    ref,
+    currentUser?.timezone ?? undefined,
+  );
+
+  // All trades (member-filtered, date-unfiltered) — used for fixed metrics.
+  // periodTrades is the date-filtered subset used for performance metrics.
+  const periodTrades = dateRange
+    ? trades.filter(
+        (trade) =>
+          trade.openDate >= dateRange.gte &&
+          trade.openDate < dateRange.lte,
+      )
+    : trades;
+
+  const periodSuffix = getPeriodSuffix(period, ref, language);
+  // ───────────────────────────────────────────────────────────────────────────
+
   const currency = account.currency;
   const initialBalance = account.initialBalance || 0;
 
-  const totalTrades = trades.length;
+  const totalTrades = periodTrades.length;
 
-  const wins = trades.filter(
+  const wins = periodTrades.filter(
     (trade) => trade.outcome === "win"
   ).length;
 
-  const losses = trades.filter(
+  const losses = periodTrades.filter(
     (trade) => trade.outcome === "loss"
   ).length;
 
-  const be = trades.filter(
+  const be = periodTrades.filter(
     (trade) => trade.outcome === "be"
   ).length;
 
-  const closedTrades = trades.filter(
+  const closedTrades = periodTrades.filter(
     (trade) =>
       trade.outcome === "win" ||
       trade.outcome === "loss" ||
       trade.outcome === "be"
   ).length;
 
-  const winningTrades = trades.filter(
+  const winningTrades = periodTrades.filter(
     (trade) => trade.outcome === "win"
   );
 
-  const losingTrades = trades.filter(
+  const losingTrades = periodTrades.filter(
     (trade) => trade.outcome === "loss"
   );
 
@@ -769,11 +800,12 @@ export default async function DashboardPage({
     0
   );
 
-  const totalPnl = trades.reduce(
+  const totalPnl = periodTrades.reduce(
     (acc, trade) => acc + (trade.resultUsd || 0),
     0
   );
 
+  // currentEquity: always the most recent equity of the account (all-time, fixed).
   const currentEquity =
     trades.length > 0
       ? trades[trades.length - 1].equity ||
@@ -837,34 +869,34 @@ export default async function DashboardPage({
         : 0;
 
   const bestTrade =
-    trades.length > 0
+    periodTrades.length > 0
       ? Math.max(
-        ...trades.map(
+        ...periodTrades.map(
           (trade) => trade.resultUsd || 0
         )
       )
       : 0;
 
   const worstTrade =
-    trades.length > 0
+    periodTrades.length > 0
       ? Math.min(
-        ...trades.map(
+        ...periodTrades.map(
           (trade) => trade.resultUsd || 0
         )
       )
       : 0;
 
   const maxDrawdown =
-    trades.length > 0
+    periodTrades.length > 0
       ? Math.min(
-        ...trades.map(
+        ...periodTrades.map(
           (trade) =>
             trade.drawdownPercent || 0
         )
       )
       : 0;
 
-  const recentTrades = [...trades]
+  const recentTrades = [...periodTrades]
     .reverse()
     .slice(0, 5);
 
@@ -881,7 +913,7 @@ export default async function DashboardPage({
     (trade) => trade.outcome === "loss"
   ).length;
 
-  const chartData = trades.map((trade) => ({
+  const chartData = periodTrades.map((trade) => ({
     date: getDateLabel(
       trade.openDate,
       language
@@ -918,6 +950,7 @@ export default async function DashboardPage({
 
   const stats = [
     {
+      // Fixed: total account equity, not period-scoped
       label: t.currentEquity,
       value: formatCurrency(
         currentEquity,
@@ -927,6 +960,7 @@ export default async function DashboardPage({
     },
 
     {
+      // Fixed: total profit % of the whole account
       label: t.currentProfit,
       value: formatPercent(
         currentProfitPercent
@@ -937,7 +971,7 @@ export default async function DashboardPage({
     },
 
     {
-      label: t.totalPnl,
+      label: t.totalPnl + periodSuffix,
       value: formatCurrency(
         totalPnl,
         currency
@@ -946,7 +980,7 @@ export default async function DashboardPage({
     },
 
     {
-      label: t.winRate,
+      label: t.winRate + periodSuffix,
       value: formatPercent(winRate),
       tone:
         winRate >= 50
@@ -955,31 +989,31 @@ export default async function DashboardPage({
     },
 
     {
-      label: t.trades,
+      label: t.trades + periodSuffix,
       value: totalTrades,
       tone: "text-white",
     },
 
     {
-      label: t.wins,
+      label: t.wins + periodSuffix,
       value: wins,
       tone: "text-green-400",
     },
 
     {
-      label: t.losses,
+      label: t.losses + periodSuffix,
       value: losses,
       tone: "text-red-400",
     },
 
     {
-      label: t.breakEven,
+      label: t.breakEven + periodSuffix,
       value: be,
       tone: "text-yellow-400",
     },
 
     {
-      label: t.averageResult,
+      label: t.averageResult + periodSuffix,
       value: formatCurrency(
         averageResult,
         currency
@@ -990,7 +1024,7 @@ export default async function DashboardPage({
     },
 
     {
-      label: t.averageWin,
+      label: t.averageWin + periodSuffix,
       value: formatCurrency(
         averageWin,
         currency
@@ -999,7 +1033,7 @@ export default async function DashboardPage({
     },
 
     {
-      label: t.averageLoss,
+      label: t.averageLoss + periodSuffix,
       value: formatCurrency(
         averageLoss,
         currency
@@ -1008,7 +1042,7 @@ export default async function DashboardPage({
     },
 
     {
-      label: t.profitFactor,
+      label: t.profitFactor + periodSuffix,
       value: profitFactor.toFixed(2),
       tone:
         profitFactor >= 1
@@ -1017,7 +1051,7 @@ export default async function DashboardPage({
     },
 
     {
-      label: t.bestTrade,
+      label: t.bestTrade + periodSuffix,
       value: formatCurrency(
         bestTrade,
         currency
@@ -1026,7 +1060,7 @@ export default async function DashboardPage({
     },
 
     {
-      label: t.worstTrade,
+      label: t.worstTrade + periodSuffix,
       value: formatCurrency(
         worstTrade,
         currency
@@ -1035,12 +1069,13 @@ export default async function DashboardPage({
     },
 
     {
-      label: t.maxDrawdown,
+      label: t.maxDrawdown + periodSuffix,
       value: formatPercent(maxDrawdown),
       tone: "text-red-400",
     },
 
     {
+      // Fixed: based on total account equity vs profit target
       label: t.remainingTarget,
       value:
         remainingToTarget !== null
@@ -1056,18 +1091,22 @@ export default async function DashboardPage({
 
   return (
     <div className="space-y-12">
-      {isSharedAccount && (
-        <MemberSelector
-          members={accountMembers.map((m) => ({
-            id: m.user.id,
-            name: m.user.name,
-            username: m.user.username,
-          }))}
-          selectedMemberId={selectedMemberId}
-          accountId={accountId}
-          appLanguage={language}
-        />
-      )}
+      <ScopeBar
+        accountId={accountId}
+        members={
+          isSharedAccount
+            ? accountMembers.map((m) => ({
+                id: m.user.id,
+                name: m.user.name,
+                username: m.user.username,
+              }))
+            : undefined
+        }
+        selectedMemberId={selectedMemberId}
+        currentPeriod={period}
+        currentRef={ref}
+        appLanguage={language}
+      />
 
       <DashboardHero
         accountName={account.name}
