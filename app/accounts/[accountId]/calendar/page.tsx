@@ -20,6 +20,7 @@ import {
   normalizeAppLanguage,
   type AppLanguage,
 } from "@/lib/i18n";
+import MemberSelector from "@/components/MemberSelector";
 
 type CalendarLabels = {
   tradingCalendar: string;
@@ -533,6 +534,7 @@ export default async function CalendarPage({
   searchParams: Promise<{
     month?: string;
     year?: string;
+    member?: string;
   }>;
 }) {
   const session = await auth();
@@ -547,7 +549,10 @@ export default async function CalendarPage({
   const query =
     await searchParams;
 
-  const [membership, currentUser] =
+  const selectedMemberId =
+    query.member || undefined;
+
+  const [membership, currentUser, accountMembers] =
     await Promise.all([
       prisma.accountMember.findFirst(
         {
@@ -572,7 +577,14 @@ export default async function CalendarPage({
           appLanguage: true,
         },
       }),
+
+      prisma.accountMember.findMany({
+        where: { tradingAccountId: accountId },
+        include: { user: true },
+      }),
     ]);
+
+  const isSharedAccount = accountMembers.length > 1;
 
   if (!membership) {
     redirect("/accounts");
@@ -636,13 +648,14 @@ export default async function CalendarPage({
   const trades =
     await prisma.trade.findMany({
       where: {
-        tradingAccountId:
-          accountId,
-
+        tradingAccountId: accountId,
         openDate: {
           gte: monthStart,
           lt: monthEnd,
         },
+        ...(selectedMemberId
+          ? { createdById: selectedMemberId }
+          : {}),
       },
 
       orderBy: [
@@ -903,6 +916,19 @@ export default async function CalendarPage({
 
   return (
     <div className="space-y-10">
+      {isSharedAccount && (
+        <MemberSelector
+          members={accountMembers.map((m) => ({
+            id: m.user.id,
+            name: m.user.name,
+            username: m.user.username,
+          }))}
+          selectedMemberId={selectedMemberId}
+          accountId={accountId}
+          appLanguage={language}
+        />
+      )}
+
       <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent)_12%,transparent),transparent_35%),radial-gradient(circle_at_bottom_left,color-mix(in_srgb,var(--color-accent-bright)_8%,transparent),transparent_35%)]" />
 
