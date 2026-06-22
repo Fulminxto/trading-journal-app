@@ -35,6 +35,12 @@ import {
   normalizeAppLanguage,
   type AppLanguage,
 } from "@/lib/i18n";
+import ScopeBar from "@/components/ScopeBar";
+import {
+  parseScopeParams,
+  getPeriodRange,
+  getPeriodSuffix,
+} from "@/lib/scope";
 
 type ReportsLabels = {
   heroEyebrow: string;
@@ -383,9 +389,15 @@ function getScoreTone(value: number) {
 
 export default async function ReportsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{
     accountId: string;
+  }>;
+  searchParams: Promise<{
+    member?: string;
+    period?: string;
+    ref?: string;
   }>;
 }) {
   const session = await auth();
@@ -395,8 +407,14 @@ export default async function ReportsPage({
   }
 
   const { accountId } = await params;
+  const filters = await searchParams;
+  const selectedMemberId = filters.member || undefined;
+  const { period, ref } = parseScopeParams({
+    period: filters.period,
+    ref: filters.ref,
+  });
 
-  const [membership, currentUser] =
+  const [membership, currentUser, accountMembers] =
     await Promise.all([
       prisma.accountMember.findFirst({
         where: {
@@ -412,6 +430,11 @@ export default async function ReportsPage({
         where: {
           id: session.user.id,
         },
+      }),
+
+      prisma.accountMember.findMany({
+        where: { tradingAccountId: accountId },
+        include: { user: true },
       }),
     ]);
 
@@ -442,6 +465,8 @@ export default async function ReportsPage({
     },
   });
 
+  const isSharedAccount = accountMembers.length > 1;
+
   const language = normalizeAppLanguage(
     currentUser?.appLanguage
   );
@@ -461,6 +486,9 @@ export default async function ReportsPage({
   const trades = await prisma.trade.findMany({
     where: {
       tradingAccountId: accountId,
+      ...(selectedMemberId
+        ? { createdById: selectedMemberId }
+        : {}),
     },
 
     orderBy: {
@@ -468,34 +496,54 @@ export default async function ReportsPage({
     },
   });
 
-  const totalTrades = trades.length;
+  const dateRange = getPeriodRange(
+    period,
+    ref,
+    currentUser?.timezone ?? undefined
+  );
 
-  const wins = trades.filter(
+  const periodTrades = dateRange
+    ? trades.filter(
+        (t) =>
+          t.openDate >= dateRange.gte &&
+          t.openDate < dateRange.lte
+      )
+    : trades;
+
+  const periodSuffix = getPeriodSuffix(
+    period,
+    ref,
+    language
+  );
+
+  const totalTrades = periodTrades.length;
+
+  const wins = periodTrades.filter(
     (trade) => trade.outcome === "win"
   ).length;
 
-  const losses = trades.filter(
+  const losses = periodTrades.filter(
     (trade) => trade.outcome === "loss"
   ).length;
 
-  const breakEven = trades.filter(
+  const breakEven = periodTrades.filter(
     (trade) => trade.outcome === "be"
   ).length;
 
   const closedTrades =
     wins + losses + breakEven;
 
-  const totalPnl = trades.reduce(
+  const totalPnl = periodTrades.reduce(
     (acc, trade) =>
       acc + (trade.resultUsd || 0),
     0
   );
 
-  const winningTrades = trades.filter(
+  const winningTrades = periodTrades.filter(
     (trade) => trade.outcome === "win"
   );
 
-  const losingTrades = trades.filter(
+  const losingTrades = periodTrades.filter(
     (trade) => trade.outcome === "loss"
   );
 
@@ -539,19 +587,19 @@ export default async function ReportsPage({
         ? grossProfit
         : 0;
 
-  const emotionalTrades = trades.filter(
+  const emotionalTrades = periodTrades.filter(
     (trade) =>
       trade.emotionalState &&
       trade.emotionalState.length > 0
   ).length;
 
-  const lowConfidenceTrades = trades.filter(
+  const lowConfidenceTrades = periodTrades.filter(
     (trade) =>
       (trade.confidence || 0) > 0 &&
       (trade.confidence || 0) <= 4
   ).length;
 
-  const weakExecutionTrades = trades.filter(
+  const weakExecutionTrades = periodTrades.filter(
     (trade) =>
       (trade.executionRating || 0) > 0 &&
       (trade.executionRating || 0) <= 4
@@ -611,8 +659,28 @@ export default async function ReportsPage({
           ? t.focusReviewSetups
           : t.focusProtectEdge;
 
+  const members = isSharedAccount
+    ? accountMembers.map((m) => ({
+        id: m.userId,
+        name: m.user.name ?? null,
+        username: m.user.username,
+        image: m.user.image ?? null,
+      }))
+    : undefined;
+
   return (
     <div className="space-y-12 print:space-y-0 print:bg-[#0C1430]">
+      <div className="print:hidden">
+        <ScopeBar
+          members={members}
+          selectedMemberId={selectedMemberId ?? undefined}
+          currentPeriod={period}
+          currentRef={ref}
+          appLanguage={language}
+          accountId={accountId}
+        />
+      </div>
+
       <PDFCompactReport
         appLanguage={language}
         currency={currency}
@@ -675,7 +743,7 @@ export default async function ReportsPage({
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
           <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
             <p className="text-sm text-gray-400">
-              {t.totalTrades}
+              {t.totalTrades}{periodSuffix}
             </p>
 
             <h2 className="mt-4 text-4xl font-black text-accent-bright">
@@ -689,7 +757,7 @@ export default async function ReportsPage({
 
           <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
             <p className="text-sm text-gray-400">
-              {t.totalPnl}
+              {t.totalPnl}{periodSuffix}
             </p>
 
             <h2
@@ -708,7 +776,7 @@ export default async function ReportsPage({
 
           <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
             <p className="text-sm text-gray-400">
-              {t.winRate}
+              {t.winRate}{periodSuffix}
             </p>
 
             <h2
@@ -726,7 +794,7 @@ export default async function ReportsPage({
 
           <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
             <p className="text-sm text-gray-400">
-              {t.behavioralRisk}
+              {t.behavioralRisk}{periodSuffix}
             </p>
 
             <h2
