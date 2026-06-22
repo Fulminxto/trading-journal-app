@@ -22,6 +22,12 @@ import {
   normalizeAppLanguage,
   type AppLanguage,
 } from "@/lib/i18n";
+import ScopeBar from "@/components/ScopeBar";
+import {
+  parseScopeParams,
+  getPeriodRange,
+  getPeriodSuffix,
+} from "@/lib/scope";
 
 type StatCardProps = {
   label: string;
@@ -643,8 +649,10 @@ function StatCard({
 
 export default async function EquityPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ accountId: string }>;
+  searchParams: Promise<{ member?: string; period?: string; ref?: string }>;
 }) {
   const session = await auth();
 
@@ -653,21 +661,34 @@ export default async function EquityPage({
   }
 
   const { accountId } = await params;
-
-  const membership = await prisma.accountMember.findFirst({
-    where: {
-      userId: session.user.id,
-      tradingAccountId: accountId,
-    },
-
-    include: {
-      tradingAccount: true,
-    },
+  const filters = await searchParams;
+  const selectedMemberId = filters.member || undefined;
+  const { period, ref } = parseScopeParams({
+    period: filters.period,
+    ref: filters.ref,
   });
+
+  const [membership, accountMembers] = await Promise.all([
+    prisma.accountMember.findFirst({
+      where: {
+        userId: session.user.id,
+        tradingAccountId: accountId,
+      },
+      include: {
+        tradingAccount: true,
+      },
+    }),
+    prisma.accountMember.findMany({
+      where: { tradingAccountId: accountId },
+      include: { user: true },
+    }),
+  ]);
 
   if (!membership) {
     redirect("/accounts");
   }
+
+  const isSharedAccount = accountMembers.length > 1;
 
   await prisma.user.update({
     where: {
@@ -685,6 +706,7 @@ export default async function EquityPage({
     },
     select: {
       appLanguage: true,
+      timezone: true,
     },
   });
 
@@ -699,6 +721,7 @@ export default async function EquityPage({
   const trades = await prisma.trade.findMany({
     where: {
       tradingAccountId: accountId,
+      ...(selectedMemberId ? { createdById: selectedMemberId } : {}),
     },
 
     orderBy: [
@@ -710,6 +733,22 @@ export default async function EquityPage({
       },
     ],
   });
+
+  const dateRange = getPeriodRange(
+    period,
+    ref,
+    currentUser?.timezone ?? undefined,
+  );
+
+  const periodTrades = dateRange
+    ? trades.filter(
+        (trade) =>
+          trade.openDate >= dateRange.gte &&
+          trade.openDate < dateRange.lte,
+      )
+    : trades;
+
+  const periodSuffix = getPeriodSuffix(period, ref, language);
 
   const initialBalance = account.initialBalance || 0;
   const currency = account.currency || "USD";
@@ -726,7 +765,7 @@ export default async function EquityPage({
       ? trades[trades.length - 1].equity || initialBalance
       : initialBalance;
 
-  const totalPnl = trades.reduce(
+  const totalPnl = periodTrades.reduce(
     (acc, trade) => acc + (trade.resultUsd || 0),
     0
   );
@@ -738,70 +777,70 @@ export default async function EquityPage({
       100
       : 0;
 
-  const positiveTrades = trades.filter(
+  const positiveTrades = periodTrades.filter(
     (trade) => (trade.resultUsd || 0) > 0
   ).length;
 
-  const negativeTrades = trades.filter(
+  const negativeTrades = periodTrades.filter(
     (trade) => (trade.resultUsd || 0) < 0
   ).length;
 
-  const flatTrades = trades.filter(
+  const flatTrades = periodTrades.filter(
     (trade) => (trade.resultUsd || 0) === 0
   ).length;
 
   const maxDrawdown =
-    trades.length > 0
+    periodTrades.length > 0
       ? Math.min(
-        ...trades.map(
+        ...periodTrades.map(
           (trade) => trade.drawdownPercent || 0
         )
       )
       : 0;
 
   const maxEquity =
-    trades.length > 0
+    periodTrades.length > 0
       ? Math.max(
         initialBalance,
-        ...trades.map(
+        ...periodTrades.map(
           (trade) => trade.equity || initialBalance
         )
       )
       : initialBalance;
 
   const lowestEquity =
-    trades.length > 0
+    periodTrades.length > 0
       ? Math.min(
         initialBalance,
-        ...trades.map(
+        ...periodTrades.map(
           (trade) => trade.equity || initialBalance
         )
       )
       : initialBalance;
 
   const bestTrade =
-    trades.length > 0
+    periodTrades.length > 0
       ? Math.max(
-        ...trades.map((trade) => trade.resultUsd || 0)
+        ...periodTrades.map((trade) => trade.resultUsd || 0)
       )
       : 0;
 
   const worstTrade =
-    trades.length > 0
+    periodTrades.length > 0
       ? Math.min(
-        ...trades.map((trade) => trade.resultUsd || 0)
+        ...periodTrades.map((trade) => trade.resultUsd || 0)
       )
       : 0;
 
   const averagePnl =
-    trades.length > 0 ? totalPnl / trades.length : 0;
+    periodTrades.length > 0 ? totalPnl / periodTrades.length : 0;
 
-  const chartData = trades.map((trade) => ({
+  const chartData = periodTrades.map((trade) => ({
     date: formatShortDate(trade.openDate, language),
     equity: trade.equity || initialBalance,
   }));
 
-  const recentTrades = [...trades].reverse().slice(0, 10);
+  const recentTrades = [...periodTrades].reverse().slice(0, 10);
 
   const stats = [
     {
@@ -812,7 +851,7 @@ export default async function EquityPage({
       tone: "text-white",
     },
     {
-      label: t.totalPnl,
+      label: t.totalPnl + periodSuffix,
       value: money(totalPnl),
       description: t.totalPnlDescription,
       icon: TrendingUp,
@@ -829,7 +868,7 @@ export default async function EquityPage({
       tone: getResultTone(currentProfitPercent),
     },
     {
-      label: t.maxDrawdown,
+      label: t.maxDrawdown + periodSuffix,
       value: formatPercent(maxDrawdown, language),
       description: t.maxDrawdownDescription,
       icon: ShieldAlert,
@@ -842,6 +881,23 @@ export default async function EquityPage({
 
   return (
     <div className="space-y-12">
+      <ScopeBar
+        accountId={accountId}
+        members={
+          isSharedAccount
+            ? accountMembers.map((m) => ({
+                id: m.user.id,
+                name: m.user.name,
+                username: m.user.username,
+              }))
+            : undefined
+        }
+        selectedMemberId={selectedMemberId}
+        currentPeriod={period}
+        currentRef={ref}
+        appLanguage={language}
+      />
+
       <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_14%,transparent),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.08),transparent_35%)]" />
 
@@ -925,7 +981,7 @@ export default async function EquityPage({
         <div className="grid gap-4">
           <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
             <p className="text-sm text-gray-400">
-              {t.equityPeak}
+              {t.equityPeak + periodSuffix}
             </p>
 
             <h2 className="mt-3 text-3xl font-black text-accent">
@@ -939,7 +995,7 @@ export default async function EquityPage({
 
           <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
             <p className="text-sm text-gray-400">
-              {t.lowestEquity}
+              {t.lowestEquity + periodSuffix}
             </p>
 
             <h2 className="mt-3 text-3xl font-black text-red-400">
@@ -955,7 +1011,7 @@ export default async function EquityPage({
 
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <StatCard
-          label={t.positiveTrades}
+          label={t.positiveTrades + periodSuffix}
           value={positiveTrades}
           description={t.positiveTradesDescription}
           icon={TrendingUp}
@@ -963,7 +1019,7 @@ export default async function EquityPage({
         />
 
         <StatCard
-          label={t.negativeTrades}
+          label={t.negativeTrades + periodSuffix}
           value={negativeTrades}
           description={t.negativeTradesDescription}
           icon={TrendingDown}
@@ -971,7 +1027,7 @@ export default async function EquityPage({
         />
 
         <StatCard
-          label={t.flatTrades}
+          label={t.flatTrades + periodSuffix}
           value={flatTrades}
           description={t.flatTradesDescription}
           icon={Activity}
@@ -979,7 +1035,7 @@ export default async function EquityPage({
         />
 
         <StatCard
-          label={t.averagePnl}
+          label={t.averagePnl + periodSuffix}
           value={money(averagePnl)}
           description={t.averagePnlDescription}
           icon={BarChart3}
@@ -990,7 +1046,7 @@ export default async function EquityPage({
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
-            {t.bestTrade}
+            {t.bestTrade + periodSuffix}
           </p>
 
           <h2 className="mt-3 text-4xl font-black text-accent">
@@ -1004,7 +1060,7 @@ export default async function EquityPage({
 
         <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
-            {t.worstTrade}
+            {t.worstTrade + periodSuffix}
           </p>
 
           <h2 className="mt-3 text-4xl font-black text-red-400">
@@ -1032,7 +1088,7 @@ export default async function EquityPage({
           <p className="text-sm text-gray-500">
             {t.showingLatest(
               recentTrades.length,
-              trades.length
+              periodTrades.length
             )}
           </p>
         </div>
