@@ -25,7 +25,12 @@ import MarketPsychologyEngine from "@/components/diary/MarketPsychologyEngine";
 import ConfidenceAnalyticsEngine from "@/components/diary/ConfidenceAnalyticsEngine";
 import BehavioralCorrelationEngine from "@/components/diary/BehavioralCorrelationEngine";
 import AIPerformanceTimeline from "@/components/diary/AIPerformanceTimeline";
-import MemberSelector from "@/components/MemberSelector";
+import ScopeBar from "@/components/ScopeBar";
+import {
+  parseScopeParams,
+  getPeriodRange,
+  getPeriodSuffix,
+} from "@/lib/scope";
 
 import {
   createAccountTrade,
@@ -821,6 +826,8 @@ export default async function DiaryPage({
     member?: string;
     source?: string;
     needsReview?: string;
+    period?: string;
+    ref?: string;
   }>;
 }) {
   const session = await auth();
@@ -832,12 +839,18 @@ export default async function DiaryPage({
   const { accountId } = await params;
   const filters = await searchParams;
 
+  const { period, ref } = parseScopeParams({
+    period: filters.period,
+    ref: filters.ref,
+  });
+
   const currentUser = await prisma.user.findUnique({
     where: {
       id: session.user.id,
     },
     select: {
       appLanguage: true,
+      timezone: true,
     },
   });
 
@@ -998,6 +1011,26 @@ export default async function DiaryPage({
     ],
   });
 
+  const dateRange = getPeriodRange(
+    period,
+    ref,
+    currentUser?.timezone ?? undefined
+  );
+
+  const periodTrades = dateRange
+    ? trades.filter(
+        (trade) =>
+          trade.openDate >= dateRange.gte &&
+          trade.openDate < dateRange.lte
+      )
+    : trades;
+
+  const periodSuffix = getPeriodSuffix(
+    period,
+    ref,
+    language
+  );
+
   const symbols = Array.from(
     new Set(allTrades.map((trade) => trade.symbol))
   ).sort();
@@ -1008,29 +1041,29 @@ export default async function DiaryPage({
     select: { id: true, name: true },
   });
 
-  const totalTrades = trades.length;
+  const totalTrades = periodTrades.length;
 
-  const importedTrades = trades.filter(
+  const importedTrades = periodTrades.filter(
     (trade) => trade.source !== "manual"
   ).length;
 
-  const needsReviewTrades = trades.filter(
+  const needsReviewTrades = periodTrades.filter(
     (trade) => trade.needsReview
   ).length;
 
-  const wins = trades.filter(
+  const wins = periodTrades.filter(
     (trade) => trade.outcome === "win"
   ).length;
 
-  const losses = trades.filter(
+  const losses = periodTrades.filter(
     (trade) => trade.outcome === "loss"
   ).length;
 
-  const breakEven = trades.filter(
+  const breakEven = periodTrades.filter(
     (trade) => trade.outcome === "be"
   ).length;
 
-  const totalPnl = trades.reduce(
+  const totalPnl = periodTrades.reduce(
     (acc, trade) => acc + (trade.resultUsd || 0),
     0
   );
@@ -1047,18 +1080,18 @@ export default async function DiaryPage({
     : account.initialBalance;
 
   const bestTrade =
-    trades.length > 0
+    periodTrades.length > 0
       ? Math.max(
-        ...trades.map(
+        ...periodTrades.map(
           (trade) => trade.resultUsd || 0
         )
       )
       : 0;
 
   const worstTrade =
-    trades.length > 0
+    periodTrades.length > 0
       ? Math.min(
-        ...trades.map(
+        ...periodTrades.map(
           (trade) => trade.resultUsd || 0
         )
       )
@@ -1073,11 +1106,12 @@ export default async function DiaryPage({
     Boolean(selectedTraderId) ||
     Boolean(filters.strategyId) ||
     Boolean(filters.from) ||
-    Boolean(filters.to);
+    Boolean(filters.to) ||
+    period !== "all";
 
   const statCards = [
     {
-      label: t.filteredPnl,
+      label: `${t.filteredPnl}${periodSuffix}`,
       value: formatCurrencyByLanguage(
         totalPnl,
         currency,
@@ -1098,27 +1132,27 @@ export default async function DiaryPage({
       tone: "text-white",
     },
     {
-      label: t.winRate,
+      label: `${t.winRate}${periodSuffix}`,
       value: `${winRate.toFixed(2)}%`,
       tone: "text-green-400",
     },
     {
-      label: t.filteredTrades,
+      label: `${t.filteredTrades}${periodSuffix}`,
       value: totalTrades,
       tone: "text-white",
     },
     {
-      label: t.imported,
+      label: `${t.imported}${periodSuffix}`,
       value: importedTrades,
       tone: "text-accent-bright",
     },
     {
-      label: t.needsReview,
+      label: `${t.needsReview}${periodSuffix}`,
       value: needsReviewTrades,
       tone: "text-yellow-300",
     },
     {
-      label: t.bestTrade,
+      label: `${t.bestTrade}${periodSuffix}`,
       value: formatCurrencyByLanguage(
         bestTrade,
         currency,
@@ -1127,7 +1161,7 @@ export default async function DiaryPage({
       tone: "text-green-400",
     },
     {
-      label: t.worstTrade,
+      label: `${t.worstTrade}${periodSuffix}`,
       value: formatCurrencyByLanguage(
         worstTrade,
         currency,
@@ -1138,65 +1172,65 @@ export default async function DiaryPage({
   ];
 
   const averageExecution =
-    trades.length > 0
+    periodTrades.length > 0
       ? Math.round(
-        trades.reduce(
+        periodTrades.reduce(
           (acc, trade) =>
             acc + (trade.executionRating || 0),
           0
-        ) / trades.length
+        ) / periodTrades.length
       )
       : 0;
 
   const averageConfidence =
-    trades.length > 0
+    periodTrades.length > 0
       ? Math.round(
-        trades.reduce(
+        periodTrades.reduce(
           (acc, trade) =>
             acc + (trade.confidence || 0),
           0
-        ) / trades.length
+        ) / periodTrades.length
       )
       : 0;
 
-  const highQualityTrades = trades.filter(
+  const highQualityTrades = periodTrades.filter(
     (trade) =>
       (trade.setupQuality || 0) >= 8 &&
       (trade.executionRating || 0) >= 8
   ).length;
 
-  const weakExecutionTrades = trades.filter(
+  const weakExecutionTrades = periodTrades.filter(
     (trade) =>
       (trade.executionRating || 0) > 0 &&
       (trade.executionRating || 0) <= 4
   ).length;
 
-  const emotionalTrades = trades.filter(
+  const emotionalTrades = periodTrades.filter(
     (trade) =>
       trade.emotionalState &&
       trade.emotionalState.length > 0
   ).length;
 
-  const lowConfidenceTrades = trades.filter(
+  const lowConfidenceTrades = periodTrades.filter(
     (trade) =>
       (trade.confidence || 0) > 0 &&
       (trade.confidence || 0) <= 4
   ).length;
 
-  const weakSetupTrades = trades.filter(
+  const weakSetupTrades = periodTrades.filter(
     (trade) =>
       (trade.setupQuality || 0) > 0 &&
       (trade.setupQuality || 0) <= 4
   ).length;
 
-  const impulsiveTrades = trades.filter(
+  const impulsiveTrades = periodTrades.filter(
     (trade) =>
       trade.mistakes &&
       trade.mistakes.toLowerCase().includes("impuls")
   ).length;
 
   const disciplineScore =
-    trades.length > 0
+    periodTrades.length > 0
       ? Math.max(
         0,
         Math.min(
@@ -1205,7 +1239,7 @@ export default async function DiaryPage({
             averageExecution * 4 +
             averageConfidence * 3 +
             (highQualityTrades /
-              Math.max(trades.length, 1)) *
+              Math.max(periodTrades.length, 1)) *
             30 -
             weakExecutionTrades * 2
           )
@@ -1213,25 +1247,25 @@ export default async function DiaryPage({
       )
       : 0;
 
-  const strongTrades = trades.filter(
+  const strongTrades = periodTrades.filter(
     (trade) =>
       (trade.executionRating || 0) >= 8 &&
       (trade.setupQuality || 0) >= 8
   ).length;
 
-  const averageTrades = trades.filter(
+  const averageTrades = periodTrades.filter(
     (trade) =>
       (trade.executionRating || 0) >= 5 &&
       (trade.executionRating || 0) < 8
   ).length;
 
-  const weakTrades = trades.filter(
+  const weakTrades = periodTrades.filter(
     (trade) =>
       (trade.executionRating || 0) > 0 &&
       (trade.executionRating || 0) <= 4
   ).length;
 
-  const setupStats = trades.reduce(
+  const setupStats = periodTrades.reduce(
     (acc, trade) => {
       const setup = trade.strategy || "Unknown";
 
@@ -1295,27 +1329,32 @@ export default async function DiaryPage({
         ? "Setup Selection"
         : "Consistency";
 
-  const highConfidenceTrades = trades.filter(
+  const highConfidenceTrades = periodTrades.filter(
     (trade) => (trade.confidence || 0) >= 8
   ).length;
 
+  const scopeMembers = isSharedAccount
+    ? accountMembers.map((m) => ({
+        id: m.user.id,
+        name: m.user.name ?? null,
+        username: m.user.username,
+        image: m.user.image ?? null,
+      }))
+    : undefined;
+
   return (
     <div className="space-y-12">
-      {isSharedAccount && (
-        <MemberSelector
-          members={accountMembers.map((m) => ({
-            id: m.user.id,
-            name: m.user.name,
-            username: m.user.username,
-          }))}
-          selectedMemberId={selectedTraderId}
-          accountId={accountId}
-          appLanguage={language}
-        />
-      )}
+      <ScopeBar
+        members={scopeMembers}
+        selectedMemberId={selectedTraderId ?? undefined}
+        currentPeriod={period}
+        currentRef={ref}
+        appLanguage={language}
+        accountId={accountId}
+      />
 
       <TradeQualityHero
-        totalTrades={trades.length}
+        totalTrades={periodTrades.length}
         averageExecution={averageExecution}
         averageConfidence={averageConfidence}
         appLanguage={language}
@@ -1385,12 +1424,12 @@ export default async function DiaryPage({
         emotionalTrades={emotionalTrades}
         weakExecutionTrades={weakExecutionTrades}
         lowConfidenceTrades={lowConfidenceTrades}
-        totalTrades={trades.length}
+        totalTrades={periodTrades.length}
         appLanguage={language}
       />
 
       <AIPerformanceTimeline
-        totalTrades={trades.length}
+        totalTrades={periodTrades.length}
         highQualityTrades={highQualityTrades}
         weakExecutionTrades={weakExecutionTrades}
         disciplineScore={disciplineScore}
@@ -1847,7 +1886,7 @@ export default async function DiaryPage({
         </div>
 
         <p className="text-sm text-gray-500">
-          {t.filteredCount(totalTrades, allTrades.length)}
+          {t.filteredCount(periodTrades.length, allTrades.length)}
         </p>
       </div>
 
@@ -1872,7 +1911,7 @@ export default async function DiaryPage({
           </thead>
 
           <tbody>
-            {trades.map((trade) => (
+            {periodTrades.map((trade) => (
               <tr
                 key={trade.id}
                 className="border-t border-white/10 hover:bg-white/[0.02]"
@@ -2020,7 +2059,7 @@ export default async function DiaryPage({
               </tr>
             ))}
 
-            {trades.length === 0 && (
+            {periodTrades.length === 0 && (
               <tr>
                 <td
                   colSpan={isSharedAccount ? 11 : 10}
@@ -2035,12 +2074,12 @@ export default async function DiaryPage({
       </div>
 
       <div className="space-y-4 lg:hidden">
-        {trades.length === 0 ? (
+        {periodTrades.length === 0 ? (
           <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 text-center text-gray-500">
             {t.noTrades}
           </div>
         ) : (
-          trades.map((trade) => (
+          periodTrades.map((trade) => (
             <div
               key={trade.id}
               className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl transition-all duration-300 hover:border-accent-bright/20 hover:bg-white/[0.06]"
