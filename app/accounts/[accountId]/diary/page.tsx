@@ -1055,14 +1055,6 @@ export default async function DiaryPage({
     (trade) => trade.outcome === "win"
   ).length;
 
-  const losses = periodTrades.filter(
-    (trade) => trade.outcome === "loss"
-  ).length;
-
-  const breakEven = periodTrades.filter(
-    (trade) => trade.outcome === "be"
-  ).length;
-
   const totalPnl = periodTrades.reduce(
     (acc, trade) => acc + (trade.resultUsd || 0),
     0
@@ -1072,12 +1064,6 @@ export default async function DiaryPage({
     totalTrades > 0
       ? (wins / totalTrades) * 100
       : 0;
-
-  const latestTrade = allTrades[0];
-
-  const currentEquity = latestTrade
-    ? latestTrade.equity || account.initialBalance
-    : account.initialBalance;
 
   const bestTrade =
     periodTrades.length > 0
@@ -1109,27 +1095,11 @@ export default async function DiaryPage({
     Boolean(filters.to) ||
     period !== "all";
 
-  const statCards = [
+  const keyMetrics = [
     {
       label: `${t.filteredPnl}${periodSuffix}`,
-      value: formatCurrencyByLanguage(
-        totalPnl,
-        currency,
-        language
-      ),
-      tone:
-        totalPnl >= 0
-          ? "text-green-400"
-          : "text-red-400",
-    },
-    {
-      label: t.currentEquity,
-      value: formatCurrencyByLanguage(
-        currentEquity,
-        currency,
-        language
-      ),
-      tone: "text-white",
+      value: formatCurrencyByLanguage(totalPnl, currency, language),
+      tone: totalPnl >= 0 ? "text-green-400" : "text-red-400",
     },
     {
       label: `${t.winRate}${periodSuffix}`,
@@ -1142,31 +1112,26 @@ export default async function DiaryPage({
       tone: "text-white",
     },
     {
+      label: `${t.needsReview}${periodSuffix}`,
+      value: needsReviewTrades,
+      tone: "text-yellow-300",
+    },
+  ];
+
+  const secondaryMetrics = [
+    {
       label: `${t.imported}${periodSuffix}`,
       value: importedTrades,
       tone: "text-accent-bright",
     },
     {
-      label: `${t.needsReview}${periodSuffix}`,
-      value: needsReviewTrades,
-      tone: "text-yellow-300",
-    },
-    {
       label: `${t.bestTrade}${periodSuffix}`,
-      value: formatCurrencyByLanguage(
-        bestTrade,
-        currency,
-        language
-      ),
+      value: formatCurrencyByLanguage(bestTrade, currency, language),
       tone: "text-green-400",
     },
     {
       label: `${t.worstTrade}${periodSuffix}`,
-      value: formatCurrencyByLanguage(
-        worstTrade,
-        currency,
-        language
-      ),
+      value: formatCurrencyByLanguage(worstTrade, currency, language),
       tone: "text-red-400",
     },
   ];
@@ -1344,6 +1309,76 @@ export default async function DiaryPage({
 
   return (
     <div className="space-y-12">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+        <div>
+          <p className="text-sm text-gray-400">
+            {t.operationalRegister}
+          </p>
+
+          <h1 className="text-3xl font-bold sm:text-4xl">
+            {t.title}
+          </h1>
+
+          {selectedMember && (
+            <div className="mt-4 rounded-3xl border border-accent-bright/20 bg-accent-bright/10 p-5">
+              <p className="text-xs uppercase tracking-[0.2em] text-accent-bright">
+                {t.memberFilterActive}
+              </p>
+
+              <h2 className="mt-2 text-xl font-black text-white">
+                {t.viewingOnlyTradesOf}{" "}
+                {selectedMember.name ||
+                  selectedMember.username}
+              </h2>
+
+              <Link
+                href={`/accounts/${accountId}/diary`}
+                className="mt-4 inline-flex rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm font-bold text-gray-300 transition hover:bg-white/[0.05]"
+              >
+                {t.clearFilter}
+              </Link>
+            </div>
+          )}
+
+          {isReadOnly && (
+            <div className="mt-4 rounded-3xl border border-yellow-500/20 bg-yellow-500/10 p-5">
+              <p className="text-xs uppercase tracking-[0.2em] text-yellow-300">
+                {t.readOnlyMode}
+              </p>
+
+              <h2 className="mt-2 text-xl font-black text-white">
+                {t.readOnlyTitle}
+              </h2>
+
+              <p className="mt-3 text-sm text-gray-300">
+                {t.readOnlyDescription}
+              </p>
+            </div>
+          )}
+
+          <div className="mt-2 flex flex-wrap items-center gap-3">
+            <p className="text-sm text-gray-500">
+              {t.account}: {account.name}
+            </p>
+
+            {isReadOnly && (
+              <div className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-4 py-1 text-xs font-black uppercase tracking-[0.2em] text-yellow-300">
+                {t.readOnly}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {canCreateTrades && (
+          <Link
+            href="#new-trade-form"
+            className="shrink-0 rounded-2xl bg-accent px-5 py-3 font-bold text-white transition hover:bg-accent-bright"
+          >
+            + {t.newTradeTitle}
+          </Link>
+        )}
+      </div>
+
       <ScopeBar
         members={scopeMembers}
         selectedMemberId={selectedTraderId ?? undefined}
@@ -1352,6 +1387,25 @@ export default async function DiaryPage({
         appLanguage={language}
         accountId={accountId}
       />
+
+      <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
+        {keyMetrics.map((stat) => (
+          <div
+            key={stat.label}
+            className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+          >
+            <p className="text-sm text-gray-400">
+              {stat.label}
+            </p>
+
+            <h2
+              className={`mt-2 text-2xl font-bold ${stat.tone}`}
+            >
+              {stat.value}
+            </h2>
+          </div>
+        ))}
+      </div>
 
       <TradeQualityHero
         totalTrades={periodTrades.length}
@@ -1442,90 +1496,6 @@ export default async function DiaryPage({
         impulsiveTrades={impulsiveTrades}
         appLanguage={language}
       />
-
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div>
-          <p className="text-sm text-gray-400">
-            {t.operationalRegister}
-          </p>
-
-          <h1 className="text-3xl font-bold sm:text-4xl">
-            {t.title}
-          </h1>
-
-          {selectedMember && (
-            <div className="mt-4 rounded-3xl border border-accent-bright/20 bg-accent-bright/10 p-5">
-              <p className="text-xs uppercase tracking-[0.2em] text-accent-bright">
-                {t.memberFilterActive}
-              </p>
-
-              <h2 className="mt-2 text-xl font-black text-white">
-                {t.viewingOnlyTradesOf}{" "}
-                {selectedMember.name ||
-                  selectedMember.username}
-              </h2>
-
-              <Link
-                href={`/accounts/${accountId}/diary`}
-                className="mt-4 inline-flex rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm font-bold text-gray-300 transition hover:bg-white/[0.05]"
-              >
-                {t.clearFilter}
-              </Link>
-            </div>
-          )}
-
-          {isReadOnly && (
-            <div className="mt-4 rounded-3xl border border-yellow-500/20 bg-yellow-500/10 p-5">
-              <p className="text-xs uppercase tracking-[0.2em] text-yellow-300">
-                {t.readOnlyMode}
-              </p>
-
-              <h2 className="mt-2 text-xl font-black text-white">
-                {t.readOnlyTitle}
-              </h2>
-
-              <p className="mt-3 text-sm text-gray-300">
-                {t.readOnlyDescription}
-              </p>
-            </div>
-          )}
-
-          <div className="mt-2 flex flex-wrap items-center gap-3">
-            <p className="text-sm text-gray-500">
-              {t.account}: {account.name}
-            </p>
-
-            {isReadOnly && (
-              <div className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-4 py-1 text-xs font-black uppercase tracking-[0.2em] text-yellow-300">
-                {t.readOnly}
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-gray-300">
-          {wins} {t.win} - {losses} {t.loss} - {breakEven} {t.be}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-8">
-        {statCards.map((stat) => (
-          <div
-            key={stat.label}
-            className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
-          >
-            <p className="text-sm text-gray-400">
-              {stat.label}
-            </p>
-
-            <h2
-              className={`mt-2 text-2xl font-bold ${stat.tone}`}
-            >
-              {stat.value}
-            </h2>
-          </div>
-        ))}
-      </div>
 
       <form
         action={`/accounts/${accountId}/diary`}
@@ -1646,6 +1616,7 @@ export default async function DiaryPage({
 
       {canCreateTrades && (
         <form
+          id="new-trade-form"
           action={createAccountTrade.bind(null, accountId)}
           className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
         >
@@ -1873,6 +1844,25 @@ export default async function DiaryPage({
           </div>
         </form>
       )}
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        {secondaryMetrics.map((stat) => (
+          <div
+            key={stat.label}
+            className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+          >
+            <p className="text-sm text-gray-400">
+              {stat.label}
+            </p>
+
+            <h2
+              className={`mt-2 text-2xl font-bold ${stat.tone}`}
+            >
+              {stat.value}
+            </h2>
+          </div>
+        ))}
+      </div>
 
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
