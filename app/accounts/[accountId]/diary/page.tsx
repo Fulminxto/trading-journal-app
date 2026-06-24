@@ -12,19 +12,7 @@ import {
   type AppLanguage,
 } from "@/lib/i18n";
 
-import TradeQualityHero from "@/components/diary/TradeQualityHero";
-import TradeQualityIntelligence from "@/components/diary/TradeQualityIntelligence";
-import TradeBehaviorWarnings from "@/components/diary/TradeBehaviorWarnings";
-import ExecutionPatternEngine from "@/components/diary/ExecutionPatternEngine";
-import TradeDisciplineScore from "@/components/diary/TradeDisciplineScore";
-import TradePerformanceClusters from "@/components/diary/TradePerformanceClusters";
-import EdgeDetectionEngine from "@/components/diary/EdgeDetectionEngine";
-import TraderIdentityEngine from "@/components/diary/TraderIdentityEngine";
-import AdaptiveCoachingLayer from "@/components/diary/AdaptiveCoachingLayer";
-import MarketPsychologyEngine from "@/components/diary/MarketPsychologyEngine";
-import ConfidenceAnalyticsEngine from "@/components/diary/ConfidenceAnalyticsEngine";
-import BehavioralCorrelationEngine from "@/components/diary/BehavioralCorrelationEngine";
-import AIPerformanceTimeline from "@/components/diary/AIPerformanceTimeline";
+import ExecutionInsights from "@/components/diary/ExecutionInsights";
 import ScopeBar from "@/components/ScopeBar";
 import {
   parseScopeParams,
@@ -1176,24 +1164,6 @@ export default async function DiaryPage({
       trade.emotionalState.length > 0
   ).length;
 
-  const lowConfidenceTrades = periodTrades.filter(
-    (trade) =>
-      (trade.confidence || 0) > 0 &&
-      (trade.confidence || 0) <= 4
-  ).length;
-
-  const weakSetupTrades = periodTrades.filter(
-    (trade) =>
-      (trade.setupQuality || 0) > 0 &&
-      (trade.setupQuality || 0) <= 4
-  ).length;
-
-  const impulsiveTrades = periodTrades.filter(
-    (trade) =>
-      trade.mistakes &&
-      trade.mistakes.toLowerCase().includes("impuls")
-  ).length;
-
   const disciplineScore =
     periodTrades.length > 0
       ? Math.max(
@@ -1211,24 +1181,6 @@ export default async function DiaryPage({
         )
       )
       : 0;
-
-  const strongTrades = periodTrades.filter(
-    (trade) =>
-      (trade.executionRating || 0) >= 8 &&
-      (trade.setupQuality || 0) >= 8
-  ).length;
-
-  const averageTrades = periodTrades.filter(
-    (trade) =>
-      (trade.executionRating || 0) >= 5 &&
-      (trade.executionRating || 0) < 8
-  ).length;
-
-  const weakTrades = periodTrades.filter(
-    (trade) =>
-      (trade.executionRating || 0) > 0 &&
-      (trade.executionRating || 0) <= 4
-  ).length;
 
   const setupStats = periodTrades.reduce(
     (acc, trade) => {
@@ -1272,31 +1224,6 @@ export default async function DiaryPage({
 
       return winRateB - winRateA;
     })[0]?.[0] || "Not enough data";
-
-  const traderType =
-    averageConfidence >= 7 && averageExecution >= 7
-      ? "Confident Executor"
-      : averageExecution >= 7
-        ? "Technical Executor"
-        : averageConfidence >= 7
-          ? "High Conviction Trader"
-          : "Developing Trader";
-
-  const traderStrength =
-    highQualityTrades >= weakExecutionTrades
-      ? "Execution Quality"
-      : "Data Awareness";
-
-  const traderWeakness =
-    emotionalTrades > highQualityTrades
-      ? "Emotional Discipline"
-      : weakSetupTrades > strongTrades
-        ? "Setup Selection"
-        : "Consistency";
-
-  const highConfidenceTrades = periodTrades.filter(
-    (trade) => (trade.confidence || 0) >= 8
-  ).length;
 
   const scopeMembers = isSharedAccount
     ? accountMembers.map((m) => ({
@@ -1407,95 +1334,17 @@ export default async function DiaryPage({
         ))}
       </div>
 
-      <TradeQualityHero
-        totalTrades={periodTrades.length}
+      <ExecutionInsights
+        disciplineScore={disciplineScore}
         averageExecution={averageExecution}
         averageConfidence={averageConfidence}
-        appLanguage={language}
-      />
-
-      <TradeDisciplineScore score={disciplineScore} appLanguage={language} />
-
-      <TradeQualityIntelligence
         highQualityTrades={highQualityTrades}
         weakExecutionTrades={weakExecutionTrades}
         emotionalTrades={emotionalTrades}
-        appLanguage={language}
-      />
-
-      <TradeBehaviorWarnings
-        weakExecutionTrades={weakExecutionTrades}
-        emotionalTrades={emotionalTrades}
-        highQualityTrades={highQualityTrades}
-        appLanguage={language}
-      />
-
-      <TradePerformanceClusters
-        strongTrades={strongTrades}
-        averageTrades={averageTrades}
-        weakTrades={weakTrades}
-        appLanguage={language}
-      />
-
-      <EdgeDetectionEngine
         bestSetup={bestSetup}
-        weakSetupCount={weakSetupTrades}
-        strongTradeCount={strongTrades}
         appLanguage={language}
       />
 
-      <TraderIdentityEngine
-        traderType={traderType}
-        strength={traderStrength}
-        weakness={traderWeakness}
-        appLanguage={language}
-      />
-
-      <AdaptiveCoachingLayer
-        disciplineScore={disciplineScore}
-        traderType={traderType}
-        weakness={traderWeakness}
-        weakExecutionTrades={weakExecutionTrades}
-        emotionalTrades={emotionalTrades}
-        appLanguage={language}
-      />
-
-      <MarketPsychologyEngine
-        emotionalTrades={emotionalTrades}
-        lowConfidenceTrades={lowConfidenceTrades}
-        highQualityTrades={highQualityTrades}
-        appLanguage={language}
-      />
-
-      <ConfidenceAnalyticsEngine
-        lowConfidenceTrades={lowConfidenceTrades}
-        highConfidenceTrades={highConfidenceTrades}
-        highQualityTrades={highQualityTrades}
-        appLanguage={language}
-      />
-
-      <BehavioralCorrelationEngine
-        emotionalTrades={emotionalTrades}
-        weakExecutionTrades={weakExecutionTrades}
-        lowConfidenceTrades={lowConfidenceTrades}
-        totalTrades={periodTrades.length}
-        appLanguage={language}
-      />
-
-      <AIPerformanceTimeline
-        totalTrades={periodTrades.length}
-        highQualityTrades={highQualityTrades}
-        weakExecutionTrades={weakExecutionTrades}
-        disciplineScore={disciplineScore}
-        appLanguage={language}
-      />
-
-      <ExecutionPatternEngine
-        lowConfidenceTrades={lowConfidenceTrades}
-        weakSetupTrades={weakSetupTrades}
-        impulsiveTrades={impulsiveTrades}
-        appLanguage={language}
-      />
 
       <form
         action={`/accounts/${accountId}/diary`}
