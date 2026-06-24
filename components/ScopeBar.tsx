@@ -29,6 +29,7 @@ type Props = {
   currentRef: string;
   // i18n
   appLanguage: AppLanguage;
+  mode?: "all" | "trader" | "period";
 };
 
 const PRESETS: Period[] = ["all", "day", "week", "month", "year"];
@@ -54,6 +55,7 @@ export default function ScopeBar({
   currentPeriod,
   currentRef,
   appLanguage,
+  mode = "all",
 }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -120,18 +122,27 @@ export default function ScopeBar({
   });
 
   const navigatorLabel = getPeriodLabel(currentPeriod, currentRef, lang);
+  const showTrader = mode === "all" || mode === "trader";
+  const showPeriod = mode === "all" || mode === "period";
+  const showDescription = mode === "all";
+
+  if (mode === "trader" && !isShared) {
+    return null;
+  }
 
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
     <div className="space-y-3">
       <div
-        className={`flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between ${
+        className={`flex flex-col gap-4 sm:flex-row sm:items-center ${
+          mode === "all" ? "sm:justify-between" : ""
+        } ${
           isPending ? "pointer-events-none" : ""
         }`}
       >
         {/* ── LEFT: Trader pills (shared accounts only) ── */}
-        {isShared && (
+        {showTrader && isShared && (
           <div className="flex flex-wrap items-center gap-3">
             <p className="shrink-0 text-xs font-semibold uppercase tracking-wider text-gray-500">
               {TRADER_LABEL[lang]}
@@ -190,6 +201,7 @@ export default function ScopeBar({
         )}
 
         {/* ── RIGHT: Period pills + navigator ── */}
+        {showPeriod && (
         <div className="flex flex-wrap items-center gap-3">
           <p className="shrink-0 text-xs font-semibold uppercase tracking-wider text-gray-500">
             {PERIOD_LABEL[lang]}
@@ -243,12 +255,15 @@ export default function ScopeBar({
           {/* Loading indicator */}
           {isPending && <VoltisLightningLoader size={20} />}
         </div>
+        )}
       </div>
 
       {/* ── Scope description row ── */}
-      <p className="text-xs text-gray-500">
-        {scopeDescription}
-      </p>
+      {showDescription && (
+        <p className="text-xs text-gray-500">
+          {scopeDescription}
+        </p>
+      )}
     </div>
   );
 }

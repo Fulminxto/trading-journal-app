@@ -3,9 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 import EquityChart from "@/components/EquityChart";
-import DashboardHero from "@/components/dashboard/DashboardHero";
 import DashboardStatCard from "@/components/dashboard/DashboardStatCard";
-import ConsistencyScoreCard from "@/components/dashboard/ConsistencyScoreCard";
 import ScopeBar from "@/components/ScopeBar";
 import {
   normalizeAppLanguage,
@@ -136,6 +134,18 @@ type DashboardLabels = {
   healthStable: string;
   healthPositiveMonitorRisk: string;
   healthNeedsReview: string;
+
+  equityTotal: string;
+  scoreElite: string;
+  scoreConsistent: string;
+  scoreDeveloping: string;
+  scoreUnstable: string;
+
+  riskControl: string;
+  exposure: string;
+
+  averages: string;
+  extremes: string;
 };
 
 const dashboardLabels: Record<
@@ -213,6 +223,18 @@ const dashboardLabels: Record<
     healthPositiveMonitorRisk:
       "Positivo, ma monitora il rischio",
     healthNeedsReview: "Da revisionare",
+
+    equityTotal: "Equity totale",
+    scoreElite: "Elite",
+    scoreConsistent: "Consistente",
+    scoreDeveloping: "In sviluppo",
+    scoreUnstable: "Instabile",
+
+    riskControl: "Controllo rischio",
+    exposure: "Esposizione",
+
+    averages: "Medie",
+    extremes: "Estremi",
   },
 
   en: {
@@ -286,6 +308,18 @@ const dashboardLabels: Record<
     healthPositiveMonitorRisk:
       "Positive but monitor risk",
     healthNeedsReview: "Needs review",
+
+    equityTotal: "Total Equity",
+    scoreElite: "Elite",
+    scoreConsistent: "Consistent",
+    scoreDeveloping: "Developing",
+    scoreUnstable: "Unstable",
+
+    riskControl: "Risk Control",
+    exposure: "Exposure",
+
+    averages: "Averages",
+    extremes: "Extremes",
   },
 
   uk: {
@@ -359,6 +393,18 @@ const dashboardLabels: Record<
     healthPositiveMonitorRisk:
       "Позитивно, але контролюй ризик",
     healthNeedsReview: "Потрібен review",
+
+    equityTotal: "Загальна equity",
+    scoreElite: "Elite",
+    scoreConsistent: "Стабільний",
+    scoreDeveloping: "У розвитку",
+    scoreUnstable: "Нестабільний",
+
+    riskControl: "Контроль ризику",
+    exposure: "Експозиція",
+
+    averages: "Середні",
+    extremes: "Екстреми",
   },
 
   ru: {
@@ -432,6 +478,18 @@ const dashboardLabels: Record<
     healthPositiveMonitorRisk:
       "Положительно, но контролируй риск",
     healthNeedsReview: "Нужен review",
+
+    equityTotal: "Общая equity",
+    scoreElite: "Elite",
+    scoreConsistent: "Стабильный",
+    scoreDeveloping: "В развитии",
+    scoreUnstable: "Нестабильный",
+
+    riskControl: "Контроль риска",
+    exposure: "Экспозиция",
+
+    averages: "Средние",
+    extremes: "Экстремумы",
   },
 
   es: {
@@ -505,6 +563,18 @@ const dashboardLabels: Record<
     healthPositiveMonitorRisk:
       "Positivo, pero controla el riesgo",
     healthNeedsReview: "Necesita revisión",
+
+    equityTotal: "Equity total",
+    scoreElite: "Elite",
+    scoreConsistent: "Consistente",
+    scoreDeveloping: "En desarrollo",
+    scoreUnstable: "Inestable",
+
+    riskControl: "Control de riesgo",
+    exposure: "Exposición",
+
+    averages: "Promedios",
+    extremes: "Extremos",
   },
 
   fr: {
@@ -578,6 +648,18 @@ const dashboardLabels: Record<
     healthPositiveMonitorRisk:
       "Positif, mais surveille le risque",
     healthNeedsReview: "À revoir",
+
+    equityTotal: "Equity totale",
+    scoreElite: "Elite",
+    scoreConsistent: "Consistant",
+    scoreDeveloping: "En développement",
+    scoreUnstable: "Instable",
+
+    riskControl: "Contrôle du risque",
+    exposure: "Exposition",
+
+    averages: "Moyennes",
+    extremes: "Extrêmes",
   },
 
   de: {
@@ -651,6 +733,18 @@ const dashboardLabels: Record<
     healthPositiveMonitorRisk:
       "Positiv, aber Risiko überwachen",
     healthNeedsReview: "Review nötig",
+
+    equityTotal: "Gesamt-Equity",
+    scoreElite: "Elite",
+    scoreConsistent: "Konstant",
+    scoreDeveloping: "In Entwicklung",
+    scoreUnstable: "Instabil",
+
+    riskControl: "Risikokontrolle",
+    exposure: "Exposition",
+
+    averages: "Durchschnitte",
+    extremes: "Extreme",
   },
 };
 
@@ -824,19 +918,6 @@ export default async function DashboardPage({
       ? account.profitTarget - currentProfitPercent
       : null;
 
-  const targetProgress =
-    account.profitTarget && account.profitTarget > 0
-      ? Math.max(
-        0,
-        Math.min(
-          100,
-          (currentProfitPercent /
-            account.profitTarget) *
-          100
-        )
-      )
-      : 0;
-
   const winRate =
     closedTrades > 0
       ? (wins / closedTrades) * 100
@@ -896,6 +977,11 @@ export default async function DashboardPage({
       )
       : 0;
 
+  const exposurePercent =
+    account.maxDrawdown && account.maxDrawdown > 0
+      ? Math.min(100, (Math.abs(maxDrawdown) / account.maxDrawdown) * 100)
+      : 0;
+
   const recentTrades = [...periodTrades]
     .reverse()
     .slice(0, 5);
@@ -948,319 +1034,170 @@ export default async function DashboardPage({
           ? t.healthPositiveMonitorRisk
           : t.healthNeedsReview;
 
-  const stats = [
-    {
-      // Fixed: total account equity, not period-scoped
-      label: t.currentEquity,
-      value: formatCurrency(
-        currentEquity,
-        currency
-      ),
-      tone: "text-white",
-    },
+  const scoreTierLabel =
+    consistencyScore >= 80 ? t.scoreElite :
+    consistencyScore >= 60 ? t.scoreConsistent :
+    consistencyScore >= 40 ? t.scoreDeveloping :
+                             t.scoreUnstable;
 
-    {
-      // Fixed: total profit % of the whole account
-      label: t.currentProfit,
-      value: formatPercent(
-        currentProfitPercent
-      ),
-      tone: getResultTone(
-        currentProfitPercent
-      ),
-    },
+  const watchItems =
+    totalTrades < 5
+      ? [
+          {
+            label: t.execution,
+            value: `${totalTrades} ${t.trades}`,
+            tone: "text-yellow-400",
+            note:
+              "Few trades. Treat signals as early context.",
+          },
+        ]
+      : [
+          ...(exposurePercent >= 70
+            ? [
+                {
+                  label: t.risk,
+                  value: formatPercent(maxDrawdown),
+                  tone: "text-red-400",
+                  note:
+                    "Drawdown is close to the account limit.",
+                },
+              ]
+            : []),
+          ...(winRate < 45
+            ? [
+                {
+                  label: t.consistency,
+                  value: formatPercent(winRate),
+                  tone: "text-red-400",
+                  note:
+                    "Win rate is under pressure. Review entries.",
+                },
+              ]
+            : []),
+          ...(averageResult < 0
+            ? [
+                {
+                  label: t.execution,
+                  value: formatCurrency(averageResult, currency),
+                  tone: "text-red-400",
+                  note:
+                    "Average result is negative. Watch loss size.",
+                },
+              ]
+            : []),
+          ...(currentProfitPercent > 0 && exposurePercent < 50
+            ? [
+                {
+                  label: t.risk,
+                  value: formatPercent(currentProfitPercent),
+                  tone: "text-green-400",
+                  note:
+                    "Profit is positive and risk is contained.",
+                },
+              ]
+            : []),
+        ];
 
-    {
-      label: t.totalPnl + periodSuffix,
-      value: formatCurrency(
-        totalPnl,
-        currency
-      ),
-      tone: getResultTone(totalPnl),
-    },
-
-    {
-      label: t.winRate + periodSuffix,
-      value: formatPercent(winRate),
-      tone:
-        winRate >= 50
-          ? "text-green-400"
-          : "text-red-400",
-    },
-
-    {
-      label: t.trades + periodSuffix,
-      value: totalTrades,
-      tone: "text-white",
-    },
-
-    {
-      label: t.wins + periodSuffix,
-      value: wins,
-      tone: "text-green-400",
-    },
-
-    {
-      label: t.losses + periodSuffix,
-      value: losses,
-      tone: "text-red-400",
-    },
-
-    {
-      label: t.breakEven + periodSuffix,
-      value: be,
-      tone: "text-yellow-400",
-    },
-
-    {
-      label: t.averageResult + periodSuffix,
-      value: formatCurrency(
-        averageResult,
-        currency
-      ),
-      tone: getResultTone(
-        averageResult
-      ),
-    },
-
-    {
-      label: t.averageWin + periodSuffix,
-      value: formatCurrency(
-        averageWin,
-        currency
-      ),
-      tone: "text-green-400",
-    },
-
-    {
-      label: t.averageLoss + periodSuffix,
-      value: formatCurrency(
-        averageLoss,
-        currency
-      ),
-      tone: "text-red-400",
-    },
-
-    {
-      label: t.profitFactor + periodSuffix,
-      value: profitFactor.toFixed(2),
-      tone:
-        profitFactor >= 1
-          ? "text-green-400"
-          : "text-red-400",
-    },
-
-    {
-      label: t.bestTrade + periodSuffix,
-      value: formatCurrency(
-        bestTrade,
-        currency
-      ),
-      tone: "text-green-400",
-    },
-
-    {
-      label: t.worstTrade + periodSuffix,
-      value: formatCurrency(
-        worstTrade,
-        currency
-      ),
-      tone: "text-red-400",
-    },
-
-    {
-      label: t.maxDrawdown + periodSuffix,
-      value: formatPercent(maxDrawdown),
-      tone: "text-red-400",
-    },
-
-    {
-      // Fixed: based on total account equity vs profit target
-      label: t.remainingTarget,
-      value:
-        remainingToTarget !== null
-          ? formatPercent(remainingToTarget)
-          : "-",
-      tone:
-        remainingToTarget !== null &&
-          remainingToTarget <= 0
-          ? "text-green-400"
-          : "text-yellow-400",
-    },
-  ];
+  const visibleWatchItems =
+    watchItems.length > 0
+      ? watchItems.slice(0, 3)
+      : [
+          {
+            label: t.consistency,
+            value: `${consistencyScore}/100`,
+            tone: "text-accent",
+            note:
+              "No critical signal. Keep monitoring execution.",
+          },
+        ];
 
   return (
-    <div className="space-y-12">
-      <ScopeBar
-        accountId={accountId}
-        members={
-          isSharedAccount
-            ? accountMembers.map((m) => ({
-                id: m.user.id,
-                name: m.user.name,
-                username: m.user.username,
-              }))
-            : undefined
-        }
-        selectedMemberId={selectedMemberId}
-        currentPeriod={period}
-        currentRef={ref}
-        appLanguage={language}
-      />
+    <div className="mx-auto w-full max-w-[1500px] space-y-8">
+      <div className="space-y-5">
+        <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+          <div className="flex flex-col gap-2">
+            <p className="text-xs font-black uppercase tracking-[0.28em] text-accent-bright">
+              VOLTIS DASHBOARD
+            </p>
 
-      <DashboardHero
-        accountName={account.name}
-        currentEquity={formatCurrency(
-          currentEquity,
-          currency
-        )}
-        totalPnl={formatCurrency(
-          totalPnl,
-          currency
-        )}
-        winRate={formatPercent(winRate)}
-        totalTrades={totalTrades}
-        appLanguage={language}
-      />
+            <h1 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
+              {account.name}
+            </h1>
 
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
-        <div className="xl:col-span-2">
-          <ConsistencyScoreCard
-            score={consistencyScore}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-semibold text-white">
+                {accountHealth}
+              </span>
+
+              <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-3 py-1 text-xs font-semibold text-accent-bright">
+                Score {consistencyScore}/100 / {scoreTierLabel}
+              </span>
+            </div>
+
+            <ScopeBar
+              accountId={accountId}
+              members={
+                isSharedAccount
+                  ? accountMembers.map((m) => ({
+                      id: m.user.id,
+                      name: m.user.name,
+                      username: m.user.username,
+                    }))
+                  : undefined
+              }
+              selectedMemberId={selectedMemberId}
+              currentPeriod={period}
+              currentRef={ref}
+              appLanguage={language}
+              mode="trader"
+            />
+          </div>
+
+          <ScopeBar
+            accountId={accountId}
+            selectedMemberId={selectedMemberId}
+            currentPeriod={period}
+            currentRef={ref}
             appLanguage={language}
+            mode="period"
           />
         </div>
 
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            {t.accountStatus}
-          </p>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <DashboardStatCard
+            label={t.totalPnl + periodSuffix}
+            value={formatCurrency(totalPnl, currency)}
+            tone={getResultTone(totalPnl)}
+          />
 
-          <h2 className="mt-2 text-2xl font-black text-white">
-            {accountHealth}
-          </h2>
+          <DashboardStatCard
+            label={t.winRate + periodSuffix}
+            value={formatPercent(winRate)}
+            tone={winRate >= 50 ? "text-green-400" : "text-red-400"}
+          />
 
-          <p className="mt-3 text-sm leading-6 text-gray-400">
-            {t.accountStatusDescription}
-          </p>
+          <DashboardStatCard
+            label={t.trades + periodSuffix}
+            value={totalTrades}
+            tone="text-white"
+          />
+
+          <DashboardStatCard
+            label={t.equityTotal}
+            value={formatCurrency(currentEquity, currency)}
+            tone="text-white"
+          />
         </div>
       </div>
 
-      <div>
-        <p className="text-sm text-gray-400">
-          {t.dashboardAccount}
-        </p>
-
-        <h1 className="text-3xl font-bold sm:text-4xl">
-          {account.name}
-        </h1>
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4">
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            {t.accountType}
-          </p>
-
-          <h2 className="mt-2 text-3xl font-bold">
-            {account.type}
-          </h2>
-        </div>
-
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            {t.initialBalance}
-          </p>
-
-          <h2 className="mt-2 text-3xl font-bold">
-            {formatCurrency(
-              initialBalance,
-              currency
-            )}
-          </h2>
-        </div>
-
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            {t.currency}
-          </p>
-
-          <h2 className="mt-2 text-3xl font-bold">
-            {currency}
-          </h2>
-        </div>
-
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            {t.brokerFirm}
-          </p>
-
-          <h2 className="mt-2 text-3xl font-bold">
-            {account.broker || "-"}
-          </h2>
-        </div>
-
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            {t.phase}
-          </p>
-
-          <h2 className="mt-2 text-3xl font-bold">
-            {account.phase || "-"}
-          </h2>
-        </div>
-
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            {t.profitTarget}
-          </p>
-
-          <h2 className="mt-2 text-3xl font-bold text-accent">
-            {account.profitTarget
-              ? formatPercent(
-                account.profitTarget
-              )
-              : "-"}
-          </h2>
-        </div>
-
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            {t.maxDrawdownLimit}
-          </p>
-
-          <h2 className="mt-2 text-3xl font-bold text-red-400">
-            {account.maxDrawdown
-              ? formatPercent(
-                account.maxDrawdown
-              )
-              : "-"}
-          </h2>
-        </div>
-
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            {t.dailyDrawdownLimit}
-          </p>
-
-          <h2 className="mt-2 text-3xl font-bold text-red-400">
-            {account.dailyDrawdown
-              ? formatPercent(
-                account.dailyDrawdown
-              )
-              : "-"}
-          </h2>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
           <div className="mb-6">
-            <p className="text-sm text-gray-400">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
               {t.accountGrowth}
             </p>
 
-            <h2 className="mt-1 text-2xl font-bold">
+            <h2 className="mt-1 text-2xl font-black text-white">
               {t.equityCurve}
             </h2>
           </div>
@@ -1272,193 +1209,232 @@ export default async function DashboardPage({
               {t.noTradesEquity}
             </div>
           )}
-        </div>
 
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            {t.targetProgress}
-          </p>
+          <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            <div>
+              <p className="text-xs text-gray-500">
+                {t.currentProfit}
+              </p>
 
-          <h2 className="mt-2 text-3xl font-black text-white">
-            {account.profitTarget
-              ? `${targetProgress.toFixed(0)}%`
-              : "-"}
-          </h2>
-
-          <div className="mt-5 h-3 overflow-hidden rounded-full bg-white/10">
-            <div
-              className="h-full rounded-full bg-accent"
-              style={{
-                width: `${targetProgress}%`,
-              }}
-            />
-          </div>
-
-          <div className="mt-5 space-y-3 text-sm text-gray-400">
-            <div className="flex items-center justify-between gap-4">
-              <span>{t.currentProfit}</span>
-              <span
-                className={getResultTone(
-                  currentProfitPercent
-                )}
-              >
-                {formatPercent(
-                  currentProfitPercent
-                )}
-              </span>
+              <p className={`mt-1 text-lg font-black ${getResultTone(currentProfitPercent)}`}>
+                {formatPercent(currentProfitPercent)}
+              </p>
             </div>
 
-            <div className="flex items-center justify-between gap-4">
-              <span>{t.target}</span>
-              <span className="text-accent">
+            <div>
+              <p className="text-xs text-gray-500">
+                {t.target}
+              </p>
+
+              <p className="mt-1 text-lg font-black text-accent">
                 {account.profitTarget
-                  ? formatPercent(
-                    account.profitTarget
-                  )
+                  ? formatPercent(account.profitTarget)
                   : "-"}
-              </span>
+              </p>
             </div>
 
-            <div className="flex items-center justify-between gap-4">
-              <span>{t.remaining}</span>
-              <span
-                className={
-                  remainingToTarget !== null &&
-                    remainingToTarget <= 0
+            <div>
+              <p className="text-xs text-gray-500">
+                {t.remaining}
+              </p>
+
+              <p
+                className={`mt-1 text-lg font-black ${
+                  remainingToTarget !== null && remainingToTarget <= 0
                     ? "text-green-400"
                     : "text-yellow-400"
-                }
+                }`}
               >
                 {remainingToTarget !== null
-                  ? formatPercent(
-                    remainingToTarget
-                  )
+                  ? formatPercent(remainingToTarget)
                   : "-"}
-              </span>
+              </p>
+            </div>
+
+            <div>
+              <p className="text-xs text-gray-500">
+                {t.recentMomentum}
+              </p>
+
+              <p className={`mt-1 text-lg font-black ${getResultTone(lastFivePnl)}`}>
+                {formatCurrency(lastFivePnl, currency)}
+              </p>
+
+              <p className="mt-0.5 text-xs text-gray-500">
+                <span className="text-accent">{lastFiveWins}{t.winsShort}</span>
+                {" / "}
+                <span className="text-red-400">{lastFiveLosses}{t.lossesShort}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
+          <div className="mb-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
+              {t.riskControl}
+            </p>
+
+            <h2 className="mt-1 text-2xl font-bold">
+              {t.risk}
+            </h2>
+          </div>
+
+          <div className="space-y-5">
+            <div>
+              <p className="text-xs text-gray-500">
+                {t.maxDrawdown + periodSuffix}
+              </p>
+
+              <p className="mt-1 text-3xl font-black text-red-400">
+                {formatPercent(maxDrawdown)}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-xs text-gray-500">
+                  {t.maxDrawdownLimit}
+                </p>
+
+                <p className="mt-1 text-lg font-bold text-red-400">
+                  {account.maxDrawdown
+                    ? formatPercent(account.maxDrawdown)
+                    : "-"}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-xs text-gray-500">
+                  {t.dailyDrawdownLimit}
+                </p>
+
+                <p className="mt-1 text-lg font-bold text-red-400">
+                  {account.dailyDrawdown
+                    ? formatPercent(account.dailyDrawdown)
+                    : "-"}
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <div className="mb-2 flex items-center justify-between text-xs text-gray-500">
+                <span>{t.exposure}</span>
+                <span>{exposurePercent.toFixed(0)}%</span>
+              </div>
+
+              <div className="h-2 overflow-hidden rounded-full bg-white/10">
+                <div
+                  className="h-full rounded-full bg-red-400 transition-all"
+                  style={{ width: `${exposurePercent}%` }}
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            {t.recentMomentum}
-          </p>
-
-          <h2
-            className={`mt-2 text-3xl font-black ${getResultTone(
-              lastFivePnl
-            )}`}
-          >
-            {formatCurrency(
-              lastFivePnl,
-              currency
-            )}
-          </h2>
-
-          <p className="mt-3 text-sm text-gray-400">
-            {t.last} {recentTrades.length} {t.trades} ·{" "}
-            <span className="text-accent">
-              {lastFiveWins}{t.winsShort}
-            </span>{" "}
-            /{" "}
-            <span className="text-red-400">
-              {lastFiveLosses}{t.lossesShort}
-            </span>
-          </p>
-        </div>
-
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            {t.profitFactor}
-          </p>
-
-          <h2
-            className={`mt-2 text-3xl font-black ${profitFactor >= 1
-              ? "text-green-400"
-              : "text-red-400"
-              }`}
-          >
-            {profitFactor.toFixed(2)}
-          </h2>
-
-          <p className="mt-3 text-sm text-gray-400">
-            {t.profitFactorDescription}
-          </p>
-        </div>
-
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-gray-400">
             {t.outcomeSplit}
           </p>
 
-          <div className="mt-4 space-y-3 text-sm">
-            <div>
-              <div className="mb-1 flex justify-between text-gray-400">
-                <span>{t.wins}</span>
-                <span className="text-accent">
-                  {formatPercent(winRate)}
-                </span>
-              </div>
-              <div className="h-2 overflow-hidden rounded-full bg-white/10">
-                <div
-                  className="h-full rounded-full bg-accent"
-                  style={{
-                    width: `${Math.min(
-                      100,
-                      winRate
-                    )}%`,
-                  }}
-                />
+          <div className="mt-4 space-y-4 text-sm">
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-gray-400">{t.wins}</span>
+              <div className="text-right">
+                <span className="font-black text-accent">{wins}</span>
+                <span className="ml-2 text-gray-500">{formatPercent(winRate)}</span>
               </div>
             </div>
 
-            <div>
-              <div className="mb-1 flex justify-between text-gray-400">
-                <span>{t.losses}</span>
-                <span className="text-red-400">
-                  {formatPercent(lossRate)}
-                </span>
-              </div>
-              <div className="h-2 overflow-hidden rounded-full bg-white/10">
-                <div
-                  className="h-full rounded-full bg-red-400"
-                  style={{
-                    width: `${Math.min(
-                      100,
-                      lossRate
-                    )}%`,
-                  }}
-                />
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-gray-400">{t.losses}</span>
+              <div className="text-right">
+                <span className="font-black text-red-400">{losses}</span>
+                <span className="ml-2 text-gray-500">{formatPercent(lossRate)}</span>
               </div>
             </div>
 
-            <div>
-              <div className="mb-1 flex justify-between text-gray-400">
-                <span>{t.breakEven}</span>
-                <span className="text-yellow-400">
-                  {formatPercent(beRate)}
-                </span>
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-gray-400">{t.breakEven}</span>
+              <div className="text-right">
+                <span className="font-black text-yellow-400">{be}</span>
+                <span className="ml-2 text-gray-500">{formatPercent(beRate)}</span>
               </div>
-              <div className="h-2 overflow-hidden rounded-full bg-white/10">
-                <div
-                  className="h-full rounded-full bg-yellow-400"
-                  style={{
-                    width: `${Math.min(
-                      100,
-                      beRate
-                    )}%`,
-                  }}
-                />
-              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+          <p className="text-sm text-gray-400">
+            {t.averages}
+          </p>
+
+          <div className="mt-4 space-y-4 text-sm">
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-gray-400">{t.averageResult + periodSuffix}</span>
+              <span className={`font-black ${getResultTone(averageResult)}`}>
+                {formatCurrency(averageResult, currency)}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-gray-400">{t.averageWin + periodSuffix}</span>
+              <span className="font-black text-green-400">
+                {formatCurrency(averageWin, currency)}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-gray-400">{t.averageLoss + periodSuffix}</span>
+              <span className="font-black text-red-400">
+                {formatCurrency(averageLoss, currency)}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-gray-400">{t.profitFactor + periodSuffix}</span>
+              <span className={`font-black ${profitFactor >= 1 ? "text-green-400" : "text-red-400"}`}>
+                {profitFactor.toFixed(2)}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+          <p className="text-sm text-gray-400">
+            {t.extremes}
+          </p>
+
+          <div className="mt-4 space-y-4 text-sm">
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-gray-400">{t.bestTrade + periodSuffix}</span>
+              <span className="font-black text-green-400">
+                {formatCurrency(bestTrade, currency)}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-gray-400">{t.worstTrade + periodSuffix}</span>
+              <span className="font-black text-red-400">
+                {formatCurrency(worstTrade, currency)}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-gray-400">{t.maxDrawdown + periodSuffix}</span>
+              <span className="font-black text-red-400">
+                {formatPercent(maxDrawdown)}
+              </span>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-5">
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-3">
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(300px,1fr)]">
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
           <div className="mb-5">
             <p className="text-sm text-gray-400">
               {t.latestActivity}
@@ -1474,23 +1450,43 @@ export default async function DashboardPage({
               {recentTrades.map((trade) => (
                 <div
                   key={trade.id}
-                  className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/10 p-4"
+                  className="rounded-2xl border border-white/10 bg-black/10 p-4 transition-colors hover:border-white/20 hover:bg-white/[0.03]"
                 >
-                  <div className="min-w-0">
-                    <p className="truncate font-bold text-white">
-                      {trade.symbol || t.unknownSymbol}
-                    </p>
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <p className="truncate text-base font-black text-white">
+                          {trade.symbol || t.unknownSymbol}
+                        </p>
 
-                    <p className="mt-1 text-xs text-gray-400">
-                      {getDateLabel(trade.openDate, language)} ·{" "}
-                      {trade.direction || "-"} ·{" "}
-                      {trade.outcome || "-"}
-                    </p>
+                        <span className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-gray-300">
+                          {trade.direction || "-"}
+                        </span>
+
+                        <span
+                          className={`rounded-full border px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.16em] ${
+                            trade.outcome === "win"
+                              ? "border-green-400/20 bg-green-400/10 text-green-300"
+                              : trade.outcome === "loss"
+                                ? "border-red-400/20 bg-red-400/10 text-red-300"
+                                : "border-yellow-400/20 bg-yellow-400/10 text-yellow-300"
+                          }`}
+                        >
+                          {trade.outcome || "-"}
+                        </span>
+                      </div>
+
+                      <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
+                        <span>{getDateLabel(trade.openDate, language)}</span>
+                        {trade.session ? (
+                          <span>{trade.session}</span>
+                        ) : null}
+                      </p>
                   </div>
 
-                  <div className="shrink-0 text-right">
+                  <div className="flex items-end justify-between gap-4 sm:block sm:shrink-0 sm:text-right">
                     <p
-                      className={`font-bold ${getResultTone(
+                      className={`text-lg font-black ${getResultTone(
                         trade.resultUsd || 0
                       )}`}
                     >
@@ -1510,6 +1506,7 @@ export default async function DashboardPage({
                     </p>
                   </div>
                 </div>
+                </div>
               ))}
             </div>
           ) : (
@@ -1519,7 +1516,7 @@ export default async function DashboardPage({
           )}
         </div>
 
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
+        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
           <div className="mb-5">
             <p className="text-sm text-gray-400">
               {t.reviewNotes}
@@ -1530,69 +1527,94 @@ export default async function DashboardPage({
             </h2>
           </div>
 
-          <div className="space-y-4 text-sm leading-6 text-gray-400">
-            <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
-              <p className="font-bold text-white">
-                {t.risk}
-              </p>
-              <p className="mt-1">
-                {t.currentMaxDrawdownIs}{" "}
-                <span className="text-red-400">
-                  {formatPercent(maxDrawdown)}
-                </span>
-                .
-              </p>
-            </div>
+          <div className="space-y-3 text-sm leading-6 text-gray-400">
+            {visibleWatchItems.map((item) => (
+              <div
+                key={`${item.label}-${item.value}`}
+                className="rounded-2xl border border-white/10 bg-black/10 p-4"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <p className="font-bold text-white">
+                    {item.label}
+                  </p>
 
-            <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
-              <p className="font-bold text-white">
-                {t.execution}
-              </p>
-              <p className="mt-1">
-                {t.averageResultPerTradeIs}{" "}
-                <span
-                  className={getResultTone(
-                    averageResult
-                  )}
-                >
-                  {formatCurrency(
-                    averageResult,
-                    currency
-                  )}
-                </span>
-                .
-              </p>
-            </div>
+                  <p className={`shrink-0 font-black ${item.tone}`}>
+                    {item.value}
+                  </p>
+                </div>
 
-            <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
-              <p className="font-bold text-white">
-                {t.consistency}
-              </p>
-              <p className="mt-1">
-                {t.scoreCurrentlyAt}{" "}
-                <span className="text-accent">
-                  {consistencyScore}/100
-                </span>
-                .
-              </p>
-            </div>
+                <p className="mt-2 text-xs leading-5 text-gray-500">
+                  {item.note}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {stats.map((stat) => (
-          <DashboardStatCard
-            key={stat.label}
-            label={stat.label}
-            value={stat.value}
-            tone={stat.tone}
-          />
-        ))}
-      </div>
+      <details className="group rounded-3xl border border-white/10 bg-white/[0.025] p-4 sm:p-5">
+        <summary className="flex cursor-pointer list-none flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
+              Technical profile
+            </p>
+
+            <h2 className="mt-1 text-lg font-bold text-white">
+              Account details
+            </h2>
+          </div>
+
+          <div className="flex items-center gap-3 text-xs font-semibold text-gray-500">
+            <span>{t.accountStatus}: {accountHealth}</span>
+            <span className="transition group-open:rotate-180">v</span>
+          </div>
+        </summary>
+
+        <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4">
+          {[
+            [t.accountType, account.type],
+            [t.phase, account.phase || "-"],
+            [t.brokerFirm, account.broker || "-"],
+            [t.currency, currency],
+            [
+              t.initialBalance,
+              formatCurrency(initialBalance, currency),
+            ],
+            [
+              t.profitTarget,
+              account.profitTarget
+                ? formatPercent(account.profitTarget)
+                : "-",
+            ],
+            [
+              t.maxDrawdownLimit,
+              account.maxDrawdown
+                ? formatPercent(account.maxDrawdown)
+                : "-",
+            ],
+            [
+              t.dailyDrawdownLimit,
+              account.dailyDrawdown
+                ? formatPercent(account.dailyDrawdown)
+                : "-",
+            ],
+          ].map(([label, value]) => (
+            <div
+              key={label}
+              className="rounded-2xl border border-white/10 bg-black/10 p-3"
+            >
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-gray-500">
+                {label}
+              </p>
+
+              <p className="mt-2 truncate text-sm font-bold text-gray-200">
+                {value}
+              </p>
+            </div>
+          ))}
+        </div>
+      </details>
+
     </div>
   );
 }
-
-
-
