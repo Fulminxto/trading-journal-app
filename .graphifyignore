@@ -1,0 +1,11 @@
+public/
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.svg
+*.ico
+*.pdf
+*.md
+*.mdx

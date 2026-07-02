@@ -68,3 +68,6 @@ When proposing changes, separate:
 ## Important warning
 Claude should not over-redesign VOLTIS just to make visible changes.
 The goal is not novelty. The goal is coherence, seriousness, usability, and premium product identity.
+# graphify
+- **graphify** (`.claude/skills/graphify/SKILL.md`) - any input to knowledge graph. Trigger: `/graphify`
+When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.
