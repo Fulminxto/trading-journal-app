@@ -30,7 +30,7 @@ export default function ToggleSwitch({
     <button
       type="button"
       role="switch"
-      aria-checked={optimisticChecked}
+      aria-checked={optimisticChecked ? "true" : "false"}
       aria-label={name}
       disabled={disabled}
       onClick={handleToggle}
