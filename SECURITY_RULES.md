@@ -86,3 +86,21 @@ Before deployment:
 - test role boundaries
 - test auth flows
 - review exposed env usage
+
+## Security Tooling Status
+
+### Snyk
+Status: Active.
+Use:
+- npm run security:snyk
+- npm run security:snyk:monitor
+
+### Semgrep
+Status: Pending.
+Reason:
+Windows pip installation created a broken wrapper and Docker is not installed.
+
+Next options:
+- install Docker Desktop
+- use WSL
+- retry with a different Semgrep installation method
