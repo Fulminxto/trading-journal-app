@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -1848,17 +1848,14 @@ export default function OnboardingModal({
 
   const copy = getCopy(language);
 
-  const [open, setOpen] = useState(() => {
-    if (typeof window === "undefined") {
-      return false;
-    }
+  const [open, setOpen] = useState(false);
 
-    return (
-      localStorage.getItem(
-        ONBOARDING_STORAGE_KEY
-      ) !== "true"
-    );
-  });
+  useEffect(() => {
+    if (localStorage.getItem(ONBOARDING_STORAGE_KEY) !== "true") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setOpen(true);
+    }
+  }, []);
   const [currentStep, setCurrentStep] =
     useState(0);
 function closeOnboarding() {
@@ -1900,8 +1897,8 @@ function closeOnboarding() {
     100;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#071018]/95 p-4 backdrop-blur-md">
-      <div className="relative max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-[36px] border border-white/10 bg-[radial-gradient(ellipse_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_8%,transparent)_50%,transparent),radial-gradient(ellipse_at_bottom_left,color-mix(in_srgb,var(--color-accent)_8%,transparent)_50%,transparent),#071018] p-6 shadow-2xl sm:p-8">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-surface-1/95 p-4 backdrop-blur-md">
+      <div className="relative max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-[36px] border border-white/10 bg-[radial-gradient(ellipse_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_8%,transparent)_50%,transparent),radial-gradient(ellipse_at_bottom_left,color-mix(in_srgb,var(--color-accent)_8%,transparent)_50%,transparent),var(--color-surface-1)] p-6 shadow-2xl sm:p-8">
 
         <button
           onClick={closeOnboarding}

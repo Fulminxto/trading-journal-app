@@ -1,4 +1,4 @@
-﻿import {
+import {
   normalizeAppLanguage,
   type AppLanguage,
 } from "@/lib/i18n";
@@ -46,19 +46,19 @@ const phrases: Phrase[] = [
     en: "I do not detect strong revenge trading signals in the current data. Keep monitoring trades taken after a loss.",
   },
   {
-    it: "Per ora i dati sono concentrati in una sola sessione, quindi non posso confrontare in modo affidabile sessione migliore e peggiore. Inserisci trade in più fasce orarie per attivare un confronto reale.",
+    it: "Per ora i dati sono concentrati in una sola sessione, quindi non posso confrontare in modo affidabile sessione migliore e peggiore. Inserisci trade in pi� fasce orarie per attivare un confronto reale.",
     en: "For now, the data is concentrated in a single session, so I cannot reliably compare the best and worst session. Add trades across more time windows to activate a real comparison.",
   },
   {
-    it: "La struttura operativa è stabile. Focus: ottimizzare edge, scalare con controllo e mantenere disciplina.",
+    it: "La struttura operativa � stabile. Focus: ottimizzare edge, scalare con controllo e mantenere disciplina.",
     en: "The operating structure is stable. Focus: optimize edge, scale with control and maintain discipline.",
   },
   {
-    it: "VOLTIS rileva rischio operativo critico. Priorità: ridurre frequenza, proteggere capitale e fare review prima di nuove operazioni.",
+    it: "VOLTIS rileva rischio operativo critico. Priorit�: ridurre frequenza, proteggere capitale e fare review prima di nuove operazioni.",
     en: "VOLTIS detects critical operational risk. Priority: reduce frequency, protect capital and complete a review before taking new trades.",
   },
   {
-    it: "VOLTIS rileva rischio comportamentale elevato. Focus: execution pulita, niente revenge trading e massima selettività.",
+    it: "VOLTIS rileva rischio comportamentale elevato. Focus: execution pulita, niente revenge trading e massima selettivit�.",
     en: "VOLTIS detects elevated behavioral risk. Focus: clean execution, no revenge trading and maximum selectivity.",
   },
   {
@@ -74,7 +74,7 @@ const phrases: Phrase[] = [
     en: "Possible revenge trading signals after a loss.",
   },
   {
-    it: "Qualità execution ridotta nelle fasce orarie serali.",
+    it: "Qualit� execution ridotta nelle fasce orarie serali.",
     en: "Reduced execution quality detected during evening time windows.",
   },
   {
@@ -82,7 +82,7 @@ const phrases: Phrase[] = [
     en: "Behavioral drift detected:",
   },
   {
-    it: "qualità recente",
+    it: "qualit� recente",
     en: "recent quality",
   },
   {
@@ -98,31 +98,31 @@ const phrases: Phrase[] = [
     en: "Confidence stability detects deterioration:",
   },
   {
-    it: "Emotional stability engine rileva instabilità emotiva elevata",
+    it: "Emotional stability engine rileva instabilit� emotiva elevata",
     en: "Emotional stability engine detects elevated emotional instability",
   },
   {
-    it: "Consistency engine rileva instabilità operativa e deterioramento decisionale.",
+    it: "Consistency engine rileva instabilit� operativa e deterioramento decisionale.",
     en: "Consistency engine detects operational instability and decision-making deterioration.",
   },
   {
-    it: "AI Review Engine rileva deterioramento nella qualità decisionale e execution.",
+    it: "AI Review Engine rileva deterioramento nella qualit� decisionale e execution.",
     en: "AI Review Engine detects deterioration in decision quality and execution.",
   },
   {
-    it: "AI Review Engine rileva deterioramento nella qualità decisionale e execution.",
+    it: "AI Review Engine rileva deterioramento nella qualit� decisionale e execution.",
     en: "AI Review Engine detects deterioration in decision quality and execution.",
   },
   {
-    it: "Trade recente eseguito con buona qualità decisionale, execution stabile e confidence coerente.",
+    it: "Trade recente eseguito con buona qualit� decisionale, execution stabile e confidence coerente.",
     en: "Recent trade executed with good decision quality, stable execution and consistent confidence.",
   },
   {
-    it: "La perdita recente mostra segnali di weak execution. Priorità: migliorare selezione setup ed evitare ingressi impulsivi.",
+    it: "La perdita recente mostra segnali di weak execution. Priorit�: migliorare selezione setup ed evitare ingressi impulsivi.",
     en: "The recent loss shows weak execution signals. Priority: improve setup selection and avoid impulsive entries.",
   },
   {
-    it: "La perdita recente evidenzia bassa confidence operativa. Il focus è evitare trade presi senza piena convinzione.",
+    it: "La perdita recente evidenzia bassa confidence operativa. Il focus � evitare trade presi senza piena convinzione.",
     en: "The recent loss highlights low operational confidence. The focus is to avoid trades taken without full conviction.",
   },
   {
@@ -197,70 +197,70 @@ const phrases: Phrase[] = [
 
 const brokenEncodingPairs: Phrase[] = [
   {
-    it: "La struttura operativa Ã¨ stabile. Focus: ottimizzare edge, scalare con controllo e mantenere disciplina.",
+    it: "La struttura operativa è stabile. Focus: ottimizzare edge, scalare con controllo e mantenere disciplina.",
     en: "The operating structure is stable. Focus: optimize edge, scale with control and maintain discipline.",
   },
   {
-    it: "AI Review Engine rileva deterioramento nella qualitÃ decisionale e execution.",
+    it: "AI Review Engine rileva deterioramento nella qualit� decisionale e execution.",
     en: "AI Review Engine detects deterioration in decision quality and execution.",
   },
   {
-    it: "AI Review Engine rileva deterioramento nella qualitÃ  decisionale e execution.",
+    it: "AI Review Engine rileva deterioramento nella qualit�  decisionale e execution.",
     en: "AI Review Engine detects deterioration in decision quality and execution.",
   },
   {
-    it: "Trade recente eseguito con buona qualitÃ  decisionale, execution stabile e confidence coerente.",
+    it: "Trade recente eseguito con buona qualit�  decisionale, execution stabile e confidence coerente.",
     en: "Recent trade executed with good decision quality, stable execution and consistent confidence.",
   },
   {
-    it: "La perdita recente mostra segnali di weak execution. PrioritÃ : migliorare selezione setup ed evitare ingressi impulsivi.",
+    it: "La perdita recente mostra segnali di weak execution. Priorit� : migliorare selezione setup ed evitare ingressi impulsivi.",
     en: "The recent loss shows weak execution signals. Priority: improve setup selection and avoid impulsive entries.",
   },
   {
-    it: "La perdita recente evidenzia bassa confidence operativa. Il focus Ã¨ evitare trade presi senza piena convinzione.",
+    it: "La perdita recente evidenzia bassa confidence operativa. Il focus è evitare trade presi senza piena convinzione.",
     en: "The recent loss highlights low operational confidence. The focus is to avoid trades taken without full conviction.",
   },
   {
-    it: "Per ora i dati sono concentrati in una sola sessione, quindi non posso confrontare in modo affidabile sessione migliore e peggiore. Inserisci trade in piÃ¹ fasce orarie per attivare un confronto reale.",
+    it: "Per ora i dati sono concentrati in una sola sessione, quindi non posso confrontare in modo affidabile sessione migliore e peggiore. Inserisci trade in più fasce orarie per attivare un confronto reale.",
     en: "For now, the data is concentrated in a single session, so I cannot reliably compare the best and worst session. Add trades across more time windows to activate a real comparison.",
   },
   {
-    it: "QualitÃ  execution ridotta nelle fasce orarie serali.",
+    it: "Qualit�  execution ridotta nelle fasce orarie serali.",
     en: "Reduced execution quality detected during evening time windows.",
   },
   {
-    it: "Behavioral drift rilevato: qualitÃ  recente",
+    it: "Behavioral drift rilevato: qualit�  recente",
     en: "Behavioral drift detected: recent quality",
   },
   {
-    it: "Emotional stability engine rileva instabilitÃ  emotiva elevata",
+    it: "Emotional stability engine rileva instabilit�  emotiva elevata",
     en: "Emotional stability engine detects elevated emotional instability",
   },
   {
-    it: "Consistency engine rileva instabilitÃ  operativa e deterioramento decisionale.",
+    it: "Consistency engine rileva instabilit�  operativa e deterioramento decisionale.",
     en: "Consistency engine detects operational instability and decision-making deterioration.",
   },
 ];
 
 function cleanupEncoding(value: string) {
   return value
-    .replaceAll("Ã¨", "è")
-    .replaceAll("Ã©", "é")
-    .replaceAll("Ã¬", "ì")
-    .replaceAll("Ã²", "ò")
-    .replaceAll("Ã¹", "ù")
-    .replaceAll("Ã ", "à")
-    .replaceAll("Ã€", "À")
-    .replaceAll("Ãˆ", "È")
-    .replaceAll("Ã‰", "É")
-    .replaceAll("ÃŒ", "Ì")
-    .replaceAll("Ã’", "Ò")
-    .replaceAll("Ã™", "Ù")
-    .replaceAll("Â", "")
-    .replaceAll("â€™", "’")
-    .replaceAll("â€œ", "“")
-    .replaceAll("â€", "”")
-    .replaceAll("â€", "”");
+    .replaceAll("è", "�")
+    .replaceAll("é", "�")
+    .replaceAll("ì", "�")
+    .replaceAll("ò", "�")
+    .replaceAll("ù", "�")
+    .replaceAll("� ", "�")
+    .replaceAll("À", "�")
+    .replaceAll("È", "�")
+    .replaceAll("É", "�")
+    .replaceAll("Ì", "�")
+    .replaceAll("Ò", "�")
+    .replaceAll("Ù", "�")
+    .replaceAll("�", "")
+    .replaceAll("’", "�")
+    .replaceAll("“", "�")
+    .replaceAll("”", "�")
+    .replaceAll("�", "�");
 }
 
 export function renderCopilotText(

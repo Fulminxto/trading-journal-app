@@ -1,4 +1,4 @@
-﻿type Memory = {
+type Memory = {
   title: string;
   severity: string;
   score: number;
@@ -35,7 +35,7 @@ export function buildAdaptiveCoachingMode({
       mode: "Protection Mode",
       tone: "strict",
       message:
-        "VOLTIS rileva rischio operativo critico. PrioritÃ : ridurre frequenza, proteggere capitale e fare review prima di nuove operazioni.",
+        "VOLTIS rileva rischio operativo critico. Priorit�: ridurre frequenza, proteggere capitale e fare review prima di nuove operazioni.",
     };
   }
 
@@ -48,7 +48,7 @@ export function buildAdaptiveCoachingMode({
       mode: "Discipline Mode",
       tone: "direct",
       message:
-        "VOLTIS rileva rischio comportamentale elevato. Focus: execution pulita, niente revenge trading e massima selettivitÃ .",
+        "VOLTIS rileva rischio comportamentale elevato. Focus: execution pulita, niente revenge trading e massima selettivit�.",
     };
   }
 
@@ -60,7 +60,7 @@ export function buildAdaptiveCoachingMode({
       mode: "Optimization Mode",
       tone: "growth",
       message:
-        "La struttura operativa Ã¨ stabile. Focus: ottimizzare edge, scalare con controllo e mantenere disciplina.",
+        "La struttura operativa � stabile. Focus: ottimizzare edge, scalare con controllo e mantenere disciplina.",
     };
   }
 

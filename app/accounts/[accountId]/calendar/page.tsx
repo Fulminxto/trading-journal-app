@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
   CalendarDays,
@@ -75,8 +75,8 @@ const calendarLabels: Record<
     currentMonth: "Mese corrente",
     monthlyPerformanceView: "Vista performance mensile",
     heroDescription:
-      "Una vista giorno per giorno della performance, dellÃ¢â‚¬â„¢attivitÃƒÂ  di trading e della consistenza mensile. Usala per individuare giornate forti, giornate deboli e periodi in cui la disciplina richiede piÃƒÂ¹ attenzione.",
-    backToAccountHub: "Torna allÃ¢â‚¬â„¢Account Hub",
+      "Una vista giorno per giorno della performance, dell’attività di trading e della consistenza mensile. Usala per individuare giornate forti, giornate deboli e periodi in cui la disciplina richiede più attenzione.",
+    backToAccountHub: "Torna all’Account Hub",
     previousMonth: "Mese precedente",
     nextMonth: "Mese successivo",
 
@@ -106,7 +106,7 @@ const calendarLabels: Record<
 
     monthlySummary: "Riepilogo mensile",
     whatThisMonthShows: "Cosa mostra questo mese",
-    activity: "AttivitÃƒÂ ",
+    activity: "Attività",
     activityDescription:
       "Giorni con almeno un trade registrato.",
     direction: "Direzione",
@@ -171,105 +171,105 @@ const calendarLabels: Record<
   },
 
   uk: {
-    tradingCalendar: "ÃÂ¢ÃÂ¾Ã‘â‚¬ÃÂ³ÃÂ¾ÃÂ²ÃÂ¸ÃÂ¹ ÃÂºÃÂ°ÃÂ»ÃÂµÃÂ½ÃÂ´ÃÂ°Ã‘â‚¬",
-    currentMonth: "ÃÅ¸ÃÂ¾Ã‘â€šÃÂ¾Ã‘â€¡ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ¼Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€ Ã‘Å’",
-    monthlyPerformanceView: "ÃÅ“Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ¾ÃÂ³ÃÂ»Ã‘ÂÃÂ´ Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃ‘â€“ÃÂ²",
+    tradingCalendar: "Торговий календар",
+    currentMonth: "Поточний місяць",
+    monthlyPerformanceView: "Місячний огляд результатів",
     heroDescription:
-      "ÃÅ¸ÃÂ¾ÃÂ³ÃÂ»Ã‘ÂÃÂ´ ÃÂ´ÃÂµÃÂ½Ã‘Å’ ÃÂ·ÃÂ° ÃÂ´ÃÂ½ÃÂµÃÂ¼ ÃÂ½ÃÂ° Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“Ã‘ÂÃ‘â€šÃ‘Å’, Ã‘â€šÃÂ¾Ã‘â‚¬ÃÂ³ÃÂ¾ÃÂ²Ã‘Æ’ ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“Ã‘ÂÃ‘â€šÃ‘Å’ Ã‘â€“ ÃÂ¼Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ½Ã‘Æ’ Ã‘ÂÃ‘â€šÃÂ°ÃÂ±Ã‘â€“ÃÂ»Ã‘Å’ÃÂ½Ã‘â€“Ã‘ÂÃ‘â€šÃ‘Å’. Ãâ€™ÃÂ¸ÃÂºÃÂ¾Ã‘â‚¬ÃÂ¸Ã‘ÂÃ‘â€šÃÂ¾ÃÂ²Ã‘Æ’ÃÂ¹ Ã‘â€ ÃÂµ, Ã‘â€°ÃÂ¾ÃÂ± ÃÂ±ÃÂ°Ã‘â€¡ÃÂ¸Ã‘â€šÃÂ¸ Ã‘ÂÃÂ¸ÃÂ»Ã‘Å’ÃÂ½Ã‘â€“ ÃÂ´ÃÂ½Ã‘â€“, Ã‘ÂÃÂ»ÃÂ°ÃÂ±ÃÂºÃ‘â€“ ÃÂ´ÃÂ½Ã‘â€“ Ã‘â€šÃÂ° ÃÂ¿ÃÂµÃ‘â‚¬Ã‘â€“ÃÂ¾ÃÂ´ÃÂ¸, ÃÂºÃÂ¾ÃÂ»ÃÂ¸ ÃÂ´ÃÂ¸Ã‘ÂÃ‘â€ ÃÂ¸ÃÂ¿ÃÂ»Ã‘â€“ÃÂ½Ã‘â€“ ÃÂ¿ÃÂ¾Ã‘â€šÃ‘â‚¬Ã‘â€“ÃÂ±ÃÂ½ÃÂ¾ ÃÂ±Ã‘â€“ÃÂ»Ã‘Å’Ã‘Ë†ÃÂµ Ã‘Æ’ÃÂ²ÃÂ°ÃÂ³ÃÂ¸.",
-    backToAccountHub: "ÃÂÃÂ°ÃÂ·ÃÂ°ÃÂ´ ÃÂ´ÃÂ¾ Account Hub",
-    previousMonth: "ÃÅ¸ÃÂ¾ÃÂ¿ÃÂµÃ‘â‚¬ÃÂµÃÂ´ÃÂ½Ã‘â€“ÃÂ¹ ÃÂ¼Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€ Ã‘Å’",
-    nextMonth: "ÃÂÃÂ°Ã‘ÂÃ‘â€šÃ‘Æ’ÃÂ¿ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ¼Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€ Ã‘Å’",
+      "Погляд день за днем на результативність, торгову активність і місячну стабільність. Використовуй це, щоб бачити сильні дні, слабкі дні та періоди, коли дисципліні потрібно більше уваги.",
+    backToAccountHub: "Назад до Account Hub",
+    previousMonth: "Попередній місяць",
+    nextMonth: "Наступний місяць",
 
-    monthlyPnl: "ÃÅ“Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ¸ÃÂ¹ PnL",
-    activeDays: "ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¸Ã‘â€¦ ÃÂ´ÃÂ½Ã‘â€“ÃÂ²",
-    trades: "Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´",
-    averageDaily: "ÃÂ¡ÃÂµÃ‘â‚¬ÃÂµÃÂ´ÃÂ½Ã‘â€“ÃÂ¹ ÃÂ´ÃÂµÃÂ½Ã‘Å’",
+    monthlyPnl: "Місячний PnL",
+    activeDays: "активних днів",
+    trades: "угод",
+    averageDaily: "Середній день",
     averageDailyDescription:
-      "ÃÂ¡ÃÂµÃ‘â‚¬ÃÂµÃÂ´ÃÂ½Ã‘â€“ÃÂ¹ PnL ÃÂ»ÃÂ¸Ã‘Ë†ÃÂµ ÃÂ·ÃÂ° ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“ Ã‘â€šÃÂ¾Ã‘â‚¬ÃÂ³ÃÂ¾ÃÂ²Ã‘â€“ ÃÂ´ÃÂ½Ã‘â€“.",
-    bestDay: "ÃÂÃÂ°ÃÂ¹ÃÂºÃ‘â‚¬ÃÂ°Ã‘â€°ÃÂ¸ÃÂ¹ ÃÂ´ÃÂµÃÂ½Ã‘Å’",
-    worstDay: "ÃÂÃÂ°ÃÂ¹ÃÂ³Ã‘â€“Ã‘â‚¬Ã‘Ë†ÃÂ¸ÃÂ¹ ÃÂ´ÃÂµÃÂ½Ã‘Å’",
-    positiveDays: "ÃÅ¸ÃÂ¾ÃÂ·ÃÂ¸Ã‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“ ÃÂ´ÃÂ½Ã‘â€“",
-    negativeDays: "ÃÂÃÂµÃÂ³ÃÂ°Ã‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“ ÃÂ´ÃÂ½Ã‘â€“",
-    flatDays: "ÃÂÃÂµÃÂ¹Ã‘â€šÃ‘â‚¬ÃÂ°ÃÂ»Ã‘Å’ÃÂ½Ã‘â€“ ÃÂ´ÃÂ½Ã‘â€“",
+      "Середній PnL лише за активні торгові дні.",
+    bestDay: "Найкращий день",
+    worstDay: "Найгірший день",
+    positiveDays: "Позитивні дні",
+    negativeDays: "Негативні дні",
+    flatDays: "Нейтральні дні",
     avgTradesPerActiveDay:
-      "ÃÂ¡ÃÂµÃ‘â‚¬ÃÂµÃÂ´ÃÂ½Ã‘Â ÃÂºÃ‘â€“ÃÂ»Ã‘Å’ÃÂºÃ‘â€“Ã‘ÂÃ‘â€šÃ‘Å’ Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ / ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ´ÃÂµÃÂ½Ã‘Å’",
+      "Середня кількість угод / активний день",
 
-    calendarMatrix: "ÃÅ“ÃÂ°Ã‘â€šÃ‘â‚¬ÃÂ¸Ã‘â€ Ã‘Â ÃÂºÃÂ°ÃÂ»ÃÂµÃÂ½ÃÂ´ÃÂ°Ã‘â‚¬Ã‘Â",
+    calendarMatrix: "Матриця календаря",
     monthPerformance: (monthName) =>
-      `ÃÂ ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃÂ¸ ÃÂ·ÃÂ° ${monthName}`,
-    profit: "ÃÅ¸Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘Æ’Ã‘â€šÃÂ¾ÃÂº",
-    loss: "Ãâ€”ÃÂ±ÃÂ¸Ã‘â€šÃÂ¾ÃÂº",
-    noResult: "Ãâ€˜ÃÂµÃÂ· Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃ‘Æ’",
+      `Результати за ${monthName}`,
+    profit: "Прибуток",
+    loss: "Збиток",
+    noResult: "Без результату",
 
     winsShort: "W",
     lossesShort: "L",
     beShort: "BE",
 
-    monthlySummary: "ÃÅ“Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ¿Ã‘â€“ÃÂ´Ã‘ÂÃ‘Æ’ÃÂ¼ÃÂ¾ÃÂº",
-    whatThisMonthShows: "ÃÂ©ÃÂ¾ ÃÂ¿ÃÂ¾ÃÂºÃÂ°ÃÂ·Ã‘Æ’Ã‘â€ Ã‘â€ ÃÂµÃÂ¹ ÃÂ¼Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€ Ã‘Å’",
-    activity: "ÃÂÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“Ã‘ÂÃ‘â€šÃ‘Å’",
+    monthlySummary: "Місячний підсумок",
+    whatThisMonthShows: "Що показує цей місяць",
+    activity: "Активність",
     activityDescription:
-      "Ãâ€ÃÂ½Ã‘â€“ ÃÂ· ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ½ÃÂ°ÃÂ¹ÃÂ¼ÃÂ½Ã‘â€“ ÃÂ¾ÃÂ´ÃÂ½Ã‘â€“Ã‘â€Ã‘Å½ ÃÂ·ÃÂ°ÃÂ¿ÃÂ¸Ã‘ÂÃÂ°ÃÂ½ÃÂ¾Ã‘Å½ Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ÃÂ¾Ã‘Å½.",
-    direction: "ÃÂÃÂ°ÃÂ¿Ã‘â‚¬Ã‘ÂÃÂ¼",
-    positive: "ÃÅ¸ÃÂ¾ÃÂ·ÃÂ¸Ã‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¸ÃÂ¹",
-    negative: "ÃÂÃÂµÃÂ³ÃÂ°Ã‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¸ÃÂ¹",
-    flat: "ÃÂÃÂµÃÂ¹Ã‘â€šÃ‘â‚¬ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¸ÃÂ¹",
+      "Дні з принаймні однією записаною угодою.",
+    direction: "Напрям",
+    positive: "Позитивний",
+    negative: "Негативний",
+    flat: "Нейтральний",
     directionDescription:
-      "ÃÂÃÂ° ÃÂ¾Ã‘ÂÃÂ½ÃÂ¾ÃÂ²Ã‘â€“ ÃÂ·ÃÂ°ÃÂ³ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¾ÃÂ³ÃÂ¾ ÃÂ¼Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ¾ÃÂ³ÃÂ¾ PnL.",
-    totalTrades: "ÃÂ£Ã‘ÂÃ‘Å’ÃÂ¾ÃÂ³ÃÂ¾ Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´",
+      "На основі загального місячного PnL.",
+    totalTrades: "Усього угод",
     totalTradesDescription:
-      "Ãâ€”ÃÂ°ÃÂ³ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ° ÃÂºÃ‘â€“ÃÂ»Ã‘Å’ÃÂºÃ‘â€“Ã‘ÂÃ‘â€šÃ‘Å’ ÃÂ¾ÃÂ¿ÃÂµÃ‘â‚¬ÃÂ°Ã‘â€ Ã‘â€“ÃÂ¹, ÃÂ²Ã‘â€“ÃÂ´ÃÂºÃ‘â‚¬ÃÂ¸Ã‘â€šÃÂ¸Ã‘â€¦ ÃÂ¿Ã‘â‚¬ÃÂ¾Ã‘â€šÃ‘ÂÃÂ³ÃÂ¾ÃÂ¼ Ã‘â€ Ã‘Å’ÃÂ¾ÃÂ³ÃÂ¾ ÃÂ¼Ã‘â€“Ã‘ÂÃ‘ÂÃ‘â€ Ã‘Â.",
+      "Загальна кількість операцій, відкритих протягом цього місяця.",
   },
 
   ru: {
-    tradingCalendar: "ÃÂ¢ÃÂ¾Ã‘â‚¬ÃÂ³ÃÂ¾ÃÂ²Ã‘â€¹ÃÂ¹ ÃÂºÃÂ°ÃÂ»ÃÂµÃÂ½ÃÂ´ÃÂ°Ã‘â‚¬",
-    currentMonth: "ÃÂ¢ÃÂµÃÂºÃ‘Æ’Ã‘â€°ÃÂ¸ÃÂ¹ ÃÂ¼ÃÂµÃ‘ÂÃ‘ÂÃ‘â€ ",
-    monthlyPerformanceView: "ÃÅ“ÃÂµÃ‘ÂÃ‘ÂÃ‘â€¡ÃÂ½Ã‘â€¹ÃÂ¹ ÃÂ¾ÃÂ±ÃÂ·ÃÂ¾Ã‘â‚¬ Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃÂ¾ÃÂ²",
+    tradingCalendar: "Торговый календар",
+    currentMonth: "Текущий месяц",
+    monthlyPerformanceView: "Месячный обзор результатов",
     heroDescription:
-      "ÃÅ¸ÃÂ¾ÃÂ¼ÃÂµÃ‘ÂÃ‘ÂÃ‘â€¡ÃÂ½Ã‘â€¹ÃÂ¹ ÃÂ¸ ÃÂ¿ÃÂ¾ÃÂ´ÃÂ½ÃÂµÃÂ²ÃÂ½Ã‘â€¹ÃÂ¹ ÃÂ²ÃÂ·ÃÂ³ÃÂ»Ã‘ÂÃÂ´ ÃÂ½ÃÂ° Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘Å’, Ã‘â€šÃÂ¾Ã‘â‚¬ÃÂ³ÃÂ¾ÃÂ²Ã‘Æ’Ã‘Å½ ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘Å’ ÃÂ¸ Ã‘ÂÃ‘â€šÃÂ°ÃÂ±ÃÂ¸ÃÂ»Ã‘Å’ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘Å’. ÃËœÃ‘ÂÃÂ¿ÃÂ¾ÃÂ»Ã‘Å’ÃÂ·Ã‘Æ’ÃÂ¹ ÃÂµÃÂ³ÃÂ¾, Ã‘â€¡Ã‘â€šÃÂ¾ÃÂ±Ã‘â€¹ ÃÂ²ÃÂ¸ÃÂ´ÃÂµÃ‘â€šÃ‘Å’ Ã‘ÂÃÂ¸ÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂµ ÃÂ´ÃÂ½ÃÂ¸, Ã‘ÂÃÂ»ÃÂ°ÃÂ±Ã‘â€¹ÃÂµ ÃÂ´ÃÂ½ÃÂ¸ ÃÂ¸ ÃÂ¿ÃÂµÃ‘â‚¬ÃÂ¸ÃÂ¾ÃÂ´Ã‘â€¹, ÃÂ³ÃÂ´ÃÂµ ÃÂ´ÃÂ¸Ã‘ÂÃ‘â€ ÃÂ¸ÃÂ¿ÃÂ»ÃÂ¸ÃÂ½ÃÂµ ÃÂ½Ã‘Æ’ÃÂ¶ÃÂ½ÃÂ¾ ÃÂ±ÃÂ¾ÃÂ»Ã‘Å’Ã‘Ë†ÃÂµ ÃÂ²ÃÂ½ÃÂ¸ÃÂ¼ÃÂ°ÃÂ½ÃÂ¸Ã‘Â.",
-    backToAccountHub: "ÃÂÃÂ°ÃÂ·ÃÂ°ÃÂ´ ÃÂ² Account Hub",
-    previousMonth: "ÃÅ¸Ã‘â‚¬ÃÂµÃÂ´Ã‘â€¹ÃÂ´Ã‘Æ’Ã‘â€°ÃÂ¸ÃÂ¹ ÃÂ¼ÃÂµÃ‘ÂÃ‘ÂÃ‘â€ ",
-    nextMonth: "ÃÂ¡ÃÂ»ÃÂµÃÂ´Ã‘Æ’Ã‘Å½Ã‘â€°ÃÂ¸ÃÂ¹ ÃÂ¼ÃÂµÃ‘ÂÃ‘ÂÃ‘â€ ",
+      "Помесячный и подневный взгляд на результативность, торговую активность и стабильность. Используй его, чтобы видеть сильные дни, слабые дни и периоды, где дисциплине нужно больше внимания.",
+    backToAccountHub: "Назад в Account Hub",
+    previousMonth: "Предыдущий месяц",
+    nextMonth: "Следующий месяц",
 
-    monthlyPnl: "ÃÅ“ÃÂµÃ‘ÂÃ‘ÂÃ‘â€¡ÃÂ½Ã‘â€¹ÃÂ¹ PnL",
-    activeDays: "ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€¹Ã‘â€¦ ÃÂ´ÃÂ½ÃÂµÃÂ¹",
-    trades: "Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂ¾ÃÂº",
-    averageDaily: "ÃÂ¡Ã‘â‚¬ÃÂµÃÂ´ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ´ÃÂµÃÂ½Ã‘Å’",
+    monthlyPnl: "Месячный PnL",
+    activeDays: "активных дней",
+    trades: "сделок",
+    averageDaily: "Средний день",
     averageDailyDescription:
-      "ÃÂ¡Ã‘â‚¬ÃÂµÃÂ´ÃÂ½ÃÂ¸ÃÂ¹ PnL Ã‘â€šÃÂ¾ÃÂ»Ã‘Å’ÃÂºÃÂ¾ ÃÂ¿ÃÂ¾ ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€¹ÃÂ¼ Ã‘â€šÃÂ¾Ã‘â‚¬ÃÂ³ÃÂ¾ÃÂ²Ã‘â€¹ÃÂ¼ ÃÂ´ÃÂ½Ã‘ÂÃÂ¼.",
-    bestDay: "Ãâ€ºÃ‘Æ’Ã‘â€¡Ã‘Ë†ÃÂ¸ÃÂ¹ ÃÂ´ÃÂµÃÂ½Ã‘Å’",
-    worstDay: "ÃÂ¥Ã‘Æ’ÃÂ´Ã‘Ë†ÃÂ¸ÃÂ¹ ÃÂ´ÃÂµÃÂ½Ã‘Å’",
-    positiveDays: "ÃÅ¸ÃÂ¾ÃÂ»ÃÂ¾ÃÂ¶ÃÂ¸Ã‘â€šÃÂµÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂµ ÃÂ´ÃÂ½ÃÂ¸",
-    negativeDays: "ÃÅ¾Ã‘â€šÃ‘â‚¬ÃÂ¸Ã‘â€ ÃÂ°Ã‘â€šÃÂµÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂµ ÃÂ´ÃÂ½ÃÂ¸",
-    flatDays: "ÃÂÃÂµÃÂ¹Ã‘â€šÃ‘â‚¬ÃÂ°ÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂµ ÃÂ´ÃÂ½ÃÂ¸",
+      "Средний PnL только по активным торговым дням.",
+    bestDay: "Лучший день",
+    worstDay: "Худший день",
+    positiveDays: "Положительные дни",
+    negativeDays: "Отрицательные дни",
+    flatDays: "Нейтральные дни",
     avgTradesPerActiveDay:
-      "ÃÂ¡Ã‘â‚¬ÃÂµÃÂ´ÃÂ½ÃÂµÃÂµ Ã‘â€¡ÃÂ¸Ã‘ÂÃÂ»ÃÂ¾ Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂ¾ÃÂº / ÃÂ°ÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€¹ÃÂ¹ ÃÂ´ÃÂµÃÂ½Ã‘Å’",
+      "Среднее число сделок / активный день",
 
-    calendarMatrix: "ÃÅ“ÃÂ°Ã‘â€šÃ‘â‚¬ÃÂ¸Ã‘â€ ÃÂ° ÃÂºÃÂ°ÃÂ»ÃÂµÃÂ½ÃÂ´ÃÂ°Ã‘â‚¬Ã‘Â",
+    calendarMatrix: "Матрица календаря",
     monthPerformance: (monthName) =>
-      `ÃÂ ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃ‘â€¹ ÃÂ·ÃÂ° ${monthName}`,
-    profit: "ÃÅ¸Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘â€¹ÃÂ»Ã‘Å’",
-    loss: "ÃÂ£ÃÂ±Ã‘â€¹Ã‘â€šÃÂ¾ÃÂº",
-    noResult: "Ãâ€˜ÃÂµÃÂ· Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃÂ°",
+      `Результаты за ${monthName}`,
+    profit: "Прибыль",
+    loss: "Убыток",
+    noResult: "Без результата",
 
     winsShort: "W",
     lossesShort: "L",
     beShort: "BE",
 
-    monthlySummary: "ÃÅ“ÃÂµÃ‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ°Ã‘Â Ã‘ÂÃÂ²ÃÂ¾ÃÂ´ÃÂºÃÂ°",
-    whatThisMonthShows: "ÃÂ§Ã‘â€šÃÂ¾ ÃÂ¿ÃÂ¾ÃÂºÃÂ°ÃÂ·Ã‘â€¹ÃÂ²ÃÂ°ÃÂµÃ‘â€š Ã‘ÂÃ‘â€šÃÂ¾Ã‘â€š ÃÂ¼ÃÂµÃ‘ÂÃ‘ÂÃ‘â€ ",
-    activity: "ÃÂÃÂºÃ‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘Å’",
+    monthlySummary: "Месячная сводка",
+    whatThisMonthShows: "Что показывает этот месяц",
+    activity: "Активность",
     activityDescription:
-      "Ãâ€ÃÂ½ÃÂ¸ Ã‘Â Ã‘â€¦ÃÂ¾Ã‘â€šÃ‘Â ÃÂ±Ã‘â€¹ ÃÂ¾ÃÂ´ÃÂ½ÃÂ¾ÃÂ¹ ÃÂ·ÃÂ°ÃÂ¿ÃÂ¸Ã‘ÂÃÂ°ÃÂ½ÃÂ½ÃÂ¾ÃÂ¹ Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂºÃÂ¾ÃÂ¹.",
-    direction: "ÃÂÃÂ°ÃÂ¿Ã‘â‚¬ÃÂ°ÃÂ²ÃÂ»ÃÂµÃÂ½ÃÂ¸ÃÂµ",
-    positive: "ÃÅ¸ÃÂ¾ÃÂ»ÃÂ¾ÃÂ¶ÃÂ¸Ã‘â€šÃÂµÃÂ»Ã‘Å’ÃÂ½ÃÂ¾",
-    negative: "ÃÅ¾Ã‘â€šÃ‘â‚¬ÃÂ¸Ã‘â€ ÃÂ°Ã‘â€šÃÂµÃÂ»Ã‘Å’ÃÂ½ÃÂ¾",
-    flat: "ÃÂÃÂµÃÂ¹Ã‘â€šÃ‘â‚¬ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¾",
+      "Дни с хотя бы одной записанной сделкой.",
+    direction: "Направление",
+    positive: "Положительно",
+    negative: "Отрицательно",
+    flat: "Нейтрально",
     directionDescription:
-      "ÃÅ¾Ã‘ÂÃÂ½ÃÂ¾ÃÂ²ÃÂ°ÃÂ½ÃÂ¾ ÃÂ½ÃÂ° ÃÂ¾ÃÂ±Ã‘â€°ÃÂµÃÂ¼ ÃÂ¼ÃÂµÃ‘ÂÃ‘ÂÃ‘â€¡ÃÂ½ÃÂ¾ÃÂ¼ PnL.",
-    totalTrades: "Ãâ€™Ã‘ÂÃÂµÃÂ³ÃÂ¾ Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂ¾ÃÂº",
+      "Основано на общем месячном PnL.",
+    totalTrades: "Всего сделок",
     totalTradesDescription:
-      "ÃÅ¾ÃÂ±Ã‘â€°ÃÂµÃÂµ ÃÂºÃÂ¾ÃÂ»ÃÂ¸Ã‘â€¡ÃÂµÃ‘ÂÃ‘â€šÃÂ²ÃÂ¾ ÃÂ¾ÃÂ¿ÃÂµÃ‘â‚¬ÃÂ°Ã‘â€ ÃÂ¸ÃÂ¹, ÃÂ¾Ã‘â€šÃÂºÃ‘â‚¬Ã‘â€¹Ã‘â€šÃ‘â€¹Ã‘â€¦ ÃÂ² Ã‘â€šÃÂµÃ‘â€¡ÃÂµÃÂ½ÃÂ¸ÃÂµ Ã‘ÂÃ‘â€šÃÂ¾ÃÂ³ÃÂ¾ ÃÂ¼ÃÂµÃ‘ÂÃ‘ÂÃ‘â€ ÃÂ°.",
+      "Общее количество операций, открытых в течение этого месяца.",
   },
 
   es: {
@@ -277,30 +277,30 @@ const calendarLabels: Record<
     currentMonth: "Mes actual",
     monthlyPerformanceView: "Vista de rendimiento mensual",
     heroDescription:
-      "Una vista dÃƒÂ­a a dÃƒÂ­a del rendimiento, la actividad de trading y la consistencia mensual. ÃƒÅ¡sala para detectar dÃƒÂ­as fuertes, dÃƒÂ­as dÃƒÂ©biles y periodos donde la disciplina necesita mÃƒÂ¡s atenciÃƒÂ³n.",
+      "Una vista día a día del rendimiento, la actividad de trading y la consistencia mensual. Úsala para detectar días fuertes, días débiles y periodos donde la disciplina necesita más atención.",
     backToAccountHub: "Volver al Account Hub",
     previousMonth: "Mes anterior",
     nextMonth: "Mes siguiente",
 
     monthlyPnl: "PnL mensual",
-    activeDays: "dÃƒÂ­as activos",
+    activeDays: "días activos",
     trades: "trades",
     averageDaily: "Media diaria",
     averageDailyDescription:
-      "PnL medio calculado solo en dÃƒÂ­as de trading activos.",
-    bestDay: "Mejor dÃƒÂ­a",
-    worstDay: "Peor dÃƒÂ­a",
-    positiveDays: "DÃƒÂ­as positivos",
-    negativeDays: "DÃƒÂ­as negativos",
-    flatDays: "DÃƒÂ­as flat",
+      "PnL medio calculado solo en días de trading activos.",
+    bestDay: "Mejor día",
+    worstDay: "Peor día",
+    positiveDays: "Días positivos",
+    negativeDays: "Días negativos",
+    flatDays: "Días flat",
     avgTradesPerActiveDay:
-      "Media trades / dÃƒÂ­a activo",
+      "Media trades / día activo",
 
     calendarMatrix: "Matriz del calendario",
     monthPerformance: (monthName) =>
       `Rendimiento de ${monthName}`,
     profit: "Ganancia",
-    loss: "PÃƒÂ©rdida",
+    loss: "Pérdida",
     noResult: "Sin resultado",
 
     winsShort: "W",
@@ -308,11 +308,11 @@ const calendarLabels: Record<
     beShort: "BE",
 
     monthlySummary: "Resumen mensual",
-    whatThisMonthShows: "QuÃƒÂ© muestra este mes",
+    whatThisMonthShows: "Qué muestra este mes",
     activity: "Actividad",
     activityDescription:
-      "DÃƒÂ­as con al menos un trade registrado.",
-    direction: "DirecciÃƒÂ³n",
+      "Días con al menos un trade registrado.",
+    direction: "Dirección",
     positive: "Positivo",
     negative: "Negativo",
     flat: "Flat",
@@ -328,9 +328,9 @@ const calendarLabels: Record<
     currentMonth: "Mois actuel",
     monthlyPerformanceView: "Vue de performance mensuelle",
     heroDescription:
-      "Une vue jour par jour de la performance, de lÃ¢â‚¬â„¢activitÃƒÂ© de trading et de la rÃƒÂ©gularitÃƒÂ© mensuelle. Utilise-la pour repÃƒÂ©rer les jours forts, les jours faibles et les pÃƒÂ©riodes oÃƒÂ¹ la discipline demande plus dÃ¢â‚¬â„¢attention.",
-    backToAccountHub: "Retour ÃƒÂ  lÃ¢â‚¬â„¢Account Hub",
-    previousMonth: "Mois prÃƒÂ©cÃƒÂ©dent",
+      "Une vue jour par jour de la performance, de l’activité de trading et de la régularité mensuelle. Utilise-la pour repérer les jours forts, les jours faibles et les périodes où la discipline demande plus d’attention.",
+    backToAccountHub: "Retour à l’Account Hub",
+    previousMonth: "Mois précédent",
     nextMonth: "Mois suivant",
 
     monthlyPnl: "PnL mensuel",
@@ -338,11 +338,11 @@ const calendarLabels: Record<
     trades: "trades",
     averageDaily: "Moyenne quotidienne",
     averageDailyDescription:
-      "PnL moyen calculÃƒÂ© uniquement sur les jours de trading actifs.",
+      "PnL moyen calculé uniquement sur les jours de trading actifs.",
     bestDay: "Meilleur jour",
     worstDay: "Pire jour",
     positiveDays: "Jours positifs",
-    negativeDays: "Jours nÃƒÂ©gatifs",
+    negativeDays: "Jours négatifs",
     flatDays: "Jours flat",
     avgTradesPerActiveDay:
       "Moy. trades / jour actif",
@@ -352,26 +352,26 @@ const calendarLabels: Record<
       `Performance de ${monthName}`,
     profit: "Profit",
     loss: "Perte",
-    noResult: "Aucun rÃƒÂ©sultat",
+    noResult: "Aucun résultat",
 
     winsShort: "W",
     lossesShort: "L",
     beShort: "BE",
 
-    monthlySummary: "RÃƒÂ©sumÃƒÂ© mensuel",
+    monthlySummary: "Résumé mensuel",
     whatThisMonthShows: "Ce que montre ce mois",
-    activity: "ActivitÃƒÂ©",
+    activity: "Activité",
     activityDescription:
-      "Jours avec au moins un trade enregistrÃƒÂ©.",
+      "Jours avec au moins un trade enregistré.",
     direction: "Direction",
     positive: "Positif",
-    negative: "NÃƒÂ©gatif",
+    negative: "Négatif",
     flat: "Flat",
     directionDescription:
-      "BasÃƒÂ© sur le PnL mensuel total.",
+      "Basé sur le PnL mensuel total.",
     totalTrades: "Trades totaux",
     totalTradesDescription:
-      "Nombre total dÃ¢â‚¬â„¢opÃƒÂ©rations ouvertes durant ce mois.",
+      "Nombre total d’opérations ouvertes durant ce mois.",
   },
 
   de: {
@@ -379,24 +379,24 @@ const calendarLabels: Record<
     currentMonth: "Aktueller Monat",
     monthlyPerformanceView: "Monatliche Performance-Ansicht",
     heroDescription:
-      "Eine Tagesansicht von Performance, Trading-AktivitÃƒÂ¤t und monatlicher Konstanz. Nutze sie, um starke Tage, schwache Tage und Phasen zu erkennen, in denen Disziplin mehr Aufmerksamkeit braucht.",
-    backToAccountHub: "ZurÃƒÂ¼ck zum Account Hub",
+      "Eine Tagesansicht von Performance, Trading-Aktivität und monatlicher Konstanz. Nutze sie, um starke Tage, schwache Tage und Phasen zu erkennen, in denen Disziplin mehr Aufmerksamkeit braucht.",
+    backToAccountHub: "Zurück zum Account Hub",
     previousMonth: "Vorheriger Monat",
-    nextMonth: "NÃƒÂ¤chster Monat",
+    nextMonth: "Nächster Monat",
 
     monthlyPnl: "Monatlicher PnL",
     activeDays: "aktive Tage",
     trades: "Trades",
     averageDaily: "Tagesdurchschnitt",
     averageDailyDescription:
-      "Durchschnittlicher PnL nur ÃƒÂ¼ber aktive Trading-Tage.",
+      "Durchschnittlicher PnL nur über aktive Trading-Tage.",
     bestDay: "Bester Tag",
     worstDay: "Schlechtester Tag",
     positiveDays: "Positive Tage",
     negativeDays: "Negative Tage",
     flatDays: "Flat-Tage",
     avgTradesPerActiveDay:
-      "ÃƒËœ Trades / aktiver Tag",
+      "Ø Trades / aktiver Tag",
 
     calendarMatrix: "Kalendermatrix",
     monthPerformance: (monthName) =>
@@ -409,9 +409,9 @@ const calendarLabels: Record<
     lossesShort: "L",
     beShort: "BE",
 
-    monthlySummary: "MonatsÃƒÂ¼bersicht",
+    monthlySummary: "Monatsübersicht",
     whatThisMonthShows: "Was dieser Monat zeigt",
-    activity: "AktivitÃƒÂ¤t",
+    activity: "Aktivität",
     activityDescription:
       "Tage mit mindestens einem eingetragenen Trade.",
     direction: "Richtung",
@@ -422,7 +422,7 @@ const calendarLabels: Record<
       "Basierend auf dem gesamten monatlichen PnL.",
     totalTrades: "Gesamt-Trades",
     totalTradesDescription:
-      "Gesamtzahl der in diesem Monat erÃƒÂ¶ffneten Operationen.",
+      "Gesamtzahl der in diesem Monat eröffneten Operationen.",
   },
 };
 
@@ -954,7 +954,7 @@ export default async function CalendarPage({
               {t.monthlyPerformanceView}
             </p>
 
-            <h1 className="mt-3 text-3xl font-black capitalize tracking-tight break-words text-white sm:text-6xl">
+            <h1 className="mt-3 text-4xl font-black capitalize tracking-tight break-words text-white sm:text-6xl">
               {monthLabel}
             </h1>
 
@@ -996,7 +996,7 @@ export default async function CalendarPage({
         <StatCard
           label={t.monthlyPnl}
           value={formattedTotalMonthPnl}
-          description={`${activeDays} ${t.activeDays} Ã‚Â· ${totalMonthTrades} ${t.trades}`}
+          description={`${activeDays} ${t.activeDays} · ${totalMonthTrades} ${t.trades}`}
           tone={getResultTone(totalMonthPnl)}
         />
 

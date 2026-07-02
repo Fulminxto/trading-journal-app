@@ -129,7 +129,7 @@ export default function ConsistencyScoreCard({
   const t = labels[language] ?? labels.en;
 
   return (
-    <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-[#0b1220] via-[#111827] to-black p-6">
+    <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-surface-1 via-[#111827] to-black p-6">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_12%,transparent),transparent_35%)]" />
 
       <div className="relative z-10">

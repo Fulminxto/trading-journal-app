@@ -1,4 +1,4 @@
-﻿type Input = {
+type Input = {
   disciplineScore: number;
   behavioralRisk: number;
   revengeRiskTrades: number;
@@ -60,13 +60,13 @@ export function buildIntelligenceFeed(input: Input) {
 
   if (input.weakTimeTrades > 0) {
     intelligenceFeed.push(
-      "QualitÃ  execution ridotta nelle fasce orarie serali."
+      "Qualit� execution ridotta nelle fasce orarie serali."
     );
   }
 
   if (input.behavioralDrift) {
     intelligenceFeed.push(
-      `Behavioral drift rilevato: qualitÃ  recente ${input.recentAverageQuality}% vs precedente ${input.previousAverageQuality}%.`
+      `Behavioral drift rilevato: qualit� recente ${input.recentAverageQuality}% vs precedente ${input.previousAverageQuality}%.`
     );
   }
 
@@ -96,7 +96,7 @@ export function buildIntelligenceFeed(input: Input) {
 
   if (input.emotionalVolatility) {
     intelligenceFeed.push(
-      `Emotional stability engine rileva instabilitÃ  emotiva elevata (${input.emotionalInstabilityScore}%).`
+      `Emotional stability engine rileva instabilit� emotiva elevata (${input.emotionalInstabilityScore}%).`
     );
   }
 
@@ -108,7 +108,7 @@ export function buildIntelligenceFeed(input: Input) {
 
   if (input.consistencyScore <= 45 && input.totalTrades > 0) {
     intelligenceFeed.push(
-      "Consistency engine rileva instabilitÃ  operativa e deterioramento decisionale."
+      "Consistency engine rileva instabilit� operativa e deterioramento decisionale."
     );
   }
 
@@ -120,7 +120,7 @@ export function buildIntelligenceFeed(input: Input) {
 
   if (input.reviewScore <= 50 && input.totalTrades > 0) {
     intelligenceFeed.push(
-      "AI Review Engine rileva deterioramento nella qualitÃ  decisionale e execution."
+      "AI Review Engine rileva deterioramento nella qualit� decisionale e execution."
     );
   }
 

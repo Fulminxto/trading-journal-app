@@ -1,0 +1,773 @@
+
+> trading-app@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.5.0.2:3000
+- Environments: .env
+✓ Ready in 695ms
+
+[browser] Uncaught Error: Internal Next.js error: Router action dispatched before initialization.
+    at dispatchAppRouterAction (file://C:/Users/samsung/OneDrive/Desktop/VOLTIS/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:916:37)
+    at <unknown> (file://C:/Users/samsung/OneDrive/Desktop/VOLTIS/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:11823:61)
+    at startTransition (file://C:/Users/samsung/OneDrive/Desktop/VOLTIS/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:1279:31)
+    at Object.hmrRefresh (file://C:/Users/samsung/OneDrive/Desktop/VOLTIS/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:11822:40)
+    at <unknown> (file://C:/Users/samsung/OneDrive/Desktop/VOLTIS/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13990:64)
+    at startTransition (file://C:/Users/samsung/OneDrive/Desktop/VOLTIS/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:1279:31)
+    at processMessage (file://C:/Users/samsung/OneDrive/Desktop/VOLTIS/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13989:44)
+    at WebSocket.handleMessage (file://C:/Users/samsung/OneDrive/Desktop/VOLTIS/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13358:52)
+[next-auth][warn][DEBUG_ENABLED] 
+https://next-auth.js.org/warnings#debug_enabled
+ GET /manifest.webmanifest 200 in 500ms (next.js: 468ms, proxy.ts: 8ms, application-code: 25ms)
+[next-auth][warn][DEBUG_ENABLED] 
+https://next-auth.js.org/warnings#debug_enabled
+ GET /api/notifications 200 in 1180ms (next.js: 443ms, application-code: 737ms)
+ GET /api/accounts/cmp36tn0d0002wmy4t18tvpie/permissions 200 in 1912ms (next.js: 1220ms, application-code: 692ms)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 10.1s (next.js: 3.4s, proxy.ts: 159ms, application-code: 6.5s)
+ GET /manifest.webmanifest 200 in 40ms (next.js: 20ms, proxy.ts: 11ms, application-code: 9ms)
+ GET /api/notifications 200 in 1003ms (next.js: 4ms, application-code: 999ms)
+ GET /api/accounts/cmp36tn0d0002wmy4t18tvpie/permissions 200 in 1351ms (next.js: 10ms, application-code: 1341ms)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 5.0s (next.js: 20ms, proxy.ts: 6ms, application-code: 5.0s)
+ GET /manifest.webmanifest 200 in 20ms (next.js: 5ms, proxy.ts: 6ms, application-code: 9ms)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary/1/replay 200 in 2.3s (next.js: 1150ms, proxy.ts: 6ms, application-code: 1164ms)
+ GET /manifest.webmanifest 200 in 19ms (next.js: 6ms, proxy.ts: 4ms, application-code: 10ms)
+✓ Compiled in 150ms
+[next-auth][warn][DEBUG_ENABLED] 
+https://next-auth.js.org/warnings#debug_enabled
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 7.8s (next.js: 104ms, proxy.ts: 69ms, application-code: 7.7s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 7.9s (next.js: 12ms, proxy.ts: 21ms, application-code: 7.9s)
+ GET /manifest.webmanifest 200 in 35ms (next.js: 22ms, proxy.ts: 5ms, application-code: 9ms)
+ GET /manifest.webmanifest 200 in 28ms (next.js: 7ms, proxy.ts: 12ms, application-code: 9ms)
+[next-auth][warn][DEBUG_ENABLED] 
+https://next-auth.js.org/warnings#debug_enabled
+ GET /api/notifications 200 in 1153ms (next.js: 65ms, application-code: 1088ms)
+ GET /api/accounts/cmp36tn0d0002wmy4t18tvpie/permissions 200 in 1451ms (next.js: 47ms, application-code: 1404ms)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 5.8s (next.js: 20ms, proxy.ts: 7ms, application-code: 5.8s)
+✓ Compiled in 340ms
+ GET /manifest.webmanifest 200 in 21ms (next.js: 6ms, proxy.ts: 7ms, application-code: 7ms)
+ GET /api/notifications 200 in 1045ms (next.js: 4ms, application-code: 1042ms)
+ GET /api/accounts/cmp36tn0d0002wmy4t18tvpie/permissions 200 in 1394ms (next.js: 9ms, application-code: 1385ms)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 5.0s (next.js: 17ms, proxy.ts: 5ms, application-code: 5.0s)
+ GET /manifest.webmanifest 200 in 27ms (next.js: 12ms, proxy.ts: 7ms, application-code: 7ms)
+ GET /api/notifications 200 in 1092ms (next.js: 4ms, application-code: 1088ms)
+ GET /api/accounts/cmp36tn0d0002wmy4t18tvpie/permissions 200 in 1462ms (next.js: 8ms, application-code: 1454ms)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 5.7s (next.js: 17ms, proxy.ts: 5ms, application-code: 5.7s)
+✓ Compiled in 368ms
+✓ Compiled in 134ms
+[next-auth][warn][DEBUG_ENABLED] 
+https://next-auth.js.org/warnings#debug_enabled
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 8.3s (next.js: 170ms, proxy.ts: 72ms, application-code: 8.1s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 8.2s (next.js: 15ms, proxy.ts: 21ms, application-code: 8.2s)
+ GET /manifest.webmanifest 200 in 55ms (next.js: 38ms, proxy.ts: 6ms, application-code: 11ms)
+✓ Compiled in 172ms
+[next-auth][warn][DEBUG_ENABLED] 
+https://next-auth.js.org/warnings#debug_enabled
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 7.3s (next.js: 153ms, proxy.ts: 65ms, application-code: 7.1s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 7.3s (next.js: 11ms, proxy.ts: 27ms, application-code: 7.3s)
+ GET /manifest.webmanifest 200 in 59ms (next.js: 43ms, proxy.ts: 6ms, application-code: 10ms)
+✓ Compiled in 161ms
+[next-auth][warn][DEBUG_ENABLED] 
+https://next-auth.js.org/warnings#debug_enabled
+✓ Compiled in 123ms
+[next-auth][warn][DEBUG_ENABLED] 
+https://next-auth.js.org/warnings#debug_enabled
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 8.0s (next.js: 162ms, proxy.ts: 68ms, application-code: 7.8s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 7.7s (next.js: 29ms, proxy.ts: 28ms, application-code: 7.7s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 7.6s (next.js: 180ms, proxy.ts: 76ms, application-code: 7.3s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 7.5s (next.js: 12ms, proxy.ts: 63ms, application-code: 7.4s)
+ GET /manifest.webmanifest 200 in 49ms (next.js: 33ms, proxy.ts: 5ms, application-code: 12ms)
+✓ Compiled in 111ms
+[next-auth][warn][DEBUG_ENABLED] 
+https://next-auth.js.org/warnings#debug_enabled
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 7.5s (next.js: 201ms, proxy.ts: 71ms, application-code: 7.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 7.5s (next.js: 14ms, proxy.ts: 30ms, application-code: 7.4s)
+ GET /manifest.webmanifest 200 in 55ms (next.js: 39ms, proxy.ts: 5ms, application-code: 10ms)
+ GET /manifest.webmanifest 200 in 30ms (next.js: 10ms, proxy.ts: 10ms, application-code: 9ms)
+[next-auth][warn][DEBUG_ENABLED] 
+https://next-auth.js.org/warnings#debug_enabled
+ GET /api/notifications 200 in 1028ms (next.js: 85ms, application-code: 943ms)
+ GET /api/accounts/cmp36tn0d0002wmy4t18tvpie/permissions 200 in 1294ms (next.js: 33ms, application-code: 1261ms)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 5.6s (next.js: 18ms, proxy.ts: 7ms, application-code: 5.6s)
+✓ Compiled in 275ms
+[next-auth][warn][DEBUG_ENABLED] 
+https://next-auth.js.org/warnings#debug_enabled
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 21.7s (next.js: 311ms, proxy.ts: 10ms, application-code: 21.3s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 21.6s (next.js: 13ms, proxy.ts: 134ms, application-code: 21.4s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 21.7s (next.js: 35ms, proxy.ts: 38ms, application-code: 21.7s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.1s (next.js: 111ms, proxy.ts: 39ms, application-code: 22.0s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.4s (next.js: 186ms, proxy.ts: 39ms, application-code: 22.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.7s (next.js: 269ms, proxy.ts: 20ms, application-code: 22.5s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.4s (next.js: 20ms, proxy.ts: 10ms, application-code: 22.4s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.4s (next.js: 12ms, proxy.ts: 6ms, application-code: 22.4s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.4s (next.js: 11ms, proxy.ts: 6ms, application-code: 22.4s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.4s (next.js: 31ms, proxy.ts: 7ms, application-code: 22.4s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.5s (next.js: 11ms, proxy.ts: 6ms, application-code: 22.4s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.4s (next.js: 12ms, proxy.ts: 5ms, application-code: 22.4s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.2s (next.js: 15ms, proxy.ts: 5ms, application-code: 22.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.2s (next.js: 12ms, proxy.ts: 6ms, application-code: 22.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.2s (next.js: 11ms, proxy.ts: 6ms, application-code: 22.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.2s (next.js: 21ms, proxy.ts: 5ms, application-code: 22.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.2s (next.js: 11ms, proxy.ts: 6ms, application-code: 22.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.3s (next.js: 12ms, proxy.ts: 6ms, application-code: 22.3s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.3s (next.js: 19ms, proxy.ts: 5ms, application-code: 22.3s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.3s (next.js: 12ms, proxy.ts: 6ms, application-code: 22.3s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.3s (next.js: 10ms, proxy.ts: 5ms, application-code: 22.3s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.3s (next.js: 19ms, proxy.ts: 5ms, application-code: 22.3s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.3s (next.js: 12ms, proxy.ts: 6ms, application-code: 22.3s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.3s (next.js: 12ms, proxy.ts: 7ms, application-code: 22.3s)
+✓ Compiled in 156ms
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 23.0s (next.js: 18ms, proxy.ts: 6ms, application-code: 23.0s)
+[next-auth][warn][DEBUG_ENABLED] 
+https://next-auth.js.org/warnings#debug_enabled
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 23.1s (next.js: 12ms, proxy.ts: 6ms, application-code: 23.1s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 23.1s (next.js: 12ms, proxy.ts: 6ms, application-code: 23.1s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 23.1s (next.js: 17ms, proxy.ts: 6ms, application-code: 23.1s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 23.1s (next.js: 11ms, proxy.ts: 6ms, application-code: 23.1s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 23.0s (next.js: 10ms, proxy.ts: 6ms, application-code: 23.0s)
+✓ Compiled in 131ms
+⨯ ReferenceError: createAccountTrade is not defined
+    at DiaryPage (app\accounts\[accountId]\diary\page.tsx:1556:19)
+  1554 |         <form
+  1555 |           id="new-trade-form"
+> 1556 |           action={createAccountTrade.bind(null, accountId)}
+       |                   ^
+  1557 |           className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+  1558 |         >
+  1559 |           <div className="mb-6"> {
+  digest: '208524642'
+}
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.9s (next.js: 178ms, proxy.ts: 71ms, application-code: 22.6s)
+⨯ ReferenceError: createAccountTrade is not defined
+    at DiaryPage (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\chunks\ssr\[root-of-the-server]__0wk0i5.._.js:2402:25) {
+  digest: '208524642'
+}
+[next-auth][warn][DEBUG_ENABLED] 
+https://next-auth.js.org/warnings#debug_enabled
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 23.0s (next.js: 12ms, proxy.ts: 8ms, application-code: 22.9s)
+⨯ ReferenceError: createAccountTrade is not defined
+    at DiaryPage (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\chunks\ssr\[root-of-the-server]__0wk0i5.._.js:2402:25) {
+  digest: '208524642'
+}
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.8s (next.js: 10ms, proxy.ts: 6ms, application-code: 22.8s)
+⨯ ReferenceError: createAccountTrade is not defined
+    at DiaryPage (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\chunks\ssr\[root-of-the-server]__0wk0i5.._.js:2402:25) {
+  digest: '208524642'
+}
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.8s (next.js: 15ms, proxy.ts: 5ms, application-code: 22.7s)
+⨯ ReferenceError: createAccountTrade is not defined
+    at DiaryPage (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\chunks\ssr\[root-of-the-server]__0wk0i5.._.js:2402:25) {
+  digest: '208524642'
+}
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.8s (next.js: 11ms, proxy.ts: 6ms, application-code: 22.7s)
+⨯ ReferenceError: createAccountTrade is not defined
+    at DiaryPage (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\chunks\ssr\[root-of-the-server]__0wk0i5.._.js:2402:25) {
+  digest: '208524642'
+}
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.8s (next.js: 11ms, proxy.ts: 6ms, application-code: 22.8s)
+⨯ ReferenceError: createAccountTrade is not defined
+    at DiaryPage (app\accounts\[accountId]\diary\page.tsx:1547:19)
+  1545 |         <form
+  1546 |           id="new-trade-form"
+> 1547 |           action={createAccountTrade.bind(null, accountId)}
+       |                   ^
+  1548 |           className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+  1549 |         >
+  1550 |           <div className="mb-6"> {
+  digest: '4066729063'
+}
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.4s (next.js: 249ms, proxy.ts: 85ms, application-code: 22.1s)
+⨯ ReferenceError: createAccountTrade is not defined
+    at DiaryPage (app\accounts\[accountId]\diary\page.tsx:1547:19)
+  1545 |         <form
+  1546 |           id="new-trade-form"
+> 1547 |           action={createAccountTrade.bind(null, accountId)}
+       |                   ^
+  1548 |           className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+  1549 |         >
+  1550 |           <div className="mb-6"> {
+  digest: '4066729063'
+}
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.3s (next.js: 12ms, proxy.ts: 6ms, application-code: 22.2s)
+⨯ ReferenceError: createAccountTrade is not defined
+    at DiaryPage (app\accounts\[accountId]\diary\page.tsx:1547:19)
+  1545 |         <form
+  1546 |           id="new-trade-form"
+> 1547 |           action={createAccountTrade.bind(null, accountId)}
+       |                   ^
+  1548 |           className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+  1549 |         >
+  1550 |           <div className="mb-6"> {
+  digest: '4066729063'
+}
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.5s (next.js: 11ms, proxy.ts: 6ms, application-code: 22.4s)
+⨯ ReferenceError: createAccountTrade is not defined
+    at DiaryPage (app\accounts\[accountId]\diary\page.tsx:1547:19)
+  1545 |         <form
+  1546 |           id="new-trade-form"
+> 1547 |           action={createAccountTrade.bind(null, accountId)}
+       |                   ^
+  1548 |           className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+  1549 |         >
+  1550 |           <div className="mb-6"> {
+  digest: '4066729063'
+}
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.5s (next.js: 10ms, proxy.ts: 6ms, application-code: 22.5s)
+⨯ ReferenceError: createAccountTrade is not defined
+    at DiaryPage (app\accounts\[accountId]\diary\page.tsx:1547:19)
+  1545 |         <form
+  1546 |           id="new-trade-form"
+> 1547 |           action={createAccountTrade.bind(null, accountId)}
+       |                   ^
+  1548 |           className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+  1549 |         >
+  1550 |           <div className="mb-6"> {
+  digest: '4066729063'
+}
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.5s (next.js: 14ms, proxy.ts: 5ms, application-code: 22.5s)
+⨯ ReferenceError: createAccountTrade is not defined
+    at DiaryPage (app\accounts\[accountId]\diary\page.tsx:1547:19)
+  1545 |         <form
+  1546 |           id="new-trade-form"
+> 1547 |           action={createAccountTrade.bind(null, accountId)}
+       |                   ^
+  1548 |           className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+  1549 |         >
+  1550 |           <div className="mb-6"> {
+  digest: '4066729063'
+}
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.5s (next.js: 11ms, proxy.ts: 5ms, application-code: 22.5s)
+✓ Compiled in 141ms
+⨯ ReferenceError: createAccountTrade is not defined
+    at DiaryPage (app\accounts\[accountId]\diary\page.tsx:1547:19)
+  1545 |         <form
+  1546 |           id="new-trade-form"
+> 1547 |           action={createAccountTrade.bind(null, accountId)}
+       |                   ^
+  1548 |           className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+  1549 |         >
+  1550 |           <div className="mb-6"> {
+  digest: '4066729063'
+}
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.9s (next.js: 18ms, proxy.ts: 7ms, application-code: 22.9s)
+⨯ ReferenceError: createAccountTrade is not defined
+    at DiaryPage (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\chunks\ssr\[root-of-the-server]__0wk0i5.._.js:2388:25) {
+  digest: '4066729063'
+}
+[next-auth][warn][DEBUG_ENABLED] 
+https://next-auth.js.org/warnings#debug_enabled
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 23.0s (next.js: 10ms, proxy.ts: 6ms, application-code: 23.0s)
+⨯ ReferenceError: createAccountTrade is not defined
+    at DiaryPage (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\chunks\ssr\[root-of-the-server]__0wk0i5.._.js:2388:25) {
+  digest: '4066729063'
+}
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.9s (next.js: 10ms, proxy.ts: 6ms, application-code: 22.9s)
+⨯ ReferenceError: createAccountTrade is not defined
+    at DiaryPage (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\chunks\ssr\[root-of-the-server]__0wk0i5.._.js:2388:25) {
+  digest: '4066729063'
+}
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.9s (next.js: 19ms, proxy.ts: 6ms, application-code: 22.9s)
+⨯ ReferenceError: createAccountTrade is not defined
+    at DiaryPage (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\chunks\ssr\[root-of-the-server]__0wk0i5.._.js:2388:25) {
+  digest: '4066729063'
+}
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.9s (next.js: 10ms, proxy.ts: 7ms, application-code: 22.9s)
+⨯ ReferenceError: createAccountTrade is not defined
+    at DiaryPage (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\chunks\ssr\[root-of-the-server]__0wk0i5.._.js:2388:25) {
+  digest: '4066729063'
+}
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.9s (next.js: 10ms, proxy.ts: 5ms, application-code: 22.9s)
+✓ Compiled in 225ms
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.4s (next.js: 181ms, proxy.ts: 80ms, application-code: 22.1s)
+[next-auth][warn][DEBUG_ENABLED] 
+https://next-auth.js.org/warnings#debug_enabled
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.4s (next.js: 13ms, proxy.ts: 6ms, application-code: 22.4s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.4s (next.js: 11ms, proxy.ts: 6ms, application-code: 22.4s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.4s (next.js: 11ms, proxy.ts: 6ms, application-code: 22.4s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.4s (next.js: 18ms, proxy.ts: 6ms, application-code: 22.4s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.5s (next.js: 10ms, proxy.ts: 6ms, application-code: 22.5s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.3s (next.js: 176ms, proxy.ts: 86ms, application-code: 22.0s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.2s (next.js: 10ms, proxy.ts: 7ms, application-code: 22.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.3s (next.js: 11ms, proxy.ts: 6ms, application-code: 22.3s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.2s (next.js: 11ms, proxy.ts: 6ms, application-code: 22.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.3s (next.js: 18ms, proxy.ts: 6ms, application-code: 22.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.2s (next.js: 8ms, proxy.ts: 5ms, application-code: 22.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.2s (next.js: 18ms, proxy.ts: 6ms, application-code: 22.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.2s (next.js: 12ms, proxy.ts: 6ms, application-code: 22.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.2s (next.js: 10ms, proxy.ts: 6ms, application-code: 22.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.2s (next.js: 18ms, proxy.ts: 6ms, application-code: 22.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.2s (next.js: 9ms, proxy.ts: 6ms, application-code: 22.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.2s (next.js: 12ms, proxy.ts: 5ms, application-code: 22.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 23.1s (next.js: 19ms, proxy.ts: 6ms, application-code: 23.1s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 23.1s (next.js: 10ms, proxy.ts: 5ms, application-code: 23.1s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 23.2s (next.js: 11ms, proxy.ts: 6ms, application-code: 23.1s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 23.1s (next.js: 19ms, proxy.ts: 6ms, application-code: 23.1s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 23.1s (next.js: 11ms, proxy.ts: 5ms, application-code: 23.1s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 23.2s (next.js: 10ms, proxy.ts: 6ms, application-code: 23.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 23.6s (next.js: 19ms, proxy.ts: 8ms, application-code: 23.5s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 23.6s (next.js: 11ms, proxy.ts: 5ms, application-code: 23.6s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 24.6s (next.js: 12ms, proxy.ts: 6ms, application-code: 24.6s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 24.7s (next.js: 18ms, proxy.ts: 6ms, application-code: 24.7s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 24.8s (next.js: 13ms, proxy.ts: 6ms, application-code: 24.7s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 24.7s (next.js: 12ms, proxy.ts: 5ms, application-code: 24.7s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 25.6s (next.js: 18ms, proxy.ts: 6ms, application-code: 25.6s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 25.5s (next.js: 14ms, proxy.ts: 13ms, application-code: 25.5s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 24.6s (next.js: 22ms, proxy.ts: 6ms, application-code: 24.6s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 24.5s (next.js: 13ms, proxy.ts: 6ms, application-code: 24.5s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 24.5s (next.js: 13ms, proxy.ts: 6ms, application-code: 24.4s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 24.4s (next.js: 20ms, proxy.ts: 7ms, application-code: 24.4s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.3s (next.js: 18ms, proxy.ts: 6ms, application-code: 22.3s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.3s (next.js: 13ms, proxy.ts: 6ms, application-code: 22.3s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.2s (next.js: 12ms, proxy.ts: 5ms, application-code: 22.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.2s (next.js: 17ms, proxy.ts: 7ms, application-code: 22.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.2s (next.js: 14ms, proxy.ts: 6ms, application-code: 22.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.2s (next.js: 10ms, proxy.ts: 5ms, application-code: 22.2s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.8s (next.js: 18ms, proxy.ts: 5ms, application-code: 22.8s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.8s (next.js: 11ms, proxy.ts: 7ms, application-code: 22.8s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.8s (next.js: 10ms, proxy.ts: 6ms, application-code: 22.8s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.8s (next.js: 10ms, proxy.ts: 7ms, application-code: 22.8s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.8s (next.js: 20ms, proxy.ts: 6ms, application-code: 22.8s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.8s (next.js: 12ms, proxy.ts: 8ms, application-code: 22.8s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.5s (next.js: 18ms, proxy.ts: 5ms, application-code: 22.5s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.6s (next.js: 14ms, proxy.ts: 6ms, application-code: 22.6s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.6s (next.js: 11ms, proxy.ts: 6ms, application-code: 22.6s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.5s (next.js: 20ms, proxy.ts: 9ms, application-code: 22.5s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.5s (next.js: 10ms, proxy.ts: 7ms, application-code: 22.5s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.6s (next.js: 12ms, proxy.ts: 6ms, application-code: 22.5s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.3s (next.js: 18ms, proxy.ts: 5ms, application-code: 22.3s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.3s (next.js: 11ms, proxy.ts: 6ms, application-code: 22.3s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.3s (next.js: 9ms, proxy.ts: 6ms, application-code: 22.3s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.4s (next.js: 18ms, proxy.ts: 9ms, application-code: 22.3s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.4s (next.js: 11ms, proxy.ts: 6ms, application-code: 22.4s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 22.3s (next.js: 10ms, proxy.ts: 6ms, application-code: 22.3s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 19.4s (next.js: 18ms, proxy.ts: 5ms, application-code: 19.3s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 19.3s (next.js: 12ms, proxy.ts: 6ms, application-code: 19.3s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 19.3s (next.js: 9ms, proxy.ts: 5ms, application-code: 19.3s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 19.4s (next.js: 18ms, proxy.ts: 5ms, application-code: 19.3s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 19.4s (next.js: 10ms, proxy.ts: 6ms, application-code: 19.3s)
+ GET /manifest.webmanifest 200 in 74ms (next.js: 53ms, proxy.ts: 6ms, application-code: 15ms)
+ GET /manifest.webmanifest 200 in 17ms (next.js: 5ms, proxy.ts: 4ms, application-code: 8ms)
+[next-auth][warn][DEBUG_ENABLED] 
+https://next-auth.js.org/warnings#debug_enabled
+ GET /api/notifications 200 in 1000ms (next.js: 52ms, application-code: 949ms)
+ GET /api/accounts/cmp36tn0d0002wmy4t18tvpie/permissions 200 in 1270ms (next.js: 31ms, application-code: 1239ms)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 5.1s (next.js: 13ms, proxy.ts: 3ms, application-code: 5.1s)
+ GET /manifest.webmanifest 200 in 19ms (next.js: 7ms, proxy.ts: 6ms, application-code: 7ms)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary/new 200 in 2.9s (next.js: 1118ms, proxy.ts: 4ms, application-code: 1770ms)
+ GET /manifest.webmanifest 200 in 16ms (next.js: 6ms, proxy.ts: 4ms, application-code: 6ms)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 2.6s (next.js: 24ms, proxy.ts: 3ms, application-code: 2.5s)
+ GET /manifest.webmanifest 200 in 16ms (next.js: 4ms, proxy.ts: 6ms, application-code: 7ms)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/dashboard 200 in 3.8s (next.js: 2.0s, proxy.ts: 6ms, application-code: 1755ms)
+ GET /manifest.webmanifest 200 in 13ms (next.js: 3ms, proxy.ts: 3ms, application-code: 6ms)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 2.6s (next.js: 14ms, proxy.ts: 4ms, application-code: 2.6s)
+✓ Compiled in 132ms
+[next-auth][warn][DEBUG_ENABLED] 
+https://next-auth.js.org/warnings#debug_enabled
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 8.5s (next.js: 828ms, proxy.ts: 55ms, application-code: 7.6s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 7.8s (next.js: 9ms, proxy.ts: 14ms, application-code: 7.8s)
+ GET /manifest.webmanifest 200 in 49ms (next.js: 32ms, proxy.ts: 3ms, application-code: 13ms)
+✓ Compiled in 152ms
+[next-auth][warn][DEBUG_ENABLED] 
+https://next-auth.js.org/warnings#debug_enabled
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 7.6s (next.js: 142ms, proxy.ts: 57ms, application-code: 7.4s)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 7.6s (next.js: 13ms, proxy.ts: 24ms, application-code: 7.6s)
+ GET /manifest.webmanifest 200 in 48ms (next.js: 34ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /manifest.webmanifest 200 in 40ms (next.js: 14ms, proxy.ts: 19ms, application-code: 7ms)
+[next-auth][warn][DEBUG_ENABLED] 
+https://next-auth.js.org/warnings#debug_enabled
+ GET /api/notifications 200 in 900ms (next.js: 55ms, application-code: 845ms)
+ GET /api/accounts/cmp36tn0d0002wmy4t18tvpie/permissions 200 in 1178ms (next.js: 30ms, application-code: 1148ms)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 4.9s (next.js: 12ms, proxy.ts: 5ms, application-code: 4.9s)
+ GET /manifest.webmanifest 200 in 14ms (next.js: 3ms, proxy.ts: 4ms, application-code: 7ms)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/dashboard 200 in 1901ms (next.js: 29ms, proxy.ts: 10ms, application-code: 1861ms)
+prisma:error Error in PostgreSQL connection: Error { kind: Io, cause: Some(Os { code: 10054, kind: ConnectionReset, message: "Connessione in corso interrotta forzatamente dall'host remoto." }) }
+ GET /login?callbackUrl=%2F 200 in 2.2s (next.js: 942ms, proxy.ts: 6ms, application-code: 1244ms)
+ GET /login?callbackUrl=%2F 200 in 385ms (next.js: 7ms, proxy.ts: 5ms, application-code: 373ms)
+ GET /manifest.webmanifest 200 in 23ms (next.js: 4ms, proxy.ts: 7ms, application-code: 12ms)
+ POST /api/auth/pre-login 200 in 870ms (next.js: 145ms, application-code: 725ms)
+ GET /api/auth/providers 200 in 1135ms (next.js: 1118ms, application-code: 18ms)
+ GET /api/auth/csrf 200 in 24ms (next.js: 10ms, application-code: 14ms)
+ POST /api/auth/callback/credentials 200 in 1140ms (next.js: 3ms, application-code: 1136ms)
+ GET /accounts 200 in 2.9s (next.js: 473ms, proxy.ts: 7ms, application-code: 2.4s)
+ GET /manifest.webmanifest 200 in 28ms (next.js: 9ms, proxy.ts: 11ms, application-code: 7ms)
+ GET /api/notifications 200 in 747ms (next.js: 4ms, application-code: 743ms)
+ GET /manifest.webmanifest 200 in 36ms (next.js: 5ms, proxy.ts: 23ms, application-code: 7ms)
+ GET /api/accounts/cmp36tn0d0002wmy4t18tvpie/permissions 200 in 937ms (next.js: 11ms, application-code: 926ms)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie 200 in 3.3s (next.js: 1083ms, proxy.ts: 5ms, application-code: 2.2s)
+ GET /manifest.webmanifest 200 in 19ms (next.js: 5ms, proxy.ts: 5ms, application-code: 9ms)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 2.7s (next.js: 19ms, proxy.ts: 6ms, application-code: 2.6s)
+ GET /manifest.webmanifest 200 in 47ms (next.js: 24ms, proxy.ts: 15ms, application-code: 9ms)
+ GET /api/notifications 200 in 894ms (next.js: 5ms, application-code: 889ms)
+ GET /api/accounts/cmp36tn0d0002wmy4t18tvpie/permissions 200 in 1235ms (next.js: 10ms, application-code: 1225ms)
+ GET /accounts/cmp36tn0d0002wmy4t18tvpie/diary 200 in 4.9s (next.js: 17ms, proxy.ts: 8ms, application-code: 4.9s)
+Persisting failed: Unable to write SST file 00000423.sst
+
+Caused by:
+    Impossibile trovare il percorso specificato. (os error 3)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Persisting failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+⨯ Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\app\page.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\require.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\load-components.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\build\utils.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\app\page.js:1:7) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\.next\\dev\\server\\app\\page.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\require.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\load-components.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\build\\utils.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-utils\\setup-dev-bundler.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-server.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\start-server.js'
+  ],
+  page: '/'
+}
+⨯ Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\pages\_document.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\require.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\load-components.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\build\utils.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\pages\_document.js:1:7) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\.next\\dev\\server\\pages\\_document.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\require.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\load-components.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\build\\utils.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-utils\\setup-dev-bundler.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-server.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\start-server.js'
+  ]
+}
+ GET / 500 in 1704ms (next.js: 1470ms, proxy.ts: 6ms, application-code: 228ms)
+⨯ Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\app\page.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\require.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\load-components.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\build\utils.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\app\page.js:1:7) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\.next\\dev\\server\\app\\page.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\require.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\load-components.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\build\\utils.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-utils\\setup-dev-bundler.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-server.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\start-server.js'
+  ],
+  page: '/'
+}
+⨯ Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\pages\_document.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\require.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\load-components.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\build\utils.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\pages\_document.js:1:7) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\.next\\dev\\server\\pages\\_document.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\require.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\load-components.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\build\\utils.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-utils\\setup-dev-bundler.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-server.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\start-server.js'
+  ]
+}
+ GET / 500 in 102ms (next.js: 86ms, proxy.ts: 5ms, application-code: 11ms)
+[browser] Uncaught Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\pages\_document.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\require.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\load-components.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\build\utils.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (.next\dev\server\pages\_document.js:1:7)
+Persisting failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+⨯ Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\app\page.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\require.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\load-components.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\build\utils.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\app\page.js:1:7) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\.next\\dev\\server\\app\\page.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\require.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\load-components.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\build\\utils.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-utils\\setup-dev-bundler.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-server.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\start-server.js'
+  ],
+  page: '/'
+}
+⨯ Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\pages\_document.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\require.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\load-components.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\build\utils.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\pages\_document.js:1:7) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\.next\\dev\\server\\pages\\_document.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\require.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\load-components.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\build\\utils.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-utils\\setup-dev-bundler.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-server.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\start-server.js'
+  ]
+}
+ GET / 500 in 85ms (next.js: 68ms, proxy.ts: 5ms, application-code: 12ms)
+[browser] Uncaught Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\pages\_document.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\require.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\load-components.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\build\utils.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (.next\dev\server\pages\_document.js:1:7)
+⨯ Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\app\page.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\require.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\load-components.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\build\utils.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\app\page.js:1:7) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\.next\\dev\\server\\app\\page.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\require.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\load-components.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\build\\utils.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-utils\\setup-dev-bundler.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-server.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\start-server.js'
+  ],
+  page: '/'
+}
+⨯ Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\pages\_document.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\require.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\load-components.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\build\utils.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\pages\_document.js:1:7) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\.next\\dev\\server\\pages\\_document.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\require.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\load-components.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\build\\utils.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-utils\\setup-dev-bundler.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-server.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\start-server.js'
+  ]
+}
+ GET / 500 in 86ms (next.js: 69ms, proxy.ts: 5ms, application-code: 12ms)
+[browser] Uncaught Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\pages\_document.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\require.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\load-components.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\build\utils.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (.next\dev\server\pages\_document.js:1:7)
+⨯ Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\app\page.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\require.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\load-components.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\build\utils.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\app\page.js:1:7) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\.next\\dev\\server\\app\\page.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\require.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\load-components.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\build\\utils.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-utils\\setup-dev-bundler.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-server.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\start-server.js'
+  ],
+  page: '/'
+}
+⨯ Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\pages\_document.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\require.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\load-components.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\build\utils.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\pages\_document.js:1:7) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\.next\\dev\\server\\pages\\_document.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\require.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\load-components.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\build\\utils.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-utils\\setup-dev-bundler.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-server.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\start-server.js'
+  ]
+}
+ GET / 500 in 93ms (next.js: 72ms, proxy.ts: 5ms, application-code: 15ms)
+[browser] Uncaught Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\pages\_document.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\require.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\load-components.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\build\utils.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (.next\dev\server\pages\_document.js:1:7)
+⨯ Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\app\page.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\require.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\load-components.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\build\utils.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\app\page.js:1:7) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\.next\\dev\\server\\app\\page.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\require.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\load-components.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\build\\utils.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-utils\\setup-dev-bundler.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-server.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\start-server.js'
+  ],
+  page: '/'
+}
+⨯ Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\pages\_document.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\require.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\load-components.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\build\utils.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\pages\_document.js:1:7) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\.next\\dev\\server\\pages\\_document.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\require.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\load-components.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\build\\utils.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-utils\\setup-dev-bundler.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-server.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\start-server.js'
+  ]
+}
+ GET / 500 in 138ms (next.js: 113ms, proxy.ts: 11ms, application-code: 14ms)
+[browser] Uncaught Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\pages\_document.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\require.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\load-components.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\build\utils.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (.next\dev\server\pages\_document.js:1:7)
+⨯ Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\app\page.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\require.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\load-components.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\build\utils.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\app\page.js:1:7) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\.next\\dev\\server\\app\\page.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\require.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\load-components.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\build\\utils.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-utils\\setup-dev-bundler.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-server.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\start-server.js'
+  ],
+  page: '/'
+}
+⨯ Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\pages\_document.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\require.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\load-components.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\build\utils.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\samsung\OneDrive\Desktop\VOLTIS\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (C:\Users\samsung\OneDrive\Desktop\VOLTIS\.next\dev\server\pages\_document.js:1:7) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\.next\\dev\\server\\pages\\_document.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\require.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\load-components.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\build\\utils.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-utils\\setup-dev-bundler.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\router-server.js',
+    'C:\\Users\\samsung\\OneDrive\\Desktop\\VOLTIS\\node_modules\\next\\dist\\server\\lib\\start-server.js'
+  ]
+}
+ GET / 500 in 84ms (next.js: 67ms, proxy.ts: 5ms, application-code: 11ms)
+Persisting failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+[?25h

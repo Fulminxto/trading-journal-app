@@ -1,3 +1,5 @@
+import { ChevronDown } from "lucide-react";
+
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
@@ -146,6 +148,13 @@ type DashboardLabels = {
 
   averages: string;
   extremes: string;
+
+  watchNoteFewTrades: string;
+  watchNoteDrawdownLimit: string;
+  watchNoteWinRatePressure: string;
+  watchNoteAverageResultNegative: string;
+  watchNoteProfitContained: string;
+  watchNoteNoCriticalSignal: string;
 };
 
 const dashboardLabels: Record<
@@ -235,6 +244,13 @@ const dashboardLabels: Record<
 
     averages: "Medie",
     extremes: "Estremi",
+
+    watchNoteFewTrades: "Pochi trade. Considera i segnali come contesto iniziale.",
+    watchNoteDrawdownLimit: "Il drawdown è vicino al limite dell'account.",
+    watchNoteWinRatePressure: "Il win rate è sotto pressione. Rivedi gli ingressi.",
+    watchNoteAverageResultNegative: "Il risultato medio è negativo. Controlla la dimensione delle perdite.",
+    watchNoteProfitContained: "Il profitto è positivo e il rischio è contenuto.",
+    watchNoteNoCriticalSignal: "Nessun segnale critico. Continua a monitorare l'esecuzione.",
   },
 
   en: {
@@ -320,6 +336,13 @@ const dashboardLabels: Record<
 
     averages: "Averages",
     extremes: "Extremes",
+
+    watchNoteFewTrades: "Few trades. Treat signals as early context.",
+    watchNoteDrawdownLimit: "Drawdown is close to the account limit.",
+    watchNoteWinRatePressure: "Win rate is under pressure. Review entries.",
+    watchNoteAverageResultNegative: "Average result is negative. Watch loss size.",
+    watchNoteProfitContained: "Profit is positive and risk is contained.",
+    watchNoteNoCriticalSignal: "No critical signal. Keep monitoring execution.",
   },
 
   uk: {
@@ -405,6 +428,13 @@ const dashboardLabels: Record<
 
     averages: "Середні",
     extremes: "Екстреми",
+
+    watchNoteFewTrades: "Мало трейдів. Розглядай сигнали як ранній контекст.",
+    watchNoteDrawdownLimit: "Drawdown наближається до ліміту акаунта.",
+    watchNoteWinRatePressure: "Win rate під тиском. Переглянь входи.",
+    watchNoteAverageResultNegative: "Середній результат негативний. Стеж за розміром збитків.",
+    watchNoteProfitContained: "Прибуток позитивний і ризик під контролем.",
+    watchNoteNoCriticalSignal: "Немає критичних сигналів. Продовжуй моніторинг виконання.",
   },
 
   ru: {
@@ -490,6 +520,13 @@ const dashboardLabels: Record<
 
     averages: "Средние",
     extremes: "Экстремумы",
+
+    watchNoteFewTrades: "Мало сделок. Рассматривай сигналы как ранний контекст.",
+    watchNoteDrawdownLimit: "Drawdown приближается к лимиту аккаунта.",
+    watchNoteWinRatePressure: "Win rate под давлением. Пересмотри входы.",
+    watchNoteAverageResultNegative: "Средний результат отрицательный. Следи за размером убытков.",
+    watchNoteProfitContained: "Прибыль положительная и риск под контролем.",
+    watchNoteNoCriticalSignal: "Нет критических сигналов. Продолжай мониторинг исполнения.",
   },
 
   es: {
@@ -575,6 +612,13 @@ const dashboardLabels: Record<
 
     averages: "Promedios",
     extremes: "Extremos",
+
+    watchNoteFewTrades: "Pocos trades. Trata las señales como contexto inicial.",
+    watchNoteDrawdownLimit: "El drawdown está cerca del límite de la cuenta.",
+    watchNoteWinRatePressure: "El win rate está bajo presión. Revisa las entradas.",
+    watchNoteAverageResultNegative: "El resultado medio es negativo. Controla el tamaño de las pérdidas.",
+    watchNoteProfitContained: "El beneficio es positivo y el riesgo está contenido.",
+    watchNoteNoCriticalSignal: "Sin señal crítica. Sigue monitorizando la ejecución.",
   },
 
   fr: {
@@ -660,6 +704,13 @@ const dashboardLabels: Record<
 
     averages: "Moyennes",
     extremes: "Extrêmes",
+
+    watchNoteFewTrades: "Peu de trades. Traite les signaux comme un contexte précoce.",
+    watchNoteDrawdownLimit: "Le drawdown est proche de la limite du compte.",
+    watchNoteWinRatePressure: "Le win rate est sous pression. Revois les entrées.",
+    watchNoteAverageResultNegative: "Le résultat moyen est négatif. Surveille la taille des pertes.",
+    watchNoteProfitContained: "Le profit est positif et le risque est contenu.",
+    watchNoteNoCriticalSignal: "Aucun signal critique. Continue à surveiller l'exécution.",
   },
 
   de: {
@@ -745,6 +796,13 @@ const dashboardLabels: Record<
 
     averages: "Durchschnitte",
     extremes: "Extreme",
+
+    watchNoteFewTrades: "Wenige Trades. Behandle Signale als frühen Kontext.",
+    watchNoteDrawdownLimit: "Der Drawdown nähert sich dem Kontolimit.",
+    watchNoteWinRatePressure: "Die Win-Rate steht unter Druck. Überprüfe die Einstiege.",
+    watchNoteAverageResultNegative: "Das Durchschnittsergebnis ist negativ. Achte auf die Verlusthöhe.",
+    watchNoteProfitContained: "Der Gewinn ist positiv und das Risiko ist begrenzt.",
+    watchNoteNoCriticalSignal: "Kein kritisches Signal. Überwache weiter die Ausführung.",
   },
 };
 
@@ -1047,8 +1105,7 @@ export default async function DashboardPage({
             label: t.execution,
             value: `${totalTrades} ${t.trades}`,
             tone: "text-yellow-400",
-            note:
-              "Few trades. Treat signals as early context.",
+            note: t.watchNoteFewTrades,
           },
         ]
       : [
@@ -1058,8 +1115,7 @@ export default async function DashboardPage({
                   label: t.risk,
                   value: formatPercent(maxDrawdown),
                   tone: "text-red-400",
-                  note:
-                    "Drawdown is close to the account limit.",
+                  note: t.watchNoteDrawdownLimit,
                 },
               ]
             : []),
@@ -1069,8 +1125,7 @@ export default async function DashboardPage({
                   label: t.consistency,
                   value: formatPercent(winRate),
                   tone: "text-red-400",
-                  note:
-                    "Win rate is under pressure. Review entries.",
+                  note: t.watchNoteWinRatePressure,
                 },
               ]
             : []),
@@ -1080,8 +1135,7 @@ export default async function DashboardPage({
                   label: t.execution,
                   value: formatCurrency(averageResult, currency),
                   tone: "text-red-400",
-                  note:
-                    "Average result is negative. Watch loss size.",
+                  note: t.watchNoteAverageResultNegative,
                 },
               ]
             : []),
@@ -1091,8 +1145,7 @@ export default async function DashboardPage({
                   label: t.risk,
                   value: formatPercent(currentProfitPercent),
                   tone: "text-green-400",
-                  note:
-                    "Profit is positive and risk is contained.",
+                  note: t.watchNoteProfitContained,
                 },
               ]
             : []),
@@ -1106,25 +1159,24 @@ export default async function DashboardPage({
             label: t.consistency,
             value: `${consistencyScore}/100`,
             tone: "text-accent",
-            note:
-              "No critical signal. Keep monitoring execution.",
+            note: t.watchNoteNoCriticalSignal,
           },
         ];
 
   return (
     <div className="mx-auto w-full max-w-[1500px] space-y-8">
-      <div className="space-y-5">
-        <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-          <div className="flex flex-col gap-2">
+      <div className="space-y-4">
+        <div className="flex flex-col gap-3 xl:flex-row xl:items-end xl:justify-between">
+          <div className="flex flex-col gap-1.5">
             <p className="text-xs font-black uppercase tracking-[0.28em] text-accent-bright">
               VOLTIS DASHBOARD
             </p>
 
-            <h1 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
-              {account.name}
-            </h1>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              <h1 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
+                {account.name}
+              </h1>
 
-            <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-semibold text-white">
                 {accountHealth}
               </span>
@@ -1275,7 +1327,7 @@ export default async function DashboardPage({
               {t.riskControl}
             </p>
 
-            <h2 className="mt-1 text-2xl font-bold">
+            <h2 className="mt-1 text-2xl font-black">
               {t.risk}
             </h2>
           </div>
@@ -1297,7 +1349,7 @@ export default async function DashboardPage({
                   {t.maxDrawdownLimit}
                 </p>
 
-                <p className="mt-1 text-lg font-bold text-red-400">
+                <p className="mt-1 text-lg font-bold text-gray-300">
                   {account.maxDrawdown
                     ? formatPercent(account.maxDrawdown)
                     : "-"}
@@ -1309,7 +1361,7 @@ export default async function DashboardPage({
                   {t.dailyDrawdownLimit}
                 </p>
 
-                <p className="mt-1 text-lg font-bold text-red-400">
+                <p className="mt-1 text-lg font-bold text-gray-300">
                   {account.dailyDrawdown
                     ? formatPercent(account.dailyDrawdown)
                     : "-"}
@@ -1440,7 +1492,7 @@ export default async function DashboardPage({
               {t.latestActivity}
             </p>
 
-            <h2 className="text-2xl font-bold">
+            <h2 className="text-2xl font-black">
               {t.recentTrades}
             </h2>
           </div>
@@ -1522,7 +1574,7 @@ export default async function DashboardPage({
               {t.reviewNotes}
             </p>
 
-            <h2 className="text-2xl font-bold">
+            <h2 className="text-2xl font-black">
               {t.whatToWatch}
             </h2>
           </div>
@@ -1559,14 +1611,14 @@ export default async function DashboardPage({
               Technical profile
             </p>
 
-            <h2 className="mt-1 text-lg font-bold text-white">
+            <h2 className="mt-1 text-lg font-black text-white">
               Account details
             </h2>
           </div>
 
           <div className="flex items-center gap-3 text-xs font-semibold text-gray-500">
             <span>{t.accountStatus}: {accountHealth}</span>
-            <span className="transition group-open:rotate-180">v</span>
+            <ChevronDown size={16} className="transition group-open:rotate-180" />
           </div>
         </summary>
 

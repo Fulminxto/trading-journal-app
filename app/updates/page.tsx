@@ -1,4 +1,4 @@
-﻿import {
+import {
   Megaphone,
   Wrench,
   Sparkles,
@@ -36,7 +36,7 @@ type UpdatesLabels = {
 
 const updatesLabels: Record<AppLanguage, UpdatesLabels> = {
   it: {
-    eyebrow: "NovitÃ ",
+    eyebrow: "Novità",
     title: "Aggiornamenti App",
     description:
       "Tutti gli aggiornamenti pubblicati, nuove feature, bug fix e comunicazioni importanti di VOLTIS.",
@@ -74,41 +74,41 @@ const updatesLabels: Record<AppLanguage, UpdatesLabels> = {
   },
 
   uk: {
-    eyebrow: "Ð©Ð¾ Ð½Ð¾Ð²Ð¾Ð³Ð¾",
-    title: "ÐžÐ½Ð¾Ð²Ð»ÐµÐ½Ð½Ñ Ð·Ð°ÑÑ‚Ð¾ÑÑƒÐ½ÐºÑƒ",
+    eyebrow: "Що нового",
+    title: "Оновлення застосунку",
     description:
-      "Ð£ÑÑ– Ð¾Ð¿ÑƒÐ±Ð»Ñ–ÐºÐ¾Ð²Ð°Ð½Ñ– Ð¾Ð½Ð¾Ð²Ð»ÐµÐ½Ð½Ñ, Ð½Ð¾Ð²Ñ– Ñ„ÑƒÐ½ÐºÑ†Ñ–Ñ—, Ð²Ð¸Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð½Ñ Ð¿Ð¾Ð¼Ð¸Ð»Ð¾Ðº Ñ– Ð²Ð°Ð¶Ð»Ð¸Ð²Ñ– Ð¿Ð¾Ð²Ñ–Ð´Ð¾Ð¼Ð»ÐµÐ½Ð½Ñ VOLTIS.",
-    empty: "ÐŸÐ¾ÐºÐ¸ Ñ‰Ð¾ Ð½ÐµÐ¼Ð°Ñ” Ð¾Ð¿ÑƒÐ±Ð»Ñ–ÐºÐ¾Ð²Ð°Ð½Ð¸Ñ… Ð¾Ð½Ð¾Ð²Ð»ÐµÐ½ÑŒ.",
-    published: "ÐžÐ¿ÑƒÐ±Ð»Ñ–ÐºÐ¾Ð²Ð°Ð½Ð¾",
+      "Усі опубліковані оновлення, нові функції, виправлення помилок і важливі повідомлення VOLTIS.",
+    empty: "Поки що немає опублікованих оновлень.",
+    published: "Опубліковано",
 
-    typeFeature: "Ð¤ÑƒÐ½ÐºÑ†Ñ–Ñ",
-    typeBugfix: "Ð’Ð¸Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð½Ñ",
-    typeMaintenance: "ÐžÐ±ÑÐ»ÑƒÐ³Ð¾Ð²ÑƒÐ²Ð°Ð½Ð½Ñ",
-    typeAnnouncement: "ÐžÐ³Ð¾Ð»Ð¾ÑˆÐµÐ½Ð½Ñ",
+    typeFeature: "Функція",
+    typeBugfix: "Виправлення",
+    typeMaintenance: "Обслуговування",
+    typeAnnouncement: "Оголошення",
 
-    priorityLow: "ÐÐ¸Ð·ÑŒÐºÐ¸Ð¹",
-    priorityMedium: "Ð¡ÐµÑ€ÐµÐ´Ð½Ñ–Ð¹",
-    priorityHigh: "Ð’Ð¸ÑÐ¾ÐºÐ¸Ð¹",
-    priorityCritical: "ÐšÑ€Ð¸Ñ‚Ð¸Ñ‡Ð½Ð¸Ð¹",
+    priorityLow: "Низький",
+    priorityMedium: "Середній",
+    priorityHigh: "Високий",
+    priorityCritical: "Критичний",
   },
 
   ru: {
-    eyebrow: "Ð§Ñ‚Ð¾ Ð½Ð¾Ð²Ð¾Ð³Ð¾",
-    title: "ÐžÐ±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ñ",
+    eyebrow: "Что нового",
+    title: "Обновления приложения",
     description:
-      "Ð’ÑÐµ Ð¾Ð¿ÑƒÐ±Ð»Ð¸ÐºÐ¾Ð²Ð°Ð½Ð½Ñ‹Ðµ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ, Ð½Ð¾Ð²Ñ‹Ðµ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸, Ð¸ÑÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ñ Ð¾ÑˆÐ¸Ð±Ð¾Ðº Ð¸ Ð²Ð°Ð¶Ð½Ñ‹Ðµ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ñ VOLTIS.",
-    empty: "ÐŸÐ¾ÐºÐ° Ð½ÐµÑ‚ Ð¾Ð¿ÑƒÐ±Ð»Ð¸ÐºÐ¾Ð²Ð°Ð½Ð½Ñ‹Ñ… Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ð¹.",
-    published: "ÐžÐ¿ÑƒÐ±Ð»Ð¸ÐºÐ¾Ð²Ð°Ð½Ð¾",
+      "Все опубликованные обновления, новые функции, исправления ошибок и важные сообщения VOLTIS.",
+    empty: "Пока нет опубликованных обновлений.",
+    published: "Опубликовано",
 
-    typeFeature: "Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ",
-    typeBugfix: "Ð˜ÑÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ",
-    typeMaintenance: "ÐžÐ±ÑÐ»ÑƒÐ¶Ð¸Ð²Ð°Ð½Ð¸Ðµ",
-    typeAnnouncement: "ÐžÐ±ÑŠÑÐ²Ð»ÐµÐ½Ð¸Ðµ",
+    typeFeature: "Функция",
+    typeBugfix: "Исправление",
+    typeMaintenance: "Обслуживание",
+    typeAnnouncement: "Объявление",
 
-    priorityLow: "ÐÐ¸Ð·ÐºÐ¸Ð¹",
-    priorityMedium: "Ð¡Ñ€ÐµÐ´Ð½Ð¸Ð¹",
-    priorityHigh: "Ð’Ñ‹ÑÐ¾ÐºÐ¸Ð¹",
-    priorityCritical: "ÐšÑ€Ð¸Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸Ð¹",
+    priorityLow: "Низкий",
+    priorityMedium: "Средний",
+    priorityHigh: "Высокий",
+    priorityCritical: "Критический",
   },
 
   es: {
@@ -119,33 +119,33 @@ const updatesLabels: Record<AppLanguage, UpdatesLabels> = {
     empty: "No hay actualizaciones publicadas.",
     published: "Publicado",
 
-    typeFeature: "FunciÃ³n",
-    typeBugfix: "CorrecciÃ³n",
+    typeFeature: "Función",
+    typeBugfix: "Corrección",
     typeMaintenance: "Mantenimiento",
-    typeAnnouncement: "ComunicaciÃ³n",
+    typeAnnouncement: "Comunicación",
 
     priorityLow: "Baja",
     priorityMedium: "Media",
     priorityHigh: "Alta",
-    priorityCritical: "CrÃ­tica",
+    priorityCritical: "Crítica",
   },
 
   fr: {
-    eyebrow: "NouveautÃ©s",
-    title: "Mises Ã  jour de lâ€™app",
+    eyebrow: "Nouveautés",
+    title: "Mises à jour de l’app",
     description:
-      "Toutes les mises Ã  jour publiÃ©es, nouvelles fonctionnalitÃ©s, corrections de bugs et communications importantes de VOLTIS.",
-    empty: "Aucune mise Ã  jour publiÃ©e.",
-    published: "PubliÃ©",
+      "Toutes les mises à jour publiées, nouvelles fonctionnalités, corrections de bugs et communications importantes de VOLTIS.",
+    empty: "Aucune mise à jour publiée.",
+    published: "Publié",
 
-    typeFeature: "FonctionnalitÃ©",
+    typeFeature: "Fonctionnalité",
     typeBugfix: "Correction",
     typeMaintenance: "Maintenance",
     typeAnnouncement: "Communication",
 
     priorityLow: "Basse",
     priorityMedium: "Moyenne",
-    priorityHigh: "Ã‰levÃ©e",
+    priorityHigh: "Élevée",
     priorityCritical: "Critique",
   },
 
@@ -153,9 +153,9 @@ const updatesLabels: Record<AppLanguage, UpdatesLabels> = {
     eyebrow: "Neuigkeiten",
     title: "App-Updates",
     description:
-      "Alle verÃ¶ffentlichten Updates, neue Funktionen, Fehlerbehebungen und wichtige VOLTIS-Mitteilungen.",
-    empty: "Noch keine Updates verÃ¶ffentlicht.",
-    published: "VerÃ¶ffentlicht",
+      "Alle veröffentlichten Updates, neue Funktionen, Fehlerbehebungen und wichtige VOLTIS-Mitteilungen.",
+    empty: "Noch keine Updates veröffentlicht.",
+    published: "Veröffentlicht",
 
     typeFeature: "Funktion",
     typeBugfix: "Fehlerbehebung",

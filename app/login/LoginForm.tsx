@@ -235,7 +235,7 @@ export default function LoginForm({
           autoComplete="one-time-code"
           autoFocus
           required
-          className="w-full rounded-2xl border border-white/10 bg-black/30 p-4 text-center text-xl tracking-[0.5em] outline-none transition placeholder:text-gray-600 focus:border-accent/50 focus:bg-black/40"
+          className="w-full rounded-2xl border border-white/10 bg-surface-2 p-4 text-center text-xl tracking-[0.5em] outline-none transition placeholder:text-gray-600 focus:border-accent/50 focus:bg-surface-2"
         />
 
         {error && (
@@ -247,10 +247,10 @@ export default function LoginForm({
         <button
           type="submit"
           disabled={loading}
-          className="flex w-full items-center justify-center rounded-2xl bg-accent p-4 font-bold text-black shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)] transition hover:bg-accent-bright disabled:opacity-50"
+          className="flex w-full items-center justify-center rounded-2xl bg-accent p-4 font-bold text-white shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)] transition hover:bg-accent-bright disabled:opacity-50"
         >
           {loading ? (
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#060A1A]">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-bg-deep">
               <VoltisLightningLoader size={24} />
             </span>
           ) : (
@@ -278,7 +278,7 @@ export default function LoginForm({
       <input
         name="username"
         placeholder={t.usernamePlaceholder}
-        className="w-full rounded-2xl border border-white/10 bg-black/30 p-4 outline-none transition placeholder:text-gray-600 focus:border-accent/50 focus:bg-black/40"
+        className="w-full rounded-2xl border border-white/10 bg-surface-2 p-4 outline-none transition placeholder:text-gray-600 focus:border-accent/50 focus:bg-surface-2"
         required
       />
 
@@ -287,7 +287,7 @@ export default function LoginForm({
           name="password"
           type={showPassword ? "text" : "password"}
           placeholder={t.passwordPlaceholder}
-          className="w-full rounded-2xl border border-white/10 bg-black/30 p-4 pr-12 outline-none transition placeholder:text-gray-600 focus:border-accent/50 focus:bg-black/40"
+          className="w-full rounded-2xl border border-white/10 bg-surface-2 p-4 pr-12 outline-none transition placeholder:text-gray-600 focus:border-accent/50 focus:bg-surface-2"
           required
         />
 
@@ -311,7 +311,7 @@ export default function LoginForm({
       <button
         type="submit"
         disabled={loading}
-        className="flex w-full items-center justify-center rounded-2xl bg-accent p-4 font-bold text-black shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)] transition hover:bg-accent-bright disabled:opacity-50"
+        className="flex w-full items-center justify-center rounded-2xl bg-accent p-4 font-bold text-white shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)] transition hover:bg-accent-bright disabled:opacity-50"
       >
         {loading ? (
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#060A1A]">

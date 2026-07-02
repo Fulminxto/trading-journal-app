@@ -1,4 +1,4 @@
-﻿import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -61,35 +61,35 @@ const labels: Record<AppLanguage, CreateAccountLabels> =
     },
     uk: {
       eyebrow: "Workspace",
-      title: "Ð¡Ñ‚Ð²Ð¾Ñ€Ð¸Ñ‚Ð¸ Ñ‚Ð¾Ñ€Ð³Ð¾Ð²Ð¸Ð¹ Ð°ÐºÐ°ÑƒÐ½Ñ‚",
+      title: "Створити торговий акаунт",
       description:
-        "Ð¡Ñ‚Ð²Ð¾Ñ€Ñ–Ñ‚ÑŒ Ð½Ð¾Ð²Ð¸Ð¹ Ð¾ÑÐ¾Ð±Ð¸ÑÑ‚Ð¸Ð¹ Ð°Ð±Ð¾ ÑÐ¿Ñ–Ð»ÑŒÐ½Ð¸Ð¹ Ñ‚Ð¾Ñ€Ð³Ð¾Ð²Ð¸Ð¹ Ð°ÐºÐ°ÑƒÐ½Ñ‚ Ñƒ VOLTIS.",
-      accountNamePlaceholder: "ÐÐ°Ð·Ð²Ð° Ð°ÐºÐ°ÑƒÐ½Ñ‚Ñƒ",
-      initialBalancePlaceholder: "ÐŸÐ¾Ñ‡Ð°Ñ‚ÐºÐ¾Ð²Ð¸Ð¹ Ð±Ð°Ð»Ð°Ð½Ñ",
-      currencyPlaceholder: "Ð’Ð°Ð»ÑŽÑ‚Ð°",
-      brokerPlaceholder: "Ð‘Ñ€Ð¾ÐºÐµÑ€ / Prop Firm",
-      phasePlaceholder: "Ð¤Ð°Ð·Ð°",
+        "Створіть новий особистий або спільний торговий акаунт у VOLTIS.",
+      accountNamePlaceholder: "Назва акаунту",
+      initialBalancePlaceholder: "Початковий баланс",
+      currencyPlaceholder: "Валюта",
+      brokerPlaceholder: "Брокер / Prop Firm",
+      phasePlaceholder: "Фаза",
       profitTargetPlaceholder: "Profit Target %",
       maxDrawdownPlaceholder: "Max Drawdown %",
       dailyDrawdownPlaceholder: "Daily Drawdown %",
-      cancelButton: "Ð¡ÐºÐ°ÑÑƒÐ²Ð°Ñ‚Ð¸",
-      createButton: "Ð¡Ñ‚Ð²Ð¾Ñ€Ð¸Ñ‚Ð¸ Ð°ÐºÐ°ÑƒÐ½Ñ‚",
+      cancelButton: "Скасувати",
+      createButton: "Створити акаунт",
     },
     ru: {
       eyebrow: "Workspace",
-      title: "Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ Ñ‚Ð¾Ñ€Ð³Ð¾Ð²Ñ‹Ð¹ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚",
+      title: "Создать торговый аккаунт",
       description:
-        "Ð¡Ð¾Ð·Ð´Ð°Ð¹Ñ‚Ðµ Ð½Ð¾Ð²Ñ‹Ð¹ Ð»Ð¸Ñ‡Ð½Ñ‹Ð¹ Ð¸Ð»Ð¸ ÑÐ¾Ð²Ð¼ÐµÑÑ‚Ð½Ñ‹Ð¹ Ñ‚Ð¾Ñ€Ð³Ð¾Ð²Ñ‹Ð¹ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚ Ð² VOLTIS.",
-      accountNamePlaceholder: "ÐÐ°Ð·Ð²Ð°Ð½Ð¸Ðµ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°",
-      initialBalancePlaceholder: "ÐÐ°Ñ‡Ð°Ð»ÑŒÐ½Ñ‹Ð¹ Ð±Ð°Ð»Ð°Ð½Ñ",
-      currencyPlaceholder: "Ð’Ð°Ð»ÑŽÑ‚Ð°",
-      brokerPlaceholder: "Ð‘Ñ€Ð¾ÐºÐµÑ€ / Prop Firm",
-      phasePlaceholder: "Ð¤Ð°Ð·Ð°",
+        "Создайте новый личный или совместный торговый аккаунт в VOLTIS.",
+      accountNamePlaceholder: "Название аккаунта",
+      initialBalancePlaceholder: "Начальный баланс",
+      currencyPlaceholder: "Валюта",
+      brokerPlaceholder: "Брокер / Prop Firm",
+      phasePlaceholder: "Фаза",
       profitTargetPlaceholder: "Profit Target %",
       maxDrawdownPlaceholder: "Max Drawdown %",
       dailyDrawdownPlaceholder: "Daily Drawdown %",
-      cancelButton: "ÐžÑ‚Ð¼ÐµÐ½Ð°",
-      createButton: "Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚",
+      cancelButton: "Отмена",
+      createButton: "Создать аккаунт",
     },
     es: {
       eyebrow: "Workspace",
@@ -109,9 +109,9 @@ const labels: Record<AppLanguage, CreateAccountLabels> =
     },
     fr: {
       eyebrow: "Workspace",
-      title: "CrÃ©er un compte de trading",
+      title: "Créer un compte de trading",
       description:
-        "CrÃ©ez un nouveau compte de trading personnel ou partagÃ© dans VOLTIS.",
+        "Créez un nouveau compte de trading personnel ou partagé dans VOLTIS.",
       accountNamePlaceholder: "Nom du compte",
       initialBalancePlaceholder: "Solde initial",
       currencyPlaceholder: "Devise",
@@ -121,16 +121,16 @@ const labels: Record<AppLanguage, CreateAccountLabels> =
       maxDrawdownPlaceholder: "Max Drawdown %",
       dailyDrawdownPlaceholder: "Daily Drawdown %",
       cancelButton: "Annuler",
-      createButton: "CrÃ©er le compte",
+      createButton: "Créer le compte",
     },
     de: {
       eyebrow: "Workspace",
       title: "Trading-Konto erstellen",
       description:
-        "Erstelle ein neues persÃ¶nliches oder gemeinsames Trading-Konto in VOLTIS.",
+        "Erstelle ein neues persönliches oder gemeinsames Trading-Konto in VOLTIS.",
       accountNamePlaceholder: "Kontoname",
       initialBalancePlaceholder: "Anfangssaldo",
-      currencyPlaceholder: "WÃ¤hrung",
+      currencyPlaceholder: "Währung",
       brokerPlaceholder: "Broker / Prop Firm",
       phasePlaceholder: "Phase",
       profitTargetPlaceholder: "Profit Target %",
@@ -203,7 +203,7 @@ export default async function CreateAccountPage() {
         <input
           name="name"
           placeholder={t.accountNamePlaceholder}
-          className="rounded-2xl bg-zinc-900 p-4"
+          className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white placeholder:text-gray-500 focus:border-accent/50 focus:outline-none"
           required
         />
 
@@ -213,7 +213,7 @@ export default async function CreateAccountPage() {
             canCreatePersonalAccount ? "LIVE" : "SHARED"
           }
           aria-label="Account type"
-          className="rounded-2xl bg-zinc-900 p-4"
+          className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white placeholder:text-gray-500 focus:border-accent/50 focus:outline-none"
           required
         >
           {canCreatePersonalAccount && (
@@ -235,7 +235,7 @@ export default async function CreateAccountPage() {
           name="initialBalance"
           type="number"
           placeholder={t.initialBalancePlaceholder}
-          className="rounded-2xl bg-zinc-900 p-4"
+          className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white placeholder:text-gray-500 focus:border-accent/50 focus:outline-none"
           required
         />
 
@@ -243,20 +243,20 @@ export default async function CreateAccountPage() {
           name="currency"
           defaultValue="USD"
           placeholder={t.currencyPlaceholder}
-          className="rounded-2xl bg-zinc-900 p-4"
+          className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white placeholder:text-gray-500 focus:border-accent/50 focus:outline-none"
           required
         />
 
         <input
           name="broker"
           placeholder={t.brokerPlaceholder}
-          className="rounded-2xl bg-zinc-900 p-4"
+          className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white placeholder:text-gray-500 focus:border-accent/50 focus:outline-none"
         />
 
         <input
           name="phase"
           placeholder={t.phasePlaceholder}
-          className="rounded-2xl bg-zinc-900 p-4"
+          className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white placeholder:text-gray-500 focus:border-accent/50 focus:outline-none"
         />
 
         <input
@@ -264,7 +264,7 @@ export default async function CreateAccountPage() {
           type="number"
           step="0.01"
           placeholder={t.profitTargetPlaceholder}
-          className="rounded-2xl bg-zinc-900 p-4"
+          className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white placeholder:text-gray-500 focus:border-accent/50 focus:outline-none"
         />
 
         <input
@@ -272,7 +272,7 @@ export default async function CreateAccountPage() {
           type="number"
           step="0.01"
           placeholder={t.maxDrawdownPlaceholder}
-          className="rounded-2xl bg-zinc-900 p-4"
+          className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white placeholder:text-gray-500 focus:border-accent/50 focus:outline-none"
         />
 
         <input
@@ -280,7 +280,7 @@ export default async function CreateAccountPage() {
           type="number"
           step="0.01"
           placeholder={t.dailyDrawdownPlaceholder}
-          className="rounded-2xl bg-zinc-900 p-4"
+          className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white placeholder:text-gray-500 focus:border-accent/50 focus:outline-none"
         />
 
         <div className="flex gap-3 md:col-span-2">

@@ -1,4 +1,4 @@
-﻿import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
@@ -92,7 +92,7 @@ const reportsLabels: Record<
       "Emozione, confidence, esecuzione",
 
     executiveFocus: "Focus esecutivo",
-    edgeQuality: "QualitÃƒÂ  edge",
+    edgeQuality: "Qualità edge",
     profitFactorDescription: (lossRate) =>
       `Profit factor basato su gross profit e gross loss. Loss rate: ${lossRate}%.`,
 
@@ -111,9 +111,9 @@ const reportsLabels: Record<
     focusImproveRiskReward:
       "Migliora il rapporto rischio/rendimento e il controllo delle perdite.",
     focusReviewSetups:
-      "Rivedi setup e qualitÃƒÂ  degli ingressi.",
+      "Rivedi setup e qualità degli ingressi.",
     focusProtectEdge:
-      "Proteggi lÃ¢â‚¬â„¢edge attuale con esecuzione costante.",
+      "Proteggi l’edge attuale con esecuzione costante.",
   },
 
   en: {
@@ -157,87 +157,87 @@ const reportsLabels: Record<
 
   uk: {
     heroEyebrow: "VOLTIS AI Reports",
-    heroTitle: "Ãâ€ ÃÂ½Ã‘â€šÃÂµÃÂ»ÃÂµÃÂºÃ‘â€šÃ‘Æ’ÃÂ°ÃÂ»Ã‘Å’ÃÂ½Ã‘â€“ ÃÂ·ÃÂ²Ã‘â€“Ã‘â€šÃÂ¸",
+    heroTitle: "Інтелектуальні звіти",
     heroDescription:
-      "ÃÅ¾ÃÂ¿ÃÂµÃ‘â‚¬ÃÂ°Ã‘â€ Ã‘â€“ÃÂ¹ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ¿Ã‘â€“ÃÂ´Ã‘ÂÃ‘Æ’ÃÂ¼ÃÂ¾ÃÂº ÃÂ´ÃÂ»Ã‘Â ÃÂ°ÃÂ½ÃÂ°ÃÂ»Ã‘â€“ÃÂ·Ã‘Æ’ Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃ‘â€“ÃÂ², ÃÂ¿ÃÂ¾ÃÂ²ÃÂµÃÂ´Ã‘â€“ÃÂ½ÃÂºÃÂ¸, Ã‘â‚¬ÃÂ¸ÃÂ·ÃÂ¸ÃÂºÃ‘Æ’, ÃÂ´ÃÂ¸Ã‘ÂÃ‘â€ ÃÂ¸ÃÂ¿ÃÂ»Ã‘â€“ÃÂ½ÃÂ¸ Ã‘â€šÃÂ° Ã‘â‚¬ÃÂ¾ÃÂ·ÃÂ²ÃÂ¸Ã‘â€šÃÂºÃ‘Æ’ Ã‘â€šÃ‘â‚¬ÃÂµÃÂ¹ÃÂ´ÃÂµÃ‘â‚¬ÃÂ°.",
+      "Операційний підсумок для аналізу результатів, поведінки, ризику, дисципліни та розвитку трейдера.",
 
-    totalTrades: "ÃÂ£Ã‘ÂÃ‘Å’ÃÂ¾ÃÂ³ÃÂ¾ Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´",
-    totalPnl: "Ãâ€”ÃÂ°ÃÂ³ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¸ÃÂ¹ PnL",
-    average: "ÃÂ¡ÃÂµÃ‘â‚¬ÃÂµÃÂ´ÃÂ½Ã‘â€",
-    winRate: "Ãâ€™Ã‘â€“ÃÂ´Ã‘ÂÃÂ¾Ã‘â€šÃÂ¾ÃÂº ÃÂ¿ÃÂµÃ‘â‚¬ÃÂµÃÂ¼ÃÂ¾ÃÂ³",
-    behavioralRisk: "ÃÅ¸ÃÂ¾ÃÂ²ÃÂµÃÂ´Ã‘â€“ÃÂ½ÃÂºÃÂ¾ÃÂ²ÃÂ¸ÃÂ¹ Ã‘â‚¬ÃÂ¸ÃÂ·ÃÂ¸ÃÂº",
+    totalTrades: "Усього угод",
+    totalPnl: "Загальний PnL",
+    average: "Середнє",
+    winRate: "Відсоток перемог",
+    behavioralRisk: "Поведінковий ризик",
     behavioralRiskDescription:
-      "Ãâ€¢ÃÂ¼ÃÂ¾Ã‘â€ Ã‘â€“Ã‘â€”, ÃÂ²ÃÂ¿ÃÂµÃÂ²ÃÂ½ÃÂµÃÂ½Ã‘â€“Ã‘ÂÃ‘â€šÃ‘Å’, ÃÂ²ÃÂ¸ÃÂºÃÂ¾ÃÂ½ÃÂ°ÃÂ½ÃÂ½Ã‘Â",
+      "Емоції, впевненість, виконання",
 
-    executiveFocus: "ÃÅ¾ÃÂ¿ÃÂµÃ‘â‚¬ÃÂ°Ã‘â€ Ã‘â€“ÃÂ¹ÃÂ½ÃÂ¸ÃÂ¹ Ã‘â€žÃÂ¾ÃÂºÃ‘Æ’Ã‘Â",
-    edgeQuality: "ÃÂ¯ÃÂºÃ‘â€“Ã‘ÂÃ‘â€šÃ‘Å’ ÃÂ¿ÃÂµÃ‘â‚¬ÃÂµÃÂ²ÃÂ°ÃÂ³ÃÂ¸",
+    executiveFocus: "Операційний фокус",
+    edgeQuality: "Якість переваги",
     profitFactorDescription: (lossRate) =>
-      `Profit factor ÃÂ½ÃÂ° ÃÂ¾Ã‘ÂÃÂ½ÃÂ¾ÃÂ²Ã‘â€“ ÃÂ²ÃÂ°ÃÂ»ÃÂ¾ÃÂ²ÃÂ¾ÃÂ³ÃÂ¾ ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘Æ’Ã‘â€šÃÂºÃ‘Æ’ Ã‘â€šÃÂ° ÃÂ²ÃÂ°ÃÂ»ÃÂ¾ÃÂ²ÃÂ¸Ã‘â€¦ ÃÂ·ÃÂ±ÃÂ¸Ã‘â€šÃÂºÃ‘â€“ÃÂ². Loss rate: ${lossRate}%.`,
+      `Profit factor на основі валового прибутку та валових збитків. Loss rate: ${lossRate}%.`,
 
-    strongSample: "ÃÂ¡ÃÂ¸ÃÂ»Ã‘Å’ÃÂ½ÃÂ° ÃÂ²ÃÂ¸ÃÂ±Ã‘â€“Ã‘â‚¬ÃÂºÃÂ°",
-    growingSample: "Ãâ€™ÃÂ¸ÃÂ±Ã‘â€“Ã‘â‚¬ÃÂºÃÂ° ÃÂ·Ã‘â‚¬ÃÂ¾Ã‘ÂÃ‘â€šÃÂ°Ã‘â€",
-    earlySample: "ÃÅ¸ÃÂ¾Ã‘â€¡ÃÂ°Ã‘â€šÃÂºÃÂ¾ÃÂ²ÃÂ° ÃÂ²ÃÂ¸ÃÂ±Ã‘â€“Ã‘â‚¬ÃÂºÃÂ°",
+    strongSample: "Сильна вибірка",
+    growingSample: "Вибірка зростає",
+    earlySample: "Початкова вибірка",
 
-    waitingForData: "ÃÅ¾Ã‘â€¡Ã‘â€“ÃÂºÃ‘Æ’ÃÂ²ÃÂ°ÃÂ½ÃÂ½Ã‘Â ÃÂ´ÃÂ°ÃÂ½ÃÂ¸Ã‘â€¦",
-    healthy: "Ãâ€”ÃÂ´ÃÂ¾Ã‘â‚¬ÃÂ¾ÃÂ²ÃÂ¸ÃÂ¹ Ã‘ÂÃ‘â€šÃÂ°ÃÂ½",
+    waitingForData: "Очікування даних",
+    healthy: "Здоровий стан",
     profitableMonitorBehavior:
-      "ÃÅ¸Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘Æ’Ã‘â€šÃÂºÃÂ¾ÃÂ²ÃÂ¾, ÃÂºÃÂ¾ÃÂ½Ã‘â€šÃ‘â‚¬ÃÂ¾ÃÂ»Ã‘Å½ÃÂ¹ ÃÂ¿ÃÂ¾ÃÂ²ÃÂµÃÂ´Ã‘â€“ÃÂ½ÃÂºÃ‘Æ’",
-    needsReview: "ÃÅ¸ÃÂ¾Ã‘â€šÃ‘â‚¬ÃÂµÃÂ±Ã‘Æ’Ã‘â€ ÃÂ¿ÃÂµÃ‘â‚¬ÃÂµÃÂ³ÃÂ»Ã‘ÂÃÂ´Ã‘Æ’",
+      "Прибутково, контролюй поведінку",
+    needsReview: "Потребує перегляду",
 
     focusReduceBehavioralRisk:
-      "Ãâ€”ÃÂ¼ÃÂµÃÂ½Ã‘Ë† ÃÂ¿ÃÂ¾ÃÂ²ÃÂµÃÂ´Ã‘â€“ÃÂ½ÃÂºÃÂ¾ÃÂ²ÃÂ¸ÃÂ¹ Ã‘â‚¬ÃÂ¸ÃÂ·ÃÂ¸ÃÂº ÃÂ¿ÃÂµÃ‘â‚¬ÃÂµÃÂ´ ÃÂ·ÃÂ±Ã‘â€“ÃÂ»Ã‘Å’Ã‘Ë†ÃÂµÃÂ½ÃÂ½Ã‘ÂÃÂ¼ ÃÂ¾ÃÂ±Ã‘ÂÃ‘ÂÃÂ³Ã‘Æ’.",
+      "Зменш поведінковий ризик перед збільшенням обсягу.",
     focusImproveRiskReward:
-      "ÃÅ¸ÃÂ¾ÃÂºÃ‘â‚¬ÃÂ°Ã‘â€° ÃÂ±ÃÂ°ÃÂ»ÃÂ°ÃÂ½Ã‘Â Ã‘â‚¬ÃÂ¸ÃÂ·ÃÂ¸ÃÂºÃ‘Æ’/ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘Æ’Ã‘â€šÃÂºÃ‘Æ’ Ã‘â€šÃÂ° ÃÂºÃÂ¾ÃÂ½Ã‘â€šÃ‘â‚¬ÃÂ¾ÃÂ»Ã‘Å’ ÃÂ·ÃÂ±ÃÂ¸Ã‘â€šÃÂºÃ‘â€“ÃÂ².",
+      "Покращ баланс ризику/прибутку та контроль збитків.",
     focusReviewSetups:
-      "ÃÅ¸ÃÂµÃ‘â‚¬ÃÂµÃÂ³ÃÂ»Ã‘ÂÃÂ½Ã‘Å’ Ã‘ÂÃÂµÃ‘â€šÃÂ°ÃÂ¿ÃÂ¸ Ã‘â€šÃÂ° Ã‘ÂÃÂºÃ‘â€“Ã‘ÂÃ‘â€šÃ‘Å’ ÃÂ²Ã‘â€¦ÃÂ¾ÃÂ´Ã‘â€“ÃÂ².",
+      "Переглянь сетапи та якість входів.",
     focusProtectEdge:
-      "Ãâ€”ÃÂ°Ã‘â€¦ÃÂ¸Ã‘â€°ÃÂ°ÃÂ¹ ÃÂ¿ÃÂ¾Ã‘â€šÃÂ¾Ã‘â€¡ÃÂ½Ã‘Æ’ ÃÂ¿ÃÂµÃ‘â‚¬ÃÂµÃÂ²ÃÂ°ÃÂ³Ã‘Æ’ Ã‘ÂÃ‘â€šÃÂ°ÃÂ±Ã‘â€“ÃÂ»Ã‘Å’ÃÂ½ÃÂ¸ÃÂ¼ ÃÂ²ÃÂ¸ÃÂºÃÂ¾ÃÂ½ÃÂ°ÃÂ½ÃÂ½Ã‘ÂÃÂ¼.",
+      "Захищай поточну перевагу стабільним виконанням.",
   },
 
   ru: {
     heroEyebrow: "VOLTIS AI Reports",
-    heroTitle: "ÃËœÃÂ½Ã‘â€šÃÂµÃÂ»ÃÂ»ÃÂµÃÂºÃ‘â€šÃ‘Æ’ÃÂ°ÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂµ ÃÂ¾Ã‘â€šÃ‘â€¡ÃÂµÃ‘â€šÃ‘â€¹",
+    heroTitle: "Интеллектуальные отчеты",
     heroDescription:
-      "ÃÅ¾ÃÂ¿ÃÂµÃ‘â‚¬ÃÂ°Ã‘â€ ÃÂ¸ÃÂ¾ÃÂ½ÃÂ½Ã‘â€¹ÃÂ¹ ÃÂ¾ÃÂ±ÃÂ·ÃÂ¾Ã‘â‚¬ ÃÂ´ÃÂ»Ã‘Â ÃÂ°ÃÂ½ÃÂ°ÃÂ»ÃÂ¸ÃÂ·ÃÂ° Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃÂ¾ÃÂ², ÃÂ¿ÃÂ¾ÃÂ²ÃÂµÃÂ´ÃÂµÃÂ½ÃÂ¸Ã‘Â, Ã‘â‚¬ÃÂ¸Ã‘ÂÃÂºÃÂ°, ÃÂ´ÃÂ¸Ã‘ÂÃ‘â€ ÃÂ¸ÃÂ¿ÃÂ»ÃÂ¸ÃÂ½Ã‘â€¹ ÃÂ¸ Ã‘â‚¬ÃÂ°ÃÂ·ÃÂ²ÃÂ¸Ã‘â€šÃÂ¸Ã‘Â Ã‘â€šÃ‘â‚¬ÃÂµÃÂ¹ÃÂ´ÃÂµÃ‘â‚¬ÃÂ°.",
+      "Операционный обзор для анализа результатов, поведения, риска, дисциплины и развития трейдера.",
 
-    totalTrades: "Ãâ€™Ã‘ÂÃÂµÃÂ³ÃÂ¾ Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂ¾ÃÂº",
-    totalPnl: "ÃÅ¾ÃÂ±Ã‘â€°ÃÂ¸ÃÂ¹ PnL",
-    average: "ÃÂ¡Ã‘â‚¬ÃÂµÃÂ´ÃÂ½ÃÂµÃÂµ",
-    winRate: "ÃÅ¸Ã‘â‚¬ÃÂ¾Ã‘â€ ÃÂµÃÂ½Ã‘â€š ÃÂ¿ÃÂ¾ÃÂ±ÃÂµÃÂ´",
-    behavioralRisk: "ÃÅ¸ÃÂ¾ÃÂ²ÃÂµÃÂ´ÃÂµÃÂ½Ã‘â€¡ÃÂµÃ‘ÂÃÂºÃÂ¸ÃÂ¹ Ã‘â‚¬ÃÂ¸Ã‘ÂÃÂº",
+    totalTrades: "Всего сделок",
+    totalPnl: "Общий PnL",
+    average: "Среднее",
+    winRate: "Процент побед",
+    behavioralRisk: "Поведенческий риск",
     behavioralRiskDescription:
-      "ÃÂ­ÃÂ¼ÃÂ¾Ã‘â€ ÃÂ¸ÃÂ¸, Ã‘Æ’ÃÂ²ÃÂµÃ‘â‚¬ÃÂµÃÂ½ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘Å’, ÃÂ¸Ã‘ÂÃÂ¿ÃÂ¾ÃÂ»ÃÂ½ÃÂµÃÂ½ÃÂ¸ÃÂµ",
+      "Эмоции, уверенность, исполнение",
 
-    executiveFocus: "ÃÅ¾ÃÂ¿ÃÂµÃ‘â‚¬ÃÂ°Ã‘â€ ÃÂ¸ÃÂ¾ÃÂ½ÃÂ½Ã‘â€¹ÃÂ¹ Ã‘â€žÃÂ¾ÃÂºÃ‘Æ’Ã‘Â",
-    edgeQuality: "ÃÅ¡ÃÂ°Ã‘â€¡ÃÂµÃ‘ÂÃ‘â€šÃÂ²ÃÂ¾ ÃÂ¿Ã‘â‚¬ÃÂµÃÂ¸ÃÂ¼Ã‘Æ’Ã‘â€°ÃÂµÃ‘ÂÃ‘â€šÃÂ²ÃÂ°",
+    executiveFocus: "Операционный фокус",
+    edgeQuality: "Качество преимущества",
     profitFactorDescription: (lossRate) =>
-      `Profit factor ÃÂ½ÃÂ° ÃÂ¾Ã‘ÂÃÂ½ÃÂ¾ÃÂ²ÃÂµ ÃÂ²ÃÂ°ÃÂ»ÃÂ¾ÃÂ²ÃÂ¾ÃÂ¹ ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘â€¹ÃÂ»ÃÂ¸ ÃÂ¸ ÃÂ²ÃÂ°ÃÂ»ÃÂ¾ÃÂ²ÃÂ¾ÃÂ³ÃÂ¾ Ã‘Æ’ÃÂ±Ã‘â€¹Ã‘â€šÃÂºÃÂ°. Loss rate: ${lossRate}%.`,
+      `Profit factor на основе валовой прибыли и валового убытка. Loss rate: ${lossRate}%.`,
 
-    strongSample: "ÃÂ¡ÃÂ¸ÃÂ»Ã‘Å’ÃÂ½ÃÂ°Ã‘Â ÃÂ²Ã‘â€¹ÃÂ±ÃÂ¾Ã‘â‚¬ÃÂºÃÂ°",
-    growingSample: "ÃÂ ÃÂ°Ã‘ÂÃ‘â€šÃ‘Æ’Ã‘â€°ÃÂ°Ã‘Â ÃÂ²Ã‘â€¹ÃÂ±ÃÂ¾Ã‘â‚¬ÃÂºÃÂ°",
-    earlySample: "ÃÂÃÂ°Ã‘â€¡ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ°Ã‘Â ÃÂ²Ã‘â€¹ÃÂ±ÃÂ¾Ã‘â‚¬ÃÂºÃÂ°",
+    strongSample: "Сильная выборка",
+    growingSample: "Растущая выборка",
+    earlySample: "Начальная выборка",
 
-    waitingForData: "ÃÅ¾ÃÂ¶ÃÂ¸ÃÂ´ÃÂ°ÃÂ½ÃÂ¸ÃÂµ ÃÂ´ÃÂ°ÃÂ½ÃÂ½Ã‘â€¹Ã‘â€¦",
-    healthy: "Ãâ€”ÃÂ´ÃÂ¾Ã‘â‚¬ÃÂ¾ÃÂ²ÃÂ¾ÃÂµ Ã‘ÂÃÂ¾Ã‘ÂÃ‘â€šÃÂ¾Ã‘ÂÃÂ½ÃÂ¸ÃÂµ",
+    waitingForData: "Ожидание данных",
+    healthy: "Здоровое состояние",
     profitableMonitorBehavior:
-      "ÃÅ¸Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘â€¹ÃÂ»Ã‘Å’ÃÂ½ÃÂ¾, Ã‘ÂÃÂ»ÃÂµÃÂ´ÃÂ¸ ÃÂ·ÃÂ° ÃÂ¿ÃÂ¾ÃÂ²ÃÂµÃÂ´ÃÂµÃÂ½ÃÂ¸ÃÂµÃÂ¼",
-    needsReview: "ÃÂ¢Ã‘â‚¬ÃÂµÃÂ±Ã‘Æ’ÃÂµÃ‘â€š ÃÂ°ÃÂ½ÃÂ°ÃÂ»ÃÂ¸ÃÂ·ÃÂ°",
+      "Прибыльно, следи за поведением",
+    needsReview: "Требует анализа",
 
     focusReduceBehavioralRisk:
-      "ÃÂ¡ÃÂ½ÃÂ¸ÃÂ·Ã‘Å’ ÃÂ¿ÃÂ¾ÃÂ²ÃÂµÃÂ´ÃÂµÃÂ½Ã‘â€¡ÃÂµÃ‘ÂÃÂºÃÂ¸ÃÂ¹ Ã‘â‚¬ÃÂ¸Ã‘ÂÃÂº ÃÂ¿ÃÂµÃ‘â‚¬ÃÂµÃÂ´ Ã‘Æ’ÃÂ²ÃÂµÃÂ»ÃÂ¸Ã‘â€¡ÃÂµÃÂ½ÃÂ¸ÃÂµÃÂ¼ ÃÂ¾ÃÂ±Ã‘Å ÃÂµÃÂ¼ÃÂ°.",
+      "Снизь поведенческий риск перед увеличением объема.",
     focusImproveRiskReward:
-      "ÃÂ£ÃÂ»Ã‘Æ’Ã‘â€¡Ã‘Ë†ÃÂ¸ ÃÂ±ÃÂ°ÃÂ»ÃÂ°ÃÂ½Ã‘Â Ã‘â‚¬ÃÂ¸Ã‘ÂÃÂº/ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘â€¹ÃÂ»Ã‘Å’ ÃÂ¸ ÃÂºÃÂ¾ÃÂ½Ã‘â€šÃ‘â‚¬ÃÂ¾ÃÂ»Ã‘Å’ Ã‘Æ’ÃÂ±Ã‘â€¹Ã‘â€šÃÂºÃÂ¾ÃÂ².",
+      "Улучши баланс риск/прибыль и контроль убытков.",
     focusReviewSetups:
-      "ÃÅ¸ÃÂµÃ‘â‚¬ÃÂµÃ‘ÂÃÂ¼ÃÂ¾Ã‘â€šÃ‘â‚¬ÃÂ¸ Ã‘ÂÃÂµÃ‘â€šÃÂ°ÃÂ¿Ã‘â€¹ ÃÂ¸ ÃÂºÃÂ°Ã‘â€¡ÃÂµÃ‘ÂÃ‘â€šÃÂ²ÃÂ¾ ÃÂ²Ã‘â€¦ÃÂ¾ÃÂ´ÃÂ¾ÃÂ².",
+      "Пересмотри сетапы и качество входов.",
     focusProtectEdge:
-      "Ãâ€”ÃÂ°Ã‘â€°ÃÂ¸Ã‘â€°ÃÂ°ÃÂ¹ Ã‘â€šÃÂµÃÂºÃ‘Æ’Ã‘â€°ÃÂ¸ÃÂ¹ edge Ã‘ÂÃ‘â€šÃÂ°ÃÂ±ÃÂ¸ÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂ¼ ÃÂ¸Ã‘ÂÃÂ¿ÃÂ¾ÃÂ»ÃÂ½ÃÂµÃÂ½ÃÂ¸ÃÂµÃÂ¼.",
+      "Защищай текущий edge стабильным исполнением.",
   },
 
   es: {
     heroEyebrow: "VOLTIS AI Reports",
     heroTitle: "Informes de inteligencia",
     heroDescription:
-      "Un resumen operativo para leer rendimiento, comportamiento, riesgo, disciplina y evoluciÃƒÂ³n del trader.",
+      "Un resumen operativo para leer rendimiento, comportamiento, riesgo, disciplina y evolución del trader.",
 
     totalTrades: "Trades totales",
     totalPnl: "PnL total",
@@ -245,14 +245,14 @@ const reportsLabels: Record<
     winRate: "Win Rate",
     behavioralRisk: "Riesgo conductual",
     behavioralRiskDescription:
-      "EmociÃƒÂ³n, confianza, ejecuciÃƒÂ³n",
+      "Emoción, confianza, ejecución",
 
     executiveFocus: "Foco ejecutivo",
     edgeQuality: "Calidad del edge",
     profitFactorDescription: (lossRate) =>
-      `Profit factor basado en beneficio bruto y pÃƒÂ©rdida bruta. Loss rate: ${lossRate}%.`,
+      `Profit factor basado en beneficio bruto y pérdida bruta. Loss rate: ${lossRate}%.`,
 
-    strongSample: "Muestra sÃƒÂ³lida",
+    strongSample: "Muestra sólida",
     growingSample: "Muestra en crecimiento",
     earlySample: "Muestra inicial",
 
@@ -260,23 +260,23 @@ const reportsLabels: Record<
     healthy: "Saludable",
     profitableMonitorBehavior:
       "Rentable, monitorea el comportamiento",
-    needsReview: "Necesita revisiÃƒÂ³n",
+    needsReview: "Necesita revisión",
 
     focusReduceBehavioralRisk:
       "Reduce el riesgo conductual antes de aumentar volumen.",
     focusImproveRiskReward:
-      "Mejora el balance riesgo/beneficio y el control de pÃƒÂ©rdidas.",
+      "Mejora el balance riesgo/beneficio y el control de pérdidas.",
     focusReviewSetups:
       "Revisa setups y calidad de entrada.",
     focusProtectEdge:
-      "Protege el edge actual con ejecuciÃƒÂ³n constante.",
+      "Protege el edge actual con ejecución constante.",
   },
 
   fr: {
     heroEyebrow: "VOLTIS AI Reports",
-    heroTitle: "Rapports dÃ¢â‚¬â„¢intelligence",
+    heroTitle: "Rapports d’intelligence",
     heroDescription:
-      "Un rÃƒÂ©sumÃƒÂ© opÃƒÂ©rationnel pour lire performance, comportement, risque, discipline et ÃƒÂ©volution du trader.",
+      "Un résumé opérationnel pour lire performance, comportement, risque, discipline et évolution du trader.",
 
     totalTrades: "Trades totaux",
     totalPnl: "PnL total",
@@ -284,31 +284,31 @@ const reportsLabels: Record<
     winRate: "Win Rate",
     behavioralRisk: "Risque comportemental",
     behavioralRiskDescription:
-      "Ãƒâ€°motion, confiance, exÃƒÂ©cution",
+      "Émotion, confiance, exécution",
 
-    executiveFocus: "Focus exÃƒÂ©cutif",
-    edgeQuality: "QualitÃƒÂ© de lÃ¢â‚¬â„¢edge",
+    executiveFocus: "Focus exécutif",
+    edgeQuality: "Qualité de l’edge",
     profitFactorDescription: (lossRate) =>
-      `Profit factor basÃƒÂ© sur le profit brut et la perte brute. Loss rate : ${lossRate}%.`,
+      `Profit factor basé sur le profit brut et la perte brute. Loss rate : ${lossRate}%.`,
 
-    strongSample: "Ãƒâ€°chantillon solide",
-    growingSample: "Ãƒâ€°chantillon en croissance",
-    earlySample: "Ãƒâ€°chantillon initial",
+    strongSample: "Échantillon solide",
+    growingSample: "Échantillon en croissance",
+    earlySample: "Échantillon initial",
 
-    waitingForData: "En attente de donnÃƒÂ©es",
+    waitingForData: "En attente de données",
     healthy: "Sain",
     profitableMonitorBehavior:
       "Rentable, surveille le comportement",
-    needsReview: "Ãƒâ‚¬ revoir",
+    needsReview: "À revoir",
 
     focusReduceBehavioralRisk:
-      "RÃƒÂ©duis le risque comportemental avant dÃ¢â‚¬â„¢augmenter le volume.",
+      "Réduis le risque comportemental avant d’augmenter le volume.",
     focusImproveRiskReward:
-      "AmÃƒÂ©liore lÃ¢â‚¬â„¢ÃƒÂ©quilibre risque/rendement et le contrÃƒÂ´le des pertes.",
+      "Améliore l’équilibre risque/rendement et le contrôle des pertes.",
     focusReviewSetups:
-      "Revois les setups et la qualitÃƒÂ© des entrÃƒÂ©es.",
+      "Revois les setups et la qualité des entrées.",
     focusProtectEdge:
-      "ProtÃƒÂ¨ge lÃ¢â‚¬â„¢edge actuel avec une exÃƒÂ©cution constante.",
+      "Protège l’edge actuel avec une exécution constante.",
   },
 
   de: {
@@ -323,31 +323,31 @@ const reportsLabels: Record<
     winRate: "Win Rate",
     behavioralRisk: "Verhaltensrisiko",
     behavioralRiskDescription:
-      "Emotion, Vertrauen, AusfÃƒÂ¼hrung",
+      "Emotion, Vertrauen, Ausführung",
 
     executiveFocus: "Operativer Fokus",
-    edgeQuality: "Edge-QualitÃƒÂ¤t",
+    edgeQuality: "Edge-Qualität",
     profitFactorDescription: (lossRate) =>
       `Profit Factor basierend auf Bruttogewinn und Bruttoverlust. Loss Rate: ${lossRate}%.`,
 
     strongSample: "Starke Stichprobe",
     growingSample: "Wachsende Stichprobe",
-    earlySample: "FrÃƒÂ¼he Stichprobe",
+    earlySample: "Frühe Stichprobe",
 
     waitingForData: "Warten auf Daten",
     healthy: "Gesund",
     profitableMonitorBehavior:
       "Profitabel, Verhalten beobachten",
-    needsReview: "BenÃƒÂ¶tigt Review",
+    needsReview: "Benötigt Review",
 
     focusReduceBehavioralRisk:
-      "Reduziere Verhaltensrisiko, bevor du Volumen erhÃƒÂ¶hst.",
+      "Reduziere Verhaltensrisiko, bevor du Volumen erhöhst.",
     focusImproveRiskReward:
       "Verbessere Risiko/Ertrag-Balance und Verlustkontrolle.",
     focusReviewSetups:
-      "ÃƒÅ“berprÃƒÂ¼fe Setups und EinstiegsqualitÃƒÂ¤t.",
+      "Überprüfe Setups und Einstiegsqualität.",
     focusProtectEdge:
-      "SchÃƒÂ¼tze den aktuellen Edge mit konstanter AusfÃƒÂ¼hrung.",
+      "Schütze den aktuellen Edge mit konstanter Ausführung.",
   },
 };
 
@@ -669,7 +669,7 @@ export default async function ReportsPage({
     : undefined;
 
   return (
-    <div className="space-y-12 print:space-y-0 print:bg-[#0C1430]">
+    <div className="space-y-12 print:space-y-0 print:bg-bg-base">
       <div className="print:hidden">
         <ScopeBar
           members={members}
@@ -713,7 +713,7 @@ export default async function ReportsPage({
           />
         </div>
 
-        <div className="print-hidden relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#070b14] via-[#0f1726] to-black p-8 shadow-2xl shadow-cyan-500/5">
+        <div className="print-hidden relative overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-[#070b14] via-[#0f1726] to-black p-8 shadow-2xl shadow-cyan-500/5">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_12%,transparent),transparent_35%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.10),transparent_35%)]" />
 
@@ -723,7 +723,7 @@ export default async function ReportsPage({
                 {t.heroEyebrow}
               </p>
 
-              <h1 className="mt-4 text-5xl font-black tracking-tight text-white xl:text-7xl">
+              <h1 className="mt-4 text-5xl font-black tracking-tight text-white xl:text-6xl">
                 {t.heroTitle}
               </h1>
 

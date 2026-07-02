@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import {
   Area,
@@ -34,8 +34,8 @@ const tooltipLabels: Record<
 > = {
   en: { equity: "Equity", date: "Date:" },
   it: { equity: "Equity", date: "Data:" },
-  uk: { equity: "Equity", date: "Ð”Ð°Ñ‚Ð°:" },
-  ru: { equity: "Equity", date: "Ð”Ð°Ñ‚Ð°:" },
+  uk: { equity: "Equity", date: "Дата:" },
+  ru: { equity: "Equity", date: "Дата:" },
   es: { equity: "Equity", date: "Fecha:" },
   fr: { equity: "Equity", date: "Date :" },
   de: { equity: "Equity", date: "Datum:" },
@@ -47,10 +47,10 @@ const emptyLabels: Record<
 > = {
   en: { title: "No equity data yet", description: "Start tracking executions to generate your equity curve and performance analytics." },
   it: { title: "Nessun dato equity", description: "Inizia a registrare trade per generare la curva equity e le analisi di performance." },
-  uk: { title: "ÐÐµÐ¼Ð°Ñ” Ð´Ð°Ð½Ð¸Ñ… equity", description: "ÐŸÐ¾Ñ‡Ð½Ñ–Ñ‚ÑŒ Ð·Ð°Ð¿Ð¸ÑÑƒÐ²Ð°Ñ‚Ð¸ ÑƒÐ³Ð¾Ð´Ð¸ Ð´Ð»Ñ Ð¿Ð¾Ð±ÑƒÐ´Ð¾Ð²Ð¸ ÐºÑ€Ð¸Ð²Ð¾Ñ— equity Ñ‚Ð° Ð°Ð½Ð°Ð»Ñ–Ñ‚Ð¸ÐºÐ¸." },
-  ru: { title: "ÐÐµÑ‚ Ð´Ð°Ð½Ð½Ñ‹Ñ… equity", description: "ÐÐ°Ñ‡Ð½Ð¸Ñ‚Ðµ Ð·Ð°Ð¿Ð¸ÑÑ‹Ð²Ð°Ñ‚ÑŒ ÑÐ´ÐµÐ»ÐºÐ¸ Ð´Ð»Ñ Ð¿Ð¾ÑÑ‚Ñ€Ð¾ÐµÐ½Ð¸Ñ ÐºÑ€Ð¸Ð²Ð¾Ð¹ equity Ð¸ Ð°Ð½Ð°Ð»Ð¸Ñ‚Ð¸ÐºÐ¸." },
-  es: { title: "Sin datos de equity", description: "Empieza a registrar operaciones para generar tu curva de equity y analÃ­tica." },
-  fr: { title: "Aucune donnÃ©e equity", description: "Commencez Ã  enregistrer des trades pour gÃ©nÃ©rer votre courbe equity et vos analyses." },
+  uk: { title: "Немає даних equity", description: "Почніть записувати угоди для побудови кривої equity та аналітики." },
+  ru: { title: "Нет данных equity", description: "Начните записывать сделки для построения кривой equity и аналитики." },
+  es: { title: "Sin datos de equity", description: "Empieza a registrar operaciones para generar tu curva de equity y analítica." },
+  fr: { title: "Aucune donnée equity", description: "Commencez à enregistrer des trades pour générer votre courbe equity et vos analyses." },
   de: { title: "Keine Equity-Daten", description: "Beginne mit der Aufzeichnung von Trades, um deine Equity-Kurve zu erstellen." },
 };
 

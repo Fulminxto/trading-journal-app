@@ -1,4 +1,4 @@
-﻿type Trade = {
+type Trade = {
   id: string | number;
   symbol: string;
   outcome: string | null;
@@ -75,19 +75,19 @@ export function calculateReviewMetrics({
       confidence >= 7
     ) {
       latestTradeReview =
-        "Trade recente eseguito con buona qualitÃ  decisionale, execution stabile e confidence coerente.";
+        "Trade recente eseguito con buona qualit� decisionale, execution stabile e confidence coerente.";
     } else if (
       latestTrade.outcome === "loss" &&
       execution <= 4
     ) {
       latestTradeReview =
-        "La perdita recente mostra segnali di weak execution. PrioritÃ : migliorare selezione setup ed evitare ingressi impulsivi.";
+        "La perdita recente mostra segnali di weak execution. Priorit�: migliorare selezione setup ed evitare ingressi impulsivi.";
     } else if (
       latestTrade.outcome === "loss" &&
       confidence <= 4
     ) {
       latestTradeReview =
-        "La perdita recente evidenzia bassa confidence operativa. Il focus Ã¨ evitare trade presi senza piena convinzione.";
+        "La perdita recente evidenzia bassa confidence operativa. Il focus � evitare trade presi senza piena convinzione.";
     } else if (latestTrade.emotionalState) {
       latestTradeReview =
         "Emotional component detected in the recent trade. VOLTIS recommends a post-session behavioral review.";

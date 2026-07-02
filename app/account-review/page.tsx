@@ -127,7 +127,7 @@ export default async function AccountReviewPage({
     <>
       <GlobalToast status={query.toast} />
 
-      <div className="flex min-h-screen items-center justify-center bg-[#0C1430] p-8 text-white">
+      <div className="flex min-h-screen items-center justify-center bg-bg-base p-8 text-white">
         <form
           action={submitAccountReview}
           className="w-full max-w-2xl rounded-[40px] border border-yellow-500/20 bg-yellow-500/10 p-10 backdrop-blur-xl"
@@ -150,7 +150,7 @@ export default async function AccountReviewPage({
             name="username"
             required
             placeholder={t.usernamePlaceholder}
-            className="mt-8 w-full rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none placeholder:text-gray-500"
+            className="mt-8 w-full rounded-2xl border border-white/10 bg-surface-2 p-4 text-sm text-white outline-none placeholder:text-gray-500"
           />
 
           <textarea
@@ -158,7 +158,7 @@ export default async function AccountReviewPage({
             required
             rows={6}
             placeholder={t.messagePlaceholder}
-            className="mt-4 w-full rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white outline-none placeholder:text-gray-500"
+            className="mt-4 w-full rounded-2xl border border-white/10 bg-surface-2 p-4 text-sm text-white outline-none placeholder:text-gray-500"
           />
 
           <button

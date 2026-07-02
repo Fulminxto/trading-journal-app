@@ -1,4 +1,4 @@
-﻿import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -9,7 +9,7 @@ import {
 } from "@/lib/i18n";
 import { ArrowLeft, Pencil } from "lucide-react";
 
-// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Types Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 type ReplayLabels = {
   backToDiary: string;
@@ -99,13 +99,13 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     swap: "Swap",
     fees: "Fees",
     equityAfter: "Equity post-trade",
-    noData: "Ã¢â‚¬â€",
+    noData: "—",
     motivationTitle: "Motivazione & Setup",
     strategyLabel: "Strategia",
     reasonLabel: "Motivazione",
-    setupQualityLabel: "QualitÃƒÂ  del setup",
+    setupQualityLabel: "Qualità del setup",
     executionTitle: "Esecuzione",
-    executionRatingLabel: "QualitÃƒÂ  esecuzione",
+    executionRatingLabel: "Qualità esecuzione",
     confidenceLabel: "Confidenza",
     emotionalStateLabel: "Stato emotivo",
     calm: "Calmo",
@@ -152,7 +152,7 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     swap: "Swap",
     fees: "Fees",
     equityAfter: "Equity after",
-    noData: "Ã¢â‚¬â€",
+    noData: "—",
     motivationTitle: "Motivation & Setup",
     strategyLabel: "Strategy",
     reasonLabel: "Motivation",
@@ -173,110 +173,110 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     notesLabel: "Notes",
   },
   uk: {
-    backToDiary: "Ãâ€ÃÂ¾ Ã‘â€°ÃÂ¾ÃÂ´ÃÂµÃÂ½ÃÂ½ÃÂ¸ÃÂºÃÂ°",
-    editTrade: "ÃÂ ÃÂµÃÂ´ÃÂ°ÃÂ³Ã‘Æ’ÃÂ²ÃÂ°Ã‘â€šÃÂ¸",
+    backToDiary: "До щоденника",
+    editTrade: "Редагувати",
     badge: "Trade Replay",
-    openTrade: "Ãâ€™Ã‘â€“ÃÂ´ÃÂºÃ‘â‚¬ÃÂ¸Ã‘â€šÃÂ° Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ÃÂ°",
+    openTrade: "Відкрита угода",
     long: "LONG",
     short: "SHORT",
     win: "WIN",
     loss: "LOSS",
-    be: "Ãâ€˜ÃÂµÃÂ·ÃÂ·ÃÂ±ÃÂ¸Ã‘â€šÃÂºÃÂ¾ÃÂ²ÃÂ¾",
-    anatomyTitle: "ÃÂÃÂ½ÃÂ°Ã‘â€šÃÂ¾ÃÂ¼Ã‘â€“Ã‘Â Ã‘â€ Ã‘â€“ÃÂ½ÃÂ¸",
-    timelineTitle: "ÃÂ¥Ã‘â‚¬ÃÂ¾ÃÂ½ÃÂ¾ÃÂ»ÃÂ¾ÃÂ³Ã‘â€“Ã‘Â",
-    performanceTitle: "ÃÂ ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃÂ¸",
-    entryLabel: "Ãâ€™ÃÂ¥Ãâ€ Ãâ€",
-    exitLabel: "Ãâ€™ÃËœÃÂ¥Ãâ€ Ãâ€",
+    be: "Беззбитково",
+    anatomyTitle: "Анатомія ціни",
+    timelineTitle: "Хронологія",
+    performanceTitle: "Результати",
+    entryLabel: "ВХІД",
+    exitLabel: "ВИХІД",
     slLabel: "SL",
     tpLabel: "TP",
-    noPriceData: "Ãâ€ÃÂ°ÃÂ½Ã‘â€“ ÃÂ¿Ã‘â‚¬ÃÂ¾ Ã‘â€ Ã‘â€“ÃÂ½ÃÂ¸ ÃÂ½ÃÂµÃÂ´ÃÂ¾Ã‘ÂÃ‘â€šÃ‘Æ’ÃÂ¿ÃÂ½Ã‘â€“",
-    openDate: "Ãâ€™Ã‘â€“ÃÂ´ÃÂºÃ‘â‚¬ÃÂ¸Ã‘â€šÃÂ¾",
-    closeDate: "Ãâ€”ÃÂ°ÃÂºÃ‘â‚¬ÃÂ¸Ã‘â€šÃÂ¾",
-    duration: "ÃÂ¢Ã‘â‚¬ÃÂ¸ÃÂ²ÃÂ°ÃÂ»Ã‘â€“Ã‘ÂÃ‘â€šÃ‘Å’",
-    session: "ÃÂ¡ÃÂµÃ‘ÂÃ‘â€“Ã‘Â",
-    daysAbbr: "ÃÂ´",
-    hoursAbbr: "ÃÂ³",
-    minsAbbr: "Ã‘â€¦ÃÂ²",
-    plannedRR: "ÃÅ¸ÃÂ»ÃÂ°ÃÂ½ÃÂ¾ÃÂ²ÃÂ¸ÃÂ¹ R:R",
-    actualRR: "ÃÂ ÃÂµÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¸ÃÂ¹ R:R",
-    resultUsd: "ÃÂ ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€š",
-    resultPct: "ÃÂ ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€š %",
-    commission: "ÃÅ¡ÃÂ¾ÃÂ¼Ã‘â€“Ã‘ÂÃ‘â€“Ã‘Â",
-    swap: "ÃÂ¡ÃÂ²ÃÂ¾ÃÂ¿",
-    fees: "Ãâ€”ÃÂ±ÃÂ¾Ã‘â‚¬ÃÂ¸",
-    equityAfter: "Equity ÃÂ¿Ã‘â€“Ã‘ÂÃÂ»Ã‘Â",
-    noData: "Ã¢â‚¬â€",
-    motivationTitle: "ÃÅ“ÃÂ¾Ã‘â€šÃÂ¸ÃÂ²ÃÂ°Ã‘â€ Ã‘â€“Ã‘Â & ÃÂÃÂ°ÃÂ»ÃÂ°Ã‘Ë†Ã‘â€šÃ‘Æ’ÃÂ²ÃÂ°ÃÂ½ÃÂ½Ã‘Â",
-    strategyLabel: "ÃÂ¡Ã‘â€šÃ‘â‚¬ÃÂ°Ã‘â€šÃÂµÃÂ³Ã‘â€“Ã‘Â",
-    reasonLabel: "ÃÅ“ÃÂ¾Ã‘â€šÃÂ¸ÃÂ²ÃÂ°Ã‘â€ Ã‘â€“Ã‘Â",
-    setupQualityLabel: "ÃÂ¯ÃÂºÃ‘â€“Ã‘ÂÃ‘â€šÃ‘Å’ ÃÂ½ÃÂ°ÃÂ»ÃÂ°Ã‘Ë†Ã‘â€šÃ‘Æ’ÃÂ²ÃÂ°ÃÂ½ÃÂ½Ã‘Â",
-    executionTitle: "Ãâ€™ÃÂ¸ÃÂºÃÂ¾ÃÂ½ÃÂ°ÃÂ½ÃÂ½Ã‘Â",
-    executionRatingLabel: "ÃÂ¯ÃÂºÃ‘â€“Ã‘ÂÃ‘â€šÃ‘Å’ ÃÂ²ÃÂ¸ÃÂºÃÂ¾ÃÂ½ÃÂ°ÃÂ½ÃÂ½Ã‘Â",
-    confidenceLabel: "Ãâ€™ÃÂ¿ÃÂµÃÂ²ÃÂ½ÃÂµÃÂ½Ã‘â€“Ã‘ÂÃ‘â€šÃ‘Å’",
-    emotionalStateLabel: "Ãâ€¢ÃÂ¼ÃÂ¾Ã‘â€ Ã‘â€“ÃÂ¹ÃÂ½ÃÂ¸ÃÂ¹ Ã‘ÂÃ‘â€šÃÂ°ÃÂ½",
-    calm: "ÃÂ¡ÃÂ¿ÃÂ¾ÃÂºÃ‘â€“ÃÂ¹ÃÂ½ÃÂ¸ÃÂ¹",
-    focused: "Ãâ€”ÃÂ¾Ã‘ÂÃÂµÃ‘â‚¬ÃÂµÃÂ´ÃÂ¶ÃÂµÃÂ½ÃÂ¸ÃÂ¹",
-    confident: "Ãâ€™ÃÂ¿ÃÂµÃÂ²ÃÂ½ÃÂµÃÂ½ÃÂ¸ÃÂ¹",
-    tired: "Ãâ€™Ã‘â€šÃÂ¾ÃÂ¼ÃÂ»ÃÂµÃÂ½ÃÂ¸ÃÂ¹",
-    stressed: "ÃÂÃÂ°ÃÂ¿Ã‘â‚¬Ã‘Æ’ÃÂ¶ÃÂµÃÂ½ÃÂ¸ÃÂ¹",
-    impulsive: "Ãâ€ ÃÂ¼ÃÂ¿Ã‘Æ’ÃÂ»Ã‘Å’Ã‘ÂÃÂ¸ÃÂ²ÃÂ½ÃÂ¸ÃÂ¹",
-    reviewTitle: "ÃÅ¾ÃÂ³ÃÂ»Ã‘ÂÃÂ´",
-    mistakesLabel: "ÃÅ¸ÃÂ¾ÃÂ¼ÃÂ¸ÃÂ»ÃÂºÃÂ¸",
-    lessonsLabel: "Ãâ€”ÃÂ°Ã‘ÂÃÂ²ÃÂ¾Ã‘â€ÃÂ½Ã‘â€“ Ã‘Æ’Ã‘â‚¬ÃÂ¾ÃÂºÃÂ¸",
-    notesLabel: "ÃÂÃÂ¾Ã‘â€šÃÂ°Ã‘â€šÃÂºÃÂ¸",
+    noPriceData: "Дані про ціни недоступні",
+    openDate: "Відкрито",
+    closeDate: "Закрито",
+    duration: "Тривалість",
+    session: "Сесія",
+    daysAbbr: "д",
+    hoursAbbr: "г",
+    minsAbbr: "хв",
+    plannedRR: "Плановий R:R",
+    actualRR: "Реальний R:R",
+    resultUsd: "Результат",
+    resultPct: "Результат %",
+    commission: "Комісія",
+    swap: "Своп",
+    fees: "Збори",
+    equityAfter: "Equity після",
+    noData: "—",
+    motivationTitle: "Мотивація & Налаштування",
+    strategyLabel: "Стратегія",
+    reasonLabel: "Мотивація",
+    setupQualityLabel: "Якість налаштування",
+    executionTitle: "Виконання",
+    executionRatingLabel: "Якість виконання",
+    confidenceLabel: "Впевненість",
+    emotionalStateLabel: "Емоційний стан",
+    calm: "Спокійний",
+    focused: "Зосереджений",
+    confident: "Впевнений",
+    tired: "Втомлений",
+    stressed: "Напружений",
+    impulsive: "Імпульсивний",
+    reviewTitle: "Огляд",
+    mistakesLabel: "Помилки",
+    lessonsLabel: "Засвоєні уроки",
+    notesLabel: "Нотатки",
   },
   ru: {
-    backToDiary: "ÃÅ¡ ÃÂ´ÃÂ½ÃÂµÃÂ²ÃÂ½ÃÂ¸ÃÂºÃ‘Æ’",
-    editTrade: "ÃÂ ÃÂµÃÂ´ÃÂ°ÃÂºÃ‘â€šÃÂ¸Ã‘â‚¬ÃÂ¾ÃÂ²ÃÂ°Ã‘â€šÃ‘Å’",
+    backToDiary: "К дневнику",
+    editTrade: "Редактировать",
     badge: "Trade Replay",
-    openTrade: "ÃÅ¾Ã‘â€šÃÂºÃ‘â‚¬Ã‘â€¹Ã‘â€šÃÂ°Ã‘Â Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂºÃÂ°",
+    openTrade: "Открытая сделка",
     long: "LONG",
     short: "SHORT",
     win: "WIN",
     loss: "LOSS",
-    be: "Ãâ€˜ÃÂµÃÂ·Ã‘Æ’ÃÂ±Ã‘â€¹Ã‘â€šÃÂ¾ÃÂº",
-    anatomyTitle: "ÃÂÃÂ½ÃÂ°Ã‘â€šÃÂ¾ÃÂ¼ÃÂ¸Ã‘Â Ã‘â€ ÃÂµÃÂ½Ã‘â€¹",
-    timelineTitle: "ÃÂ¥Ã‘â‚¬ÃÂ¾ÃÂ½ÃÂ¾ÃÂ»ÃÂ¾ÃÂ³ÃÂ¸Ã‘Â",
-    performanceTitle: "ÃÂ ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃ‘â€¹",
-    entryLabel: "Ãâ€™ÃÂ¥ÃÅ¾Ãâ€",
-    exitLabel: "Ãâ€™ÃÂ«ÃÂ¥ÃÅ¾Ãâ€",
+    be: "Безубыток",
+    anatomyTitle: "Анатомия цены",
+    timelineTitle: "Хронология",
+    performanceTitle: "Результаты",
+    entryLabel: "ВХОД",
+    exitLabel: "ВЫХОД",
     slLabel: "SL",
     tpLabel: "TP",
-    noPriceData: "ÃÂ¦ÃÂµÃÂ½ÃÂ¾ÃÂ²Ã‘â€¹ÃÂµ ÃÂ´ÃÂ°ÃÂ½ÃÂ½Ã‘â€¹ÃÂµ ÃÂ½ÃÂµÃÂ´ÃÂ¾Ã‘ÂÃ‘â€šÃ‘Æ’ÃÂ¿ÃÂ½Ã‘â€¹",
-    openDate: "ÃÅ¾Ã‘â€šÃÂºÃ‘â‚¬Ã‘â€¹Ã‘â€šÃÂ¾",
-    closeDate: "Ãâ€”ÃÂ°ÃÂºÃ‘â‚¬Ã‘â€¹Ã‘â€šÃÂ¾",
-    duration: "Ãâ€ÃÂ»ÃÂ¸Ã‘â€šÃÂµÃÂ»Ã‘Å’ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘Å’",
-    session: "ÃÂ¡ÃÂµÃ‘ÂÃ‘ÂÃÂ¸Ã‘Â",
-    daysAbbr: "ÃÂ´",
-    hoursAbbr: "Ã‘â€¡",
-    minsAbbr: "ÃÂ¼ÃÂ¸ÃÂ½",
-    plannedRR: "ÃÅ¸ÃÂ»ÃÂ°ÃÂ½ÃÂ¾ÃÂ²Ã‘â€¹ÃÂ¹ R:R",
-    actualRR: "ÃÂ ÃÂµÃÂ°ÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂ¹ R:R",
-    resultUsd: "ÃÂ ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€š",
-    resultPct: "ÃÂ ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€š %",
-    commission: "ÃÅ¡ÃÂ¾ÃÂ¼ÃÂ¸Ã‘ÂÃ‘ÂÃÂ¸Ã‘Â",
-    swap: "ÃÂ¡ÃÂ²ÃÂ¾ÃÂ¿",
-    fees: "ÃÂ¡ÃÂ±ÃÂ¾Ã‘â‚¬Ã‘â€¹",
-    equityAfter: "Equity ÃÂ¿ÃÂ¾Ã‘ÂÃÂ»ÃÂµ",
-    noData: "Ã¢â‚¬â€",
-    motivationTitle: "ÃÅ“ÃÂ¾Ã‘â€šÃÂ¸ÃÂ²ÃÂ°Ã‘â€ ÃÂ¸Ã‘Â & ÃÅ¸ÃÂ¾ÃÂ´ÃÂ³ÃÂ¾Ã‘â€šÃÂ¾ÃÂ²ÃÂºÃÂ°",
-    strategyLabel: "ÃÂ¡Ã‘â€šÃ‘â‚¬ÃÂ°Ã‘â€šÃÂµÃÂ³ÃÂ¸Ã‘Â",
-    reasonLabel: "ÃÅ“ÃÂ¾Ã‘â€šÃÂ¸ÃÂ²ÃÂ°Ã‘â€ ÃÂ¸Ã‘Â",
-    setupQualityLabel: "ÃÅ¡ÃÂ°Ã‘â€¡ÃÂµÃ‘ÂÃ‘â€šÃÂ²ÃÂ¾ Ã‘ÂÃÂµÃ‘â€šÃÂ°ÃÂ¿ÃÂ°",
-    executionTitle: "ÃËœÃ‘ÂÃÂ¿ÃÂ¾ÃÂ»ÃÂ½ÃÂµÃÂ½ÃÂ¸ÃÂµ",
-    executionRatingLabel: "ÃÅ¡ÃÂ°Ã‘â€¡ÃÂµÃ‘ÂÃ‘â€šÃÂ²ÃÂ¾ ÃÂ¸Ã‘ÂÃÂ¿ÃÂ¾ÃÂ»ÃÂ½ÃÂµÃÂ½ÃÂ¸Ã‘Â",
-    confidenceLabel: "ÃÂ£ÃÂ²ÃÂµÃ‘â‚¬ÃÂµÃÂ½ÃÂ½ÃÂ¾Ã‘ÂÃ‘â€šÃ‘Å’",
-    emotionalStateLabel: "ÃÂ­ÃÂ¼ÃÂ¾Ã‘â€ ÃÂ¸ÃÂ¾ÃÂ½ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¾ÃÂµ Ã‘ÂÃÂ¾Ã‘ÂÃ‘â€šÃÂ¾Ã‘ÂÃÂ½ÃÂ¸ÃÂµ",
-    calm: "ÃÂ¡ÃÂ¿ÃÂ¾ÃÂºÃÂ¾ÃÂ¹ÃÂ½Ã‘â€¹ÃÂ¹",
-    focused: "ÃÂ¡ÃÂ¾Ã‘ÂÃ‘â‚¬ÃÂµÃÂ´ÃÂ¾Ã‘â€šÃÂ¾Ã‘â€¡ÃÂµÃÂ½ÃÂ½Ã‘â€¹ÃÂ¹",
-    confident: "ÃÂ£ÃÂ²ÃÂµÃ‘â‚¬ÃÂµÃÂ½ÃÂ½Ã‘â€¹ÃÂ¹",
-    tired: "ÃÂ£Ã‘ÂÃ‘â€šÃÂ°ÃÂ²Ã‘Ë†ÃÂ¸ÃÂ¹",
-    stressed: "ÃÂÃÂ°ÃÂ¿Ã‘â‚¬Ã‘ÂÃÂ¶Ã‘â€˜ÃÂ½ÃÂ½Ã‘â€¹ÃÂ¹",
-    impulsive: "ÃËœÃÂ¼ÃÂ¿Ã‘Æ’ÃÂ»Ã‘Å’Ã‘ÂÃÂ¸ÃÂ²ÃÂ½Ã‘â€¹ÃÂ¹",
-    reviewTitle: "ÃÂÃÂ½ÃÂ°ÃÂ»ÃÂ¸ÃÂ·",
-    mistakesLabel: "ÃÅ¾Ã‘Ë†ÃÂ¸ÃÂ±ÃÂºÃÂ¸",
-    lessonsLabel: "ÃËœÃÂ·ÃÂ²ÃÂ»ÃÂµÃ‘â€¡Ã‘â€˜ÃÂ½ÃÂ½Ã‘â€¹ÃÂµ Ã‘Æ’Ã‘â‚¬ÃÂ¾ÃÂºÃÂ¸",
-    notesLabel: "Ãâ€”ÃÂ°ÃÂ¼ÃÂµÃ‘â€šÃÂºÃÂ¸",
+    noPriceData: "Ценовые данные недоступны",
+    openDate: "Открыто",
+    closeDate: "Закрыто",
+    duration: "Длительность",
+    session: "Сессия",
+    daysAbbr: "д",
+    hoursAbbr: "ч",
+    minsAbbr: "мин",
+    plannedRR: "Плановый R:R",
+    actualRR: "Реальный R:R",
+    resultUsd: "Результат",
+    resultPct: "Результат %",
+    commission: "Комиссия",
+    swap: "Своп",
+    fees: "Сборы",
+    equityAfter: "Equity после",
+    noData: "—",
+    motivationTitle: "Мотивация & Подготовка",
+    strategyLabel: "Стратегия",
+    reasonLabel: "Мотивация",
+    setupQualityLabel: "Качество сетапа",
+    executionTitle: "Исполнение",
+    executionRatingLabel: "Качество исполнения",
+    confidenceLabel: "Уверенность",
+    emotionalStateLabel: "Эмоциональное состояние",
+    calm: "Спокойный",
+    focused: "Сосредоточенный",
+    confident: "Уверенный",
+    tired: "Уставший",
+    stressed: "Напряжённый",
+    impulsive: "Импульсивный",
+    reviewTitle: "Анализ",
+    mistakesLabel: "Ошибки",
+    lessonsLabel: "Извлечённые уроки",
+    notesLabel: "Заметки",
   },
   es: {
     backToDiary: "Volver al diario",
@@ -288,8 +288,8 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     win: "WIN",
     loss: "LOSS",
     be: "Sin resultado",
-    anatomyTitle: "AnatomÃƒÂ­a del precio",
-    timelineTitle: "CronologÃƒÂ­a",
+    anatomyTitle: "Anatomía del precio",
+    timelineTitle: "Cronología",
     performanceTitle: "Rendimiento",
     entryLabel: "ENTRADA",
     exitLabel: "SALIDA",
@@ -298,8 +298,8 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     noPriceData: "Datos de precio no disponibles",
     openDate: "Apertura",
     closeDate: "Cierre",
-    duration: "DuraciÃƒÂ³n",
-    session: "SesiÃƒÂ³n",
+    duration: "Duración",
+    session: "Sesión",
     daysAbbr: "d",
     hoursAbbr: "h",
     minsAbbr: "m",
@@ -307,17 +307,17 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     actualRR: "R:R real",
     resultUsd: "Resultado",
     resultPct: "Resultado %",
-    commission: "ComisiÃƒÂ³n",
+    commission: "Comisión",
     swap: "Swap",
     fees: "Tasas",
-    equityAfter: "Equity despuÃƒÂ©s",
-    noData: "Ã¢â‚¬â€",
-    motivationTitle: "MotivaciÃƒÂ³n & Setup",
+    equityAfter: "Equity después",
+    noData: "—",
+    motivationTitle: "Motivación & Setup",
     strategyLabel: "Estrategia",
-    reasonLabel: "MotivaciÃƒÂ³n",
+    reasonLabel: "Motivación",
     setupQualityLabel: "Calidad del setup",
-    executionTitle: "EjecuciÃƒÂ³n",
-    executionRatingLabel: "Calidad de ejecuciÃƒÂ³n",
+    executionTitle: "Ejecución",
+    executionRatingLabel: "Calidad de ejecución",
     confidenceLabel: "Confianza",
     emotionalStateLabel: "Estado emocional",
     calm: "Tranquilo",
@@ -326,7 +326,7 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     tired: "Cansado",
     stressed: "Estresado",
     impulsive: "Impulsivo",
-    reviewTitle: "RevisiÃƒÂ³n",
+    reviewTitle: "Revisión",
     mistakesLabel: "Errores",
     lessonsLabel: "Lecciones aprendidas",
     notesLabel: "Notas",
@@ -340,52 +340,52 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     short: "SHORT",
     win: "WIN",
     loss: "LOSS",
-    be: "Sans rÃƒÂ©sultat",
+    be: "Sans résultat",
     anatomyTitle: "Anatomie du prix",
     timelineTitle: "Chronologie",
     performanceTitle: "Performance",
-    entryLabel: "ENTRÃƒâ€°E",
+    entryLabel: "ENTRÉE",
     exitLabel: "SORTIE",
     slLabel: "SL",
     tpLabel: "TP",
-    noPriceData: "DonnÃƒÂ©es de prix non disponibles",
+    noPriceData: "Données de prix non disponibles",
     openDate: "Ouverture",
-    closeDate: "ClÃƒÂ´ture",
-    duration: "DurÃƒÂ©e",
+    closeDate: "Clôture",
+    duration: "Durée",
     session: "Session",
     daysAbbr: "j",
     hoursAbbr: "h",
     minsAbbr: "m",
-    plannedRR: "R:R planifiÃƒÂ©",
-    actualRR: "R:R rÃƒÂ©el",
-    resultUsd: "RÃƒÂ©sultat",
-    resultPct: "RÃƒÂ©sultat %",
+    plannedRR: "R:R planifié",
+    actualRR: "R:R réel",
+    resultUsd: "Résultat",
+    resultPct: "Résultat %",
     commission: "Commission",
     swap: "Swap",
     fees: "Frais",
-    equityAfter: "Equity aprÃƒÂ¨s",
-    noData: "Ã¢â‚¬â€",
+    equityAfter: "Equity après",
+    noData: "—",
     motivationTitle: "Motivation & Setup",
-    strategyLabel: "StratÃƒÂ©gie",
+    strategyLabel: "Stratégie",
     reasonLabel: "Motivation",
-    setupQualityLabel: "QualitÃƒÂ© du setup",
-    executionTitle: "ExÃƒÂ©cution",
-    executionRatingLabel: "QualitÃƒÂ© d'exÃƒÂ©cution",
+    setupQualityLabel: "Qualité du setup",
+    executionTitle: "Exécution",
+    executionRatingLabel: "Qualité d'exécution",
     confidenceLabel: "Confiance",
-    emotionalStateLabel: "Ãƒâ€°tat ÃƒÂ©motionnel",
+    emotionalStateLabel: "État émotionnel",
     calm: "Calme",
-    focused: "ConcentrÃƒÂ©",
+    focused: "Concentré",
     confident: "Confiant",
-    tired: "FatiguÃƒÂ©",
-    stressed: "StressÃƒÂ©",
+    tired: "Fatigué",
+    stressed: "Stressé",
     impulsive: "Impulsif",
     reviewTitle: "Bilan",
     mistakesLabel: "Erreurs",
-    lessonsLabel: "LeÃƒÂ§ons apprises",
+    lessonsLabel: "Leçons apprises",
     notesLabel: "Notes",
   },
   de: {
-    backToDiary: "ZurÃƒÂ¼ck zum Tagebuch",
+    backToDiary: "Zurück zum Tagebuch",
     editTrade: "Bearbeiten",
     badge: "Trade Replay",
     openTrade: "Offener Trade",
@@ -401,8 +401,8 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     exitLabel: "AUSSTIEG",
     slLabel: "SL",
     tpLabel: "TP",
-    noPriceData: "Preisdaten nicht verfÃƒÂ¼gbar",
-    openDate: "ErÃƒÂ¶ffnet",
+    noPriceData: "Preisdaten nicht verfügbar",
+    openDate: "Eröffnet",
     closeDate: "Geschlossen",
     duration: "Dauer",
     session: "Session",
@@ -415,21 +415,21 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     resultPct: "Ergebnis %",
     commission: "Provision",
     swap: "Swap",
-    fees: "GebÃƒÂ¼hren",
+    fees: "Gebühren",
     equityAfter: "Equity danach",
-    noData: "Ã¢â‚¬â€",
+    noData: "—",
     motivationTitle: "Motivation & Setup",
     strategyLabel: "Strategie",
     reasonLabel: "Motivation",
-    setupQualityLabel: "Setup-QualitÃƒÂ¤t",
-    executionTitle: "AusfÃƒÂ¼hrung",
-    executionRatingLabel: "AusfÃƒÂ¼hrungsqualitÃƒÂ¤t",
+    setupQualityLabel: "Setup-Qualität",
+    executionTitle: "Ausführung",
+    executionRatingLabel: "Ausführungsqualität",
     confidenceLabel: "Vertrauen",
     emotionalStateLabel: "Emotionaler Zustand",
     calm: "Ruhig",
     focused: "Fokussiert",
     confident: "Selbstsicher",
-    tired: "MÃƒÂ¼de",
+    tired: "Müde",
     stressed: "Gestresst",
     impulsive: "Impulsiv",
     reviewTitle: "Auswertung",
@@ -439,7 +439,7 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
   },
 };
 
-// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Helpers Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function formatPrice(p: number): string {
   const a = Math.abs(p);
@@ -532,7 +532,7 @@ function emotionLabel(state: string, t: ReplayLabels): string {
   return state;
 }
 
-// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ SVG Price Anatomy Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+// ─── SVG Price Anatomy ────────────────────────────────────────────────────────
 
 function PriceAnatomySVG({
   entry,
@@ -591,7 +591,7 @@ function PriceAnatomySVG({
       style={{ display: "block", maxHeight: "240px" }}
       aria-hidden="true"
     >
-      {/* Risk zone: entry Ã¢â€ â€ SL */}
+      {/* Risk zone: entry ↔ SL */}
       {sy !== null && (
         <rect
           x={lx}
@@ -602,7 +602,7 @@ function PriceAnatomySVG({
         />
       )}
 
-      {/* Reward zone: entry Ã¢â€ â€ TP */}
+      {/* Reward zone: entry ↔ TP */}
       {ty !== null && (
         <rect
           x={lx}
@@ -688,7 +688,7 @@ function PriceAnatomySVG({
   );
 }
 
-// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Page Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function TradeReplayPage({
   params,
@@ -719,7 +719,7 @@ export default async function TradeReplayPage({
   const t = pageLabels[language];
   const currency = membership.tradingAccount.currency ?? "USD";
 
-  // Ã¢â€â‚¬Ã¢â€â‚¬ Derived values Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+  // ── Derived values ──────────────────────────────────────────────────────
 
   const isLong = trade.direction?.toLowerCase() === "long";
   const directionLabel = isLong ? t.long : t.short;
@@ -754,7 +754,7 @@ export default async function TradeReplayPage({
     trade.outcome,
   );
 
-  // Ã¢â€â‚¬Ã¢â€â‚¬ Price level grid Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+  // ── Price level grid ────────────────────────────────────────────────────
 
   const entry = trade.openingPrice;
 
@@ -799,7 +799,7 @@ export default async function TradeReplayPage({
     },
   ];
 
-  // Ã¢â€â‚¬Ã¢â€â‚¬ Performance metrics Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+  // ── Performance metrics ─────────────────────────────────────────────────
 
   const perfMetrics = [
     {
@@ -816,7 +816,7 @@ export default async function TradeReplayPage({
         actualRR !== null
           ? actualRR === 0
             ? "0"
-            : `${actualRR < 0 ? "Ã¢Ë†â€™" : ""}1 : ${Math.abs(actualRR).toFixed(2)}`
+            : `${actualRR < 0 ? "−" : ""}1 : ${Math.abs(actualRR).toFixed(2)}`
           : t.noData,
       color:
         actualRR === null
@@ -877,7 +877,7 @@ export default async function TradeReplayPage({
     },
   ];
 
-  // Ã¢â€â‚¬Ã¢â€â‚¬ Render Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+  // ── Render ───────────────────────────────────────────────────────────────
 
   return (
     <div className="space-y-6">
@@ -1231,7 +1231,7 @@ export default async function TradeReplayPage({
             )}
           </div>
 
-          <div className="rounded-2xl border border-green-500/15  param($m) $m.Value -replace 'green-500', 'accent'  p-5">
+          <div className="rounded-2xl border border-accent/15 bg-accent/[0.04] p-5">
             <p className="text-[10px] font-black uppercase tracking-[0.15em] text-accent">
               {t.lessonsLabel}
             </p>

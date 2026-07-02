@@ -117,7 +117,7 @@ export default async function AdminAccountsPage() {
             </p>
 
             <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-5">
-              <div className="rounded-xl border border-white/10 bg-black/20 p-4">
+              <div className="rounded-xl border border-white/10 bg-surface-2 p-4">
                 <p className="text-xs text-gray-500">
                   {t.broker}
                 </p>
@@ -127,7 +127,7 @@ export default async function AdminAccountsPage() {
                 </h3>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-black/20 p-4">
+              <div className="rounded-xl border border-white/10 bg-surface-2 p-4">
                 <p className="text-xs text-gray-500">
                   {t.phase}
                 </p>
@@ -137,7 +137,7 @@ export default async function AdminAccountsPage() {
                 </h3>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-black/20 p-4">
+              <div className="rounded-xl border border-white/10 bg-surface-2 p-4">
                 <p className="text-xs text-gray-500">
                   {t.profitTarget}
                 </p>
@@ -149,7 +149,7 @@ export default async function AdminAccountsPage() {
                 </h3>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-black/20 p-4">
+              <div className="rounded-xl border border-white/10 bg-surface-2 p-4">
                 <p className="text-xs text-gray-500">
                   {t.maxDd}
                 </p>
@@ -161,7 +161,7 @@ export default async function AdminAccountsPage() {
                 </h3>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-black/20 p-4">
+              <div className="rounded-xl border border-white/10 bg-surface-2 p-4">
                 <p className="text-xs text-gray-500">
                   {t.dailyDd}
                 </p>
@@ -200,7 +200,7 @@ export default async function AdminAccountsPage() {
           </div>
         </div>
 
-        <div className="mb-8 rounded-2xl border border-white/10 bg-black/20 p-4">
+        <div className="mb-8 rounded-2xl border border-white/10 bg-surface-2 p-4">
           <p className="mb-3 text-sm font-semibold text-gray-300">
             {t.accountActions}
           </p>
@@ -272,14 +272,14 @@ export default async function AdminAccountsPage() {
           <input
             name="username"
             placeholder={t.userUsernamePlaceholder}
-            className="rounded-2xl bg-zinc-900 p-4"
+            className="rounded-2xl bg-surface-2 p-4"
             required
           />
 
           <select
             name="role"
             aria-label={t.memberRole}
-            className="rounded-2xl bg-zinc-900 p-4"
+            className="rounded-2xl bg-surface-2 p-4"
             defaultValue="MEMBER"
           >
             <option value="MANAGER">MANAGER</option>
@@ -303,7 +303,7 @@ export default async function AdminAccountsPage() {
             return (
               <div
                 key={member.id}
-                className="rounded-2xl border border-white/10 bg-black/20 p-5"
+                className="rounded-2xl border border-white/10 bg-surface-2 p-5"
               >
                 <div className="mb-5 flex items-start justify-between gap-4">
                   <div>
@@ -336,7 +336,7 @@ export default async function AdminAccountsPage() {
                       name="role"
                       aria-label={t.updateMemberRole}
                       defaultValue={member.role}
-                      className="rounded-xl bg-zinc-900 p-3 text-sm"
+                      className="rounded-xl bg-surface-2 p-3 text-sm"
                     >
                       <option value="MANAGER">MANAGER</option>
                       <option value="MEMBER">MEMBER</option>
@@ -492,7 +492,7 @@ export default async function AdminAccountsPage() {
             {t.dangerZone}
           </summary>
 
-          <div className="mt-4 flex flex-col gap-3 rounded-xl border border-red-500/20 bg-black/20 p-4 md:flex-row md:items-center md:justify-between">
+          <div className="mt-4 flex flex-col gap-3 rounded-xl border border-red-500/20 bg-surface-2 p-4 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="font-bold text-red-300">
                 {t.deleteAccountPermanently}
@@ -548,14 +548,14 @@ export default async function AdminAccountsPage() {
         <input
           name="name"
           placeholder={t.accountName}
-          className="rounded-2xl bg-zinc-900 p-4"
+          className="rounded-2xl bg-surface-2 p-4"
           required
         />
 
         <select
           name="type"
           aria-label={t.accountType}
-          className="rounded-2xl bg-zinc-900 p-4"
+          className="rounded-2xl bg-surface-2 p-4"
           required
         >
           <option value="LIVE">LIVE</option>
@@ -570,7 +570,7 @@ export default async function AdminAccountsPage() {
           name="initialBalance"
           type="number"
           placeholder={t.initialBalance}
-          className="rounded-2xl bg-zinc-900 p-4"
+          className="rounded-2xl bg-surface-2 p-4"
           required
         />
 
@@ -578,20 +578,20 @@ export default async function AdminAccountsPage() {
           name="currency"
           defaultValue="USD"
           placeholder={t.currency}
-          className="rounded-2xl bg-zinc-900 p-4"
+          className="rounded-2xl bg-surface-2 p-4"
           required
         />
 
         <input
           name="broker"
           placeholder={t.brokerPropFirm}
-          className="rounded-2xl bg-zinc-900 p-4"
+          className="rounded-2xl bg-surface-2 p-4"
         />
 
         <input
           name="phase"
           placeholder={t.phase}
-          className="rounded-2xl bg-zinc-900 p-4"
+          className="rounded-2xl bg-surface-2 p-4"
         />
 
         <input
@@ -599,7 +599,7 @@ export default async function AdminAccountsPage() {
           type="number"
           step="0.01"
           placeholder={`${t.profitTarget} %`}
-          className="rounded-2xl bg-zinc-900 p-4"
+          className="rounded-2xl bg-surface-2 p-4"
         />
 
         <input
@@ -607,7 +607,7 @@ export default async function AdminAccountsPage() {
           type="number"
           step="0.01"
           placeholder={`${t.maxDd} %`}
-          className="rounded-2xl bg-zinc-900 p-4"
+          className="rounded-2xl bg-surface-2 p-4"
         />
 
         <input
@@ -615,7 +615,7 @@ export default async function AdminAccountsPage() {
           type="number"
           step="0.01"
           placeholder={`${t.dailyDd} %`}
-          className="rounded-2xl bg-zinc-900 p-4"
+          className="rounded-2xl bg-surface-2 p-4"
         />
 
         <button

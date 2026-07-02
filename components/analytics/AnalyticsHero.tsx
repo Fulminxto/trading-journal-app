@@ -102,7 +102,7 @@ export default function AnalyticsHero({
   const t = labels[language] ?? labels.en;
 
   return (
-    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#070b14] via-[#0f1726] to-black p-8 shadow-2xl shadow-accent-bright/5">
+    <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-surface-1 via-[#0f1726] to-black p-8 shadow-2xl shadow-accent-bright/5">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.18),transparent_35%)]" />
 
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,color-mix(in_srgb,var(--color-accent-bright)_10%,transparent)_35%,transparent)]" />

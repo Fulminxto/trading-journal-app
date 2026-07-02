@@ -82,7 +82,7 @@ export default async function FrozenPage() {
   const t = labels[language] ?? labels.en;
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#0C1430] p-8 text-white">
+    <div className="flex min-h-screen items-center justify-center bg-bg-base p-8 text-white">
       <div className="max-w-2xl rounded-[40px] border border-yellow-500/20 bg-yellow-500/10 p-10 text-center backdrop-blur-xl">
         <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl border border-yellow-500/20 bg-yellow-500/10">
           <ShieldAlert

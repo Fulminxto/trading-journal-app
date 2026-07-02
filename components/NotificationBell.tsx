@@ -400,7 +400,7 @@ export default function NotificationBell({
         onClick={handleToggle}
         aria-label={t.bell}
         title={t.bell}
-        className="relative rounded-2xl border border-white/10 bg-[#071018]/80 p-3 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:bg-[#071018]"
+        className="relative rounded-2xl border border-white/10 bg-surface-1/80 p-3 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:bg-surface-1"
       >
         <Bell size={18} />
 

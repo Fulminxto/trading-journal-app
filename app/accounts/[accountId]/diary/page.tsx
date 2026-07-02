@@ -1,4 +1,4 @@
-﻿import { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { PlayCircle } from "lucide-react";
@@ -20,10 +20,7 @@ import {
   getPeriodSuffix,
 } from "@/lib/scope";
 
-import {
-  createAccountTrade,
-  deleteAccountTrade,
-} from "./actions";
+import { deleteAccountTrade } from "./actions";
 
 type DiaryLabels = {
   filteredPnl: string;
@@ -98,6 +95,11 @@ type DiaryLabels = {
   historyTitle: string;
   filteredCount: (filtered: number, total: number) => string;
   noTrades: string;
+  noTradesAccount: string;
+  emptyFiltersHint: string;
+  resetAllFilters: string;
+  activeFilters: string;
+  dateConflictWarning: string;
 
   date: string;
   trader: string;
@@ -131,8 +133,8 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     memberFilterActive: "Filtro membro attivo",
     viewingOnlyTradesOf: "Stai visualizzando solo i trade di",
     clearFilter: "Pulisci filtro",
-    readOnlyMode: "ModalitÃ  sola lettura",
-    readOnlyTitle: "Questo account Ã¨ in modalitÃ  visualizzazione",
+    readOnlyMode: "Modalità sola lettura",
+    readOnlyTitle: "Questo account è in modalità visualizzazione",
     readOnlyDescription:
       "Puoi consultare il diario, ma non puoi creare, modificare o eliminare trade.",
     account: "Account",
@@ -151,8 +153,8 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     allStatuses: "Tutti gli stati",
     allTraders: "Tutti i trader",
     strategy: "Strategia",
-    allStrategies: "â€” Tutte le strategie â€”",
-    noStrategy: "â€” Nessuna strategia â€”",
+    allStrategies: "— Tutte le strategie —",
+    noStrategy: "— Nessuna strategia —",
     applyFilters: "Applica filtri",
 
     newTradeEyebrow: "Nuova operazione",
@@ -172,7 +174,7 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     result: "Risultato $",
     session: "Sessione",
     emotionalState: "Stato emotivo",
-    setupQuality: "QualitÃ  setup (1-10)",
+    setupQuality: "Qualità setup (1-10)",
     executionRating: "Valutazione esecuzione (1-10)",
     confidence: "Confidence (1-10)",
     mistakes: "Errori commessi",
@@ -191,6 +193,11 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     filteredCount: (filtered, total) =>
       `${filtered} operazioni filtrate su ${total} totali`,
     noTrades: "Nessun trade trovato con questi filtri.",
+    noTradesAccount: "Nessun trade registrato. Aggiungi il tuo primo trade.",
+    emptyFiltersHint: "Potrebbe esserci un conflitto tra l'intervallo date preciso e il periodo rapido della ScopeBar.",
+    resetAllFilters: "Azzera tutti i filtri",
+    activeFilters: "Filtri attivi:",
+    dateConflictWarning: "⚠ date in conflitto",
 
     date: "Data",
     trader: "Trader",
@@ -243,8 +250,8 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     allStatuses: "All statuses",
     allTraders: "All traders",
     strategy: "Strategy",
-    allStrategies: "â€” All strategies â€”",
-    noStrategy: "â€” No strategy â€”",
+    allStrategies: "— All strategies —",
+    noStrategy: "— No strategy —",
     applyFilters: "Apply filters",
 
     newTradeEyebrow: "New operation",
@@ -283,6 +290,11 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     filteredCount: (filtered, total) =>
       `${filtered} filtered trades out of ${total} total`,
     noTrades: "No trades found with these filters.",
+    noTradesAccount: "No trades recorded yet. Add your first trade.",
+    emptyFiltersHint: "A date range conflict between the precise filter and the ScopeBar period may be causing empty results.",
+    resetAllFilters: "Clear all filters",
+    activeFilters: "Active filters:",
+    dateConflictWarning: "⚠ date conflict",
 
     date: "Date",
     trader: "Trader",
@@ -333,8 +345,8 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     allStatuses: "Ð£ÑÑ– ÑÑ‚Ð°Ñ‚ÑƒÑÐ¸",
     allTraders: "Ð£ÑÑ– Ñ‚Ñ€ÐµÐ¹Ð´ÐµÑ€Ð¸",
     strategy: "Ð¡Ñ‚Ñ€Ð°Ñ‚ÐµÐ³Ñ–Ñ",
-    allStrategies: "â€” Ð£ÑÑ– ÑÑ‚Ñ€Ð°Ñ‚ÐµÐ³Ñ–Ñ— â€”",
-    noStrategy: "â€” Ð‘ÐµÐ· ÑÑ‚Ñ€Ð°Ñ‚ÐµÐ³Ñ–Ñ— â€”",
+    allStrategies: "— Ð£ÑÑ– ÑÑ‚Ñ€Ð°Ñ‚ÐµÐ³Ñ–Ñ— —",
+    noStrategy: "— Ð‘ÐµÐ· ÑÑ‚Ñ€Ð°Ñ‚ÐµÐ³Ñ–Ñ— —",
     applyFilters: "Ð—Ð°ÑÑ‚Ð¾ÑÑƒÐ²Ð°Ñ‚Ð¸ Ñ„Ñ–Ð»ÑŒÑ‚Ñ€Ð¸",
     newTradeEyebrow: "ÐÐ¾Ð²Ð° Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ñ",
     newTradeTitle: "Ð”Ð¾Ð´Ð°Ñ‚Ð¸ ÑƒÐ³Ð¾Ð´Ñƒ",
@@ -370,6 +382,11 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     filteredCount: (filtered, total) =>
       `${filtered} Ð²Ñ–Ð´Ñ„Ñ–Ð»ÑŒÑ‚Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ… ÑƒÐ³Ð¾Ð´ Ñ–Ð· ${total}`,
     noTrades: "Ð—Ð° Ñ†Ð¸Ð¼Ð¸ Ñ„Ñ–Ð»ÑŒÑ‚Ñ€Ð°Ð¼Ð¸ ÑƒÐ³Ð¾Ð´ Ð½Ðµ Ð·Ð½Ð°Ð¹Ð´ÐµÐ½Ð¾.",
+    noTradesAccount: "Угод ще не зареєстровано. Додайте свій перший trade.",
+    emptyFiltersHint: "Можливий конфлікт між точним діапазоном дат і швидким періодом ScopeBar.",
+    resetAllFilters: "Скинути всі фільтри",
+    activeFilters: "Активні фільтри:",
+    dateConflictWarning: "⚠ конфлікт дат",
     date: "Ð”Ð°Ñ‚Ð°",
     trader: "Ð¢Ñ€ÐµÐ¹Ð´ÐµÑ€",
     symbol: "Ð¡Ð¸Ð¼Ð²Ð¾Ð»",
@@ -419,8 +436,8 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     allStatuses: "Ð’ÑÐµ ÑÑ‚Ð°Ñ‚ÑƒÑÑ‹",
     allTraders: "Ð’ÑÐµ Ñ‚Ñ€ÐµÐ¹Ð´ÐµÑ€Ñ‹",
     strategy: "Ð¡Ñ‚Ñ€Ð°Ñ‚ÐµÐ³Ð¸Ñ",
-    allStrategies: "â€” Ð’ÑÐµ ÑÑ‚Ñ€Ð°Ñ‚ÐµÐ³Ð¸Ð¸ â€”",
-    noStrategy: "â€” Ð‘ÐµÐ· ÑÑ‚Ñ€Ð°Ñ‚ÐµÐ³Ð¸Ð¸ â€”",
+    allStrategies: "— Ð’ÑÐµ ÑÑ‚Ñ€Ð°Ñ‚ÐµÐ³Ð¸Ð¸ —",
+    noStrategy: "— Ð‘ÐµÐ· ÑÑ‚Ñ€Ð°Ñ‚ÐµÐ³Ð¸Ð¸ —",
     applyFilters: "ÐŸÑ€Ð¸Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ Ñ„Ð¸Ð»ÑŒÑ‚Ñ€Ñ‹",
     newTradeEyebrow: "ÐÐ¾Ð²Ð°Ñ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ñ",
     newTradeTitle: "Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ ÑÐ´ÐµÐ»ÐºÑƒ",
@@ -456,6 +473,11 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     filteredCount: (filtered, total) =>
       `${filtered} Ð¾Ñ‚Ñ„Ð¸Ð»ÑŒÑ‚Ñ€Ð¾Ð²Ð°Ð½Ð½Ñ‹Ñ… ÑÐ´ÐµÐ»Ð¾Ðº Ð¸Ð· ${total}`,
     noTrades: "ÐŸÐ¾ ÑÑ‚Ð¸Ð¼ Ñ„Ð¸Ð»ÑŒÑ‚Ñ€Ð°Ð¼ ÑÐ´ÐµÐ»ÐºÐ¸ Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½Ñ‹.",
+    noTradesAccount: "Сделок пока нет. Добавьте свою первую сделку.",
+    emptyFiltersHint: "Возможен конфликт между точным диапазоном дат и быстрым периодом ScopeBar.",
+    resetAllFilters: "Сбросить все фильтры",
+    activeFilters: "Активные фильтры:",
+    dateConflictWarning: "⚠ конфликт дат",
     date: "Ð”Ð°Ñ‚Ð°",
     trader: "Ð¢Ñ€ÐµÐ¹Ð´ÐµÑ€",
     symbol: "Ð¡Ð¸Ð¼Ð²Ð¾Ð»",
@@ -478,16 +500,16 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     winRate: "Win Rate",
     filteredTrades: "Trades filtrados",
     imported: "Importados",
-    needsReview: "Necesita revisiÃ³n",
+    needsReview: "Necesita revisión",
     bestTrade: "Mejor trade",
     worstTrade: "Peor trade",
     operationalRegister: "Registro operativo",
     title: "Diario de trading",
     memberFilterActive: "Filtro de miembro activo",
-    viewingOnlyTradesOf: "EstÃ¡s viendo solo los trades de",
+    viewingOnlyTradesOf: "Estás viendo solo los trades de",
     clearFilter: "Limpiar filtro",
     readOnlyMode: "Modo solo lectura",
-    readOnlyTitle: "Esta cuenta estÃ¡ en modo visualizaciÃ³n",
+    readOnlyTitle: "Esta cuenta está en modo visualización",
     readOnlyDescription:
       "Puedes consultar el diario, pero no puedes crear, editar o eliminar trades.",
     account: "Cuenta",
@@ -498,18 +520,18 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     filtersEyebrow: "Filtros operativos",
     filtersTitle: "Analiza tus trades",
     resetFilters: "Restablecer filtros",
-    allSymbols: "Todos los sÃ­mbolos",
+    allSymbols: "Todos los símbolos",
     allOutcomes: "Todos los resultados",
     allDirections: "Todas las direcciones",
     allSources: "Todas las fuentes",
     allStatuses: "Todos los estados",
     allTraders: "Todos los traders",
     strategy: "Estrategia",
-    allStrategies: "â€” Todas las estrategias â€”",
-    noStrategy: "â€” Sin estrategia â€”",
+    allStrategies: "— Todas las estrategias —",
+    noStrategy: "— Sin estrategia —",
     applyFilters: "Aplicar filtros",
-    newTradeEyebrow: "Nueva operaciÃ³n",
-    newTradeTitle: "AÃ±adir trade",
+    newTradeEyebrow: "Nueva operación",
+    newTradeTitle: "Añadir trade",
     openDate: "Fecha de apertura",
     openTime: "Hora de apertura",
     reason: "Motivo",
@@ -523,14 +545,14 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     closingPrice: "Precio de cierre",
     outcome: "Resultado",
     result: "Resultado $",
-    session: "SesiÃ³n",
+    session: "Sesión",
     emotionalState: "Estado emocional",
     setupQuality: "Calidad del setup (1-10)",
-    executionRating: "EjecuciÃ³n (1-10)",
+    executionRating: "Ejecución (1-10)",
     confidence: "Confianza (1-10)",
     mistakes: "Errores",
     lessonsLearned: "Lecciones aprendidas",
-    addTrade: "AÃ±adir trade",
+    addTrade: "Añadir trade",
     calm: "Calmo",
     focused: "Enfocado",
     confident: "Confiado",
@@ -542,11 +564,16 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     filteredCount: (filtered, total) =>
       `${filtered} trades filtrados de ${total} totales`,
     noTrades: "No se encontraron trades con estos filtros.",
+    noTradesAccount: "Aún no hay trades registrados. Añade tu primer trade.",
+    emptyFiltersHint: "Puede haber un conflicto entre el rango de fechas y el período rápido del ScopeBar.",
+    resetAllFilters: "Limpiar todos los filtros",
+    activeFilters: "Filtros activos:",
+    dateConflictWarning: "⚠ conflicto de fechas",
     date: "Fecha",
     trader: "Trader",
-    symbol: "SÃ­mbolo",
+    symbol: "Símbolo",
     sync: "Sync",
-    direction: "DirecciÃ³n",
+    direction: "Dirección",
     equity: "Equity",
     actions: "Acciones",
     edit: "Editar",
@@ -559,15 +586,15 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
   },
 
   fr: {
-    filteredPnl: "PnL filtrÃ©",
+    filteredPnl: "PnL filtré",
     currentEquity: "Equity actuelle",
     winRate: "Win Rate",
-    filteredTrades: "Trades filtrÃ©s",
-    imported: "ImportÃ©s",
-    needsReview: "Ã€ revoir",
+    filteredTrades: "Trades filtrés",
+    imported: "Importés",
+    needsReview: "À revoir",
     bestTrade: "Meilleur trade",
     worstTrade: "Pire trade",
-    operationalRegister: "Registre opÃ©rationnel",
+    operationalRegister: "Registre opérationnel",
     title: "Journal de trading",
     memberFilterActive: "Filtre membre actif",
     viewingOnlyTradesOf: "Vous consultez uniquement les trades de",
@@ -575,59 +602,64 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     readOnlyMode: "Mode lecture seule",
     readOnlyTitle: "Ce compte est en mode consultation",
     readOnlyDescription:
-      "Vous pouvez consulter le journal, mais vous ne pouvez pas crÃ©er, modifier ou supprimer des trades.",
+      "Vous pouvez consulter le journal, mais vous ne pouvez pas créer, modifier ou supprimer des trades.",
     account: "Compte",
     readOnly: "Lecture seule",
     win: "Win",
     loss: "Loss",
     be: "BE",
-    filtersEyebrow: "Filtres opÃ©rationnels",
+    filtersEyebrow: "Filtres opérationnels",
     filtersTitle: "Analysez vos trades",
-    resetFilters: "RÃ©initialiser les filtres",
+    resetFilters: "Réinitialiser les filtres",
     allSymbols: "Tous les symboles",
-    allOutcomes: "Tous les rÃ©sultats",
+    allOutcomes: "Tous les résultats",
     allDirections: "Toutes les directions",
     allSources: "Toutes les sources",
     allStatuses: "Tous les statuts",
     allTraders: "Tous les traders",
-    strategy: "StratÃ©gie",
-    allStrategies: "â€” Toutes les stratÃ©gies â€”",
-    noStrategy: "â€” Aucune stratÃ©gie â€”",
+    strategy: "Stratégie",
+    allStrategies: "— Toutes les stratégies —",
+    noStrategy: "— Aucune stratégie —",
     applyFilters: "Appliquer les filtres",
-    newTradeEyebrow: "Nouvelle opÃ©ration",
+    newTradeEyebrow: "Nouvelle opération",
     newTradeTitle: "Ajouter un trade",
-    openDate: "Date dâ€™ouverture",
-    openTime: "Heure dâ€™ouverture",
+    openDate: "Date d’ouverture",
+    openTime: "Heure d’ouverture",
     reason: "Raison",
     instrument: "Instrument",
     amount: "Amount / Lot",
-    openingPrice: "Prix dâ€™ouverture",
+    openingPrice: "Prix d’ouverture",
     stopLoss: "Stop Loss",
     takeProfit: "Take Profit",
     riskReward: "Risk Reward",
-    closeDate: "Date de clÃ´ture",
-    closingPrice: "Prix de clÃ´ture",
-    outcome: "RÃ©sultat",
-    result: "RÃ©sultat $",
+    closeDate: "Date de clôture",
+    closingPrice: "Prix de clôture",
+    outcome: "Résultat",
+    result: "Résultat $",
     session: "Session",
-    emotionalState: "Ã‰tat Ã©motionnel",
-    setupQuality: "QualitÃ© du setup (1-10)",
-    executionRating: "ExÃ©cution (1-10)",
+    emotionalState: "État émotionnel",
+    setupQuality: "Qualité du setup (1-10)",
+    executionRating: "Exécution (1-10)",
     confidence: "Confiance (1-10)",
     mistakes: "Erreurs",
-    lessonsLearned: "LeÃ§ons apprises",
+    lessonsLearned: "Leçons apprises",
     addTrade: "Ajouter un trade",
     calm: "Calme",
-    focused: "ConcentrÃ©",
+    focused: "Concentré",
     confident: "Confiant",
-    tired: "FatiguÃ©",
-    stressed: "StressÃ©",
+    tired: "Fatigué",
+    stressed: "Stressé",
     impulsive: "Impulsif",
-    historyEyebrow: "Historique des opÃ©rations",
-    historyTitle: "Trades enregistrÃ©s",
+    historyEyebrow: "Historique des opérations",
+    historyTitle: "Trades enregistrés",
     filteredCount: (filtered, total) =>
-      `${filtered} trades filtrÃ©s sur ${total} au total`,
-    noTrades: "Aucun trade trouvÃ© avec ces filtres.",
+      `${filtered} trades filtrés sur ${total} au total`,
+    noTrades: "Aucun trade trouvé avec ces filtres.",
+    noTradesAccount: "Aucun trade enregistré. Ajoutez votre premier trade.",
+    emptyFiltersHint: "Un conflit de dates entre le filtre précis et la période ScopeBar peut vider les résultats.",
+    resetAllFilters: "Effacer tous les filtres",
+    activeFilters: "Filtres actifs :",
+    dateConflictWarning: "⚠ conflit de dates",
     date: "Date",
     trader: "Trader",
     symbol: "Symbole",
@@ -650,18 +682,18 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     winRate: "Win Rate",
     filteredTrades: "Gefilterte Trades",
     imported: "Importiert",
-    needsReview: "Review nÃ¶tig",
+    needsReview: "Review nötig",
     bestTrade: "Bester Trade",
     worstTrade: "Schlechtester Trade",
     operationalRegister: "Operatives Register",
     title: "Trading-Tagebuch",
     memberFilterActive: "Mitgliederfilter aktiv",
     viewingOnlyTradesOf: "Du siehst nur Trades von",
-    clearFilter: "Filter lÃ¶schen",
+    clearFilter: "Filter löschen",
     readOnlyMode: "Nur-Lese-Modus",
     readOnlyTitle: "Dieses Konto ist im Ansichtsmodus",
     readOnlyDescription:
-      "Du kannst das Tagebuch ansehen, aber keine Trades erstellen, bearbeiten oder lÃ¶schen.",
+      "Du kannst das Tagebuch ansehen, aber keine Trades erstellen, bearbeiten oder löschen.",
     account: "Konto",
     readOnly: "Nur Lesen",
     win: "Win",
@@ -669,7 +701,7 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     be: "BE",
     filtersEyebrow: "Operative Filter",
     filtersTitle: "Analysiere deine Trades",
-    resetFilters: "Filter zurÃ¼cksetzen",
+    resetFilters: "Filter zurücksetzen",
     allSymbols: "Alle Symbole",
     allOutcomes: "Alle Ergebnisse",
     allDirections: "Alle Richtungen",
@@ -677,17 +709,17 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     allStatuses: "Alle Status",
     allTraders: "Alle Trader",
     strategy: "Strategie",
-    allStrategies: "â€” Alle Strategien â€”",
-    noStrategy: "â€” Keine Strategie â€”",
+    allStrategies: "— Alle Strategien —",
+    noStrategy: "— Keine Strategie —",
     applyFilters: "Filter anwenden",
     newTradeEyebrow: "Neue Operation",
-    newTradeTitle: "Trade hinzufÃ¼gen",
-    openDate: "ErÃ¶ffnungsdatum",
-    openTime: "ErÃ¶ffnungszeit",
+    newTradeTitle: "Trade hinzufügen",
+    openDate: "Eröffnungsdatum",
+    openTime: "Eröffnungszeit",
     reason: "Grund",
     instrument: "Instrument",
     amount: "Amount / Lot",
-    openingPrice: "ErÃ¶ffnungspreis",
+    openingPrice: "Eröffnungspreis",
     stopLoss: "Stop Loss",
     takeProfit: "Take Profit",
     riskReward: "Risk Reward",
@@ -697,16 +729,16 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     result: "Ergebnis $",
     session: "Session",
     emotionalState: "Emotionaler Zustand",
-    setupQuality: "Setup-QualitÃ¤t (1-10)",
+    setupQuality: "Setup-Qualität (1-10)",
     executionRating: "Execution Rating (1-10)",
     confidence: "Confidence (1-10)",
     mistakes: "Fehler",
     lessonsLearned: "Gelernte Lektionen",
-    addTrade: "Trade hinzufÃ¼gen",
+    addTrade: "Trade hinzufügen",
     calm: "Ruhig",
     focused: "Fokussiert",
     confident: "Selbstbewusst",
-    tired: "MÃ¼de",
+    tired: "Müde",
     stressed: "Gestresst",
     impulsive: "Impulsiv",
     historyEyebrow: "Operationshistorie",
@@ -714,6 +746,11 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     filteredCount: (filtered, total) =>
       `${filtered} gefilterte Trades von ${total} insgesamt`,
     noTrades: "Keine Trades mit diesen Filtern gefunden.",
+    noTradesAccount: "Noch keine Trades erfasst. Füge deinen ersten Trade hinzu.",
+    emptyFiltersHint: "Ein Datumskonflikt zwischen präzisem Filter und ScopeBar-Zeitraum kann leere Ergebnisse erzeugen.",
+    resetAllFilters: "Alle Filter zurücksetzen",
+    activeFilters: "Aktive Filter:",
+    dateConflictWarning: "⚠ Datumskonflikt",
     date: "Datum",
     trader: "Trader",
     symbol: "Symbol",
@@ -722,7 +759,7 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     equity: "Equity",
     actions: "Aktionen",
     edit: "Bearbeiten",
-    delete: "LÃ¶schen",
+    delete: "Löschen",
     manual: "Manuell",
     mt5: "MT5",
     broker: "Broker",
@@ -793,6 +830,26 @@ function getOutcomeClass(outcome: string | null) {
   }
 
   return "bg-white/10 text-gray-400";
+}
+
+function CalendarIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+      <line x1="16" y1="2" x2="16" y2="6"/>
+      <line x1="8" y1="2" x2="8" y2="6"/>
+      <line x1="3" y1="10" x2="21" y2="10"/>
+    </svg>
+  );
+}
+
+function ClockIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <polyline points="12 6 12 12 16 14"/>
+    </svg>
+  );
 }
 
 export default async function DiaryPage({
@@ -1083,6 +1140,23 @@ export default async function DiaryPage({
     Boolean(filters.to) ||
     period !== "all";
 
+  const activeDateConflict =
+    period !== "all" && Boolean(filters.from || filters.to);
+
+  const activeFilterChips: string[] = [];
+  if (filters.symbol) activeFilterChips.push(filters.symbol);
+  if (filters.outcome) activeFilterChips.push(filters.outcome.toUpperCase());
+  if (filters.direction) activeFilterChips.push(filters.direction);
+  if (filters.source) activeFilterChips.push(filters.source);
+  if (filters.needsReview === "true") activeFilterChips.push(t.needsReview);
+  if (filters.strategyId) {
+    const strat = strategies.find((s) => s.id === filters.strategyId);
+    if (strat) activeFilterChips.push(strat.name);
+  }
+  if (filters.from) activeFilterChips.push(`>= ${filters.from}`);
+  if (filters.to) activeFilterChips.push(`<= ${filters.to}`);
+  if (period !== "all") activeFilterChips.push(period + (ref ? ` (${ref})` : ""));
+
   const keyMetrics = [
     {
       label: `${t.filteredPnl}${periodSuffix}`,
@@ -1235,75 +1309,66 @@ export default async function DiaryPage({
     : undefined;
 
   return (
-    <div className="space-y-12">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <div>
-          <p className="text-sm text-gray-400">
-            {t.operationalRegister}
-          </p>
+    <div className="space-y-8">
+      <div>
+        <p className="text-sm text-gray-400">
+          {t.operationalRegister}
+        </p>
 
+        <div className="mt-1 flex flex-wrap items-center gap-4">
           <h1 className="text-3xl font-bold sm:text-4xl">
             {t.title}
           </h1>
-
-          {selectedMember && (
-            <div className="mt-4 rounded-3xl border border-accent-bright/20 bg-accent-bright/10 p-5">
-              <p className="text-xs uppercase tracking-[0.2em] text-accent-bright">
-                {t.memberFilterActive}
-              </p>
-
-              <h2 className="mt-2 text-xl font-black text-white">
-                {t.viewingOnlyTradesOf}{" "}
-                {selectedMember.name ||
-                  selectedMember.username}
-              </h2>
-
-              <Link
-                href={`/accounts/${accountId}/diary`}
-                className="mt-4 inline-flex rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm font-bold text-gray-300 transition hover:bg-white/[0.05]"
-              >
-                {t.clearFilter}
-              </Link>
-            </div>
-          )}
-
-          {isReadOnly && (
-            <div className="mt-4 rounded-3xl border border-yellow-500/20 bg-yellow-500/10 p-5">
-              <p className="text-xs uppercase tracking-[0.2em] text-yellow-300">
-                {t.readOnlyMode}
-              </p>
-
-              <h2 className="mt-2 text-xl font-black text-white">
-                {t.readOnlyTitle}
-              </h2>
-
-              <p className="mt-3 text-sm text-gray-300">
-                {t.readOnlyDescription}
-              </p>
-            </div>
-          )}
-
-          <div className="mt-2 flex flex-wrap items-center gap-3">
-            <p className="text-sm text-gray-500">
-              {t.account}: {account.name}
-            </p>
-
-            {isReadOnly && (
-              <div className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-4 py-1 text-xs font-black uppercase tracking-[0.2em] text-yellow-300">
-                {t.readOnly}
-              </div>
-            )}
-          </div>
         </div>
 
-        {canCreateTrades && (
-          <Link
-            href="#new-trade-form"
-            className="shrink-0 rounded-2xl bg-accent px-5 py-3 font-bold text-white transition hover:bg-accent-bright"
-          >
-            + {t.newTradeTitle}
-          </Link>
+        {selectedMember && (
+          <div className="mt-4 rounded-3xl border border-accent-bright/20 bg-accent-bright/10 p-5">
+            <p className="text-xs uppercase tracking-[0.2em] text-accent-bright">
+              {t.memberFilterActive}
+            </p>
+
+            <h2 className="mt-2 text-xl font-black text-white">
+              {t.viewingOnlyTradesOf}{" "}
+              {selectedMember.name ||
+                selectedMember.username}
+            </h2>
+
+            <Link
+              href={`/accounts/${accountId}/diary`}
+              className="mt-4 inline-flex rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm font-bold text-gray-300 transition hover:bg-white/[0.05]"
+            >
+              {t.clearFilter}
+            </Link>
+          </div>
         )}
+
+        {isReadOnly && (
+          <div className="mt-4 rounded-3xl border border-yellow-500/20 bg-yellow-500/10 p-5">
+            <p className="text-xs uppercase tracking-[0.2em] text-yellow-300">
+              {t.readOnlyMode}
+            </p>
+
+            <h2 className="mt-2 text-xl font-black text-white">
+              {t.readOnlyTitle}
+            </h2>
+
+            <p className="mt-3 text-sm text-gray-300">
+              {t.readOnlyDescription}
+            </p>
+          </div>
+        )}
+
+        <div className="mt-2 flex flex-wrap items-center gap-3">
+          <p className="text-sm text-gray-500">
+            {t.account}: {account.name}
+          </p>
+
+          {isReadOnly && (
+            <div className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-4 py-1 text-xs font-black uppercase tracking-[0.2em] text-yellow-300">
+              {t.readOnly}
+            </div>
+          )}
+        </div>
       </div>
 
       <ScopeBar
@@ -1348,48 +1413,24 @@ export default async function DiaryPage({
 
       <form
         action={`/accounts/${accountId}/diary`}
-        className="mb-10 rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+        className="rounded-3xl border border-white/10 bg-white/[0.03] p-4"
       >
-        <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p className="text-sm text-gray-400">
-              {t.filtersEyebrow}
-            </p>
-
-            <h2 className="mt-1 text-2xl font-bold">
-              {t.filtersTitle}
-            </h2>
-          </div>
-
-          {hasActiveFilters && (
-            <Link
-              href={`/accounts/${accountId}/diary`}
-              className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-gray-300 hover:bg-white/[0.06]"
-            >
-              {t.resetFilters}
-            </Link>
-          )}
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-9">
+        <div className="flex flex-wrap items-center gap-2">
           <select
             name="symbol"
             defaultValue={filters.symbol || ""}
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            className="rounded-xl border border-white/10 bg-zinc-900 px-3 py-2 text-sm outline-none focus:border-accent/40"
           >
             <option value="">{t.allSymbols}</option>
-
             {symbols.map((symbol) => (
-              <option key={symbol} value={symbol}>
-                {symbol}
-              </option>
+              <option key={symbol} value={symbol}>{symbol}</option>
             ))}
           </select>
 
           <select
             name="outcome"
             defaultValue={filters.outcome || ""}
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            className="rounded-xl border border-white/10 bg-zinc-900 px-3 py-2 text-sm outline-none focus:border-accent/40"
           >
             <option value="">{t.allOutcomes}</option>
             <option value="win">{t.win}</option>
@@ -1400,7 +1441,7 @@ export default async function DiaryPage({
           <select
             name="direction"
             defaultValue={filters.direction || ""}
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            className="rounded-xl border border-white/10 bg-zinc-900 px-3 py-2 text-sm outline-none focus:border-accent/40"
           >
             <option value="">{t.allDirections}</option>
             <option value="LONG">LONG</option>
@@ -1410,7 +1451,7 @@ export default async function DiaryPage({
           <select
             name="source"
             defaultValue={filters.source || ""}
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            className="rounded-xl border border-white/10 bg-zinc-900 px-3 py-2 text-sm outline-none focus:border-accent/40"
           >
             <option value="">{t.allSources}</option>
             <option value="manual">{t.manual}</option>
@@ -1421,7 +1462,7 @@ export default async function DiaryPage({
           <select
             name="needsReview"
             defaultValue={filters.needsReview || ""}
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            className="rounded-xl border border-white/10 bg-zinc-900 px-3 py-2 text-sm outline-none focus:border-accent/40"
           >
             <option value="">{t.allStatuses}</option>
             <option value="true">{t.needsReview}</option>
@@ -1430,308 +1471,114 @@ export default async function DiaryPage({
           <select
             name="strategyId"
             defaultValue={filters.strategyId || ""}
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+            className="rounded-xl border border-white/10 bg-zinc-900 px-3 py-2 text-sm outline-none focus:border-accent/40"
           >
             <option value="">{t.allStrategies}</option>
             {strategies.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.name}
-              </option>
+              <option key={s.id} value={s.id}>{s.name}</option>
             ))}
           </select>
 
-          <input
-            name="from"
-            type="date"
-            defaultValue={filters.from || ""}
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          />
-
-          <input
-            name="to"
-            type="date"
-            defaultValue={filters.to || ""}
-            className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-          />
+          <div className={`flex items-center gap-2 rounded-xl border px-3 py-1.5 ${activeDateConflict ? "border-orange-500/40 bg-orange-500/[0.06]" : "border-accent-bright/30 bg-accent-bright/[0.04]"}`}>
+            <div className="dt-wrap">
+              <input
+                name="from"
+                type="date"
+                defaultValue={filters.from || ""}
+                className="bg-transparent pr-6 text-sm text-gray-300 outline-none"
+              />
+              <span className="dt-icon" aria-hidden="true"><CalendarIcon /></span>
+            </div>
+            <span className="text-xs text-gray-500">→</span>
+            <div className="dt-wrap">
+              <input
+                name="to"
+                type="date"
+                defaultValue={filters.to || ""}
+                className="bg-transparent pr-6 text-sm text-gray-300 outline-none"
+              />
+              <span className="dt-icon" aria-hidden="true"><CalendarIcon /></span>
+            </div>
+            {activeDateConflict && (
+              <span className="text-xs font-bold text-orange-400">{t.dateConflictWarning}</span>
+            )}
+          </div>
 
           <button
             type="submit"
-            className="rounded-2xl bg-accent p-4 font-bold text-white transition hover:bg-accent-bright sm:col-span-2 xl:col-span-9"
+            className="rounded-xl bg-accent px-4 py-2 text-sm font-bold text-white transition hover:bg-accent-bright"
           >
             {t.applyFilters}
           </button>
+
+          {hasActiveFilters && (
+            <Link
+              href={`/accounts/${accountId}/diary`}
+              className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-gray-400 hover:bg-white/[0.06]"
+            >
+              {t.resetFilters}
+            </Link>
+          )}
         </div>
+
+        {activeFilterChips.length > 0 && (
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <span className="text-xs text-gray-500">{t.activeFilters}</span>
+            {activeFilterChips.map((chip) => (
+              <span
+                key={chip}
+                className="rounded-full border border-white/10 bg-white/[0.05] px-3 py-0.5 text-xs text-gray-300"
+              >
+                {chip}
+              </span>
+            ))}
+            {activeDateConflict && (
+              <span className="rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-0.5 text-xs font-semibold text-orange-400">
+                {t.dateConflictWarning}
+              </span>
+            )}
+          </div>
+        )}
       </form>
 
-      {canCreateTrades && (
-        <form
-          id="new-trade-form"
-          action={createAccountTrade.bind(null, accountId)}
-          className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
-        >
-          <div className="mb-6">
+      <div className="space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
             <p className="text-sm text-gray-400">
-              {t.newTradeEyebrow}
+              {t.historyEyebrow}
             </p>
 
-            <h2 className="mt-1 text-2xl font-bold">
-              {t.newTradeTitle}
+            <h2 className="text-2xl font-bold">
+              {t.historyTitle}
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <input
-              name="openDate"
-              type="date"
-              aria-label={t.openDate}
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-              required
-            />
-
-            <input
-              name="openTime"
-              type="time"
-              aria-label={t.openTime}
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            />
-
-            <input
-              name="reason"
-              placeholder={t.reason}
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            />
-
-            <select
-              name="strategyId"
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+          {canCreateTrades && (
+            <Link
+              href={`/accounts/${accountId}/diary/new`}
+              className="inline-flex items-center gap-1.5 rounded-2xl border border-accent/40 bg-accent/10 px-4 py-2 text-sm font-semibold text-accent transition hover:bg-accent/20"
             >
-              <option value="">{t.noStrategy}</option>
-              {strategies.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.name}
-                </option>
-              ))}
-            </select>
-
-            <select
-              name="symbol"
-              required
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            >
-              <option value="">{t.instrument}</option>
-
-              <optgroup label="Forex">
-                <option value="EURUSD">EURUSD</option>
-                <option value="GBPUSD">GBPUSD</option>
-                <option value="USDJPY">USDJPY</option>
-                <option value="AUDUSD">AUDUSD</option>
-                <option value="USDCAD">USDCAD</option>
-                <option value="USDCHF">USDCHF</option>
-                <option value="NZDUSD">NZDUSD</option>
-              </optgroup>
-
-              <optgroup label="Gold & Commodities">
-                <option value="XAUUSD">XAUUSD</option>
-                <option value="XAGUSD">XAGUSD</option>
-                <option value="USOIL">USOIL</option>
-                <option value="UKOIL">UKOIL</option>
-              </optgroup>
-
-              <optgroup label="Crypto">
-                <option value="BTCUSD">BTCUSD</option>
-                <option value="ETHUSD">ETHUSD</option>
-                <option value="SOLUSD">SOLUSD</option>
-                <option value="XRPUSD">XRPUSD</option>
-              </optgroup>
-
-              <optgroup label="Indices">
-                <option value="NASDAQ">NASDAQ</option>
-                <option value="S&P500">S&P500</option>
-                <option value="DAX40">DAX40</option>
-                <option value="DJI">DJI</option>
-              </optgroup>
-            </select>
-
-            <select
-              name="direction"
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            >
-              <option value="LONG">LONG</option>
-              <option value="SHORT">SHORT</option>
-            </select>
-
-            <input
-              name="amount"
-              placeholder={t.amount}
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            />
-
-            <input
-              name="openingPrice"
-              placeholder={t.openingPrice}
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            />
-
-            <input
-              name="stopLoss"
-              placeholder={t.stopLoss}
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            />
-
-            <input
-              name="takeProfit"
-              placeholder={t.takeProfit}
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            />
-
-            <input
-              name="riskReward"
-              placeholder={t.riskReward}
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            />
-
-            <input
-              name="closeDate"
-              type="date"
-              aria-label={t.closeDate}
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            />
-
-            <input
-              name="closingPrice"
-              placeholder={t.closingPrice}
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            />
-
-            <select
-              name="outcome"
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            >
-              <option value="">{t.outcome}</option>
-              <option value="win">{t.win}</option>
-              <option value="loss">{t.loss}</option>
-              <option value="be">{t.be}</option>
-            </select>
-
-            <input
-              name="resultUsd"
-              placeholder={t.result}
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            />
-
-            <select
-              name="session"
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            >
-              <option value="">{t.session}</option>
-              <option value="ASIA">Asia</option>
-              <option value="LONDON">London</option>
-              <option value="NEW_YORK">New York</option>
-              <option value="OVERLAP">Overlap</option>
-            </select>
-
-            <select
-              name="emotionalState"
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            >
-              <option value="">{t.emotionalState}</option>
-              <option value="CALM">{t.calm}</option>
-              <option value="FOCUSED">{t.focused}</option>
-              <option value="CONFIDENT">{t.confident}</option>
-              <option value="TIRED">{t.tired}</option>
-              <option value="STRESSED">{t.stressed}</option>
-              <option value="IMPULSIVE">
-                {t.impulsive}
-              </option>
-            </select>
-
-            <input
-              name="setupQuality"
-              type="number"
-              min="1"
-              max="10"
-              placeholder={t.setupQuality}
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            />
-
-            <input
-              name="executionRating"
-              type="number"
-              min="1"
-              max="10"
-              placeholder={t.executionRating}
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            />
-
-            <input
-              name="confidence"
-              type="number"
-              min="1"
-              max="10"
-              placeholder={t.confidence}
-              className="rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-            />
-
-            <textarea
-              name="mistakes"
-              placeholder={t.mistakes}
-              className="min-h-[110px] rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40 sm:col-span-2"
-            />
-
-            <textarea
-              name="lessonsLearned"
-              placeholder={t.lessonsLearned}
-              className="min-h-[110px] rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40 sm:col-span-2"
-            />
-
-            <button
-              type="submit"
-              className="rounded-2xl bg-accent p-4 font-bold text-white transition hover:bg-accent-bright sm:col-span-2 xl:col-span-4"
-            >
-              {t.addTrade}
-            </button>
-          </div>
-        </form>
-      )}
-
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {secondaryMetrics.map((stat) => (
-          <div
-            key={stat.label}
-            className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
-          >
-            <p className="text-sm text-gray-400">
-              {stat.label}
-            </p>
-
-            <h2
-              className={`mt-2 text-2xl font-bold ${stat.tone}`}
-            >
-              {stat.value}
-            </h2>
-          </div>
-        ))}
-      </div>
-
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <div>
-          <p className="text-sm text-gray-400">
-            {t.historyEyebrow}
-          </p>
-
-          <h2 className="text-2xl font-bold">
-            {t.historyTitle}
-          </h2>
+              + {t.newTradeTitle}
+            </Link>
+          )}
         </div>
 
-        <p className="text-sm text-gray-500">
-          {t.filteredCount(periodTrades.length, allTrades.length)}
-        </p>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+          <p className="text-xs text-gray-500">
+            {t.filteredCount(periodTrades.length, allTrades.length)}
+          </p>
+          {secondaryMetrics.map((stat) => (
+            <div key={stat.label} className="flex items-center gap-1">
+              <span className="text-xs text-gray-500">{stat.label}:</span>
+              <span className={`text-xs font-semibold ${stat.tone}`}>{stat.value}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="hidden overflow-x-auto rounded-3xl border border-white/10 bg-white/[0.03] lg:block">
         <table className="w-full border-collapse">
-          <thead className="bg-white/5 text-left text-sm text-gray-400">
+          <thead className="bg-white/[0.06] text-left text-sm text-gray-400">
             <tr>
               <th className="p-4">{t.date}</th>
               {isSharedAccount && (
@@ -1902,9 +1749,24 @@ export default async function DiaryPage({
               <tr>
                 <td
                   colSpan={isSharedAccount ? 11 : 10}
-                  className="p-8 text-center text-gray-500"
+                  className="p-10 text-center"
                 >
-                  {t.noTrades}
+                  {allTrades.length === 0 ? (
+                    <p className="font-medium text-gray-400">{t.noTradesAccount}</p>
+                  ) : (
+                    <div className="space-y-3">
+                      <p className="text-gray-400">{t.noTrades}</p>
+                      {activeDateConflict && (
+                        <p className="text-sm text-orange-400">{t.emptyFiltersHint}</p>
+                      )}
+                      <Link
+                        href={`/accounts/${accountId}/diary`}
+                        className="inline-block rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-gray-300 hover:bg-white/[0.08]"
+                      >
+                        {t.resetAllFilters}
+                      </Link>
+                    </div>
+                  )}
                 </td>
               </tr>
             )}
@@ -1914,8 +1776,23 @@ export default async function DiaryPage({
 
       <div className="space-y-4 lg:hidden">
         {periodTrades.length === 0 ? (
-          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 text-center text-gray-500">
-            {t.noTrades}
+          <div className="space-y-3 rounded-3xl border border-white/10 bg-white/[0.03] p-8 text-center">
+            {allTrades.length === 0 ? (
+              <p className="font-medium text-gray-400">{t.noTradesAccount}</p>
+            ) : (
+              <>
+                <p className="text-gray-400">{t.noTrades}</p>
+                {activeDateConflict && (
+                  <p className="text-sm text-orange-400">{t.emptyFiltersHint}</p>
+                )}
+                <Link
+                  href={`/accounts/${accountId}/diary`}
+                  className="inline-block rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-gray-300 hover:bg-white/[0.08]"
+                >
+                  {t.resetAllFilters}
+                </Link>
+              </>
+            )}
           </div>
         ) : (
           periodTrades.map((trade) => (
@@ -2078,7 +1955,7 @@ export default async function DiaryPage({
                 )}
 
                 {trade.lessonsLearned && (
-                  <div className="mt-4 rounded-2xl border border-accent/10  param($m) $m.Value -replace 'green-500', 'accent'  p-3">
+                  <div className="mt-4 rounded-2xl border border-accent/10 bg-accent/[0.03] p-3">
                     <p className="text-xs font-semibold uppercase tracking-wide text-accent">
                       {t.lessonsLearned}
                     </p>

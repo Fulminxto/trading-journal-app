@@ -50,7 +50,7 @@ export default function VoltisLightningLoader({
     const CHAOS = W * 0.069;
     const SPARK_RATE = 0.35;
     const BASE_W = W * 0.0139;
-    const OUTER_RGB = "44,116,232";
+    const OUTER_RGB = "46,98,230";
     const MID_COL = "#5BE0FF";
     const CORE_COL = "#FFFFFF";
     const STOP_RES = W * 0.008;
@@ -175,7 +175,7 @@ export default function VoltisLightningLoader({
   }
 
   return (
-    <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-[#0C1430]">
+    <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-bg-base">
       <div className="loader-fade-in flex flex-col items-center gap-5">
         <canvas ref={canvasRef} className="block" />
         <p className="text-xs uppercase tracking-[0.45em] text-[#5f7099]">

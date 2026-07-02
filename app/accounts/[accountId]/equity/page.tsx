@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
   Activity,
@@ -96,33 +96,33 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
     heroEyebrow: "Centro controllo equity",
     heroTitle: "Curva Equity",
     heroDescription:
-      "Segui la crescita dellÃ¢â‚¬â„¢account, la protezione del capitale, il comportamento del drawdown e lÃ¢â‚¬â„¢evoluzione della tua equity nel tempo.",
-    backToAccountHub: "Torna allÃ¢â‚¬â„¢Account Hub",
+      "Segui la crescita dell’account, la protezione del capitale, il comportamento del drawdown e l’evoluzione della tua equity nel tempo.",
+    backToAccountHub: "Torna all’Account Hub",
 
     currentEquity: "Equity attuale",
     currentEquityDescription:
       "Ultima equity calcolata dopo i trade chiusi.",
     totalPnl: "PnL totale",
     totalPnlDescription:
-      "Profitto o perdita totale generata dallÃ¢â‚¬â„¢account.",
+      "Profitto o perdita totale generata dall’account.",
     growth: "Crescita",
     growthDescription:
       "Performance rispetto al saldo iniziale.",
     maxDrawdown: "Drawdown massimo",
     maxDrawdownDescription:
-      "Peggiore calo dellÃ¢â‚¬â„¢equity registrato sullÃ¢â‚¬â„¢account.",
+      "Peggiore calo dell’equity registrato sull’account.",
 
     accountGrowth: "Crescita account",
     equityProgression: "Progressione Equity",
     noTradesChart:
-      "Nessun trade presente. Quando aggiungerai operazioni, la curva equity comparirÃƒÂ  qui.",
+      "Nessun trade presente. Quando aggiungerai operazioni, la curva equity comparirà qui.",
 
     equityPeak: "Picco Equity",
     equityPeakDescription:
-      "Valore equity piÃƒÂ¹ alto registrato su questo account.",
+      "Valore equity più alto registrato su questo account.",
     lowestEquity: "Equity minima",
     lowestEquityDescription:
-      "Valore equity piÃƒÂ¹ basso registrato includendo il saldo iniziale.",
+      "Valore equity più basso registrato includendo il saldo iniziale.",
 
     positiveTrades: "Trade positivi",
     positiveTradesDescription:
@@ -139,10 +139,10 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
 
     bestTrade: "Miglior trade",
     bestTradeDescription:
-      "Risultato positivo singolo piÃƒÂ¹ grande registrato su questo account.",
+      "Risultato positivo singolo più grande registrato su questo account.",
     worstTrade: "Peggior trade",
     worstTradeDescription:
-      "Risultato negativo singolo piÃƒÂ¹ grande registrato su questo account.",
+      "Risultato negativo singolo più grande registrato su questo account.",
 
     equityHistory: "Storico equity",
     tradeByTradeProgression: "Progressione trade per trade",
@@ -230,141 +230,141 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
   },
 
   uk: {
-    heroBadge: "Ãâ€™Ã‘â€“ÃÂ´Ã‘ÂÃ‘â€šÃÂµÃÂ¶ÃÂµÃÂ½ÃÂ½Ã‘Â ÃÂºÃÂ°ÃÂ¿Ã‘â€“Ã‘â€šÃÂ°ÃÂ»Ã‘Æ’",
-    heroEyebrow: "ÃÂ¦ÃÂµÃÂ½Ã‘â€šÃ‘â‚¬ ÃÂºÃÂ¾ÃÂ½Ã‘â€šÃ‘â‚¬ÃÂ¾ÃÂ»Ã‘Å½ equity",
-    heroTitle: "ÃÅ¡Ã‘â‚¬ÃÂ¸ÃÂ²ÃÂ° Equity",
+    heroBadge: "Відстеження капіталу",
+    heroEyebrow: "Центр контролю equity",
+    heroTitle: "Крива Equity",
     heroDescription:
-      "Ãâ€™Ã‘â€“ÃÂ´Ã‘ÂÃ‘â€šÃÂµÃÂ¶Ã‘Æ’ÃÂ¹ ÃÂ·Ã‘â‚¬ÃÂ¾Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ½Ã‘Â ÃÂ°ÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂ°, ÃÂ·ÃÂ°Ã‘â€¦ÃÂ¸Ã‘ÂÃ‘â€š ÃÂºÃÂ°ÃÂ¿Ã‘â€“Ã‘â€šÃÂ°ÃÂ»Ã‘Æ’, ÃÂ¿ÃÂ¾ÃÂ²ÃÂµÃÂ´Ã‘â€“ÃÂ½ÃÂºÃ‘Æ’ drawdown Ã‘â€šÃÂ° Ã‘â‚¬ÃÂ¾ÃÂ·ÃÂ²ÃÂ¸Ã‘â€šÃÂ¾ÃÂº Ã‘â€šÃÂ¾Ã‘â‚¬ÃÂ³ÃÂ¾ÃÂ²ÃÂ¾Ã‘â€” equity ÃÂ· Ã‘â€¡ÃÂ°Ã‘ÂÃÂ¾ÃÂ¼.",
-    backToAccountHub: "ÃÂÃÂ°ÃÂ·ÃÂ°ÃÂ´ ÃÂ´ÃÂ¾ Account Hub",
+      "Відстежуй зростання акаунта, захист капіталу, поведінку drawdown та розвиток торгової equity з часом.",
+    backToAccountHub: "Назад до Account Hub",
 
-    currentEquity: "ÃÅ¸ÃÂ¾Ã‘â€šÃÂ¾Ã‘â€¡ÃÂ½ÃÂ° equity",
+    currentEquity: "Поточна equity",
     currentEquityDescription:
-      "ÃÅ¾Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ½Ã‘â€ Ã‘â‚¬ÃÂ¾ÃÂ·Ã‘â‚¬ÃÂ°Ã‘â€¦ÃÂ¾ÃÂ²ÃÂ°ÃÂ½ÃÂµ ÃÂ·ÃÂ½ÃÂ°Ã‘â€¡ÃÂµÃÂ½ÃÂ½Ã‘Â equity ÃÂ¿Ã‘â€“Ã‘ÂÃÂ»Ã‘Â ÃÂ·ÃÂ°ÃÂºÃ‘â‚¬ÃÂ¸Ã‘â€šÃÂ¸Ã‘â€¦ Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´.",
-    totalPnl: "Ãâ€”ÃÂ°ÃÂ³ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¸ÃÂ¹ PnL",
+      "Останнє розраховане значення equity після закритих угод.",
+    totalPnl: "Загальний PnL",
     totalPnlDescription:
-      "Ãâ€”ÃÂ°ÃÂ³ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘Æ’Ã‘â€šÃÂ¾ÃÂº ÃÂ°ÃÂ±ÃÂ¾ ÃÂ·ÃÂ±ÃÂ¸Ã‘â€šÃÂ¾ÃÂº, Ã‘ÂÃ‘â€šÃÂ²ÃÂ¾Ã‘â‚¬ÃÂµÃÂ½ÃÂ¸ÃÂ¹ ÃÂ°ÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂ¾ÃÂ¼.",
-    growth: "Ãâ€”Ã‘â‚¬ÃÂ¾Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ½Ã‘Â",
+      "Загальний прибуток або збиток, створений акаунтом.",
+    growth: "Зростання",
     growthDescription:
-      "ÃÂ ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€š ÃÂ²Ã‘â€“ÃÂ´ÃÂ½ÃÂ¾Ã‘ÂÃÂ½ÃÂ¾ ÃÂ¿ÃÂ¾Ã‘â€¡ÃÂ°Ã‘â€šÃÂºÃÂ¾ÃÂ²ÃÂ¾ÃÂ³ÃÂ¾ ÃÂ±ÃÂ°ÃÂ»ÃÂ°ÃÂ½Ã‘ÂÃ‘Æ’.",
-    maxDrawdown: "ÃÅ“ÃÂ°ÃÂºÃ‘ÂÃÂ¸ÃÂ¼ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¸ÃÂ¹ drawdown",
+      "Результат відносно початкового балансу.",
+    maxDrawdown: "Максимальний drawdown",
     maxDrawdownDescription:
-      "ÃÂÃÂ°ÃÂ¹ÃÂ³ÃÂ»ÃÂ¸ÃÂ±Ã‘Ë†ÃÂµ ÃÂ¿Ã‘â‚¬ÃÂ¾Ã‘ÂÃ‘â€“ÃÂ´ÃÂ°ÃÂ½ÃÂ½Ã‘Â equity, ÃÂ·ÃÂ°Ã‘â€žÃ‘â€“ÃÂºÃ‘ÂÃÂ¾ÃÂ²ÃÂ°ÃÂ½ÃÂµ ÃÂ½ÃÂ° ÃÂ°ÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃ‘â€“.",
+      "Найглибше просідання equity, зафіксоване на акаунті.",
 
-    accountGrowth: "Ãâ€”Ã‘â‚¬ÃÂ¾Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ½Ã‘Â ÃÂ°ÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂ°",
-    equityProgression: "ÃÅ¸Ã‘â‚¬ÃÂ¾ÃÂ³Ã‘â‚¬ÃÂµÃ‘ÂÃ‘â€“Ã‘Â Equity",
+    accountGrowth: "Зростання акаунта",
+    equityProgression: "Прогресія Equity",
     noTradesChart:
-      "ÃÂ£ÃÂ³ÃÂ¾ÃÂ´ Ã‘â€°ÃÂµ ÃÂ½ÃÂµÃÂ¼ÃÂ°Ã‘â€. ÃÅ¡ÃÂ¾ÃÂ»ÃÂ¸ Ã‘â€šÃÂ¸ ÃÂ´ÃÂ¾ÃÂ´ÃÂ°Ã‘ÂÃÂ¸ Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ÃÂ¸, ÃÂºÃ‘â‚¬ÃÂ¸ÃÂ²ÃÂ° equity ÃÂ·Ã¢â‚¬â„¢Ã‘ÂÃÂ²ÃÂ¸Ã‘â€šÃ‘Å’Ã‘ÂÃ‘Â Ã‘â€šÃ‘Æ’Ã‘â€š.",
+      "Угод ще немає. Коли ти додаси угоди, крива equity з’явиться тут.",
 
-    equityPeak: "ÃÅ¸Ã‘â€“ÃÂº Equity",
+    equityPeak: "Пік Equity",
     equityPeakDescription:
-      "ÃÂÃÂ°ÃÂ¹ÃÂ²ÃÂ¸Ã‘â€°ÃÂµ ÃÂ·ÃÂ½ÃÂ°Ã‘â€¡ÃÂµÃÂ½ÃÂ½Ã‘Â equity, ÃÂ·ÃÂ°Ã‘â€žÃ‘â€“ÃÂºÃ‘ÂÃÂ¾ÃÂ²ÃÂ°ÃÂ½ÃÂµ ÃÂ½ÃÂ° Ã‘â€ Ã‘Å’ÃÂ¾ÃÂ¼Ã‘Æ’ ÃÂ°ÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃ‘â€“.",
-    lowestEquity: "ÃÅ“Ã‘â€“ÃÂ½Ã‘â€“ÃÂ¼ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ° equity",
+      "Найвище значення equity, зафіксоване на цьому акаунті.",
+    lowestEquity: "Мінімальна equity",
     lowestEquityDescription:
-      "ÃÂÃÂ°ÃÂ¹ÃÂ½ÃÂ¸ÃÂ¶Ã‘â€¡ÃÂµ ÃÂ·ÃÂ½ÃÂ°Ã‘â€¡ÃÂµÃÂ½ÃÂ½Ã‘Â equity ÃÂ· Ã‘Æ’Ã‘â‚¬ÃÂ°Ã‘â€¦Ã‘Æ’ÃÂ²ÃÂ°ÃÂ½ÃÂ½Ã‘ÂÃÂ¼ ÃÂ¿ÃÂ¾Ã‘â€¡ÃÂ°Ã‘â€šÃÂºÃÂ¾ÃÂ²ÃÂ¾ÃÂ³ÃÂ¾ ÃÂ±ÃÂ°ÃÂ»ÃÂ°ÃÂ½Ã‘ÂÃ‘Æ’.",
+      "Найнижче значення equity з урахуванням початкового балансу.",
 
-    positiveTrades: "ÃÅ¸ÃÂ¾ÃÂ·ÃÂ¸Ã‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“ Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ÃÂ¸",
+    positiveTrades: "Позитивні угоди",
     positiveTradesDescription:
-      "ÃÂ£ÃÂ³ÃÂ¾ÃÂ´ÃÂ¸, ÃÂ·ÃÂ°ÃÂºÃ‘â‚¬ÃÂ¸Ã‘â€šÃ‘â€“ ÃÂ· ÃÂ¿ÃÂ¾ÃÂ·ÃÂ¸Ã‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¸ÃÂ¼ Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃÂ¾ÃÂ¼.",
-    negativeTrades: "ÃÂÃÂµÃÂ³ÃÂ°Ã‘â€šÃÂ¸ÃÂ²ÃÂ½Ã‘â€“ Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ÃÂ¸",
+      "Угоди, закриті з позитивним результатом.",
+    negativeTrades: "Негативні угоди",
     negativeTradesDescription:
-      "ÃÂ£ÃÂ³ÃÂ¾ÃÂ´ÃÂ¸, ÃÂ·ÃÂ°ÃÂºÃ‘â‚¬ÃÂ¸Ã‘â€šÃ‘â€“ ÃÂ· ÃÂ½ÃÂµÃÂ³ÃÂ°Ã‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¸ÃÂ¼ Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃÂ¾ÃÂ¼.",
-    flatTrades: "Flat Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ÃÂ¸",
+      "Угоди, закриті з негативним результатом.",
+    flatTrades: "Flat угоди",
     flatTradesDescription:
-      "ÃÂ£ÃÂ³ÃÂ¾ÃÂ´ÃÂ¸, ÃÂ·ÃÂ°ÃÂºÃ‘â‚¬ÃÂ¸Ã‘â€šÃ‘â€“ ÃÂ² break-even ÃÂ°ÃÂ±ÃÂ¾ ÃÂ±ÃÂµÃÂ· PnL.",
-    averagePnl: "ÃÂ¡ÃÂµÃ‘â‚¬ÃÂµÃÂ´ÃÂ½Ã‘â€“ÃÂ¹ PnL",
+      "Угоди, закриті в break-even або без PnL.",
+    averagePnl: "Середній PnL",
     averagePnlDescription:
-      "ÃÂ¡ÃÂµÃ‘â‚¬ÃÂµÃÂ´ÃÂ½Ã‘â€“ÃÂ¹ Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€š ÃÂ·ÃÂ° ÃÂ¾ÃÂ´ÃÂ½Ã‘Æ’ ÃÂ·ÃÂ°ÃÂ¿ÃÂ¸Ã‘ÂÃÂ°ÃÂ½Ã‘Æ’ Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´Ã‘Æ’.",
+      "Середній результат за одну записану угоду.",
 
-    bestTrade: "ÃÂÃÂ°ÃÂ¹ÃÂºÃ‘â‚¬ÃÂ°Ã‘â€°ÃÂ° Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ÃÂ°",
+    bestTrade: "Найкраща угода",
     bestTradeDescription:
-      "ÃÂÃÂ°ÃÂ¹ÃÂ±Ã‘â€“ÃÂ»Ã‘Å’Ã‘Ë†ÃÂ¸ÃÂ¹ ÃÂ¾ÃÂ´ÃÂ¸ÃÂ½ÃÂ¸Ã‘â€¡ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ¿ÃÂ¾ÃÂ·ÃÂ¸Ã‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¸ÃÂ¹ Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€š ÃÂ½ÃÂ° Ã‘â€ Ã‘Å’ÃÂ¾ÃÂ¼Ã‘Æ’ ÃÂ°ÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃ‘â€“.",
-    worstTrade: "ÃÂÃÂ°ÃÂ¹ÃÂ³Ã‘â€“Ã‘â‚¬Ã‘Ë†ÃÂ° Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ÃÂ°",
+      "Найбільший одиничний позитивний результат на цьому акаунті.",
+    worstTrade: "Найгірша угода",
     worstTradeDescription:
-      "ÃÂÃÂ°ÃÂ¹ÃÂ±Ã‘â€“ÃÂ»Ã‘Å’Ã‘Ë†ÃÂ¸ÃÂ¹ ÃÂ¾ÃÂ´ÃÂ¸ÃÂ½ÃÂ¸Ã‘â€¡ÃÂ½ÃÂ¸ÃÂ¹ ÃÂ½ÃÂµÃÂ³ÃÂ°Ã‘â€šÃÂ¸ÃÂ²ÃÂ½ÃÂ¸ÃÂ¹ Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€š ÃÂ½ÃÂ° Ã‘â€ Ã‘Å’ÃÂ¾ÃÂ¼Ã‘Æ’ ÃÂ°ÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃ‘â€“.",
+      "Найбільший одиничний негативний результат на цьому акаунті.",
 
-    equityHistory: "Ãâ€ Ã‘ÂÃ‘â€šÃÂ¾Ã‘â‚¬Ã‘â€“Ã‘Â equity",
-    tradeByTradeProgression: "ÃÅ¸Ã‘â‚¬ÃÂ¾ÃÂ³Ã‘â‚¬ÃÂµÃ‘ÂÃ‘â€“Ã‘Â Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ÃÂ° ÃÂ·ÃÂ° Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ÃÂ¾Ã‘Å½",
+    equityHistory: "Історія equity",
+    tradeByTradeProgression: "Прогресія угода за угодою",
     showingLatest: (shown, total) =>
-      `ÃÅ¸ÃÂ¾ÃÂºÃÂ°ÃÂ·ÃÂ°ÃÂ½ÃÂ¾ ÃÂ¾Ã‘ÂÃ‘â€šÃÂ°ÃÂ½ÃÂ½Ã‘â€“ ${shown} ÃÂ· ${total} Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´`,
+      `Показано останні ${shown} з ${total} угод`,
 
-    unknownSymbol: "ÃÂÃÂµÃÂ²Ã‘â€“ÃÂ´ÃÂ¾ÃÂ¼ÃÂ¸ÃÂ¹ Ã‘ÂÃÂ¸ÃÂ¼ÃÂ²ÃÂ¾ÃÂ»",
+    unknownSymbol: "Невідомий символ",
     equity: "Equity",
     drawdown: "Drawdown",
-    date: "Ãâ€ÃÂ°Ã‘â€šÃÂ°",
-    symbol: "ÃÂ¡ÃÂ¸ÃÂ¼ÃÂ²ÃÂ¾ÃÂ»",
-    outcome: "ÃÂ ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€š",
+    date: "Дата",
+    symbol: "Символ",
+    outcome: "Результат",
     pnl: "PnL",
     noEquityHistory:
-      "Ãâ€ Ã‘ÂÃ‘â€šÃÂ¾Ã‘â‚¬Ã‘â€“Ã‘â€” equity Ã‘â€°ÃÂµ ÃÂ½ÃÂµÃÂ¼ÃÂ°Ã‘â€. Ãâ€ÃÂ¾ÃÂ´ÃÂ°ÃÂ¹ Ã‘Æ’ÃÂ³ÃÂ¾ÃÂ´ÃÂ¸, Ã‘â€°ÃÂ¾ÃÂ± ÃÂ¿ÃÂ¾Ã‘â€¡ÃÂ°Ã‘â€šÃÂ¸ ÃÂ²Ã‘â€“ÃÂ´Ã‘ÂÃ‘â€šÃÂµÃÂ¶Ã‘Æ’ÃÂ²ÃÂ°Ã‘â€šÃÂ¸ ÃÂ¿Ã‘â‚¬ÃÂ¾ÃÂ³Ã‘â‚¬ÃÂµÃ‘Â ÃÂºÃÂ°ÃÂ¿Ã‘â€“Ã‘â€šÃÂ°ÃÂ»Ã‘Æ’.",
+      "Історії equity ще немає. Додай угоди, щоб почати відстежувати прогрес капіталу.",
   },
 
   ru: {
-    heroBadge: "ÃÅ¾Ã‘â€šÃ‘ÂÃÂ»ÃÂµÃÂ¶ÃÂ¸ÃÂ²ÃÂ°ÃÂ½ÃÂ¸ÃÂµ ÃÂºÃÂ°ÃÂ¿ÃÂ¸Ã‘â€šÃÂ°ÃÂ»ÃÂ°",
-    heroEyebrow: "ÃÂ¦ÃÂµÃÂ½Ã‘â€šÃ‘â‚¬ ÃÂºÃÂ¾ÃÂ½Ã‘â€šÃ‘â‚¬ÃÂ¾ÃÂ»Ã‘Â equity",
-    heroTitle: "ÃÅ¡Ã‘â‚¬ÃÂ¸ÃÂ²ÃÂ°Ã‘Â Equity",
+    heroBadge: "Отслеживание капитала",
+    heroEyebrow: "Центр контроля equity",
+    heroTitle: "Кривая Equity",
     heroDescription:
-      "ÃÂ¡ÃÂ»ÃÂµÃÂ´ÃÂ¸ ÃÂ·ÃÂ° Ã‘â‚¬ÃÂ¾Ã‘ÂÃ‘â€šÃÂ¾ÃÂ¼ ÃÂ°ÃÂºÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂ°, ÃÂ·ÃÂ°Ã‘â€°ÃÂ¸Ã‘â€šÃÂ¾ÃÂ¹ ÃÂºÃÂ°ÃÂ¿ÃÂ¸Ã‘â€šÃÂ°ÃÂ»ÃÂ°, ÃÂ¿ÃÂ¾ÃÂ²ÃÂµÃÂ´ÃÂµÃÂ½ÃÂ¸ÃÂµÃÂ¼ drawdown ÃÂ¸ Ã‘â‚¬ÃÂ°ÃÂ·ÃÂ²ÃÂ¸Ã‘â€šÃÂ¸ÃÂµÃÂ¼ Ã‘â€šÃÂ¾Ã‘â‚¬ÃÂ³ÃÂ¾ÃÂ²ÃÂ¾ÃÂ¹ equity ÃÂ²ÃÂ¾ ÃÂ²Ã‘â‚¬ÃÂµÃÂ¼ÃÂµÃÂ½ÃÂ¸.",
-    backToAccountHub: "ÃÂÃÂ°ÃÂ·ÃÂ°ÃÂ´ ÃÂº Account Hub",
+      "Следи за ростом аккаунта, защитой капитала, поведением drawdown и развитием торговой equity во времени.",
+    backToAccountHub: "Назад к Account Hub",
 
-    currentEquity: "ÃÂ¢ÃÂµÃÂºÃ‘Æ’Ã‘â€°ÃÂ°Ã‘Â equity",
+    currentEquity: "Текущая equity",
     currentEquityDescription:
-      "ÃÅ¸ÃÂ¾Ã‘ÂÃÂ»ÃÂµÃÂ´ÃÂ½ÃÂµÃÂµ Ã‘â‚¬ÃÂ°Ã‘ÂÃ‘ÂÃ‘â€¡ÃÂ¸Ã‘â€šÃÂ°ÃÂ½ÃÂ½ÃÂ¾ÃÂµ ÃÂ·ÃÂ½ÃÂ°Ã‘â€¡ÃÂµÃÂ½ÃÂ¸ÃÂµ equity ÃÂ¿ÃÂ¾Ã‘ÂÃÂ»ÃÂµ ÃÂ·ÃÂ°ÃÂºÃ‘â‚¬Ã‘â€¹Ã‘â€šÃ‘â€¹Ã‘â€¦ Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂ¾ÃÂº.",
-    totalPnl: "ÃÅ¾ÃÂ±Ã‘â€°ÃÂ¸ÃÂ¹ PnL",
+      "Последнее рассчитанное значение equity после закрытых сделок.",
+    totalPnl: "Общий PnL",
     totalPnlDescription:
-      "ÃÅ¾ÃÂ±Ã‘â€°ÃÂ°Ã‘Â ÃÂ¿Ã‘â‚¬ÃÂ¸ÃÂ±Ã‘â€¹ÃÂ»Ã‘Å’ ÃÂ¸ÃÂ»ÃÂ¸ Ã‘Æ’ÃÂ±Ã‘â€¹Ã‘â€šÃÂ¾ÃÂº, Ã‘ÂÃÂ¾ÃÂ·ÃÂ´ÃÂ°ÃÂ½ÃÂ½Ã‘â€¹ÃÂµ ÃÂ°ÃÂºÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂ¾ÃÂ¼.",
-    growth: "ÃÂ ÃÂ¾Ã‘ÂÃ‘â€š",
+      "Общая прибыль или убыток, созданные аккаунтом.",
+    growth: "Рост",
     growthDescription:
-      "ÃÂ ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€š ÃÂ¾Ã‘â€šÃÂ½ÃÂ¾Ã‘ÂÃÂ¸Ã‘â€šÃÂµÃÂ»Ã‘Å’ÃÂ½ÃÂ¾ ÃÂ½ÃÂ°Ã‘â€¡ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¾ÃÂ³ÃÂ¾ ÃÂ±ÃÂ°ÃÂ»ÃÂ°ÃÂ½Ã‘ÂÃÂ°.",
-    maxDrawdown: "ÃÅ“ÃÂ°ÃÂºÃ‘ÂÃÂ¸ÃÂ¼ÃÂ°ÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂ¹ drawdown",
+      "Результат относительно начального баланса.",
+    maxDrawdown: "Максимальный drawdown",
     maxDrawdownDescription:
-      "ÃÂ¡ÃÂ°ÃÂ¼ÃÂ¾ÃÂµ ÃÂ³ÃÂ»Ã‘Æ’ÃÂ±ÃÂ¾ÃÂºÃÂ¾ÃÂµ Ã‘ÂÃÂ½ÃÂ¸ÃÂ¶ÃÂµÃÂ½ÃÂ¸ÃÂµ equity, ÃÂ·ÃÂ°Ã‘â€žÃÂ¸ÃÂºÃ‘ÂÃÂ¸Ã‘â‚¬ÃÂ¾ÃÂ²ÃÂ°ÃÂ½ÃÂ½ÃÂ¾ÃÂµ ÃÂ½ÃÂ° ÃÂ°ÃÂºÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂµ.",
+      "Самое глубокое снижение equity, зафиксированное на аккаунте.",
 
-    accountGrowth: "ÃÂ ÃÂ¾Ã‘ÂÃ‘â€š ÃÂ°ÃÂºÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂ°",
-    equityProgression: "ÃÅ¸Ã‘â‚¬ÃÂ¾ÃÂ³Ã‘â‚¬ÃÂµÃ‘ÂÃ‘ÂÃÂ¸Ã‘Â Equity",
+    accountGrowth: "Рост аккаунта",
+    equityProgression: "Прогрессия Equity",
     noTradesChart:
-      "ÃÂ¡ÃÂ´ÃÂµÃÂ»ÃÂ¾ÃÂº ÃÂ¿ÃÂ¾ÃÂºÃÂ° ÃÂ½ÃÂµÃ‘â€š. ÃÅ¡ÃÂ¾ÃÂ³ÃÂ´ÃÂ° Ã‘â€šÃ‘â€¹ ÃÂ´ÃÂ¾ÃÂ±ÃÂ°ÃÂ²ÃÂ¸Ã‘Ë†Ã‘Å’ Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂºÃÂ¸, ÃÂºÃ‘â‚¬ÃÂ¸ÃÂ²ÃÂ°Ã‘Â equity ÃÂ¿ÃÂ¾Ã‘ÂÃÂ²ÃÂ¸Ã‘â€šÃ‘ÂÃ‘Â ÃÂ·ÃÂ´ÃÂµÃ‘ÂÃ‘Å’.",
+      "Сделок пока нет. Когда ты добавишь сделки, кривая equity появится здесь.",
 
-    equityPeak: "ÃÅ¸ÃÂ¸ÃÂº Equity",
+    equityPeak: "Пик Equity",
     equityPeakDescription:
-      "ÃÂ¡ÃÂ°ÃÂ¼ÃÂ¾ÃÂµ ÃÂ²Ã‘â€¹Ã‘ÂÃÂ¾ÃÂºÃÂ¾ÃÂµ ÃÂ·ÃÂ½ÃÂ°Ã‘â€¡ÃÂµÃÂ½ÃÂ¸ÃÂµ equity, ÃÂ·ÃÂ°Ã‘â€žÃÂ¸ÃÂºÃ‘ÂÃÂ¸Ã‘â‚¬ÃÂ¾ÃÂ²ÃÂ°ÃÂ½ÃÂ½ÃÂ¾ÃÂµ ÃÂ½ÃÂ° Ã‘ÂÃ‘â€šÃÂ¾ÃÂ¼ ÃÂ°ÃÂºÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂµ.",
-    lowestEquity: "ÃÅ“ÃÂ¸ÃÂ½ÃÂ¸ÃÂ¼ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ°Ã‘Â equity",
+      "Самое высокое значение equity, зафиксированное на этом аккаунте.",
+    lowestEquity: "Минимальная equity",
     lowestEquityDescription:
-      "ÃÂ¡ÃÂ°ÃÂ¼ÃÂ¾ÃÂµ ÃÂ½ÃÂ¸ÃÂ·ÃÂºÃÂ¾ÃÂµ ÃÂ·ÃÂ½ÃÂ°Ã‘â€¡ÃÂµÃÂ½ÃÂ¸ÃÂµ equity Ã‘Â Ã‘Æ’Ã‘â€¡ÃÂµÃ‘â€šÃÂ¾ÃÂ¼ ÃÂ½ÃÂ°Ã‘â€¡ÃÂ°ÃÂ»Ã‘Å’ÃÂ½ÃÂ¾ÃÂ³ÃÂ¾ ÃÂ±ÃÂ°ÃÂ»ÃÂ°ÃÂ½Ã‘ÂÃÂ°.",
+      "Самое низкое значение equity с учетом начального баланса.",
 
-    positiveTrades: "ÃÅ¸ÃÂ¾ÃÂ»ÃÂ¾ÃÂ¶ÃÂ¸Ã‘â€šÃÂµÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂµ Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂºÃÂ¸",
+    positiveTrades: "Положительные сделки",
     positiveTradesDescription:
-      "ÃÂ¡ÃÂ´ÃÂµÃÂ»ÃÂºÃÂ¸, ÃÂ·ÃÂ°ÃÂºÃ‘â‚¬Ã‘â€¹Ã‘â€šÃ‘â€¹ÃÂµ Ã‘Â ÃÂ¿ÃÂ¾ÃÂ»ÃÂ¾ÃÂ¶ÃÂ¸Ã‘â€šÃÂµÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂ¼ Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃÂ¾ÃÂ¼.",
-    negativeTrades: "ÃÅ¾Ã‘â€šÃ‘â‚¬ÃÂ¸Ã‘â€ ÃÂ°Ã‘â€šÃÂµÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂµ Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂºÃÂ¸",
+      "Сделки, закрытые с положительным результатом.",
+    negativeTrades: "Отрицательные сделки",
     negativeTradesDescription:
-      "ÃÂ¡ÃÂ´ÃÂµÃÂ»ÃÂºÃÂ¸, ÃÂ·ÃÂ°ÃÂºÃ‘â‚¬Ã‘â€¹Ã‘â€šÃ‘â€¹ÃÂµ Ã‘Â ÃÂ¾Ã‘â€šÃ‘â‚¬ÃÂ¸Ã‘â€ ÃÂ°Ã‘â€šÃÂµÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂ¼ Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€šÃÂ¾ÃÂ¼.",
-    flatTrades: "Flat Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂºÃÂ¸",
+      "Сделки, закрытые с отрицательным результатом.",
+    flatTrades: "Flat сделки",
     flatTradesDescription:
-      "ÃÂ¡ÃÂ´ÃÂµÃÂ»ÃÂºÃÂ¸, ÃÂ·ÃÂ°ÃÂºÃ‘â‚¬Ã‘â€¹Ã‘â€šÃ‘â€¹ÃÂµ ÃÂ² break-even ÃÂ¸ÃÂ»ÃÂ¸ ÃÂ±ÃÂµÃÂ· PnL.",
-    averagePnl: "ÃÂ¡Ã‘â‚¬ÃÂµÃÂ´ÃÂ½ÃÂ¸ÃÂ¹ PnL",
+      "Сделки, закрытые в break-even или без PnL.",
+    averagePnl: "Средний PnL",
     averagePnlDescription:
-      "ÃÂ¡Ã‘â‚¬ÃÂµÃÂ´ÃÂ½ÃÂ¸ÃÂ¹ Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€š ÃÂ½ÃÂ° ÃÂ¾ÃÂ´ÃÂ½Ã‘Æ’ ÃÂ·ÃÂ°ÃÂ¿ÃÂ¸Ã‘ÂÃÂ°ÃÂ½ÃÂ½Ã‘Æ’Ã‘Å½ Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂºÃ‘Æ’.",
+      "Средний результат на одну записанную сделку.",
 
-    bestTrade: "Ãâ€ºÃ‘Æ’Ã‘â€¡Ã‘Ë†ÃÂ°Ã‘Â Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂºÃÂ°",
+    bestTrade: "Лучшая сделка",
     bestTradeDescription:
-      "ÃÂ¡ÃÂ°ÃÂ¼Ã‘â€¹ÃÂ¹ ÃÂºÃ‘â‚¬Ã‘Æ’ÃÂ¿ÃÂ½Ã‘â€¹ÃÂ¹ ÃÂµÃÂ´ÃÂ¸ÃÂ½ÃÂ¸Ã‘â€¡ÃÂ½Ã‘â€¹ÃÂ¹ ÃÂ¿ÃÂ¾ÃÂ»ÃÂ¾ÃÂ¶ÃÂ¸Ã‘â€šÃÂµÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂ¹ Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€š ÃÂ½ÃÂ° Ã‘ÂÃ‘â€šÃÂ¾ÃÂ¼ ÃÂ°ÃÂºÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂµ.",
-    worstTrade: "ÃÂ¥Ã‘Æ’ÃÂ´Ã‘Ë†ÃÂ°Ã‘Â Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂºÃÂ°",
+      "Самый крупный единичный положительный результат на этом аккаунте.",
+    worstTrade: "Худшая сделка",
     worstTradeDescription:
-      "ÃÂ¡ÃÂ°ÃÂ¼Ã‘â€¹ÃÂ¹ ÃÂºÃ‘â‚¬Ã‘Æ’ÃÂ¿ÃÂ½Ã‘â€¹ÃÂ¹ ÃÂµÃÂ´ÃÂ¸ÃÂ½ÃÂ¸Ã‘â€¡ÃÂ½Ã‘â€¹ÃÂ¹ ÃÂ¾Ã‘â€šÃ‘â‚¬ÃÂ¸Ã‘â€ ÃÂ°Ã‘â€šÃÂµÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹ÃÂ¹ Ã‘â‚¬ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€š ÃÂ½ÃÂ° Ã‘ÂÃ‘â€šÃÂ¾ÃÂ¼ ÃÂ°ÃÂºÃÂºÃÂ°Ã‘Æ’ÃÂ½Ã‘â€šÃÂµ.",
+      "Самый крупный единичный отрицательный результат на этом аккаунте.",
 
-    equityHistory: "ÃËœÃ‘ÂÃ‘â€šÃÂ¾Ã‘â‚¬ÃÂ¸Ã‘Â equity",
-    tradeByTradeProgression: "ÃÅ¸Ã‘â‚¬ÃÂ¾ÃÂ³Ã‘â‚¬ÃÂµÃ‘ÂÃ‘ÂÃÂ¸Ã‘Â Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂºÃÂ° ÃÂ·ÃÂ° Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂºÃÂ¾ÃÂ¹",
+    equityHistory: "История equity",
+    tradeByTradeProgression: "Прогрессия сделка за сделкой",
     showingLatest: (shown, total) =>
-      `ÃÅ¸ÃÂ¾ÃÂºÃÂ°ÃÂ·ÃÂ°ÃÂ½Ã‘â€¹ ÃÂ¿ÃÂ¾Ã‘ÂÃÂ»ÃÂµÃÂ´ÃÂ½ÃÂ¸ÃÂµ ${shown} ÃÂ¸ÃÂ· ${total} Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂ¾ÃÂº`,
+      `Показаны последние ${shown} из ${total} сделок`,
 
-    unknownSymbol: "ÃÂÃÂµÃÂ¸ÃÂ·ÃÂ²ÃÂµÃ‘ÂÃ‘â€šÃÂ½Ã‘â€¹ÃÂ¹ Ã‘ÂÃÂ¸ÃÂ¼ÃÂ²ÃÂ¾ÃÂ»",
+    unknownSymbol: "Неизвестный символ",
     equity: "Equity",
     drawdown: "Drawdown",
-    date: "Ãâ€ÃÂ°Ã‘â€šÃÂ°",
-    symbol: "ÃÂ¡ÃÂ¸ÃÂ¼ÃÂ²ÃÂ¾ÃÂ»",
-    outcome: "ÃÂ ÃÂµÃÂ·Ã‘Æ’ÃÂ»Ã‘Å’Ã‘â€šÃÂ°Ã‘â€š",
+    date: "Дата",
+    symbol: "Символ",
+    outcome: "Результат",
     pnl: "PnL",
     noEquityHistory:
-      "ÃËœÃ‘ÂÃ‘â€šÃÂ¾Ã‘â‚¬ÃÂ¸ÃÂ¸ equity ÃÂ¿ÃÂ¾ÃÂºÃÂ° ÃÂ½ÃÂµÃ‘â€š. Ãâ€ÃÂ¾ÃÂ±ÃÂ°ÃÂ²Ã‘Å’ Ã‘ÂÃÂ´ÃÂµÃÂ»ÃÂºÃÂ¸, Ã‘â€¡Ã‘â€šÃÂ¾ÃÂ±Ã‘â€¹ ÃÂ½ÃÂ°Ã‘â€¡ÃÂ°Ã‘â€šÃ‘Å’ ÃÂ¾Ã‘â€šÃ‘ÂÃÂ»ÃÂµÃÂ¶ÃÂ¸ÃÂ²ÃÂ°Ã‘â€šÃ‘Å’ ÃÂ¿Ã‘â‚¬ÃÂ¾ÃÂ³Ã‘â‚¬ÃÂµÃ‘ÂÃ‘Â ÃÂºÃÂ°ÃÂ¿ÃÂ¸Ã‘â€šÃÂ°ÃÂ»ÃÂ°.",
+      "Истории equity пока нет. Добавь сделки, чтобы начать отслеживать прогресс капитала.",
   },
 
   es: {
@@ -372,33 +372,33 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
     heroEyebrow: "Centro de control de equity",
     heroTitle: "Curva Equity",
     heroDescription:
-      "Sigue el crecimiento de la cuenta, la protecciÃƒÂ³n del capital, el comportamiento del drawdown y la evoluciÃƒÂ³n de tu equity en el tiempo.",
+      "Sigue el crecimiento de la cuenta, la protección del capital, el comportamiento del drawdown y la evolución de tu equity en el tiempo.",
     backToAccountHub: "Volver al Account Hub",
 
     currentEquity: "Equity actual",
     currentEquityDescription:
-      "ÃƒÅ¡ltimo valor de equity calculado despuÃƒÂ©s de las operaciones cerradas.",
+      "Último valor de equity calculado después de las operaciones cerradas.",
     totalPnl: "PnL total",
     totalPnlDescription:
-      "Ganancia o pÃƒÂ©rdida total generada por la cuenta.",
+      "Ganancia o pérdida total generada por la cuenta.",
     growth: "Crecimiento",
     growthDescription:
       "Rendimiento comparado con el balance inicial.",
-    maxDrawdown: "Drawdown mÃƒÂ¡ximo",
+    maxDrawdown: "Drawdown máximo",
     maxDrawdownDescription:
       "Mayor retroceso de equity registrado en la cuenta.",
 
     accountGrowth: "Crecimiento de la cuenta",
-    equityProgression: "ProgresiÃƒÂ³n de Equity",
+    equityProgression: "Progresión de Equity",
     noTradesChart:
-      "AÃƒÂºn no hay operaciones. Cuando agregues trades, la curva equity aparecerÃƒÂ¡ aquÃƒÂ­.",
+      "Aún no hay operaciones. Cuando agregues trades, la curva equity aparecerá aquí.",
 
     equityPeak: "Pico de Equity",
     equityPeakDescription:
-      "Valor de equity mÃƒÂ¡s alto registrado en esta cuenta.",
-    lowestEquity: "Equity mÃƒÂ­nima",
+      "Valor de equity más alto registrado en esta cuenta.",
+    lowestEquity: "Equity mínima",
     lowestEquityDescription:
-      "Valor de equity mÃƒÂ¡s bajo registrado incluyendo el balance inicial.",
+      "Valor de equity más bajo registrado incluyendo el balance inicial.",
 
     positiveTrades: "Trades positivos",
     positiveTradesDescription:
@@ -421,73 +421,73 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
       "Mayor resultado negativo individual registrado en esta cuenta.",
 
     equityHistory: "Historial de equity",
-    tradeByTradeProgression: "ProgresiÃƒÂ³n trade por trade",
+    tradeByTradeProgression: "Progresión trade por trade",
     showingLatest: (shown, total) =>
-      `Mostrando los ÃƒÂºltimos ${shown} de ${total} trades`,
+      `Mostrando los últimos ${shown} de ${total} trades`,
 
-    unknownSymbol: "SÃƒÂ­mbolo desconocido",
+    unknownSymbol: "Símbolo desconocido",
     equity: "Equity",
     drawdown: "Drawdown",
     date: "Fecha",
-    symbol: "SÃƒÂ­mbolo",
+    symbol: "Símbolo",
     outcome: "Resultado",
     pnl: "PnL",
     noEquityHistory:
-      "AÃƒÂºn no hay historial de equity. Agrega trades para empezar a seguir la progresiÃƒÂ³n del capital.",
+      "Aún no hay historial de equity. Agrega trades para empezar a seguir la progresión del capital.",
   },
 
   fr: {
     heroBadge: "Suivi du capital",
-    heroEyebrow: "Centre de contrÃƒÂ´le equity",
+    heroEyebrow: "Centre de contrôle equity",
     heroTitle: "Courbe Equity",
     heroDescription:
-      "Suis la croissance du compte, la protection du capital, le comportement du drawdown et lÃ¢â‚¬â„¢ÃƒÂ©volution de ton equity dans le temps.",
-    backToAccountHub: "Retour ÃƒÂ  lÃ¢â‚¬â„¢Account Hub",
+      "Suis la croissance du compte, la protection du capital, le comportement du drawdown et l’évolution de ton equity dans le temps.",
+    backToAccountHub: "Retour à l’Account Hub",
 
     currentEquity: "Equity actuelle",
     currentEquityDescription:
-      "DerniÃƒÂ¨re equity calculÃƒÂ©e aprÃƒÂ¨s les trades clÃƒÂ´turÃƒÂ©s.",
+      "Dernière equity calculée après les trades clôturés.",
     totalPnl: "PnL total",
     totalPnlDescription:
-      "Profit ou perte total gÃƒÂ©nÃƒÂ©rÃƒÂ© par le compte.",
+      "Profit ou perte total généré par le compte.",
     growth: "Croissance",
     growthDescription:
-      "Performance comparÃƒÂ©e au solde initial.",
+      "Performance comparée au solde initial.",
     maxDrawdown: "Drawdown maximal",
     maxDrawdownDescription:
-      "Plus forte baisse dÃ¢â‚¬â„¢equity enregistrÃƒÂ©e sur le compte.",
+      "Plus forte baisse d’equity enregistrée sur le compte.",
 
     accountGrowth: "Croissance du compte",
     equityProgression: "Progression Equity",
     noTradesChart:
-      "Aucun trade pour le moment. Une fois les trades ajoutÃƒÂ©s, la courbe equity apparaÃƒÂ®tra ici.",
+      "Aucun trade pour le moment. Une fois les trades ajoutés, la courbe equity apparaîtra ici.",
 
     equityPeak: "Pic Equity",
     equityPeakDescription:
-      "Valeur equity la plus ÃƒÂ©levÃƒÂ©e enregistrÃƒÂ©e sur ce compte.",
+      "Valeur equity la plus élevée enregistrée sur ce compte.",
     lowestEquity: "Equity minimale",
     lowestEquityDescription:
-      "Valeur equity la plus basse enregistrÃƒÂ©e, solde initial inclus.",
+      "Valeur equity la plus basse enregistrée, solde initial inclus.",
 
     positiveTrades: "Trades positifs",
     positiveTradesDescription:
-      "Trades clÃƒÂ´turÃƒÂ©s avec un rÃƒÂ©sultat positif.",
-    negativeTrades: "Trades nÃƒÂ©gatifs",
+      "Trades clôturés avec un résultat positif.",
+    negativeTrades: "Trades négatifs",
     negativeTradesDescription:
-      "Trades clÃƒÂ´turÃƒÂ©s avec un rÃƒÂ©sultat nÃƒÂ©gatif.",
+      "Trades clôturés avec un résultat négatif.",
     flatTrades: "Trades flat",
     flatTradesDescription:
-      "Trades clÃƒÂ´turÃƒÂ©s au break-even ou sans PnL.",
+      "Trades clôturés au break-even ou sans PnL.",
     averagePnl: "PnL moyen",
     averagePnlDescription:
-      "RÃƒÂ©sultat moyen par trade enregistrÃƒÂ©.",
+      "Résultat moyen par trade enregistré.",
 
     bestTrade: "Meilleur trade",
     bestTradeDescription:
-      "Plus grand rÃƒÂ©sultat positif individuel enregistrÃƒÂ© sur ce compte.",
+      "Plus grand résultat positif individuel enregistré sur ce compte.",
     worstTrade: "Pire trade",
     worstTradeDescription:
-      "Plus grand rÃƒÂ©sultat nÃƒÂ©gatif individuel enregistrÃƒÂ© sur ce compte.",
+      "Plus grand résultat négatif individuel enregistré sur ce compte.",
 
     equityHistory: "Historique equity",
     tradeByTradeProgression: "Progression trade par trade",
@@ -499,10 +499,10 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
     drawdown: "Drawdown",
     date: "Date",
     symbol: "Symbole",
-    outcome: "RÃƒÂ©sultat",
+    outcome: "Résultat",
     pnl: "PnL",
     noEquityHistory:
-      "Aucun historique equity pour le moment. Ajoute des trades pour commencer ÃƒÂ  suivre la progression du capital.",
+      "Aucun historique equity pour le moment. Ajoute des trades pour commencer à suivre la progression du capital.",
   },
 
   de: {
@@ -511,7 +511,7 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
     heroTitle: "Equity-Kurve",
     heroDescription:
       "Verfolge Kontowachstum, Kapitalschutz, Drawdown-Verhalten und die Entwicklung deiner Trading-Equity im Zeitverlauf.",
-    backToAccountHub: "ZurÃƒÂ¼ck zum Account Hub",
+    backToAccountHub: "Zurück zum Account Hub",
 
     currentEquity: "Aktuelle Equity",
     currentEquityDescription:
@@ -524,16 +524,16 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
       "Performance im Vergleich zum Anfangssaldo.",
     maxDrawdown: "Maximaler Drawdown",
     maxDrawdownDescription:
-      "Tiefster Equity-RÃƒÂ¼ckgang, der auf dem Konto erfasst wurde.",
+      "Tiefster Equity-Rückgang, der auf dem Konto erfasst wurde.",
 
     accountGrowth: "Kontowachstum",
     equityProgression: "Equity-Entwicklung",
     noTradesChart:
-      "Noch keine Trades. Sobald Trades hinzugefÃƒÂ¼gt werden, erscheint die Equity-Kurve hier.",
+      "Noch keine Trades. Sobald Trades hinzugefügt werden, erscheint die Equity-Kurve hier.",
 
     equityPeak: "Equity-Hoch",
     equityPeakDescription:
-      "HÃƒÂ¶chster Equity-Wert, der fÃƒÂ¼r dieses Konto erfasst wurde.",
+      "Höchster Equity-Wert, der für dieses Konto erfasst wurde.",
     lowestEquity: "Niedrigste Equity",
     lowestEquityDescription:
       "Niedrigster Equity-Wert inklusive Anfangssaldo.",
@@ -553,13 +553,13 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
 
     bestTrade: "Bester Trade",
     bestTradeDescription:
-      "GrÃƒÂ¶ÃƒÅ¸tes einzelnes positives Ergebnis auf diesem Konto.",
+      "Größtes einzelnes positives Ergebnis auf diesem Konto.",
     worstTrade: "Schlechtester Trade",
     worstTradeDescription:
-      "GrÃƒÂ¶ÃƒÅ¸tes einzelnes negatives Ergebnis auf diesem Konto.",
+      "Größtes einzelnes negatives Ergebnis auf diesem Konto.",
 
     equityHistory: "Equity-Historie",
-    tradeByTradeProgression: "Trade-fÃƒÂ¼r-Trade-Entwicklung",
+    tradeByTradeProgression: "Trade-für-Trade-Entwicklung",
     showingLatest: (shown, total) =>
       `Zeige die letzten ${shown} von ${total} Trades`,
 
@@ -571,7 +571,7 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
     outcome: "Ergebnis",
     pnl: "PnL",
     noEquityHistory:
-      "Noch keine Equity-Historie. FÃƒÂ¼ge Trades hinzu, um die Kapitalentwicklung zu verfolgen.",
+      "Noch keine Equity-Historie. Füge Trades hinzu, um die Kapitalentwicklung zu verfolgen.",
   },
 };
 
@@ -1119,7 +1119,7 @@ export default async function EquityPage({
                             trade.openDate,
                             language
                           )}{" "}
-                          Ã‚Â· {trade.outcome || "-"}
+                          · {trade.outcome || "-"}
                         </p>
                       </div>
 

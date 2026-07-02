@@ -1,4 +1,4 @@
-﻿import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -61,47 +61,47 @@ const notificationsCopy: Record<AppLanguage, NotificationsCopy> = {
     },
 
     uk: {
-        eyebrow: "Ð¦ÐµÐ½Ñ‚Ñ€ ÑÐ¿Ð¾Ð²Ñ–Ñ‰ÐµÐ½ÑŒ",
-        title: "Ð¡Ð¿Ð¾Ð²Ñ–Ñ‰ÐµÐ½Ð½Ñ",
+        eyebrow: "Центр сповіщень",
+        title: "Сповіщення",
         description:
-            "Ð¢ÑƒÑ‚ Ð·Ð½Ð°Ñ…Ð¾Ð´ÑÑ‚ÑŒÑÑ Ð²Ð°Ð¶Ð»Ð¸Ð²Ñ– Ð¾Ð½Ð¾Ð²Ð»ÐµÐ½Ð½Ñ Ñ‰Ð¾Ð´Ð¾ Ð²Ð°ÑˆÐ¸Ñ… Ð°ÐºÐ°ÑƒÐ½Ñ‚Ñ–Ð², ÑƒÐ³Ð¾Ð´ Ñ– Ð´Ð¾Ð·Ð²Ð¾Ð»Ñ–Ð².",
-        markAllAsRead: "ÐŸÐ¾Ð·Ð½Ð°Ñ‡Ð¸Ñ‚Ð¸ Ð²ÑÐµ ÑÐº Ð¿Ñ€Ð¾Ñ‡Ð¸Ñ‚Ð°Ð½Ðµ",
-        total: "Ð£ÑÑŒÐ¾Ð³Ð¾",
-        unread: "ÐÐµÐ¿Ñ€Ð¾Ñ‡Ð¸Ñ‚Ð°Ð½Ñ–",
-        read: "ÐŸÑ€Ð¾Ñ‡Ð¸Ñ‚Ð°Ð½Ñ–",
-        new: "ÐÐ¾Ð²Ðµ",
-        open: "Ð’Ñ–Ð´ÐºÑ€Ð¸Ñ‚Ð¸",
-        markAsRead: "ÐŸÐ¾Ð·Ð½Ð°Ñ‡Ð¸Ñ‚Ð¸ ÑÐº Ð¿Ñ€Ð¾Ñ‡Ð¸Ñ‚Ð°Ð½Ðµ",
-        empty: "ÐŸÐ¾ÐºÐ¸ Ñ‰Ð¾ Ð½ÐµÐ¼Ð°Ñ” ÑÐ¿Ð¾Ð²Ñ–Ñ‰ÐµÐ½ÑŒ.",
+            "Тут знаходяться важливі оновлення щодо ваших акаунтів, угод і дозволів.",
+        markAllAsRead: "Позначити все як прочитане",
+        total: "Усього",
+        unread: "Непрочитані",
+        read: "Прочитані",
+        new: "Нове",
+        open: "Відкрити",
+        markAsRead: "Позначити як прочитане",
+        empty: "Поки що немає сповіщень.",
     },
 
     ru: {
-        eyebrow: "Ð¦ÐµÐ½Ñ‚Ñ€ ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ð¹",
-        title: "Ð£Ð²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ñ",
+        eyebrow: "Центр уведомлений",
+        title: "Уведомления",
         description:
-            "Ð—Ð´ÐµÑÑŒ Ð½Ð°Ñ…Ð¾Ð´ÑÑ‚ÑÑ Ð²Ð°Ð¶Ð½Ñ‹Ðµ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ Ð¿Ð¾ Ð²Ð°ÑˆÐ¸Ð¼ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°Ð¼, ÑÐ´ÐµÐ»ÐºÐ°Ð¼ Ð¸ Ñ€Ð°Ð·Ñ€ÐµÑˆÐµÐ½Ð¸ÑÐ¼.",
-        markAllAsRead: "ÐžÑ‚Ð¼ÐµÑ‚Ð¸Ñ‚ÑŒ Ð²ÑÐµ ÐºÐ°Ðº Ð¿Ñ€Ð¾Ñ‡Ð¸Ñ‚Ð°Ð½Ð½Ñ‹Ðµ",
-        total: "Ð’ÑÐµÐ³Ð¾",
-        unread: "ÐÐµÐ¿Ñ€Ð¾Ñ‡Ð¸Ñ‚Ð°Ð½Ð½Ñ‹Ðµ",
-        read: "ÐŸÑ€Ð¾Ñ‡Ð¸Ñ‚Ð°Ð½Ð½Ñ‹Ðµ",
-        new: "ÐÐ¾Ð²Ð¾Ðµ",
-        open: "ÐžÑ‚ÐºÑ€Ñ‹Ñ‚ÑŒ",
-        markAsRead: "ÐžÑ‚Ð¼ÐµÑ‚Ð¸Ñ‚ÑŒ ÐºÐ°Ðº Ð¿Ñ€Ð¾Ñ‡Ð¸Ñ‚Ð°Ð½Ð½Ð¾Ðµ",
-        empty: "ÐŸÐ¾ÐºÐ° Ð½ÐµÑ‚ ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ð¹.",
+            "Здесь находятся важные обновления по вашим аккаунтам, сделкам и разрешениям.",
+        markAllAsRead: "Отметить все как прочитанные",
+        total: "Всего",
+        unread: "Непрочитанные",
+        read: "Прочитанные",
+        new: "Новое",
+        open: "Открыть",
+        markAsRead: "Отметить как прочитанное",
+        empty: "Пока нет уведомлений.",
     },
 
     es: {
         eyebrow: "Centro de notificaciones",
         title: "Notificaciones",
         description:
-            "AquÃ­ encuentras actualizaciones importantes sobre tus cuentas, trades y permisos.",
-        markAllAsRead: "Marcar todo como leÃ­do",
+            "Aquí encuentras actualizaciones importantes sobre tus cuentas, trades y permisos.",
+        markAllAsRead: "Marcar todo como leído",
         total: "Total",
-        unread: "No leÃ­das",
-        read: "LeÃ­das",
+        unread: "No leídas",
+        read: "Leídas",
         new: "Nueva",
         open: "Abrir",
-        markAsRead: "Marcar como leÃ­da",
+        markAsRead: "Marcar como leída",
         empty: "No hay notificaciones por ahora.",
     },
 
@@ -109,7 +109,7 @@ const notificationsCopy: Record<AppLanguage, NotificationsCopy> = {
         eyebrow: "Centre de notifications",
         title: "Notifications",
         description:
-            "Vous trouverez ici les mises Ã  jour importantes concernant vos comptes, trades et permissions.",
+            "Vous trouverez ici les mises à jour importantes concernant vos comptes, trades et permissions.",
         markAllAsRead: "Tout marquer comme lu",
         total: "Total",
         unread: "Non lues",
@@ -130,7 +130,7 @@ const notificationsCopy: Record<AppLanguage, NotificationsCopy> = {
         unread: "Ungelesen",
         read: "Gelesen",
         new: "Neu",
-        open: "Ã–ffnen",
+        open: "Öffnen",
         markAsRead: "Als gelesen markieren",
         empty: "Derzeit keine Benachrichtigungen.",
     },

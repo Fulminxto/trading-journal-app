@@ -51,7 +51,7 @@ const memberPerformanceLabels: Record<
     win: "win",
     loss: "loss",
     operatingFocus: "Focus operativo",
-    mostUsedInstrument: "Strumento piÃ¹ utilizzato",
+    mostUsedInstrument: "Strumento più utilizzato",
     noSymbol: "N/D",
   },
 
@@ -74,63 +74,63 @@ const memberPerformanceLabels: Record<
   },
 
   uk: {
-    memberPerformance: "Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ð¸Ð²Ð½Ñ–ÑÑ‚ÑŒ ÑƒÑ‡Ð°ÑÐ½Ð¸ÐºÐ°",
+    memberPerformance: "Результативність учасника",
     description:
-      "Ð†Ð½Ð´Ð¸Ð²Ñ–Ð´ÑƒÐ°Ð»ÑŒÐ½Ð¸Ð¹ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð¸Ð¹ Ð°Ð½Ð°Ð»Ñ–Ð· Ñ†ÑŒÐ¾Ð³Ð¾ ÑƒÑ‡Ð°ÑÐ½Ð¸ÐºÐ° Ð² Ð¾Ð±Ñ€Ð°Ð½Ð¾Ð¼Ñƒ Ð°ÐºÐ°ÑƒÐ½Ñ‚Ñ–.",
-    back: "ÐÐ°Ð·Ð°Ð´",
-    totalTrades: "Ð£ÑÑŒÐ¾Ð³Ð¾ ÑƒÐ³Ð¾Ð´",
-    winRate: "Ð’Ñ–Ð´ÑÐ¾Ñ‚Ð¾Ðº Ð²Ð¸Ð³Ñ€Ð°ÑˆÑ–Ð²",
-    totalPnl: "Ð—Ð°Ð³Ð°Ð»ÑŒÐ½Ð¸Ð¹ PnL",
-    bestSymbol: "ÐÐ°Ð¹ÐºÑ€Ð°Ñ‰Ð¸Ð¹ ÑÐ¸Ð¼Ð²Ð¾Ð»",
-    bestTrade: "ÐÐ°Ð¹ÐºÑ€Ð°Ñ‰Ð° ÑƒÐ³Ð¾Ð´Ð°",
+      "Індивідуальний операційний аналіз цього учасника в обраному акаунті.",
+    back: "Назад",
+    totalTrades: "Усього угод",
+    winRate: "Відсоток виграшів",
+    totalPnl: "Загальний PnL",
+    bestSymbol: "Найкращий символ",
+    bestTrade: "Найкраща угода",
     winLoss: "Win / Loss",
     win: "win",
     loss: "loss",
-    operatingFocus: "ÐžÐ¿ÐµÑ€Ð°Ñ†Ñ–Ð¹Ð½Ð¸Ð¹ Ñ„Ð¾ÐºÑƒÑ",
-    mostUsedInstrument: "ÐÐ°Ð¹Ñ‡Ð°ÑÑ‚Ñ–ÑˆÐµ Ð²Ð¸ÐºÐ¾Ñ€Ð¸ÑÑ‚Ð°Ð½Ð¸Ð¹ Ñ–Ð½ÑÑ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚",
-    noSymbol: "Ð/Ð”",
+    operatingFocus: "Операційний фокус",
+    mostUsedInstrument: "Найчастіше використаний інструмент",
+    noSymbol: "Н/Д",
   },
 
   ru: {
-    memberPerformance: "Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ð¸Ð²Ð½Ð¾ÑÑ‚ÑŒ ÑƒÑ‡Ð°ÑÑ‚Ð½Ð¸ÐºÐ°",
+    memberPerformance: "Результативность участника",
     description:
-      "Ð˜Ð½Ð´Ð¸Ð²Ð¸Ð´ÑƒÐ°Ð»ÑŒÐ½Ñ‹Ð¹ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ñ‹Ð¹ Ð°Ð½Ð°Ð»Ð¸Ð· ÑÑ‚Ð¾Ð³Ð¾ ÑƒÑ‡Ð°ÑÑ‚Ð½Ð¸ÐºÐ° Ð² Ð²Ñ‹Ð±Ñ€Ð°Ð½Ð½Ð¾Ð¼ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ðµ.",
-    back: "ÐÐ°Ð·Ð°Ð´",
-    totalTrades: "Ð’ÑÐµÐ³Ð¾ ÑÐ´ÐµÐ»Ð¾Ðº",
-    winRate: "ÐŸÑ€Ð¾Ñ†ÐµÐ½Ñ‚ Ð²Ñ‹Ð¸Ð³Ñ€Ñ‹ÑˆÐµÐ¹",
-    totalPnl: "ÐžÐ±Ñ‰Ð¸Ð¹ PnL",
-    bestSymbol: "Ð›ÑƒÑ‡ÑˆÐ¸Ð¹ ÑÐ¸Ð¼Ð²Ð¾Ð»",
-    bestTrade: "Ð›ÑƒÑ‡ÑˆÐ°Ñ ÑÐ´ÐµÐ»ÐºÐ°",
+      "Индивидуальный операционный анализ этого участника в выбранном аккаунте.",
+    back: "Назад",
+    totalTrades: "Всего сделок",
+    winRate: "Процент выигрышей",
+    totalPnl: "Общий PnL",
+    bestSymbol: "Лучший символ",
+    bestTrade: "Лучшая сделка",
     winLoss: "Win / Loss",
     win: "win",
     loss: "loss",
-    operatingFocus: "ÐžÐ¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ñ‹Ð¹ Ñ„Ð¾ÐºÑƒÑ",
-    mostUsedInstrument: "Ð¡Ð°Ð¼Ñ‹Ð¹ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÐ¼Ñ‹Ð¹ Ð¸Ð½ÑÑ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚",
-    noSymbol: "Ð/Ð”",
+    operatingFocus: "Операционный фокус",
+    mostUsedInstrument: "Самый используемый инструмент",
+    noSymbol: "Н/Д",
   },
 
   es: {
     memberPerformance: "Rendimiento del miembro",
     description:
-      "AnÃ¡lisis operativo individual de este miembro en la cuenta seleccionada.",
-    back: "AtrÃ¡s",
+      "Análisis operativo individual de este miembro en la cuenta seleccionada.",
+    back: "Atrás",
     totalTrades: "Trades totales",
     winRate: "Win rate",
     totalPnl: "PnL total",
-    bestSymbol: "Mejor sÃ­mbolo",
+    bestSymbol: "Mejor símbolo",
     bestTrade: "Mejor trade",
     winLoss: "Win / Loss",
     win: "win",
     loss: "loss",
     operatingFocus: "Enfoque operativo",
-    mostUsedInstrument: "Instrumento mÃ¡s utilizado",
+    mostUsedInstrument: "Instrumento más utilizado",
     noSymbol: "N/D",
   },
 
   fr: {
     memberPerformance: "Performance du membre",
     description:
-      "Analyse opÃ©rationnelle individuelle de ce membre sur le compte sÃ©lectionnÃ©.",
+      "Analyse opérationnelle individuelle de ce membre sur le compte sélectionné.",
     back: "Retour",
     totalTrades: "Trades totaux",
     winRate: "Win rate",
@@ -140,16 +140,16 @@ const memberPerformanceLabels: Record<
     winLoss: "Win / Loss",
     win: "win",
     loss: "loss",
-    operatingFocus: "Focus opÃ©rationnel",
-    mostUsedInstrument: "Instrument le plus utilisÃ©",
+    operatingFocus: "Focus opérationnel",
+    mostUsedInstrument: "Instrument le plus utilisé",
     noSymbol: "N/A",
   },
 
   de: {
     memberPerformance: "Mitglieder-Performance",
     description:
-      "Individuelle operative Analyse dieses Mitglieds im ausgewÃ¤hlten Konto.",
-    back: "ZurÃ¼ck",
+      "Individuelle operative Analyse dieses Mitglieds im ausgewählten Konto.",
+    back: "Zurück",
     totalTrades: "Trades gesamt",
     winRate: "Win Rate",
     totalPnl: "Gesamt-PnL",
@@ -412,7 +412,7 @@ export default async function MemberPerformancePage({
           </h2>
 
           <p className="mt-4 text-sm text-gray-300">
-            {wins} {t.win} Â· {losses} {t.loss}
+            {wins} {t.win} · {losses} {t.loss}
           </p>
         </div>
 

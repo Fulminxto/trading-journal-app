@@ -543,16 +543,16 @@ export default async function AccountsPage() {
 
   return (
     <div>
-      <div className="relative mb-10 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] p-8">
-        <div className="absolute right-0 top-0 h-64 w-64 rounded-full bg-accent/10 blur-3xl" />
+      <div className="relative mb-10 overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_12%,transparent),transparent_35%),radial-gradient(circle_at_bottom_left,color-mix(in_srgb,var(--color-accent)_8%,transparent),transparent_35%)]" />
 
         <div className="relative flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-sm text-accent">
+            <p className="text-sm text-gray-400">
               {t.overviewEyebrow}
             </p>
 
-            <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">
+            <h1 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
               {t.welcomeBack},{" "}
               {currentUser.name ||
                 currentUser.username}
