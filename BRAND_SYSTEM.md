@@ -1,80 +1,165 @@
-# VOLTIS — Brand System
+# BRAND SYSTEM
 
-## Core Identity
-VOLTIS is a private trading operating system.
+## Shared Core
 
-It is built for selected traders who want to measure, protect, and improve their behavior.
+All ecosystem products must share:
 
-It is not built for the mass market.
+- same typography logic
+- same spacing system
+- same radius system
+- same card logic
+- same motion discipline
+- same interaction philosophy
 
-## Brand Values
-- Precision
-- Discipline
-- Clarity
-- Protection
-- Control
-- Growth
-- Seriousness
+---
 
-## Emotional Tone
-The product should feel:
-- exclusive
-- intelligent
-- calm
-- sharp
-- focused
-- reliable
-- premium
+## Typography Lock
 
-Never loud.
+Primary font:
+Inter
 
-## Design Inspirations
-Reference direction:
-- Linear
-- Arc
-- Syntra
-- DeepSage
+Monospace:
+JetBrains Mono
 
-Not:
-- generic crypto dashboards
-- gaming UIs
-- neon overload
-- flashy SaaS templates
+Hierarchy:
 
-## Color Logic
-Primary:
-- dark base
-- graphite layers
-- subtle contrast
+Display → 28 / 600
+Section → 20 / 600
+Value → 16 / 500
+Body → 14 / 400
+Small → 13 / 400
+Meta → 12 / 500 uppercase
 
-Accent:
-- gold / refined highlight
-- use carefully
+Rules:
 
-Negative:
-- controlled red
+Never flatten hierarchy.
+Never use random font sizes.
+Never overload weights.
 
-Positive:
-- refined green
+---
 
-## UI Language
-Everything must feel:
-- intentional
-- balanced
-- expensive
-- professional
+## Radius Lock
 
-No visual chaos.
+Hard values:
 
-## Writing Style
-Copy inside VOLTIS should be:
-- short
-- clear
-- direct
-- professional
+8px → controls
+12px → cards
+16px → large containers
+999px → pills
 
-No motivational fluff.
-No exaggerated marketing language.
+No random radius values.
 
-## Future Rule
-Any future module must inherit this brand system.
+---
+
+## Spacing Lock
+
+System:
+
+4
+8
+12
+16
+20
+24
+32
+40
+48
+64
+
+No random spacing.
+
+Spacing must create rhythm.
+
+---
+
+## Surface Logic
+
+Depth system:
+
+background
+surface
+card
+elevated
+
+Maximum 4 depth levels.
+
+No extra layers.
+
+---
+
+## Motion System
+
+Hover → 180ms
+Transition → 240ms
+Modal → 260ms
+Page → 300ms
+
+Rules:
+
+Motion supports clarity.
+Never decorative.
+Never chaotic.
+
+---
+
+## Voltis Identity
+
+Core:
+
+cold
+electric
+sharp
+precise
+rare
+
+Visual language:
+
+crystal
+lightning
+fracture
+energy
+night
+
+Behavior:
+
+fast
+reactive
+alive
+
+---
+
+## Vitalis Identity
+
+Core:
+
+warm
+organic
+breathing
+growth
+balance
+
+Visual language:
+
+leaf
+veins
+sunlight
+roots
+cycles
+
+Behavior:
+
+soft
+slow
+alive
+
+---
+
+## Shared Ecosystem Rule
+
+Different soul.
+Same skeleton.
+
+Every new product must inherit:
+
+structure first.
+identity second.

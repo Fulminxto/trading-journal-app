@@ -1,60 +1,132 @@
-# VOLTIS — UI Rules
+# UI RULES
 
-## Design Direction
-VOLTIS must feel premium, serious, selective, calm, and precise.
-It is not a playful app, not a mass-market dashboard, and not a generic SaaS template.
+## Core Principle
 
-## Visual Personality
-- Dark premium interface
-- High contrast where needed
-- Clean spacing
-- Sharp hierarchy
-- Calm animations
-- No cheap gradients
-- No random colors
-- No inconsistent icon styles
+Every screen must have:
 
-## Layout Rules
-- Pages must feel spacious but not empty.
-- Cards must use consistent radius, padding, shadows, borders, and typography.
-- Sidebar must stay coherent across all pages.
-- Mobile layouts must not feel like compressed desktop.
-- Dashboard sections must be readable within seconds.
+one dominant truth.
 
-## Components
-Use shared components whenever possible:
-- Buttons
-- Cards
-- Inputs
-- Toggles
-- Modals
-- Empty states
-- Loaders
-- Stat cards
-- Charts
+Everything else supports it.
 
-Do not create one-off components unless necessary.
+Never create visual democracy.
 
-## Icons
-- Icons must be sharp, clean, and visually consistent.
-- Avoid icons that look blurry, thin, or mismatched.
-- Icon size, stroke, and alignment must be consistent with the sidebar and dashboard.
+---
 
-## Typography
-- Headings: strong and clear.
-- Body text: readable, calm, not oversized.
-- Labels: subtle but legible.
-- Avoid excessive font weight changes.
+## Information Hierarchy
 
-## Interaction Rules
-- Hover states must be subtle.
-- No unnecessary movement.
-- No distracting animations.
-- Premium feeling comes from precision, not effects.
+Every screen must define:
 
-## AI Assistant Rule
-Before modifying UI, Claude/Codex must check:
-1. this file
-2. BRAND_SYSTEM.md
-3. PROJECT_STATE.md
-4. existing similar components
+Primary → what matters most
+Secondary → what supports it
+Tertiary → contextual information
+
+If hierarchy is unclear:
+the screen fails.
+
+---
+
+## Dashboard Rules
+
+Maximum 4 primary metrics per row.
+
+Charts must always own visual priority.
+
+Never overload the hero.
+
+Hero = summary.
+Not detail.
+
+---
+
+## Card Rules
+
+One card = one truth.
+
+Maximum:
+
+1 primary value
+2 support elements
+1 optional action
+
+Never overload cards.
+
+---
+
+## Spacing Rules
+
+Always preserve breathing zones.
+
+Never compress information just to fit more.
+
+Remove before shrinking.
+
+---
+
+## Sidebar Rules
+
+Sidebar is structural.
+
+Never decorative.
+
+Rules:
+
+fixed rhythm
+fixed icon alignment
+fixed spacing
+fixed typography
+
+Across all ecosystem products.
+
+---
+
+## Motion Rules
+
+Motion must explain.
+
+Allowed:
+
+fade
+soft rise
+stagger
+draw
+glow
+
+Forbidden:
+
+bounce
+aggressive scaling
+flash spam
+chaotic motion
+
+---
+
+## Chart Rules
+
+Charts are premium objects.
+
+Rules:
+
+high breathing space
+clean labels
+minimal noise
+soft transitions
+data-first
+
+Never clutter charts.
+
+---
+
+## Premium Test
+
+Before approving any UI:
+
+Ask:
+
+Does it feel expensive?
+Does it feel handcrafted?
+Does it feel intentional?
+Does it feel breathable?
+Does it feel durable?
+
+If one fails:
+rework.
