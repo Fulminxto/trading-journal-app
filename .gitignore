@@ -44,3 +44,6 @@ next-env.d.ts
 
 # Local database backups
 /backups/
+
+*storybook.log
+storybook-static
