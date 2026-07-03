@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useRef, useTransition } from "react";
 import { inviteMember, cancelInvite } from "./actions";
+import Input from "@/components/ui/Input";
 
 type InviteFormLabels = {
     usernamePlaceholder: string;
@@ -36,14 +37,14 @@ export function InviteMemberForm({
     return (
         <form ref={formRef} action={formAction} className="space-y-3">
             <div className="flex flex-col gap-3 sm:flex-row">
-                <input
+                <Input
                     name="username"
                     type="text"
                     placeholder={t.usernamePlaceholder}
                     required
                     autoComplete="off"
                     disabled={isPending}
-                    className="flex-1 rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white placeholder-gray-500 outline-none focus:border-accent-bright/40 disabled:opacity-50"
+                    className="flex-1"
                 />
                 <select
                     name="role"
