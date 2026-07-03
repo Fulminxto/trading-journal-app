@@ -4,14 +4,114 @@
   "graph": {},
   "nodes": [
     {
+      "label": "LoginForm.tsx",
+      "file_type": "code",
+      "source_file": "app/login/LoginForm.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_login_loginform",
+      "community": 14,
+      "norm_label": "loginform.tsx"
+    },
+    {
+      "label": "LoginFormLabels",
+      "file_type": "code",
+      "source_file": "app/login/LoginForm.tsx",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "app_login_loginform_loginformlabels",
+      "community": 14,
+      "norm_label": "loginformlabels"
+    },
+    {
+      "label": "LoginForm()",
+      "file_type": "code",
+      "source_file": "app/login/LoginForm.tsx",
+      "source_location": "L133",
+      "_origin": "ast",
+      "id": "app_login_loginform_loginform",
+      "community": 14,
+      "norm_label": "loginform()"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "app/login/page.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_login_page",
+      "community": 14,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "LoginCopy",
+      "file_type": "code",
+      "source_file": "app/login/page.tsx",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "app_login_page_logincopy",
+      "community": 14,
+      "norm_label": "logincopy"
+    },
+    {
+      "label": "getLanguageFromAcceptHeader()",
+      "file_type": "code",
+      "source_file": "app/login/page.tsx",
+      "source_location": "L164",
+      "_origin": "ast",
+      "id": "app_login_page_getlanguagefromacceptheader",
+      "community": 14,
+      "norm_label": "getlanguagefromacceptheader()"
+    },
+    {
+      "label": "LoginPage()",
+      "file_type": "code",
+      "source_file": "app/login/page.tsx",
+      "source_location": "L177",
+      "_origin": "ast",
+      "id": "app_login_page_loginpage",
+      "community": 14,
+      "norm_label": "loginpage()"
+    },
+    {
+      "label": "Card.tsx",
+      "file_type": "code",
+      "source_file": "components/ui/Card.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "components_ui_card",
+      "community": 14,
+      "norm_label": "card.tsx"
+    },
+    {
+      "label": "CardProps",
+      "file_type": "code",
+      "source_file": "components/ui/Card.tsx",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "components_ui_card_cardprops",
+      "community": 14,
+      "norm_label": "cardprops"
+    },
+    {
+      "label": "Card()",
+      "file_type": "code",
+      "source_file": "components/ui/Card.tsx",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "components_ui_card_card",
+      "community": 14,
+      "norm_label": "card()"
+    },
+    {
       "label": "page.tsx",
       "file_type": "code",
       "source_file": "app/accounts/[accountId]/dashboard/page.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "app_accounts_accountid_dashboard_page",
       "community": 11,
-      "norm_label": "page.tsx"
+      "norm_label": "page.tsx",
+      "id": "app_accounts_accountid_dashboard_page"
     },
     {
       "label": "formatCurrency()",
@@ -19,9 +119,9 @@
       "source_file": "app/accounts/[accountId]/dashboard/page.tsx",
       "source_location": "L23",
       "_origin": "ast",
-      "id": "app_accounts_accountid_dashboard_page_formatcurrency",
       "community": 11,
-      "norm_label": "formatcurrency()"
+      "norm_label": "formatcurrency()",
+      "id": "app_accounts_accountid_dashboard_page_formatcurrency"
     },
     {
       "label": "formatPercent()",
@@ -29,9 +129,9 @@
       "source_file": "app/accounts/[accountId]/dashboard/page.tsx",
       "source_location": "L34",
       "_origin": "ast",
-      "id": "app_accounts_accountid_dashboard_page_formatpercent",
       "community": 11,
-      "norm_label": "formatpercent()"
+      "norm_label": "formatpercent()",
+      "id": "app_accounts_accountid_dashboard_page_formatpercent"
     },
     {
       "label": "getResultTone()",
@@ -39,9 +139,9 @@
       "source_file": "app/accounts/[accountId]/dashboard/page.tsx",
       "source_location": "L38",
       "_origin": "ast",
-      "id": "app_accounts_accountid_dashboard_page_getresulttone",
       "community": 11,
-      "norm_label": "getresulttone()"
+      "norm_label": "getresulttone()",
+      "id": "app_accounts_accountid_dashboard_page_getresulttone"
     },
     {
       "label": "getDateLabel()",
@@ -49,9 +149,9 @@
       "source_file": "app/accounts/[accountId]/dashboard/page.tsx",
       "source_location": "L50",
       "_origin": "ast",
-      "id": "app_accounts_accountid_dashboard_page_getdatelabel",
       "community": 11,
-      "norm_label": "getdatelabel()"
+      "norm_label": "getdatelabel()",
+      "id": "app_accounts_accountid_dashboard_page_getdatelabel"
     },
     {
       "label": "DashboardLabels",
@@ -59,9 +159,9 @@
       "source_file": "app/accounts/[accountId]/dashboard/page.tsx",
       "source_location": "L76",
       "_origin": "ast",
-      "id": "app_accounts_accountid_dashboard_page_dashboardlabels",
       "community": 11,
-      "norm_label": "dashboardlabels"
+      "norm_label": "dashboardlabels",
+      "id": "app_accounts_accountid_dashboard_page_dashboardlabels"
     },
     {
       "label": "DashboardPage()",
@@ -69,9 +169,9 @@
       "source_file": "app/accounts/[accountId]/dashboard/page.tsx",
       "source_location": "L813",
       "_origin": "ast",
-      "id": "app_accounts_accountid_dashboard_page_dashboardpage",
       "community": 11,
-      "norm_label": "dashboardpage()"
+      "norm_label": "dashboardpage()",
+      "id": "app_accounts_accountid_dashboard_page_dashboardpage"
     },
     {
       "label": "NotificationBell.tsx",
@@ -532,36 +632,6 @@
       "community": 7,
       "norm_label": "topbar()",
       "id": "components_topbar_topbar"
-    },
-    {
-      "label": "Card.tsx",
-      "file_type": "code",
-      "source_file": "components/ui/Card.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 7,
-      "norm_label": "card.tsx",
-      "id": "components_ui_card"
-    },
-    {
-      "label": "CardProps",
-      "file_type": "code",
-      "source_file": "components/ui/Card.tsx",
-      "source_location": "L3",
-      "_origin": "ast",
-      "community": 7,
-      "norm_label": "cardprops",
-      "id": "components_ui_card_cardprops"
-    },
-    {
-      "label": "Card()",
-      "file_type": "code",
-      "source_file": "components/ui/Card.tsx",
-      "source_location": "L25",
-      "_origin": "ast",
-      "community": 7,
-      "norm_label": "card()",
-      "id": "components_ui_card_card"
     },
     {
       "label": "IconTile.tsx",
@@ -1058,12 +1128,137 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "app/login/LoginForm.tsx",
+      "source_location": "L133",
+      "weight": 1.0,
+      "source": "app_login_loginform",
+      "target": "app_login_loginform_loginform",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/login/LoginForm.tsx",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "app_login_loginform",
+      "target": "app_login_loginform_loginformlabels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/login/page.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "app_login_page",
+      "target": "app_login_loginform",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/login/page.tsx",
+      "source_location": "L164",
+      "weight": 1.0,
+      "source": "app_login_page",
+      "target": "app_login_page_getlanguagefromacceptheader",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/login/page.tsx",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "app_login_page",
+      "target": "app_login_page_logincopy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/login/page.tsx",
+      "source_location": "L177",
+      "weight": 1.0,
+      "source": "app_login_page",
+      "target": "app_login_page_loginpage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/login/page.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "app_login_page",
+      "target": "components_ui_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/login/page.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "app_login_page",
+      "target": "components_ui_card_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/login/page.tsx",
+      "source_location": "L186",
+      "weight": 1.0,
+      "source": "app_login_page_loginpage",
+      "target": "app_login_page_getlanguagefromacceptheader",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/Topbar.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_topbar",
+      "target": "components_ui_card"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/Card.tsx",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "components_ui_card",
+      "target": "components_ui_card_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/Card.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "components_ui_card",
+      "target": "components_ui_card_cardprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "app/accounts/[accountId]/dashboard/page.tsx",
       "source_location": "L163",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_dashboard_page",
-      "target": "app_accounts_accountid_dashboard_page_dashboardlabels",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_dashboard_page_dashboardlabels"
     },
     {
       "relation": "contains",
@@ -1071,9 +1266,9 @@
       "source_file": "app/accounts/[accountId]/dashboard/page.tsx",
       "source_location": "L813",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_dashboard_page",
-      "target": "app_accounts_accountid_dashboard_page_dashboardpage",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_dashboard_page_dashboardpage"
     },
     {
       "relation": "contains",
@@ -1081,9 +1276,9 @@
       "source_file": "app/accounts/[accountId]/dashboard/page.tsx",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_dashboard_page",
-      "target": "app_accounts_accountid_dashboard_page_formatcurrency",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_dashboard_page_formatcurrency"
     },
     {
       "relation": "contains",
@@ -1091,9 +1286,9 @@
       "source_file": "app/accounts/[accountId]/dashboard/page.tsx",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_dashboard_page",
-      "target": "app_accounts_accountid_dashboard_page_formatpercent",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_dashboard_page_formatpercent"
     },
     {
       "relation": "contains",
@@ -1101,9 +1296,9 @@
       "source_file": "app/accounts/[accountId]/dashboard/page.tsx",
       "source_location": "L50",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_dashboard_page",
-      "target": "app_accounts_accountid_dashboard_page_getdatelabel",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_dashboard_page_getdatelabel"
     },
     {
       "relation": "contains",
@@ -1111,9 +1306,9 @@
       "source_file": "app/accounts/[accountId]/dashboard/page.tsx",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_dashboard_page",
-      "target": "app_accounts_accountid_dashboard_page_getresulttone",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_dashboard_page_getresulttone"
     },
     {
       "relation": "calls",
@@ -1122,9 +1317,9 @@
       "source_file": "app/accounts/[accountId]/dashboard/page.tsx",
       "source_location": "L1139",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_dashboard_page_dashboardpage",
-      "target": "app_accounts_accountid_dashboard_page_formatcurrency",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_dashboard_page_formatcurrency"
     },
     {
       "relation": "calls",
@@ -1133,9 +1328,9 @@
       "source_file": "app/accounts/[accountId]/dashboard/page.tsx",
       "source_location": "L1119",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_dashboard_page_dashboardpage",
-      "target": "app_accounts_accountid_dashboard_page_formatpercent",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_dashboard_page_formatpercent"
     },
     {
       "relation": "calls",
@@ -1144,9 +1339,9 @@
       "source_file": "app/accounts/[accountId]/dashboard/page.tsx",
       "source_location": "L1262",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_dashboard_page_dashboardpage",
-      "target": "app_accounts_accountid_dashboard_page_getresulttone",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_dashboard_page_getresulttone"
     },
     {
       "relation": "contains",
@@ -1572,37 +1767,6 @@
       "confidence_score": 1.0,
       "source": "components_topbar",
       "target": "components_topbar_topbaruser"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/Topbar.tsx",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_topbar",
-      "target": "components_ui_card"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/ui/Card.tsx",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_ui_card",
-      "target": "components_ui_card_card"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/ui/Card.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_ui_card",
-      "target": "components_ui_card_cardprops"
     },
     {
       "relation": "contains",
@@ -2501,5 +2665,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "7c5468499a826675f6d2d0acf0f7b3a0823dbe7b"
+  "built_at_commit": "e73dcb166f29c44b2b740e33d642249fa32ffb04"
 }

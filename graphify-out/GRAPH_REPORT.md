@@ -1,7 +1,7 @@
 # Graph Report - VOLTIS  (2026-07-03)
 
 ## Corpus Check
-- 358 files · ~372,053 words
+- 358 files · ~372,114 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e73dcb16`
+- Built from commit: `2deee88e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -101,7 +101,7 @@ Cohesion: 0.24
 Nodes (6): LoginFormLabels, getLanguageFromAcceptHeader(), LoginCopy, LoginPage(), Card(), CardProps
 
 ## Knowledge Gaps
-- **37 isolated node(s):** `LoginFormLabels`, `LoginCopy`, `CardProps`, `DashboardLabels`, `NotificationItem` (+32 more)
+- **37 isolated node(s):** `AccountsCopy`, `LoginFormLabels`, `LoginCopy`, `CardProps`, `DashboardLabels` (+32 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -112,7 +112,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.028) - this node is a cross-community bridge._
 - **Why does `canManageRules()` connect `permissions.ts` to `page.tsx`, `actions.ts`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
-- **What connects `LoginFormLabels`, `LoginCopy`, `CardProps` to the rest of the system?**
+- **What connects `AccountsCopy`, `LoginFormLabels`, `LoginCopy` to the rest of the system?**
   _37 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Card.tsx` be split into smaller, more focused modules?**
   _Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected._

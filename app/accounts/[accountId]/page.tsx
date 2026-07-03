@@ -23,6 +23,10 @@ import {
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { isManager as checkIsManager } from "@/lib/permissions";
+import Card from "@/components/ui/Card";
+import IconTile from "@/components/ui/IconTile";
+import SignatureEdge from "@/components/ui/SignatureEdge";
 import {
   formatCurrencyByLanguage,
   formatPercentByLanguage,
@@ -37,7 +41,6 @@ type HubCard = {
   eyebrow: string;
   icon: LucideIcon;
   show: boolean;
-  accentClass: string;
 };
 
 type StatCardProps = {
@@ -939,18 +942,11 @@ function AccountHubCard({ card }: { card: HubCard }) {
   const Icon = card.icon;
 
   return (
-    <Link
-      href={card.href}
-      className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-6 transition duration-300 hover:border-white/20 hover:bg-white/[0.06]"
-    >
-      <div
-        className={`absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100 ${card.accentClass}`}
-      />
-
-      <div className="relative z-10">
+    <Link href={card.href} className="block">
+      <Card interactive className="p-6">
         <div className="mb-8 flex items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-gray-500">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-muted-faint">
               {card.eyebrow}
             </p>
 
@@ -959,15 +955,15 @@ function AccountHubCard({ card }: { card: HubCard }) {
             </h2>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-accent-bright">
+          <IconTile>
             <Icon size={20} />
-          </div>
+          </IconTile>
         </div>
 
-        <p className="text-sm leading-6 text-gray-400">
+        <p className="text-sm leading-6 text-muted">
           {card.description}
         </p>
-      </div>
+      </Card>
     </Link>
   );
 }
@@ -978,15 +974,15 @@ function StatCard({
   tone = "text-white",
 }: StatCardProps) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-      <p className="text-sm text-gray-400">
+    <Card interactive className="p-6">
+      <p className="text-sm text-muted">
         {label}
       </p>
 
       <p className={`mt-3 text-3xl font-black ${tone}`}>
         {value}
       </p>
-    </div>
+    </Card>
   );
 }
 
@@ -1066,7 +1062,7 @@ export default async function AccountPage({
     }),
   ]);
 
-  const isManager = membership.role === "MANAGER";
+  const isManager = checkIsManager(membership);
   const isArchived = account.status === "ARCHIVED";
 
   const canViewAnalytics =
@@ -1152,32 +1148,24 @@ export default async function AccountPage({
       ...t.cards.dashboard,
       icon: BarChart3,
       show: true,
-      accentClass:
-        "bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_12%,transparent),transparent_38%)]",
     },
     {
       href: `/accounts/${account.id}/diary`,
       ...t.cards.diary,
       icon: CandlestickChart,
       show: true,
-      accentClass:
-        "bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent)_12%,transparent),transparent_38%)]",
     },
     {
       href: `/accounts/${account.id}/calendar`,
       ...t.cards.calendar,
       icon: CalendarDays,
       show: true,
-      accentClass:
-        "bg-[radial-gradient(circle_at_top_right,rgba(250,204,21,0.12),transparent_38%)]",
     },
     {
       href: `/accounts/${account.id}/equity`,
       ...t.cards.equity,
       icon: LineChart,
       show: true,
-      accentClass:
-        "bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.12),transparent_38%)]",
     },
   ];
 
@@ -1187,32 +1175,24 @@ export default async function AccountPage({
       ...t.cards.analytics,
       icon: Activity,
       show: canViewAnalytics,
-      accentClass:
-        "bg-[radial-gradient(circle_at_top_right,rgba(6,182,212,0.14),transparent_38%)]",
     },
     {
       href: `/accounts/${account.id}/reports`,
       ...t.cards.reports,
       icon: FileText,
       show: canViewReports,
-      accentClass:
-        "bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.14),transparent_38%)]",
     },
     {
       href: `/accounts/${account.id}/sessions`,
       ...t.cards.sessions,
       icon: BookOpen,
       show: canUseSessions && !isArchived,
-      accentClass:
-        "bg-[radial-gradient(circle_at_top_right,rgba(245,158,11,0.14),transparent_38%)]",
     },
     {
       href: `/accounts/${account.id}/copilot`,
       ...t.cards.copilot,
       icon: Bot,
       show: canViewCopilot && !isArchived,
-      accentClass:
-        "bg-[radial-gradient(circle_at_top_right,rgba(217,70,239,0.14),transparent_38%)]",
     },
   ];
 
@@ -1222,40 +1202,30 @@ export default async function AccountPage({
       ...t.cards.members,
       icon: Users,
       show: canViewMembers,
-      accentClass:
-        "bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent)_12%,transparent),transparent_38%)]",
     },
     {
       href: `/accounts/${account.id}/workspace`,
       ...t.cards.workspace,
       icon: Layers3,
       show: canViewMembers && !isArchived,
-      accentClass:
-        "bg-[radial-gradient(circle_at_top_right,rgba(20,184,166,0.12),transparent_38%)]",
     },
     {
       href: `/accounts/${account.id}/rules`,
       ...t.cards.rules,
       icon: Goal,
       show: canManageAccount && !isArchived,
-      accentClass:
-        "bg-[radial-gradient(circle_at_top_right,rgba(250,204,21,0.12),transparent_38%)]",
     },
     {
       href: `/accounts/${account.id}/integrations`,
       ...t.cards.integrations,
       icon: Zap,
       show: canManageAccount && !isArchived,
-      accentClass:
-        "bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_12%,transparent),transparent_38%)]",
     },
     {
       href: `/accounts/${account.id}/playbook`,
       ...t.cards.playbook,
       icon: BookMarked,
       show: !isArchived,
-      accentClass:
-        "bg-[radial-gradient(circle_at_top_right,rgba(250,204,21,0.12),transparent_38%)]",
     },
   ];
 
@@ -1279,46 +1249,48 @@ export default async function AccountPage({
 
   return (
     <div className="space-y-10">
-      <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_14%,transparent),transparent_35%),radial-gradient(circle_at_bottom_left,color-mix(in_srgb,var(--color-accent)_8%,transparent),transparent_35%)]" />
+      <Card
+        variant="hero"
+        className="reveal-rise relative p-8 sm:p-10"
+        style={{ animationDelay: "0ms" }}
+      >
+        <SignatureEdge
+          orientation="vertical"
+          className="absolute bottom-8 left-0 top-8"
+        />
 
-        <div className="relative z-10 grid gap-8 xl:grid-cols-5">
+        <div className="grid gap-8 pl-4 xl:grid-cols-5">
           <div className="xl:col-span-3">
             <div className="mb-6 flex flex-wrap items-center gap-3">
               <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
                 {t.hubBadge}
               </span>
 
-              <span
-                className={`rounded-full border px-4 py-2 text-xs font-black uppercase tracking-[0.18em] ${isArchived
-                    ? "border-yellow-500/20 bg-yellow-500/10 text-yellow-300"
-                    : "border-accent/20 bg-accent/10 text-green-300"
-                  }`}
-              >
+              <span className="rounded-full bg-white/[0.06] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-muted">
                 {isArchived ? t.archived : account.status}
               </span>
 
-              <span className="rounded-full border border-white/10 bg-black/20 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-gray-300">
+              <span className="rounded-full bg-white/[0.06] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-muted">
                 {membership.role}
               </span>
             </div>
 
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-muted">
               {t.selectedAccount}
             </p>
 
-            <h1 className="mt-3 text-4xl font-black tracking-tight break-words text-white sm:text-6xl">
+            <h1 className="text-hero mt-3 break-words">
               {account.name}
             </h1>
 
-            <p className="mt-6 max-w-3xl text-base leading-7 text-gray-400">
+            <p className="mt-6 max-w-3xl text-base leading-7 text-muted">
               {t.heroDescription}
             </p>
 
             {canManageMembers && (
               <Link
                 href={`/accounts/${account.id}/members`}
-                className="mt-6 inline-flex items-center gap-2 rounded-2xl border border-accent/20 bg-accent/10 px-5 py-3 text-sm font-bold text-green-300 transition hover:bg-accent/20"
+                className="mt-6 inline-flex items-center gap-2 rounded-inner border-[0.5px] border-flash/[0.12] px-5 py-3 text-sm text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.04]"
               >
                 <Users size={16} />
                 {t.manageTeam}
@@ -1326,9 +1298,9 @@ export default async function AccountPage({
             )}
 
             {isArchived && (
-              <div className="mt-6 rounded-2xl border border-yellow-500/20 bg-yellow-500/10 p-5 text-sm leading-6 text-yellow-100">
+              <Card variant="inner" className="mt-6 p-5 text-sm leading-6 text-muted">
                 {t.archivedMessage}
-              </div>
+              </Card>
             )}
           </div>
 
@@ -1372,13 +1344,16 @@ export default async function AccountPage({
             />
           </div>
         </div>
-      </section>
+      </Card>
 
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+      <section
+        className="reveal-rise grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4"
+        style={{ animationDelay: "80ms" }}
+      >
+        <Card interactive className="p-6">
           <div className="flex items-center gap-3">
             <Wallet className="text-accent" size={22} />
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-muted">
               {t.initialBalance}
             </p>
           </div>
@@ -1390,12 +1365,12 @@ export default async function AccountPage({
               language
             )}
           </p>
-        </div>
+        </Card>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <Card interactive className="p-6">
           <div className="flex items-center gap-3">
             <TrendingUp className="text-accent-bright" size={22} />
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-muted">
               {t.targetProgress}
             </p>
           </div>
@@ -1411,18 +1386,18 @@ export default async function AccountPage({
 
           <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/10">
             <div
-              className="h-full rounded-full bg-cyan-300"
+              className="h-full rounded-full bg-accent-bright"
               style={{
                 width: `${accountProgress}%`,
               }}
             />
           </div>
-        </div>
+        </Card>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <Card interactive className="p-6">
           <div className="flex items-center gap-3">
             <ShieldCheck className="text-yellow-300" size={22} />
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-muted">
               {t.needsReview}
             </p>
           </div>
@@ -1430,12 +1405,12 @@ export default async function AccountPage({
           <p className="mt-4 text-3xl font-black text-yellow-300">
             {needsReviewCount}
           </p>
-        </div>
+        </Card>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <Card interactive className="p-6">
           <div className="flex items-center gap-3">
-            <Landmark className="text-purple-300" size={22} />
-            <p className="text-sm text-gray-400">
+            <Landmark className="text-accent" size={22} />
+            <p className="text-sm text-muted">
               {t.members}
             </p>
           </div>
@@ -1443,22 +1418,25 @@ export default async function AccountPage({
           <p className="mt-4 text-3xl font-black text-white">
             {membersCount}
           </p>
-        </div>
+        </Card>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-3">
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
+      <section
+        className="reveal-rise grid gap-4 md:grid-cols-3"
+        style={{ animationDelay: "120ms" }}
+      >
+        <Card interactive className="p-6">
+          <p className="text-sm text-muted">
             {t.accountType}
           </p>
 
           <p className="mt-3 text-2xl font-black text-white">
             {account.type}
           </p>
-        </div>
+        </Card>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
+        <Card interactive className="p-6">
+          <p className="text-sm text-muted">
             {t.profitTarget}
           </p>
 
@@ -1468,10 +1446,10 @@ export default async function AccountPage({
               language
             )}
           </p>
-        </div>
+        </Card>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
+        <Card interactive className="p-6">
+          <p className="text-sm text-muted">
             {t.maxDrawdown}
           </p>
 
@@ -1481,20 +1459,21 @@ export default async function AccountPage({
               language
             )}
           </p>
-        </div>
+        </Card>
       </section>
 
-      {sections.map((section) => (
+      {sections.map((section, index) => (
         <section
           key={section.title}
-          className="space-y-5"
+          className="reveal-rise space-y-5"
+          style={{ animationDelay: `${160 + index * 40}ms` }}
         >
           <div>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-muted">
               {section.description}
             </p>
 
-            <h2 className="mt-2 text-3xl font-black text-white">
+            <h2 className="text-section mt-2 text-white">
               {section.title}
             </h2>
           </div>
