@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   ".claude/settings.local.json": {
-    "mtime": 1783075387.9128606,
-    "ast_hash": "3413831070296ddccff22f8b17fef83a",
+    "mtime": 1783076292.6944394,
+    "ast_hash": "37261ea77c7285f2591317636473ba47",
     "semantic_hash": ""
   },
   ".claude/skills/impeccable/scripts/command-metadata.json": {
@@ -875,8 +875,8 @@
     "semantic_hash": ""
   },
   "components/NotificationBell.tsx": {
-    "mtime": 1783075780.811032,
-    "ast_hash": "cc4e7f913dcb2abb289b08c067e7e44f",
+    "mtime": 1783075984.6894574,
+    "ast_hash": "561642c63cca60bdc692b494aab7bcb5",
     "semantic_hash": ""
   },
   "components/OnboardingModal.tsx": {
@@ -900,8 +900,8 @@
     "semantic_hash": ""
   },
   "components/ScopeBar.tsx": {
-    "mtime": 1783075660.0324264,
-    "ast_hash": "59f191e7b66247486ed2fe19d2322b30",
+    "mtime": 1783075986.3239834,
+    "ast_hash": "9a305a157393de6c0168a67c65110bbe",
     "semantic_hash": ""
   },
   "components/SettingsHardRefresh.tsx": {
@@ -910,8 +910,8 @@
     "semantic_hash": ""
   },
   "components/Sidebar.tsx": {
-    "mtime": 1783075201.3149712,
-    "ast_hash": "f69f9b1ede32fea23caace459df4b012",
+    "mtime": 1783075982.576173,
+    "ast_hash": "424c5036069a427a358ba9af6cb86147",
     "semantic_hash": ""
   },
   "components/ToggleSwitch.stories.tsx": {
@@ -1750,8 +1750,8 @@
     "semantic_hash": ""
   },
   ".impeccable/hook.cache.json": {
-    "mtime": 1783075865.8622305,
-    "ast_hash": "0118522cd633a6882ac3bf6b15fc4ac6",
+    "mtime": 1783076234.4670067,
+    "ast_hash": "5cc11bfe1901aa64d948da03a6ca9c5b",
     "semantic_hash": ""
   },
   "lib/permissions.ts": {

@@ -10,5 +10,7 @@
   "8": "IconTile.tsx",
   "9": "SignatureEdge.tsx",
   "10": "actions.ts",
-  "11": "NotificationBell.tsx"
+  "11": "NotificationBell.tsx",
+  "12": "ListRow.tsx",
+  "13": "Pill.tsx"
 }

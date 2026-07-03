@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 
 import VoltisLightningLoader from "@/components/VoltisLightningLoader";
+import Input from "@/components/ui/Input";
 
 import {
   normalizeAppLanguage,
@@ -125,6 +126,10 @@ const loginFormLabels: Record<AppLanguage, LoginFormLabels> = {
   },
 };
 
+// CTA Fulmine: the one gradient reserved for CTAs that count (Accedi).
+const CTA_GRADIENT =
+  "linear-gradient(120deg, #2E62E6, #3f86e8 60%, #5BE0FF)";
+
 export default function LoginForm({
   appLanguage,
 }: {
@@ -222,11 +227,11 @@ export default function LoginForm({
   if (step === "otp") {
     return (
       <form onSubmit={handleOtpSubmit} className="space-y-4">
-        <p className="text-center text-sm text-gray-400">
+        <p className="text-center text-sm text-muted">
           {t.otpDescription}
         </p>
 
-        <input
+        <Input
           name="otp"
           type="text"
           inputMode="numeric"
@@ -235,11 +240,11 @@ export default function LoginForm({
           autoComplete="one-time-code"
           autoFocus
           required
-          className="w-full rounded-2xl border border-white/10 bg-surface-2 p-4 text-center text-xl tracking-[0.5em] outline-none transition placeholder:text-gray-600 focus:border-accent/50 focus:bg-surface-2"
+          className="text-center text-xl tracking-[0.5em]"
         />
 
         {error && (
-          <p className="rounded-2xl border border-red-500/10 bg-red-500/10 p-3 text-sm text-red-400">
+          <p className="reveal-rise rounded-inner border border-red-500/10 bg-red-500/10 p-3 text-sm text-red-400">
             {error}
           </p>
         )}
@@ -247,7 +252,8 @@ export default function LoginForm({
         <button
           type="submit"
           disabled={loading}
-          className="flex w-full items-center justify-center rounded-2xl bg-accent p-4 font-bold text-white shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)] transition hover:bg-accent-bright disabled:opacity-50"
+          style={{ background: CTA_GRADIENT }}
+          className="flex w-full items-center justify-center rounded-inner p-4 font-semibold text-white transition hover:shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)] disabled:opacity-50"
         >
           {loading ? (
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-bg-deep">
@@ -265,7 +271,7 @@ export default function LoginForm({
             setPreAuthToken("");
             setError("");
           }}
-          className="w-full text-center text-sm text-gray-500 transition hover:text-gray-300"
+          className="w-full text-center text-sm text-muted-faint transition hover:text-muted"
         >
           {t.back}
         </button>
@@ -275,19 +281,18 @@ export default function LoginForm({
 
   return (
     <form onSubmit={handleCredentialsSubmit} className="space-y-4">
-      <input
+      <Input
         name="username"
         placeholder={t.usernamePlaceholder}
-        className="w-full rounded-2xl border border-white/10 bg-surface-2 p-4 outline-none transition placeholder:text-gray-600 focus:border-accent/50 focus:bg-surface-2"
         required
       />
 
       <div className="relative">
-        <input
+        <Input
           name="password"
           type={showPassword ? "text" : "password"}
           placeholder={t.passwordPlaceholder}
-          className="w-full rounded-2xl border border-white/10 bg-surface-2 p-4 pr-12 outline-none transition placeholder:text-gray-600 focus:border-accent/50 focus:bg-surface-2"
+          className="pr-12"
           required
         />
 
@@ -296,14 +301,14 @@ export default function LoginForm({
           onClick={() => setShowPassword(!showPassword)}
           aria-label={showPassword ? t.hidePassword : t.showPassword}
           title={showPassword ? t.hidePassword : t.showPassword}
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 transition hover:text-white"
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-muted transition-colors duration-base hover:text-accent-bright"
         >
           {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
         </button>
       </div>
 
       {error && (
-        <p className="rounded-2xl border border-red-500/10 bg-red-500/10 p-3 text-sm text-red-400">
+        <p className="reveal-rise rounded-inner border border-red-500/10 bg-red-500/10 p-3 text-sm text-red-400">
           {error}
         </p>
       )}
@@ -311,10 +316,11 @@ export default function LoginForm({
       <button
         type="submit"
         disabled={loading}
-        className="flex w-full items-center justify-center rounded-2xl bg-accent p-4 font-bold text-white shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)] transition hover:bg-accent-bright disabled:opacity-50"
+        style={{ background: CTA_GRADIENT }}
+        className="flex w-full items-center justify-center rounded-inner p-4 font-semibold text-white transition hover:shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)] disabled:opacity-50"
       >
         {loading ? (
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#060A1A]">
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-bg-deep">
             <VoltisLightningLoader size={24} />
           </span>
         ) : (

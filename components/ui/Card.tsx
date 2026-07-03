@@ -27,6 +27,7 @@ export default function Card({
   interactive = false,
   className = "",
   children,
+  style,
   ...rest
 }: CardProps) {
   const isInteractive = interactive && variant !== "inner";
@@ -53,14 +54,15 @@ export default function Card({
   return (
     <div
       className={`relative overflow-hidden ${variantCls} ${faceCls} ${interactiveCls} ${className}`.trim()}
-      style={
-        isCrystal
+      style={{
+        ...(isCrystal
           ? {
               background: CRYSTAL_FACE,
               clipPath: variant === "hero" ? HERO_CLIP : undefined,
             }
-          : undefined
-      }
+          : undefined),
+        ...style,
+      }}
       {...rest}
     >
       {isInteractive && (

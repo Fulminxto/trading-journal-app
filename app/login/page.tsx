@@ -4,6 +4,9 @@ import { LockKeyhole, ShieldCheck, Sparkles } from "lucide-react";
 
 import { auth } from "@/lib/auth";
 import LoginForm from "./LoginForm";
+import Card from "@/components/ui/Card";
+import IconTile from "@/components/ui/IconTile";
+import SignatureEdge from "@/components/ui/SignatureEdge";
 import {
   normalizeAppLanguage,
   type AppLanguage,
@@ -188,12 +191,14 @@ export default async function LoginPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-bg-base px-4 py-10 text-white">
-      <div className="absolute left-1/2 top-1/2 h-[620px] w-[620px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/10 blur-[140px]" />
-
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,color-mix(in_srgb,var(--color-accent)_10%,transparent)_34%,transparent),radial-gradient(circle_at_bottom_right,color-mix(in_srgb,var(--color-accent-bright)_8%,transparent)_32%,transparent)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,color-mix(in_srgb,var(--color-accent)_7%,transparent)_30%,transparent),radial-gradient(circle_at_bottom_right,color-mix(in_srgb,var(--color-accent-bright)_5%,transparent)_28%,transparent)]" />
 
       <div className="relative grid w-full max-w-6xl items-center gap-8 lg:grid-cols-2">
-        <section className="hidden rounded-[2rem] border border-white/10 bg-white/[0.03] p-8 shadow-2xl backdrop-blur-xl lg:block">
+        <Card
+          variant="base"
+          className="reveal-rise hidden p-8 lg:block"
+          style={{ animationDelay: "0ms" }}
+        >
           <div className="mb-8 flex items-center gap-3">
             <img
               src="/icons/variants/classic/icon.svg"
@@ -204,31 +209,30 @@ export default async function LoginPage() {
             />
 
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.35em] text-accent-bright">
+              <p className="text-xs font-black uppercase tracking-[0.42em] text-accent-bright">
                 {t.eyebrow}
               </p>
 
-              <p className="mt-1 text-xs uppercase tracking-[0.2em] text-gray-500">
+              <p className="mt-1 text-xs uppercase tracking-[0.2em] text-muted-faint">
                 {t.privateAccess}
               </p>
             </div>
           </div>
 
-          <h1 className="max-w-xl text-5xl font-black tracking-tight text-white">
+          <h1 className="text-hero max-w-xl text-white">
             {t.title}
           </h1>
 
-          <p className="mt-6 max-w-xl text-base leading-8 text-gray-400">
+          <p className="mt-6 max-w-xl text-base leading-8 text-muted">
             {t.manifesto}
           </p>
 
           <div className="mt-8 grid gap-4">
-            <div className="rounded-3xl border border-accent-bright/20 bg-accent-bright/10 p-5">
+            <Card variant="inner" className="p-5">
               <div className="mb-3 flex items-center gap-3">
-                <LockKeyhole
-                  size={20}
-                  className="text-accent-bright"
-                />
+                <IconTile size="sm" interactive={false}>
+                  <LockKeyhole size={16} className="text-accent-bright" />
+                </IconTile>
 
                 <h2 className="font-black text-white">
                   {t.selectedAccess}
@@ -238,71 +242,80 @@ export default async function LoginPage() {
               <p className="text-sm leading-6 text-white/70">
                 {t.selectedAccessDescription}
               </p>
-            </div>
+            </Card>
 
             <div className="grid gap-4 md:grid-cols-2">
-              <div className="rounded-3xl border border-white/10 bg-black/20 p-5">
+              <Card variant="inner" className="p-5">
                 <div className="mb-3 flex items-center gap-3">
-                  <ShieldCheck
-                    size={20}
-                    className="text-accent"
-                  />
+                  <IconTile size="sm" interactive={false}>
+                    <ShieldCheck size={16} />
+                  </IconTile>
 
                   <h2 className="font-black text-white">
                     {t.seriousTool}
                   </h2>
                 </div>
 
-                <p className="text-sm leading-6 text-gray-400">
+                <p className="text-sm leading-6 text-muted">
                   {t.seriousToolDescription}
                 </p>
-              </div>
+              </Card>
 
-              <div className="rounded-3xl border border-white/10 bg-black/20 p-5">
+              <Card variant="inner" className="p-5">
                 <div className="mb-3 flex items-center gap-3">
-                  <Sparkles
-                    size={20}
-                    className="text-yellow-300"
-                  />
+                  <IconTile size="sm" interactive={false}>
+                    <Sparkles size={16} />
+                  </IconTile>
 
                   <h2 className="font-black text-white">
                     {t.notMassMarket}
                   </h2>
                 </div>
 
-                <p className="text-sm leading-6 text-gray-400">
+                <p className="text-sm leading-6 text-muted">
                   {t.notMassMarketDescription}
                 </p>
-              </div>
+              </Card>
             </div>
           </div>
-        </section>
+        </Card>
 
-        <section className="mx-auto w-full max-w-md rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 shadow-2xl backdrop-blur-xl">
-          <div className="mb-8 text-center">
-            <img
-              src="/icons/variants/classic/icon.svg"
-              alt="VOLTIS"
-              width={56}
-              height={56}
-              className="mx-auto h-14 w-14 object-contain"
-            />
+        <Card
+          variant="hero"
+          className="shimmer-sweep reveal-rise relative mx-auto w-full max-w-md p-8"
+          style={{ animationDelay: "80ms" }}
+        >
+          <SignatureEdge
+            orientation="vertical"
+            className="absolute bottom-8 left-0 top-8"
+          />
 
-            <p className="mt-6 text-xs uppercase tracking-[0.45em] text-gray-500">
-              {t.eyebrow}
-            </p>
+          <div className="pl-4">
+            <div className="mb-8 text-center">
+              <img
+                src="/icons/variants/classic/icon.svg"
+                alt="VOLTIS"
+                width={56}
+                height={56}
+                className="mx-auto h-14 w-14 object-contain"
+              />
 
-            <h1 className="mt-4 text-4xl font-black tracking-tight">
-              {t.title}
-            </h1>
+              <p className="mt-6 text-xs uppercase tracking-[0.42em] text-muted-faint">
+                {t.eyebrow}
+              </p>
 
-            <p className="mt-3 text-sm leading-6 text-gray-400">
-              {t.description}
-            </p>
+              <h1 className="text-hero mt-4">
+                {t.title}
+              </h1>
+
+              <p className="mt-3 text-sm leading-6 text-muted">
+                {t.description}
+              </p>
+            </div>
+
+            <LoginForm appLanguage={appLanguage} />
           </div>
-
-          <LoginForm appLanguage={appLanguage} />
-        </section>
+        </Card>
       </div>
     </div>
   );
