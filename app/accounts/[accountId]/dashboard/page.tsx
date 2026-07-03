@@ -7,6 +7,9 @@ import { redirect } from "next/navigation";
 import EquityChart from "@/components/EquityChart";
 import DashboardStatCard from "@/components/dashboard/DashboardStatCard";
 import ScopeBar from "@/components/ScopeBar";
+import Card from "@/components/ui/Card";
+import ListRow from "@/components/ui/ListRow";
+import SignatureEdge from "@/components/ui/SignatureEdge";
 import {
   normalizeAppLanguage,
   type AppLanguage,
@@ -1168,9 +1171,13 @@ export default async function DashboardPage({
       <div className="space-y-4">
         <div className="flex flex-col gap-3 xl:flex-row xl:items-end xl:justify-between">
           <div className="flex flex-col gap-1.5">
-            <p className="text-xs font-black uppercase tracking-[0.28em] text-accent-bright">
-              VOLTIS DASHBOARD
-            </p>
+            <div className="flex items-center gap-3">
+              <SignatureEdge orientation="vertical" className="h-4" />
+
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-accent-bright">
+                VOLTIS DASHBOARD
+              </p>
+            </div>
 
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
               <h1 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
@@ -1214,26 +1221,126 @@ export default async function DashboardPage({
             mode="period"
           />
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      {/* PRIMARY — the equity curve is the one hero, full width, dominant. */}
+      <div className="reveal-rise" style={{ animationDelay: "40ms" }}>
+        <Card variant="hero" interactive className="relative p-5 sm:p-6">
+          <SignatureEdge
+            orientation="vertical"
+            className="absolute bottom-6 left-0 top-6"
+          />
+
+          <div className="pl-4">
+            <div className="mb-6">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-faint">
+                {t.accountGrowth}
+              </p>
+
+              <h2 className="mt-1 text-2xl font-black text-white">
+                {t.equityCurve}
+              </h2>
+            </div>
+
+            {chartData.length > 0 ? (
+              <EquityChart data={chartData} language={language} />
+            ) : (
+              <Card
+                variant="inner"
+                className="flex min-h-[260px] items-center justify-center border-dashed p-8 text-center text-sm text-muted"
+              >
+                {t.noTradesEquity}
+              </Card>
+            )}
+
+            <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+              <div>
+                <p className="text-xs text-muted-faint">
+                  {t.currentProfit}
+                </p>
+
+                <p className={`mt-1 text-lg font-black ${getResultTone(currentProfitPercent)}`}>
+                  {formatPercent(currentProfitPercent)}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-xs text-muted-faint">
+                  {t.target}
+                </p>
+
+                <p className="mt-1 text-lg font-black text-accent">
+                  {account.profitTarget
+                    ? formatPercent(account.profitTarget)
+                    : "-"}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-xs text-muted-faint">
+                  {t.remaining}
+                </p>
+
+                <p
+                  className={`mt-1 text-lg font-black ${
+                    remainingToTarget !== null && remainingToTarget <= 0
+                      ? "text-green-400"
+                      : "text-yellow-400"
+                  }`}
+                >
+                  {remainingToTarget !== null
+                    ? formatPercent(remainingToTarget)
+                    : "-"}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-xs text-muted-faint">
+                  {t.recentMomentum}
+                </p>
+
+                <p className={`mt-1 text-lg font-black ${getResultTone(lastFivePnl)}`}>
+                  {formatCurrency(lastFivePnl, currency)}
+                </p>
+
+                <p className="mt-0.5 text-xs text-muted-faint">
+                  <span className="text-accent">{lastFiveWins}{t.winsShort}</span>
+                  {" / "}
+                  <span className="text-red-400">{lastFiveLosses}{t.lossesShort}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      {/* SECONDARY — 4 compact metrics, staggered entrance. */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="reveal-rise" style={{ animationDelay: "120ms" }}>
           <DashboardStatCard
             label={t.totalPnl + periodSuffix}
             value={formatCurrency(totalPnl, currency)}
             tone={getResultTone(totalPnl)}
           />
+        </div>
 
+        <div className="reveal-rise" style={{ animationDelay: "160ms" }}>
           <DashboardStatCard
             label={t.winRate + periodSuffix}
             value={formatPercent(winRate)}
             tone={winRate >= 50 ? "text-green-400" : "text-red-400"}
           />
+        </div>
 
+        <div className="reveal-rise" style={{ animationDelay: "200ms" }}>
           <DashboardStatCard
             label={t.trades + periodSuffix}
             value={totalTrades}
             tone="text-white"
           />
+        </div>
 
+        <div className="reveal-rise" style={{ animationDelay: "240ms" }}>
           <DashboardStatCard
             label={t.equityTotal}
             value={formatCurrency(currentEquity, currency)}
@@ -1242,114 +1349,35 @@ export default async function DashboardPage({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
-          <div className="mb-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
-              {t.accountGrowth}
-            </p>
+      {/* TERTIARY — Risk sits as a peer among the summary cards, not
+          beside the hero, so it never competes with the one dominant truth. */}
+      <div
+        className="reveal-rise grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4"
+        style={{ animationDelay: "320ms" }}
+      >
+        <Card interactive className="p-6">
+          <p className="text-sm text-muted">
+            {t.risk}
+          </p>
 
-            <h2 className="mt-1 text-2xl font-black text-white">
-              {t.equityCurve}
-            </h2>
-          </div>
-
-          {chartData.length > 0 ? (
-            <EquityChart data={chartData} language={language} />
-          ) : (
-            <div className="flex min-h-[260px] items-center justify-center rounded-2xl border border-dashed border-white/10 bg-black/10 p-8 text-center text-sm text-gray-400">
-              {t.noTradesEquity}
-            </div>
-          )}
-
-          <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="mt-4 space-y-4 text-sm">
             <div>
-              <p className="text-xs text-gray-500">
-                {t.currentProfit}
-              </p>
-
-              <p className={`mt-1 text-lg font-black ${getResultTone(currentProfitPercent)}`}>
-                {formatPercent(currentProfitPercent)}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-xs text-gray-500">
-                {t.target}
-              </p>
-
-              <p className="mt-1 text-lg font-black text-accent">
-                {account.profitTarget
-                  ? formatPercent(account.profitTarget)
-                  : "-"}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-xs text-gray-500">
-                {t.remaining}
-              </p>
-
-              <p
-                className={`mt-1 text-lg font-black ${
-                  remainingToTarget !== null && remainingToTarget <= 0
-                    ? "text-green-400"
-                    : "text-yellow-400"
-                }`}
-              >
-                {remainingToTarget !== null
-                  ? formatPercent(remainingToTarget)
-                  : "-"}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-xs text-gray-500">
-                {t.recentMomentum}
-              </p>
-
-              <p className={`mt-1 text-lg font-black ${getResultTone(lastFivePnl)}`}>
-                {formatCurrency(lastFivePnl, currency)}
-              </p>
-
-              <p className="mt-0.5 text-xs text-gray-500">
-                <span className="text-accent">{lastFiveWins}{t.winsShort}</span>
-                {" / "}
-                <span className="text-red-400">{lastFiveLosses}{t.lossesShort}</span>
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
-          <div className="mb-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
-              {t.riskControl}
-            </p>
-
-            <h2 className="mt-1 text-2xl font-black">
-              {t.risk}
-            </h2>
-          </div>
-
-          <div className="space-y-5">
-            <div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-faint">
                 {t.maxDrawdown + periodSuffix}
               </p>
 
-              <p className="mt-1 text-3xl font-black text-red-400">
+              <p className="mt-1 text-2xl font-black text-red-400">
                 {formatPercent(maxDrawdown)}
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               <div>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-faint">
                   {t.maxDrawdownLimit}
                 </p>
 
-                <p className="mt-1 text-lg font-bold text-gray-300">
+                <p className="mt-1 text-sm font-bold text-gray-300">
                   {account.maxDrawdown
                     ? formatPercent(account.maxDrawdown)
                     : "-"}
@@ -1357,11 +1385,11 @@ export default async function DashboardPage({
               </div>
 
               <div>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-faint">
                   {t.dailyDrawdownLimit}
                 </p>
 
-                <p className="mt-1 text-lg font-bold text-gray-300">
+                <p className="mt-1 text-sm font-bold text-gray-300">
                   {account.dailyDrawdown
                     ? formatPercent(account.dailyDrawdown)
                     : "-"}
@@ -1370,7 +1398,7 @@ export default async function DashboardPage({
             </div>
 
             <div>
-              <div className="mb-2 flex items-center justify-between text-xs text-gray-500">
+              <div className="mb-2 flex items-center justify-between text-xs text-muted-faint">
                 <span>{t.exposure}</span>
                 <span>{exposurePercent.toFixed(0)}%</span>
               </div>
@@ -1383,112 +1411,113 @@ export default async function DashboardPage({
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </Card>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
+        <Card interactive className="p-6">
+          <p className="text-sm text-muted">
             {t.outcomeSplit}
           </p>
 
           <div className="mt-4 space-y-4 text-sm">
             <div className="flex items-center justify-between gap-4">
-              <span className="text-gray-400">{t.wins}</span>
+              <span className="text-muted">{t.wins}</span>
               <div className="text-right">
                 <span className="font-black text-accent">{wins}</span>
-                <span className="ml-2 text-gray-500">{formatPercent(winRate)}</span>
+                <span className="ml-2 text-muted-faint">{formatPercent(winRate)}</span>
               </div>
             </div>
 
             <div className="flex items-center justify-between gap-4">
-              <span className="text-gray-400">{t.losses}</span>
+              <span className="text-muted">{t.losses}</span>
               <div className="text-right">
                 <span className="font-black text-red-400">{losses}</span>
-                <span className="ml-2 text-gray-500">{formatPercent(lossRate)}</span>
+                <span className="ml-2 text-muted-faint">{formatPercent(lossRate)}</span>
               </div>
             </div>
 
             <div className="flex items-center justify-between gap-4">
-              <span className="text-gray-400">{t.breakEven}</span>
+              <span className="text-muted">{t.breakEven}</span>
               <div className="text-right">
                 <span className="font-black text-yellow-400">{be}</span>
-                <span className="ml-2 text-gray-500">{formatPercent(beRate)}</span>
+                <span className="ml-2 text-muted-faint">{formatPercent(beRate)}</span>
               </div>
             </div>
           </div>
-        </div>
+        </Card>
 
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
+        <Card interactive className="p-6">
+          <p className="text-sm text-muted">
             {t.averages}
           </p>
 
           <div className="mt-4 space-y-4 text-sm">
             <div className="flex items-center justify-between gap-4">
-              <span className="text-gray-400">{t.averageResult + periodSuffix}</span>
+              <span className="text-muted">{t.averageResult + periodSuffix}</span>
               <span className={`font-black ${getResultTone(averageResult)}`}>
                 {formatCurrency(averageResult, currency)}
               </span>
             </div>
 
             <div className="flex items-center justify-between gap-4">
-              <span className="text-gray-400">{t.averageWin + periodSuffix}</span>
+              <span className="text-muted">{t.averageWin + periodSuffix}</span>
               <span className="font-black text-green-400">
                 {formatCurrency(averageWin, currency)}
               </span>
             </div>
 
             <div className="flex items-center justify-between gap-4">
-              <span className="text-gray-400">{t.averageLoss + periodSuffix}</span>
+              <span className="text-muted">{t.averageLoss + periodSuffix}</span>
               <span className="font-black text-red-400">
                 {formatCurrency(averageLoss, currency)}
               </span>
             </div>
 
             <div className="flex items-center justify-between gap-4">
-              <span className="text-gray-400">{t.profitFactor + periodSuffix}</span>
+              <span className="text-muted">{t.profitFactor + periodSuffix}</span>
               <span className={`font-black ${profitFactor >= 1 ? "text-green-400" : "text-red-400"}`}>
                 {profitFactor.toFixed(2)}
               </span>
             </div>
           </div>
-        </div>
+        </Card>
 
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
+        <Card interactive className="p-6">
+          <p className="text-sm text-muted">
             {t.extremes}
           </p>
 
           <div className="mt-4 space-y-4 text-sm">
             <div className="flex items-center justify-between gap-4">
-              <span className="text-gray-400">{t.bestTrade + periodSuffix}</span>
+              <span className="text-muted">{t.bestTrade + periodSuffix}</span>
               <span className="font-black text-green-400">
                 {formatCurrency(bestTrade, currency)}
               </span>
             </div>
 
             <div className="flex items-center justify-between gap-4">
-              <span className="text-gray-400">{t.worstTrade + periodSuffix}</span>
+              <span className="text-muted">{t.worstTrade + periodSuffix}</span>
               <span className="font-black text-red-400">
                 {formatCurrency(worstTrade, currency)}
               </span>
             </div>
 
             <div className="flex items-center justify-between gap-4">
-              <span className="text-gray-400">{t.maxDrawdown + periodSuffix}</span>
+              <span className="text-muted">{t.maxDrawdown + periodSuffix}</span>
               <span className="font-black text-red-400">
                 {formatPercent(maxDrawdown)}
               </span>
             </div>
           </div>
-        </div>
+        </Card>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(300px,1fr)]">
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
+      <div
+        className="reveal-rise grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(300px,1fr)]"
+        style={{ animationDelay: "420ms" }}
+      >
+        <Card interactive className="p-5 sm:p-6">
           <div className="mb-5">
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-muted">
               {t.latestActivity}
             </p>
 
@@ -1500,10 +1529,7 @@ export default async function DashboardPage({
           {recentTrades.length > 0 ? (
             <div className="space-y-3">
               {recentTrades.map((trade) => (
-                <div
-                  key={trade.id}
-                  className="rounded-2xl border border-white/10 bg-black/10 p-4 transition-colors hover:border-white/20 hover:bg-white/[0.03]"
-                >
+                <ListRow key={trade.id}>
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
@@ -1528,49 +1554,49 @@ export default async function DashboardPage({
                         </span>
                       </div>
 
-                      <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
+                      <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-faint">
                         <span>{getDateLabel(trade.openDate, language)}</span>
                         {trade.session ? (
                           <span>{trade.session}</span>
                         ) : null}
                       </p>
-                  </div>
+                    </div>
 
-                  <div className="flex items-end justify-between gap-4 sm:block sm:shrink-0 sm:text-right">
-                    <p
-                      className={`text-lg font-black ${getResultTone(
-                        trade.resultUsd || 0
-                      )}`}
-                    >
-                      {formatCurrency(
-                        trade.resultUsd || 0,
-                        currency
-                      )}
-                    </p>
+                    <div className="flex items-end justify-between gap-4 sm:block sm:shrink-0 sm:text-right">
+                      <p
+                        className={`text-lg font-black ${getResultTone(
+                          trade.resultUsd || 0
+                        )}`}
+                      >
+                        {formatCurrency(
+                          trade.resultUsd || 0,
+                          currency
+                        )}
+                      </p>
 
-                    <p className="mt-1 text-xs text-gray-500">
-                      {t.equity}{" "}
-                      {formatCurrency(
-                        trade.equity ||
-                        initialBalance,
-                        currency
-                      )}
-                    </p>
+                      <p className="mt-1 text-xs text-muted-faint">
+                        {t.equity}{" "}
+                        {formatCurrency(
+                          trade.equity ||
+                          initialBalance,
+                          currency
+                        )}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                </div>
+                </ListRow>
               ))}
             </div>
           ) : (
-            <div className="rounded-2xl border border-dashed border-white/10 bg-black/10 p-6 text-sm text-gray-400">
+            <Card variant="inner" className="border-dashed p-6 text-sm text-muted">
               {t.noRecentTrades}
-            </div>
+            </Card>
           )}
-        </div>
+        </Card>
 
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
+        <Card interactive className="p-5 sm:p-6">
           <div className="mb-5">
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-muted">
               {t.reviewNotes}
             </p>
 
@@ -1579,11 +1605,12 @@ export default async function DashboardPage({
             </h2>
           </div>
 
-          <div className="space-y-3 text-sm leading-6 text-gray-400">
+          <div className="space-y-3 text-sm leading-6 text-muted">
             {visibleWatchItems.map((item) => (
-              <div
+              <Card
                 key={`${item.label}-${item.value}`}
-                className="rounded-2xl border border-white/10 bg-black/10 p-4"
+                variant="inner"
+                className="p-4"
               >
                 <div className="flex items-center justify-between gap-3">
                   <p className="font-bold text-white">
@@ -1595,19 +1622,19 @@ export default async function DashboardPage({
                   </p>
                 </div>
 
-                <p className="mt-2 text-xs leading-5 text-gray-500">
+                <p className="mt-2 text-xs leading-5 text-muted-faint">
                   {item.note}
                 </p>
-              </div>
+              </Card>
             ))}
           </div>
-        </div>
+        </Card>
       </div>
 
-      <details className="group rounded-3xl border border-white/10 bg-white/[0.025] p-4 sm:p-5">
+      <details className="group rounded-card border-[0.5px] border-flash/[0.1] bg-surface-1 p-4 sm:p-5">
         <summary className="flex cursor-pointer list-none flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-faint">
               Technical profile
             </p>
 
@@ -1616,7 +1643,7 @@ export default async function DashboardPage({
             </h2>
           </div>
 
-          <div className="flex items-center gap-3 text-xs font-semibold text-gray-500">
+          <div className="flex items-center gap-3 text-xs font-semibold text-muted-faint">
             <span>{t.accountStatus}: {accountHealth}</span>
             <ChevronDown size={16} className="transition group-open:rotate-180" />
           </div>
@@ -1651,18 +1678,15 @@ export default async function DashboardPage({
                 : "-",
             ],
           ].map(([label, value]) => (
-            <div
-              key={label}
-              className="rounded-2xl border border-white/10 bg-black/10 p-3"
-            >
-              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-gray-500">
+            <Card key={label} variant="inner" className="p-3">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-faint">
                 {label}
               </p>
 
               <p className="mt-2 truncate text-sm font-bold text-gray-200">
                 {value}
               </p>
-            </div>
+            </Card>
           ))}
         </div>
       </details>

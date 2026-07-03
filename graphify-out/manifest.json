@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   ".claude/settings.local.json": {
-    "mtime": 1783075387.9128606,
-    "ast_hash": "3413831070296ddccff22f8b17fef83a",
+    "mtime": 1783076292.6944394,
+    "ast_hash": "37261ea77c7285f2591317636473ba47",
     "semantic_hash": ""
   },
   ".claude/skills/impeccable/scripts/command-metadata.json": {
@@ -485,8 +485,8 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/members/invite-form.tsx": {
-    "mtime": 1781624505.0692348,
-    "ast_hash": "d1b91d4e66a3fb0ffc1ce04a3cfe0870",
+    "mtime": 1783075865.7195902,
+    "ast_hash": "a8660a3c70a2b1dd0efd7209a7501899",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/members/member-actions.tsx": {
@@ -850,8 +850,8 @@
     "semantic_hash": ""
   },
   "components/AppShell.tsx": {
-    "mtime": 1782558943.6543853,
-    "ast_hash": "a3c1d3787204a0cd84d8c335f3222e66",
+    "mtime": 1783075519.490366,
+    "ast_hash": "148366820fa15581e4af578ea4748b7b",
     "semantic_hash": ""
   },
   "components/EmptyState.tsx": {
@@ -875,8 +875,8 @@
     "semantic_hash": ""
   },
   "components/NotificationBell.tsx": {
-    "mtime": 1782558945.1880624,
-    "ast_hash": "211336cee6e148d3afb136a1be98f9c4",
+    "mtime": 1783075984.6894574,
+    "ast_hash": "561642c63cca60bdc692b494aab7bcb5",
     "semantic_hash": ""
   },
   "components/OnboardingModal.tsx": {
@@ -900,8 +900,8 @@
     "semantic_hash": ""
   },
   "components/ScopeBar.tsx": {
-    "mtime": 1782228364.0339348,
-    "ast_hash": "3b1241a7860a2caa093a3c6bd01ceb59",
+    "mtime": 1783075986.3239834,
+    "ast_hash": "9a305a157393de6c0168a67c65110bbe",
     "semantic_hash": ""
   },
   "components/SettingsHardRefresh.tsx": {
@@ -910,8 +910,8 @@
     "semantic_hash": ""
   },
   "components/Sidebar.tsx": {
-    "mtime": 1783075201.3149712,
-    "ast_hash": "f69f9b1ede32fea23caace459df4b012",
+    "mtime": 1783075982.576173,
+    "ast_hash": "424c5036069a427a358ba9af6cb86147",
     "semantic_hash": ""
   },
   "components/ToggleSwitch.stories.tsx": {
@@ -1465,8 +1465,8 @@
     "semantic_hash": ""
   },
   "components/ui/Card.tsx": {
-    "mtime": 1783074769.9817452,
-    "ast_hash": "9b2995d6125375bd9bf363b2180ccc1b",
+    "mtime": 1783075454.7169578,
+    "ast_hash": "83a33ffa832506820f74736ef60a5837",
     "semantic_hash": ""
   },
   "eslint.config.mjs": {
@@ -1750,8 +1750,8 @@
     "semantic_hash": ""
   },
   ".impeccable/hook.cache.json": {
-    "mtime": 1783075201.4717803,
-    "ast_hash": "731a54721aad27c4ac713121ba5faee3",
+    "mtime": 1783076234.4670067,
+    "ast_hash": "5cc11bfe1901aa64d948da03a6ca9c5b",
     "semantic_hash": ""
   },
   "lib/permissions.ts": {
@@ -1767,6 +1767,26 @@
   "components/ui/SignatureEdge.tsx": {
     "mtime": 1783074868.7975042,
     "ast_hash": "0f94bfb0a300183496f4ebb718206e26",
+    "semantic_hash": ""
+  },
+  "components/Topbar.tsx": {
+    "mtime": 1783075490.3022192,
+    "ast_hash": "86d65ec78a16a815ce264da64e6d99d4",
+    "semantic_hash": ""
+  },
+  "components/ui/Pill.tsx": {
+    "mtime": 1783075640.117445,
+    "ast_hash": "e3b6bfee178a99c67f5784fd805e3b46",
+    "semantic_hash": ""
+  },
+  "components/ui/ListRow.tsx": {
+    "mtime": 1783075747.3227782,
+    "ast_hash": "1467f32abf5199d931014af3ad0f2382",
+    "semantic_hash": ""
+  },
+  "components/ui/Input.tsx": {
+    "mtime": 1783075852.2617378,
+    "ast_hash": "70c0d5bfeb97ee6369a9b30228502ad8",
     "semantic_hash": ""
   }
 }

@@ -5,8 +5,12 @@
   "3": "permissions.ts",
   "4": "Sidebar.tsx",
   "5": "actions.ts",
-  "6": "actions.ts",
+  "6": "ScopeBar.tsx",
   "7": "Card.tsx",
   "8": "IconTile.tsx",
-  "9": "SignatureEdge.tsx"
+  "9": "SignatureEdge.tsx",
+  "10": "actions.ts",
+  "11": "NotificationBell.tsx",
+  "12": "ListRow.tsx",
+  "13": "Pill.tsx"
 }

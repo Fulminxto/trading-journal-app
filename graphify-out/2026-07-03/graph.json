@@ -4,154 +4,374 @@
   "graph": {},
   "nodes": [
     {
-      "label": "Sidebar.tsx",
+      "label": "invite-form.tsx",
       "file_type": "code",
-      "source_file": "components/Sidebar.tsx",
+      "source_file": "app/accounts/[accountId]/members/invite-form.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "components_sidebar",
-      "community": 4,
-      "norm_label": "sidebar.tsx"
+      "id": "app_accounts_accountid_members_invite_form",
+      "community": 10,
+      "norm_label": "invite-form.tsx"
     },
     {
-      "label": "AccountPermissions",
+      "label": "InviteFormLabels",
       "file_type": "code",
-      "source_file": "components/Sidebar.tsx",
-      "source_location": "L44",
+      "source_file": "app/accounts/[accountId]/members/invite-form.tsx",
+      "source_location": "L7",
       "_origin": "ast",
-      "id": "components_sidebar_accountpermissions",
-      "community": 4,
-      "norm_label": "accountpermissions"
+      "id": "app_accounts_accountid_members_invite_form_inviteformlabels",
+      "community": 10,
+      "norm_label": "inviteformlabels"
     },
     {
-      "label": "AccountLink",
+      "label": "InviteMemberForm()",
       "file_type": "code",
-      "source_file": "components/Sidebar.tsx",
-      "source_location": "L61",
+      "source_file": "app/accounts/[accountId]/members/invite-form.tsx",
+      "source_location": "L15",
       "_origin": "ast",
-      "id": "components_sidebar_accountlink",
-      "community": 4,
-      "norm_label": "accountlink"
+      "id": "app_accounts_accountid_members_invite_form_invitememberform",
+      "community": 10,
+      "norm_label": "invitememberform()"
     },
     {
-      "label": "SidebarLink",
+      "label": "CancelInviteButton()",
       "file_type": "code",
-      "source_file": "components/Sidebar.tsx",
-      "source_location": "L70",
-      "_origin": "ast",
-      "id": "components_sidebar_sidebarlink",
-      "community": 4,
-      "norm_label": "sidebarlink"
-    },
-    {
-      "label": "SidebarProps",
-      "file_type": "code",
-      "source_file": "components/Sidebar.tsx",
+      "source_file": "app/accounts/[accountId]/members/invite-form.tsx",
       "source_location": "L76",
       "_origin": "ast",
-      "id": "components_sidebar_sidebarprops",
-      "community": 4,
-      "norm_label": "sidebarprops"
+      "id": "app_accounts_accountid_members_invite_form_cancelinvitebutton",
+      "community": 10,
+      "norm_label": "cancelinvitebutton()"
     },
     {
-      "label": "SidebarLabels",
+      "label": "Input.tsx",
       "file_type": "code",
-      "source_file": "components/Sidebar.tsx",
-      "source_location": "L83",
-      "_origin": "ast",
-      "id": "components_sidebar_sidebarlabels",
-      "community": 4,
-      "norm_label": "sidebarlabels"
-    },
-    {
-      "label": "baseLinks",
-      "file_type": "code",
-      "source_file": "components/Sidebar.tsx",
-      "source_location": "L312",
-      "_origin": "ast",
-      "id": "components_sidebar_baselinks",
-      "community": 4,
-      "norm_label": "baselinks"
-    },
-    {
-      "label": "getAccountLinkLabel()",
-      "file_type": "code",
-      "source_file": "components/Sidebar.tsx",
-      "source_location": "L388",
-      "_origin": "ast",
-      "id": "components_sidebar_getaccountlinklabel",
-      "community": 4,
-      "norm_label": "getaccountlinklabel()"
-    },
-    {
-      "label": "Sidebar()",
-      "file_type": "code",
-      "source_file": "components/Sidebar.tsx",
-      "source_location": "L440",
-      "_origin": "ast",
-      "id": "components_sidebar_sidebar",
-      "community": 4,
-      "norm_label": "sidebar()"
-    },
-    {
-      "label": "IconTile.tsx",
-      "file_type": "code",
-      "source_file": "components/ui/IconTile.tsx",
+      "source_file": "components/ui/Input.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "components_ui_icontile",
-      "community": 8,
-      "norm_label": "icontile.tsx"
+      "id": "components_ui_input",
+      "community": 10,
+      "norm_label": "input.tsx"
     },
     {
-      "label": "IconTileProps",
+      "label": "InputProps",
       "file_type": "code",
-      "source_file": "components/ui/IconTile.tsx",
+      "source_file": "components/ui/Input.tsx",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "components_ui_icontile_icontileprops",
-      "community": 8,
-      "norm_label": "icontileprops"
+      "id": "components_ui_input_inputprops",
+      "community": 10,
+      "norm_label": "inputprops"
     },
     {
-      "label": "IconTile()",
+      "label": "Input()",
       "file_type": "code",
-      "source_file": "components/ui/IconTile.tsx",
-      "source_location": "L19",
+      "source_file": "components/ui/Input.tsx",
+      "source_location": "L10",
       "_origin": "ast",
-      "id": "components_ui_icontile_icontile",
-      "community": 8,
-      "norm_label": "icontile()"
+      "id": "components_ui_input_input",
+      "community": 10,
+      "norm_label": "input()"
     },
     {
-      "label": "SignatureEdge.tsx",
+      "label": "NotificationBell.tsx",
       "file_type": "code",
-      "source_file": "components/ui/SignatureEdge.tsx",
+      "source_file": "components/NotificationBell.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "components_ui_signatureedge",
-      "community": 9,
-      "norm_label": "signatureedge.tsx"
+      "community": 11,
+      "norm_label": "notificationbell.tsx",
+      "id": "components_notificationbell"
     },
     {
-      "label": "SignatureEdgeProps",
+      "label": "NotificationItem",
       "file_type": "code",
-      "source_file": "components/ui/SignatureEdge.tsx",
+      "source_file": "components/NotificationBell.tsx",
+      "source_location": "L21",
+      "_origin": "ast",
+      "community": 11,
+      "norm_label": "notificationitem",
+      "id": "components_notificationbell_notificationitem"
+    },
+    {
+      "label": "PanelCopy",
+      "file_type": "code",
+      "source_file": "components/NotificationBell.tsx",
+      "source_location": "L31",
+      "_origin": "ast",
+      "community": 11,
+      "norm_label": "panelcopy",
+      "id": "components_notificationbell_panelcopy"
+    },
+    {
+      "label": "InviteCopy",
+      "file_type": "code",
+      "source_file": "components/NotificationBell.tsx",
+      "source_location": "L91",
+      "_origin": "ast",
+      "community": 11,
+      "norm_label": "invitecopy",
+      "id": "components_notificationbell_invitecopy"
+    },
+    {
+      "label": "RELATIVE_TIME_UNITS",
+      "file_type": "code",
+      "source_file": "components/NotificationBell.tsx",
+      "source_location": "L151",
+      "_origin": "ast",
+      "community": 11,
+      "norm_label": "relative_time_units",
+      "id": "components_notificationbell_relative_time_units"
+    },
+    {
+      "label": "formatRelativeTime()",
+      "file_type": "code",
+      "source_file": "components/NotificationBell.tsx",
+      "source_location": "L163",
+      "_origin": "ast",
+      "community": 11,
+      "norm_label": "formatrelativetime()",
+      "id": "components_notificationbell_formatrelativetime"
+    },
+    {
+      "label": "extractAccountId()",
+      "file_type": "code",
+      "source_file": "components/NotificationBell.tsx",
+      "source_location": "L180",
+      "_origin": "ast",
+      "community": 11,
+      "norm_label": "extractaccountid()",
+      "id": "components_notificationbell_extractaccountid"
+    },
+    {
+      "label": "NotificationBell()",
+      "file_type": "code",
+      "source_file": "components/NotificationBell.tsx",
+      "source_location": "L187",
+      "_origin": "ast",
+      "community": 11,
+      "norm_label": "notificationbell()",
+      "id": "components_notificationbell_notificationbell"
+    },
+    {
+      "label": "ListRow.tsx",
+      "file_type": "code",
+      "source_file": "components/ui/ListRow.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "components_ui_signatureedge_signatureedgeprops",
-      "community": 9,
-      "norm_label": "signatureedgeprops"
+      "community": 11,
+      "norm_label": "listrow.tsx",
+      "id": "components_ui_listrow"
     },
     {
-      "label": "SignatureEdge()",
+      "label": "ListRowProps",
       "file_type": "code",
-      "source_file": "components/ui/SignatureEdge.tsx",
-      "source_location": "L13",
+      "source_file": "components/ui/ListRow.tsx",
+      "source_location": "L4",
       "_origin": "ast",
-      "id": "components_ui_signatureedge_signatureedge",
-      "community": 9,
-      "norm_label": "signatureedge()"
+      "community": 11,
+      "norm_label": "listrowprops",
+      "id": "components_ui_listrow_listrowprops"
+    },
+    {
+      "label": "ListRow()",
+      "file_type": "code",
+      "source_file": "components/ui/ListRow.tsx",
+      "source_location": "L20",
+      "_origin": "ast",
+      "community": 11,
+      "norm_label": "listrow()",
+      "id": "components_ui_listrow_listrow"
+    },
+    {
+      "label": "ScopeBar.tsx",
+      "file_type": "code",
+      "source_file": "components/ScopeBar.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 6,
+      "norm_label": "scopebar.tsx",
+      "id": "components_scopebar"
+    },
+    {
+      "label": "Member",
+      "file_type": "code",
+      "source_file": "components/ScopeBar.tsx",
+      "source_location": "L17",
+      "_origin": "ast",
+      "community": 6,
+      "norm_label": "member",
+      "id": "components_scopebar_member"
+    },
+    {
+      "label": "Props",
+      "file_type": "code",
+      "source_file": "components/ScopeBar.tsx",
+      "source_location": "L23",
+      "_origin": "ast",
+      "community": 6,
+      "norm_label": "props",
+      "id": "components_scopebar_props"
+    },
+    {
+      "label": "PRESETS",
+      "file_type": "code",
+      "source_file": "components/ScopeBar.tsx",
+      "source_location": "L36",
+      "_origin": "ast",
+      "community": 6,
+      "norm_label": "presets",
+      "id": "components_scopebar_presets"
+    },
+    {
+      "label": "TRADER_LABEL",
+      "file_type": "code",
+      "source_file": "components/ScopeBar.tsx",
+      "source_location": "L38",
+      "_origin": "ast",
+      "community": 6,
+      "norm_label": "trader_label",
+      "id": "components_scopebar_trader_label"
+    },
+    {
+      "label": "PERIOD_LABEL",
+      "file_type": "code",
+      "source_file": "components/ScopeBar.tsx",
+      "source_location": "L43",
+      "_origin": "ast",
+      "community": 6,
+      "norm_label": "period_label",
+      "id": "components_scopebar_period_label"
+    },
+    {
+      "label": "ALL_TRADERS_LABEL",
+      "file_type": "code",
+      "source_file": "components/ScopeBar.tsx",
+      "source_location": "L48",
+      "_origin": "ast",
+      "community": 6,
+      "norm_label": "all_traders_label",
+      "id": "components_scopebar_all_traders_label"
+    },
+    {
+      "label": "ScopeBar()",
+      "file_type": "code",
+      "source_file": "components/ScopeBar.tsx",
+      "source_location": "L53",
+      "_origin": "ast",
+      "community": 6,
+      "norm_label": "scopebar()",
+      "id": "components_scopebar_scopebar"
+    },
+    {
+      "label": "Pill.tsx",
+      "file_type": "code",
+      "source_file": "components/ui/Pill.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 6,
+      "norm_label": "pill.tsx",
+      "id": "components_ui_pill"
+    },
+    {
+      "label": "PillProps",
+      "file_type": "code",
+      "source_file": "components/ui/Pill.tsx",
+      "source_location": "L3",
+      "_origin": "ast",
+      "community": 6,
+      "norm_label": "pillprops",
+      "id": "components_ui_pill_pillprops"
+    },
+    {
+      "label": "Pill()",
+      "file_type": "code",
+      "source_file": "components/ui/Pill.tsx",
+      "source_location": "L15",
+      "_origin": "ast",
+      "community": 6,
+      "norm_label": "pill()",
+      "id": "components_ui_pill_pill"
+    },
+    {
+      "label": "AppShell.tsx",
+      "file_type": "code",
+      "source_file": "components/AppShell.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 7,
+      "norm_label": "appshell.tsx",
+      "id": "components_appshell"
+    },
+    {
+      "label": "AppShellUser",
+      "file_type": "code",
+      "source_file": "components/AppShell.tsx",
+      "source_location": "L9",
+      "_origin": "ast",
+      "community": 7,
+      "norm_label": "appshelluser",
+      "id": "components_appshell_appshelluser"
+    },
+    {
+      "label": "AppShell()",
+      "file_type": "code",
+      "source_file": "components/AppShell.tsx",
+      "source_location": "L17",
+      "_origin": "ast",
+      "community": 7,
+      "norm_label": "appshell()",
+      "id": "components_appshell_appshell"
+    },
+    {
+      "label": "Topbar.tsx",
+      "file_type": "code",
+      "source_file": "components/Topbar.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 7,
+      "norm_label": "topbar.tsx",
+      "id": "components_topbar"
+    },
+    {
+      "label": "TopbarUser",
+      "file_type": "code",
+      "source_file": "components/Topbar.tsx",
+      "source_location": "L23",
+      "_origin": "ast",
+      "community": 7,
+      "norm_label": "topbaruser",
+      "id": "components_topbar_topbaruser"
+    },
+    {
+      "label": "TopbarLabels",
+      "file_type": "code",
+      "source_file": "components/Topbar.tsx",
+      "source_location": "L30",
+      "_origin": "ast",
+      "community": 7,
+      "norm_label": "topbarlabels",
+      "id": "components_topbar_topbarlabels"
+    },
+    {
+      "label": "labels",
+      "file_type": "code",
+      "source_file": "components/Topbar.tsx",
+      "source_location": "L43",
+      "_origin": "ast",
+      "community": 7,
+      "norm_label": "labels",
+      "id": "components_topbar_labels"
+    },
+    {
+      "label": "Topbar()",
+      "file_type": "code",
+      "source_file": "components/Topbar.tsx",
+      "source_location": "L130",
+      "_origin": "ast",
+      "community": 7,
+      "norm_label": "topbar()",
+      "id": "components_topbar_topbar"
     },
     {
       "label": "Card.tsx",
@@ -177,11 +397,161 @@
       "label": "Card()",
       "file_type": "code",
       "source_file": "components/ui/Card.tsx",
-      "source_location": "L23",
+      "source_location": "L25",
       "_origin": "ast",
       "community": 7,
       "norm_label": "card()",
       "id": "components_ui_card_card"
+    },
+    {
+      "label": "Sidebar.tsx",
+      "file_type": "code",
+      "source_file": "components/Sidebar.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "sidebar.tsx",
+      "id": "components_sidebar"
+    },
+    {
+      "label": "AccountPermissions",
+      "file_type": "code",
+      "source_file": "components/Sidebar.tsx",
+      "source_location": "L47",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "accountpermissions",
+      "id": "components_sidebar_accountpermissions"
+    },
+    {
+      "label": "AccountLink",
+      "file_type": "code",
+      "source_file": "components/Sidebar.tsx",
+      "source_location": "L64",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "accountlink",
+      "id": "components_sidebar_accountlink"
+    },
+    {
+      "label": "SidebarLink",
+      "file_type": "code",
+      "source_file": "components/Sidebar.tsx",
+      "source_location": "L73",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "sidebarlink",
+      "id": "components_sidebar_sidebarlink"
+    },
+    {
+      "label": "SidebarProps",
+      "file_type": "code",
+      "source_file": "components/Sidebar.tsx",
+      "source_location": "L80",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "sidebarprops",
+      "id": "components_sidebar_sidebarprops"
+    },
+    {
+      "label": "SidebarLabels",
+      "file_type": "code",
+      "source_file": "components/Sidebar.tsx",
+      "source_location": "L87",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "sidebarlabels",
+      "id": "components_sidebar_sidebarlabels"
+    },
+    {
+      "label": "baseLinks",
+      "file_type": "code",
+      "source_file": "components/Sidebar.tsx",
+      "source_location": "L340",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "baselinks",
+      "id": "components_sidebar_baselinks"
+    },
+    {
+      "label": "getAccountLinkLabel()",
+      "file_type": "code",
+      "source_file": "components/Sidebar.tsx",
+      "source_location": "L416",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "getaccountlinklabel()",
+      "id": "components_sidebar_getaccountlinklabel"
+    },
+    {
+      "label": "Sidebar()",
+      "file_type": "code",
+      "source_file": "components/Sidebar.tsx",
+      "source_location": "L468",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "sidebar()",
+      "id": "components_sidebar_sidebar"
+    },
+    {
+      "label": "IconTile.tsx",
+      "file_type": "code",
+      "source_file": "components/ui/IconTile.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "icontile.tsx",
+      "id": "components_ui_icontile"
+    },
+    {
+      "label": "IconTileProps",
+      "file_type": "code",
+      "source_file": "components/ui/IconTile.tsx",
+      "source_location": "L3",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "icontileprops",
+      "id": "components_ui_icontile_icontileprops"
+    },
+    {
+      "label": "IconTile()",
+      "file_type": "code",
+      "source_file": "components/ui/IconTile.tsx",
+      "source_location": "L19",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "icontile()",
+      "id": "components_ui_icontile_icontile"
+    },
+    {
+      "label": "SignatureEdge.tsx",
+      "file_type": "code",
+      "source_file": "components/ui/SignatureEdge.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 9,
+      "norm_label": "signatureedge.tsx",
+      "id": "components_ui_signatureedge"
+    },
+    {
+      "label": "SignatureEdgeProps",
+      "file_type": "code",
+      "source_file": "components/ui/SignatureEdge.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 9,
+      "norm_label": "signatureedgeprops",
+      "id": "components_ui_signatureedge_signatureedgeprops"
+    },
+    {
+      "label": "SignatureEdge()",
+      "file_type": "code",
+      "source_file": "components/ui/SignatureEdge.tsx",
+      "source_location": "L13",
+      "_origin": "ast",
+      "community": 9,
+      "norm_label": "signatureedge()",
+      "id": "components_ui_signatureedge_signatureedge"
     },
     {
       "label": "actions.ts",
@@ -189,7 +559,7 @@
       "source_file": "app/accounts/[accountId]/copilot/actions.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 6,
+      "community": 1,
       "norm_label": "actions.ts",
       "id": "app_accounts_accountid_copilot_actions"
     },
@@ -199,7 +569,7 @@
       "source_file": "app/accounts/[accountId]/copilot/actions.ts",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 6,
+      "community": 1,
       "norm_label": "getstring()",
       "id": "app_accounts_accountid_copilot_actions_getstring"
     },
@@ -209,7 +579,7 @@
       "source_file": "app/accounts/[accountId]/copilot/actions.ts",
       "source_location": "L33",
       "_origin": "ast",
-      "community": 6,
+      "community": 1,
       "norm_label": "getlimitedstring()",
       "id": "app_accounts_accountid_copilot_actions_getlimitedstring"
     },
@@ -219,7 +589,7 @@
       "source_file": "app/accounts/[accountId]/copilot/actions.ts",
       "source_location": "L44",
       "_origin": "ast",
-      "community": 6,
+      "community": 1,
       "norm_label": "getcopilotaccess()",
       "id": "app_accounts_accountid_copilot_actions_getcopilotaccess"
     },
@@ -229,7 +599,7 @@
       "source_file": "app/accounts/[accountId]/copilot/actions.ts",
       "source_location": "L80",
       "_origin": "ast",
-      "community": 6,
+      "community": 1,
       "norm_label": "sendcopilotmessage()",
       "id": "app_accounts_accountid_copilot_actions_sendcopilotmessage"
     },
@@ -239,7 +609,7 @@
       "source_file": "app/accounts/[accountId]/copilot/actions.ts",
       "source_location": "L572",
       "_origin": "ast",
-      "community": 6,
+      "community": 1,
       "norm_label": "generateanalysis()",
       "id": "app_accounts_accountid_copilot_actions_generateanalysis"
     },
@@ -618,128 +988,408 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "components/Sidebar.tsx",
-      "source_location": "L61",
-      "weight": 1.0,
-      "source": "components_sidebar",
-      "target": "components_sidebar_accountlink",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/Sidebar.tsx",
-      "source_location": "L44",
-      "weight": 1.0,
-      "source": "components_sidebar",
-      "target": "components_sidebar_accountpermissions",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/Sidebar.tsx",
-      "source_location": "L312",
-      "weight": 1.0,
-      "source": "components_sidebar",
-      "target": "components_sidebar_baselinks",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/Sidebar.tsx",
-      "source_location": "L388",
-      "weight": 1.0,
-      "source": "components_sidebar",
-      "target": "components_sidebar_getaccountlinklabel",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/Sidebar.tsx",
-      "source_location": "L440",
-      "weight": 1.0,
-      "source": "components_sidebar",
-      "target": "components_sidebar_sidebar",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/Sidebar.tsx",
-      "source_location": "L111",
-      "weight": 1.0,
-      "source": "components_sidebar",
-      "target": "components_sidebar_sidebarlabels",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/Sidebar.tsx",
-      "source_location": "L70",
-      "weight": 1.0,
-      "source": "components_sidebar",
-      "target": "components_sidebar_sidebarlink",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/Sidebar.tsx",
+      "source_file": "app/accounts/[accountId]/members/invite-form.tsx",
       "source_location": "L76",
       "weight": 1.0,
-      "source": "components_sidebar",
-      "target": "components_sidebar_sidebarprops",
+      "source": "app_accounts_accountid_members_invite_form",
+      "target": "app_accounts_accountid_members_invite_form_cancelinvitebutton",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "components/ui/IconTile.tsx",
-      "source_location": "L19",
+      "source_file": "app/accounts/[accountId]/members/invite-form.tsx",
+      "source_location": "L7",
       "weight": 1.0,
-      "source": "components_ui_icontile",
-      "target": "components_ui_icontile_icontile",
+      "source": "app_accounts_accountid_members_invite_form",
+      "target": "app_accounts_accountid_members_invite_form_inviteformlabels",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "components/ui/IconTile.tsx",
+      "source_file": "app/accounts/[accountId]/members/invite-form.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_members_invite_form",
+      "target": "app_accounts_accountid_members_invite_form_invitememberform",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/members/invite-form.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_members_invite_form",
+      "target": "components_ui_input",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/members/invite-form.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_members_invite_form",
+      "target": "components_ui_input_input",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/Input.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "components_ui_input",
+      "target": "components_ui_input_input",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/Input.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "source": "components_ui_icontile",
-      "target": "components_ui_icontile_icontileprops",
+      "source": "components_ui_input",
+      "target": "components_ui_input_inputprops",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "components/ui/SignatureEdge.tsx",
-      "source_location": "L13",
+      "source_file": "components/NotificationBell.tsx",
+      "source_location": "L180",
       "weight": 1.0,
-      "source": "components_ui_signatureedge",
-      "target": "components_ui_signatureedge_signatureedge",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "components_notificationbell",
+      "target": "components_notificationbell_extractaccountid"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "components/ui/SignatureEdge.tsx",
-      "source_location": "L1",
+      "source_file": "components/NotificationBell.tsx",
+      "source_location": "L163",
       "weight": 1.0,
-      "source": "components_ui_signatureedge",
-      "target": "components_ui_signatureedge_signatureedgeprops",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "components_notificationbell",
+      "target": "components_notificationbell_formatrelativetime"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/NotificationBell.tsx",
+      "source_location": "L99",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_notificationbell",
+      "target": "components_notificationbell_invitecopy"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/NotificationBell.tsx",
+      "source_location": "L187",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_notificationbell",
+      "target": "components_notificationbell_notificationbell"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/NotificationBell.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_notificationbell",
+      "target": "components_notificationbell_notificationitem"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/NotificationBell.tsx",
+      "source_location": "L39",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_notificationbell",
+      "target": "components_notificationbell_panelcopy"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/NotificationBell.tsx",
+      "source_location": "L151",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_notificationbell",
+      "target": "components_notificationbell_relative_time_units"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/NotificationBell.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_notificationbell",
+      "target": "components_ui_listrow"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/NotificationBell.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_notificationbell",
+      "target": "components_ui_listrow_listrow"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/Topbar.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_topbar",
+      "target": "components_notificationbell"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/ListRow.tsx",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_ui_listrow",
+      "target": "components_ui_listrow_listrow"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/ListRow.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_ui_listrow",
+      "target": "components_ui_listrow_listrowprops"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ScopeBar.tsx",
+      "source_location": "L48",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_scopebar",
+      "target": "components_scopebar_all_traders_label"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ScopeBar.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_scopebar",
+      "target": "components_scopebar_member"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ScopeBar.tsx",
+      "source_location": "L43",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_scopebar",
+      "target": "components_scopebar_period_label"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ScopeBar.tsx",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_scopebar",
+      "target": "components_scopebar_presets"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ScopeBar.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_scopebar",
+      "target": "components_scopebar_props"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ScopeBar.tsx",
+      "source_location": "L53",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_scopebar",
+      "target": "components_scopebar_scopebar"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ScopeBar.tsx",
+      "source_location": "L38",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_scopebar",
+      "target": "components_scopebar_trader_label"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ScopeBar.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_scopebar",
+      "target": "components_ui_pill"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ScopeBar.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_scopebar",
+      "target": "components_ui_pill_pill"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/Pill.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_ui_pill",
+      "target": "components_ui_pill_pill"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/Pill.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_ui_pill",
+      "target": "components_ui_pill_pillprops"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/AppShell.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_appshell",
+      "target": "components_appshell_appshell"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/AppShell.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_appshell",
+      "target": "components_appshell_appshelluser"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/AppShell.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_appshell",
+      "target": "components_topbar"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/AppShell.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_appshell",
+      "target": "components_topbar_topbar"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/Topbar.tsx",
+      "source_location": "L43",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_topbar",
+      "target": "components_topbar_labels"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/Topbar.tsx",
+      "source_location": "L130",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_topbar",
+      "target": "components_topbar_topbar"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/Topbar.tsx",
+      "source_location": "L30",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_topbar",
+      "target": "components_topbar_topbarlabels"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/Topbar.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_topbar",
+      "target": "components_topbar_topbaruser"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/Topbar.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_topbar",
+      "target": "components_ui_card"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "components/ui/Card.tsx",
-      "source_location": "L23",
+      "source_location": "L25",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "components_ui_card",
@@ -754,6 +1404,126 @@
       "confidence_score": 1.0,
       "source": "components_ui_card",
       "target": "components_ui_card_cardprops"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/Sidebar.tsx",
+      "source_location": "L64",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_sidebar",
+      "target": "components_sidebar_accountlink"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/Sidebar.tsx",
+      "source_location": "L47",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_sidebar",
+      "target": "components_sidebar_accountpermissions"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/Sidebar.tsx",
+      "source_location": "L340",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_sidebar",
+      "target": "components_sidebar_baselinks"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/Sidebar.tsx",
+      "source_location": "L416",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_sidebar",
+      "target": "components_sidebar_getaccountlinklabel"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/Sidebar.tsx",
+      "source_location": "L468",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_sidebar",
+      "target": "components_sidebar_sidebar"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/Sidebar.tsx",
+      "source_location": "L118",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_sidebar",
+      "target": "components_sidebar_sidebarlabels"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/Sidebar.tsx",
+      "source_location": "L73",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_sidebar",
+      "target": "components_sidebar_sidebarlink"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/Sidebar.tsx",
+      "source_location": "L80",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_sidebar",
+      "target": "components_sidebar_sidebarprops"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/IconTile.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_ui_icontile",
+      "target": "components_ui_icontile_icontile"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/IconTile.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_ui_icontile",
+      "target": "components_ui_icontile_icontileprops"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/SignatureEdge.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_ui_signatureedge",
+      "target": "components_ui_signatureedge_signatureedge"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/SignatureEdge.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_ui_signatureedge",
+      "target": "components_ui_signatureedge_signatureedgeprops"
     },
     {
       "relation": "contains",
@@ -1612,5 +2382,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e5ec6bfb07a8ad654086ebb405556467fb3fdbb2"
+  "built_at_commit": "84e9b37d600b2a3eadc94de81a2a8b4953e3b20c"
 }
