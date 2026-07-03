@@ -9,6 +9,9 @@ import {
 } from "@/lib/i18n";
 import { ArrowLeft, Pencil } from "lucide-react";
 
+import Card from "@/components/ui/Card";
+import SignatureEdge from "@/components/ui/SignatureEdge";
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type ReplayLabels = {
@@ -21,9 +24,13 @@ type ReplayLabels = {
   win: string;
   loss: string;
   be: string;
+  actSetupTitle: string;
+  actTradeTitle: string;
+  actOutcomeTitle: string;
   anatomyTitle: string;
   timelineTitle: string;
   performanceTitle: string;
+  costsLabel: string;
   entryLabel: string;
   exitLabel: string;
   slLabel: string;
@@ -45,7 +52,6 @@ type ReplayLabels = {
   fees: string;
   equityAfter: string;
   noData: string;
-  motivationTitle: string;
   strategyLabel: string;
   reasonLabel: string;
   setupQualityLabel: string;
@@ -76,9 +82,13 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     win: "WIN",
     loss: "LOSS",
     be: "Break Even",
+    actSetupTitle: "Il piano",
+    actTradeTitle: "L'operazione",
+    actOutcomeTitle: "L'esito",
     anatomyTitle: "Anatomia del prezzo",
     timelineTitle: "Timeline",
-    performanceTitle: "Performance",
+    performanceTitle: "Risultato",
+    costsLabel: "Costi & equity",
     entryLabel: "ENTRATA",
     exitLabel: "USCITA",
     slLabel: "SL",
@@ -100,11 +110,10 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     fees: "Fees",
     equityAfter: "Equity post-trade",
     noData: "—",
-    motivationTitle: "Motivazione & Setup",
     strategyLabel: "Strategia",
     reasonLabel: "Motivazione",
     setupQualityLabel: "Qualità del setup",
-    executionTitle: "Esecuzione",
+    executionTitle: "Esecuzione & Psicologia",
     executionRatingLabel: "Qualità esecuzione",
     confidenceLabel: "Confidenza",
     emotionalStateLabel: "Stato emotivo",
@@ -129,9 +138,13 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     win: "WIN",
     loss: "LOSS",
     be: "Break Even",
+    actSetupTitle: "The Plan",
+    actTradeTitle: "The Trade",
+    actOutcomeTitle: "The Outcome",
     anatomyTitle: "Price Anatomy",
     timelineTitle: "Timeline",
-    performanceTitle: "Performance",
+    performanceTitle: "Result",
+    costsLabel: "Costs & Equity",
     entryLabel: "ENTRY",
     exitLabel: "EXIT",
     slLabel: "SL",
@@ -153,11 +166,10 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     fees: "Fees",
     equityAfter: "Equity after",
     noData: "—",
-    motivationTitle: "Motivation & Setup",
     strategyLabel: "Strategy",
     reasonLabel: "Motivation",
     setupQualityLabel: "Setup quality",
-    executionTitle: "Execution",
+    executionTitle: "Execution & Psychology",
     executionRatingLabel: "Execution quality",
     confidenceLabel: "Confidence",
     emotionalStateLabel: "Emotional state",
@@ -182,9 +194,13 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     win: "WIN",
     loss: "LOSS",
     be: "Беззбитково",
+    actSetupTitle: "План",
+    actTradeTitle: "Угода",
+    actOutcomeTitle: "Результат",
     anatomyTitle: "Анатомія ціни",
     timelineTitle: "Хронологія",
-    performanceTitle: "Результати",
+    performanceTitle: "Результат",
+    costsLabel: "Витрати та Equity",
     entryLabel: "ВХІД",
     exitLabel: "ВИХІД",
     slLabel: "SL",
@@ -206,11 +222,10 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     fees: "Збори",
     equityAfter: "Equity після",
     noData: "—",
-    motivationTitle: "Мотивація & Налаштування",
     strategyLabel: "Стратегія",
     reasonLabel: "Мотивація",
     setupQualityLabel: "Якість налаштування",
-    executionTitle: "Виконання",
+    executionTitle: "Виконання та психологія",
     executionRatingLabel: "Якість виконання",
     confidenceLabel: "Впевненість",
     emotionalStateLabel: "Емоційний стан",
@@ -235,9 +250,13 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     win: "WIN",
     loss: "LOSS",
     be: "Безубыток",
+    actSetupTitle: "План",
+    actTradeTitle: "Сделка",
+    actOutcomeTitle: "Итог",
     anatomyTitle: "Анатомия цены",
     timelineTitle: "Хронология",
-    performanceTitle: "Результаты",
+    performanceTitle: "Результат",
+    costsLabel: "Издержки и Equity",
     entryLabel: "ВХОД",
     exitLabel: "ВЫХОД",
     slLabel: "SL",
@@ -259,11 +278,10 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     fees: "Сборы",
     equityAfter: "Equity после",
     noData: "—",
-    motivationTitle: "Мотивация & Подготовка",
     strategyLabel: "Стратегия",
     reasonLabel: "Мотивация",
     setupQualityLabel: "Качество сетапа",
-    executionTitle: "Исполнение",
+    executionTitle: "Исполнение и психология",
     executionRatingLabel: "Качество исполнения",
     confidenceLabel: "Уверенность",
     emotionalStateLabel: "Эмоциональное состояние",
@@ -288,9 +306,13 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     win: "WIN",
     loss: "LOSS",
     be: "Sin resultado",
+    actSetupTitle: "El plan",
+    actTradeTitle: "La operación",
+    actOutcomeTitle: "El resultado",
     anatomyTitle: "Anatomía del precio",
     timelineTitle: "Cronología",
-    performanceTitle: "Rendimiento",
+    performanceTitle: "Resultado",
+    costsLabel: "Costos y equity",
     entryLabel: "ENTRADA",
     exitLabel: "SALIDA",
     slLabel: "SL",
@@ -312,11 +334,10 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     fees: "Tasas",
     equityAfter: "Equity después",
     noData: "—",
-    motivationTitle: "Motivación & Setup",
     strategyLabel: "Estrategia",
     reasonLabel: "Motivación",
     setupQualityLabel: "Calidad del setup",
-    executionTitle: "Ejecución",
+    executionTitle: "Ejecución y psicología",
     executionRatingLabel: "Calidad de ejecución",
     confidenceLabel: "Confianza",
     emotionalStateLabel: "Estado emocional",
@@ -341,9 +362,13 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     win: "WIN",
     loss: "LOSS",
     be: "Sans résultat",
+    actSetupTitle: "Le plan",
+    actTradeTitle: "L'opération",
+    actOutcomeTitle: "Le résultat",
     anatomyTitle: "Anatomie du prix",
     timelineTitle: "Chronologie",
-    performanceTitle: "Performance",
+    performanceTitle: "Résultat",
+    costsLabel: "Coûts et equity",
     entryLabel: "ENTRÉE",
     exitLabel: "SORTIE",
     slLabel: "SL",
@@ -365,11 +390,10 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     fees: "Frais",
     equityAfter: "Equity après",
     noData: "—",
-    motivationTitle: "Motivation & Setup",
     strategyLabel: "Stratégie",
     reasonLabel: "Motivation",
     setupQualityLabel: "Qualité du setup",
-    executionTitle: "Exécution",
+    executionTitle: "Exécution & psychologie",
     executionRatingLabel: "Qualité d'exécution",
     confidenceLabel: "Confiance",
     emotionalStateLabel: "État émotionnel",
@@ -394,9 +418,13 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     win: "WIN",
     loss: "LOSS",
     be: "Break Even",
+    actSetupTitle: "Der Plan",
+    actTradeTitle: "Der Trade",
+    actOutcomeTitle: "Das Ergebnis",
     anatomyTitle: "Preisanatomie",
     timelineTitle: "Zeitverlauf",
-    performanceTitle: "Performance",
+    performanceTitle: "Ergebnis",
+    costsLabel: "Kosten & Equity",
     entryLabel: "EINSTIEG",
     exitLabel: "AUSSTIEG",
     slLabel: "SL",
@@ -418,11 +446,10 @@ const pageLabels: Record<AppLanguage, ReplayLabels> = {
     fees: "Gebühren",
     equityAfter: "Equity danach",
     noData: "—",
-    motivationTitle: "Motivation & Setup",
     strategyLabel: "Strategie",
     reasonLabel: "Motivation",
     setupQualityLabel: "Setup-Qualität",
-    executionTitle: "Ausführung",
+    executionTitle: "Ausführung & Psychologie",
     executionRatingLabel: "Ausführungsqualität",
     confidenceLabel: "Vertrauen",
     emotionalStateLabel: "Emotionaler Zustand",
@@ -509,17 +536,11 @@ function capitalizeSession(s: string | null): string {
     .join(" ");
 }
 
-function emotionStyle(state: string): string {
-  const styles: Record<string, string> = {
-    calm: "border-blue-500/20 bg-blue-500/10 text-blue-300",
-    focused: "border-indigo-500/20 bg-indigo-500/10 text-indigo-300",
-    confident: "border-accent/20 bg-accent/10 text-green-300",
-    tired: "border-yellow-500/20 bg-yellow-500/10 text-yellow-300",
-    stressed: "border-orange-500/20 bg-orange-500/10 text-orange-300",
-    impulsive: "border-red-500/20 bg-red-500/10 text-red-300",
-  };
-  return styles[state.toLowerCase()] ?? "border-white/10 bg-white/5 text-gray-300";
-}
+// Emotional state is a distinguishing label, not a P&L outcome - stays in
+// the cold family per REBRAND_BLUEPRINT.md's "colore-etichetta" rule
+// rather than the calm=blue/stressed=orange/impulsive=red rainbow this
+// used to be.
+const EMOTION_PILL_CLASS = "border-white/10 bg-white/[0.05] text-white";
 
 function emotionLabel(state: string, t: ReplayLabels): string {
   const lower = state.toLowerCase();
@@ -530,6 +551,29 @@ function emotionLabel(state: string, t: ReplayLabels): string {
   if (lower === "stressed") return t.stressed;
   if (lower === "impulsive") return t.impulsive;
   return state;
+}
+
+// ─── Small building blocks ─────────────────────────────────────────────────────
+
+function ActHeader({ number, title }: { number: string; title: string }) {
+  return (
+    <div className="mb-6 flex items-center gap-3">
+      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-xs font-black text-accent-bright">
+        {number}
+      </span>
+      <h2 className="text-sm font-black uppercase tracking-[0.14em] text-white">
+        {title}
+      </h2>
+    </div>
+  );
+}
+
+function SubCaption({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="mb-4 text-xs font-black uppercase tracking-[0.15em] text-muted-faint">
+      {children}
+    </p>
+  );
 }
 
 // ─── SVG Price Anatomy ────────────────────────────────────────────────────────
@@ -551,7 +595,7 @@ function PriceAnatomySVG({
 }) {
   if (!entry) {
     return (
-      <div className="flex h-40 items-center justify-center text-sm text-gray-600">
+      <div className="flex h-32 items-center justify-center text-sm text-muted-faint">
         {t.noPriceData}
       </div>
     );
@@ -580,9 +624,9 @@ function PriceAnatomySVG({
   const ty = tp !== null ? toY(tp) : null;
 
   const exitColor =
-    outcome === "win" ? "#4ade80" :
-    outcome === "loss" ? "#f87171" :
-    outcome === "be" ? "#facc15" : "#94a3b8";
+    outcome === "win" ? "var(--color-positive)" :
+    outcome === "loss" ? "var(--color-negative)" :
+    outcome === "be" ? "var(--color-warning)" : "var(--color-muted)";
 
   return (
     <svg
@@ -598,7 +642,7 @@ function PriceAnatomySVG({
           y={Math.min(ey, sy)}
           width={dw}
           height={Math.abs(ey - sy)}
-          fill="rgba(239,68,68,0.10)"
+          fill="color-mix(in srgb, var(--color-negative) 10%, transparent)"
         />
       )}
 
@@ -609,7 +653,7 @@ function PriceAnatomySVG({
           y={Math.min(ey, ty)}
           width={dw}
           height={Math.abs(ey - ty)}
-          fill="color-mix(in_srgb,var(--color-accent)_10%,transparent)"
+          fill="color-mix(in srgb, var(--color-positive) 10%, transparent)"
         />
       )}
 
@@ -618,14 +662,14 @@ function PriceAnatomySVG({
         <>
           <line
             x1={lx} y1={sy} x2={rx} y2={sy}
-            stroke="#ef4444" strokeWidth="1.5" strokeDasharray="5 4"
+            stroke="var(--color-negative)" strokeWidth="1.5" strokeDasharray="5 4"
           />
           <text x={lx - 6} y={sy + 4} textAnchor="end"
-            fill="#ef4444" fontSize="10" fontFamily="monospace">
+            fill="var(--color-negative)" fontSize="10" fontFamily="monospace">
             {formatPrice(sl)}
           </text>
           <text x={rx + 6} y={sy + 4} textAnchor="start"
-            fill="#ef4444" fontSize="10" fontWeight="bold">
+            fill="var(--color-negative)" fontSize="10" fontWeight="bold">
             {t.slLabel}
           </text>
         </>
@@ -636,14 +680,14 @@ function PriceAnatomySVG({
         <>
           <line
             x1={lx} y1={ty} x2={rx} y2={ty}
-            stroke="#22c55e" strokeWidth="1.5" strokeDasharray="5 4"
+            stroke="var(--color-positive)" strokeWidth="1.5" strokeDasharray="5 4"
           />
           <text x={lx - 6} y={ty + 4} textAnchor="end"
-            fill="#22c55e" fontSize="10" fontFamily="monospace">
+            fill="var(--color-positive)" fontSize="10" fontFamily="monospace">
             {formatPrice(tp)}
           </text>
           <text x={rx + 6} y={ty + 4} textAnchor="start"
-            fill="#22c55e" fontSize="10" fontWeight="bold">
+            fill="var(--color-positive)" fontSize="10" fontWeight="bold">
             {t.tpLabel}
           </text>
         </>
@@ -651,14 +695,14 @@ function PriceAnatomySVG({
 
       {/* Entry solid line + left dot */}
       <line x1={lx} y1={ey} x2={rx} y2={ey}
-        stroke="#94a3b8" strokeWidth="2" />
-      <circle cx={lx + dw * 0.12} cy={ey} r="5" fill="#94a3b8" />
+        stroke="var(--color-muted)" strokeWidth="2" />
+      <circle cx={lx + dw * 0.12} cy={ey} r="5" fill="var(--color-muted)" />
       <text x={lx - 6} y={ey + 4} textAnchor="end"
-        fill="#94a3b8" fontSize="10" fontFamily="monospace">
+        fill="var(--color-muted)" fontSize="10" fontFamily="monospace">
         {formatPrice(entry)}
       </text>
       <text x={rx + 6} y={ey + 4} textAnchor="start"
-        fill="#94a3b8" fontSize="10" fontWeight="bold">
+        fill="var(--color-muted)" fontSize="10" fontWeight="bold">
         {t.entryLabel}
       </text>
 
@@ -723,9 +767,11 @@ export default async function TradeReplayPage({
 
   const isLong = trade.direction?.toLowerCase() === "long";
   const directionLabel = isLong ? t.long : t.short;
+  // Cold family, not green/red - direction isn't a P&L outcome, and the
+  // outcome badge right next to it already owns that semantic space.
   const directionClass = isLong
-    ? "border-green-500/30 bg-accent/10 text-green-300"
-    : "border-red-500/30 bg-red-500/10 text-red-300";
+    ? "border-accent-bright/30 bg-accent-bright/10 text-accent-bright"
+    : "border-accent/30 bg-accent/10 text-accent";
 
   const outcomeLabel =
     trade.outcome === "win" ? t.win :
@@ -739,11 +785,11 @@ export default async function TradeReplayPage({
         ? "border-red-500/30 bg-red-500/10 text-red-300"
         : trade.outcome === "be"
           ? "border-yellow-500/30 bg-yellow-500/10 text-yellow-300"
-          : "border-white/10 bg-white/5 text-gray-400";
+          : "border-white/10 bg-white/5 text-muted";
 
   const pnlColor =
     (trade.resultUsd ?? 0) > 0 ? "text-green-400" :
-    (trade.resultUsd ?? 0) < 0 ? "text-red-400" : "text-gray-400";
+    (trade.resultUsd ?? 0) < 0 ? "text-red-400" : "text-muted";
 
   const duration = calcDuration(trade.openDate, trade.closeDate, t);
 
@@ -759,15 +805,15 @@ export default async function TradeReplayPage({
   const entry = trade.openingPrice;
 
   const exitColor =
-    trade.outcome === "win" ? "#4ade80" :
-    trade.outcome === "loss" ? "#f87171" :
-    trade.outcome === "be" ? "#facc15" : "#94a3b8";
+    trade.outcome === "win" ? "var(--color-positive)" :
+    trade.outcome === "loss" ? "var(--color-negative)" :
+    trade.outcome === "be" ? "var(--color-warning)" : "var(--color-muted)";
 
   const priceLevels = [
     {
       label: t.entryLabel,
       price: trade.openingPrice,
-      color: "#94a3b8",
+      color: "var(--color-muted)",
       pct: null as string | null,
     },
     {
@@ -782,7 +828,7 @@ export default async function TradeReplayPage({
     {
       label: t.slLabel,
       price: trade.stopLoss,
-      color: "#ef4444",
+      color: "var(--color-negative)",
       pct:
         trade.stopLoss !== null && entry !== null
           ? pctFromEntry(trade.stopLoss, entry)
@@ -791,7 +837,7 @@ export default async function TradeReplayPage({
     {
       label: t.tpLabel,
       price: trade.takeProfit,
-      color: "#22c55e",
+      color: "var(--color-positive)",
       pct:
         trade.takeProfit !== null && entry !== null
           ? pctFromEntry(trade.takeProfit, entry)
@@ -799,16 +845,32 @@ export default async function TradeReplayPage({
     },
   ];
 
-  // ── Performance metrics ─────────────────────────────────────────────────
+  // ── Hero metrics (secondary strip) ──────────────────────────────────────
 
-  const perfMetrics = [
+  const heroMetrics = [
+    {
+      label: t.resultUsd,
+      value:
+        trade.resultUsd !== null
+          ? formatCurrencyByLanguage(trade.resultUsd, currency, language)
+          : t.noData,
+      tone: pnlColor,
+    },
+    {
+      label: t.resultPct,
+      value:
+        trade.resultPercent !== null
+          ? `${trade.resultPercent >= 0 ? "+" : ""}${trade.resultPercent.toFixed(2)}%`
+          : t.noData,
+      tone: pnlColor,
+    },
     {
       label: t.plannedRR,
       value:
         trade.riskReward !== null
           ? `1 : ${trade.riskReward.toFixed(2)}`
           : t.noData,
-      color: "text-gray-300",
+      tone: "text-white",
     },
     {
       label: t.actualRR,
@@ -818,38 +880,26 @@ export default async function TradeReplayPage({
             ? "0"
             : `${actualRR < 0 ? "−" : ""}1 : ${Math.abs(actualRR).toFixed(2)}`
           : t.noData,
-      color:
+      tone:
         actualRR === null
-          ? "text-gray-500"
+          ? "text-muted-faint"
           : actualRR > 0
             ? "text-green-400"
             : actualRR < 0
               ? "text-red-400"
               : "text-yellow-400",
     },
-    {
-      label: t.resultUsd,
-      value:
-        trade.resultUsd !== null
-          ? formatCurrencyByLanguage(trade.resultUsd, currency, language)
-          : t.noData,
-      color: pnlColor,
-    },
-    {
-      label: t.resultPct,
-      value:
-        trade.resultPercent !== null
-          ? `${trade.resultPercent >= 0 ? "+" : ""}${trade.resultPercent.toFixed(2)}%`
-          : t.noData,
-      color: pnlColor,
-    },
+  ];
+
+  // ── Costs & equity (Act 03) ─────────────────────────────────────────────
+
+  const costMetrics = [
     {
       label: t.commission,
       value:
         trade.commission !== null
           ? formatCurrencyByLanguage(trade.commission, currency, language)
           : t.noData,
-      color: "text-gray-400",
     },
     {
       label: t.swap,
@@ -857,7 +907,6 @@ export default async function TradeReplayPage({
         trade.swap !== null
           ? formatCurrencyByLanguage(trade.swap, currency, language)
           : t.noData,
-      color: "text-gray-400",
     },
     {
       label: t.fees,
@@ -865,7 +914,6 @@ export default async function TradeReplayPage({
         trade.fees !== null
           ? formatCurrencyByLanguage(trade.fees, currency, language)
           : t.noData,
-      color: "text-gray-400",
     },
     {
       label: t.equityAfter,
@@ -873,46 +921,43 @@ export default async function TradeReplayPage({
         trade.equity !== null
           ? formatCurrencyByLanguage(trade.equity, currency, language)
           : t.noData,
-      color: "text-gray-300",
     },
   ];
 
   // ── Render ───────────────────────────────────────────────────────────────
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
 
       {/* Navigation */}
       <div className="flex items-center justify-between">
         <Link
           href={`/accounts/${accountId}/diary`}
-          className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-gray-400 transition hover:bg-white/[0.06] hover:text-white"
+          className="inline-flex items-center gap-2 rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-2.5 text-sm text-muted transition-colors duration-base hover:bg-white/[0.05] hover:text-white"
         >
           <ArrowLeft size={14} />
           {t.backToDiary}
         </Link>
         <Link
           href={`/accounts/${accountId}/diary/${tradeId}/edit`}
-          className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-gray-400 transition hover:bg-white/[0.06] hover:text-white"
+          className="inline-flex items-center gap-2 rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-2.5 text-sm text-muted transition-colors duration-base hover:bg-white/[0.05] hover:text-white"
         >
           <Pencil size={14} />
           {t.editTrade}
         </Link>
       </div>
 
-      {/* Hero */}
-      <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,0.12),transparent_40%)]" />
-        <div className="relative z-10">
-          <span className="rounded-full border border-indigo-500/20 bg-indigo-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-indigo-300">
-            {t.badge}
-          </span>
+      {/* Hero: the one dominant truth — what happened, and what it was worth */}
+      <div className="reveal-rise" style={{ animationDelay: "0ms" }}>
+        <Card variant="hero" className="p-6 sm:p-10">
+          <div className="flex items-center gap-3">
+            <SignatureEdge orientation="vertical" className="h-4" />
+            <p className="text-sm text-muted">{t.badge}</p>
+          </div>
 
-          <div className="mt-5 flex flex-wrap items-start justify-between gap-5">
+          <div className="mt-4 flex flex-wrap items-start justify-between gap-6">
             <div>
-              <h1 className="text-4xl font-black tracking-tight text-white sm:text-5xl">
-                {trade.symbol}
-              </h1>
+              <h1 className="text-hero text-white">{trade.symbol}</h1>
               <div className="mt-3 flex flex-wrap items-center gap-2">
                 <span
                   className={`rounded-full border px-3 py-1 text-xs font-black tracking-widest ${directionClass}`}
@@ -929,7 +974,7 @@ export default async function TradeReplayPage({
                 {trade.strategyRef && (
                   <span
                     className="rounded-full border border-white/10 px-3 py-1 text-xs font-bold"
-                    style={{ color: trade.strategyRef.color ?? "#94a3b8" }}
+                    style={{ color: trade.strategyRef.color ?? "#9fb4dd" }}
                   >
                     {trade.strategyRef.name}
                   </span>
@@ -939,13 +984,13 @@ export default async function TradeReplayPage({
 
             <div className="text-right">
               {trade.resultUsd !== null ? (
-                <p className={`text-3xl font-black sm:text-4xl ${pnlColor}`}>
+                <p className={`text-4xl font-black tabular-nums sm:text-5xl ${pnlColor}`}>
                   {formatCurrencyByLanguage(trade.resultUsd, currency, language)}
                 </p>
               ) : (
-                <p className="text-3xl font-black text-gray-600">{t.noData}</p>
+                <p className="text-4xl font-black text-muted-faint">{t.noData}</p>
               )}
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-sm text-muted-faint">
                 {formatDate(trade.openDate)}
                 {trade.closeDate && (
                   <> &rarr; {formatDate(trade.closeDate)}</>
@@ -953,16 +998,83 @@ export default async function TradeReplayPage({
               </p>
             </div>
           </div>
+        </Card>
+      </div>
+
+      {/* Secondary: compact result strip, once, right under the hero */}
+      <div
+        className="reveal-rise grid grid-cols-2 gap-4 sm:grid-cols-4"
+        style={{ animationDelay: "60ms" }}
+      >
+        {heroMetrics.map((m) => (
+          <Card key={m.label} interactive className="p-5">
+            <p className="text-sm text-muted">{m.label}</p>
+            <h3 className={`mt-2 text-2xl font-bold ${m.tone}`}>{m.value}</h3>
+          </Card>
+        ))}
+      </div>
+
+      {/* Act 01 — The Plan: what was intended before the trade happened */}
+      <Card className="reveal-rise p-6 sm:p-10" style={{ animationDelay: "100ms" }}>
+        <ActHeader number="01" title={t.actSetupTitle} />
+
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div>
+            <SubCaption>{t.strategyLabel}</SubCaption>
+            {trade.strategyRef ? (
+              <div className="flex items-center gap-2.5">
+                <span
+                  className="h-3 w-3 flex-shrink-0 rounded-full"
+                  style={{ backgroundColor: trade.strategyRef.color ?? "#9fb4dd" }}
+                />
+                <span className="text-lg font-black text-white">{trade.strategyRef.name}</span>
+              </div>
+            ) : trade.strategy ? (
+              <p className="text-lg font-black text-white">{trade.strategy}</p>
+            ) : (
+              <p className="text-sm text-muted-faint">{t.noData}</p>
+            )}
+          </div>
+
+          <div>
+            <SubCaption>{t.setupQualityLabel}</SubCaption>
+            {trade.setupQuality !== null ? (
+              <div className="flex items-center gap-4">
+                <div className="flex gap-1">
+                  {Array.from({ length: 10 }, (_, i) => (
+                    <span
+                      key={i}
+                      className={`h-2 w-5 rounded-full ${i < trade.setupQuality! ? "bg-accent" : "bg-white/10"}`}
+                    />
+                  ))}
+                </div>
+                <span className="text-lg font-black text-white">
+                  {trade.setupQuality}
+                  <span className="ml-0.5 text-sm text-muted-faint">/10</span>
+                </span>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-faint">{t.noData}</p>
+            )}
+          </div>
         </div>
-      </section>
 
-      {/* Price Anatomy */}
-      <section className="rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
-        <p className="mb-6 text-xs font-black uppercase tracking-[0.18em] text-gray-500">
-          {t.anatomyTitle}
-        </p>
+        <div className="mt-6 border-t border-white/[0.06] pt-6">
+          <SubCaption>{t.reasonLabel}</SubCaption>
+          {trade.reason ? (
+            <p className="text-sm leading-relaxed text-gray-300">{trade.reason}</p>
+          ) : (
+            <p className="text-sm text-muted-faint">{t.noData}</p>
+          )}
+        </div>
+      </Card>
 
-        <div className="rounded-2xl border border-white/10 bg-black/20 p-4 sm:p-6">
+      {/* Act 02 — The Trade: the price action and the state of mind behind it */}
+      <Card className="reveal-rise p-6 sm:p-10" style={{ animationDelay: "140ms" }}>
+        <ActHeader number="02" title={t.actTradeTitle} />
+
+        <SubCaption>{t.anatomyTitle}</SubCaption>
+        <Card variant="inner" className="p-4 sm:p-6">
           <PriceAnatomySVG
             entry={trade.openingPrice}
             exit={trade.closingPrice}
@@ -971,24 +1083,18 @@ export default async function TradeReplayPage({
             outcome={trade.outcome}
             t={t}
           />
-        </div>
+        </Card>
 
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {priceLevels.map(({ label, price, color, pct }) => (
-            <div
-              key={label}
-              className="rounded-2xl border border-white/10 bg-black/20 p-4"
-            >
+            <Card key={label} variant="inner" className="p-4">
               <p
                 className="text-[10px] font-black uppercase tracking-[0.15em]"
                 style={{ color }}
               >
                 {label}
               </p>
-              <p
-                className="mt-1.5 text-base font-black text-white"
-                style={{ fontVariantNumeric: "tabular-nums" }}
-              >
+              <p className="mt-1.5 text-base font-black tabular-nums text-white">
                 {price !== null ? formatPrice(price) : t.noData}
               </p>
               {pct !== null && (
@@ -996,277 +1102,194 @@ export default async function TradeReplayPage({
                   {pct}
                 </p>
               )}
-            </div>
+            </Card>
           ))}
         </div>
-      </section>
 
-      {/* Timeline */}
-      <section className="rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
-        <p className="mb-6 text-xs font-black uppercase tracking-[0.18em] text-gray-500">
-          {t.timelineTitle}
-        </p>
-
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {/* Open */}
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-[10px] font-black uppercase tracking-[0.15em] text-gray-500">
-              {t.openDate}
-            </p>
-            <p className="mt-2 text-base font-black text-white">
-              {formatDate(trade.openDate)}
-            </p>
-            {trade.openTime ? (
-              <p className="mt-0.5 font-mono text-sm text-gray-400">
-                {trade.openTime}
+        <div className="mt-8 border-t border-white/[0.06] pt-8">
+          <SubCaption>{t.timelineTitle}</SubCaption>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <Card variant="inner" className="p-5">
+              <p className="text-[10px] font-black uppercase tracking-[0.15em] text-muted-faint">
+                {t.openDate}
               </p>
-            ) : (
-              <p className="mt-0.5 font-mono text-sm text-gray-600">
-                {formatTimeHM(trade.openDate)}
+              <p className="mt-2 text-base font-black text-white">
+                {formatDate(trade.openDate)}
               </p>
-            )}
-          </div>
-
-          {/* Duration */}
-          <div className="rounded-2xl border border-indigo-500/20 bg-indigo-500/[0.06] p-5 text-center">
-            <p className="text-[10px] font-black uppercase tracking-[0.15em] text-indigo-400">
-              {t.duration}
-            </p>
-            <p className="mt-2 text-2xl font-black text-white">
-              {duration}
-            </p>
-            {trade.session && (
-              <p className="mt-1 text-xs text-gray-500">
-                {capitalizeSession(trade.session)}
+              <p className="mt-0.5 font-mono text-sm text-muted-faint">
+                {trade.openTime || formatTimeHM(trade.openDate)}
               </p>
-            )}
-          </div>
+            </Card>
 
-          {/* Close */}
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-[10px] font-black uppercase tracking-[0.15em] text-gray-500">
-              {t.closeDate}
-            </p>
-            {trade.closeDate ? (
-              <>
-                <p className="mt-2 text-base font-black text-white">
-                  {formatDate(trade.closeDate)}
+            <Card variant="inner" className="p-5 text-center">
+              <p className="text-[10px] font-black uppercase tracking-[0.15em] text-accent-bright">
+                {t.duration}
+              </p>
+              <p className="mt-2 text-2xl font-black text-white">
+                {duration}
+              </p>
+              {trade.session && (
+                <p className="mt-1 text-xs text-muted-faint">
+                  {capitalizeSession(trade.session)}
                 </p>
-                <p className="mt-0.5 font-mono text-sm text-gray-400">
-                  {formatTimeHM(trade.closeDate)}
-                </p>
-              </>
-            ) : (
-              <p className="mt-2 text-sm text-gray-600">{t.openTrade}</p>
-            )}
+              )}
+            </Card>
+
+            <Card variant="inner" className="p-5">
+              <p className="text-[10px] font-black uppercase tracking-[0.15em] text-muted-faint">
+                {t.closeDate}
+              </p>
+              {trade.closeDate ? (
+                <>
+                  <p className="mt-2 text-base font-black text-white">
+                    {formatDate(trade.closeDate)}
+                  </p>
+                  <p className="mt-0.5 font-mono text-sm text-muted-faint">
+                    {formatTimeHM(trade.closeDate)}
+                  </p>
+                </>
+              ) : (
+                <p className="mt-2 text-sm text-muted-faint">{t.openTrade}</p>
+              )}
+            </Card>
           </div>
         </div>
-      </section>
 
-      {/* Performance */}
-      <section className="rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
-        <p className="mb-6 text-xs font-black uppercase tracking-[0.18em] text-gray-500">
-          {t.performanceTitle}
-        </p>
+        <div className="mt-8 border-t border-white/[0.06] pt-8">
+          <SubCaption>{t.executionTitle}</SubCaption>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <Card variant="inner" className="p-5">
+              <p className="text-[10px] font-black uppercase tracking-[0.15em] text-muted-faint">
+                {t.executionRatingLabel}
+              </p>
+              {trade.executionRating !== null ? (
+                <>
+                  <p className="mt-3 text-3xl font-black text-white">
+                    {trade.executionRating}
+                    <span className="text-sm text-muted-faint">/10</span>
+                  </p>
+                  <div className="mt-2 flex gap-1">
+                    {Array.from({ length: 10 }, (_, i) => (
+                      <span
+                        key={i}
+                        className={`h-1.5 flex-1 rounded-full ${i < trade.executionRating! ? "bg-accent" : "bg-white/10"}`}
+                      />
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <p className="mt-3 text-sm text-muted-faint">{t.noData}</p>
+              )}
+            </Card>
+
+            <Card variant="inner" className="p-5">
+              <p className="text-[10px] font-black uppercase tracking-[0.15em] text-muted-faint">
+                {t.confidenceLabel}
+              </p>
+              {trade.confidence !== null ? (
+                <>
+                  <p className="mt-3 text-3xl font-black text-white">
+                    {trade.confidence}
+                    <span className="text-sm text-muted-faint">/10</span>
+                  </p>
+                  <div className="mt-2 flex gap-1">
+                    {Array.from({ length: 10 }, (_, i) => (
+                      <span
+                        key={i}
+                        className={`h-1.5 flex-1 rounded-full ${i < trade.confidence! ? "bg-accent-bright" : "bg-white/10"}`}
+                      />
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <p className="mt-3 text-sm text-muted-faint">{t.noData}</p>
+              )}
+            </Card>
+
+            <Card variant="inner" className="p-5">
+              <p className="text-[10px] font-black uppercase tracking-[0.15em] text-muted-faint">
+                {t.emotionalStateLabel}
+              </p>
+              {trade.emotionalState ? (
+                <div className="mt-3">
+                  <span className={`inline-block rounded-full border px-3 py-1.5 text-sm font-bold ${EMOTION_PILL_CLASS}`}>
+                    {emotionLabel(trade.emotionalState, t)}
+                  </span>
+                </div>
+              ) : (
+                <p className="mt-3 text-sm text-muted-faint">{t.noData}</p>
+              )}
+            </Card>
+          </div>
+        </div>
+      </Card>
+
+      {/* Act 03 — The Outcome: the bill, and what to carry forward */}
+      <Card className="reveal-rise p-6 sm:p-10" style={{ animationDelay: "180ms" }}>
+        <ActHeader number="03" title={t.actOutcomeTitle} />
+
+        <SubCaption>{t.costsLabel}</SubCaption>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {perfMetrics.map(({ label, value, color }) => (
-            <div
-              key={label}
-              className="rounded-2xl border border-white/10 bg-black/20 p-4"
-            >
-              <p className="text-[10px] uppercase tracking-[0.12em] text-gray-500">
+          {costMetrics.map(({ label, value }) => (
+            <Card key={label} variant="inner" className="p-4">
+              <p className="text-[10px] uppercase tracking-[0.12em] text-muted-faint">
                 {label}
               </p>
-              <p className={`mt-2 text-lg font-black ${color}`}>{value}</p>
-            </div>
+              <p className="mt-2 text-lg font-black text-white">{value}</p>
+            </Card>
           ))}
         </div>
-      </section>
 
-      {/* Motivation & Setup */}
-      <section className="rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
-        <p className="mb-6 text-xs font-black uppercase tracking-[0.18em] text-gray-500">
-          {t.motivationTitle}
-        </p>
-        <div className="space-y-6">
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.15em] text-gray-500">
-              {t.strategyLabel}
-            </p>
-            {trade.strategyRef ? (
-              <div className="mt-2 flex items-center gap-2.5">
-                <span
-                  className="h-3 w-3 flex-shrink-0 rounded-full"
-                  style={{ backgroundColor: trade.strategyRef.color ?? "#94a3b8" }}
-                />
-                <span className="text-base font-black text-white">{trade.strategyRef.name}</span>
-              </div>
-            ) : trade.strategy ? (
-              <p className="mt-2 text-base font-black text-white">{trade.strategy}</p>
-            ) : (
-              <p className="mt-2 text-sm text-gray-600">{t.noData}</p>
-            )}
-          </div>
+        <div className="mt-8 space-y-4 border-t border-white/[0.06] pt-8">
+          <SubCaption>{t.reviewTitle}</SubCaption>
 
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.15em] text-gray-500">
-              {t.reasonLabel}
-            </p>
-            {trade.reason ? (
-              <p className="mt-2 text-sm leading-relaxed text-gray-300">{trade.reason}</p>
-            ) : (
-              <p className="mt-2 text-sm text-gray-600">{t.noData}</p>
-            )}
-          </div>
-
-          {trade.setupQuality !== null && (
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.15em] text-gray-500">
-                {t.setupQualityLabel}
-              </p>
-              <div className="mt-3 flex items-center gap-4">
-                <div className="flex gap-1">
-                  {Array.from({ length: 10 }, (_, i) => (
-                    <span
-                      key={i}
-                      className={`h-2 w-6 rounded-full ${i < trade.setupQuality! ? "bg-indigo-400" : "bg-white/10"}`}
-                    />
-                  ))}
-                </div>
-                <span className="text-xl font-black text-white">
-                  {trade.setupQuality}
-                  <span className="ml-0.5 text-sm text-gray-500">/10</span>
-                </span>
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Execution */}
-      <section className="rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
-        <p className="mb-6 text-xs font-black uppercase tracking-[0.18em] text-gray-500">
-          {t.executionTitle}
-        </p>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-[10px] font-black uppercase tracking-[0.15em] text-gray-500">
-              {t.executionRatingLabel}
-            </p>
-            {trade.executionRating !== null ? (
-              <>
-                <p className="mt-3 text-3xl font-black text-white">
-                  {trade.executionRating}
-                  <span className="text-sm text-gray-500">/10</span>
-                </p>
-                <div className="mt-2 flex gap-1">
-                  {Array.from({ length: 10 }, (_, i) => (
-                    <span
-                      key={i}
-                      className={`h-1.5 flex-1 rounded-full ${i < trade.executionRating! ? "bg-indigo-400" : "bg-white/10"}`}
-                    />
-                  ))}
-                </div>
-              </>
-            ) : (
-              <p className="mt-3 text-sm text-gray-600">{t.noData}</p>
-            )}
-          </div>
-
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-[10px] font-black uppercase tracking-[0.15em] text-gray-500">
-              {t.confidenceLabel}
-            </p>
-            {trade.confidence !== null ? (
-              <>
-                <p className="mt-3 text-3xl font-black text-white">
-                  {trade.confidence}
-                  <span className="text-sm text-gray-500">/10</span>
-                </p>
-                <div className="mt-2 flex gap-1">
-                  {Array.from({ length: 10 }, (_, i) => (
-                    <span
-                      key={i}
-                      className={`h-1.5 flex-1 rounded-full ${i < trade.confidence! ? "bg-accent-bright" : "bg-white/10"}`}
-                    />
-                  ))}
-                </div>
-              </>
-            ) : (
-              <p className="mt-3 text-sm text-gray-600">{t.noData}</p>
-            )}
-          </div>
-
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-[10px] font-black uppercase tracking-[0.15em] text-gray-500">
-              {t.emotionalStateLabel}
-            </p>
-            {trade.emotionalState ? (
-              <div className="mt-3">
-                <span className={`inline-block rounded-full border px-3 py-1.5 text-sm font-bold ${emotionStyle(trade.emotionalState)}`}>
-                  {emotionLabel(trade.emotionalState, t)}
-                </span>
-              </div>
-            ) : (
-              <p className="mt-3 text-sm text-gray-600">{t.noData}</p>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Review */}
-      <section className="rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
-        <p className="mb-6 text-xs font-black uppercase tracking-[0.18em] text-gray-500">
-          {t.reviewTitle}
-        </p>
-        <div className="space-y-4">
-          <div className="rounded-2xl border border-red-500/15 bg-red-500/[0.04] p-5">
+          <div className="rounded-inner border border-red-500/15 bg-red-500/[0.04] p-5">
             <p className="text-[10px] font-black uppercase tracking-[0.15em] text-red-400">
               {t.mistakesLabel}
             </p>
             {trade.mistakes ? (
               <p className="mt-2 text-sm leading-relaxed text-gray-300">{trade.mistakes}</p>
             ) : (
-              <p className="mt-2 text-sm text-gray-600">{t.noData}</p>
+              <p className="mt-2 text-sm text-muted-faint">{t.noData}</p>
             )}
           </div>
 
-          <div className="rounded-2xl border border-accent/15 bg-accent/[0.04] p-5">
+          <div className="rounded-inner border border-accent/15 bg-accent/[0.04] p-5">
             <p className="text-[10px] font-black uppercase tracking-[0.15em] text-accent">
               {t.lessonsLabel}
             </p>
             {trade.lessonsLearned ? (
               <p className="mt-2 text-sm leading-relaxed text-gray-300">{trade.lessonsLearned}</p>
             ) : (
-              <p className="mt-2 text-sm text-gray-600">{t.noData}</p>
+              <p className="mt-2 text-sm text-muted-faint">{t.noData}</p>
             )}
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-[10px] font-black uppercase tracking-[0.15em] text-gray-500">
+          <Card variant="inner" className="p-5">
+            <p className="text-[10px] font-black uppercase tracking-[0.15em] text-muted-faint">
               {t.notesLabel}
             </p>
             {trade.notes ? (
               <p className="mt-2 text-sm leading-relaxed text-gray-300">{trade.notes}</p>
             ) : (
-              <p className="mt-2 text-sm text-gray-600">{t.noData}</p>
+              <p className="mt-2 text-sm text-muted-faint">{t.noData}</p>
             )}
-          </div>
+          </Card>
         </div>
-      </section>
+      </Card>
 
       {/* Bottom navigation */}
       <div className="flex items-center justify-between pb-4">
         <Link
           href={`/accounts/${accountId}/diary`}
-          className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-gray-400 transition hover:bg-white/[0.06] hover:text-white"
+          className="inline-flex items-center gap-2 rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-2.5 text-sm text-muted transition-colors duration-base hover:bg-white/[0.05] hover:text-white"
         >
           <ArrowLeft size={14} />
           {t.backToDiary}
         </Link>
         <Link
           href={`/accounts/${accountId}/diary/${tradeId}/edit`}
-          className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-gray-400 transition hover:bg-white/[0.06] hover:text-white"
+          className="inline-flex items-center gap-2 rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-2.5 text-sm text-muted transition-colors duration-base hover:bg-white/[0.05] hover:text-white"
         >
           <Pencil size={14} />
           {t.editTrade}
