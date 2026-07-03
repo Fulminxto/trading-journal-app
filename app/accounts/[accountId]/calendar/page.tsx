@@ -21,6 +21,15 @@ import {
   type AppLanguage,
 } from "@/lib/i18n";
 import MemberSelector from "@/components/MemberSelector";
+import Card from "@/components/ui/Card";
+import SignatureEdge from "@/components/ui/SignatureEdge";
+
+// Same halo gradient Card.tsx uses on hover - reused here so the
+// calendar grid's "hover che accende" (REBRAND_BLUEPRINT.md) matches
+// the signature spark language everywhere else, instead of stacking a
+// separate glow effect on top of a scale transform.
+const CELL_HALO =
+  "radial-gradient(circle at top right, color-mix(in srgb, var(--color-halo) 26%, transparent) 0%, transparent 60%)";
 
 type CalendarLabels = {
   tradingCalendar: string;
@@ -48,6 +57,7 @@ type CalendarLabels = {
   profit: string;
   loss: string;
   noResult: string;
+  noTradesThisMonth: string;
 
   winsShort: string;
   lossesShort: string;
@@ -99,6 +109,7 @@ const calendarLabels: Record<
     profit: "Profitto",
     loss: "Perdita",
     noResult: "Nessun risultato",
+    noTradesThisMonth: "Nessun trade registrato questo mese.",
 
     winsShort: "W",
     lossesShort: "L",
@@ -149,6 +160,7 @@ const calendarLabels: Record<
     profit: "Profit",
     loss: "Loss",
     noResult: "No result",
+    noTradesThisMonth: "No trades recorded this month.",
 
     winsShort: "W",
     lossesShort: "L",
@@ -200,6 +212,7 @@ const calendarLabels: Record<
     profit: "Прибуток",
     loss: "Збиток",
     noResult: "Без результату",
+    noTradesThisMonth: "Цього місяця угод не зареєстровано.",
 
     winsShort: "W",
     lossesShort: "L",
@@ -251,6 +264,7 @@ const calendarLabels: Record<
     profit: "Прибыль",
     loss: "Убыток",
     noResult: "Без результата",
+    noTradesThisMonth: "В этом месяце сделок не зарегистрировано.",
 
     winsShort: "W",
     lossesShort: "L",
@@ -302,6 +316,7 @@ const calendarLabels: Record<
     profit: "Ganancia",
     loss: "Pérdida",
     noResult: "Sin resultado",
+    noTradesThisMonth: "No hay trades registrados este mes.",
 
     winsShort: "W",
     lossesShort: "L",
@@ -353,6 +368,7 @@ const calendarLabels: Record<
     profit: "Profit",
     loss: "Perte",
     noResult: "Aucun résultat",
+    noTradesThisMonth: "Aucun trade enregistré ce mois-ci.",
 
     winsShort: "W",
     lossesShort: "L",
@@ -404,6 +420,7 @@ const calendarLabels: Record<
     profit: "Profit",
     loss: "Verlust",
     noResult: "Kein Ergebnis",
+    noTradesThisMonth: "Diesen Monat wurden keine Trades erfasst.",
 
     winsShort: "W",
     lossesShort: "L",
@@ -507,8 +524,8 @@ function StatCard({
   tone?: string;
 }) {
   return (
-    <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-      <p className="text-sm text-gray-400">
+    <Card interactive className="p-6">
+      <p className="text-sm text-muted">
         {label}
       </p>
 
@@ -516,10 +533,10 @@ function StatCard({
         {value}
       </h2>
 
-      <p className="mt-3 text-sm leading-6 text-gray-500">
+      <p className="mt-3 text-sm leading-6 text-muted-faint">
         {description}
       </p>
-    </div>
+    </Card>
   );
 }
 
@@ -929,70 +946,74 @@ export default async function CalendarPage({
         />
       )}
 
-      <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent)_12%,transparent),transparent_35%),radial-gradient(circle_at_bottom_left,color-mix(in_srgb,var(--color-accent-bright)_8%,transparent),transparent_35%)]" />
+      <div
+        className="reveal-rise flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between"
+        style={{ animationDelay: "0ms" }}
+      >
+        <div>
+          <div className="mb-4 flex flex-wrap items-center gap-3">
+            <SignatureEdge orientation="vertical" className="h-4" />
 
-        <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
-          <div>
-            <div className="mb-6 flex flex-wrap items-center gap-3">
-              <span className="rounded-full border border-accent/20 bg-accent/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-green-300">
-                {t.tradingCalendar}
+            <span className="rounded-full bg-white/[0.06] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-muted">
+              {t.tradingCalendar}
+            </span>
+
+            <span className="rounded-full bg-white/[0.06] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-muted">
+              {account.name}
+            </span>
+
+            {isCurrentMonth && (
+              <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
+                {t.currentMonth}
               </span>
-
-              <span className="rounded-full border border-white/10 bg-black/20 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-gray-300">
-                {account.name}
-              </span>
-
-              {isCurrentMonth && (
-                <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
-                  {t.currentMonth}
-                </span>
-              )}
-            </div>
-
-            <p className="text-sm text-gray-400">
-              {t.monthlyPerformanceView}
-            </p>
-
-            <h1 className="mt-3 text-4xl font-black capitalize tracking-tight break-words text-white sm:text-6xl">
-              {monthLabel}
-            </h1>
-
-            <p className="mt-6 max-w-3xl text-base leading-7 text-gray-400">
-              {t.heroDescription}
-            </p>
+            )}
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <p className="text-sm text-muted">
+            {t.monthlyPerformanceView}
+          </p>
+
+          <h1 className="text-hero mt-3 capitalize break-words">
+            {monthLabel}
+          </h1>
+
+          <p className="mt-4 max-w-3xl text-base leading-7 text-muted">
+            {t.heroDescription}
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3">
+          <Link
+            href={`/accounts/${accountId}`}
+            className="rounded-inner border-[0.5px] border-flash/[0.12] px-5 py-3 text-sm text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.06]"
+          >
+            {t.backToAccountHub}
+          </Link>
+
+          <div className="flex items-center gap-3">
             <Link
-              href={`/accounts/${accountId}`}
-              className="rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-bold text-white transition hover:bg-white/[0.08]"
+              href={`/accounts/${accountId}/calendar?month=${previousMonth}&year=${previousYear}`}
+              className="flex h-12 w-12 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.12] text-white transition-colors duration-base hover:bg-white/[0.08]"
+              aria-label={t.previousMonth}
             >
-              {t.backToAccountHub}
+              <ChevronLeft size={20} />
             </Link>
 
-            <div className="flex items-center gap-3">
-              <Link
-                href={`/accounts/${accountId}/calendar?month=${previousMonth}&year=${previousYear}`}
-                className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-white transition hover:bg-white/[0.08]"
-                aria-label={t.previousMonth}
-              >
-                <ChevronLeft size={20} />
-              </Link>
-
-              <Link
-                href={`/accounts/${accountId}/calendar?month=${nextMonth}&year=${nextYear}`}
-                className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-white transition hover:bg-white/[0.08]"
-                aria-label={t.nextMonth}
-              >
-                <ChevronRight size={20} />
-              </Link>
-            </div>
+            <Link
+              href={`/accounts/${accountId}/calendar?month=${nextMonth}&year=${nextYear}`}
+              className="flex h-12 w-12 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.12] text-white transition-colors duration-base hover:bg-white/[0.08]"
+              aria-label={t.nextMonth}
+            >
+              <ChevronRight size={20} />
+            </Link>
           </div>
         </div>
-      </section>
+      </div>
 
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section
+        className="reveal-rise grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4"
+        style={{ animationDelay: "60ms" }}
+      >
         <StatCard
           label={t.monthlyPnl}
           value={formattedTotalMonthPnl}
@@ -1011,41 +1032,44 @@ export default async function CalendarPage({
           label={t.bestDay}
           value={formattedBestDay}
           description={bestDayLabel}
-          tone="text-accent"
+          tone={getResultTone(bestDay)}
         />
 
         <StatCard
           label={t.worstDay}
           value={formattedWorstDay}
           description={worstDayLabel}
-          tone="text-red-400"
+          tone={getResultTone(worstDay)}
         />
       </section>
 
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+      <section
+        className="reveal-rise grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4"
+        style={{ animationDelay: "100ms" }}
+      >
+        <Card interactive className="p-6">
           <div className="flex items-center gap-3">
             <TrendingUp
-              className="text-accent"
+              className="text-green-400"
               size={21}
             />
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-muted">
               {t.positiveDays}
             </p>
           </div>
 
-          <h2 className="mt-4 text-3xl font-black text-accent">
+          <h2 className="mt-4 text-3xl font-black text-green-400">
             {positiveDays}
           </h2>
-        </div>
+        </Card>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <Card interactive className="p-6">
           <div className="flex items-center gap-3">
             <TrendingDown
               className="text-red-400"
               size={21}
             />
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-muted">
               {t.negativeDays}
             </p>
           </div>
@@ -1053,15 +1077,15 @@ export default async function CalendarPage({
           <h2 className="mt-4 text-3xl font-black text-red-400">
             {negativeDays}
           </h2>
-        </div>
+        </Card>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <Card interactive className="p-6">
           <div className="flex items-center gap-3">
             <Minus
               className="text-yellow-300"
               size={21}
             />
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-muted">
               {t.flatDays}
             </p>
           </div>
@@ -1069,15 +1093,15 @@ export default async function CalendarPage({
           <h2 className="mt-4 text-3xl font-black text-yellow-300">
             {flatDays}
           </h2>
-        </div>
+        </Card>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+        <Card interactive className="p-6">
           <div className="flex items-center gap-3">
             <Flame
               className="text-accent-bright"
               size={21}
             />
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-muted">
               {t.avgTradesPerActiveDay}
             </p>
           </div>
@@ -1088,271 +1112,282 @@ export default async function CalendarPage({
               language
             )}
           </h2>
-        </div>
+        </Card>
       </section>
 
-      <section className="rounded-[32px] border border-white/10 bg-white/[0.03] p-4 sm:p-6">
-        <div className="mb-6 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <p className="text-sm text-gray-400">
-              {t.calendarMatrix}
-            </p>
-
-            <h2 className="mt-1 text-3xl font-black capitalize text-white">
-              {t.monthPerformance(
-                monthName
-              )}
-            </h2>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[0.14em] text-gray-400">
-            <div className="flex items-center gap-2">
-              <CircleDot
-                size={14}
-                className="text-accent"
-              />
-              {t.profit}
-            </div>
-
-            <div className="flex items-center gap-2">
-              <CircleDot
-                size={14}
-                className="text-red-400"
-              />
-              {t.loss}
-            </div>
-
-            <div className="flex items-center gap-2">
-              <CircleDot
-                size={14}
-                className="text-gray-500"
-              />
-              {t.noResult}
-            </div>
-          </div>
-        </div>
-
-        <div className="overflow-x-auto">
-          <div className="min-w-[840px] overflow-hidden rounded-3xl border border-white/10">
-            <div className="grid grid-cols-7 border-b border-white/10 bg-black/20">
-              {weekdays.map((day) => (
-                <div
-                  key={day}
-                  className="border-r border-white/10 p-4 text-center text-sm font-black uppercase tracking-[0.14em] text-gray-500 last:border-r-0"
-                >
-                  {day}
-                </div>
-              ))}
-            </div>
-
-            <div className="grid grid-cols-7 bg-black/10">
-              {Array.from({
-                length:
-                  adjustedFirstDay,
-              }).map((_, index) => (
-                <div
-                  key={`empty-${index}`}
-                  className="min-h-[150px] border-r border-b border-white/10 bg-black/20"
-                />
-              ))}
-
-              {Array.from({
-                length: days,
-              }).map((_, index) => {
-                const day = index + 1;
-
-                const data =
-                  grouped[day];
-
-                const pnl =
-                  data?.pnl || 0;
-
-                const tradesCount =
-                  data?.trades || 0;
-
-                const positive =
-                  pnl > 0;
-
-                const negative =
-                  pnl < 0;
-
-                const intensity =
-                  Math.min(
-                    Math.abs(pnl) / 500,
-                    1
-                  );
-
-                const isToday =
-                  now.getDate() ===
-                  day &&
-                  now.getMonth() ===
-                  month &&
-                  now.getFullYear() ===
-                  year;
-
-                return (
-                  <div
-                    key={day}
-                    className={`group relative min-h-[150px] border-r border-b border-white/10 p-4 transition-all duration-300 last:border-r-0 hover:z-10 hover:scale-[1.02] ${positive
-                        ? "bg-accent/10"
-                        : negative
-                          ? "bg-red-500/10"
-                          : "bg-transparent"
-                      }`}
-                    style={{
-                      backgroundColor: positive
-                        ? `rgba(34,197,94,${0.06 +
-                        intensity * 0.18
-                        })`
-                        : negative
-                          ? `rgba(239,68,68,${0.06 +
-                          intensity * 0.18
-                          })`
-                          : undefined,
-                    }}
-                  >
-                    <div
-                      className={`pointer-events-none absolute inset-0 opacity-0 blur-2xl transition duration-500 group-hover:opacity-100 ${positive
-                          ? "bg-accent/10"
-                          : negative
-                            ? "bg-red-500/10"
-                            : "bg-white/5"
-                        }`}
-                    />
-
-                    <div className="relative mb-5 flex items-center justify-between">
-                      <div
-                        className={`flex h-10 w-10 items-center justify-center rounded-full text-sm font-black ${isToday
-                            ? "bg-white text-black"
-                            : "bg-white/5 text-white"
-                          }`}
-                      >
-                        {day}
-                      </div>
-
-                      <div
-                        className={`h-2.5 w-2.5 rounded-full ${positive
-                            ? "bg-accent"
-                            : negative
-                              ? "bg-red-400"
-                              : "bg-gray-500"
-                          }`}
-                      />
-                    </div>
-
-                    <div className="relative space-y-2">
-                      <p
-                        className={`text-sm font-black ${positive
-                            ? "text-green-400"
-                            : negative
-                              ? "text-red-400"
-                              : "text-gray-400"
-                          }`}
-                      >
-                        {formatCurrencyByLanguage(
-                          pnl,
-                          currency,
-                          language
-                        )}
-                      </p>
-
-                      <p className="text-xs text-gray-500">
-                        {tradesCount} {t.trades}
-                      </p>
-
-                      {data && (
-                        <p className="text-xs text-gray-600">
-                          {data.wins}
-                          {t.winsShort} /{" "}
-                          {data.losses}
-                          {t.lossesShort} /{" "}
-                          {data.be}
-                          {t.beShort}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-
-              {Array.from({
-                length: endEmptyDays,
-              }).map((_, index) => (
-                <div
-                  key={`end-empty-${index}`}
-                  className="min-h-[150px] border-r border-b border-white/10 bg-black/20"
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-        <div className="mb-6 flex items-center gap-3">
-          <CalendarDays
-            className="text-accent-bright"
-            size={22}
+      {/* PRIMARY - the monthly performance map is the dominant truth
+          this page exists for, so it gets the hero treatment every
+          other card on this page doesn't. */}
+      <div className="reveal-rise" style={{ animationDelay: "140ms" }}>
+        <Card variant="hero" interactive className="relative p-4 sm:p-6">
+          <SignatureEdge
+            orientation="vertical"
+            className="absolute bottom-6 left-0 top-6"
           />
 
-          <div>
-            <p className="text-sm text-gray-400">
-              {t.monthlySummary}
-            </p>
+          <div className="pl-4">
+            <div className="mb-6 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <p className="text-sm text-muted">
+                  {t.calendarMatrix}
+                </p>
 
-            <h2 className="text-2xl font-black text-white">
-              {t.whatThisMonthShows}
-            </h2>
+                <h2 className="text-section mt-1 capitalize text-white">
+                  {t.monthPerformance(
+                    monthName
+                  )}
+                </h2>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[0.14em] text-muted">
+                <div className="flex items-center gap-2">
+                  <CircleDot
+                    size={14}
+                    className="text-green-400"
+                  />
+                  {t.profit}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <CircleDot
+                    size={14}
+                    className="text-red-400"
+                  />
+                  {t.loss}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <CircleDot
+                    size={14}
+                    className="text-muted-faint"
+                  />
+                  {t.noResult}
+                </div>
+              </div>
+            </div>
+
+            {activeDays === 0 && (
+              <Card variant="inner" className="mb-6 border-dashed p-4 text-sm text-muted">
+                {t.noTradesThisMonth}
+              </Card>
+            )}
+
+            <div className="overflow-x-auto">
+              <div className="min-w-[840px] overflow-hidden rounded-inner border-[0.5px] border-white/[0.08]">
+                <div className="grid grid-cols-7 border-b border-white/[0.08] bg-surface-2">
+                  {weekdays.map((day) => (
+                    <div
+                      key={day}
+                      className="border-r border-white/[0.08] p-4 text-center text-sm font-black uppercase tracking-[0.14em] text-muted-faint last:border-r-0"
+                    >
+                      {day}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="grid grid-cols-7 bg-bg-deep/40">
+                  {Array.from({
+                    length:
+                      adjustedFirstDay,
+                  }).map((_, index) => (
+                    <div
+                      key={`empty-${index}`}
+                      className="min-h-[150px] border-r border-b border-white/[0.08] bg-surface-1/60"
+                    />
+                  ))}
+
+                  {Array.from({
+                    length: days,
+                  }).map((_, index) => {
+                    const day = index + 1;
+
+                    const data =
+                      grouped[day];
+
+                    const pnl =
+                      data?.pnl || 0;
+
+                    const tradesCount =
+                      data?.trades || 0;
+
+                    const positive =
+                      pnl > 0;
+
+                    const negative =
+                      pnl < 0;
+
+                    const intensity =
+                      Math.min(
+                        Math.abs(pnl) / 500,
+                        1
+                      );
+
+                    const isToday =
+                      now.getDate() ===
+                      day &&
+                      now.getMonth() ===
+                      month &&
+                      now.getFullYear() ===
+                      year;
+
+                    return (
+                      <div
+                        key={day}
+                        className="group relative min-h-[150px] border-r border-b border-white/[0.08] p-4 transition-colors duration-base last:border-r-0 hover:border-accent-bright/30"
+                        style={{
+                          backgroundColor: positive
+                            ? `color-mix(in srgb, var(--color-positive) ${6 + intensity * 18}%, transparent)`
+                            : negative
+                              ? `color-mix(in srgb, var(--color-negative) ${6 + intensity * 18}%, transparent)`
+                              : undefined,
+                        }}
+                      >
+                        <div
+                          aria-hidden="true"
+                          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-base group-hover:opacity-100"
+                          style={{ background: CELL_HALO }}
+                        />
+
+                        <div className="relative mb-5 flex items-center justify-between">
+                          <div
+                            className={`flex h-10 w-10 items-center justify-center rounded-full text-sm font-black ${isToday
+                                ? "bg-accent-bright text-bg-deep"
+                                : "bg-white/5 text-white"
+                              }`}
+                          >
+                            {day}
+                          </div>
+
+                          <div
+                            className={`h-2.5 w-2.5 rounded-full ${positive
+                                ? "bg-green-400"
+                                : negative
+                                  ? "bg-red-400"
+                                  : "bg-white/20"
+                              }`}
+                          />
+                        </div>
+
+                        <div className="relative space-y-2">
+                          <p
+                            className={`text-sm font-black ${positive
+                                ? "text-green-400"
+                                : negative
+                                  ? "text-red-400"
+                                  : "text-muted"
+                              }`}
+                          >
+                            {formatCurrencyByLanguage(
+                              pnl,
+                              currency,
+                              language
+                            )}
+                          </p>
+
+                          <p className="text-xs text-muted-faint">
+                            {tradesCount} {t.trades}
+                          </p>
+
+                          {data && (
+                            <p className="text-xs text-muted-faint">
+                              {data.wins}
+                              {t.winsShort} /{" "}
+                              {data.losses}
+                              {t.lossesShort} /{" "}
+                              {data.be}
+                              {t.beShort}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  {Array.from({
+                    length: endEmptyDays,
+                  }).map((_, index) => (
+                    <div
+                      key={`end-empty-${index}`}
+                      className="min-h-[150px] border-r border-b border-white/[0.08] bg-surface-1/60"
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        </Card>
+      </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-sm text-gray-400">
-              {t.activity}
-            </p>
+      <section
+        className="reveal-rise"
+        style={{ animationDelay: "200ms" }}
+      >
+        <Card className="p-6">
+          <div className="mb-6 flex items-center gap-3">
+            <CalendarDays
+              className="text-accent-bright"
+              size={22}
+            />
 
-            <h3 className="mt-3 text-3xl font-black text-white">
-              {activeDays}
-            </h3>
+            <div>
+              <p className="text-sm text-muted">
+                {t.monthlySummary}
+              </p>
 
-            <p className="mt-2 text-sm leading-6 text-gray-500">
-              {t.activityDescription}
-            </p>
+              <h2 className="text-2xl font-black text-white">
+                {t.whatThisMonthShows}
+              </h2>
+            </div>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-sm text-gray-400">
-              {t.direction}
-            </p>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <Card variant="inner" className="p-5">
+              <p className="text-sm text-muted">
+                {t.activity}
+              </p>
 
-            <h3
-              className={`mt-3 text-3xl font-black ${getResultTone(
-                totalMonthPnl
-              )}`}
-            >
-              {directionLabel}
-            </h3>
+              <h3 className="mt-3 text-3xl font-black text-white">
+                {activeDays}
+              </h3>
 
-            <p className="mt-2 text-sm leading-6 text-gray-500">
-              {t.directionDescription}
-            </p>
+              <p className="mt-2 text-sm leading-6 text-muted-faint">
+                {t.activityDescription}
+              </p>
+            </Card>
+
+            <Card variant="inner" className="p-5">
+              <p className="text-sm text-muted">
+                {t.direction}
+              </p>
+
+              <h3
+                className={`mt-3 text-3xl font-black ${getResultTone(
+                  totalMonthPnl
+                )}`}
+              >
+                {directionLabel}
+              </h3>
+
+              <p className="mt-2 text-sm leading-6 text-muted-faint">
+                {t.directionDescription}
+              </p>
+            </Card>
+
+            <Card variant="inner" className="p-5">
+              <p className="text-sm text-muted">
+                {t.totalTrades}
+              </p>
+
+              <h3 className="mt-3 text-3xl font-black text-accent-bright">
+                {totalMonthTrades}
+              </h3>
+
+              <p className="mt-2 text-sm leading-6 text-muted-faint">
+                {t.totalTradesDescription}
+              </p>
+            </Card>
           </div>
-
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-sm text-gray-400">
-              {t.totalTrades}
-            </p>
-
-            <h3 className="mt-3 text-3xl font-black text-accent-bright">
-              {totalMonthTrades}
-            </h3>
-
-            <p className="mt-2 text-sm leading-6 text-gray-500">
-              {t.totalTradesDescription}
-            </p>
-          </div>
-        </div>
+        </Card>
       </section>
     </div>
   );

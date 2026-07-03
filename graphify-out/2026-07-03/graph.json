@@ -4,14 +4,194 @@
   "graph": {},
   "nodes": [
     {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "app/accounts/[accountId]/equity/page.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_accounts_accountid_equity_page",
+      "community": 2,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "StatCardProps",
+      "file_type": "code",
+      "source_file": "app/accounts/[accountId]/equity/page.tsx",
+      "source_location": "L35",
+      "_origin": "ast",
+      "id": "app_accounts_accountid_equity_page_statcardprops",
+      "community": 2,
+      "norm_label": "statcardprops"
+    },
+    {
+      "label": "EquityLabels",
+      "file_type": "code",
+      "source_file": "app/accounts/[accountId]/equity/page.tsx",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "app_accounts_accountid_equity_page_equitylabels",
+      "community": 2,
+      "norm_label": "equitylabels"
+    },
+    {
+      "label": "formatPercent()",
+      "file_type": "code",
+      "source_file": "app/accounts/[accountId]/equity/page.tsx",
+      "source_location": "L636",
+      "_origin": "ast",
+      "id": "app_accounts_accountid_equity_page_formatpercent",
+      "community": 2,
+      "norm_label": "formatpercent()"
+    },
+    {
+      "label": "formatDate()",
+      "file_type": "code",
+      "source_file": "app/accounts/[accountId]/equity/page.tsx",
+      "source_location": "L643",
+      "_origin": "ast",
+      "id": "app_accounts_accountid_equity_page_formatdate",
+      "community": 2,
+      "norm_label": "formatdate()"
+    },
+    {
+      "label": "formatShortDate()",
+      "file_type": "code",
+      "source_file": "app/accounts/[accountId]/equity/page.tsx",
+      "source_location": "L654",
+      "_origin": "ast",
+      "id": "app_accounts_accountid_equity_page_formatshortdate",
+      "community": 2,
+      "norm_label": "formatshortdate()"
+    },
+    {
+      "label": "getResultTone()",
+      "file_type": "code",
+      "source_file": "app/accounts/[accountId]/equity/page.tsx",
+      "source_location": "L664",
+      "_origin": "ast",
+      "id": "app_accounts_accountid_equity_page_getresulttone",
+      "community": 2,
+      "norm_label": "getresulttone()"
+    },
+    {
+      "label": "StatCard()",
+      "file_type": "code",
+      "source_file": "app/accounts/[accountId]/equity/page.tsx",
+      "source_location": "L676",
+      "_origin": "ast",
+      "id": "app_accounts_accountid_equity_page_statcard",
+      "community": 2,
+      "norm_label": "statcard()"
+    },
+    {
+      "label": "EquityPage()",
+      "file_type": "code",
+      "source_file": "app/accounts/[accountId]/equity/page.tsx",
+      "source_location": "L708",
+      "_origin": "ast",
+      "id": "app_accounts_accountid_equity_page_equitypage",
+      "community": 2,
+      "norm_label": "equitypage()"
+    },
+    {
+      "label": "EmptyState.tsx",
+      "file_type": "code",
+      "source_file": "components/EmptyState.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "components_emptystate",
+      "community": 15,
+      "norm_label": "emptystate.tsx"
+    },
+    {
+      "label": "EmptyStateProps",
+      "file_type": "code",
+      "source_file": "components/EmptyState.tsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "components_emptystate_emptystateprops",
+      "community": 15,
+      "norm_label": "emptystateprops"
+    },
+    {
+      "label": "EmptyState()",
+      "file_type": "code",
+      "source_file": "components/EmptyState.tsx",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "components_emptystate_emptystate",
+      "community": 15,
+      "norm_label": "emptystate()"
+    },
+    {
+      "label": "DrawdownChart.tsx",
+      "file_type": "code",
+      "source_file": "components/equity/DrawdownChart.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "components_equity_drawdownchart",
+      "community": 15,
+      "norm_label": "drawdownchart.tsx"
+    },
+    {
+      "label": "DrawdownPoint",
+      "file_type": "code",
+      "source_file": "components/equity/DrawdownChart.tsx",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "components_equity_drawdownchart_drawdownpoint",
+      "community": 15,
+      "norm_label": "drawdownpoint"
+    },
+    {
+      "label": "Props",
+      "file_type": "code",
+      "source_file": "components/equity/DrawdownChart.tsx",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "components_equity_drawdownchart_props",
+      "community": 15,
+      "norm_label": "props"
+    },
+    {
+      "label": "tooltipLabels",
+      "file_type": "code",
+      "source_file": "components/equity/DrawdownChart.tsx",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "components_equity_drawdownchart_tooltiplabels",
+      "community": 15,
+      "norm_label": "tooltiplabels"
+    },
+    {
+      "label": "emptyLabels",
+      "file_type": "code",
+      "source_file": "components/equity/DrawdownChart.tsx",
+      "source_location": "L42",
+      "_origin": "ast",
+      "id": "components_equity_drawdownchart_emptylabels",
+      "community": 15,
+      "norm_label": "emptylabels"
+    },
+    {
+      "label": "DrawdownChart()",
+      "file_type": "code",
+      "source_file": "components/equity/DrawdownChart.tsx",
+      "source_location": "L61",
+      "_origin": "ast",
+      "id": "components_equity_drawdownchart_drawdownchart",
+      "community": 15,
+      "norm_label": "drawdownchart()"
+    },
+    {
       "label": "OnboardingModal.tsx",
       "file_type": "code",
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "components_onboardingmodal",
       "community": 8,
-      "norm_label": "onboardingmodal.tsx"
+      "norm_label": "onboardingmodal.tsx",
+      "id": "components_onboardingmodal"
     },
     {
       "label": "OnboardingCardText",
@@ -19,9 +199,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L43",
       "_origin": "ast",
-      "id": "components_onboardingmodal_onboardingcardtext",
       "community": 8,
-      "norm_label": "onboardingcardtext"
+      "norm_label": "onboardingcardtext",
+      "id": "components_onboardingmodal_onboardingcardtext"
     },
     {
       "label": "OnboardingStepText",
@@ -29,9 +209,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L48",
       "_origin": "ast",
-      "id": "components_onboardingmodal_onboardingsteptext",
       "community": 8,
-      "norm_label": "onboardingsteptext"
+      "norm_label": "onboardingsteptext",
+      "id": "components_onboardingmodal_onboardingsteptext"
     },
     {
       "label": "OnboardingCard",
@@ -39,9 +219,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L57",
       "_origin": "ast",
-      "id": "components_onboardingmodal_onboardingcard",
       "community": 8,
-      "norm_label": "onboardingcard"
+      "norm_label": "onboardingcard",
+      "id": "components_onboardingmodal_onboardingcard"
     },
     {
       "label": "OnboardingStep",
@@ -49,9 +229,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L62",
       "_origin": "ast",
-      "id": "components_onboardingmodal_onboardingstep",
       "community": 8,
-      "norm_label": "onboardingstep"
+      "norm_label": "onboardingstep",
+      "id": "components_onboardingmodal_onboardingstep"
     },
     {
       "label": "OnboardingCopyText",
@@ -59,9 +239,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L71",
       "_origin": "ast",
-      "id": "components_onboardingmodal_onboardingcopytext",
       "community": 8,
-      "norm_label": "onboardingcopytext"
+      "norm_label": "onboardingcopytext",
+      "id": "components_onboardingmodal_onboardingcopytext"
     },
     {
       "label": "OnboardingCopy",
@@ -69,9 +249,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L84",
       "_origin": "ast",
-      "id": "components_onboardingmodal_onboardingcopy",
       "community": 8,
-      "norm_label": "onboardingcopy"
+      "norm_label": "onboardingcopy",
+      "id": "components_onboardingmodal_onboardingcopy"
     },
     {
       "label": "stepVisuals",
@@ -79,9 +259,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L96",
       "_origin": "ast",
-      "id": "components_onboardingmodal_stepvisuals",
       "community": 8,
-      "norm_label": "stepvisuals"
+      "norm_label": "stepvisuals",
+      "id": "components_onboardingmodal_stepvisuals"
     },
     {
       "label": "onboardingText",
@@ -89,9 +269,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L184",
       "_origin": "ast",
-      "id": "components_onboardingmodal_onboardingtext",
       "community": 8,
-      "norm_label": "onboardingtext"
+      "norm_label": "onboardingtext",
+      "id": "components_onboardingmodal_onboardingtext"
     },
     {
       "label": "buildCopy()",
@@ -99,9 +279,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L1746",
       "_origin": "ast",
-      "id": "components_onboardingmodal_buildcopy",
       "community": 8,
-      "norm_label": "buildcopy()"
+      "norm_label": "buildcopy()",
+      "id": "components_onboardingmodal_buildcopy"
     },
     {
       "label": "getCopy()",
@@ -109,9 +289,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L1775",
       "_origin": "ast",
-      "id": "components_onboardingmodal_getcopy",
       "community": 8,
-      "norm_label": "getcopy()"
+      "norm_label": "getcopy()",
+      "id": "components_onboardingmodal_getcopy"
     },
     {
       "label": "OnboardingModal()",
@@ -119,9 +299,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L1781",
       "_origin": "ast",
-      "id": "components_onboardingmodal_onboardingmodal",
       "community": 8,
-      "norm_label": "onboardingmodal()"
+      "norm_label": "onboardingmodal()",
+      "id": "components_onboardingmodal_onboardingmodal"
     },
     {
       "label": "IconTile.tsx",
@@ -129,9 +309,9 @@
       "source_file": "components/ui/IconTile.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "components_ui_icontile",
       "community": 8,
-      "norm_label": "icontile.tsx"
+      "norm_label": "icontile.tsx",
+      "id": "components_ui_icontile"
     },
     {
       "label": "IconTileProps",
@@ -139,9 +319,9 @@
       "source_file": "components/ui/IconTile.tsx",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "components_ui_icontile_icontileprops",
       "community": 8,
-      "norm_label": "icontileprops"
+      "norm_label": "icontileprops",
+      "id": "components_ui_icontile_icontileprops"
     },
     {
       "label": "IconTile()",
@@ -149,9 +329,9 @@
       "source_file": "components/ui/IconTile.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "id": "components_ui_icontile_icontile",
       "community": 8,
-      "norm_label": "icontile()"
+      "norm_label": "icontile()",
+      "id": "components_ui_icontile_icontile"
     },
     {
       "label": "page.tsx",
@@ -1089,7 +1269,7 @@
       "source_file": "app/accounts/[accountId]/rules/actions.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 2,
+      "community": 5,
       "norm_label": "actions.ts",
       "id": "app_accounts_accountid_rules_actions"
     },
@@ -1099,7 +1279,7 @@
       "source_file": "app/accounts/[accountId]/rules/actions.ts",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 2,
+      "community": 5,
       "norm_label": "getstring()",
       "id": "app_accounts_accountid_rules_actions_getstring"
     },
@@ -1109,7 +1289,7 @@
       "source_file": "app/accounts/[accountId]/rules/actions.ts",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 2,
+      "community": 5,
       "norm_label": "getnumber()",
       "id": "app_accounts_accountid_rules_actions_getnumber"
     },
@@ -1119,7 +1299,7 @@
       "source_file": "app/accounts/[accountId]/rules/actions.ts",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 2,
+      "community": 5,
       "norm_label": "getnumberinrange()",
       "id": "app_accounts_accountid_rules_actions_getnumberinrange"
     },
@@ -1129,7 +1309,7 @@
       "source_file": "app/accounts/[accountId]/rules/actions.ts",
       "source_location": "L67",
       "_origin": "ast",
-      "community": 2,
+      "community": 5,
       "norm_label": "getintegerinrange()",
       "id": "app_accounts_accountid_rules_actions_getintegerinrange"
     },
@@ -1139,7 +1319,7 @@
       "source_file": "app/accounts/[accountId]/rules/actions.ts",
       "source_location": "L87",
       "_origin": "ast",
-      "community": 2,
+      "community": 5,
       "norm_label": "getrulesaccess()",
       "id": "app_accounts_accountid_rules_actions_getrulesaccess"
     },
@@ -1149,7 +1329,7 @@
       "source_file": "app/accounts/[accountId]/rules/actions.ts",
       "source_location": "L123",
       "_origin": "ast",
-      "community": 2,
+      "community": 5,
       "norm_label": "savetradinggoals()",
       "id": "app_accounts_accountid_rules_actions_savetradinggoals"
     },
@@ -1249,7 +1429,7 @@
       "source_file": "app/api/accounts/[accountId]/permissions/route.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 2,
+      "community": 1,
       "norm_label": "route.ts",
       "id": "app_api_accounts_accountid_permissions_route"
     },
@@ -1259,7 +1439,7 @@
       "source_file": "app/api/accounts/[accountId]/permissions/route.ts",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 2,
+      "community": 1,
       "norm_label": "get()",
       "id": "app_api_accounts_accountid_permissions_route_get"
     },
@@ -1269,7 +1449,7 @@
       "source_file": "lib/permissions.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 2,
+      "community": 1,
       "norm_label": "permissions.ts",
       "id": "lib_permissions"
     },
@@ -1279,7 +1459,7 @@
       "source_file": "lib/permissions.ts",
       "source_location": "L3",
       "_origin": "ast",
-      "community": 2,
+      "community": 1,
       "norm_label": "accountpermissionflags",
       "id": "lib_permissions_accountpermissionflags"
     },
@@ -1289,7 +1469,7 @@
       "source_file": "lib/permissions.ts",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 2,
+      "community": 1,
       "norm_label": "permission_select",
       "id": "lib_permissions_permission_select"
     },
@@ -1299,7 +1479,7 @@
       "source_file": "lib/permissions.ts",
       "source_location": "L37",
       "_origin": "ast",
-      "community": 2,
+      "community": 1,
       "norm_label": "ismanager()",
       "id": "lib_permissions_ismanager"
     },
@@ -1309,7 +1489,7 @@
       "source_file": "lib/permissions.ts",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 2,
+      "community": 1,
       "norm_label": "canmanagerules()",
       "id": "lib_permissions_canmanagerules"
     },
@@ -1319,7 +1499,7 @@
       "source_file": "lib/permissions.ts",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 2,
+      "community": 1,
       "norm_label": "canusecopilot()",
       "id": "lib_permissions_canusecopilot"
     },
@@ -1329,7 +1509,7 @@
       "source_file": "lib/permissions.ts",
       "source_location": "L53",
       "_origin": "ast",
-      "community": 2,
+      "community": 1,
       "norm_label": "getaccountpermissions()",
       "id": "lib_permissions_getaccountpermissions"
     },
@@ -1339,7 +1519,7 @@
       "source_file": "lib/permissions.ts",
       "source_location": "L66",
       "_origin": "ast",
-      "community": 1,
+      "community": 5,
       "norm_label": "getaccountmembershipwithaccount()",
       "id": "lib_permissions_getaccountmembershipwithaccount"
     }
@@ -1348,12 +1528,217 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/equity/page.tsx",
+      "source_location": "L102",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_equity_page",
+      "target": "app_accounts_accountid_equity_page_equitylabels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/equity/page.tsx",
+      "source_location": "L708",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_equity_page",
+      "target": "app_accounts_accountid_equity_page_equitypage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/equity/page.tsx",
+      "source_location": "L643",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_equity_page",
+      "target": "app_accounts_accountid_equity_page_formatdate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/equity/page.tsx",
+      "source_location": "L636",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_equity_page",
+      "target": "app_accounts_accountid_equity_page_formatpercent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/equity/page.tsx",
+      "source_location": "L654",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_equity_page",
+      "target": "app_accounts_accountid_equity_page_formatshortdate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/equity/page.tsx",
+      "source_location": "L664",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_equity_page",
+      "target": "app_accounts_accountid_equity_page_getresulttone",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/equity/page.tsx",
+      "source_location": "L676",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_equity_page",
+      "target": "app_accounts_accountid_equity_page_statcard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/equity/page.tsx",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_equity_page",
+      "target": "app_accounts_accountid_equity_page_statcardprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/equity/page.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_equity_page",
+      "target": "components_equity_drawdownchart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/equity/page.tsx",
+      "source_location": "L937",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_equity_page_equitypage",
+      "target": "app_accounts_accountid_equity_page_formatpercent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/equity/page.tsx",
+      "source_location": "L933",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_equity_page_equitypage",
+      "target": "app_accounts_accountid_equity_page_getresulttone",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/EmptyState.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "components_emptystate",
+      "target": "components_emptystate_emptystate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/EmptyState.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "components_emptystate",
+      "target": "components_emptystate_emptystateprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/equity/DrawdownChart.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "components_equity_drawdownchart",
+      "target": "components_emptystate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/equity/DrawdownChart.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "components_equity_drawdownchart",
+      "target": "components_emptystate_emptystate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/equity/DrawdownChart.tsx",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "components_equity_drawdownchart",
+      "target": "components_equity_drawdownchart_drawdownchart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/equity/DrawdownChart.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "components_equity_drawdownchart",
+      "target": "components_equity_drawdownchart_drawdownpoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/equity/DrawdownChart.tsx",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "components_equity_drawdownchart",
+      "target": "components_equity_drawdownchart_emptylabels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/equity/DrawdownChart.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "components_equity_drawdownchart",
+      "target": "components_equity_drawdownchart_props",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/equity/DrawdownChart.tsx",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "components_equity_drawdownchart",
+      "target": "components_equity_drawdownchart_tooltiplabels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L1746",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_onboardingmodal",
-      "target": "components_onboardingmodal_buildcopy",
-      "confidence_score": 1.0
+      "target": "components_onboardingmodal_buildcopy"
     },
     {
       "relation": "contains",
@@ -1361,9 +1746,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L1775",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_onboardingmodal",
-      "target": "components_onboardingmodal_getcopy",
-      "confidence_score": 1.0
+      "target": "components_onboardingmodal_getcopy"
     },
     {
       "relation": "contains",
@@ -1371,9 +1756,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L57",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_onboardingmodal",
-      "target": "components_onboardingmodal_onboardingcard",
-      "confidence_score": 1.0
+      "target": "components_onboardingmodal_onboardingcard"
     },
     {
       "relation": "contains",
@@ -1381,9 +1766,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L43",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_onboardingmodal",
-      "target": "components_onboardingmodal_onboardingcardtext",
-      "confidence_score": 1.0
+      "target": "components_onboardingmodal_onboardingcardtext"
     },
     {
       "relation": "contains",
@@ -1391,9 +1776,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L84",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_onboardingmodal",
-      "target": "components_onboardingmodal_onboardingcopy",
-      "confidence_score": 1.0
+      "target": "components_onboardingmodal_onboardingcopy"
     },
     {
       "relation": "contains",
@@ -1401,9 +1786,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L71",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_onboardingmodal",
-      "target": "components_onboardingmodal_onboardingcopytext",
-      "confidence_score": 1.0
+      "target": "components_onboardingmodal_onboardingcopytext"
     },
     {
       "relation": "contains",
@@ -1411,9 +1796,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L1781",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_onboardingmodal",
-      "target": "components_onboardingmodal_onboardingmodal",
-      "confidence_score": 1.0
+      "target": "components_onboardingmodal_onboardingmodal"
     },
     {
       "relation": "contains",
@@ -1421,9 +1806,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L62",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_onboardingmodal",
-      "target": "components_onboardingmodal_onboardingstep",
-      "confidence_score": 1.0
+      "target": "components_onboardingmodal_onboardingstep"
     },
     {
       "relation": "contains",
@@ -1431,9 +1816,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L48",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_onboardingmodal",
-      "target": "components_onboardingmodal_onboardingsteptext",
-      "confidence_score": 1.0
+      "target": "components_onboardingmodal_onboardingsteptext"
     },
     {
       "relation": "contains",
@@ -1441,9 +1826,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L184",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_onboardingmodal",
-      "target": "components_onboardingmodal_onboardingtext",
-      "confidence_score": 1.0
+      "target": "components_onboardingmodal_onboardingtext"
     },
     {
       "relation": "contains",
@@ -1451,9 +1836,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L96",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_onboardingmodal",
-      "target": "components_onboardingmodal_stepvisuals",
-      "confidence_score": 1.0
+      "target": "components_onboardingmodal_stepvisuals"
     },
     {
       "relation": "imports_from",
@@ -1462,9 +1847,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_onboardingmodal",
-      "target": "components_ui_icontile",
-      "confidence_score": 1.0
+      "target": "components_ui_icontile"
     },
     {
       "relation": "imports",
@@ -1473,9 +1858,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_onboardingmodal",
-      "target": "components_ui_icontile_icontile",
-      "confidence_score": 1.0
+      "target": "components_ui_icontile_icontile"
     },
     {
       "relation": "calls",
@@ -1484,9 +1869,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L1776",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_onboardingmodal_getcopy",
-      "target": "components_onboardingmodal_buildcopy",
-      "confidence_score": 1.0
+      "target": "components_onboardingmodal_buildcopy"
     },
     {
       "relation": "calls",
@@ -1495,9 +1880,9 @@
       "source_file": "components/OnboardingModal.tsx",
       "source_location": "L1789",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_onboardingmodal_onboardingmodal",
-      "target": "components_onboardingmodal_getcopy",
-      "confidence_score": 1.0
+      "target": "components_onboardingmodal_getcopy"
     },
     {
       "relation": "contains",
@@ -1505,9 +1890,9 @@
       "source_file": "components/ui/IconTile.tsx",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_ui_icontile",
-      "target": "components_ui_icontile_icontile",
-      "confidence_score": 1.0
+      "target": "components_ui_icontile_icontile"
     },
     {
       "relation": "contains",
@@ -1515,9 +1900,9 @@
       "source_file": "components/ui/IconTile.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_ui_icontile",
-      "target": "components_ui_icontile_icontileprops",
-      "confidence_score": 1.0
+      "target": "components_ui_icontile_icontileprops"
     },
     {
       "relation": "contains",
@@ -3151,5 +3536,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "ddfd6190c34a07823fcb6c6bddb25e4494b9c13c"
+  "built_at_commit": "7faa4dfda226e1485301cb1d734459d9bdbe76ce"
 }

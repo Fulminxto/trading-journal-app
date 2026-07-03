@@ -13,5 +13,6 @@
   "11": "NotificationBell.tsx",
   "12": "ListRow.tsx",
   "13": "Pill.tsx",
-  "14": "page.tsx"
+  "14": "page.tsx",
+  "15": "DrawdownChart.tsx"
 }
