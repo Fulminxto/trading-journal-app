@@ -12,5 +12,6 @@
   "10": "actions.ts",
   "11": "NotificationBell.tsx",
   "12": "ListRow.tsx",
-  "13": "Pill.tsx"
+  "13": "Pill.tsx",
+  "14": "page.tsx"
 }

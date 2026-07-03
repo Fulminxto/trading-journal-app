@@ -14,12 +14,22 @@ import {
   Settings,
 } from "lucide-react";
 
+import Card from "@/components/ui/Card";
+import IconTile from "@/components/ui/IconTile";
+import SignatureEdge from "@/components/ui/SignatureEdge";
+
 import {
   formatCurrencyByLanguage,
   formatNumberByLanguage,
   normalizeAppLanguage,
   type AppLanguage,
 } from "@/lib/i18n";
+
+// CTA Fulmine: reserved for the one action that counts on this page
+// (Create Account is explicitly named in REBRAND_BLUEPRINT.md §6 as a
+// CTA-Fulmine-worthy action). Everything else stays discrete/outline.
+const CTA_GRADIENT =
+  "linear-gradient(120deg, #2E62E6, #3f86e8 60%, #5BE0FF)";
 
 type AccountsCopy = {
   overviewEyebrow: string;
@@ -408,23 +418,20 @@ export default async function AccountsPage() {
         : 0;
 
     return (
-      <div
-        key={account.id}
-        className="card-hover group rounded-3xl border border-white/10 bg-white/[0.03] p-6"
-      >
+      <Card key={account.id} interactive className="p-6">
         <Link href={`/accounts/${account.id}`}>
           <div className="mb-6 flex items-center justify-between">
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4 text-white">
-              <Wallet size={24} />
-            </div>
+            <IconTile>
+              <Wallet size={20} />
+            </IconTile>
 
             <div className="flex gap-2">
-              <span className="rounded-xl bg-white/10 px-3 py-1 text-xs font-semibold text-gray-300">
+              <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-gray-300">
                 {account.type}
               </span>
 
               {account.status === "ARCHIVED" && (
-                <span className="rounded-xl bg-yellow-500/10 px-3 py-1 text-xs font-semibold text-yellow-300">
+                <span className="rounded-full bg-white/[0.06] px-3 py-1 text-xs font-semibold text-muted">
                   {t.archived}
                 </span>
               )}
@@ -433,89 +440,30 @@ export default async function AccountsPage() {
 
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-bold transition group-hover:text-accent">
+              <h2 className="text-xl font-bold text-white transition-colors duration-base group-hover:text-accent-bright">
                 {account.name}
               </h2>
 
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-1 text-sm text-muted-faint">
                 {t.role}: {membership.role}
               </p>
             </div>
 
             <ArrowRight
-              size={20}
-              className="mt-1 text-gray-600 transition group-hover:translate-x-1 group-hover:text-accent"
+              size={18}
+              className="mt-1 shrink-0 text-muted transition-all duration-base group-hover:translate-x-1 group-hover:text-accent-bright"
             />
           </div>
 
-          <div className="mt-6 grid grid-cols-2 gap-3 text-sm">
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <div className="mb-2 flex items-center gap-2 text-gray-500">
-                <TrendingUp size={15} />
-                {t.balance}
-              </div>
-
-              <p className="font-bold text-white">
-                {formatCurrencyByLanguage(
-                  account.initialBalance,
-                  account.currency,
-                  language
-                )}
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <div className="mb-2 flex items-center gap-2 text-gray-500">
-                <Activity size={15} />
-                {t.trades}
-              </div>
-
-              <p className="font-bold text-white">
-                {formatNumberByLanguage(
-                  account.trades.length,
-                  language
-                )}
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <div className="mb-2 flex items-center gap-2 text-gray-500">
-                <Shield size={15} />
-                {t.winRateShort}
-              </div>
-
-              <p
-                className={`font-bold ${winRate >= 50
-                    ? "text-accent"
-                    : "text-red-400"
-                  }`}
-              >
-                {winRate.toFixed(0)}%
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <div className="mb-2 flex items-center gap-2 text-gray-500">
-                <Users size={15} />
-                {t.members}
-              </div>
-
-              <p className="font-bold text-white">
-                {formatNumberByLanguage(
-                  account.members.length,
-                  language
-                )}
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4">
-            <p className="text-sm text-gray-500">
+          {/* Primary value: this account's PnL, the one number that
+              answers "how is this account doing". */}
+          <div className="mt-5">
+            <p className="text-xs text-muted-faint">
               {t.accountPnl}
             </p>
 
             <p
-              className={`mt-1 text-2xl font-bold ${accountPnl >= 0
+              className={`mt-1 text-3xl font-black ${accountPnl >= 0
                   ? "text-accent"
                   : "text-red-400"
                 }`}
@@ -527,57 +475,97 @@ export default async function AccountsPage() {
               )}
             </p>
           </div>
+
+          {/* Support: compact inline strip, not four competing sub-cards. */}
+          <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-white/[0.06] pt-4 text-xs">
+            <span className="flex items-center gap-1.5 text-muted">
+              <TrendingUp size={13} />
+              {formatCurrencyByLanguage(
+                account.initialBalance,
+                account.currency,
+                language
+              )}
+            </span>
+
+            <span className="flex items-center gap-1.5 text-muted">
+              <Activity size={13} />
+              {formatNumberByLanguage(account.trades.length, language)}{" "}
+              {t.trades}
+            </span>
+
+            <span
+              className={`flex items-center gap-1.5 ${winRate >= 50 ? "text-accent" : "text-red-400"
+                }`}
+            >
+              <Shield size={13} />
+              {winRate.toFixed(0)}% {t.winRateShort}
+            </span>
+
+            <span className="flex items-center gap-1.5 text-muted">
+              <Users size={13} />
+              {formatNumberByLanguage(account.members.length, language)}
+            </span>
+          </div>
         </Link>
 
-        <div className="mt-5 flex gap-3">
-          <Link
-            href={`/accounts/${account.id}`}
-            className="flex-1 rounded-2xl bg-accent px-4 py-3 text-center text-sm font-bold text-white hover:bg-accent-bright"
-          >
-            {t.openAccount}
-          </Link>
-        </div>
-      </div>
+        <Link
+          href={`/accounts/${account.id}`}
+          className="mt-5 block rounded-inner bg-accent px-4 py-3 text-center text-sm font-semibold text-white transition-colors duration-base hover:bg-accent-bright"
+        >
+          {t.openAccount}
+        </Link>
+      </Card>
     );
   };
 
+  const primaryHref = canCreateAccount ? "/accounts/create" : "/accounts/manage";
+  const primaryLabel = canCreateAccount ? t.createAccount : t.manageAccounts;
+
   return (
     <div>
-      <div className="relative mb-10 overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_12%,transparent),transparent_35%),radial-gradient(circle_at_bottom_left,color-mix(in_srgb,var(--color-accent)_8%,transparent),transparent_35%)]" />
+      <Card
+        variant="hero"
+        className="reveal-rise relative mb-8 p-8"
+        style={{ animationDelay: "0ms" }}
+      >
+        <SignatureEdge
+          orientation="vertical"
+          className="absolute bottom-8 left-0 top-8"
+        />
 
-        <div className="relative flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+        <div className="flex flex-col gap-8 pl-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-muted">
               {t.overviewEyebrow}
             </p>
 
-            <h1 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+            <h1 className="text-hero mt-3">
               {t.welcomeBack},{" "}
               {currentUser.name ||
                 currentUser.username}
             </h1>
 
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-gray-400">
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-muted">
               {t.heroDescription}
             </p>
           </div>
 
           <div className="flex flex-wrap gap-3">
             <Link
-              href="/accounts/manage"
-              className="inline-flex items-center gap-2 rounded-2xl bg-accent px-4 py-3 text-sm font-bold text-white hover:bg-accent-bright"
+              href={primaryHref}
+              style={{ background: CTA_GRADIENT }}
+              className="inline-flex items-center gap-2 rounded-inner px-4 py-3 text-sm font-semibold text-white transition-shadow duration-base hover:shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)]"
             >
-              <Settings size={16} />
-              {t.manageAccounts}
+              {primaryLabel}
             </Link>
 
             {canCreateAccount && (
               <Link
-                href="/accounts/create"
-                className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-gray-300 hover:bg-white/[0.06]"
+                href="/accounts/manage"
+                className="inline-flex items-center gap-2 rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-3 text-sm text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.04]"
               >
-                {t.createAccount}
+                <Settings size={16} />
+                {t.manageAccounts}
               </Link>
             )}
 
@@ -585,14 +573,14 @@ export default async function AccountsPage() {
               <>
                 <Link
                   href="/admin"
-                  className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-gray-300 hover:bg-white/[0.06]"
+                  className="rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-3 text-sm text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.04]"
                 >
                   {t.admin}
                 </Link>
 
                 <Link
                   href="/admin/accounts"
-                  className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-gray-300 hover:bg-white/[0.06]"
+                  className="rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-3 text-sm text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.04]"
                 >
                   {t.platformAccounts}
                 </Link>
@@ -600,11 +588,14 @@ export default async function AccountsPage() {
             )}
           </div>
         </div>
-      </div>
+      </Card>
 
-      <div className="mb-10 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-5">
-          <p className="text-sm text-gray-400">
+      <div
+        className="reveal-rise mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4"
+        style={{ animationDelay: "100ms" }}
+      >
+        <Card interactive className="p-5">
+          <p className="text-sm text-muted">
             {t.accessibleAccounts}
           </p>
 
@@ -614,10 +605,10 @@ export default async function AccountsPage() {
               language
             )}
           </h2>
-        </div>
+        </Card>
 
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-5">
-          <p className="text-sm text-gray-400">
+        <Card interactive className="p-5">
+          <p className="text-sm text-muted">
             {t.active}
           </p>
 
@@ -627,10 +618,10 @@ export default async function AccountsPage() {
               language
             )}
           </h2>
-        </div>
+        </Card>
 
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-5">
-          <p className="text-sm text-gray-400">
+        <Card interactive className="p-5">
+          <p className="text-sm text-muted">
             {t.totalTrades}
           </p>
 
@@ -640,10 +631,10 @@ export default async function AccountsPage() {
               language
             )}
           </h2>
-        </div>
+        </Card>
 
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-5">
-          <p className="text-sm text-gray-400">
+        <Card interactive className="p-5">
+          <p className="text-sm text-muted">
             {t.totalPnl}
           </p>
 
@@ -659,96 +650,102 @@ export default async function AccountsPage() {
               language
             )}
           </h2>
-        </div>
+        </Card>
       </div>
 
-      <div className="mb-10 grid grid-cols-1 gap-4 md:grid-cols-3">
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5">
-          <p className="text-sm text-gray-400">
+      {/* Secondary breakdown: compact, clearly subordinate to the row above. */}
+      <div
+        className="reveal-rise mb-10 grid grid-cols-1 gap-3 sm:grid-cols-3"
+        style={{ animationDelay: "140ms" }}
+      >
+        <Card variant="inner" className="flex items-center justify-between px-4 py-3">
+          <p className="text-xs text-muted-faint">
             {t.personalAccounts}
           </p>
 
-          <h2 className="mt-2 text-3xl font-black">
+          <p className="text-lg font-bold text-gray-200">
             {formatNumberByLanguage(
               personalMemberships.length,
               language
             )}
-          </h2>
-        </div>
+          </p>
+        </Card>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5">
-          <p className="text-sm text-gray-400">
+        <Card variant="inner" className="flex items-center justify-between px-4 py-3">
+          <p className="text-xs text-muted-faint">
             {t.sharedAccounts}
           </p>
 
-          <h2 className="mt-2 text-3xl font-black">
+          <p className="text-lg font-bold text-gray-200">
             {formatNumberByLanguage(
               sharedMemberships.length,
               language
             )}
-          </h2>
-        </div>
+          </p>
+        </Card>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5">
-          <p className="text-sm text-gray-400">
+        <Card variant="inner" className="flex items-center justify-between px-4 py-3">
+          <p className="text-xs text-muted-faint">
             {t.archived}
           </p>
 
-          <h2 className="mt-2 text-3xl font-black text-yellow-300">
+          <p className="text-lg font-bold text-gray-200">
             {formatNumberByLanguage(
               archivedMemberships.length,
               language
             )}
-          </h2>
-        </div>
-      </div>
-
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <p className="text-sm text-gray-400">
-            {t.workspaceEyebrow}
           </p>
-
-          <h2 className="text-2xl font-bold">
-            {t.activeAccounts}
-          </h2>
-        </div>
+        </Card>
       </div>
 
-      {activeMemberships.length > 0 ? (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {activeMemberships.map(renderAccountCard)}
+      <div
+        className="reveal-rise"
+        style={{ animationDelay: "200ms" }}
+      >
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <p className="text-sm text-muted">
+              {t.workspaceEyebrow}
+            </p>
+
+            <h2 className="text-2xl font-bold">
+              {t.activeAccounts}
+            </h2>
+          </div>
         </div>
-      ) : (
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-8 text-sm text-gray-400">
-          {t.noActiveAccounts}
-        </div>
-      )}
 
-      {archivedMemberships.length > 0 && (
-        <div className="mt-12">
-          <div className="mb-5 flex items-center gap-3">
-            <Archive
-              size={18}
-              className="text-yellow-300"
-            />
+        {activeMemberships.length > 0 ? (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {activeMemberships.map(renderAccountCard)}
+          </div>
+        ) : (
+          <Card variant="inner" className="border-dashed p-8 text-sm text-muted">
+            {t.noActiveAccounts}
+          </Card>
+        )}
 
-            <div>
-              <p className="text-sm text-gray-400">
-                {t.inactiveWorkspace}
-              </p>
+        {archivedMemberships.length > 0 && (
+          <div className="mt-12">
+            <div className="mb-5 flex items-center gap-3">
+              <Archive size={18} className="text-muted" />
 
-              <h2 className="text-2xl font-bold">
-                {t.archivedAccounts}
-              </h2>
+              <div>
+                <p className="text-sm text-muted">
+                  {t.inactiveWorkspace}
+                </p>
+
+                <h2 className="text-2xl font-bold">
+                  {t.archivedAccounts}
+                </h2>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {archivedMemberships.map(renderAccountCard)}
             </div>
           </div>
-
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {archivedMemberships.map(renderAccountCard)}
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

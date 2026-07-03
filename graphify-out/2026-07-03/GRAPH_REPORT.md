@@ -1,16 +1,16 @@
 # Graph Report - VOLTIS  (2026-07-03)
 
 ## Corpus Check
-- 358 files · ~371,954 words
+- 358 files · ~372,021 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 98 nodes · 130 edges · 14 communities (9 shown, 5 thin omitted)
+- 105 nodes · 139 edges · 14 communities (9 shown, 5 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e1f805e0`
+- Built from commit: `7c546849`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -38,9 +38,9 @@
 5. `CopilotPage()` - 5 edges
 6. `saveTradingGoals()` - 5 edges
 7. `RulesPage()` - 5 edges
-8. `getString()` - 4 edges
-9. `sendCopilotMessage()` - 4 edges
-10. `generateAnalysis()` - 4 edges
+8. `DashboardPage()` - 4 edges
+9. `getString()` - 4 edges
+10. `sendCopilotMessage()` - 4 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `getCopilotAccess()` --calls--> `canUseCopilot()`  [EXTRACTED]
@@ -84,19 +84,19 @@ Cohesion: 0.25
 Nodes (6): ALL_TRADERS_LABEL, Member, PERIOD_LABEL, PRESETS, Props, TRADER_LABEL
 
 ### Community 7 - "Card.tsx"
-Cohesion: 0.20
-Nodes (6): AppShellUser, labels, Topbar(), TopbarLabels, TopbarUser, CardProps
+Cohesion: 0.11
+Nodes (10): AppShellUser, InviteCopy, NotificationItem, PanelCopy, RELATIVE_TIME_UNITS, labels, Topbar(), TopbarLabels (+2 more)
 
 ### Community 10 - "actions.ts"
 Cohesion: 0.33
 Nodes (3): InviteFormLabels, Input(), InputProps
 
 ### Community 11 - "NotificationBell.tsx"
-Cohesion: 0.25
-Nodes (4): InviteCopy, NotificationItem, PanelCopy, RELATIVE_TIME_UNITS
+Cohesion: 0.43
+Nodes (5): DashboardLabels, DashboardPage(), formatCurrency(), formatPercent(), getResultTone()
 
 ## Knowledge Gaps
-- **34 isolated node(s):** `NotificationItem`, `PanelCopy`, `InviteCopy`, `RELATIVE_TIME_UNITS`, `Member` (+29 more)
+- **35 isolated node(s):** `DashboardLabels`, `NotificationItem`, `PanelCopy`, `InviteCopy`, `RELATIVE_TIME_UNITS` (+30 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -104,8 +104,10 @@ Nodes (4): InviteCopy, NotificationItem, PanelCopy, RELATIVE_TIME_UNITS
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `getAccountMembershipWithAccount()` connect `page.tsx` to `page.tsx`, `permissions.ts`, `actions.ts`?**
-  _High betweenness centrality (0.037) - this node is a cross-community bridge._
+  _High betweenness centrality (0.032) - this node is a cross-community bridge._
 - **Why does `canManageRules()` connect `permissions.ts` to `page.tsx`, `actions.ts`?**
-  _High betweenness centrality (0.004) - this node is a cross-community bridge._
-- **What connects `NotificationItem`, `PanelCopy`, `InviteCopy` to the rest of the system?**
-  _34 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _High betweenness centrality (0.003) - this node is a cross-community bridge._
+- **What connects `DashboardLabels`, `NotificationItem`, `PanelCopy` to the rest of the system?**
+  _35 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `Card.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.1111111111111111 - nodes in this community are weakly interconnected._
