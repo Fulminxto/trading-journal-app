@@ -17,7 +17,7 @@
       "label": "AccountPermissions",
       "file_type": "code",
       "source_file": "components/Sidebar.tsx",
-      "source_location": "L47",
+      "source_location": "L44",
       "_origin": "ast",
       "id": "components_sidebar_accountpermissions",
       "community": 4,
@@ -27,7 +27,7 @@
       "label": "AccountLink",
       "file_type": "code",
       "source_file": "components/Sidebar.tsx",
-      "source_location": "L64",
+      "source_location": "L61",
       "_origin": "ast",
       "id": "components_sidebar_accountlink",
       "community": 4,
@@ -37,7 +37,7 @@
       "label": "SidebarLink",
       "file_type": "code",
       "source_file": "components/Sidebar.tsx",
-      "source_location": "L73",
+      "source_location": "L70",
       "_origin": "ast",
       "id": "components_sidebar_sidebarlink",
       "community": 4,
@@ -47,7 +47,7 @@
       "label": "SidebarProps",
       "file_type": "code",
       "source_file": "components/Sidebar.tsx",
-      "source_location": "L80",
+      "source_location": "L76",
       "_origin": "ast",
       "id": "components_sidebar_sidebarprops",
       "community": 4,
@@ -57,7 +57,7 @@
       "label": "SidebarLabels",
       "file_type": "code",
       "source_file": "components/Sidebar.tsx",
-      "source_location": "L87",
+      "source_location": "L83",
       "_origin": "ast",
       "id": "components_sidebar_sidebarlabels",
       "community": 4,
@@ -67,7 +67,7 @@
       "label": "baseLinks",
       "file_type": "code",
       "source_file": "components/Sidebar.tsx",
-      "source_location": "L340",
+      "source_location": "L312",
       "_origin": "ast",
       "id": "components_sidebar_baselinks",
       "community": 4,
@@ -77,7 +77,7 @@
       "label": "getAccountLinkLabel()",
       "file_type": "code",
       "source_file": "components/Sidebar.tsx",
-      "source_location": "L416",
+      "source_location": "L388",
       "_origin": "ast",
       "id": "components_sidebar_getaccountlinklabel",
       "community": 4,
@@ -87,7 +87,7 @@
       "label": "Sidebar()",
       "file_type": "code",
       "source_file": "components/Sidebar.tsx",
-      "source_location": "L468",
+      "source_location": "L440",
       "_origin": "ast",
       "id": "components_sidebar_sidebar",
       "community": 4,
@@ -99,9 +99,9 @@
       "source_file": "components/ui/IconTile.tsx",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "components_ui_icontile",
       "community": 8,
-      "norm_label": "icontile.tsx",
-      "id": "components_ui_icontile"
+      "norm_label": "icontile.tsx"
     },
     {
       "label": "IconTileProps",
@@ -109,9 +109,9 @@
       "source_file": "components/ui/IconTile.tsx",
       "source_location": "L3",
       "_origin": "ast",
+      "id": "components_ui_icontile_icontileprops",
       "community": 8,
-      "norm_label": "icontileprops",
-      "id": "components_ui_icontile_icontileprops"
+      "norm_label": "icontileprops"
     },
     {
       "label": "IconTile()",
@@ -119,9 +119,9 @@
       "source_file": "components/ui/IconTile.tsx",
       "source_location": "L19",
       "_origin": "ast",
+      "id": "components_ui_icontile_icontile",
       "community": 8,
-      "norm_label": "icontile()",
-      "id": "components_ui_icontile_icontile"
+      "norm_label": "icontile()"
     },
     {
       "label": "SignatureEdge.tsx",
@@ -129,9 +129,9 @@
       "source_file": "components/ui/SignatureEdge.tsx",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "components_ui_signatureedge",
       "community": 9,
-      "norm_label": "signatureedge.tsx",
-      "id": "components_ui_signatureedge"
+      "norm_label": "signatureedge.tsx"
     },
     {
       "label": "SignatureEdgeProps",
@@ -139,9 +139,9 @@
       "source_file": "components/ui/SignatureEdge.tsx",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "components_ui_signatureedge_signatureedgeprops",
       "community": 9,
-      "norm_label": "signatureedgeprops",
-      "id": "components_ui_signatureedge_signatureedgeprops"
+      "norm_label": "signatureedgeprops"
     },
     {
       "label": "SignatureEdge()",
@@ -149,9 +149,9 @@
       "source_file": "components/ui/SignatureEdge.tsx",
       "source_location": "L13",
       "_origin": "ast",
+      "id": "components_ui_signatureedge_signatureedge",
       "community": 9,
-      "norm_label": "signatureedge()",
-      "id": "components_ui_signatureedge_signatureedge"
+      "norm_label": "signatureedge()"
     },
     {
       "label": "Card.tsx",
@@ -619,7 +619,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "components/Sidebar.tsx",
-      "source_location": "L64",
+      "source_location": "L61",
       "weight": 1.0,
       "source": "components_sidebar",
       "target": "components_sidebar_accountlink",
@@ -629,7 +629,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "components/Sidebar.tsx",
-      "source_location": "L47",
+      "source_location": "L44",
       "weight": 1.0,
       "source": "components_sidebar",
       "target": "components_sidebar_accountpermissions",
@@ -639,7 +639,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "components/Sidebar.tsx",
-      "source_location": "L340",
+      "source_location": "L312",
       "weight": 1.0,
       "source": "components_sidebar",
       "target": "components_sidebar_baselinks",
@@ -649,7 +649,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "components/Sidebar.tsx",
-      "source_location": "L416",
+      "source_location": "L388",
       "weight": 1.0,
       "source": "components_sidebar",
       "target": "components_sidebar_getaccountlinklabel",
@@ -659,7 +659,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "components/Sidebar.tsx",
-      "source_location": "L468",
+      "source_location": "L440",
       "weight": 1.0,
       "source": "components_sidebar",
       "target": "components_sidebar_sidebar",
@@ -669,7 +669,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "components/Sidebar.tsx",
-      "source_location": "L118",
+      "source_location": "L111",
       "weight": 1.0,
       "source": "components_sidebar",
       "target": "components_sidebar_sidebarlabels",
@@ -679,7 +679,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "components/Sidebar.tsx",
-      "source_location": "L73",
+      "source_location": "L70",
       "weight": 1.0,
       "source": "components_sidebar",
       "target": "components_sidebar_sidebarlink",
@@ -689,7 +689,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "components/Sidebar.tsx",
-      "source_location": "L80",
+      "source_location": "L76",
       "weight": 1.0,
       "source": "components_sidebar",
       "target": "components_sidebar_sidebarprops",
@@ -701,9 +701,9 @@
       "source_file": "components/ui/IconTile.tsx",
       "source_location": "L19",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "components_ui_icontile",
-      "target": "components_ui_icontile_icontile"
+      "target": "components_ui_icontile_icontile",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -711,9 +711,9 @@
       "source_file": "components/ui/IconTile.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "components_ui_icontile",
-      "target": "components_ui_icontile_icontileprops"
+      "target": "components_ui_icontile_icontileprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -721,9 +721,9 @@
       "source_file": "components/ui/SignatureEdge.tsx",
       "source_location": "L13",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "components_ui_signatureedge",
-      "target": "components_ui_signatureedge_signatureedge"
+      "target": "components_ui_signatureedge_signatureedge",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -731,9 +731,9 @@
       "source_file": "components/ui/SignatureEdge.tsx",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "components_ui_signatureedge",
-      "target": "components_ui_signatureedge_signatureedgeprops"
+      "target": "components_ui_signatureedge_signatureedgeprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -1612,5 +1612,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "79d231d7f9d5805b87c4df2c1f752634f2e81a25"
+  "built_at_commit": "e5ec6bfb07a8ad654086ebb405556467fb3fdbb2"
 }

@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   ".claude/settings.local.json": {
-    "mtime": 1783075387.9128606,
-    "ast_hash": "3413831070296ddccff22f8b17fef83a",
+    "mtime": 1783075003.1525333,
+    "ast_hash": "2b5c93124aa5ec52b3b8ca94e6f78ade",
     "semantic_hash": ""
   },
   ".claude/skills/impeccable/scripts/command-metadata.json": {
@@ -910,8 +910,8 @@
     "semantic_hash": ""
   },
   "components/Sidebar.tsx": {
-    "mtime": 1783075201.3149712,
-    "ast_hash": "f69f9b1ede32fea23caace459df4b012",
+    "mtime": 1783074945.0354066,
+    "ast_hash": "ef823c76f1df9836e975a01eab764198",
     "semantic_hash": ""
   },
   "components/ToggleSwitch.stories.tsx": {
@@ -1750,8 +1750,8 @@
     "semantic_hash": ""
   },
   ".impeccable/hook.cache.json": {
-    "mtime": 1783075201.4717803,
-    "ast_hash": "731a54721aad27c4ac713121ba5faee3",
+    "mtime": 1783074945.1888669,
+    "ast_hash": "a6ca81cc8bb7c85055155fc8e6e4a4d4",
     "semantic_hash": ""
   },
   "lib/permissions.ts": {

@@ -13,7 +13,9 @@ const HALO_HERO =
   "radial-gradient(circle at top right, color-mix(in srgb, var(--color-halo) 32%, transparent) 0%, transparent 55%)";
 
 // Card cristallo: cold-night diagonal facet, never flat black.
-const CRYSTAL_FACE =
+// Exported so other crystal surfaces (topbar buttons, tiles) share the
+// exact same gradient instead of re-deriving it.
+export const CRYSTAL_FACE =
   "linear-gradient(160deg, color-mix(in srgb, var(--color-accent) 8%, transparent) 0%, var(--color-surface-1) 55%, var(--color-surface-2) 100%)";
 
 // Spigolo tagliato — hero cards get one cut facet corner, never a plain rectangle.

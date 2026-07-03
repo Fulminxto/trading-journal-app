@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { CRYSTAL_FACE } from "@/components/ui/Card";
 import {
   getLocaleFromLanguage,
   normalizeAppLanguage,
@@ -398,21 +399,26 @@ export default function NotificationBell({
       <button
         type="button"
         onClick={handleToggle}
-        aria-label={t.bell}
+        aria-label={count > 0 ? `${t.bell} (${count})` : t.bell}
         title={t.bell}
-        className="relative rounded-2xl border border-white/10 bg-surface-1/80 p-3 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:bg-surface-1"
+        className="relative overflow-hidden rounded-inner border-[0.5px] border-flash/[0.1] p-3 shadow-2xl backdrop-blur-xl transition-all duration-300"
+        style={{ background: CRYSTAL_FACE }}
       >
-        <Bell size={18} />
+        <Bell size={18} className="relative z-10 text-muted" />
 
         {count > 0 && (
-          <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
-            {count > 99 ? "99+" : count}
-          </span>
+          <span
+            aria-hidden="true"
+            className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-accent-bright shadow-[0_0_6px_rgba(91,224,255,0.7)]"
+          />
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-3 w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-2xl border border-white/10 bg-[#071018] shadow-2xl sm:w-96">
+        <div
+          className="absolute right-0 mt-3 w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-card border-[0.5px] border-flash/[0.1] shadow-2xl sm:w-96"
+          style={{ background: CRYSTAL_FACE }}
+        >
           <div className="flex items-center justify-between border-b border-white/10 p-4">
             <p className="text-sm font-bold text-white">{t.title}</p>
 

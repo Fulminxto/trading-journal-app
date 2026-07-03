@@ -1,7 +1,7 @@
 # Graph Report - VOLTIS  (2026-07-03)
 
 ## Corpus Check
-- 354 files · ~371,615 words
+- 354 files · ~371,288 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `79d231d7`
+- Built from commit: `e5ec6bfb`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
