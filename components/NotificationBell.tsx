@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { CRYSTAL_FACE } from "@/components/ui/Card";
+import ListRow from "@/components/ui/ListRow";
 import {
   getLocaleFromLanguage,
   normalizeAppLanguage,
@@ -448,9 +449,9 @@ export default function NotificationBell({
               <div className="divide-y divide-white/5">
                 {notifications.map((notification) =>
                   notification.type === "ACCOUNT_INVITE" ? (
-                    <div
+                    <ListRow
                       key={notification.id}
-                      className={`flex flex-col gap-1.5 px-4 py-3 ${
+                      className={`flex flex-col gap-1.5 ${
                         notification.read ? "" : "bg-accent/[0.04]"
                       }`}
                     >
@@ -504,13 +505,12 @@ export default function NotificationBell({
                           {ti.decline}
                         </button>
                       </div>
-                    </div>
+                    </ListRow>
                   ) : (
-                    <button
+                    <ListRow
                       key={notification.id}
-                      type="button"
                       onClick={() => handleNotificationClick(notification)}
-                      className={`flex w-full flex-col gap-1.5 px-4 py-3 text-left transition-colors hover:bg-white/5 ${
+                      className={`flex flex-col gap-1.5 ${
                         notification.read ? "" : "bg-accent/[0.04]"
                       }`}
                     >
@@ -538,7 +538,7 @@ export default function NotificationBell({
                       <p className="line-clamp-2 text-xs text-gray-400">
                         {notification.message}
                       </p>
-                    </button>
+                    </ListRow>
                   )
                 )}
               </div>
