@@ -600,8 +600,8 @@
     "semantic_hash": ""
   },
   "app/accounts/page.tsx": {
-    "mtime": 1783074430.0423493,
-    "ast_hash": "ed3f0f98aea8a8e619f50a1fc8356763",
+    "mtime": 1783078175.3359063,
+    "ast_hash": "9a119c7332744d7c9901b3000c3c0628",
     "semantic_hash": ""
   },
   "app/activities/loading.tsx": {
@@ -1750,8 +1750,8 @@
     "semantic_hash": ""
   },
   ".impeccable/hook.cache.json": {
-    "mtime": 1783077767.1981251,
-    "ast_hash": "72ebd12ef2a40ac560818542ac9001a9",
+    "mtime": 1783078175.495073,
+    "ast_hash": "80b039ebc96b20062444b4aae12b4f7e",
     "semantic_hash": ""
   },
   "lib/permissions.ts": {

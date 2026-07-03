@@ -29,6 +29,13 @@ import {
   normalizeAppLanguage,
   type AppLanguage,
 } from "@/lib/i18n";
+import Card, { CRYSTAL_FACE } from "@/components/ui/Card";
+import IconTile from "@/components/ui/IconTile";
+
+// CTA Fulmine: "Continue" is explicitly named in REBRAND_BLUEPRINT.md
+// §6 as one of the CTA-worthy actions.
+const CTA_GRADIENT =
+  "linear-gradient(120deg, #2E62E6, #3f86e8 60%, #5BE0FF)";
 
 const ONBOARDING_STORAGE_KEY =
   "trading-journal-onboarding";
@@ -81,6 +88,11 @@ type OnboardingCopy = Omit<
   steps: OnboardingStep[];
 };
 
+// Cold family only (accent / accent-bright) - no icon here represents an
+// actual warning or P&L state, so none of them earn yellow/red/green.
+// The previous version scattered yellow-300/blue-400/purple-300 across
+// steps with no semantic reason - exactly the "accenti arcobaleno"
+// pattern REBRAND_BLUEPRINT.md names as one of the four diseases.
 const stepVisuals: {
   icon: LucideIcon;
   accent: string;
@@ -93,150 +105,78 @@ const stepVisuals: {
       icon: Lock,
       accent: "text-accent-bright",
       cards: [
-        {
-          icon: ShieldCheck,
-          tone: "text-accent-bright",
-        },
-        {
-          icon: Sparkles,
-          tone: "text-accent",
-        },
+        { icon: ShieldCheck, tone: "text-accent-bright" },
+        { icon: Sparkles, tone: "text-accent" },
       ],
     },
     {
       icon: Target,
       accent: "text-accent",
       cards: [
-        {
-          icon: BarChart3,
-          tone: "text-accent-bright",
-        },
-        {
-          icon: ShieldCheck,
-          tone: "text-yellow-300",
-        },
-        {
-          icon: CheckCircle2,
-          tone: "text-accent",
-        },
+        { icon: BarChart3, tone: "text-accent-bright" },
+        { icon: ShieldCheck, tone: "text-accent" },
+        { icon: CheckCircle2, tone: "text-accent-bright" },
       ],
     },
     {
       icon: Gauge,
-      accent: "text-yellow-300",
+      accent: "text-accent-bright",
       cards: [
-        {
-          icon: Gauge,
-          tone: "text-yellow-300",
-        },
-        {
-          icon: ShieldCheck,
-          tone: "text-accent",
-        },
-        {
-          icon: BookOpen,
-          tone: "text-accent-bright",
-        },
+        { icon: Gauge, tone: "text-accent-bright" },
+        { icon: ShieldCheck, tone: "text-accent" },
+        { icon: BookOpen, tone: "text-accent-bright" },
       ],
     },
     {
       icon: Layers3,
       accent: "text-accent-bright",
       cards: [
-        {
-          icon: Layers3,
-          tone: "text-accent-bright",
-        },
-        {
-          icon: BarChart3,
-          tone: "text-accent",
-        },
+        { icon: Layers3, tone: "text-accent-bright" },
+        { icon: BarChart3, tone: "text-accent" },
       ],
     },
     {
       icon: BookOpen,
       accent: "text-accent",
       cards: [
-        {
-          icon: BookOpen,
-          tone: "text-accent",
-        },
-        {
-          icon: CalendarDays,
-          tone: "text-blue-400",
-        },
-        {
-          icon: LineChart,
-          tone: "text-purple-300",
-        },
+        { icon: BookOpen, tone: "text-accent" },
+        { icon: CalendarDays, tone: "text-accent-bright" },
+        { icon: LineChart, tone: "text-accent" },
       ],
     },
     {
       icon: BarChart3,
-      accent: "text-purple-300",
+      accent: "text-accent-bright",
       cards: [
-        {
-          icon: BarChart3,
-          tone: "text-purple-300",
-        },
-        {
-          icon: FileText,
-          tone: "text-accent-bright",
-        },
-        {
-          icon: ListChecks,
-          tone: "text-yellow-300",
-        },
+        { icon: BarChart3, tone: "text-accent-bright" },
+        { icon: FileText, tone: "text-accent" },
+        { icon: ListChecks, tone: "text-accent-bright" },
       ],
     },
     {
       icon: Bot,
       accent: "text-accent-bright",
       cards: [
-        {
-          icon: Gauge,
-          tone: "text-accent",
-        },
-        {
-          icon: Bot,
-          tone: "text-accent-bright",
-        },
+        { icon: Gauge, tone: "text-accent" },
+        { icon: Bot, tone: "text-accent-bright" },
       ],
     },
     {
       icon: Users,
       accent: "text-accent",
       cards: [
-        {
-          icon: Users,
-          tone: "text-accent",
-        },
-        {
-          icon: Zap,
-          tone: "text-accent-bright",
-        },
-        {
-          icon: SettingsIcon,
-          tone: "text-yellow-300",
-        },
+        { icon: Users, tone: "text-accent" },
+        { icon: Zap, tone: "text-accent-bright" },
+        { icon: SettingsIcon, tone: "text-accent" },
       ],
     },
     {
       icon: Sparkles,
       accent: "text-accent-bright",
       cards: [
-        {
-          icon: BookOpen,
-          tone: "text-accent",
-        },
-        {
-          icon: BarChart3,
-          tone: "text-purple-300",
-        },
-        {
-          icon: ShieldCheck,
-          tone: "text-accent-bright",
-        },
+        { icon: BookOpen, tone: "text-accent" },
+        { icon: BarChart3, tone: "text-accent-bright" },
+        { icon: ShieldCheck, tone: "text-accent" },
       ],
     },
   ];
@@ -1898,11 +1838,13 @@ function closeOnboarding() {
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-surface-1/95 p-4 backdrop-blur-md">
-      <div className="relative max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-[36px] border border-white/10 bg-[radial-gradient(ellipse_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_8%,transparent)_50%,transparent),radial-gradient(ellipse_at_bottom_left,color-mix(in_srgb,var(--color-accent)_8%,transparent)_50%,transparent),var(--color-surface-1)] p-6 shadow-2xl sm:p-8">
-
+      <div
+        className="shimmer-sweep relative max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-card border-[0.5px] border-flash/[0.1] p-6 shadow-2xl sm:p-8"
+        style={{ background: CRYSTAL_FACE }}
+      >
         <button
           onClick={closeOnboarding}
-          className="absolute right-4 top-4 z-20 rounded-xl p-2 text-gray-400 transition hover:bg-white/10 hover:text-white"
+          className="absolute right-4 top-4 z-20 rounded-inner p-2 text-muted transition-colors duration-base hover:bg-white/10 hover:text-white"
           aria-label={copy.close}
         >
           <X size={20} />
@@ -1915,11 +1857,11 @@ function closeOnboarding() {
                 {copy.privateAccess}
               </span>
 
-              <span className="rounded-full border border-white/10 bg-black/20 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-gray-400">
+              <span className="rounded-full bg-white/[0.06] px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-muted">
                 {step.phase}
               </span>
 
-              <span className="rounded-full border border-white/10 bg-black/20 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-gray-400">
+              <span className="rounded-full bg-white/[0.06] px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-muted">
                 {copy.stepCounter(
                   currentStep + 1,
                   copy.steps.length
@@ -1929,7 +1871,7 @@ function closeOnboarding() {
 
             <div className="h-2 overflow-hidden rounded-full bg-white/10">
               <div
-                className="h-full rounded-full bg-accent-bright transition-all duration-300"
+                className="h-full rounded-full bg-accent-bright transition-all duration-base"
                 style={{
                   width: `${progress}%`,
                 }}
@@ -1937,14 +1879,17 @@ function closeOnboarding() {
             </div>
           </div>
 
-          <div className="grid min-h-[560px] items-stretch gap-8 lg:grid-cols-5">
+          <div
+            key={currentStep}
+            className="reveal-rise grid min-h-[560px] items-stretch gap-8 lg:grid-cols-5"
+          >
             <div className="flex flex-col justify-center lg:col-span-3">
-              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-3xl border border-white/10 bg-black/20">
+              <IconTile size="lg" interactive={false} className="mb-6">
                 <StepIcon
                   className={step.accent}
                   size={30}
                 />
-              </div>
+              </IconTile>
 
               <p
                 className={`text-sm font-black uppercase tracking-[0.2em] ${step.accent}`}
@@ -1952,16 +1897,16 @@ function closeOnboarding() {
                 {step.eyebrow}
               </p>
 
-              <h2 className="mt-4 text-4xl font-black tracking-tight text-white sm:text-5xl">
+              <h2 className="text-hero mt-4">
                 {step.title}
               </h2>
 
-              <p className="mt-6 max-w-2xl text-base leading-8 text-gray-400">
+              <p className="mt-6 max-w-2xl text-base leading-8 text-muted">
                 {step.description}
               </p>
 
               {step.spotlight && (
-                <div className="mt-7 rounded-3xl border border-accent-bright/20 bg-accent-bright/10 p-5">
+                <div className="mt-7 rounded-card border border-accent-bright/20 bg-accent-bright/10 p-5">
                   <p className="text-sm font-semibold leading-7 text-white">
                     {step.spotlight}
                   </p>
@@ -1974,18 +1919,18 @@ function closeOnboarding() {
                 const CardIcon = card.icon;
 
                 return (
-                  <div
+                  <Card
                     key={card.title}
-                    className="flex h-full flex-col justify-between rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+                    className="flex h-full flex-col justify-between p-5"
                   >
                     <div>
                       <div className="mb-4 flex items-center justify-between gap-4">
-                        <div className="rounded-2xl border border-white/10 bg-black/20 p-3">
+                        <IconTile interactive={false}>
                           <CardIcon
                             className={card.tone}
                             size={22}
                           />
-                        </div>
+                        </IconTile>
 
                         <CheckCircle2
                           className="text-accent"
@@ -1997,11 +1942,11 @@ function closeOnboarding() {
                         {card.title}
                       </h3>
 
-                      <p className="mt-2 text-sm leading-6 text-gray-400">
+                      <p className="mt-2 text-sm leading-6 text-muted">
                         {card.description}
                       </p>
                     </div>
-                  </div>
+                  </Card>
                 );
               })}
             </div>
@@ -2011,7 +1956,7 @@ function closeOnboarding() {
             <button
               onClick={goBack}
               disabled={currentStep === 0}
-              className="flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-sm font-bold text-white transition hover:bg-white/[0.07] disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex items-center justify-center gap-2 rounded-inner border-[0.5px] border-flash/[0.12] px-5 py-4 text-sm font-bold text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.04] disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ArrowLeft size={18} />
               {copy.back}
@@ -2019,7 +1964,8 @@ function closeOnboarding() {
 
             <button
               onClick={goNext}
-              className="flex items-center justify-center gap-2 rounded-2xl bg-accent px-6 py-4 text-sm font-black text-white transition hover:bg-accent-bright"
+              style={{ background: CTA_GRADIENT }}
+              className="flex items-center justify-center gap-2 rounded-inner px-6 py-4 text-sm font-semibold text-white transition-shadow duration-base hover:shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)]"
             >
               {currentStep ===
                 copy.steps.length - 1

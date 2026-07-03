@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 type IconTileProps = {
   children: ReactNode;
-  size?: "sm" | "md";
+  size?: "sm" | "md" | "lg";
   interactive?: boolean;
   className?: string;
 };
@@ -22,7 +22,8 @@ export default function IconTile({
   interactive = true,
   className = "",
 }: IconTileProps) {
-  const sizeCls = size === "sm" ? "h-8 w-8" : "h-10 w-10";
+  const sizeCls =
+    size === "sm" ? "h-8 w-8" : size === "lg" ? "h-16 w-16" : "h-10 w-10";
 
   return (
     <span

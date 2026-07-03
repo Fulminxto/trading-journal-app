@@ -4,14 +4,44 @@
   "graph": {},
   "nodes": [
     {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "app/accounts/page.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_accounts_page",
+      "community": 0,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "AccountsCopy",
+      "file_type": "code",
+      "source_file": "app/accounts/page.tsx",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "app_accounts_page_accountscopy",
+      "community": 0,
+      "norm_label": "accountscopy"
+    },
+    {
+      "label": "AccountsPage()",
+      "file_type": "code",
+      "source_file": "app/accounts/page.tsx",
+      "source_location": "L307",
+      "_origin": "ast",
+      "id": "app_accounts_page_accountspage",
+      "community": 0,
+      "norm_label": "accountspage()"
+    },
+    {
       "label": "LoginForm.tsx",
       "file_type": "code",
       "source_file": "app/login/LoginForm.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "app_login_loginform",
       "community": 14,
-      "norm_label": "loginform.tsx"
+      "norm_label": "loginform.tsx",
+      "id": "app_login_loginform"
     },
     {
       "label": "LoginFormLabels",
@@ -19,9 +49,9 @@
       "source_file": "app/login/LoginForm.tsx",
       "source_location": "L15",
       "_origin": "ast",
-      "id": "app_login_loginform_loginformlabels",
       "community": 14,
-      "norm_label": "loginformlabels"
+      "norm_label": "loginformlabels",
+      "id": "app_login_loginform_loginformlabels"
     },
     {
       "label": "LoginForm()",
@@ -29,9 +59,9 @@
       "source_file": "app/login/LoginForm.tsx",
       "source_location": "L133",
       "_origin": "ast",
-      "id": "app_login_loginform_loginform",
       "community": 14,
-      "norm_label": "loginform()"
+      "norm_label": "loginform()",
+      "id": "app_login_loginform_loginform"
     },
     {
       "label": "page.tsx",
@@ -39,9 +69,9 @@
       "source_file": "app/login/page.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "app_login_page",
       "community": 14,
-      "norm_label": "page.tsx"
+      "norm_label": "page.tsx",
+      "id": "app_login_page"
     },
     {
       "label": "LoginCopy",
@@ -49,9 +79,9 @@
       "source_file": "app/login/page.tsx",
       "source_location": "L15",
       "_origin": "ast",
-      "id": "app_login_page_logincopy",
       "community": 14,
-      "norm_label": "logincopy"
+      "norm_label": "logincopy",
+      "id": "app_login_page_logincopy"
     },
     {
       "label": "getLanguageFromAcceptHeader()",
@@ -59,9 +89,9 @@
       "source_file": "app/login/page.tsx",
       "source_location": "L164",
       "_origin": "ast",
-      "id": "app_login_page_getlanguagefromacceptheader",
       "community": 14,
-      "norm_label": "getlanguagefromacceptheader()"
+      "norm_label": "getlanguagefromacceptheader()",
+      "id": "app_login_page_getlanguagefromacceptheader"
     },
     {
       "label": "LoginPage()",
@@ -69,9 +99,9 @@
       "source_file": "app/login/page.tsx",
       "source_location": "L177",
       "_origin": "ast",
-      "id": "app_login_page_loginpage",
       "community": 14,
-      "norm_label": "loginpage()"
+      "norm_label": "loginpage()",
+      "id": "app_login_page_loginpage"
     },
     {
       "label": "Card.tsx",
@@ -79,9 +109,9 @@
       "source_file": "components/ui/Card.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "components_ui_card",
       "community": 14,
-      "norm_label": "card.tsx"
+      "norm_label": "card.tsx",
+      "id": "components_ui_card"
     },
     {
       "label": "CardProps",
@@ -89,9 +119,9 @@
       "source_file": "components/ui/Card.tsx",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "components_ui_card_cardprops",
       "community": 14,
-      "norm_label": "cardprops"
+      "norm_label": "cardprops",
+      "id": "components_ui_card_cardprops"
     },
     {
       "label": "Card()",
@@ -99,9 +129,9 @@
       "source_file": "components/ui/Card.tsx",
       "source_location": "L25",
       "_origin": "ast",
-      "id": "components_ui_card_card",
       "community": 14,
-      "norm_label": "card()"
+      "norm_label": "card()",
+      "id": "components_ui_card_card"
     },
     {
       "label": "page.tsx",
@@ -1092,48 +1122,38 @@
       "community": 1,
       "norm_label": "getaccountmembershipwithaccount()",
       "id": "lib_permissions_getaccountmembershipwithaccount"
-    },
-    {
-      "label": "page.tsx",
-      "file_type": "code",
-      "source_file": "app/accounts/page.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "page.tsx",
-      "id": "app_accounts_page"
-    },
-    {
-      "label": "AccountsCopy",
-      "file_type": "code",
-      "source_file": "app/accounts/page.tsx",
-      "source_location": "L24",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "accountscopy",
-      "id": "app_accounts_page_accountscopy"
-    },
-    {
-      "label": "AccountsPage()",
-      "file_type": "code",
-      "source_file": "app/accounts/page.tsx",
-      "source_location": "L297",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "accountspage()",
-      "id": "app_accounts_page_accountspage"
     }
   ],
   "links": [
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "app/accounts/page.tsx",
+      "source_location": "L67",
+      "weight": 1.0,
+      "source": "app_accounts_page",
+      "target": "app_accounts_page_accountscopy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/page.tsx",
+      "source_location": "L307",
+      "weight": 1.0,
+      "source": "app_accounts_page",
+      "target": "app_accounts_page_accountspage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "app/login/LoginForm.tsx",
       "source_location": "L133",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_login_loginform",
-      "target": "app_login_loginform_loginform",
-      "confidence_score": 1.0
+      "target": "app_login_loginform_loginform"
     },
     {
       "relation": "contains",
@@ -1141,9 +1161,9 @@
       "source_file": "app/login/LoginForm.tsx",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_login_loginform",
-      "target": "app_login_loginform_loginformlabels",
-      "confidence_score": 1.0
+      "target": "app_login_loginform_loginformlabels"
     },
     {
       "relation": "imports_from",
@@ -1152,9 +1172,9 @@
       "source_file": "app/login/page.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_login_page",
-      "target": "app_login_loginform",
-      "confidence_score": 1.0
+      "target": "app_login_loginform"
     },
     {
       "relation": "contains",
@@ -1162,9 +1182,9 @@
       "source_file": "app/login/page.tsx",
       "source_location": "L164",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_login_page",
-      "target": "app_login_page_getlanguagefromacceptheader",
-      "confidence_score": 1.0
+      "target": "app_login_page_getlanguagefromacceptheader"
     },
     {
       "relation": "contains",
@@ -1172,9 +1192,9 @@
       "source_file": "app/login/page.tsx",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_login_page",
-      "target": "app_login_page_logincopy",
-      "confidence_score": 1.0
+      "target": "app_login_page_logincopy"
     },
     {
       "relation": "contains",
@@ -1182,9 +1202,9 @@
       "source_file": "app/login/page.tsx",
       "source_location": "L177",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_login_page",
-      "target": "app_login_page_loginpage",
-      "confidence_score": 1.0
+      "target": "app_login_page_loginpage"
     },
     {
       "relation": "imports_from",
@@ -1193,9 +1213,9 @@
       "source_file": "app/login/page.tsx",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_login_page",
-      "target": "components_ui_card",
-      "confidence_score": 1.0
+      "target": "components_ui_card"
     },
     {
       "relation": "imports",
@@ -1204,9 +1224,9 @@
       "source_file": "app/login/page.tsx",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_login_page",
-      "target": "components_ui_card_card",
-      "confidence_score": 1.0
+      "target": "components_ui_card_card"
     },
     {
       "relation": "calls",
@@ -1215,9 +1235,9 @@
       "source_file": "app/login/page.tsx",
       "source_location": "L186",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_login_page_loginpage",
-      "target": "app_login_page_getlanguagefromacceptheader",
-      "confidence_score": 1.0
+      "target": "app_login_page_getlanguagefromacceptheader"
     },
     {
       "relation": "imports_from",
@@ -1236,9 +1256,9 @@
       "source_file": "components/ui/Card.tsx",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_ui_card",
-      "target": "components_ui_card_card",
-      "confidence_score": 1.0
+      "target": "components_ui_card_card"
     },
     {
       "relation": "contains",
@@ -1246,9 +1266,9 @@
       "source_file": "components/ui/Card.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_ui_card",
-      "target": "components_ui_card_cardprops",
-      "confidence_score": 1.0
+      "target": "components_ui_card_cardprops"
     },
     {
       "relation": "contains",
@@ -2642,28 +2662,8 @@
       "confidence_score": 1.0,
       "source": "lib_permissions_canusecopilot",
       "target": "lib_permissions_ismanager"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "app/accounts/page.tsx",
-      "source_location": "L57",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "app_accounts_page",
-      "target": "app_accounts_page_accountscopy"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "app/accounts/page.tsx",
-      "source_location": "L297",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "app_accounts_page",
-      "target": "app_accounts_page_accountspage"
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e73dcb166f29c44b2b740e33d642249fa32ffb04"
+  "built_at_commit": "2deee88ee638c7d09cb0ef0641fb1395f53b7622"
 }

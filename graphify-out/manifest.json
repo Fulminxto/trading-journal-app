@@ -500,8 +500,8 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/page.tsx": {
-    "mtime": 1782422301.554646,
-    "ast_hash": "34690ca61c8d43e6cc8f592a321a6587",
+    "mtime": 1783078729.6939688,
+    "ast_hash": "6c414d07a5489d8a0d152183b62e2c42",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/playbook/actions.ts": {
@@ -1750,8 +1750,8 @@
     "semantic_hash": ""
   },
   ".impeccable/hook.cache.json": {
-    "mtime": 1783078175.495073,
-    "ast_hash": "80b039ebc96b20062444b4aae12b4f7e",
+    "mtime": 1783078729.8861442,
+    "ast_hash": "e2775d486f07bb0c0b48ffa4a8bfe95c",
     "semantic_hash": ""
   },
   "lib/permissions.ts": {
