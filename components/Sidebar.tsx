@@ -4,12 +4,15 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   useEffect,
+  useLayoutEffect,
   useMemo,
+  useRef,
   useState,
   useTransition,
 } from "react";
 
 import VoltisLightningLoader from "@/components/VoltisLightningLoader";
+import SignatureEdge from "@/components/ui/SignatureEdge";
 
 import {
   LayoutDashboard,
@@ -71,6 +74,7 @@ type SidebarLink = {
   href: string;
   label: string;
   icon: LucideIcon;
+  group?: "workspace" | "general";
 };
 
 type SidebarProps = {
@@ -100,6 +104,9 @@ type SidebarLabels = {
   updates: string;
   switchAccount: string;
   accounts: string;
+
+  workspaceGroup: string;
+  generalGroup: string;
 
   adminPanel: string;
   accountsManagement: string;
@@ -133,6 +140,9 @@ const sidebarLabels: Record<
     switchAccount: "Cambia account",
     accounts: "Account",
 
+    workspaceGroup: "WORKSPACE",
+    generalGroup: "GENERALE",
+
     adminPanel: "Pannello Admin",
     accountsManagement: "Gestione Account",
     supportTickets: "Ticket Supporto",
@@ -160,6 +170,9 @@ const sidebarLabels: Record<
     updates: "Updates",
     switchAccount: "Switch Account",
     accounts: "Accounts",
+
+    workspaceGroup: "WORKSPACE",
+    generalGroup: "GENERAL",
 
     adminPanel: "Admin Panel",
     accountsManagement: "Accounts Management",
@@ -189,6 +202,9 @@ const sidebarLabels: Record<
     switchAccount: "Змінити акаунт",
     accounts: "Акаунти",
 
+    workspaceGroup: "WORKSPACE",
+    generalGroup: "ЗАГАЛЬНЕ",
+
     adminPanel: "Адмін-панель",
     accountsManagement: "Керування акаунтами",
     supportTickets: "Тікети підтримки",
@@ -216,6 +232,9 @@ const sidebarLabels: Record<
     updates: "Обновления",
     switchAccount: "Сменить аккаунт",
     accounts: "Аккаунты",
+
+    workspaceGroup: "WORKSPACE",
+    generalGroup: "ОБЩЕЕ",
 
     adminPanel: "Админ-панель",
     accountsManagement: "Управление аккаунтами",
@@ -245,6 +264,9 @@ const sidebarLabels: Record<
     switchAccount: "Cambiar cuenta",
     accounts: "Cuentas",
 
+    workspaceGroup: "WORKSPACE",
+    generalGroup: "GENERAL",
+
     adminPanel: "Panel Admin",
     accountsManagement: "Gestión de cuentas",
     supportTickets: "Tickets de soporte",
@@ -273,6 +295,9 @@ const sidebarLabels: Record<
     switchAccount: "Changer de compte",
     accounts: "Comptes",
 
+    workspaceGroup: "WORKSPACE",
+    generalGroup: "GÉNÉRAL",
+
     adminPanel: "Panneau Admin",
     accountsManagement: "Gestion des comptes",
     supportTickets: "Tickets support",
@@ -300,6 +325,9 @@ const sidebarLabels: Record<
     updates: "Updates",
     switchAccount: "Konto wechseln",
     accounts: "Konten",
+
+    workspaceGroup: "WORKSPACE",
+    generalGroup: "ALLGEMEIN",
 
     adminPanel: "Admin-Bereich",
     accountsManagement: "Kontoverwaltung",
@@ -594,16 +622,19 @@ export default function Sidebar({
             t
           ),
           icon: link.icon,
+          group: "workspace" as const,
         })),
         {
           href: "/updates",
           label: t.updates,
           icon: Megaphone,
+          group: "general" as const,
         },
         {
           href: "/accounts",
           label: t.switchAccount,
           icon: ArrowLeftRight,
+          group: "general" as const,
         },
       ];
     }
@@ -626,6 +657,71 @@ export default function Sidebar({
     isAdminArea,
     t,
   ]);
+
+  const groupedLinks = useMemo(() => {
+    const hasGroups = links.some((link) => link.group);
+
+    if (!hasGroups) {
+      return [{ id: "flat", label: undefined, items: links }];
+    }
+
+    return [
+      {
+        id: "workspace",
+        label: t.workspaceGroup,
+        items: links.filter(
+          (link) => link.group !== "general"
+        ),
+      },
+      {
+        id: "general",
+        label: t.generalGroup,
+        items: links.filter(
+          (link) => link.group === "general"
+        ),
+      },
+    ].filter((group) => group.items.length > 0);
+  }, [links, t]);
+
+  const activeHref = useMemo(() => {
+    const active = links.find(
+      (link) =>
+        pathname === link.href ||
+        (link.href !== "/accounts" &&
+          pathname.startsWith(`${link.href}/`))
+    );
+
+    return active?.href;
+  }, [links, pathname]);
+
+  const navRef = useRef<HTMLElement>(null);
+  const linkRefs = useRef(
+    new Map<string, HTMLAnchorElement>()
+  );
+
+  const [edgeRect, setEdgeRect] = useState<{
+    top: number;
+    height: number;
+  } | null>(null);
+
+  useLayoutEffect(() => {
+    const navEl = navRef.current;
+    const activeEl = activeHref
+      ? linkRefs.current.get(activeHref)
+      : null;
+
+    if (navEl && activeEl) {
+      const navTop = navEl.getBoundingClientRect().top;
+      const linkRect = activeEl.getBoundingClientRect();
+
+      setEdgeRect({
+        top: linkRect.top - navTop,
+        height: linkRect.height,
+      });
+    } else {
+      setEdgeRect(null);
+    }
+  }, [activeHref, isCollapsed, groupedLinks]);
 
   return (
     <>
@@ -706,7 +802,23 @@ export default function Sidebar({
 
         <div className="mt-4 border-t border-white/[0.06]" />
 
-        <nav className="mt-6 flex flex-1 flex-col gap-3 text-sm">
+        <nav
+          ref={navRef}
+          className="relative mt-6 flex flex-1 flex-col gap-4 text-sm"
+        >
+          {edgeRect && (
+            <SignatureEdge
+              orientation="vertical"
+              pulse
+              className="absolute left-0 z-10 transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)]"
+              style={{
+                top: 0,
+                height: edgeRect.height,
+                transform: `translateY(${edgeRect.top}px)`,
+              }}
+            />
+          )}
+
           {permissionsLoading &&
             accountId &&
             !isAdminArea &&
@@ -716,47 +828,74 @@ export default function Sidebar({
               </div>
             )}
 
-          {links.map((link) => {
-            const active =
-              pathname === link.href ||
-              (link.href !== "/accounts" &&
-                pathname.startsWith(`${link.href}/`));
+          {groupedLinks.map((group, groupIndex) => (
+            <div key={group.id}>
+              {group.label && !isCollapsed && (
+                <p className="mb-2 px-4 text-[10px] font-medium uppercase tracking-[0.16em] text-muted-faint">
+                  {group.label}
+                </p>
+              )}
 
-            const Icon = link.icon;
-            const isThisPending =
-              isPending && pendingHref === link.href;
+              <div className="flex flex-col gap-1">
+                {group.items.map((link) => {
+                  const active = link.href === activeHref;
 
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={(e) => {
-                  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-                  e.preventDefault();
-                  onClose?.();
-                  setPendingHref(link.href);
-                  startTransition(() => router.push(link.href));
-                }}
-                className={`group flex items-center rounded-xl transition ${isCollapsed
-                  ? "justify-center px-3 py-3"
-                  : "gap-3 px-4 py-3"
-                  } ${active
-                    ? "bg-accent/10 text-accent"
-                    : "text-gray-300 hover:bg-white/5 hover:text-white"
-                  }`}
-              >
-                {isThisPending ? (
-                  <VoltisLightningLoader size={18} />
-                ) : (
-                  <Icon size={18} />
-                )}
+                  const Icon = link.icon;
+                  const isThisPending =
+                    isPending && pendingHref === link.href;
 
-                {!isCollapsed && (
-                  <span>{link.label}</span>
-                )}
-              </Link>
-            );
-          })}
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      ref={(el) => {
+                        if (el) {
+                          linkRefs.current.set(link.href, el);
+                        } else {
+                          linkRefs.current.delete(link.href);
+                        }
+                      }}
+                      onClick={(e) => {
+                        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                        e.preventDefault();
+                        onClose?.();
+                        setPendingHref(link.href);
+                        startTransition(() => router.push(link.href));
+                      }}
+                      className={`group flex items-center rounded-xl transition-colors duration-base ${isCollapsed
+                        ? "justify-center px-3 py-3"
+                        : "gap-3 px-4 py-3"
+                        } ${active
+                          ? "bg-gradient-to-r from-accent/15 via-accent/[0.04] to-transparent text-white"
+                          : "text-gray-300 hover:bg-white/5 hover:text-white"
+                        }`}
+                    >
+                      {isThisPending ? (
+                        <VoltisLightningLoader size={18} />
+                      ) : (
+                        <Icon
+                          size={18}
+                          className={
+                            active
+                              ? "text-accent-bright"
+                              : "text-muted transition-colors duration-base group-hover:text-accent-bright"
+                          }
+                        />
+                      )}
+
+                      {!isCollapsed && (
+                        <span>{link.label}</span>
+                      )}
+                    </Link>
+                  );
+                })}
+              </div>
+
+              {groupIndex < groupedLinks.length - 1 && (
+                <div className="mt-4 border-t border-white/[0.06]" />
+              )}
+            </div>
+          ))}
         </nav>
 
         {!isCollapsed && (
@@ -764,7 +903,7 @@ export default function Sidebar({
             <div className="border-t border-white/[0.06]" />
             <div className="pt-3 text-center">
               <p className="text-[9px] uppercase tracking-[0.28em] text-white/[0.18]">
-                Private Trading OS
+                Private Trading OS · v0.1.0
               </p>
             </div>
           </div>
