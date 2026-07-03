@@ -574,7 +574,7 @@ export default async function AccountsPage() {
 
             {canCreateAccount && (
               <Link
-                href="/accounts/manage"
+                href="/accounts/create"
                 className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-gray-300 hover:bg-white/[0.06]"
               >
                 {t.createAccount}
