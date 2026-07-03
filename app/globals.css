@@ -18,6 +18,11 @@
   --color-negative: #F87171;
   --color-warning:  #FCD34D;
 
+  /* ── Muted text (cold family, non-semantic) ── */
+  --color-muted:       #9fb4dd;
+  --color-muted-dim:   #7d8db5;
+  --color-muted-faint: #5f7099;
+
   /* ── Border radius ── */
   --radius-card:  1.5rem;
   --radius-inner: 1rem;
@@ -123,6 +128,21 @@ input[type="number"] {
   to   { opacity: 1; }
 }
 
+@keyframes signature-pulse {
+  0%, 100% {
+    opacity: 0.65;
+    box-shadow: 0 0 8px color-mix(in srgb, var(--color-halo) 40%, transparent);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 14px color-mix(in srgb, var(--color-halo) 65%, transparent);
+  }
+}
+
+.animate-signature-pulse {
+  animation: signature-pulse 2.4s ease-in-out infinite;
+}
+
 @layer utilities {
   .loader-fade-in {
     opacity: 0;
@@ -141,18 +161,33 @@ input[type="number"] {
   .tabular-nums     { font-variant-numeric: tabular-nums; }
 }
 
-/* Sidebar: thin, always-visible, tenue scrollbar */
-.sidebar-scroll {
+/* Faded scrollbar: thin tenue scrollbar + content fades at top/bottom edges.
+   Used by sidebar, and any long list/table that scrolls internally. */
+.faded-scroll {
   scrollbar-width: thin;
   scrollbar-color: rgba(91, 224, 255, 0.3) transparent;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black 24px,
+    black calc(100% - 24px),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black 24px,
+    black calc(100% - 24px),
+    transparent 100%
+  );
 }
-.sidebar-scroll::-webkit-scrollbar {
+.faded-scroll::-webkit-scrollbar {
   width: 4px;
 }
-.sidebar-scroll::-webkit-scrollbar-track {
+.faded-scroll::-webkit-scrollbar-track {
   background: transparent;
 }
-.sidebar-scroll::-webkit-scrollbar-thumb {
+.faded-scroll::-webkit-scrollbar-thumb {
   background: rgba(91, 224, 255, 0.3);
   border-radius: 999px;
 }

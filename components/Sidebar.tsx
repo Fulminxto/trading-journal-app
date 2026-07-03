@@ -643,7 +643,7 @@ export default function Sidebar({
         onMouseLeave={() =>
           setCollapsed(true)
         }
-        className={`sidebar-scroll fixed left-0 top-0 z-50 flex h-screen flex-col overflow-y-auto border-r border-white/10 bg-surface-1 p-4 pt-[calc(env(safe-area-inset-top)+1rem)] transition-all duration-500 ease-out lg:sticky lg:z-40 lg:pt-4 ${isCollapsed
+        className={`faded-scroll fixed left-0 top-0 z-50 flex h-screen flex-col overflow-y-auto border-r border-white/10 bg-surface-1 p-4 pt-[calc(env(safe-area-inset-top)+1rem)] transition-all duration-500 ease-out lg:sticky lg:z-40 lg:pt-4 ${isCollapsed
           ? "w-[88px]"
           : "w-72 lg:w-64"
           } ${open
