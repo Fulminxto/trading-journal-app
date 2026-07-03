@@ -14,6 +14,9 @@ import {
 
 import ExecutionInsights from "@/components/diary/ExecutionInsights";
 import ScopeBar from "@/components/ScopeBar";
+import Card from "@/components/ui/Card";
+import ListRow from "@/components/ui/ListRow";
+import SignatureEdge from "@/components/ui/SignatureEdge";
 import {
   parseScopeParams,
   getPeriodRange,
@@ -21,6 +24,14 @@ import {
 } from "@/lib/scope";
 
 import { deleteAccountTrade } from "./actions";
+
+// CTA Fulmine: REBRAND_BLUEPRINT.md §6 names both "Apply filters" and
+// "Add trade" explicitly as CTA-worthy actions.
+const CTA_GRADIENT =
+  "linear-gradient(120deg, #2E62E6, #3f86e8 60%, #5BE0FF)";
+
+const selectClass =
+  "rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-2 px-3 py-2 text-sm text-white outline-none transition-colors duration-base focus:border-accent-bright/50";
 
 type DiaryLabels = {
   filteredPnl: string;
@@ -786,15 +797,19 @@ function getTradeSourceLabel(
 function getTradeSourceClass(
   source?: string | null
 ) {
+  // Cold family only, per REBRAND_BLUEPRINT.md's "colore-etichetta"
+  // rule - these distinguish sync sources, they don't mean anything
+  // semantically, so they stay within accent/accent-bright/neutral,
+  // never an arbitrary hue like Tailwind's blue-500.
   if (source === "mt5") {
     return "border-accent-bright/20 bg-accent-bright/10 text-accent-bright";
   }
 
   if (source === "broker") {
-    return "border-blue-500/20 bg-blue-500/10 text-blue-300";
+    return "border-accent/20 bg-accent/10 text-accent";
   }
 
-  return "border-white/10 bg-white/10 text-gray-300";
+  return "border-white/10 bg-white/10 text-muted";
 }
 
 function getOutcomeLabel(
@@ -817,8 +832,11 @@ function getOutcomeLabel(
 }
 
 function getOutcomeClass(outcome: string | null) {
+  // win was previously bg-accent/10 (cyan) here - every other page
+  // (Dashboard, Equity, Account Hub) treats a win outcome as green.
+  // Fixed to match; loss/be were already correct.
   if (outcome === "win") {
-    return "bg-accent/10 text-accent";
+    return "bg-green-500/10 text-green-400";
   }
 
   if (outcome === "loss") {
@@ -829,7 +847,7 @@ function getOutcomeClass(outcome: string | null) {
     return "bg-yellow-500/10 text-yellow-400";
   }
 
-  return "bg-white/10 text-gray-400";
+  return "bg-white/10 text-muted";
 }
 
 function CalendarIcon() {
@@ -1166,7 +1184,9 @@ export default async function DiaryPage({
     {
       label: `${t.winRate}${periodSuffix}`,
       value: `${winRate.toFixed(2)}%`,
-      tone: "text-green-400",
+      // Was hardcoded green regardless of the actual rate - a 20%
+      // win rate still showed as a positive signal.
+      tone: winRate >= 50 ? "text-green-400" : "text-red-400",
     },
     {
       label: `${t.filteredTrades}${periodSuffix}`,
@@ -1310,19 +1330,22 @@ export default async function DiaryPage({
 
   return (
     <div className="space-y-8">
-      <div>
-        <p className="text-sm text-gray-400">
-          {t.operationalRegister}
-        </p>
+      <div className="reveal-rise" style={{ animationDelay: "0ms" }}>
+        <div className="flex items-center gap-3">
+          <SignatureEdge orientation="vertical" className="h-4" />
+          <p className="text-sm text-muted">
+            {t.operationalRegister}
+          </p>
+        </div>
 
         <div className="mt-1 flex flex-wrap items-center gap-4">
-          <h1 className="text-3xl font-bold sm:text-4xl">
+          <h1 className="text-hero">
             {t.title}
           </h1>
         </div>
 
         {selectedMember && (
-          <div className="mt-4 rounded-3xl border border-accent-bright/20 bg-accent-bright/10 p-5">
+          <Card variant="inner" className="mt-4 p-5">
             <p className="text-xs uppercase tracking-[0.2em] text-accent-bright">
               {t.memberFilterActive}
             </p>
@@ -1335,16 +1358,16 @@ export default async function DiaryPage({
 
             <Link
               href={`/accounts/${accountId}/diary`}
-              className="mt-4 inline-flex rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm font-bold text-gray-300 transition hover:bg-white/[0.05]"
+              className="mt-4 inline-flex rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-3 text-sm font-bold text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.05]"
             >
               {t.clearFilter}
             </Link>
-          </div>
+          </Card>
         )}
 
         {isReadOnly && (
-          <div className="mt-4 rounded-3xl border border-yellow-500/20 bg-yellow-500/10 p-5">
-            <p className="text-xs uppercase tracking-[0.2em] text-yellow-300">
+          <Card variant="inner" className="mt-4 p-5">
+            <p className="text-xs uppercase tracking-[0.2em] text-muted">
               {t.readOnlyMode}
             </p>
 
@@ -1352,19 +1375,19 @@ export default async function DiaryPage({
               {t.readOnlyTitle}
             </h2>
 
-            <p className="mt-3 text-sm text-gray-300">
+            <p className="mt-3 text-sm text-muted">
               {t.readOnlyDescription}
             </p>
-          </div>
+          </Card>
         )}
 
         <div className="mt-2 flex flex-wrap items-center gap-3">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted-faint">
             {t.account}: {account.name}
           </p>
 
           {isReadOnly && (
-            <div className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-4 py-1 text-xs font-black uppercase tracking-[0.2em] text-yellow-300">
+            <div className="rounded-full bg-white/[0.06] px-4 py-1 text-xs font-black uppercase tracking-[0.2em] text-muted">
               {t.readOnly}
             </div>
           )}
@@ -1380,13 +1403,13 @@ export default async function DiaryPage({
         accountId={accountId}
       />
 
-      <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
+      <div
+        className="reveal-rise grid grid-cols-2 gap-4 xl:grid-cols-4"
+        style={{ animationDelay: "60ms" }}
+      >
         {keyMetrics.map((stat) => (
-          <div
-            key={stat.label}
-            className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
-          >
-            <p className="text-sm text-gray-400">
+          <Card key={stat.label} interactive className="p-5">
+            <p className="text-sm text-muted">
               {stat.label}
             </p>
 
@@ -1395,11 +1418,12 @@ export default async function DiaryPage({
             >
               {stat.value}
             </h2>
-          </div>
+          </Card>
         ))}
       </div>
 
-      <ExecutionInsights
+      <div className="reveal-rise" style={{ animationDelay: "100ms" }}>
+        <ExecutionInsights
         disciplineScore={disciplineScore}
         averageExecution={averageExecution}
         averageConfidence={averageConfidence}
@@ -1409,17 +1433,18 @@ export default async function DiaryPage({
         bestSetup={bestSetup}
         appLanguage={language}
       />
-
+      </div>
 
       <form
         action={`/accounts/${accountId}/diary`}
-        className="rounded-3xl border border-white/10 bg-white/[0.03] p-4"
+        className="reveal-rise rounded-card border-[0.5px] border-flash/[0.1] bg-surface-1 p-4"
+        style={{ animationDelay: "140ms" }}
       >
         <div className="flex flex-wrap items-center gap-2">
           <select
             name="symbol"
             defaultValue={filters.symbol || ""}
-            className="rounded-xl border border-white/10 bg-zinc-900 px-3 py-2 text-sm outline-none focus:border-accent/40"
+            className={selectClass}
           >
             <option value="">{t.allSymbols}</option>
             {symbols.map((symbol) => (
@@ -1430,7 +1455,7 @@ export default async function DiaryPage({
           <select
             name="outcome"
             defaultValue={filters.outcome || ""}
-            className="rounded-xl border border-white/10 bg-zinc-900 px-3 py-2 text-sm outline-none focus:border-accent/40"
+            className={selectClass}
           >
             <option value="">{t.allOutcomes}</option>
             <option value="win">{t.win}</option>
@@ -1441,7 +1466,7 @@ export default async function DiaryPage({
           <select
             name="direction"
             defaultValue={filters.direction || ""}
-            className="rounded-xl border border-white/10 bg-zinc-900 px-3 py-2 text-sm outline-none focus:border-accent/40"
+            className={selectClass}
           >
             <option value="">{t.allDirections}</option>
             <option value="LONG">LONG</option>
@@ -1451,7 +1476,7 @@ export default async function DiaryPage({
           <select
             name="source"
             defaultValue={filters.source || ""}
-            className="rounded-xl border border-white/10 bg-zinc-900 px-3 py-2 text-sm outline-none focus:border-accent/40"
+            className={selectClass}
           >
             <option value="">{t.allSources}</option>
             <option value="manual">{t.manual}</option>
@@ -1462,7 +1487,7 @@ export default async function DiaryPage({
           <select
             name="needsReview"
             defaultValue={filters.needsReview || ""}
-            className="rounded-xl border border-white/10 bg-zinc-900 px-3 py-2 text-sm outline-none focus:border-accent/40"
+            className={selectClass}
           >
             <option value="">{t.allStatuses}</option>
             <option value="true">{t.needsReview}</option>
@@ -1471,7 +1496,7 @@ export default async function DiaryPage({
           <select
             name="strategyId"
             defaultValue={filters.strategyId || ""}
-            className="rounded-xl border border-white/10 bg-zinc-900 px-3 py-2 text-sm outline-none focus:border-accent/40"
+            className={selectClass}
           >
             <option value="">{t.allStrategies}</option>
             {strategies.map((s) => (
@@ -1479,7 +1504,7 @@ export default async function DiaryPage({
             ))}
           </select>
 
-          <div className={`flex items-center gap-2 rounded-xl border px-3 py-1.5 ${activeDateConflict ? "border-orange-500/40 bg-orange-500/[0.06]" : "border-accent-bright/30 bg-accent-bright/[0.04]"}`}>
+          <div className={`flex items-center gap-2 rounded-inner border-[0.5px] px-3 py-1.5 ${activeDateConflict ? "border-yellow-500/40 bg-yellow-500/[0.06]" : "border-accent-bright/30 bg-accent-bright/[0.04]"}`}>
             <div className="dt-wrap">
               <input
                 name="from"
@@ -1489,7 +1514,7 @@ export default async function DiaryPage({
               />
               <span className="dt-icon" aria-hidden="true"><CalendarIcon /></span>
             </div>
-            <span className="text-xs text-gray-500">→</span>
+            <span className="text-xs text-muted-faint">→</span>
             <div className="dt-wrap">
               <input
                 name="to"
@@ -1500,13 +1525,14 @@ export default async function DiaryPage({
               <span className="dt-icon" aria-hidden="true"><CalendarIcon /></span>
             </div>
             {activeDateConflict && (
-              <span className="text-xs font-bold text-orange-400">{t.dateConflictWarning}</span>
+              <span className="text-xs font-bold text-yellow-400">{t.dateConflictWarning}</span>
             )}
           </div>
 
           <button
             type="submit"
-            className="rounded-xl bg-accent px-4 py-2 text-sm font-bold text-white transition hover:bg-accent-bright"
+            style={{ background: CTA_GRADIENT }}
+            className="rounded-inner px-4 py-2 text-sm font-semibold text-white transition-shadow duration-base hover:shadow-[0_0_24px_color-mix(in_srgb,var(--color-accent)_18%,transparent)]"
           >
             {t.applyFilters}
           </button>
@@ -1514,7 +1540,7 @@ export default async function DiaryPage({
           {hasActiveFilters && (
             <Link
               href={`/accounts/${accountId}/diary`}
-              className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-gray-400 hover:bg-white/[0.06]"
+              className="rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-2 text-sm text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.06]"
             >
               {t.resetFilters}
             </Link>
@@ -1523,17 +1549,17 @@ export default async function DiaryPage({
 
         {activeFilterChips.length > 0 && (
           <div className="mt-3 flex flex-wrap items-center gap-2">
-            <span className="text-xs text-gray-500">{t.activeFilters}</span>
+            <span className="text-xs text-muted-faint">{t.activeFilters}</span>
             {activeFilterChips.map((chip) => (
               <span
                 key={chip}
-                className="rounded-full border border-white/10 bg-white/[0.05] px-3 py-0.5 text-xs text-gray-300"
+                className="rounded-full bg-white/[0.05] px-3 py-0.5 text-xs text-muted"
               >
                 {chip}
               </span>
             ))}
             {activeDateConflict && (
-              <span className="rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-0.5 text-xs font-semibold text-orange-400">
+              <span className="rounded-full bg-yellow-500/10 px-3 py-0.5 text-xs font-semibold text-yellow-400">
                 {t.dateConflictWarning}
               </span>
             )}
@@ -1541,10 +1567,13 @@ export default async function DiaryPage({
         )}
       </form>
 
-      <div className="space-y-3">
+      <div
+        className="reveal-rise space-y-3"
+        style={{ animationDelay: "180ms" }}
+      >
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-muted">
               {t.historyEyebrow}
             </p>
 
@@ -1556,7 +1585,8 @@ export default async function DiaryPage({
           {canCreateTrades && (
             <Link
               href={`/accounts/${accountId}/diary/new`}
-              className="inline-flex items-center gap-1.5 rounded-2xl border border-accent/40 bg-accent/10 px-4 py-2 text-sm font-semibold text-accent transition hover:bg-accent/20"
+              style={{ background: CTA_GRADIENT }}
+              className="inline-flex items-center gap-1.5 rounded-inner px-4 py-2 text-sm font-semibold text-white transition-shadow duration-base hover:shadow-[0_0_24px_color-mix(in_srgb,var(--color-accent)_18%,transparent)]"
             >
               + {t.newTradeTitle}
             </Link>
@@ -1564,21 +1594,24 @@ export default async function DiaryPage({
         </div>
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-muted-faint">
             {t.filteredCount(periodTrades.length, allTrades.length)}
           </p>
           {secondaryMetrics.map((stat) => (
             <div key={stat.label} className="flex items-center gap-1">
-              <span className="text-xs text-gray-500">{stat.label}:</span>
+              <span className="text-xs text-muted-faint">{stat.label}:</span>
               <span className={`text-xs font-semibold ${stat.tone}`}>{stat.value}</span>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="hidden overflow-x-auto rounded-3xl border border-white/10 bg-white/[0.03] lg:block">
+      <div
+        className="reveal-rise hidden overflow-x-auto rounded-card border-[0.5px] border-flash/[0.1] bg-surface-1 lg:block"
+        style={{ animationDelay: "220ms" }}
+      >
         <table className="w-full border-collapse">
-          <thead className="bg-white/[0.06] text-left text-sm text-gray-400">
+          <thead className="bg-white/[0.04] text-left text-xs uppercase tracking-[0.12em] text-muted">
             <tr>
               <th className="p-4">{t.date}</th>
               {isSharedAccount && (
@@ -1600,7 +1633,7 @@ export default async function DiaryPage({
             {periodTrades.map((trade) => (
               <tr
                 key={trade.id}
-                className="border-t border-white/10 hover:bg-white/[0.02]"
+                className="border-t border-white/[0.06] transition-colors duration-base hover:bg-accent/[0.03]"
               >
                 <td className="p-4">
                   <div className="font-semibold">
@@ -1610,14 +1643,14 @@ export default async function DiaryPage({
                     )}
                   </div>
 
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-muted-faint">
                     {trade.openTime || "-"}
                   </div>
                 </td>
 
                 {isSharedAccount && (
                   <td className="p-4">
-                    <span className="rounded-xl bg-white/10 px-3 py-1 text-sm font-semibold text-white">
+                    <span className="rounded-full bg-white/10 px-3 py-1 text-sm font-semibold text-white">
                       {trade.createdBy?.name ||
                         trade.createdBy?.username ||
                         t.unknownTrader}
@@ -1632,7 +1665,7 @@ export default async function DiaryPage({
                 <td className="p-4">
                   <div className="flex flex-col gap-2">
                     <span
-                      className={`w-fit rounded-xl border px-3 py-1 text-xs font-bold ${getTradeSourceClass(
+                      className={`w-fit rounded-full border px-3 py-1 text-xs font-bold ${getTradeSourceClass(
                         trade.source
                       )}`}
                     >
@@ -1643,7 +1676,7 @@ export default async function DiaryPage({
                     </span>
 
                     {trade.needsReview && (
-                      <span className="w-fit rounded-xl border border-yellow-500/20 bg-yellow-500/10 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-yellow-300">
+                      <span className="w-fit rounded-full border border-yellow-500/20 bg-yellow-500/10 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-yellow-300">
                         {t.needsReview}
                       </span>
                     )}
@@ -1661,7 +1694,7 @@ export default async function DiaryPage({
 
                 <td className="p-4">
                   <span
-                    className={`rounded-xl px-3 py-1 text-sm font-semibold ${getOutcomeClass(
+                    className={`rounded-full px-3 py-1 text-sm font-semibold ${getOutcomeClass(
                       trade.outcome
                     )}`}
                   >
@@ -1702,7 +1735,7 @@ export default async function DiaryPage({
                   <div className="flex items-center gap-2">
                     <Link
                       href={`/accounts/${accountId}/diary/${trade.id}/replay`}
-                      className="inline-flex items-center justify-center rounded-xl bg-indigo-500/10 p-2 text-indigo-400 hover:bg-indigo-500/20"
+                      className="inline-flex items-center justify-center rounded-inner border-[0.5px] border-flash/[0.1] p-2 text-muted transition-colors duration-base hover:text-accent-bright"
                       title="Replay"
                     >
                       <PlayCircle size={15} />
@@ -1712,7 +1745,7 @@ export default async function DiaryPage({
                       {canEditTrades && (
                         <Link
                           href={`/accounts/${accountId}/diary/${trade.id}/edit`}
-                          className="rounded-xl bg-white/10 px-3 py-2 text-sm hover:bg-white/20"
+                          className="rounded-inner bg-white/10 px-3 py-2 text-sm transition-colors duration-base hover:bg-white/20"
                         >
                           {t.edit}
                         </Link>
@@ -1728,7 +1761,7 @@ export default async function DiaryPage({
                         >
                           <button
                             type="submit"
-                            className="rounded-xl bg-red-500/10 px-3 py-2 text-sm text-red-400 hover:bg-red-500/20"
+                            className="rounded-inner bg-red-500/10 px-3 py-2 text-sm text-red-400 transition-colors duration-base hover:bg-red-500/20"
                           >
                             {t.delete}
                           </button>
@@ -1736,7 +1769,7 @@ export default async function DiaryPage({
                       )}
                     </div>
                   ) : (
-                    <span className="rounded-xl bg-yellow-500/10 px-3 py-2 text-xs font-semibold text-yellow-300">
+                    <span className="rounded-inner bg-white/[0.06] px-3 py-2 text-xs font-semibold text-muted">
                       {t.readOnly}
                     </span>
                   )}
@@ -1752,16 +1785,16 @@ export default async function DiaryPage({
                   className="p-10 text-center"
                 >
                   {allTrades.length === 0 ? (
-                    <p className="font-medium text-gray-400">{t.noTradesAccount}</p>
+                    <p className="font-medium text-muted">{t.noTradesAccount}</p>
                   ) : (
                     <div className="space-y-3">
-                      <p className="text-gray-400">{t.noTrades}</p>
+                      <p className="text-muted">{t.noTrades}</p>
                       {activeDateConflict && (
-                        <p className="text-sm text-orange-400">{t.emptyFiltersHint}</p>
+                        <p className="text-sm text-yellow-400">{t.emptyFiltersHint}</p>
                       )}
                       <Link
                         href={`/accounts/${accountId}/diary`}
-                        className="inline-block rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-gray-300 hover:bg-white/[0.08]"
+                        className="inline-block rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-2 text-sm text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.08]"
                       >
                         {t.resetAllFilters}
                       </Link>
@@ -1774,234 +1807,197 @@ export default async function DiaryPage({
         </table>
       </div>
 
-      <div className="space-y-4 lg:hidden">
+      <div
+        className="reveal-rise space-y-4 lg:hidden"
+        style={{ animationDelay: "260ms" }}
+      >
         {periodTrades.length === 0 ? (
-          <div className="space-y-3 rounded-3xl border border-white/10 bg-white/[0.03] p-8 text-center">
+          <Card variant="inner" className="space-y-3 border-dashed p-8 text-center">
             {allTrades.length === 0 ? (
-              <p className="font-medium text-gray-400">{t.noTradesAccount}</p>
+              <p className="font-medium text-muted">{t.noTradesAccount}</p>
             ) : (
               <>
-                <p className="text-gray-400">{t.noTrades}</p>
+                <p className="text-muted">{t.noTrades}</p>
                 {activeDateConflict && (
-                  <p className="text-sm text-orange-400">{t.emptyFiltersHint}</p>
+                  <p className="text-sm text-yellow-400">{t.emptyFiltersHint}</p>
                 )}
                 <Link
                   href={`/accounts/${accountId}/diary`}
-                  className="inline-block rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-gray-300 hover:bg-white/[0.08]"
+                  className="inline-block rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-2 text-sm text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.08]"
                 >
                   {t.resetAllFilters}
                 </Link>
               </>
             )}
-          </div>
+          </Card>
         ) : (
           periodTrades.map((trade) => (
-            <div
-              key={trade.id}
-              className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl transition-all duration-300 hover:border-accent-bright/20 hover:bg-white/[0.06]"
-            >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_6%,transparent),transparent_35%)]" />
+            <ListRow key={trade.id} className="p-6">
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0">
+                  <p className="text-xs uppercase tracking-[0.18em] text-muted-faint">
+                    {formatDateByLanguage(
+                      trade.openDate,
+                      language
+                    )} {trade.openTime || ""}
+                  </p>
 
-              <div className="relative z-10">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="min-w-0">
-                    <p className="text-xs uppercase tracking-[0.18em] text-gray-500">
-                      {formatDateByLanguage(
-                        trade.openDate,
-                        language
-                      )} {trade.openTime || ""}
+                  <h3 className="mt-2 truncate text-2xl font-black text-white">
+                    {trade.symbol}
+                  </h3>
+
+                  {isSharedAccount && (
+                    <p className="mt-1 text-sm text-muted-faint">
+                      {t.trader}: {trade.createdBy?.name || trade.createdBy?.username || t.unknownTrader}
                     </p>
+                  )}
+                </div>
 
-                    <h3 className="mt-2 truncate text-2xl font-black text-white">
-                      {trade.symbol}
-                    </h3>
+                <span
+                  className={`shrink-0 rounded-full px-3 py-2 text-xs font-black ${trade.direction === "LONG"
+                      ? "bg-accent/10 text-accent"
+                      : "bg-red-500/10 text-red-400"
+                    }`}
+                >
+                  {trade.direction}
+                </span>
+              </div>
 
-                    {isSharedAccount && (
-                      <p className="mt-1 text-sm text-gray-500">
-                        {t.trader}: {trade.createdBy?.name || trade.createdBy?.username || t.unknownTrader}
-                      </p>
+              {/* Primary value: Result $, the one number this card
+                  leads with. */}
+              <p
+                className={`mt-5 text-3xl font-black ${(trade.resultUsd || 0) >= 0
+                    ? "text-green-400"
+                    : "text-red-400"
+                  }`}
+              >
+                {formatCurrencyByLanguage(
+                  trade.resultUsd || 0,
+                  currency,
+                  language
+                )}
+              </p>
+
+              {/* Support: compact strip, not four boxed sub-cards. */}
+              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-white/[0.06] pt-3 text-xs">
+                <span className={`font-semibold ${getOutcomeClass(trade.outcome)} rounded-full px-2 py-0.5`}>
+                  {getOutcomeLabel(trade.outcome, t)}
+                </span>
+
+                <span className="text-muted">
+                  {t.equity}:{" "}
+                  <span className="font-semibold text-white">
+                    {formatCurrencyByLanguage(
+                      trade.equity || account.initialBalance,
+                      currency,
+                      language
+                    )}
+                  </span>
+                </span>
+
+                <span className="text-muted">
+                  {t.sync}:{" "}
+                  <span className="font-semibold text-accent-bright">
+                    {getTradeSourceLabel(trade.source, t)}
+                  </span>
+                </span>
+              </div>
+
+              {(trade.setupQuality ||
+                trade.executionRating ||
+                trade.confidence) && (
+                  <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
+                    {trade.setupQuality && (
+                      <span className="text-muted">
+                        Setup: <span className="font-semibold text-accent">{trade.setupQuality}/10</span>
+                      </span>
+                    )}
+
+                    {trade.executionRating && (
+                      <span className="text-muted">
+                        Execution: <span className="font-semibold text-yellow-300">{trade.executionRating}/10</span>
+                      </span>
+                    )}
+
+                    {trade.confidence && (
+                      <span className="text-muted">
+                        Confidence: <span className="font-semibold text-accent-bright">{trade.confidence}/10</span>
+                      </span>
                     )}
                   </div>
+                )}
 
-                  <span
-                    className={`shrink-0 rounded-2xl px-3 py-2 text-xs font-black ${trade.direction === "LONG"
-                        ? "bg-accent/10 text-accent"
-                        : "bg-red-500/10 text-red-400"
-                      }`}
-                  >
-                    {trade.direction}
-                  </span>
-                </div>
+              {trade.strategy && (
+                <p className="mt-3 text-sm text-muted">
+                  {t.strategy}: {trade.strategy}
+                </p>
+              )}
 
-                <div className="mt-5 grid grid-cols-2 gap-3">
-                  <div className="rounded-2xl bg-black/20 p-3">
-                    <p className="text-xs text-gray-500">
-                      {t.outcome}
-                    </p>
+              {trade.notes && (
+                <Card variant="inner" className="mt-3 p-3 text-sm text-muted">
+                  {trade.notes}
+                </Card>
+              )}
 
-                    <p className="mt-1 font-bold text-white">
-                      {getOutcomeLabel(trade.outcome, t)}
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl bg-black/20 p-3">
-                    <p className="text-xs text-gray-500">
-                      {t.result}
-                    </p>
-
-                    <p
-                      className={`mt-1 font-bold ${(trade.resultUsd || 0) >= 0
-                          ? "text-green-400"
-                          : "text-red-400"
-                        }`}
-                    >
-                      {formatCurrencyByLanguage(
-                        trade.resultUsd || 0,
-                        currency,
-                        language
-                      )}
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl bg-black/20 p-3">
-                    <p className="text-xs text-gray-500">
-                      {t.equity}
-                    </p>
-
-                    <p className="mt-1 font-bold text-white">
-                      {formatCurrencyByLanguage(
-                        trade.equity || account.initialBalance,
-                        currency,
-                        language
-                      )}
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl bg-black/20 p-3">
-                    <p className="text-xs text-gray-500">
-                      {t.sync}
-                    </p>
-
-                    <p className="mt-1 font-bold text-accent-bright">
-                      {getTradeSourceLabel(trade.source, t)}
-                    </p>
-                  </div>
-                </div>
-
-                {(trade.setupQuality ||
-                  trade.executionRating ||
-                  trade.confidence) && (
-                    <div className="mt-4 grid grid-cols-3 gap-3">
-                      {trade.setupQuality && (
-                        <div className="rounded-2xl bg-black/20 p-3">
-                          <p className="text-xs text-gray-500">
-                            Setup
-                          </p>
-
-                          <p className="mt-1 font-bold text-accent">
-                            {trade.setupQuality}/10
-                          </p>
-                        </div>
-                      )}
-
-                      {trade.executionRating && (
-                        <div className="rounded-2xl bg-black/20 p-3">
-                          <p className="text-xs text-gray-500">
-                            Execution
-                          </p>
-
-                          <p className="mt-1 font-bold text-yellow-300">
-                            {trade.executionRating}/10
-                          </p>
-                        </div>
-                      )}
-
-                      {trade.confidence && (
-                        <div className="rounded-2xl bg-black/20 p-3">
-                          <p className="text-xs text-gray-500">
-                            Confidence
-                          </p>
-
-                          <p className="mt-1 font-bold text-blue-400">
-                            {trade.confidence}/10
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                {trade.strategy && (
-                  <p className="mt-4 rounded-2xl bg-black/20 p-3 text-sm text-gray-400">
-                    {t.strategy}: {trade.strategy}
+              {trade.mistakes && (
+                <div className="mt-3 rounded-inner border border-red-500/10 bg-red-500/[0.03] p-3">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-red-400">
+                    {t.mistakes}
                   </p>
-                )}
 
-                {trade.notes && (
-                  <p className="mt-4 rounded-2xl bg-black/20 p-3 text-sm text-gray-400">
-                    {trade.notes}
+                  <p className="mt-2 text-sm text-gray-300">
+                    {trade.mistakes}
                   </p>
-                )}
+                </div>
+              )}
 
-                {trade.mistakes && (
-                  <div className="mt-4 rounded-2xl border border-red-500/10 bg-red-500/[0.03] p-3">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-red-400">
-                      {t.mistakes}
-                    </p>
+              {trade.lessonsLearned && (
+                <div className="mt-3 rounded-inner border border-accent/10 bg-accent/[0.03] p-3">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-accent">
+                    {t.lessonsLearned}
+                  </p>
 
-                    <p className="mt-2 text-sm text-gray-300">
-                      {trade.mistakes}
-                    </p>
-                  </div>
-                )}
+                  <p className="mt-2 text-sm text-gray-300">
+                    {trade.lessonsLearned}
+                  </p>
+                </div>
+              )}
 
-                {trade.lessonsLearned && (
-                  <div className="mt-4 rounded-2xl border border-accent/10 bg-accent/[0.03] p-3">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-accent">
-                      {t.lessonsLearned}
-                    </p>
-
-                    <p className="mt-2 text-sm text-gray-300">
-                      {trade.lessonsLearned}
-                    </p>
-                  </div>
-                )}
-
-                <div className="mt-4 flex gap-3">
+              <div className="mt-4 flex gap-3">
+                <Link
+                  href={`/accounts/${accountId}/diary/${trade.id}/replay`}
+                  className="inline-flex items-center gap-1.5 rounded-inner border-[0.5px] border-flash/[0.1] px-3 py-3 text-sm text-muted transition-colors duration-base hover:text-accent-bright"
+                >
+                  <PlayCircle size={14} />
+                  Replay
+                </Link>
+                {canEditTrades && (
                   <Link
-                    href={`/accounts/${accountId}/diary/${trade.id}/replay`}
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-indigo-500/10 px-3 py-3 text-sm text-indigo-400 hover:bg-indigo-500/20"
+                    href={`/accounts/${accountId}/diary/${trade.id}/edit`}
+                    className="flex-1 rounded-inner bg-white/10 px-3 py-3 text-center text-sm transition-colors duration-base hover:bg-white/20"
                   >
-                    <PlayCircle size={14} />
-                    Replay
+                    {t.edit}
                   </Link>
-                  {canEditTrades && (
-                    <Link
-                      href={`/accounts/${accountId}/diary/${trade.id}/edit`}
-                      className="flex-1 rounded-xl bg-white/10 px-3 py-3 text-center text-sm hover:bg-white/20"
+                )}
+                {canDeleteTrades && (
+                  <form
+                    action={deleteAccountTrade.bind(
+                      null,
+                      accountId,
+                      trade.id
+                    )}
+                    className="flex-1"
+                  >
+                    <button
+                      type="submit"
+                      className="w-full rounded-inner bg-red-500/10 px-3 py-3 text-sm text-red-400 transition-colors duration-base hover:bg-red-500/20"
                     >
-                      {t.edit}
-                    </Link>
-                  )}
-                  {canDeleteTrades && (
-                    <form
-                      action={deleteAccountTrade.bind(
-                        null,
-                        accountId,
-                        trade.id
-                      )}
-                      className="flex-1"
-                    >
-                      <button
-                        type="submit"
-                        className="w-full rounded-xl bg-red-500/10 px-3 py-3 text-sm text-red-400 hover:bg-red-500/20"
-                      >
-                        {t.delete}
-                      </button>
-                    </form>
-                  )}
-                </div>
+                      {t.delete}
+                    </button>
+                  </form>
+                )}
               </div>
-            </div>
+            </ListRow>
           ))
         )}
       </div>

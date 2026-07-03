@@ -4,14 +4,164 @@
   "graph": {},
   "nodes": [
     {
+      "label": "OnboardingModal.tsx",
+      "file_type": "code",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "components_onboardingmodal",
+      "community": 8,
+      "norm_label": "onboardingmodal.tsx"
+    },
+    {
+      "label": "OnboardingCardText",
+      "file_type": "code",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "components_onboardingmodal_onboardingcardtext",
+      "community": 8,
+      "norm_label": "onboardingcardtext"
+    },
+    {
+      "label": "OnboardingStepText",
+      "file_type": "code",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L48",
+      "_origin": "ast",
+      "id": "components_onboardingmodal_onboardingsteptext",
+      "community": 8,
+      "norm_label": "onboardingsteptext"
+    },
+    {
+      "label": "OnboardingCard",
+      "file_type": "code",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L57",
+      "_origin": "ast",
+      "id": "components_onboardingmodal_onboardingcard",
+      "community": 8,
+      "norm_label": "onboardingcard"
+    },
+    {
+      "label": "OnboardingStep",
+      "file_type": "code",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L62",
+      "_origin": "ast",
+      "id": "components_onboardingmodal_onboardingstep",
+      "community": 8,
+      "norm_label": "onboardingstep"
+    },
+    {
+      "label": "OnboardingCopyText",
+      "file_type": "code",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L71",
+      "_origin": "ast",
+      "id": "components_onboardingmodal_onboardingcopytext",
+      "community": 8,
+      "norm_label": "onboardingcopytext"
+    },
+    {
+      "label": "OnboardingCopy",
+      "file_type": "code",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L84",
+      "_origin": "ast",
+      "id": "components_onboardingmodal_onboardingcopy",
+      "community": 8,
+      "norm_label": "onboardingcopy"
+    },
+    {
+      "label": "stepVisuals",
+      "file_type": "code",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L96",
+      "_origin": "ast",
+      "id": "components_onboardingmodal_stepvisuals",
+      "community": 8,
+      "norm_label": "stepvisuals"
+    },
+    {
+      "label": "onboardingText",
+      "file_type": "code",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L184",
+      "_origin": "ast",
+      "id": "components_onboardingmodal_onboardingtext",
+      "community": 8,
+      "norm_label": "onboardingtext"
+    },
+    {
+      "label": "buildCopy()",
+      "file_type": "code",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L1746",
+      "_origin": "ast",
+      "id": "components_onboardingmodal_buildcopy",
+      "community": 8,
+      "norm_label": "buildcopy()"
+    },
+    {
+      "label": "getCopy()",
+      "file_type": "code",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L1775",
+      "_origin": "ast",
+      "id": "components_onboardingmodal_getcopy",
+      "community": 8,
+      "norm_label": "getcopy()"
+    },
+    {
+      "label": "OnboardingModal()",
+      "file_type": "code",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L1781",
+      "_origin": "ast",
+      "id": "components_onboardingmodal_onboardingmodal",
+      "community": 8,
+      "norm_label": "onboardingmodal()"
+    },
+    {
+      "label": "IconTile.tsx",
+      "file_type": "code",
+      "source_file": "components/ui/IconTile.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "components_ui_icontile",
+      "community": 8,
+      "norm_label": "icontile.tsx"
+    },
+    {
+      "label": "IconTileProps",
+      "file_type": "code",
+      "source_file": "components/ui/IconTile.tsx",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "components_ui_icontile_icontileprops",
+      "community": 8,
+      "norm_label": "icontileprops"
+    },
+    {
+      "label": "IconTile()",
+      "file_type": "code",
+      "source_file": "components/ui/IconTile.tsx",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "components_ui_icontile_icontile",
+      "community": 8,
+      "norm_label": "icontile()"
+    },
+    {
       "label": "page.tsx",
       "file_type": "code",
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "app_accounts_accountid_page",
       "community": 3,
-      "norm_label": "page.tsx"
+      "norm_label": "page.tsx",
+      "id": "app_accounts_accountid_page"
     },
     {
       "label": "HubCard",
@@ -19,9 +169,9 @@
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L37",
       "_origin": "ast",
-      "id": "app_accounts_accountid_page_hubcard",
       "community": 3,
-      "norm_label": "hubcard"
+      "norm_label": "hubcard",
+      "id": "app_accounts_accountid_page_hubcard"
     },
     {
       "label": "StatCardProps",
@@ -29,9 +179,9 @@
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L46",
       "_origin": "ast",
-      "id": "app_accounts_accountid_page_statcardprops",
       "community": 3,
-      "norm_label": "statcardprops"
+      "norm_label": "statcardprops",
+      "id": "app_accounts_accountid_page_statcardprops"
     },
     {
       "label": "AccountHubLabels",
@@ -39,9 +189,9 @@
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L52",
       "_origin": "ast",
-      "id": "app_accounts_accountid_page_accounthublabels",
       "community": 3,
-      "norm_label": "accounthublabels"
+      "norm_label": "accounthublabels",
+      "id": "app_accounts_accountid_page_accounthublabels"
     },
     {
       "label": "HubCardText",
@@ -49,9 +199,9 @@
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L98",
       "_origin": "ast",
-      "id": "app_accounts_accountid_page_hubcardtext",
       "community": 3,
-      "norm_label": "hubcardtext"
+      "norm_label": "hubcardtext",
+      "id": "app_accounts_accountid_page_hubcardtext"
     },
     {
       "label": "formatOptionalPercent()",
@@ -59,9 +209,9 @@
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L918",
       "_origin": "ast",
-      "id": "app_accounts_accountid_page_formatoptionalpercent",
       "community": 3,
-      "norm_label": "formatoptionalpercent()"
+      "norm_label": "formatoptionalpercent()",
+      "id": "app_accounts_accountid_page_formatoptionalpercent"
     },
     {
       "label": "getResultTone()",
@@ -69,9 +219,9 @@
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L929",
       "_origin": "ast",
-      "id": "app_accounts_accountid_page_getresulttone",
       "community": 3,
-      "norm_label": "getresulttone()"
+      "norm_label": "getresulttone()",
+      "id": "app_accounts_accountid_page_getresulttone"
     },
     {
       "label": "AccountHubCard()",
@@ -79,9 +229,9 @@
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L941",
       "_origin": "ast",
-      "id": "app_accounts_accountid_page_accounthubcard",
       "community": 3,
-      "norm_label": "accounthubcard()"
+      "norm_label": "accounthubcard()",
+      "id": "app_accounts_accountid_page_accounthubcard"
     },
     {
       "label": "StatCard()",
@@ -89,9 +239,9 @@
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L971",
       "_origin": "ast",
-      "id": "app_accounts_accountid_page_statcard",
       "community": 3,
-      "norm_label": "statcard()"
+      "norm_label": "statcard()",
+      "id": "app_accounts_accountid_page_statcard"
     },
     {
       "label": "AccountPage()",
@@ -99,9 +249,9 @@
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L989",
       "_origin": "ast",
-      "id": "app_accounts_accountid_page_accountpage",
       "community": 3,
-      "norm_label": "accountpage()"
+      "norm_label": "accountpage()",
+      "id": "app_accounts_accountid_page_accountpage"
     },
     {
       "label": "page.tsx",
@@ -764,36 +914,6 @@
       "id": "components_topbar_topbar"
     },
     {
-      "label": "IconTile.tsx",
-      "file_type": "code",
-      "source_file": "components/ui/IconTile.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 8,
-      "norm_label": "icontile.tsx",
-      "id": "components_ui_icontile"
-    },
-    {
-      "label": "IconTileProps",
-      "file_type": "code",
-      "source_file": "components/ui/IconTile.tsx",
-      "source_location": "L3",
-      "_origin": "ast",
-      "community": 8,
-      "norm_label": "icontileprops",
-      "id": "components_ui_icontile_icontileprops"
-    },
-    {
-      "label": "IconTile()",
-      "file_type": "code",
-      "source_file": "components/ui/IconTile.tsx",
-      "source_location": "L19",
-      "_origin": "ast",
-      "community": 8,
-      "norm_label": "icontile()",
-      "id": "components_ui_icontile_icontile"
-    },
-    {
       "label": "SignatureEdge.tsx",
       "file_type": "code",
       "source_file": "components/ui/SignatureEdge.tsx",
@@ -1039,7 +1159,7 @@
       "source_file": "app/accounts/[accountId]/rules/page.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 2,
+      "community": 5,
       "norm_label": "page.tsx",
       "id": "app_accounts_accountid_rules_page"
     },
@@ -1049,7 +1169,7 @@
       "source_file": "app/accounts/[accountId]/rules/page.tsx",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 2,
+      "community": 5,
       "norm_label": "statcardprops",
       "id": "app_accounts_accountid_rules_page_statcardprops"
     },
@@ -1059,7 +1179,7 @@
       "source_file": "app/accounts/[accountId]/rules/page.tsx",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 2,
+      "community": 5,
       "norm_label": "disciplinerule",
       "id": "app_accounts_accountid_rules_page_disciplinerule"
     },
@@ -1069,7 +1189,7 @@
       "source_file": "app/accounts/[accountId]/rules/page.tsx",
       "source_location": "L43",
       "_origin": "ast",
-      "community": 2,
+      "community": 5,
       "norm_label": "ruleslabels",
       "id": "app_accounts_accountid_rules_page_ruleslabels"
     },
@@ -1079,7 +1199,7 @@
       "source_file": "app/accounts/[accountId]/rules/page.tsx",
       "source_location": "L719",
       "_origin": "ast",
-      "community": 2,
+      "community": 5,
       "norm_label": "formatpercent()",
       "id": "app_accounts_accountid_rules_page_formatpercent"
     },
@@ -1089,7 +1209,7 @@
       "source_file": "app/accounts/[accountId]/rules/page.tsx",
       "source_location": "L735",
       "_origin": "ast",
-      "community": 2,
+      "community": 5,
       "norm_label": "getresulttone()",
       "id": "app_accounts_accountid_rules_page_getresulttone"
     },
@@ -1099,7 +1219,7 @@
       "source_file": "app/accounts/[accountId]/rules/page.tsx",
       "source_location": "L747",
       "_origin": "ast",
-      "community": 2,
+      "community": 5,
       "norm_label": "progressbar()",
       "id": "app_accounts_accountid_rules_page_progressbar"
     },
@@ -1109,7 +1229,7 @@
       "source_file": "app/accounts/[accountId]/rules/page.tsx",
       "source_location": "L771",
       "_origin": "ast",
-      "community": 2,
+      "community": 5,
       "norm_label": "statcard()",
       "id": "app_accounts_accountid_rules_page_statcard"
     },
@@ -1119,7 +1239,7 @@
       "source_file": "app/accounts/[accountId]/rules/page.tsx",
       "source_location": "L803",
       "_origin": "ast",
-      "community": 2,
+      "community": 5,
       "norm_label": "rulespage()",
       "id": "app_accounts_accountid_rules_page_rulespage"
     },
@@ -1199,7 +1319,7 @@
       "source_file": "lib/permissions.ts",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 1,
+      "community": 2,
       "norm_label": "canusecopilot()",
       "id": "lib_permissions_canusecopilot"
     },
@@ -1219,7 +1339,7 @@
       "source_file": "lib/permissions.ts",
       "source_location": "L66",
       "_origin": "ast",
-      "community": 2,
+      "community": 1,
       "norm_label": "getaccountmembershipwithaccount()",
       "id": "lib_permissions_getaccountmembershipwithaccount"
     }
@@ -1228,12 +1348,186 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L1746",
+      "weight": 1.0,
+      "source": "components_onboardingmodal",
+      "target": "components_onboardingmodal_buildcopy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L1775",
+      "weight": 1.0,
+      "source": "components_onboardingmodal",
+      "target": "components_onboardingmodal_getcopy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "components_onboardingmodal",
+      "target": "components_onboardingmodal_onboardingcard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "components_onboardingmodal",
+      "target": "components_onboardingmodal_onboardingcardtext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L84",
+      "weight": 1.0,
+      "source": "components_onboardingmodal",
+      "target": "components_onboardingmodal_onboardingcopy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "components_onboardingmodal",
+      "target": "components_onboardingmodal_onboardingcopytext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L1781",
+      "weight": 1.0,
+      "source": "components_onboardingmodal",
+      "target": "components_onboardingmodal_onboardingmodal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "components_onboardingmodal",
+      "target": "components_onboardingmodal_onboardingstep",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "components_onboardingmodal",
+      "target": "components_onboardingmodal_onboardingsteptext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L184",
+      "weight": 1.0,
+      "source": "components_onboardingmodal",
+      "target": "components_onboardingmodal_onboardingtext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L96",
+      "weight": 1.0,
+      "source": "components_onboardingmodal",
+      "target": "components_onboardingmodal_stepvisuals",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "components_onboardingmodal",
+      "target": "components_ui_icontile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "components_onboardingmodal",
+      "target": "components_ui_icontile_icontile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L1776",
+      "weight": 1.0,
+      "source": "components_onboardingmodal_getcopy",
+      "target": "components_onboardingmodal_buildcopy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "components/OnboardingModal.tsx",
+      "source_location": "L1789",
+      "weight": 1.0,
+      "source": "components_onboardingmodal_onboardingmodal",
+      "target": "components_onboardingmodal_getcopy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/IconTile.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "components_ui_icontile",
+      "target": "components_ui_icontile_icontile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/IconTile.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "components_ui_icontile",
+      "target": "components_ui_icontile_icontileprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L941",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_page",
-      "target": "app_accounts_accountid_page_accounthubcard",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_page_accounthubcard"
     },
     {
       "relation": "contains",
@@ -1241,9 +1535,9 @@
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L104",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_page",
-      "target": "app_accounts_accountid_page_accounthublabels",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_page_accounthublabels"
     },
     {
       "relation": "contains",
@@ -1251,9 +1545,9 @@
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L989",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_page",
-      "target": "app_accounts_accountid_page_accountpage",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_page_accountpage"
     },
     {
       "relation": "contains",
@@ -1261,9 +1555,9 @@
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L918",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_page",
-      "target": "app_accounts_accountid_page_formatoptionalpercent",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_page_formatoptionalpercent"
     },
     {
       "relation": "contains",
@@ -1271,9 +1565,9 @@
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L929",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_page",
-      "target": "app_accounts_accountid_page_getresulttone",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_page_getresulttone"
     },
     {
       "relation": "contains",
@@ -1281,9 +1575,9 @@
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_page",
-      "target": "app_accounts_accountid_page_hubcard",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_page_hubcard"
     },
     {
       "relation": "contains",
@@ -1291,9 +1585,9 @@
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L98",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_page",
-      "target": "app_accounts_accountid_page_hubcardtext",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_page_hubcardtext"
     },
     {
       "relation": "contains",
@@ -1301,9 +1595,9 @@
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L971",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_page",
-      "target": "app_accounts_accountid_page_statcard",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_page_statcard"
     },
     {
       "relation": "contains",
@@ -1311,9 +1605,9 @@
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_page",
-      "target": "app_accounts_accountid_page_statcardprops",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_page_statcardprops"
     },
     {
       "relation": "calls",
@@ -1322,9 +1616,9 @@
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L1444",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_page_accountpage",
-      "target": "app_accounts_accountid_page_formatoptionalpercent",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_page_formatoptionalpercent"
     },
     {
       "relation": "calls",
@@ -1333,9 +1627,9 @@
       "source_file": "app/accounts/[accountId]/page.tsx",
       "source_location": "L1324",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_page_accountpage",
-      "target": "app_accounts_accountid_page_getresulttone",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_page_getresulttone"
     },
     {
       "relation": "contains",
@@ -1999,26 +2293,6 @@
       "confidence_score": 1.0,
       "source": "components_topbar",
       "target": "components_topbar_topbaruser"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/ui/IconTile.tsx",
-      "source_location": "L19",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_ui_icontile",
-      "target": "components_ui_icontile_icontile"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/ui/IconTile.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_ui_icontile",
-      "target": "components_ui_icontile_icontileprops"
     },
     {
       "relation": "contains",
@@ -2877,5 +3151,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "da01268584de592da9d5ef2e48ec3f3b85b9263e"
+  "built_at_commit": "ddfd6190c34a07823fcb6c6bddb25e4494b9c13c"
 }

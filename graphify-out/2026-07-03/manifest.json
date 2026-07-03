@@ -880,8 +880,8 @@
     "semantic_hash": ""
   },
   "components/OnboardingModal.tsx": {
-    "mtime": 1782558951.6228526,
-    "ast_hash": "445f891bed2f1d4e5f483026310aa9fa",
+    "mtime": 1783090258.9708855,
+    "ast_hash": "b0faaaf130bad3ca35cf15b31e0a981e",
     "semantic_hash": ""
   },
   "components/PWARegister.tsx": {
@@ -1750,8 +1750,8 @@
     "semantic_hash": ""
   },
   ".impeccable/hook.cache.json": {
-    "mtime": 1783078729.8861442,
-    "ast_hash": "e2775d486f07bb0c0b48ffa4a8bfe95c",
+    "mtime": 1783090259.1184878,
+    "ast_hash": "c0ff972139891678696823c77bd60db7",
     "semantic_hash": ""
   },
   "lib/permissions.ts": {
@@ -1760,8 +1760,8 @@
     "semantic_hash": ""
   },
   "components/ui/IconTile.tsx": {
-    "mtime": 1783074909.8845363,
-    "ast_hash": "ad2a90580f47afdb6a97206db2d8114c",
+    "mtime": 1783079590.049663,
+    "ast_hash": "137f098d84f428e4e68f2abcdd5becde",
     "semantic_hash": ""
   },
   "components/ui/SignatureEdge.tsx": {

@@ -455,8 +455,8 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/equity/page.tsx": {
-    "mtime": 1782317520.1064723,
-    "ast_hash": "bfb05f2643d55ec674a969b3558ff930",
+    "mtime": 1783090984.9499855,
+    "ast_hash": "2f92b1b4e97d18f8b4dbfc0ce932b007",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/integrations/actions.ts": {
@@ -855,8 +855,8 @@
     "semantic_hash": ""
   },
   "components/EmptyState.tsx": {
-    "mtime": 1780156470.226418,
-    "ast_hash": "51023cb1188b9cc104586f8970a81102",
+    "mtime": 1783090694.9474158,
+    "ast_hash": "bc4e3173b14aaff6a1fa39a70195886f",
     "semantic_hash": ""
   },
   "components/EquityChart.tsx": {
@@ -1750,8 +1750,8 @@
     "semantic_hash": ""
   },
   ".impeccable/hook.cache.json": {
-    "mtime": 1783090259.1184878,
-    "ast_hash": "c0ff972139891678696823c77bd60db7",
+    "mtime": 1783090985.1103256,
+    "ast_hash": "42832b9ce39cc40fcbc61a931ef902b8",
     "semantic_hash": ""
   },
   "lib/permissions.ts": {
@@ -1787,6 +1787,11 @@
   "components/ui/Input.tsx": {
     "mtime": 1783075852.2617378,
     "ast_hash": "70c0d5bfeb97ee6369a9b30228502ad8",
+    "semantic_hash": ""
+  },
+  "components/equity/DrawdownChart.tsx": {
+    "mtime": 1783090712.291228,
+    "ast_hash": "c6786026d682345cd4f9aed9265ca51e",
     "semantic_hash": ""
   }
 }
