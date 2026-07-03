@@ -145,7 +145,7 @@ export default function ScopeBar({
         {/* ── LEFT: Trader pills (shared accounts only) ── */}
         {showTrader && isShared && (
           <div className="flex flex-wrap items-center gap-3">
-            <p className="shrink-0 text-xs font-semibold uppercase tracking-wider text-gray-500">
+            <p className="shrink-0 text-xs font-semibold uppercase tracking-wider text-muted-faint">
               {TRADER_LABEL[lang]}
             </p>
 
@@ -200,7 +200,7 @@ export default function ScopeBar({
         {/* ── RIGHT: Period pills + navigator ── */}
         {showPeriod && (
         <div className="flex flex-wrap items-center gap-3">
-          <p className="shrink-0 text-xs font-semibold uppercase tracking-wider text-gray-500">
+          <p className="shrink-0 text-xs font-semibold uppercase tracking-wider text-muted-faint">
             {PERIOD_LABEL[lang]}
           </p>
 
@@ -221,7 +221,7 @@ export default function ScopeBar({
               <div className="flex items-center gap-1 rounded-2xl border border-white/10 bg-white/[0.03] px-1 py-1">
                 <button
                   onClick={() => navigate(-1)}
-                  className="flex h-7 w-7 items-center justify-center rounded-xl text-gray-400 transition hover:bg-white/10 hover:text-white"
+                  className="flex h-7 w-7 items-center justify-center rounded-xl text-muted transition hover:bg-white/10 hover:text-white"
                   aria-label="Previous"
                 >
                   ‹
@@ -233,7 +233,7 @@ export default function ScopeBar({
 
                 <button
                   onClick={() => navigate(1)}
-                  className="flex h-7 w-7 items-center justify-center rounded-xl text-gray-400 transition hover:bg-white/10 hover:text-white"
+                  className="flex h-7 w-7 items-center justify-center rounded-xl text-muted transition hover:bg-white/10 hover:text-white"
                   aria-label="Next"
                 >
                   ›
@@ -250,7 +250,7 @@ export default function ScopeBar({
 
       {/* ── Scope description row ── */}
       {showDescription && (
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-muted-faint">
           {scopeDescription}
         </p>
       )}

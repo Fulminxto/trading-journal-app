@@ -777,7 +777,7 @@ export default function Sidebar({
 
             {!isCollapsed && (
               <div>
-                <p className="text-[10px] uppercase tracking-[0.42em] text-gray-600">
+                <p className="text-[10px] uppercase tracking-[0.42em] text-muted-faint">
                   {t.performanceSystem}
                 </p>
 
@@ -793,7 +793,7 @@ export default function Sidebar({
               onClick={onClose}
               aria-label={t.closeSidebar}
               title={t.closeSidebar}
-              className="rounded-lg p-2 text-gray-400 hover:bg-white/10 lg:hidden"
+              className="rounded-lg p-2 text-muted hover:bg-white/10 lg:hidden"
             >
               <X size={20} />
             </button>
@@ -823,7 +823,7 @@ export default function Sidebar({
             accountId &&
             !isAdminArea &&
             !isCollapsed && (
-              <div className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs text-gray-500">
+              <div className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs text-muted-faint">
                 {t.loadingPermissions}
               </div>
             )}

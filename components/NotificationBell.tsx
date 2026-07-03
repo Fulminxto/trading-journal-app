@@ -467,7 +467,7 @@ export default function NotificationBell({
                           )}
                         </span>
 
-                        <span className="ml-auto shrink-0 text-[11px] text-gray-500">
+                        <span className="ml-auto shrink-0 text-[11px] text-muted-faint">
                           {formatRelativeTime(notification.createdAt, locale)}
                         </span>
                       </div>
@@ -476,7 +476,7 @@ export default function NotificationBell({
                         {notification.title}
                       </p>
 
-                      <p className="line-clamp-2 text-xs text-gray-400">
+                      <p className="line-clamp-2 text-xs text-muted">
                         {notification.message}
                       </p>
 
@@ -526,7 +526,7 @@ export default function NotificationBell({
                           )}
                         </span>
 
-                        <span className="ml-auto shrink-0 text-[11px] text-gray-500">
+                        <span className="ml-auto shrink-0 text-[11px] text-muted-faint">
                           {formatRelativeTime(notification.createdAt, locale)}
                         </span>
                       </div>
@@ -535,7 +535,7 @@ export default function NotificationBell({
                         {notification.title}
                       </p>
 
-                      <p className="line-clamp-2 text-xs text-gray-400">
+                      <p className="line-clamp-2 text-xs text-muted">
                         {notification.message}
                       </p>
                     </ListRow>
@@ -543,7 +543,7 @@ export default function NotificationBell({
                 )}
               </div>
             ) : (
-              <div className="p-8 text-center text-sm text-gray-500">
+              <div className="p-8 text-center text-sm text-muted-faint">
                 {t.empty}
               </div>
             )}
