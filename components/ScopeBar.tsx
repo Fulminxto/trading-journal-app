@@ -12,6 +12,7 @@ import {
 } from "@/lib/scope";
 import { type AppLanguage } from "@/lib/i18n";
 import VoltisLightningLoader from "@/components/VoltisLightningLoader";
+import Pill from "@/components/ui/Pill";
 
 type Member = {
   id: string;
@@ -150,50 +151,46 @@ export default function ScopeBar({
 
             <div className={`flex flex-wrap gap-2 ${isPending ? "opacity-50" : ""}`}>
               {/* All traders pill */}
-              <button
+              <Pill
+                active={!selectedMemberId}
                 onClick={() => selectTrader("")}
-                className={`flex items-center gap-2 rounded-2xl border px-3 py-1.5 text-sm transition ${
-                  !selectedMemberId
-                    ? "border-accent/30 bg-accent/10 text-accent"
-                    : "border-white/10 text-gray-400 hover:bg-white/5 hover:text-white"
-                }`}
+                avatar={
+                  <span
+                    className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
+                      !selectedMemberId
+                        ? "bg-accent/20 text-accent"
+                        : "bg-white/10 text-muted"
+                    }`}
+                  >
+                    {ALL_TRADERS_LABEL[lang][0].toUpperCase()}
+                  </span>
+                }
               >
-                <span
-                  className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
-                    !selectedMemberId
-                      ? "bg-accent/20 text-accent"
-                      : "bg-white/10 text-gray-400"
-                  }`}
-                >
-                  {ALL_TRADERS_LABEL[lang][0].toUpperCase()}
-                </span>
-                <span>{ALL_TRADERS_LABEL[lang]}</span>
-              </button>
+                {ALL_TRADERS_LABEL[lang]}
+              </Pill>
 
               {members!.map((member) => {
                 const isActive = selectedMemberId === member.id;
                 const displayName = member.name || member.username;
                 return (
-                  <button
+                  <Pill
                     key={member.id}
+                    active={isActive}
                     onClick={() => selectTrader(member.id)}
-                    className={`flex items-center gap-2 rounded-2xl border px-3 py-1.5 text-sm transition ${
-                      isActive
-                        ? "border-accent/30 bg-accent/10 text-accent"
-                        : "border-white/10 text-gray-400 hover:bg-white/5 hover:text-white"
-                    }`}
+                    avatar={
+                      <span
+                        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
+                          isActive
+                            ? "bg-accent/20 text-accent"
+                            : "bg-white/10 text-muted"
+                        }`}
+                      >
+                        {displayName[0].toUpperCase()}
+                      </span>
+                    }
                   >
-                    <span
-                      className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
-                        isActive
-                          ? "bg-accent/20 text-accent"
-                          : "bg-white/10 text-gray-400"
-                      }`}
-                    >
-                      {displayName[0].toUpperCase()}
-                    </span>
-                    <span>{displayName}</span>
-                  </button>
+                    {displayName}
+                  </Pill>
                 );
               })}
             </div>
@@ -209,22 +206,15 @@ export default function ScopeBar({
 
           <div className={`flex flex-wrap items-center gap-2 ${isPending ? "opacity-50" : ""}`}>
             {/* Preset pills */}
-            {PRESETS.map((preset) => {
-              const isActive = currentPeriod === preset;
-              return (
-                <button
-                  key={preset}
-                  onClick={() => selectPeriod(preset)}
-                  className={`rounded-2xl border px-3 py-1.5 text-sm transition ${
-                    isActive
-                      ? "border-accent/30 bg-accent/10 text-accent"
-                      : "border-white/10 text-gray-400 hover:bg-white/5 hover:text-white"
-                  }`}
-                >
-                  {getPeriodPresetLabel(preset, lang)}
-                </button>
-              );
-            })}
+            {PRESETS.map((preset) => (
+              <Pill
+                key={preset}
+                active={currentPeriod === preset}
+                onClick={() => selectPeriod(preset)}
+              >
+                {getPeriodPresetLabel(preset, lang)}
+              </Pill>
+            ))}
 
             {/* Navigator: only when a specific period is active */}
             {currentPeriod !== "all" && currentRef && (
