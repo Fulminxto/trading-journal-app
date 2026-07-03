@@ -3,6 +3,10 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { logActivity } from "@/lib/activity";
+import {
+    canUseCopilot,
+    getAccountMembershipWithAccount,
+} from "@/lib/permissions";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -46,26 +50,16 @@ async function getCopilotAccess(
         redirect("/login");
     }
 
-    const membership =
-        await prisma.accountMember.findFirst({
-            where: {
-                userId: session.user.id,
-                tradingAccountId,
-            },
-            include: {
-                tradingAccount: true,
-            },
-        });
+    const membership = await getAccountMembershipWithAccount(
+        session.user.id,
+        tradingAccountId
+    );
 
     if (!membership) {
         redirect("/accounts");
     }
 
-    const canUseCopilot =
-        membership.role === "MANAGER" ||
-        membership.canViewCopilot;
-
-    if (!canUseCopilot) {
+    if (!canUseCopilot(membership)) {
         redirect(
             `/accounts/${tradingAccountId}/dashboard`
         );

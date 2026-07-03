@@ -39,6 +39,8 @@ import {
   type IconVariantId,
 } from "@/lib/icon-variants";
 
+import { isManager } from "@/lib/permissions";
+
 type AccountPermissions = {
   role: string;
 
@@ -105,12 +107,6 @@ type SidebarLabels = {
   appUpdates: string;
   maintenance: string;
 };
-
-function isManager(
-  permissions: AccountPermissions
-) {
-  return permissions.role === "MANAGER";
-}
 
 const sidebarLabels: Record<
   AppLanguage,

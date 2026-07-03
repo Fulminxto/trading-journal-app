@@ -16,6 +16,10 @@ import {
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
+  canManageRules,
+  getAccountMembershipWithAccount,
+} from "@/lib/permissions";
+import {
   formatCurrencyByLanguage,
   getLocaleFromLanguage,
   normalizeAppLanguage,
@@ -809,25 +813,16 @@ export default async function RulesPage({
 
   const { accountId } = await params;
 
-  const membership =
-    await prisma.accountMember.findFirst({
-      where: {
-        userId: session.user.id,
-        tradingAccountId: accountId,
-      },
-      include: {
-        tradingAccount: true,
-      },
-    });
+  const membership = await getAccountMembershipWithAccount(
+    session.user.id,
+    accountId
+  );
 
   if (!membership) {
     redirect("/accounts");
   }
 
-  if (
-    membership.role !== "MANAGER" &&
-    !membership.canManageAccount
-  ) {
+  if (!canManageRules(membership)) {
     redirect(`/accounts/${accountId}/dashboard`);
   }
 

@@ -6,6 +6,10 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { logActivity } from "@/lib/activity";
+import {
+  canManageRules,
+  getAccountMembershipWithAccount,
+} from "@/lib/permissions";
 
 function getString(
   formData: FormData,
@@ -89,16 +93,10 @@ async function getRulesAccess(
     redirect("/login");
   }
 
-  const membership =
-    await prisma.accountMember.findFirst({
-      where: {
-        userId: session.user.id,
-        tradingAccountId: accountId,
-      },
-      include: {
-        tradingAccount: true,
-      },
-    });
+  const membership = await getAccountMembershipWithAccount(
+    session.user.id,
+    accountId
+  );
 
   if (!membership) {
     redirect("/accounts");
@@ -113,11 +111,7 @@ async function getRulesAccess(
     );
   }
 
-  const canManageRules =
-    membership.role === "MANAGER" ||
-    membership.canManageAccount;
-
-  if (!canManageRules) {
+  if (!canManageRules(membership)) {
     redirect(
       `/accounts/${accountId}/rules`
     );

@@ -1,5 +1,9 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import {
+    canUseCopilot,
+    getAccountMembershipWithAccount,
+} from "@/lib/permissions";
 import { redirect } from "next/navigation";
 
 import CopilotHero from "@/components/copilot/CopilotHero";
@@ -89,15 +93,10 @@ export default async function CopilotPage({
     const { accountId } = await params;
 
     const [membership, currentUser] = await Promise.all([
-        prisma.accountMember.findFirst({
-            where: {
-                userId: session.user.id,
-                tradingAccountId: accountId,
-            },
-            include: {
-                tradingAccount: true,
-            },
-        }),
+        getAccountMembershipWithAccount(
+            session.user.id,
+            accountId
+        ),
         prisma.user.findUnique({
             where: {
                 id: session.user.id,
@@ -112,10 +111,7 @@ export default async function CopilotPage({
         redirect("/accounts");
     }
 
-    if (
-        membership.role !== "MANAGER" &&
-        !membership.canViewCopilot
-    ) {
+    if (!canUseCopilot(membership)) {
         redirect(`/accounts/${accountId}/dashboard`);
     }
 

@@ -2,8 +2,60 @@
   "directed": false,
   "multigraph": false,
   "graph": {},
-  "nodes": [],
-  "links": [],
+  "nodes": [
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "app/accounts/page.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_accounts_page",
+      "community": 0,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "AccountsCopy",
+      "file_type": "code",
+      "source_file": "app/accounts/page.tsx",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "app_accounts_page_accountscopy",
+      "community": 0,
+      "norm_label": "accountscopy"
+    },
+    {
+      "label": "AccountsPage()",
+      "file_type": "code",
+      "source_file": "app/accounts/page.tsx",
+      "source_location": "L297",
+      "_origin": "ast",
+      "id": "app_accounts_page_accountspage",
+      "community": 0,
+      "norm_label": "accountspage()"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/page.tsx",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "app_accounts_page",
+      "target": "app_accounts_page_accountscopy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/page.tsx",
+      "source_location": "L297",
+      "weight": 1.0,
+      "source": "app_accounts_page",
+      "target": "app_accounts_page_accountspage",
+      "confidence_score": 1.0
+    }
+  ],
   "hyperedges": [],
-  "built_at_commit": "53b3179d11b1cf6fe91869e4b5703dfddc8995a2"
+  "built_at_commit": "18448467cde26f7ce715ab2d3c1df6242ccff20a"
 }

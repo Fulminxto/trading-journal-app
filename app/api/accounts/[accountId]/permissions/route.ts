@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getAccountPermissions } from "@/lib/permissions";
 
 export async function GET(
     _request: NextRequest,
@@ -28,29 +28,10 @@ export async function GET(
 
     const { accountId } = await params;
 
-    const membership =
-        await prisma.accountMember.findFirst({
-            where: {
-                userId: session.user.id,
-                tradingAccountId: accountId,
-            },
-            select: {
-                role: true,
-
-                canCreateTrades: true,
-                canEditTrades: true,
-                canDeleteTrades: true,
-
-                canViewAnalytics: true,
-                canViewReports: true,
-                canViewCopilot: true,
-                canViewMembers: true,
-
-                canManageMembers: true,
-                canManageRoles: true,
-                canManageAccount: true,
-            },
-        });
+    const membership = await getAccountPermissions(
+        session.user.id,
+        accountId
+    );
 
     if (!membership) {
         return NextResponse.json(
