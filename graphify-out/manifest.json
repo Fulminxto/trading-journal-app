@@ -390,8 +390,8 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/calendar/page.tsx": {
-    "mtime": 1782422307.5541224,
-    "ast_hash": "c52f7d0de72801ccced04f084dcd5b8b",
+    "mtime": 1783092357.7075076,
+    "ast_hash": "2a7c3b137749735d3ae174a5702a8348",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/copilot/actions.ts": {
@@ -1750,8 +1750,8 @@
     "semantic_hash": ""
   },
   ".impeccable/hook.cache.json": {
-    "mtime": 1783091659.0043368,
-    "ast_hash": "7849abdf6071eec805926b72dda4daef",
+    "mtime": 1783092357.8574862,
+    "ast_hash": "29f94de570346ffe2d853ada8f966394",
     "semantic_hash": ""
   },
   "lib/permissions.ts": {

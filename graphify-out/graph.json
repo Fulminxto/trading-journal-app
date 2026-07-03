@@ -6,12 +6,102 @@
     {
       "label": "page.tsx",
       "file_type": "code",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_accounts_accountid_calendar_page",
+      "community": 16,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "CalendarLabels",
+      "file_type": "code",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "app_accounts_accountid_calendar_page_calendarlabels",
+      "community": 16,
+      "norm_label": "calendarlabels"
+    },
+    {
+      "label": "getDaysInMonth()",
+      "file_type": "code",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L446",
+      "_origin": "ast",
+      "id": "app_accounts_accountid_calendar_page_getdaysinmonth",
+      "community": 16,
+      "norm_label": "getdaysinmonth()"
+    },
+    {
+      "label": "formatNumber()",
+      "file_type": "code",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L457",
+      "_origin": "ast",
+      "id": "app_accounts_accountid_calendar_page_formatnumber",
+      "community": 16,
+      "norm_label": "formatnumber()"
+    },
+    {
+      "label": "getResultTone()",
+      "file_type": "code",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L467",
+      "_origin": "ast",
+      "id": "app_accounts_accountid_calendar_page_getresulttone",
+      "community": 16,
+      "norm_label": "getresulttone()"
+    },
+    {
+      "label": "getMonthIndex()",
+      "file_type": "code",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L479",
+      "_origin": "ast",
+      "id": "app_accounts_accountid_calendar_page_getmonthindex",
+      "community": 16,
+      "norm_label": "getmonthindex()"
+    },
+    {
+      "label": "getYearValue()",
+      "file_type": "code",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L497",
+      "_origin": "ast",
+      "id": "app_accounts_accountid_calendar_page_getyearvalue",
+      "community": 16,
+      "norm_label": "getyearvalue()"
+    },
+    {
+      "label": "StatCard()",
+      "file_type": "code",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L515",
+      "_origin": "ast",
+      "id": "app_accounts_accountid_calendar_page_statcard",
+      "community": 16,
+      "norm_label": "statcard()"
+    },
+    {
+      "label": "CalendarPage()",
+      "file_type": "code",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L543",
+      "_origin": "ast",
+      "id": "app_accounts_accountid_calendar_page_calendarpage",
+      "community": 16,
+      "norm_label": "calendarpage()"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
       "source_file": "app/accounts/[accountId]/diary/page.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "app_accounts_accountid_diary_page",
       "community": 15,
-      "norm_label": "page.tsx"
+      "norm_label": "page.tsx",
+      "id": "app_accounts_accountid_diary_page"
     },
     {
       "label": "DiaryLabels",
@@ -19,9 +109,9 @@
       "source_file": "app/accounts/[accountId]/diary/page.tsx",
       "source_location": "L36",
       "_origin": "ast",
-      "id": "app_accounts_accountid_diary_page_diarylabels",
       "community": 15,
-      "norm_label": "diarylabels"
+      "norm_label": "diarylabels",
+      "id": "app_accounts_accountid_diary_page_diarylabels"
     },
     {
       "label": "getTradeSourceLabel()",
@@ -29,9 +119,9 @@
       "source_file": "app/accounts/[accountId]/diary/page.tsx",
       "source_location": "L782",
       "_origin": "ast",
-      "id": "app_accounts_accountid_diary_page_gettradesourcelabel",
       "community": 15,
-      "norm_label": "gettradesourcelabel()"
+      "norm_label": "gettradesourcelabel()",
+      "id": "app_accounts_accountid_diary_page_gettradesourcelabel"
     },
     {
       "label": "getTradeSourceClass()",
@@ -39,9 +129,9 @@
       "source_file": "app/accounts/[accountId]/diary/page.tsx",
       "source_location": "L797",
       "_origin": "ast",
-      "id": "app_accounts_accountid_diary_page_gettradesourceclass",
       "community": 15,
-      "norm_label": "gettradesourceclass()"
+      "norm_label": "gettradesourceclass()",
+      "id": "app_accounts_accountid_diary_page_gettradesourceclass"
     },
     {
       "label": "getOutcomeLabel()",
@@ -49,9 +139,9 @@
       "source_file": "app/accounts/[accountId]/diary/page.tsx",
       "source_location": "L815",
       "_origin": "ast",
-      "id": "app_accounts_accountid_diary_page_getoutcomelabel",
       "community": 15,
-      "norm_label": "getoutcomelabel()"
+      "norm_label": "getoutcomelabel()",
+      "id": "app_accounts_accountid_diary_page_getoutcomelabel"
     },
     {
       "label": "getOutcomeClass()",
@@ -59,9 +149,9 @@
       "source_file": "app/accounts/[accountId]/diary/page.tsx",
       "source_location": "L834",
       "_origin": "ast",
-      "id": "app_accounts_accountid_diary_page_getoutcomeclass",
       "community": 15,
-      "norm_label": "getoutcomeclass()"
+      "norm_label": "getoutcomeclass()",
+      "id": "app_accounts_accountid_diary_page_getoutcomeclass"
     },
     {
       "label": "CalendarIcon()",
@@ -69,9 +159,9 @@
       "source_file": "app/accounts/[accountId]/diary/page.tsx",
       "source_location": "L853",
       "_origin": "ast",
-      "id": "app_accounts_accountid_diary_page_calendaricon",
       "community": 15,
-      "norm_label": "calendaricon()"
+      "norm_label": "calendaricon()",
+      "id": "app_accounts_accountid_diary_page_calendaricon"
     },
     {
       "label": "ClockIcon()",
@@ -79,9 +169,9 @@
       "source_file": "app/accounts/[accountId]/diary/page.tsx",
       "source_location": "L864",
       "_origin": "ast",
-      "id": "app_accounts_accountid_diary_page_clockicon",
       "community": 15,
-      "norm_label": "clockicon()"
+      "norm_label": "clockicon()",
+      "id": "app_accounts_accountid_diary_page_clockicon"
     },
     {
       "label": "DiaryPage()",
@@ -89,9 +179,9 @@
       "source_file": "app/accounts/[accountId]/diary/page.tsx",
       "source_location": "L873",
       "_origin": "ast",
-      "id": "app_accounts_accountid_diary_page_diarypage",
       "community": 15,
-      "norm_label": "diarypage()"
+      "norm_label": "diarypage()",
+      "id": "app_accounts_accountid_diary_page_diarypage"
     },
     {
       "label": "page.tsx",
@@ -1359,7 +1449,7 @@
       "source_file": "app/accounts/[accountId]/rules/actions.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 16,
+      "community": 5,
       "norm_label": "actions.ts",
       "id": "app_accounts_accountid_rules_actions"
     },
@@ -1369,7 +1459,7 @@
       "source_file": "app/accounts/[accountId]/rules/actions.ts",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 16,
+      "community": 5,
       "norm_label": "getstring()",
       "id": "app_accounts_accountid_rules_actions_getstring"
     },
@@ -1379,7 +1469,7 @@
       "source_file": "app/accounts/[accountId]/rules/actions.ts",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 16,
+      "community": 5,
       "norm_label": "getnumber()",
       "id": "app_accounts_accountid_rules_actions_getnumber"
     },
@@ -1389,7 +1479,7 @@
       "source_file": "app/accounts/[accountId]/rules/actions.ts",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 16,
+      "community": 5,
       "norm_label": "getnumberinrange()",
       "id": "app_accounts_accountid_rules_actions_getnumberinrange"
     },
@@ -1399,7 +1489,7 @@
       "source_file": "app/accounts/[accountId]/rules/actions.ts",
       "source_location": "L67",
       "_origin": "ast",
-      "community": 16,
+      "community": 5,
       "norm_label": "getintegerinrange()",
       "id": "app_accounts_accountid_rules_actions_getintegerinrange"
     },
@@ -1409,7 +1499,7 @@
       "source_file": "app/accounts/[accountId]/rules/actions.ts",
       "source_location": "L87",
       "_origin": "ast",
-      "community": 16,
+      "community": 5,
       "norm_label": "getrulesaccess()",
       "id": "app_accounts_accountid_rules_actions_getrulesaccess"
     },
@@ -1419,7 +1509,7 @@
       "source_file": "app/accounts/[accountId]/rules/actions.ts",
       "source_location": "L123",
       "_origin": "ast",
-      "community": 16,
+      "community": 5,
       "norm_label": "savetradinggoals()",
       "id": "app_accounts_accountid_rules_actions_savetradinggoals"
     },
@@ -1519,7 +1609,7 @@
       "source_file": "app/api/accounts/[accountId]/permissions/route.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 1,
+      "community": 5,
       "norm_label": "route.ts",
       "id": "app_api_accounts_accountid_permissions_route"
     },
@@ -1529,7 +1619,7 @@
       "source_file": "app/api/accounts/[accountId]/permissions/route.ts",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 1,
+      "community": 5,
       "norm_label": "get()",
       "id": "app_api_accounts_accountid_permissions_route_get"
     },
@@ -1539,7 +1629,7 @@
       "source_file": "lib/permissions.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 1,
+      "community": 5,
       "norm_label": "permissions.ts",
       "id": "lib_permissions"
     },
@@ -1549,7 +1639,7 @@
       "source_file": "lib/permissions.ts",
       "source_location": "L3",
       "_origin": "ast",
-      "community": 1,
+      "community": 5,
       "norm_label": "accountpermissionflags",
       "id": "lib_permissions_accountpermissionflags"
     },
@@ -1559,7 +1649,7 @@
       "source_file": "lib/permissions.ts",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 1,
+      "community": 5,
       "norm_label": "permission_select",
       "id": "lib_permissions_permission_select"
     },
@@ -1569,7 +1659,7 @@
       "source_file": "lib/permissions.ts",
       "source_location": "L37",
       "_origin": "ast",
-      "community": 1,
+      "community": 5,
       "norm_label": "ismanager()",
       "id": "lib_permissions_ismanager"
     },
@@ -1579,7 +1669,7 @@
       "source_file": "lib/permissions.ts",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 1,
+      "community": 5,
       "norm_label": "canmanagerules()",
       "id": "lib_permissions_canmanagerules"
     },
@@ -1599,7 +1689,7 @@
       "source_file": "lib/permissions.ts",
       "source_location": "L53",
       "_origin": "ast",
-      "community": 1,
+      "community": 5,
       "norm_label": "getaccountpermissions()",
       "id": "lib_permissions_getaccountpermissions"
     },
@@ -1609,7 +1699,7 @@
       "source_file": "lib/permissions.ts",
       "source_location": "L66",
       "_origin": "ast",
-      "community": 1,
+      "community": 5,
       "norm_label": "getaccountmembershipwithaccount()",
       "id": "lib_permissions_getaccountmembershipwithaccount"
     }
@@ -1618,12 +1708,147 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_calendar_page",
+      "target": "app_accounts_accountid_calendar_page_calendarlabels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L543",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_calendar_page",
+      "target": "app_accounts_accountid_calendar_page_calendarpage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L457",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_calendar_page",
+      "target": "app_accounts_accountid_calendar_page_formatnumber",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L446",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_calendar_page",
+      "target": "app_accounts_accountid_calendar_page_getdaysinmonth",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L479",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_calendar_page",
+      "target": "app_accounts_accountid_calendar_page_getmonthindex",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L467",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_calendar_page",
+      "target": "app_accounts_accountid_calendar_page_getresulttone",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L497",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_calendar_page",
+      "target": "app_accounts_accountid_calendar_page_getyearvalue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L515",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_calendar_page",
+      "target": "app_accounts_accountid_calendar_page_statcard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L690",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_calendar_page_calendarpage",
+      "target": "app_accounts_accountid_calendar_page_getdaysinmonth",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L1110",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_calendar_page_calendarpage",
+      "target": "app_accounts_accountid_calendar_page_formatnumber",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L1021",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_calendar_page_calendarpage",
+      "target": "app_accounts_accountid_calendar_page_getresulttone",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L635",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_calendar_page_calendarpage",
+      "target": "app_accounts_accountid_calendar_page_getmonthindex",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/accounts/[accountId]/calendar/page.tsx",
+      "source_location": "L638",
+      "weight": 1.0,
+      "source": "app_accounts_accountid_calendar_page_calendarpage",
+      "target": "app_accounts_accountid_calendar_page_getyearvalue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "app/accounts/[accountId]/diary/page.tsx",
       "source_location": "L853",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_diary_page",
-      "target": "app_accounts_accountid_diary_page_calendaricon",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_diary_page_calendaricon"
     },
     {
       "relation": "contains",
@@ -1631,9 +1856,9 @@
       "source_file": "app/accounts/[accountId]/diary/page.tsx",
       "source_location": "L864",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_diary_page",
-      "target": "app_accounts_accountid_diary_page_clockicon",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_diary_page_clockicon"
     },
     {
       "relation": "contains",
@@ -1641,9 +1866,9 @@
       "source_file": "app/accounts/[accountId]/diary/page.tsx",
       "source_location": "L131",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_diary_page",
-      "target": "app_accounts_accountid_diary_page_diarylabels",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_diary_page_diarylabels"
     },
     {
       "relation": "contains",
@@ -1651,9 +1876,9 @@
       "source_file": "app/accounts/[accountId]/diary/page.tsx",
       "source_location": "L873",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_diary_page",
-      "target": "app_accounts_accountid_diary_page_diarypage",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_diary_page_diarypage"
     },
     {
       "relation": "contains",
@@ -1661,9 +1886,9 @@
       "source_file": "app/accounts/[accountId]/diary/page.tsx",
       "source_location": "L834",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_diary_page",
-      "target": "app_accounts_accountid_diary_page_getoutcomeclass",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_diary_page_getoutcomeclass"
     },
     {
       "relation": "contains",
@@ -1671,9 +1896,9 @@
       "source_file": "app/accounts/[accountId]/diary/page.tsx",
       "source_location": "L815",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_diary_page",
-      "target": "app_accounts_accountid_diary_page_getoutcomelabel",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_diary_page_getoutcomelabel"
     },
     {
       "relation": "contains",
@@ -1681,9 +1906,9 @@
       "source_file": "app/accounts/[accountId]/diary/page.tsx",
       "source_location": "L797",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_diary_page",
-      "target": "app_accounts_accountid_diary_page_gettradesourceclass",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_diary_page_gettradesourceclass"
     },
     {
       "relation": "contains",
@@ -1691,9 +1916,9 @@
       "source_file": "app/accounts/[accountId]/diary/page.tsx",
       "source_location": "L782",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_accounts_accountid_diary_page",
-      "target": "app_accounts_accountid_diary_page_gettradesourcelabel",
-      "confidence_score": 1.0
+      "target": "app_accounts_accountid_diary_page_gettradesourcelabel"
     },
     {
       "relation": "contains",
@@ -3706,5 +3931,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "3ab49fc586651a780a9ee210a16281691629a4d7"
+  "built_at_commit": "30e5c149c2fcb8eed58da428c09d1b1873fc0cc6"
 }

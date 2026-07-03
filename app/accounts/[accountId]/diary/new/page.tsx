@@ -8,7 +8,20 @@ import {
   type AppLanguage,
 } from "@/lib/i18n";
 
+import Card from "@/components/ui/Card";
+import Input from "@/components/ui/Input";
+
 import { createAccountTrade } from "../actions";
+
+// CTA Fulmine: REBRAND_BLUEPRINT.md §6 names "Add trade" explicitly.
+const CTA_GRADIENT =
+  "linear-gradient(120deg, #2E62E6, #3f86e8 60%, #5BE0FF)";
+
+const selectClass =
+  "w-full rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-2 px-4 py-3 text-sm text-white outline-none transition-colors duration-base focus:border-accent-bright/50";
+
+const textareaClass =
+  "w-full min-h-[90px] rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-2 px-4 py-3 text-sm text-white outline-none transition-colors duration-base focus:border-accent-bright/50";
 
 function CalendarIcon() {
   return (
@@ -27,6 +40,59 @@ function ClockIcon() {
       <circle cx="12" cy="12" r="10"/>
       <polyline points="12 6 12 12 16 14"/>
     </svg>
+  );
+}
+
+function Field({
+  label,
+  htmlFor,
+  className = "",
+  children,
+}: {
+  label: string;
+  htmlFor?: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={className}>
+      <label
+        htmlFor={htmlFor}
+        className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-muted-faint"
+      >
+        {label}
+      </label>
+      {children}
+    </div>
+  );
+}
+
+function FormSection({
+  number,
+  title,
+  first = false,
+  children,
+}: {
+  number: string;
+  title: string;
+  first?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={first ? "" : "mt-8 border-t border-white/[0.06] pt-8"}>
+      <div className="mb-5 flex items-center gap-3">
+        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-xs font-black text-accent-bright">
+          {number}
+        </span>
+        <h2 className="text-sm font-black uppercase tracking-[0.14em] text-white">
+          {title}
+        </h2>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {children}
+      </div>
+    </div>
   );
 }
 
@@ -70,6 +136,14 @@ type NewTradeLabels = {
   tired: string;
   stressed: string;
   impulsive: string;
+
+  sectionExecution: string;
+  sectionRisk: string;
+  sectionResult: string;
+  sectionContext: string;
+  sectionReview: string;
+  direction: string;
+  strategy: string;
 };
 
 const newTradeLabels: Record<AppLanguage, NewTradeLabels> = {
@@ -113,6 +187,14 @@ const newTradeLabels: Record<AppLanguage, NewTradeLabels> = {
     tired: "Stanco",
     stressed: "Stressato",
     impulsive: "Impulsivo",
+
+    sectionExecution: "Esecuzione",
+    sectionRisk: "Livelli & Rischio",
+    sectionResult: "Chiusura & Risultato",
+    sectionContext: "Contesto",
+    sectionReview: "Review personale",
+    direction: "Direzione",
+    strategy: "Strategia",
   },
 
   en: {
@@ -155,6 +237,14 @@ const newTradeLabels: Record<AppLanguage, NewTradeLabels> = {
     tired: "Tired",
     stressed: "Stressed",
     impulsive: "Impulsive",
+
+    sectionExecution: "Execution",
+    sectionRisk: "Levels & Risk",
+    sectionResult: "Close & Result",
+    sectionContext: "Context",
+    sectionReview: "Self-Review",
+    direction: "Direction",
+    strategy: "Strategy",
   },
 
   uk: {
@@ -197,6 +287,14 @@ const newTradeLabels: Record<AppLanguage, NewTradeLabels> = {
     tired: "Втомлений",
     stressed: "Напружений",
     impulsive: "Імпульсивний",
+
+    sectionExecution: "Виконання",
+    sectionRisk: "Рівні та ризик",
+    sectionResult: "Закриття та результат",
+    sectionContext: "Контекст",
+    sectionReview: "Особистий review",
+    direction: "Напрямок",
+    strategy: "Стратегія",
   },
 
   ru: {
@@ -239,6 +337,14 @@ const newTradeLabels: Record<AppLanguage, NewTradeLabels> = {
     tired: "Уставший",
     stressed: "В стрессе",
     impulsive: "Импульсивный",
+
+    sectionExecution: "Исполнение",
+    sectionRisk: "Уровни и риск",
+    sectionResult: "Закрытие и результат",
+    sectionContext: "Контекст",
+    sectionReview: "Личный review",
+    direction: "Направление",
+    strategy: "Стратегия",
   },
 
   es: {
@@ -281,6 +387,14 @@ const newTradeLabels: Record<AppLanguage, NewTradeLabels> = {
     tired: "Cansado",
     stressed: "Estresado",
     impulsive: "Impulsivo",
+
+    sectionExecution: "Ejecución",
+    sectionRisk: "Niveles y riesgo",
+    sectionResult: "Cierre y resultado",
+    sectionContext: "Contexto",
+    sectionReview: "Auto-review",
+    direction: "Dirección",
+    strategy: "Estrategia",
   },
 
   fr: {
@@ -323,6 +437,14 @@ const newTradeLabels: Record<AppLanguage, NewTradeLabels> = {
     tired: "Fatigué",
     stressed: "Stressé",
     impulsive: "Impulsif",
+
+    sectionExecution: "Exécution",
+    sectionRisk: "Niveaux & risque",
+    sectionResult: "Clôture & résultat",
+    sectionContext: "Contexte",
+    sectionReview: "Auto-review",
+    direction: "Direction",
+    strategy: "Stratégie",
   },
 
   de: {
@@ -365,6 +487,14 @@ const newTradeLabels: Record<AppLanguage, NewTradeLabels> = {
     tired: "Müde",
     stressed: "Gestresst",
     impulsive: "Impulsiv",
+
+    sectionExecution: "Execution",
+    sectionRisk: "Level & Risiko",
+    sectionResult: "Abschluss & Ergebnis",
+    sectionContext: "Kontext",
+    sectionReview: "Selbstreview",
+    direction: "Richtung",
+    strategy: "Strategie",
   },
 };
 
@@ -424,251 +554,275 @@ export default async function NewTradePage({
 
   return (
     <div>
-      <div className="mb-8">
+      <div className="reveal-rise mb-8" style={{ animationDelay: "0ms" }}>
         <Link
           href={`/accounts/${accountId}/diary`}
-          className="inline-flex items-center gap-1.5 text-sm text-gray-400 transition hover:text-white"
+          className="inline-flex items-center gap-1.5 text-sm text-muted transition-colors duration-base hover:text-white"
         >
           ← {t.backToDiary}
         </Link>
 
-        <p className="mt-4 text-sm text-gray-400">
+        <p className="mt-4 text-sm text-muted">
           {t.eyebrow}
         </p>
 
-        <h1 className="text-3xl font-bold sm:text-4xl">
+        <h1 className="text-hero">
           {t.title}
         </h1>
 
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-400">
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-muted">
           {t.description}
         </p>
       </div>
 
-      <form
-        action={createAccountTrade.bind(null, accountId)}
-        className="grid grid-cols-1 gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:grid-cols-2 xl:grid-cols-4"
-      >
-        <div className="dt-wrap rounded-xl bg-zinc-900">
-          <input
-            name="openDate"
-            type="date"
-            aria-label={t.openDate}
-            className="w-full bg-transparent p-3 pr-8 outline-none"
-            required
-          />
-          <span className="dt-icon" aria-hidden="true"><CalendarIcon /></span>
-        </div>
+      <div className="reveal-rise" style={{ animationDelay: "60ms" }}>
+        <Card variant="hero" className="p-5 sm:p-8">
+          <form
+            action={createAccountTrade.bind(null, accountId)}
+          >
+            <FormSection number="01" title={t.sectionExecution} first>
+              <Field label={t.openDate} htmlFor="openDate">
+                <div className="dt-wrap">
+                  <Input
+                    id="openDate"
+                    name="openDate"
+                    type="date"
+                    className="pr-8"
+                    required
+                  />
+                  <span className="dt-icon" aria-hidden="true"><CalendarIcon /></span>
+                </div>
+              </Field>
 
-        <div className="dt-wrap rounded-xl bg-zinc-900">
-          <input
-            name="openTime"
-            type="time"
-            aria-label={t.openTime}
-            className="w-full bg-transparent p-3 pr-8 outline-none"
-          />
-          <span className="dt-icon" aria-hidden="true"><ClockIcon /></span>
-        </div>
+              <Field label={t.openTime} htmlFor="openTime">
+                <div className="dt-wrap">
+                  <Input
+                    id="openTime"
+                    name="openTime"
+                    type="time"
+                    className="pr-8"
+                  />
+                  <span className="dt-icon" aria-hidden="true"><ClockIcon /></span>
+                </div>
+              </Field>
 
-        <input
-          name="reason"
-          placeholder={t.reason}
-          className="rounded-xl bg-zinc-900 p-3 outline-none"
-        />
+              <Field label={t.instrument} htmlFor="symbol">
+                <select
+                  id="symbol"
+                  name="symbol"
+                  required
+                  defaultValue=""
+                  className={selectClass}
+                >
+                  <option value="">{t.instrument}</option>
+                  <optgroup label="Forex">
+                    <option value="EURUSD">EURUSD</option>
+                    <option value="GBPUSD">GBPUSD</option>
+                    <option value="USDJPY">USDJPY</option>
+                    <option value="AUDUSD">AUDUSD</option>
+                    <option value="USDCAD">USDCAD</option>
+                    <option value="USDCHF">USDCHF</option>
+                    <option value="NZDUSD">NZDUSD</option>
+                  </optgroup>
+                  <optgroup label={t.goldAndCommodities}>
+                    <option value="XAUUSD">XAUUSD</option>
+                    <option value="XAGUSD">XAGUSD</option>
+                    <option value="USOIL">USOIL</option>
+                    <option value="UKOIL">UKOIL</option>
+                  </optgroup>
+                  <optgroup label={t.crypto}>
+                    <option value="BTCUSD">BTCUSD</option>
+                    <option value="ETHUSD">ETHUSD</option>
+                    <option value="SOLUSD">SOLUSD</option>
+                    <option value="XRPUSD">XRPUSD</option>
+                  </optgroup>
+                  <optgroup label={t.indices}>
+                    <option value="NASDAQ">NASDAQ</option>
+                    <option value="S&P500">S&P500</option>
+                    <option value="DAX40">DAX40</option>
+                    <option value="DJI">DJI</option>
+                  </optgroup>
+                </select>
+              </Field>
 
-        <select
-          name="strategyId"
-          className="rounded-xl bg-zinc-900 p-3 outline-none"
-        >
-          <option value="">{t.noStrategy}</option>
-          {strategies.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.name}
-            </option>
-          ))}
-        </select>
+              <Field label={t.amount} htmlFor="amount">
+                <Input id="amount" name="amount" placeholder={t.amount} />
+              </Field>
 
-        <select
-          name="symbol"
-          required
-          className="rounded-xl bg-zinc-900 p-3 outline-none"
-        >
-          <option value="">{t.instrument}</option>
-          <optgroup label="Forex">
-            <option value="EURUSD">EURUSD</option>
-            <option value="GBPUSD">GBPUSD</option>
-            <option value="USDJPY">USDJPY</option>
-            <option value="AUDUSD">AUDUSD</option>
-            <option value="USDCAD">USDCAD</option>
-            <option value="USDCHF">USDCHF</option>
-            <option value="NZDUSD">NZDUSD</option>
-          </optgroup>
-          <optgroup label={t.goldAndCommodities}>
-            <option value="XAUUSD">XAUUSD</option>
-            <option value="XAGUSD">XAGUSD</option>
-            <option value="USOIL">USOIL</option>
-            <option value="UKOIL">UKOIL</option>
-          </optgroup>
-          <optgroup label={t.crypto}>
-            <option value="BTCUSD">BTCUSD</option>
-            <option value="ETHUSD">ETHUSD</option>
-            <option value="SOLUSD">SOLUSD</option>
-            <option value="XRPUSD">XRPUSD</option>
-          </optgroup>
-          <optgroup label={t.indices}>
-            <option value="NASDAQ">NASDAQ</option>
-            <option value="S&P500">S&P500</option>
-            <option value="DAX40">DAX40</option>
-            <option value="DJI">DJI</option>
-          </optgroup>
-        </select>
+              <Field label={t.direction} htmlFor="direction">
+                <select
+                  id="direction"
+                  name="direction"
+                  defaultValue="LONG"
+                  className={selectClass}
+                >
+                  <option value="LONG">LONG</option>
+                  <option value="SHORT">SHORT</option>
+                </select>
+              </Field>
+            </FormSection>
 
-        <select
-          name="direction"
-          className="rounded-xl bg-zinc-900 p-3 outline-none"
-        >
-          <option value="LONG">LONG</option>
-          <option value="SHORT">SHORT</option>
-        </select>
+            <FormSection number="02" title={t.sectionRisk}>
+              <Field label={t.openingPrice} htmlFor="openingPrice">
+                <Input id="openingPrice" name="openingPrice" placeholder={t.openingPrice} />
+              </Field>
 
-        <input
-          name="amount"
-          placeholder={t.amount}
-          className="rounded-xl bg-zinc-900 p-3 outline-none"
-        />
+              <Field label={t.stopLoss} htmlFor="stopLoss">
+                <Input id="stopLoss" name="stopLoss" placeholder={t.stopLoss} />
+              </Field>
 
-        <input
-          name="openingPrice"
-          placeholder={t.openingPrice}
-          className="rounded-xl bg-zinc-900 p-3 outline-none"
-        />
+              <Field label={t.takeProfit} htmlFor="takeProfit">
+                <Input id="takeProfit" name="takeProfit" placeholder={t.takeProfit} />
+              </Field>
 
-        <input
-          name="stopLoss"
-          placeholder={t.stopLoss}
-          className="rounded-xl bg-zinc-900 p-3 outline-none"
-        />
+              <Field label={t.riskReward} htmlFor="riskReward">
+                <Input id="riskReward" name="riskReward" placeholder={t.riskReward} />
+              </Field>
+            </FormSection>
 
-        <input
-          name="takeProfit"
-          placeholder={t.takeProfit}
-          className="rounded-xl bg-zinc-900 p-3 outline-none"
-        />
+            <FormSection number="03" title={t.sectionResult}>
+              <Field label={t.closeDate} htmlFor="closeDate">
+                <div className="dt-wrap">
+                  <Input
+                    id="closeDate"
+                    name="closeDate"
+                    type="date"
+                    className="pr-8"
+                  />
+                  <span className="dt-icon" aria-hidden="true"><CalendarIcon /></span>
+                </div>
+              </Field>
 
-        <input
-          name="riskReward"
-          placeholder={t.riskReward}
-          className="rounded-xl bg-zinc-900 p-3 outline-none"
-        />
+              <Field label={t.closingPrice} htmlFor="closingPrice">
+                <Input id="closingPrice" name="closingPrice" placeholder={t.closingPrice} />
+              </Field>
 
-        <div className="dt-wrap rounded-xl bg-zinc-900">
-          <input
-            name="closeDate"
-            type="date"
-            aria-label={t.closeDate}
-            className="w-full bg-transparent p-3 pr-8 outline-none"
-          />
-          <span className="dt-icon" aria-hidden="true"><CalendarIcon /></span>
-        </div>
+              <Field label={t.outcome} htmlFor="outcome">
+                <select
+                  id="outcome"
+                  name="outcome"
+                  defaultValue=""
+                  className={selectClass}
+                >
+                  <option value="">{t.outcome}</option>
+                  <option value="win">{t.win}</option>
+                  <option value="loss">{t.loss}</option>
+                  <option value="be">{t.be}</option>
+                </select>
+              </Field>
 
-        <input
-          name="closingPrice"
-          placeholder={t.closingPrice}
-          className="rounded-xl bg-zinc-900 p-3 outline-none"
-        />
+              <Field label={t.resultUsd} htmlFor="resultUsd">
+                <Input id="resultUsd" name="resultUsd" placeholder={t.resultUsd} />
+              </Field>
+            </FormSection>
 
-        <select
-          name="outcome"
-          className="rounded-xl bg-zinc-900 p-3 outline-none"
-        >
-          <option value="">{t.outcome}</option>
-          <option value="win">{t.win}</option>
-          <option value="loss">{t.loss}</option>
-          <option value="be">{t.be}</option>
-        </select>
+            <FormSection number="04" title={t.sectionContext}>
+              <Field label={t.reason} htmlFor="reason">
+                <Input id="reason" name="reason" placeholder={t.reason} />
+              </Field>
 
-        <input
-          name="resultUsd"
-          placeholder={t.resultUsd}
-          className="rounded-xl bg-zinc-900 p-3 outline-none"
-        />
+              <Field label={t.strategy} htmlFor="strategyId">
+                <select
+                  id="strategyId"
+                  name="strategyId"
+                  defaultValue=""
+                  className={selectClass}
+                >
+                  <option value="">{t.noStrategy}</option>
+                  {strategies.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.name}
+                    </option>
+                  ))}
+                </select>
+              </Field>
 
-        <select
-          name="session"
-          className="rounded-xl bg-zinc-900 p-3 outline-none"
-        >
-          <option value="">{t.session}</option>
-          <option value="ASIA">Asia</option>
-          <option value="LONDON">London</option>
-          <option value="NEW_YORK">New York</option>
-          <option value="OVERLAP">Overlap</option>
-        </select>
+              <Field label={t.session} htmlFor="session">
+                <select
+                  id="session"
+                  name="session"
+                  defaultValue=""
+                  className={selectClass}
+                >
+                  <option value="">{t.session}</option>
+                  <option value="ASIA">Asia</option>
+                  <option value="LONDON">London</option>
+                  <option value="NEW_YORK">New York</option>
+                  <option value="OVERLAP">Overlap</option>
+                </select>
+              </Field>
 
-        <select
-          name="emotionalState"
-          className="rounded-xl bg-zinc-900 p-3 outline-none"
-        >
-          <option value="">{t.emotionalState}</option>
-          <option value="CALM">{t.calm}</option>
-          <option value="FOCUSED">{t.focused}</option>
-          <option value="CONFIDENT">{t.confident}</option>
-          <option value="TIRED">{t.tired}</option>
-          <option value="STRESSED">{t.stressed}</option>
-          <option value="IMPULSIVE">{t.impulsive}</option>
-        </select>
+              <Field label={t.emotionalState} htmlFor="emotionalState">
+                <select
+                  id="emotionalState"
+                  name="emotionalState"
+                  defaultValue=""
+                  className={selectClass}
+                >
+                  <option value="">{t.emotionalState}</option>
+                  <option value="CALM">{t.calm}</option>
+                  <option value="FOCUSED">{t.focused}</option>
+                  <option value="CONFIDENT">{t.confident}</option>
+                  <option value="TIRED">{t.tired}</option>
+                  <option value="STRESSED">{t.stressed}</option>
+                  <option value="IMPULSIVE">{t.impulsive}</option>
+                </select>
+              </Field>
+            </FormSection>
 
-        <input
-          name="setupQuality"
-          type="number"
-          min="1"
-          max="10"
-          placeholder={t.setupQuality}
-          className="rounded-xl bg-zinc-900 p-3 outline-none"
-        />
+            <FormSection number="05" title={t.sectionReview}>
+              <Field label={t.setupQuality} htmlFor="setupQuality">
+                <Input id="setupQuality" name="setupQuality" type="number" min="1" max="10" placeholder="1-10" />
+              </Field>
 
-        <input
-          name="executionRating"
-          type="number"
-          min="1"
-          max="10"
-          placeholder={t.executionRating}
-          className="rounded-xl bg-zinc-900 p-3 outline-none"
-        />
+              <Field label={t.executionRating} htmlFor="executionRating">
+                <Input id="executionRating" name="executionRating" type="number" min="1" max="10" placeholder="1-10" />
+              </Field>
 
-        <input
-          name="confidence"
-          type="number"
-          min="1"
-          max="10"
-          placeholder={t.confidence}
-          className="rounded-xl bg-zinc-900 p-3 outline-none"
-        />
+              <Field label={t.confidence} htmlFor="confidence">
+                <Input id="confidence" name="confidence" type="number" min="1" max="10" placeholder="1-10" />
+              </Field>
 
-        <textarea
-          name="mistakes"
-          placeholder={t.mistakes}
-          className="min-h-[90px] rounded-xl bg-zinc-900 p-3 outline-none sm:col-span-2"
-        />
+              <div className="hidden xl:block" aria-hidden="true" />
 
-        <textarea
-          name="lessonsLearned"
-          placeholder={t.lessonsLearned}
-          className="min-h-[90px] rounded-xl bg-zinc-900 p-3 outline-none sm:col-span-2"
-        />
+              <Field label={t.mistakes} htmlFor="mistakes" className="sm:col-span-2 xl:col-span-2">
+                <textarea
+                  id="mistakes"
+                  name="mistakes"
+                  placeholder={t.mistakes}
+                  className={textareaClass}
+                />
+              </Field>
 
-        <textarea
-          name="notes"
-          placeholder={t.notes}
-          className="min-h-[90px] rounded-xl bg-zinc-900 p-3 outline-none sm:col-span-2 xl:col-span-4"
-        />
+              <Field label={t.lessonsLearned} htmlFor="lessonsLearned" className="sm:col-span-2 xl:col-span-2">
+                <textarea
+                  id="lessonsLearned"
+                  name="lessonsLearned"
+                  placeholder={t.lessonsLearned}
+                  className={textareaClass}
+                />
+              </Field>
 
-        <button
-          type="submit"
-          className="rounded-xl bg-accent p-3 font-bold text-white transition hover:bg-accent-bright sm:col-span-2 xl:col-span-4"
-        >
-          {t.addTrade}
-        </button>
-      </form>
+              <Field label={t.notes} htmlFor="notes" className="sm:col-span-2 xl:col-span-4">
+                <textarea
+                  id="notes"
+                  name="notes"
+                  placeholder={t.notes}
+                  className={textareaClass}
+                />
+              </Field>
+            </FormSection>
+
+            <button
+              type="submit"
+              style={{ background: CTA_GRADIENT }}
+              className="mt-8 w-full rounded-inner p-3 font-semibold text-white transition-shadow duration-base hover:shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)]"
+            >
+              {t.addTrade}
+            </button>
+          </form>
+        </Card>
+      </div>
     </div>
   );
 }

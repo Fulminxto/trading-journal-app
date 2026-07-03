@@ -7,7 +7,74 @@ import {
   type AppLanguage,
 } from "@/lib/i18n";
 
+import Card from "@/components/ui/Card";
+import Input from "@/components/ui/Input";
+
 import { updateAccountTrade } from "../../actions";
+
+// CTA Fulmine: matches "Save changes" to the same gradient treatment
+// New Trade's "Add trade" uses (REBRAND_BLUEPRINT.md §6).
+const CTA_GRADIENT =
+  "linear-gradient(120deg, #2E62E6, #3f86e8 60%, #5BE0FF)";
+
+const selectClass =
+  "w-full rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-2 px-4 py-3 text-sm text-white outline-none transition-colors duration-base focus:border-accent-bright/50";
+
+const textareaClass =
+  "w-full min-h-[90px] rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-2 px-4 py-3 text-sm text-white outline-none transition-colors duration-base focus:border-accent-bright/50";
+
+function Field({
+  label,
+  htmlFor,
+  className = "",
+  children,
+}: {
+  label: string;
+  htmlFor?: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={className}>
+      <label
+        htmlFor={htmlFor}
+        className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-muted-faint"
+      >
+        {label}
+      </label>
+      {children}
+    </div>
+  );
+}
+
+function FormSection({
+  number,
+  title,
+  first = false,
+  children,
+}: {
+  number: string;
+  title: string;
+  first?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={first ? "" : "mt-8 border-t border-white/[0.06] pt-8"}>
+      <div className="mb-5 flex items-center gap-3">
+        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-xs font-black text-accent-bright">
+          {number}
+        </span>
+        <h2 className="text-sm font-black uppercase tracking-[0.14em] text-white">
+          {title}
+        </h2>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {children}
+      </div>
+    </div>
+  );
+}
 
 function formatDateForInput(date: Date | null) {
   if (!date) return "";
@@ -45,6 +112,17 @@ type EditTradeLabels = {
   notes: string;
   saveChanges: string;
   noStrategyOption: string;
+
+  openDate: string;
+  openTime: string;
+  closeDate: string;
+  direction: string;
+
+  sectionExecution: string;
+  sectionRisk: string;
+  sectionResult: string;
+  sectionContext: string;
+  sectionNotes: string;
 };
 
 const editTradeLabels: Record<
@@ -84,6 +162,17 @@ const editTradeLabels: Record<
     notes: "Note",
     saveChanges: "Salva modifiche",
     noStrategyOption: "— Nessuna strategia dal Playbook —",
+
+    openDate: "Data apertura",
+    openTime: "Ora apertura",
+    closeDate: "Data chiusura",
+    direction: "Direzione",
+
+    sectionExecution: "Esecuzione",
+    sectionRisk: "Livelli & Rischio",
+    sectionResult: "Chiusura & Risultato",
+    sectionContext: "Contesto",
+    sectionNotes: "Note",
   },
 
   en: {
@@ -119,6 +208,17 @@ const editTradeLabels: Record<
     notes: "Notes",
     saveChanges: "Save changes",
     noStrategyOption: "— No Playbook strategy —",
+
+    openDate: "Open date",
+    openTime: "Open time",
+    closeDate: "Close date",
+    direction: "Direction",
+
+    sectionExecution: "Execution",
+    sectionRisk: "Levels & Risk",
+    sectionResult: "Close & Result",
+    sectionContext: "Context",
+    sectionNotes: "Notes",
   },
 
   uk: {
@@ -154,6 +254,17 @@ const editTradeLabels: Record<
     notes: "Нотатки",
     saveChanges: "Зберегти зміни",
     noStrategyOption: "— Без стратегії Playbook —",
+
+    openDate: "Дата відкриття",
+    openTime: "Час відкриття",
+    closeDate: "Дата закриття",
+    direction: "Напрямок",
+
+    sectionExecution: "Виконання",
+    sectionRisk: "Рівні та ризик",
+    sectionResult: "Закриття та результат",
+    sectionContext: "Контекст",
+    sectionNotes: "Нотатки",
   },
 
   ru: {
@@ -189,6 +300,17 @@ const editTradeLabels: Record<
     notes: "Заметки",
     saveChanges: "Сохранить изменения",
     noStrategyOption: "— Без стратегии Playbook —",
+
+    openDate: "Дата открытия",
+    openTime: "Время открытия",
+    closeDate: "Дата закрытия",
+    direction: "Направление",
+
+    sectionExecution: "Исполнение",
+    sectionRisk: "Уровни и риск",
+    sectionResult: "Закрытие и результат",
+    sectionContext: "Контекст",
+    sectionNotes: "Заметки",
   },
 
   es: {
@@ -224,6 +346,17 @@ const editTradeLabels: Record<
     notes: "Notas",
     saveChanges: "Guardar cambios",
     noStrategyOption: "— Sin estrategia del Playbook —",
+
+    openDate: "Fecha de apertura",
+    openTime: "Hora de apertura",
+    closeDate: "Fecha de cierre",
+    direction: "Dirección",
+
+    sectionExecution: "Ejecución",
+    sectionRisk: "Niveles y riesgo",
+    sectionResult: "Cierre y resultado",
+    sectionContext: "Contexto",
+    sectionNotes: "Notas",
   },
 
   fr: {
@@ -259,6 +392,17 @@ const editTradeLabels: Record<
     notes: "Notes",
     saveChanges: "Enregistrer les modifications",
     noStrategyOption: "— Aucune stratégie Playbook —",
+
+    openDate: "Date d'ouverture",
+    openTime: "Heure d'ouverture",
+    closeDate: "Date de clôture",
+    direction: "Direction",
+
+    sectionExecution: "Exécution",
+    sectionRisk: "Niveaux & risque",
+    sectionResult: "Clôture & résultat",
+    sectionContext: "Contexte",
+    sectionNotes: "Notes",
   },
 
   de: {
@@ -294,6 +438,17 @@ const editTradeLabels: Record<
     notes: "Notizen",
     saveChanges: "Änderungen speichern",
     noStrategyOption: "— Keine Playbook-Strategie —",
+
+    openDate: "Eröffnungsdatum",
+    openTime: "Eröffnungszeit",
+    closeDate: "Schlussdatum",
+    direction: "Richtung",
+
+    sectionExecution: "Execution",
+    sectionRisk: "Level & Risiko",
+    sectionResult: "Abschluss & Ergebnis",
+    sectionContext: "Kontext",
+    sectionNotes: "Notizen",
   },
 };
 
@@ -313,15 +468,17 @@ function getTradeSourceLabel(
 }
 
 function getTradeSourceClass(source?: string | null) {
+  // Same fix as Diary's identical helper: broker used Tailwind's
+  // arbitrary blue-500 instead of our own accent token.
   if (source === "mt5") {
     return "border-accent-bright/20 bg-accent-bright/10 text-accent-bright";
   }
 
   if (source === "broker") {
-    return "border-blue-500/20 bg-blue-500/10 text-blue-300";
+    return "border-accent/20 bg-accent/10 text-accent";
   }
 
-  return "border-white/10 bg-white/10 text-gray-300";
+  return "border-white/10 bg-white/10 text-muted";
 }
 
 export default async function EditTradePage({
@@ -420,22 +577,26 @@ export default async function EditTradePage({
 
   return (
     <div>
-      <div className="mb-8">
-        <p className="text-sm text-gray-400">
+      <div className="reveal-rise mb-8" style={{ animationDelay: "0ms" }}>
+        <p className="text-sm text-muted">
           {t.eyebrow}
         </p>
 
-        <h1 className="text-3xl font-bold sm:text-4xl">
+        <h1 className="text-hero">
           {t.title}
         </h1>
 
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-400">
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-muted">
           {t.description}
         </p>
       </div>
 
       {isImportedTrade && (
-        <div className="mb-6 rounded-3xl border border-yellow-500/20 bg-yellow-500/[0.06] p-6">
+        <Card
+          variant="inner"
+          className="reveal-rise mb-6 p-6"
+          style={{ animationDelay: "60ms" }}
+        >
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <p className="text-sm uppercase tracking-[0.18em] text-yellow-300">
@@ -446,14 +607,14 @@ export default async function EditTradePage({
                 {t.importedTitle}
               </h2>
 
-              <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-400">
+              <p className="mt-3 max-w-3xl text-sm leading-6 text-muted">
                 {t.importedDescription}
               </p>
             </div>
 
             <div className="flex flex-wrap gap-2">
               <span
-                className={`rounded-xl border px-3 py-1 text-xs font-bold ${getTradeSourceClass(
+                className={`rounded-full border px-3 py-1 text-xs font-bold ${getTradeSourceClass(
                   trade.source
                 )}`}
               >
@@ -461,227 +622,272 @@ export default async function EditTradePage({
               </span>
 
               {trade.needsReview && (
-                <span className="rounded-xl border border-yellow-500/20 bg-yellow-500/10 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-yellow-300">
+                <span className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-yellow-300">
                   {t.needsReview}
                 </span>
               )}
 
               {trade.syncStatus === "reviewed" && (
-                <span className="rounded-xl border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-accent">
+                <span className="rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-accent">
                   {t.reviewed}
                 </span>
               )}
             </div>
           </div>
-        </div>
+        </Card>
       )}
 
-      <form
-        action={updateTradeAction}
-        className="grid grid-cols-1 gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:grid-cols-2 xl:grid-cols-4"
-      >
-        {isImportedTrade && (
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5 sm:col-span-2 xl:col-span-4">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              <div>
-                <p className="text-sm text-gray-400">
-                  {t.reviewStatus}
-                </p>
+      <div className="reveal-rise" style={{ animationDelay: "100ms" }}>
+        <Card variant="hero" className="p-5 sm:p-8">
+          <form action={updateTradeAction}>
+            {isImportedTrade && (
+              <Card variant="inner" className="mb-8 p-5">
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                  <div>
+                    <p className="text-sm text-muted">
+                      {t.reviewStatus}
+                    </p>
 
-                <h3 className="mt-2 text-lg font-bold text-white">
-                  {t.markReviewed}
-                </h3>
+                    <h3 className="mt-2 text-lg font-bold text-white">
+                      {t.markReviewed}
+                    </h3>
 
-                <p className="mt-2 text-sm leading-6 text-gray-500">
-                  {t.reviewCheckboxDescription}
-                </p>
-              </div>
+                    <p className="mt-2 text-sm leading-6 text-muted-faint">
+                      {t.reviewCheckboxDescription}
+                    </p>
+                  </div>
 
-              <label className="flex items-center gap-3 rounded-2xl border border-accent/20 bg-accent/10 px-4 py-3 text-sm font-bold text-accent">
-                <input
-                  type="checkbox"
-                  name="markAsReviewed"
-                  defaultChecked={
-                    !trade.needsReview &&
-                    trade.syncStatus === "reviewed"
-                  }
-                  className="h-5 w-5"
+                  <label className="flex items-center gap-3 rounded-inner border border-accent/20 bg-accent/10 px-4 py-3 text-sm font-bold text-accent">
+                    <input
+                      type="checkbox"
+                      name="markAsReviewed"
+                      defaultChecked={
+                        !trade.needsReview &&
+                        trade.syncStatus === "reviewed"
+                      }
+                      className="h-5 w-5"
+                    />
+                    {t.reviewed}
+                  </label>
+                </div>
+              </Card>
+            )}
+
+            <FormSection number="01" title={t.sectionExecution} first>
+              <Field label={t.openDate} htmlFor="openDate">
+                <Input
+                  id="openDate"
+                  name="openDate"
+                  defaultValue={formatDateForInput(trade.openDate)}
+                  type="date"
+                  required
                 />
-                {t.reviewed}
-              </label>
-            </div>
-          </div>
-        )}
+              </Field>
 
-        <input
-          name="openDate"
-          defaultValue={formatDateForInput(
-            trade.openDate
-          )}
-          type="date"
-          className="rounded-xl bg-zinc-900 p-3"
-          required
-        />
+              <Field label={t.openTime} htmlFor="openTime">
+                <Input
+                  id="openTime"
+                  name="openTime"
+                  defaultValue={trade.openTime || ""}
+                  type="time"
+                />
+              </Field>
 
-        <input
-          name="openTime"
-          defaultValue={trade.openTime || ""}
-          type="time"
-          className="rounded-xl bg-zinc-900 p-3"
-        />
+              <Field label={t.instrument} htmlFor="symbol">
+                <select
+                  id="symbol"
+                  name="symbol"
+                  defaultValue={trade.symbol}
+                  required
+                  className={selectClass}
+                >
+                  <option value="">{t.instrument}</option>
 
-        <input
-          name="reason"
-          defaultValue={trade.reason || ""}
-          placeholder={t.reason}
-          className="rounded-xl bg-zinc-900 p-3"
-        />
+                  <optgroup label="Forex">
+                    <option value="EURUSD">EURUSD</option>
+                    <option value="GBPUSD">GBPUSD</option>
+                    <option value="USDJPY">USDJPY</option>
+                    <option value="AUDUSD">AUDUSD</option>
+                    <option value="USDCAD">USDCAD</option>
+                    <option value="USDCHF">USDCHF</option>
+                    <option value="NZDUSD">NZDUSD</option>
+                  </optgroup>
 
-        <select
-          name="strategyId"
-          defaultValue={trade.strategyId ?? ""}
-          className="rounded-xl bg-zinc-900 p-3"
-        >
-          <option value="">{t.noStrategyOption}</option>
-          {strategies.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.name}
-            </option>
-          ))}
-        </select>
+                  <optgroup label={t.goldAndCommodities}>
+                    <option value="XAUUSD">XAUUSD</option>
+                    <option value="XAGUSD">XAGUSD</option>
+                    <option value="USOIL">USOIL</option>
+                    <option value="UKOIL">UKOIL</option>
+                  </optgroup>
 
-        <select
-          name="symbol"
-          defaultValue={trade.symbol}
-          required
-          className="rounded-xl bg-zinc-900 p-3"
-        >
-          <option value="">{t.instrument}</option>
+                  <optgroup label={t.crypto}>
+                    <option value="BTCUSD">BTCUSD</option>
+                    <option value="ETHUSD">ETHUSD</option>
+                    <option value="SOLUSD">SOLUSD</option>
+                    <option value="XRPUSD">XRPUSD</option>
+                  </optgroup>
 
-          <optgroup label="Forex">
-            <option value="EURUSD">EURUSD</option>
-            <option value="GBPUSD">GBPUSD</option>
-            <option value="USDJPY">USDJPY</option>
-            <option value="AUDUSD">AUDUSD</option>
-            <option value="USDCAD">USDCAD</option>
-            <option value="USDCHF">USDCHF</option>
-            <option value="NZDUSD">NZDUSD</option>
-          </optgroup>
+                  <optgroup label={t.indices}>
+                    <option value="NASDAQ">NASDAQ</option>
+                    <option value="S&P500">S&P500</option>
+                    <option value="DAX40">DAX40</option>
+                    <option value="DJI">DJI</option>
+                  </optgroup>
+                </select>
+              </Field>
 
-          <optgroup label={t.goldAndCommodities}>
-            <option value="XAUUSD">XAUUSD</option>
-            <option value="XAGUSD">XAGUSD</option>
-            <option value="USOIL">USOIL</option>
-            <option value="UKOIL">UKOIL</option>
-          </optgroup>
+              <Field label={t.amount} htmlFor="amount">
+                <Input
+                  id="amount"
+                  name="amount"
+                  defaultValue={trade.amount ?? ""}
+                  placeholder={t.amount}
+                />
+              </Field>
 
-          <optgroup label={t.crypto}>
-            <option value="BTCUSD">BTCUSD</option>
-            <option value="ETHUSD">ETHUSD</option>
-            <option value="SOLUSD">SOLUSD</option>
-            <option value="XRPUSD">XRPUSD</option>
-          </optgroup>
+              <Field label={t.direction} htmlFor="direction">
+                <select
+                  id="direction"
+                  name="direction"
+                  defaultValue={trade.direction}
+                  className={selectClass}
+                >
+                  <option value="LONG">LONG</option>
+                  <option value="SHORT">SHORT</option>
+                </select>
+              </Field>
+            </FormSection>
 
-          <optgroup label={t.indices}>
-            <option value="NASDAQ">NASDAQ</option>
-            <option value="S&P500">S&P500</option>
-            <option value="DAX40">DAX40</option>
-            <option value="DJI">DJI</option>
-          </optgroup>
-        </select>
+            <FormSection number="02" title={t.sectionRisk}>
+              <Field label={t.openingPrice} htmlFor="openingPrice">
+                <Input
+                  id="openingPrice"
+                  name="openingPrice"
+                  defaultValue={trade.openingPrice ?? ""}
+                  placeholder={t.openingPrice}
+                />
+              </Field>
 
-        <select
-          name="direction"
-          defaultValue={trade.direction}
-          className="rounded-xl bg-zinc-900 p-3"
-        >
-          <option value="LONG">LONG</option>
-          <option value="SHORT">SHORT</option>
-        </select>
+              <Field label={t.stopLoss} htmlFor="stopLoss">
+                <Input
+                  id="stopLoss"
+                  name="stopLoss"
+                  defaultValue={trade.stopLoss ?? ""}
+                  placeholder={t.stopLoss}
+                />
+              </Field>
 
-        <input
-          name="amount"
-          defaultValue={trade.amount ?? ""}
-          placeholder={t.amount}
-          className="rounded-xl bg-zinc-900 p-3"
-        />
+              <Field label={t.takeProfit} htmlFor="takeProfit">
+                <Input
+                  id="takeProfit"
+                  name="takeProfit"
+                  defaultValue={trade.takeProfit ?? ""}
+                  placeholder={t.takeProfit}
+                />
+              </Field>
 
-        <input
-          name="openingPrice"
-          defaultValue={trade.openingPrice ?? ""}
-          placeholder={t.openingPrice}
-          className="rounded-xl bg-zinc-900 p-3"
-        />
+              <Field label={t.riskReward} htmlFor="riskReward">
+                <Input
+                  id="riskReward"
+                  name="riskReward"
+                  defaultValue={trade.riskReward ?? ""}
+                  placeholder={t.riskReward}
+                />
+              </Field>
+            </FormSection>
 
-        <input
-          name="stopLoss"
-          defaultValue={trade.stopLoss ?? ""}
-          placeholder={t.stopLoss}
-          className="rounded-xl bg-zinc-900 p-3"
-        />
+            <FormSection number="03" title={t.sectionResult}>
+              <Field label={t.closeDate} htmlFor="closeDate">
+                <Input
+                  id="closeDate"
+                  name="closeDate"
+                  defaultValue={formatDateForInput(trade.closeDate)}
+                  type="date"
+                />
+              </Field>
 
-        <input
-          name="takeProfit"
-          defaultValue={trade.takeProfit ?? ""}
-          placeholder={t.takeProfit}
-          className="rounded-xl bg-zinc-900 p-3"
-        />
+              <Field label={t.closingPrice} htmlFor="closingPrice">
+                <Input
+                  id="closingPrice"
+                  name="closingPrice"
+                  defaultValue={trade.closingPrice ?? ""}
+                  placeholder={t.closingPrice}
+                />
+              </Field>
 
-        <input
-          name="riskReward"
-          defaultValue={trade.riskReward ?? ""}
-          placeholder={t.riskReward}
-          className="rounded-xl bg-zinc-900 p-3"
-        />
+              <Field label={t.outcome} htmlFor="outcome">
+                <select
+                  id="outcome"
+                  name="outcome"
+                  defaultValue={trade.outcome || ""}
+                  className={selectClass}
+                >
+                  <option value="">{t.outcome}</option>
+                  <option value="win">Win</option>
+                  <option value="loss">Loss</option>
+                  <option value="be">BE</option>
+                </select>
+              </Field>
 
-        <input
-          name="closeDate"
-          defaultValue={formatDateForInput(
-            trade.closeDate
-          )}
-          type="date"
-          className="rounded-xl bg-zinc-900 p-3"
-        />
+              <Field label={t.resultUsd} htmlFor="resultUsd">
+                <Input
+                  id="resultUsd"
+                  name="resultUsd"
+                  defaultValue={trade.resultUsd ?? ""}
+                  placeholder={t.resultUsd}
+                />
+              </Field>
+            </FormSection>
 
-        <input
-          name="closingPrice"
-          defaultValue={trade.closingPrice ?? ""}
-          placeholder={t.closingPrice}
-          className="rounded-xl bg-zinc-900 p-3"
-        />
+            <FormSection number="04" title={t.sectionContext}>
+              <Field label={t.reason} htmlFor="reason">
+                <Input
+                  id="reason"
+                  name="reason"
+                  defaultValue={trade.reason || ""}
+                  placeholder={t.reason}
+                />
+              </Field>
 
-        <select
-          name="outcome"
-          defaultValue={trade.outcome || ""}
-          className="rounded-xl bg-zinc-900 p-3"
-        >
-          <option value="">{t.outcome}</option>
-          <option value="win">Win</option>
-          <option value="loss">Loss</option>
-          <option value="be">BE</option>
-        </select>
+              <Field label={t.strategy} htmlFor="strategyId">
+                <select
+                  id="strategyId"
+                  name="strategyId"
+                  defaultValue={trade.strategyId ?? ""}
+                  className={selectClass}
+                >
+                  <option value="">{t.noStrategyOption}</option>
+                  {strategies.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.name}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+            </FormSection>
 
-        <input
-          name="resultUsd"
-          defaultValue={trade.resultUsd ?? ""}
-          placeholder={t.resultUsd}
-          className="rounded-xl bg-zinc-900 p-3"
-        />
+            <FormSection number="05" title={t.sectionNotes}>
+              <Field label={t.notes} htmlFor="notes" className="sm:col-span-2 xl:col-span-4">
+                <textarea
+                  id="notes"
+                  name="notes"
+                  defaultValue={trade.notes || ""}
+                  placeholder={t.notes}
+                  className={textareaClass}
+                />
+              </Field>
+            </FormSection>
 
-        <textarea
-          name="notes"
-          defaultValue={trade.notes || ""}
-          placeholder={t.notes}
-          className="rounded-xl bg-zinc-900 p-3 sm:col-span-2 xl:col-span-4"
-        />
-
-        <button
-          type="submit"
-          className="rounded-xl bg-accent p-3 font-bold text-white sm:col-span-2 xl:col-span-4"
-        >
-          {t.saveChanges}
-        </button>
-      </form>
+            <button
+              type="submit"
+              style={{ background: CTA_GRADIENT }}
+              className="mt-8 w-full rounded-inner p-3 font-semibold text-white transition-shadow duration-base hover:shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)]"
+            >
+              {t.saveChanges}
+            </button>
+          </form>
+        </Card>
+      </div>
     </div>
   );
 }
