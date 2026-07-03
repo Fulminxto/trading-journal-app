@@ -1,18 +1,21 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
-  Activity,
   ArrowLeft,
   BarChart3,
   LineChart as LineChartIcon,
   ShieldAlert,
-  TrendingDown,
   TrendingUp,
   Wallet,
   type LucideIcon,
 } from "lucide-react";
 
 import EquityChart from "@/components/EquityChart";
+import DrawdownChart from "@/components/equity/DrawdownChart";
+import Card from "@/components/ui/Card";
+import IconTile from "@/components/ui/IconTile";
+import ListRow from "@/components/ui/ListRow";
+import SignatureEdge from "@/components/ui/SignatureEdge";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
@@ -61,6 +64,12 @@ type EquityLabels = {
   equityPeakDescription: string;
   lowestEquity: string;
   lowestEquityDescription: string;
+
+  protectBadge: string;
+  underwaterCurve: string;
+  underwaterDescription: string;
+  tradeSplitTitle: string;
+  extremesTitle: string;
 
   positiveTrades: string;
   positiveTradesDescription: string;
@@ -123,6 +132,13 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
     lowestEquity: "Equity minima",
     lowestEquityDescription:
       "Valore equity più basso registrato includendo il saldo iniziale.",
+
+    protectBadge: "Protect",
+    underwaterCurve: "Curva Underwater",
+    underwaterDescription:
+      "Quanto il capitale resta sotto il picco massimo, trade per trade.",
+    tradeSplitTitle: "Distribuzione Trade",
+    extremesTitle: "Estremi",
 
     positiveTrades: "Trade positivi",
     positiveTradesDescription:
@@ -193,6 +209,13 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
     lowestEquityDescription:
       "Lowest recorded equity value including the initial balance.",
 
+    protectBadge: "Protect",
+    underwaterCurve: "Underwater Curve",
+    underwaterDescription:
+      "How far capital stays below its peak, trade by trade.",
+    tradeSplitTitle: "Trade Split",
+    extremesTitle: "Extremes",
+
     positiveTrades: "Positive Trades",
     positiveTradesDescription:
       "Trades closed with a positive result.",
@@ -261,6 +284,13 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
     lowestEquity: "Мінімальна equity",
     lowestEquityDescription:
       "Найнижче значення equity з урахуванням початкового балансу.",
+
+    protectBadge: "Protect",
+    underwaterCurve: "Крива Underwater",
+    underwaterDescription:
+      "Наскільки капітал залишається нижче піку, угода за угодою.",
+    tradeSplitTitle: "Розподіл угод",
+    extremesTitle: "Екстремуми",
 
     positiveTrades: "Позитивні угоди",
     positiveTradesDescription:
@@ -331,6 +361,13 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
     lowestEquityDescription:
       "Самое низкое значение equity с учетом начального баланса.",
 
+    protectBadge: "Protect",
+    underwaterCurve: "Кривая Underwater",
+    underwaterDescription:
+      "Насколько капитал остается ниже пика, сделка за сделкой.",
+    tradeSplitTitle: "Распределение сделок",
+    extremesTitle: "Экстремумы",
+
     positiveTrades: "Положительные сделки",
     positiveTradesDescription:
       "Сделки, закрытые с положительным результатом.",
@@ -399,6 +436,13 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
     lowestEquity: "Equity mínima",
     lowestEquityDescription:
       "Valor de equity más bajo registrado incluyendo el balance inicial.",
+
+    protectBadge: "Protect",
+    underwaterCurve: "Curva Underwater",
+    underwaterDescription:
+      "Cuánto permanece el capital por debajo de su pico, trade por trade.",
+    tradeSplitTitle: "Distribución de Trades",
+    extremesTitle: "Extremos",
 
     positiveTrades: "Trades positivos",
     positiveTradesDescription:
@@ -469,6 +513,13 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
     lowestEquityDescription:
       "Valeur equity la plus basse enregistrée, solde initial inclus.",
 
+    protectBadge: "Protect",
+    underwaterCurve: "Courbe Underwater",
+    underwaterDescription:
+      "Jusqu'où le capital reste sous son pic, trade par trade.",
+    tradeSplitTitle: "Répartition des Trades",
+    extremesTitle: "Extrêmes",
+
     positiveTrades: "Trades positifs",
     positiveTradesDescription:
       "Trades clôturés avec un résultat positif.",
@@ -537,6 +588,13 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
     lowestEquity: "Niedrigste Equity",
     lowestEquityDescription:
       "Niedrigster Equity-Wert inklusive Anfangssaldo.",
+
+    protectBadge: "Protect",
+    underwaterCurve: "Underwater-Kurve",
+    underwaterDescription:
+      "Wie weit das Kapital unter seinem Höchststand bleibt, Trade für Trade.",
+    tradeSplitTitle: "Trade-Verteilung",
+    extremesTitle: "Extreme",
 
     positiveTrades: "Positive Trades",
     positiveTradesDescription:
@@ -623,10 +681,10 @@ function StatCard({
   tone = "text-white",
 }: StatCardProps) {
   return (
-    <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+    <Card interactive className="p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-muted">
             {label}
           </p>
 
@@ -635,15 +693,15 @@ function StatCard({
           </h2>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-accent-bright">
+        <IconTile>
           <Icon size={20} />
-        </div>
+        </IconTile>
       </div>
 
-      <p className="mt-4 text-sm leading-6 text-gray-500">
+      <p className="mt-4 text-sm leading-6 text-muted-faint">
         {description}
       </p>
-    </div>
+    </Card>
   );
 }
 
@@ -840,6 +898,23 @@ export default async function EquityPage({
     equity: trade.equity || initialBalance,
   }));
 
+  // Underwater curve: percent below the running peak at each point,
+  // derived from the same equity series as the hero chart above (not
+  // from trade.drawdownPercent, which could drift out of sync with it).
+  let runningPeak = initialBalance;
+  const underwaterData = periodTrades.map((trade) => {
+    const equity = trade.equity || initialBalance;
+    runningPeak = Math.max(runningPeak, equity);
+
+    return {
+      date: formatShortDate(trade.openDate, language),
+      drawdown:
+        runningPeak > 0
+          ? ((equity - runningPeak) / runningPeak) * 100
+          : 0,
+    };
+  });
+
   const recentTrades = [...periodTrades].reverse().slice(0, 10);
 
   const stats = [
@@ -872,15 +947,15 @@ export default async function EquityPage({
       value: formatPercent(maxDrawdown, language),
       description: t.maxDrawdownDescription,
       icon: ShieldAlert,
-      tone:
-        maxDrawdown < 0
-          ? "text-red-400"
-          : "text-yellow-400",
+      // Zero drawdown is a good outcome, not a warning - was previously
+      // shown as yellow ("caution") for the case with nothing to caution
+      // about.
+      tone: maxDrawdown < 0 ? "text-red-400" : "text-white",
     },
   ];
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-10">
       <ScopeBar
         accountId={accountId}
         members={
@@ -898,45 +973,89 @@ export default async function EquityPage({
         appLanguage={language}
       />
 
-      <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_14%,transparent),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.08),transparent_35%)]" />
+      <div
+        className="reveal-rise flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between"
+        style={{ animationDelay: "0ms" }}
+      >
+        <div>
+          <div className="mb-4 flex flex-wrap items-center gap-3">
+            <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
+              {t.heroBadge}
+            </span>
 
-        <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
-          <div>
-            <div className="mb-6 flex flex-wrap items-center gap-3">
-              <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
-                {t.heroBadge}
-              </span>
-
-              <span className="rounded-full border border-white/10 bg-black/20 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-gray-300">
-                {account.name}
-              </span>
-            </div>
-
-            <p className="text-sm text-gray-400">
-              {t.heroEyebrow}
-            </p>
-
-            <h1 className="mt-3 text-5xl font-black tracking-tight text-white sm:text-6xl">
-              {t.heroTitle}
-            </h1>
-
-            <p className="mt-6 max-w-3xl text-base leading-7 text-gray-400">
-              {t.heroDescription}
-            </p>
+            <span className="rounded-full bg-white/[0.06] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-muted">
+              {account.name}
+            </span>
           </div>
 
-          <Link
-            href={`/accounts/${accountId}`}
-            className="flex w-fit items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-bold text-white transition hover:bg-white/[0.08]"
-          >
-            <ArrowLeft size={17} />
-            {t.backToAccountHub}
-          </Link>
-        </div>
-      </section>
+          <p className="text-sm text-muted">
+            {t.heroEyebrow}
+          </p>
 
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <h1 className="text-hero mt-3">
+            {t.heroTitle}
+          </h1>
+
+          <p className="mt-4 max-w-3xl text-base leading-7 text-muted">
+            {t.heroDescription}
+          </p>
+        </div>
+
+        <Link
+          href={`/accounts/${accountId}`}
+          className="flex w-fit items-center gap-2 rounded-inner border-[0.5px] border-flash/[0.12] px-5 py-3 text-sm text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.04]"
+        >
+          <ArrowLeft size={17} />
+          {t.backToAccountHub}
+        </Link>
+      </div>
+
+      {/* PRIMARY - the equity curve, dominant, alone. */}
+      <div className="reveal-rise" style={{ animationDelay: "60ms" }}>
+        <Card variant="hero" interactive className="relative p-6 sm:p-8">
+          <SignatureEdge
+            orientation="vertical"
+            className="absolute bottom-8 left-0 top-8"
+          />
+
+          <div className="pl-4">
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div>
+                <p className="text-sm text-muted">
+                  {t.accountGrowth}
+                </p>
+
+                <h2 className="text-section mt-1 text-white">
+                  {t.equityProgression}
+                </h2>
+              </div>
+
+              <IconTile>
+                <LineChartIcon size={20} />
+              </IconTile>
+            </div>
+
+            {chartData.length > 0 ? (
+              <div className="min-w-0">
+                <EquityChart data={chartData} language={language} />
+              </div>
+            ) : (
+              <Card
+                variant="inner"
+                className="flex min-h-[280px] items-center justify-center border-dashed p-8 text-center text-sm leading-6 text-muted"
+              >
+                {t.noTradesChart}
+              </Card>
+            )}
+          </div>
+        </Card>
+      </div>
+
+      {/* SECONDARY - 4 compact metrics. */}
+      <div
+        className="reveal-rise grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4"
+        style={{ animationDelay: "120ms" }}
+      >
         {stats.map((stat) => (
           <StatCard
             key={stat.label}
@@ -947,314 +1066,301 @@ export default async function EquityPage({
             tone={stat.tone}
           />
         ))}
-      </section>
+      </div>
 
-      <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
-          <div className="mb-6 flex items-start justify-between gap-4">
-            <div>
-              <p className="text-sm text-gray-400">
-                {t.accountGrowth}
+      {/* PROTECT - Equity's differentiator from Dashboard: drawdown is
+          the protagonist here (underwater curve + peak/lowest), not a
+          single stat buried among a dozen others. */}
+      <div className="reveal-rise" style={{ animationDelay: "180ms" }}>
+        <div className="mb-4 flex items-center gap-3">
+          <span className="rounded-full border border-red-400/20 bg-red-400/10 px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-red-300">
+            {t.protectBadge}
+          </span>
+
+          <h2 className="text-section text-white">
+            {t.underwaterCurve}
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(220px,1fr)]">
+          <Card className="p-6">
+            <p className="mb-4 text-sm leading-6 text-muted">
+              {t.underwaterDescription}
+            </p>
+
+            <DrawdownChart data={underwaterData} language={language} />
+          </Card>
+
+          <div className="grid gap-4">
+            <Card interactive className="p-6">
+              <p className="text-sm text-muted">
+                {t.equityPeak + periodSuffix}
               </p>
 
-              <h2 className="mt-1 text-2xl font-black text-white">
-                {t.equityProgression}
+              <h3 className="mt-2 text-2xl font-black text-accent">
+                {money(maxEquity)}
+              </h3>
+
+              <p className="mt-3 text-xs leading-5 text-muted-faint">
+                {t.equityPeakDescription}
+              </p>
+            </Card>
+
+            <Card interactive className="p-6">
+              <p className="text-sm text-muted">
+                {t.lowestEquity + periodSuffix}
+              </p>
+
+              <h3 className="mt-2 text-2xl font-black text-red-400">
+                {money(lowestEquity)}
+              </h3>
+
+              <p className="mt-3 text-xs leading-5 text-muted-faint">
+                {t.lowestEquityDescription}
+              </p>
+            </Card>
+          </div>
+        </div>
+      </div>
+
+      {/* TERTIARY - consolidated into two compact multi-row cards
+          (was six separate stat tiles: positive/negative/flat/average
+          /best/worst - the "KPI echo" pattern REBRAND_BLUEPRINT.md
+          names as one of the four diseases). */}
+      <div
+        className="reveal-rise grid grid-cols-1 gap-4 md:grid-cols-2"
+        style={{ animationDelay: "240ms" }}
+      >
+        <Card interactive className="p-6">
+          <p className="text-sm text-muted">
+            {t.tradeSplitTitle}
+          </p>
+
+          <div className="mt-4 space-y-4 text-sm">
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-muted">{t.positiveTrades + periodSuffix}</span>
+              <span className="font-black text-accent">{positiveTrades}</span>
+            </div>
+
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-muted">{t.negativeTrades + periodSuffix}</span>
+              <span className="font-black text-red-400">{negativeTrades}</span>
+            </div>
+
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-muted">{t.flatTrades + periodSuffix}</span>
+              <span className="font-black text-white">{flatTrades}</span>
+            </div>
+          </div>
+        </Card>
+
+        <Card interactive className="p-6">
+          <p className="text-sm text-muted">
+            {t.extremesTitle}
+          </p>
+
+          <div className="mt-4 space-y-4 text-sm">
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-muted">{t.bestTrade + periodSuffix}</span>
+              <span className="font-black text-accent">{money(bestTrade)}</span>
+            </div>
+
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-muted">{t.worstTrade + periodSuffix}</span>
+              <span className="font-black text-red-400">{money(worstTrade)}</span>
+            </div>
+
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-muted">{t.averagePnl + periodSuffix}</span>
+              <span className={`font-black ${getResultTone(averagePnl)}`}>
+                {money(averagePnl)}
+              </span>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      <div className="reveal-rise" style={{ animationDelay: "300ms" }}>
+        <Card className="p-6">
+          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-sm text-muted">
+                {t.equityHistory}
+              </p>
+
+              <h2 className="text-section mt-1 text-white">
+                {t.tradeByTradeProgression}
               </h2>
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-accent-bright">
-              <LineChartIcon size={20} />
-            </div>
-          </div>
-
-          {chartData.length > 0 ? (
-            <div className="min-w-0">
-              <EquityChart data={chartData} language={language} />
-            </div>
-          ) : (
-            <div className="flex min-h-[280px] items-center justify-center rounded-2xl border border-dashed border-white/10 bg-black/20 p-8 text-center text-sm leading-6 text-gray-400">
-              {t.noTradesChart}
-            </div>
-          )}
-        </div>
-
-        <div className="grid gap-4">
-          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-            <p className="text-sm text-gray-400">
-              {t.equityPeak + periodSuffix}
-            </p>
-
-            <h2 className="mt-3 text-3xl font-black text-accent">
-              {money(maxEquity)}
-            </h2>
-
-            <p className="mt-4 text-sm leading-6 text-gray-500">
-              {t.equityPeakDescription}
+            <p className="text-sm text-muted-faint">
+              {t.showingLatest(
+                recentTrades.length,
+                periodTrades.length
+              )}
             </p>
           </div>
 
-          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-            <p className="text-sm text-gray-400">
-              {t.lowestEquity + periodSuffix}
-            </p>
+          {recentTrades.length > 0 ? (
+            <>
+              <div className="space-y-3 lg:hidden">
+                {recentTrades.map((trade) => {
+                  const result = trade.resultUsd || 0;
+                  const equity =
+                    trade.equity || initialBalance;
+                  const drawdown =
+                    trade.drawdownPercent || 0;
 
-            <h2 className="mt-3 text-3xl font-black text-red-400">
-              {money(lowestEquity)}
-            </h2>
+                  return (
+                    <ListRow key={trade.id}>
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0">
+                          <p className="truncate font-bold text-white">
+                            {trade.symbol || t.unknownSymbol}
+                          </p>
 
-            <p className="mt-4 text-sm leading-6 text-gray-500">
-              {t.lowestEquityDescription}
-            </p>
-          </div>
-        </div>
-      </section>
+                          <p className="mt-1 text-xs text-muted-faint">
+                            {formatDate(
+                              trade.openDate,
+                              language
+                            )}{" "}
+                            · {trade.outcome || "-"}
+                          </p>
+                        </div>
 
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <StatCard
-          label={t.positiveTrades + periodSuffix}
-          value={positiveTrades}
-          description={t.positiveTradesDescription}
-          icon={TrendingUp}
-          tone="text-accent"
-        />
-
-        <StatCard
-          label={t.negativeTrades + periodSuffix}
-          value={negativeTrades}
-          description={t.negativeTradesDescription}
-          icon={TrendingDown}
-          tone="text-red-400"
-        />
-
-        <StatCard
-          label={t.flatTrades + periodSuffix}
-          value={flatTrades}
-          description={t.flatTradesDescription}
-          icon={Activity}
-          tone="text-yellow-400"
-        />
-
-        <StatCard
-          label={t.averagePnl + periodSuffix}
-          value={money(averagePnl)}
-          description={t.averagePnlDescription}
-          icon={BarChart3}
-          tone={getResultTone(averagePnl)}
-        />
-      </section>
-
-      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            {t.bestTrade + periodSuffix}
-          </p>
-
-          <h2 className="mt-3 text-4xl font-black text-accent">
-            {money(bestTrade)}
-          </h2>
-
-          <p className="mt-4 text-sm leading-6 text-gray-500">
-            {t.bestTradeDescription}
-          </p>
-        </div>
-
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            {t.worstTrade + periodSuffix}
-          </p>
-
-          <h2 className="mt-3 text-4xl font-black text-red-400">
-            {money(worstTrade)}
-          </h2>
-
-          <p className="mt-4 text-sm leading-6 text-gray-500">
-            {t.worstTradeDescription}
-          </p>
-        </div>
-      </section>
-
-      <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-sm text-gray-400">
-              {t.equityHistory}
-            </p>
-
-            <h2 className="mt-1 text-2xl font-black text-white">
-              {t.tradeByTradeProgression}
-            </h2>
-          </div>
-
-          <p className="text-sm text-gray-500">
-            {t.showingLatest(
-              recentTrades.length,
-              periodTrades.length
-            )}
-          </p>
-        </div>
-
-        {recentTrades.length > 0 ? (
-          <>
-            <div className="space-y-3 lg:hidden">
-              {recentTrades.map((trade) => {
-                const result = trade.resultUsd || 0;
-                const equity =
-                  trade.equity || initialBalance;
-                const drawdown =
-                  trade.drawdownPercent || 0;
-
-                return (
-                  <div
-                    key={trade.id}
-                    className="rounded-2xl border border-white/10 bg-black/20 p-4"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="min-w-0">
-                        <p className="truncate font-bold text-white">
-                          {trade.symbol || t.unknownSymbol}
-                        </p>
-
-                        <p className="mt-1 text-xs text-gray-500">
-                          {formatDate(
-                            trade.openDate,
-                            language
-                          )}{" "}
-                          · {trade.outcome || "-"}
-                        </p>
-                      </div>
-
-                      <p
-                        className={`shrink-0 font-black ${getResultTone(
-                          result
-                        )}`}
-                      >
-                        {money(result)}
-                      </p>
-                    </div>
-
-                    <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                      <div className="rounded-xl bg-white/[0.03] p-3">
-                        <p className="text-gray-500">
-                          {t.equity}
-                        </p>
-                        <p className="mt-1 font-bold text-white">
-                          {money(equity)}
-                        </p>
-                      </div>
-
-                      <div className="rounded-xl bg-white/[0.03] p-3">
-                        <p className="text-gray-500">
-                          {t.drawdown}
-                        </p>
                         <p
-                          className={`mt-1 font-bold ${drawdown < 0
-                              ? "text-red-400"
-                              : "text-gray-300"
-                            }`}
-                        >
-                          {formatPercent(
-                            drawdown,
-                            language
-                          )}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="hidden overflow-x-auto rounded-2xl border border-white/10 lg:block">
-              <table className="w-full border-collapse">
-                <thead className="bg-white/5 text-left text-sm text-gray-400">
-                  <tr>
-                    <th className="p-4">
-                      {t.date}
-                    </th>
-                    <th className="p-4">
-                      {t.symbol}
-                    </th>
-                    <th className="p-4">
-                      {t.outcome}
-                    </th>
-                    <th className="p-4">
-                      {t.equity}
-                    </th>
-                    <th className="p-4">
-                      {t.pnl}
-                    </th>
-                    <th className="p-4">
-                      {t.drawdown}
-                    </th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {recentTrades.map((trade) => {
-                    const result =
-                      trade.resultUsd || 0;
-                    const drawdown =
-                      trade.drawdownPercent || 0;
-
-                    return (
-                      <tr
-                        key={trade.id}
-                        className="border-t border-white/10"
-                      >
-                        <td className="p-4 text-gray-300">
-                          {formatDate(
-                            trade.openDate,
-                            language
-                          )}
-                        </td>
-
-                        <td className="p-4 font-semibold text-white">
-                          {trade.symbol || "-"}
-                        </td>
-
-                        <td className="p-4 text-gray-300">
-                          {trade.outcome || "-"}
-                        </td>
-
-                        <td className="p-4 font-semibold text-white">
-                          {money(
-                            trade.equity ||
-                            initialBalance
-                          )}
-                        </td>
-
-                        <td
-                          className={`p-4 font-semibold ${getResultTone(
+                          className={`shrink-0 font-black ${getResultTone(
                             result
                           )}`}
                         >
                           {money(result)}
-                        </td>
+                        </p>
+                      </div>
 
-                        <td
-                          className={`p-4 font-semibold ${drawdown < 0
-                              ? "text-red-400"
-                              : "text-gray-300"
-                            }`}
+                      <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                        <div>
+                          <p className="text-muted-faint">
+                            {t.equity}
+                          </p>
+                          <p className="mt-1 font-bold text-white">
+                            {money(equity)}
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-muted-faint">
+                            {t.drawdown}
+                          </p>
+                          <p
+                            className={`mt-1 font-bold ${drawdown < 0
+                                ? "text-red-400"
+                                : "text-white"
+                              }`}
+                          >
+                            {formatPercent(
+                              drawdown,
+                              language
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    </ListRow>
+                  );
+                })}
+              </div>
+
+              <div className="hidden overflow-x-auto rounded-inner border-[0.5px] border-white/[0.08] lg:block">
+                <table className="w-full border-collapse">
+                  <thead className="bg-white/5 text-left text-sm text-muted">
+                    <tr>
+                      <th className="p-4">
+                        {t.date}
+                      </th>
+                      <th className="p-4">
+                        {t.symbol}
+                      </th>
+                      <th className="p-4">
+                        {t.outcome}
+                      </th>
+                      <th className="p-4">
+                        {t.equity}
+                      </th>
+                      <th className="p-4">
+                        {t.pnl}
+                      </th>
+                      <th className="p-4">
+                        {t.drawdown}
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {recentTrades.map((trade) => {
+                      const result =
+                        trade.resultUsd || 0;
+                      const drawdown =
+                        trade.drawdownPercent || 0;
+
+                      return (
+                        <tr
+                          key={trade.id}
+                          className="border-t border-white/10"
                         >
-                          {formatPercent(
-                            drawdown,
-                            language
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </>
-        ) : (
-          <div className="rounded-2xl border border-dashed border-white/10 bg-black/20 p-8 text-center text-sm text-gray-400">
-            {t.noEquityHistory}
-          </div>
-        )}
-      </section>
+                          <td className="p-4 text-gray-300">
+                            {formatDate(
+                              trade.openDate,
+                              language
+                            )}
+                          </td>
+
+                          <td className="p-4 font-semibold text-white">
+                            {trade.symbol || "-"}
+                          </td>
+
+                          <td className="p-4 text-gray-300">
+                            {trade.outcome || "-"}
+                          </td>
+
+                          <td className="p-4 font-semibold text-white">
+                            {money(
+                              trade.equity ||
+                              initialBalance
+                            )}
+                          </td>
+
+                          <td
+                            className={`p-4 font-semibold ${getResultTone(
+                              result
+                            )}`}
+                          >
+                            {money(result)}
+                          </td>
+
+                          <td
+                            className={`p-4 font-semibold ${drawdown < 0
+                                ? "text-red-400"
+                                : "text-gray-300"
+                              }`}
+                          >
+                            {formatPercent(
+                              drawdown,
+                              language
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          ) : (
+            <Card variant="inner" className="border-dashed p-8 text-center text-sm text-muted">
+              {t.noEquityHistory}
+            </Card>
+          )}
+        </Card>
+      </div>
     </div>
   );
 }
