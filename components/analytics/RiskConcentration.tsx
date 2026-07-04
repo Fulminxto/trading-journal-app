@@ -3,6 +3,9 @@ import Card from "@/components/ui/Card";
 import SignatureEdge from "@/components/ui/SignatureEdge";
 
 type Props = {
+  // Pre-sorted by page.tsx, worst severity first - this component trusts
+  // that order rather than re-deriving it, so the "dominant tile" below is
+  // always data[0].
   data: {
     factor: string;
     count: number;
@@ -117,10 +120,15 @@ export default function RiskConcentration({
   const language = normalizeAppLanguage(appLanguage);
   const t = labels[language];
 
+  // The signature mechanic: severity dictates size, not a fixed layout.
+  // Whatever is most dangerous right now is physically the biggest thing
+  // on the page - "unforgiving" made structural, not decorative.
+  const [primary, ...rest] = data;
+
   return (
-    <Card variant="hero" className="p-6 sm:p-10">
+    <Card className="border-[0.5px] border-red-500/25 p-6 sm:p-10">
       <div className="flex items-center gap-3">
-        <SignatureEdge orientation="vertical" className="h-4" />
+        <SignatureEdge orientation="vertical" pulse={false} className="h-4" />
         <p className="text-sm text-muted">{t.eyebrow}</p>
       </div>
 
@@ -128,26 +136,41 @@ export default function RiskConcentration({
         {t.title}
       </h2>
 
-      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {data.map((item) => (
-          <Card
-            key={item.factor}
-            variant="inner"
-            className={`border p-5 ${getTone(item.severity)}`}
-          >
-            <p className="text-sm text-gray-300">
-              {item.factor}
-            </p>
+      <div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-[1.3fr_1fr]">
+        <Card
+          variant="inner"
+          className={`border p-6 sm:p-8 ${getTone(primary.severity)}`}
+        >
+          <p className="text-[10px] font-black uppercase tracking-[0.2em]">
+            {getSeverityLabel(primary.severity, t)}
+          </p>
 
-            <h3 className="mt-3 text-metric-lg">
-              {item.count}
-            </h3>
+          <h3 className="mt-4 text-6xl font-black tabular-nums">
+            {primary.count}
+          </h3>
 
-            <p className="mt-2 text-[10px] font-black uppercase tracking-[0.16em]">
-              {getSeverityLabel(item.severity, t)}
-            </p>
-          </Card>
-        ))}
+          <p className="mt-3 text-base text-gray-300">
+            {primary.factor}
+          </p>
+        </Card>
+
+        <div className="grid grid-cols-3 gap-3 lg:grid-cols-1">
+          {rest.map((item) => (
+            <Card
+              key={item.factor}
+              variant="inner"
+              className={`border p-4 ${getTone(item.severity)}`}
+            >
+              <h3 className="text-2xl font-black tabular-nums">
+                {item.count}
+              </h3>
+
+              <p className="mt-1 text-xs text-gray-400">
+                {item.factor}
+              </p>
+            </Card>
+          ))}
+        </div>
       </div>
 
       <p className="mt-8 max-w-2xl text-sm leading-relaxed text-muted">

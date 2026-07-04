@@ -3,6 +3,7 @@ import {
   type ReportI18nProps,
 } from "@/components/reports/ReportI18n";
 import Card from "@/components/ui/Card";
+import ReportChapterHeader from "@/components/reports/ReportChapterHeader";
 
 type Props = ReportI18nProps & {
   primaryFocus: string;
@@ -26,15 +27,13 @@ export default function GrowthFocusCard({
 
   return (
     <Card className="report-card p-6 sm:p-10">
-      <p className="text-sm uppercase tracking-[0.2em] text-accent-bright">
-        {t.growthFocusSubtitle}
-      </p>
+      <ReportChapterHeader
+        number="05"
+        subtitle={t.growthFocusSubtitle}
+        title={t.growthFocusTitle}
+      />
 
-      <h2 className="mt-3 text-section text-white">
-        {t.growthFocusTitle}
-      </h2>
-
-      <Card variant="inner" className="mt-6 p-5">
+      <Card variant="inner" className="p-5">
         {hasEnoughData ? (
           <p className="max-w-3xl text-lg font-black leading-relaxed text-white">
             {primaryFocus}

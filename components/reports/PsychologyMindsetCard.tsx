@@ -3,6 +3,7 @@ import {
   type ReportI18nProps,
 } from "@/components/reports/ReportI18n";
 import Card from "@/components/ui/Card";
+import ReportChapterHeader from "@/components/reports/ReportChapterHeader";
 
 type Props = ReportI18nProps & {
   emotionalTrades: number;
@@ -62,15 +63,13 @@ export default function PsychologyMindsetCard({
 
   return (
     <Card className="report-card p-6 sm:p-10">
-      <p className="text-sm uppercase tracking-[0.2em] text-accent-bright">
-        {t.psychologySubtitle}
-      </p>
+      <ReportChapterHeader
+        number="04"
+        subtitle={t.psychologySubtitle}
+        title={t.psychologyTitle}
+      />
 
-      <h2 className="mt-3 text-section text-white">
-        {t.psychologyTitle}
-      </h2>
-
-      <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card variant="inner" className="p-5">
           <p className="text-sm text-muted-faint">{t.emotionalTrades}</p>
           <h3 className="mt-3 text-3xl font-black text-yellow-400">

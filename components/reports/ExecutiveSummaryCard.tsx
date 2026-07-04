@@ -4,7 +4,7 @@ import {
   type ReportI18nProps,
 } from "@/components/reports/ReportI18n";
 import Card from "@/components/ui/Card";
-import SignatureEdge from "@/components/ui/SignatureEdge";
+import ReportChapterHeader from "@/components/reports/ReportChapterHeader";
 
 type Props = ReportI18nProps & {
   totalPnl: number;
@@ -52,17 +52,14 @@ export default function ExecutiveSummaryCard({
       : t.executiveRisk;
 
   return (
-    <Card variant="hero" className="report-card p-6 sm:p-10">
-      <div className="flex items-center gap-3">
-        <SignatureEdge orientation="vertical" className="h-4" />
-        <p className="text-sm text-muted">{t.executiveSummary}</p>
-      </div>
+    <Card className="report-card p-6 sm:p-10">
+      <ReportChapterHeader
+        number="01"
+        subtitle={t.executiveSummary}
+        title={t.aiStrategicOverview}
+      />
 
-      <h2 className="mt-4 text-hero text-white">
-        {t.aiStrategicOverview}
-      </h2>
-
-      <div className="mt-8 grid grid-cols-2 gap-4 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
         <Card variant="inner" className="p-5">
           <p className="text-sm text-muted-faint">{t.pnlStatus}</p>
           <h3

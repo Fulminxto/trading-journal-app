@@ -3,7 +3,7 @@ import {
   type ReportI18nProps,
 } from "@/components/reports/ReportI18n";
 import Card from "@/components/ui/Card";
-import SignatureEdge from "@/components/ui/SignatureEdge";
+import ReportChapterHeader from "@/components/reports/ReportChapterHeader";
 
 type Props = ReportI18nProps & {
   emotionalTrades: number;
@@ -63,17 +63,14 @@ export default function BehavioralReportCard({
   const tone = getRiskTone(behavioralRisk);
 
   return (
-    <Card variant="hero" className="report-card p-6 sm:p-10">
-      <div className="flex items-center gap-3">
-        <SignatureEdge orientation="vertical" className="h-4" />
-        <p className="text-sm text-muted">{t.riskDisciplineSubtitle}</p>
-      </div>
+    <Card className="report-card p-6 sm:p-10">
+      <ReportChapterHeader
+        number="03"
+        subtitle={t.riskDisciplineSubtitle}
+        title={t.riskDisciplineTitle}
+      />
 
-      <h2 className="mt-4 text-hero text-white">
-        {t.riskDisciplineTitle}
-      </h2>
-
-      <p className="mt-4 text-xs font-black uppercase tracking-[0.18em] text-muted-faint">
+      <p className="text-xs font-black uppercase tracking-[0.18em] text-muted-faint">
         {t.riskFactorsLabel}
       </p>
 

@@ -11,6 +11,7 @@ import ReportsNavigation from "@/components/reports/ReportsNavigation";
 import PrintReportButton from "@/components/reports/PrintReportButton";
 import PDFReportFooter from "@/components/reports/PDFReportFooter";
 import PDFCompactReport from "@/components/reports/PDFCompactReport";
+import { getReportLabels } from "@/components/reports/ReportI18n";
 
 import Card from "@/components/ui/Card";
 import SignatureEdge from "@/components/ui/SignatureEdge";
@@ -561,16 +562,28 @@ export default async function ReportsPage({
       }))
     : undefined;
 
+  // Shared with the on-screen hero's document-meta strip below, so the
+  // web view and the printed cover page agree on who this was prepared
+  // for - a "referto" states this once, not per-chapter.
+  const traderName =
+    currentUser?.name ??
+    session.user.name ??
+    "Trader";
+
+  const rt = getReportLabels(language);
+
+  const generatedDate = new Date().toLocaleDateString(language, {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+
   return (
     <div className="space-y-8 print:space-y-0 print:bg-bg-base">
       <PDFCompactReport
         appLanguage={language}
         currency={currency}
-        userName={
-          currentUser?.name ??
-          session.user.name ??
-          "Trader"
-        }
+        userName={traderName}
         totalTrades={totalTrades}
         totalPnl={totalPnl}
         winRate={winRate}
@@ -587,36 +600,53 @@ export default async function ReportsPage({
       />
 
       <div className="web-report-content space-y-8">
+        {/* Hero-dossier: the report's cover page. Deliberately not
+            `variant="hero"` - no cut-corner facet, no pulsing edge. A
+            tribunal document sits still; it doesn't have the same
+            "alive" crystal signature every other page's hero uses. */}
         <div className="print-hidden">
-          <Card variant="hero" className="p-6 sm:p-10">
-            <div className="flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
+          <Card className="border-[0.5px] border-flash/[0.14] p-6 sm:p-10">
+            <div className="flex items-center gap-3">
+              <SignatureEdge orientation="vertical" pulse={false} className="h-4" />
+              <p className="text-sm text-muted">{t.heroEyebrow}</p>
+            </div>
+
+            <h1 className="mt-4 text-hero text-white">
+              {t.heroTitle}
+            </h1>
+
+            <p className="mt-6 max-w-2xl text-sm leading-relaxed text-muted">
+              {t.heroDescription}
+            </p>
+
+            {/* Document stamp: who this was prepared for, when, and the
+                sample it covers - the export-forward, archivable identity
+                stated once, not repeated per chapter. */}
+            <div className="mt-8 flex flex-wrap items-center gap-x-10 gap-y-4 border-y border-white/10 py-5">
               <div>
-                <div className="flex items-center gap-3">
-                  <SignatureEdge orientation="vertical" className="h-4" />
-                  <p className="text-sm text-muted">{t.heroEyebrow}</p>
-                </div>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-faint">
+                  {rt.preparedFor}
+                </p>
+                <p className="mt-1 font-bold text-white">{traderName}</p>
+              </div>
 
-                <h1 className="mt-4 text-hero text-white">
-                  {t.heroTitle}
-                </h1>
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-faint">
+                  {rt.generatedOn}
+                </p>
+                <p className="mt-1 font-bold text-white">{generatedDate}</p>
+              </div>
 
-                <p className="mt-6 max-w-2xl text-sm leading-relaxed text-muted">
-                  {t.heroDescription}
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-faint">
+                  {t.totalTrades}{periodSuffix}
+                </p>
+                <p className="mt-1 font-bold text-accent-bright">
+                  {totalTrades} &middot; {hasEnoughData ? reportReadiness : t.earlySample}
                 </p>
               </div>
 
-              <div className="grid shrink-0 gap-4 sm:min-w-72">
-                <Card variant="inner" className="p-5">
-                  <p className="text-xs font-black uppercase tracking-[0.18em] text-muted-faint">
-                    {t.totalTrades}{periodSuffix}
-                  </p>
-                  <p className="mt-3 text-3xl font-black text-accent-bright">
-                    {totalTrades}
-                  </p>
-                  <p className="mt-2 text-sm text-muted">
-                    {hasEnoughData ? reportReadiness : t.earlySample}
-                  </p>
-                </Card>
+              <div className="ml-auto">
                 <PrintReportButton appLanguage={language} />
               </div>
             </div>

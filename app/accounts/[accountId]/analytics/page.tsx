@@ -1318,6 +1318,15 @@ export default async function AnalyticsPage({
       trade.emotionalState.length > 0
   ).length;
 
+  // Severity-sorted, worst first - the "truth engine" always leads with
+  // whatever is most dangerous right now rather than a fixed factor
+  // order, so the dominant tile in RiskConcentration is never static.
+  const RISK_SEVERITY_RANK: Record<"high" | "medium" | "low", number> = {
+    high: 0,
+    medium: 1,
+    low: 2,
+  };
+
   const behavioralRiskData = [
     {
       factor: t.lowConfidence,
@@ -1351,7 +1360,11 @@ export default async function AnalyticsPage({
         periodTrades.length
       ),
     },
-  ];
+  ].sort(
+    (a, b) =>
+      RISK_SEVERITY_RANK[a.severity] - RISK_SEVERITY_RANK[b.severity] ||
+      b.count - a.count
+  );
 
   // ── Psychology trend: execution + confidence, one chart ─────────────────
 
@@ -1427,7 +1440,7 @@ export default async function AnalyticsPage({
         ))}
       </div>
 
-      <Card className="reveal-rise p-6 sm:p-10" style={{ animationDelay: "140ms" }}>
+      <Card className="reveal-rise p-6 sm:p-8" style={{ animationDelay: "140ms" }}>
         <p className="text-xs font-black uppercase tracking-[0.18em] text-muted-faint">
           {t.psychologySubtitle}
         </p>
@@ -1540,7 +1553,7 @@ export default async function AnalyticsPage({
       </Card>
 
       <div
-        className="reveal-rise grid grid-cols-1 gap-6 xl:grid-cols-2"
+        className="reveal-rise grid grid-cols-1 gap-4 xl:grid-cols-2"
         style={{ animationDelay: "180ms" }}
       >
         <SymbolPerformance
@@ -1619,7 +1632,7 @@ export default async function AnalyticsPage({
       </div>
 
       <div
-        className="reveal-rise grid grid-cols-1 gap-6 xl:grid-cols-2"
+        className="reveal-rise grid grid-cols-1 gap-4 xl:grid-cols-2"
         style={{ animationDelay: "240ms" }}
       >
         <SessionPerformance
@@ -1700,7 +1713,7 @@ export default async function AnalyticsPage({
       </div>
 
       <Card
-        className="reveal-rise p-6 sm:p-10"
+        className="reveal-rise p-6 sm:p-8"
         style={{ animationDelay: "260ms" }}
       >
         <p className="text-xs font-black uppercase tracking-[0.18em] text-muted-faint">
@@ -1801,7 +1814,7 @@ export default async function AnalyticsPage({
       </Card>
 
       <div
-        className="reveal-rise grid grid-cols-1 gap-6 xl:grid-cols-2"
+        className="reveal-rise grid grid-cols-1 gap-4 xl:grid-cols-2"
         style={{ animationDelay: "280ms" }}
       >
         <Card className="p-6">

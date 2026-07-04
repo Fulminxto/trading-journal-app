@@ -380,8 +380,8 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/analytics/page.tsx": {
-    "mtime": 1783168179.6936977,
-    "ast_hash": "cdcf43d14cedc9c51ff16490d2446199",
+    "mtime": 1783169322.0975893,
+    "ast_hash": "186b00d1903644dd0d8390e320c7c084",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/calendar/loading.tsx": {
@@ -525,8 +525,8 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/reports/page.tsx": {
-    "mtime": 1783167593.2842474,
-    "ast_hash": "47f971ebbdb217fe38e7cf0e288ce90a",
+    "mtime": 1783168713.3050516,
+    "ast_hash": "6c272f4d9845d808c438c6cd6de334ec",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/rules/actions.ts": {
@@ -1130,13 +1130,13 @@
     "semantic_hash": ""
   },
   "components/reports/BehavioralReportCard.tsx": {
-    "mtime": 1783153503.7645,
-    "ast_hash": "e89a6d7c59a73aef4fcedbd93d50b662",
+    "mtime": 1783168755.5145144,
+    "ast_hash": "62b5866f225f9acd6a724155018ac205",
     "semantic_hash": ""
   },
   "components/reports/ExecutiveSummaryCard.tsx": {
-    "mtime": 1783153460.3230486,
-    "ast_hash": "8f663bfb2b7cbd9edf73de5d4180ade5",
+    "mtime": 1783168738.7719266,
+    "ast_hash": "bf167096135e1ba100b7d7fa80b38cfc",
     "semantic_hash": ""
   },
   "components/reports/PDFCompactReport.tsx": {
@@ -1150,8 +1150,8 @@
     "semantic_hash": ""
   },
   "components/reports/PerformanceBreakdownCard.tsx": {
-    "mtime": 1783153481.6799345,
-    "ast_hash": "c6b1d641f948168c6796cc3d46ca5746",
+    "mtime": 1783168768.8569162,
+    "ast_hash": "ecee8f26f4e8a9544efab3d612b46db2",
     "semantic_hash": ""
   },
   "components/reports/PrintReportButton.tsx": {
@@ -1570,8 +1570,8 @@
     "semantic_hash": ""
   },
   ".impeccable/hook.cache.json": {
-    "mtime": 1783168179.8453238,
-    "ast_hash": "41dc22f33a4792140b7e2986ae950046",
+    "mtime": 1783169434.0887299,
+    "ast_hash": "635b2165ed0bd181c3bdf9bbec6ecec0",
     "semantic_hash": ""
   },
   "lib/permissions.ts": {
@@ -1625,18 +1625,23 @@
     "semantic_hash": ""
   },
   "components/analytics/RiskConcentration.tsx": {
-    "mtime": 1783113703.8116827,
-    "ast_hash": "7424fda67dee5540e4c5fc38ae7aa935",
+    "mtime": 1783169289.6533532,
+    "ast_hash": "434866d7820d4e8a9389f10481b3d092",
     "semantic_hash": ""
   },
   "components/reports/GrowthFocusCard.tsx": {
-    "mtime": 1783153558.7922316,
-    "ast_hash": "6f0044e02274fb24e9c049266bd6ce41",
+    "mtime": 1783168789.8165433,
+    "ast_hash": "f4b469e0879f9413325a6ce6fae87c3a",
     "semantic_hash": ""
   },
   "components/reports/PsychologyMindsetCard.tsx": {
-    "mtime": 1783153522.656963,
-    "ast_hash": "ec5f2edc56dcbbb26c938b4c4d9ef91d",
+    "mtime": 1783168779.6347404,
+    "ast_hash": "c8d9dac180c876e8241ca75a0d7849f2",
+    "semantic_hash": ""
+  },
+  "components/reports/ReportChapterHeader.tsx": {
+    "mtime": 1783168722.279679,
+    "ast_hash": "52172417a7acf8874931f4195fc5dcf2",
     "semantic_hash": ""
   }
 }
