@@ -1,9 +1,10 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
 
 async function getMembership(accountId: string) {
   const session = await auth();
@@ -17,9 +18,8 @@ async function getMembership(accountId: string) {
   return { membership, userId: session.user.id };
 }
 
-export async function createStrategy(
+async function createStrategyRecord(
   accountId: string,
-  _prevState: { error?: string } | null,
   formData: FormData
 ): Promise<{ error?: string }> {
   const { membership } = await getMembership(accountId);
@@ -49,17 +49,16 @@ export async function createStrategy(
       },
     });
   } catch {
-    return { error: "Esiste gi� una strategia con questo nome." };
+    return { error: "Esiste gia una strategia con questo nome." };
   }
 
   revalidatePath(`/accounts/${accountId}/playbook`);
   return {};
 }
 
-export async function updateStrategy(
+async function updateStrategyRecord(
   accountId: string,
   strategyId: string,
-  _prevState: { error?: string } | null,
   formData: FormData
 ): Promise<{ error?: string }> {
   const { membership } = await getMembership(accountId);
@@ -94,11 +93,28 @@ export async function updateStrategy(
       },
     });
   } catch {
-    return { error: "Esiste gi� una strategia con questo nome." };
+    return { error: "Esiste gia una strategia con questo nome." };
   }
 
   revalidatePath(`/accounts/${accountId}/playbook`);
   return {};
+}
+
+export async function createStrategy(
+  accountId: string,
+  _prevState: { error?: string } | null,
+  formData: FormData
+): Promise<{ error?: string }> {
+  return createStrategyRecord(accountId, formData);
+}
+
+export async function updateStrategy(
+  accountId: string,
+  strategyId: string,
+  _prevState: { error?: string } | null,
+  formData: FormData
+): Promise<{ error?: string }> {
+  return updateStrategyRecord(accountId, strategyId, formData);
 }
 
 export async function deleteStrategy(
@@ -120,4 +136,27 @@ export async function deleteStrategy(
 
   revalidatePath(`/accounts/${accountId}/playbook`);
   return {};
+}
+
+export async function createStrategyFromForm(
+  accountId: string,
+  formData: FormData
+) {
+  await createStrategyRecord(accountId, formData);
+}
+
+export async function updateStrategyFromForm(
+  accountId: string,
+  strategyId: string,
+  formData: FormData
+) {
+  await updateStrategyRecord(accountId, strategyId, formData);
+}
+
+export async function deleteStrategyFromForm(
+  accountId: string,
+  strategyId: string,
+  _formData: FormData
+) {
+  await deleteStrategy(accountId, strategyId);
 }
