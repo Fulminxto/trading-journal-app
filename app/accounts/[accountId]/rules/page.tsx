@@ -1,11 +1,11 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
   Activity,
-  AlertTriangle,
-  CalendarDays,
-  Gauge,
-  ListChecks,
+  ArrowLeft,
+  CheckCircle2,
+  LockKeyhole,
   Save,
   ShieldCheck,
   Target,
@@ -13,6 +13,8 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+import Card from "@/components/ui/Card";
+import SignatureEdge from "@/components/ui/SignatureEdge";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
@@ -27,776 +29,245 @@ import {
 } from "@/lib/i18n";
 import { saveTradingGoals } from "./actions";
 
-type StatCardProps = {
+type Standard = {
+  key: string;
   label: string;
-  value: string | number;
-  description: string;
+  value: string;
+  detail: string;
   icon: LucideIcon;
-  tone?: string;
+  configured: boolean;
 };
 
-type DisciplineRule = {
+type RulebookItem = {
   title: string;
   description: string;
 };
 
-type RulesLabels = {
-  disciplineSystem: string;
-  accountControlCenter: string;
-  title: string;
-  description: string;
-  backToAccountHub: string;
-
-  monthlyPnl: string;
-  winRate: string;
-  maxDrawdown: string;
-  tradesThisMonth: string;
-  target: string;
-  limit: string;
-  dailyLimit: string;
-  noMonthlyProfitTarget: string;
-  noWinRateTarget: string;
-  noDrawdownLimit: string;
-  noDailyTradeLimit: string;
-
-  performanceTargets: string;
-  monthlyGoals: string;
-  monthlyProfitGoalPlaceholder: string;
-  monthlyWinRateGoalPlaceholder: string;
-  maxDrawdownLimitPlaceholder: string;
-  maxTradesPerDayPlaceholder: string;
-  saveGoals: string;
-
-  operatingFramework: string;
-  disciplineRules: string;
-  rules: DisciplineRule[];
-
-  profitProgress: string;
-  monthlyTarget: string;
-  currentProgress: string;
-  monthlyProfitTargetReached: string;
-  remainingToReachTarget: string;
-  setMonthlyProfitTarget: string;
-  winRateProgress: string;
-  drawdownUsage: string;
-
-  controlSignals: string;
-  riskGuardrails: string;
-  busiestDay: string;
-  busiestDayDescription: string;
-  dailyLimitUsage: string;
-  dailyLimitUsageDescription: string;
-  closedTrades: string;
-  closedTradesDescription: string;
-};
-
-const rulesLabels: Record<AppLanguage, RulesLabels> = {
-  it: {
-    disciplineSystem: "Sistema disciplina",
-    accountControlCenter: "Centro controllo account",
-    title: "Rules & Goals",
+const rulebook: RulebookItem[] = [
+  {
+    title: "No revenge trades",
     description:
-      "Imposta gli obiettivi mensili, definisci i limiti dell’account e mantieni visibili le regole operative prima che la performance diventi emotiva.",
-    backToAccountHub: "Torna all’Account Hub",
-
-    monthlyPnl: "PnL mensile",
-    winRate: "Win Rate",
-    maxDrawdown: "Drawdown massimo",
-    tradesThisMonth: "Trade questo mese",
-    target: "Target",
-    limit: "Limite",
-    dailyLimit: "Limite giornaliero",
-    noMonthlyProfitTarget:
-      "Nessun target di profitto mensile impostato.",
-    noWinRateTarget:
-      "Nessun target di win rate impostato.",
-    noDrawdownLimit:
-      "Nessun limite di drawdown impostato.",
-    noDailyTradeLimit:
-      "Nessun limite giornaliero di trade impostato.",
-
-    performanceTargets: "Target performance",
-    monthlyGoals: "Obiettivi mensili",
-    monthlyProfitGoalPlaceholder:
-      "Obiettivo profitto mensile",
-    monthlyWinRateGoalPlaceholder:
-      "Obiettivo win rate mensile %",
-    maxDrawdownLimitPlaceholder:
-      "Limite drawdown massimo %",
-    maxTradesPerDayPlaceholder:
-      "Trade massimi al giorno",
-    saveGoals: "Salva obiettivi",
-
-    operatingFramework: "Framework operativo",
-    disciplineRules: "Regole disciplina",
-    rules: [
-      {
-        title: "Niente revenge trading",
-        description:
-          "Non aprire un nuovo trade per recuperare emotivamente una perdita.",
-      },
-      {
-        title: "Niente entrate impulsive",
-        description:
-          "Ogni entrata deve nascere da un setup valido e da una motivazione chiara.",
-      },
-      {
-        title: "Rispetta i limiti di rischio",
-        description:
-          "L’account deve rimanere dentro i limiti di drawdown e frequenza operativa.",
-      },
-      {
-        title: "Fermati dopo errori emotivi",
-        description:
-          "Se la qualità esecutiva cala, la priorità diventa protezione.",
-      },
-      {
-        title: "Processo prima del profitto",
-        description:
-          "L’obiettivo è proteggere la consistenza, non inseguire un singolo risultato.",
-      },
-    ],
-
-    profitProgress: "Progresso profitto",
-    monthlyTarget: "Target mensile",
-    currentProgress: "Progresso attuale",
-    monthlyProfitTargetReached:
-      "Target di profitto mensile raggiunto.",
-    remainingToReachTarget:
-      "rimanenti per raggiungere il target.",
-    setMonthlyProfitTarget:
-      "Imposta un target di profitto mensile per monitorare il progresso.",
-    winRateProgress: "Progresso Win Rate",
-    drawdownUsage: "Utilizzo drawdown",
-
-    controlSignals: "Segnali di controllo",
-    riskGuardrails: "Guardrail di rischio",
-    busiestDay: "Giorno più intenso",
-    busiestDayDescription:
-      "Numero massimo di trade aperti in un singolo giorno questo mese.",
-    dailyLimitUsage: "Utilizzo limite giornaliero",
-    dailyLimitUsageDescription:
-      "Calcolato sul giorno operativo più intenso.",
-    closedTrades: "Trade chiusi",
-    closedTradesDescription:
-      "Usati per calcolare il win rate attuale.",
+      "A loss does not authorize a recovery trade. New risk needs a valid setup.",
   },
-
-  en: {
-    disciplineSystem: "Discipline system",
-    accountControlCenter: "Account control center",
-    title: "Rules & Goals",
+  {
+    title: "Setup before execution",
     description:
-      "Set the monthly targets, define the account limits and keep the operating rules visible before performance becomes emotional.",
-    backToAccountHub: "Back to Account Hub",
-
-    monthlyPnl: "Monthly PnL",
-    winRate: "Win Rate",
-    maxDrawdown: "Max Drawdown",
-    tradesThisMonth: "Trades This Month",
-    target: "Target",
-    limit: "Limit",
-    dailyLimit: "Daily limit",
-    noMonthlyProfitTarget:
-      "No monthly profit target set.",
-    noWinRateTarget: "No win rate target set.",
-    noDrawdownLimit: "No drawdown limit set.",
-    noDailyTradeLimit: "No daily trade limit set.",
-
-    performanceTargets: "Performance targets",
-    monthlyGoals: "Monthly Goals",
-    monthlyProfitGoalPlaceholder:
-      "Monthly Profit Goal",
-    monthlyWinRateGoalPlaceholder:
-      "Monthly Win Rate Goal %",
-    maxDrawdownLimitPlaceholder:
-      "Max Drawdown Limit %",
-    maxTradesPerDayPlaceholder:
-      "Max Trades Per Day",
-    saveGoals: "Save Goals",
-
-    operatingFramework: "Operating framework",
-    disciplineRules: "Discipline Rules",
-    rules: [
-      {
-        title: "No revenge trading",
-        description:
-          "Do not open a new trade to emotionally recover a loss.",
-      },
-      {
-        title: "No impulsive entries",
-        description:
-          "Every entry must come from a valid setup and clear reason.",
-      },
-      {
-        title: "Respect risk limits",
-        description:
-          "The account must stay inside drawdown and trade frequency limits.",
-      },
-      {
-        title: "Stop after emotional mistakes",
-        description:
-          "If execution quality drops, the priority becomes protection.",
-      },
-      {
-        title: "Process before profit",
-        description:
-          "The goal is to protect consistency, not chase a single result.",
-      },
-    ],
-
-    profitProgress: "Profit progress",
-    monthlyTarget: "Monthly Target",
-    currentProgress: "Current progress",
-    monthlyProfitTargetReached:
-      "Monthly profit target reached.",
-    remainingToReachTarget:
-      "remaining to reach the target.",
-    setMonthlyProfitTarget:
-      "Set a monthly profit target to track progress.",
-    winRateProgress: "Win Rate Progress",
-    drawdownUsage: "Drawdown Usage",
-
-    controlSignals: "Control signals",
-    riskGuardrails: "Risk Guardrails",
-    busiestDay: "Busiest day",
-    busiestDayDescription:
-      "Max trades opened in one day this month.",
-    dailyLimitUsage: "Daily limit usage",
-    dailyLimitUsageDescription:
-      "Based on the busiest trading day.",
-    closedTrades: "Closed trades",
-    closedTradesDescription:
-      "Used to calculate current win rate.",
+      "Every position needs a reason that would still make sense after the session ends.",
   },
-
-  uk: {
-    disciplineSystem: "Система дисципліни",
-    accountControlCenter: "Центр контролю акаунта",
-    title: "Правила та цілі",
+  {
+    title: "Respect the drawdown boundary",
     description:
-      "Встановлюй місячні цілі, визначай ліміти акаунта та тримай операційні правила видимими до того, як результат стане емоційним.",
-    backToAccountHub: "Назад до Account Hub",
-
-    monthlyPnl: "Місячний PnL",
-    winRate: "Win Rate",
-    maxDrawdown: "Максимальний drawdown",
-    tradesThisMonth: "Trade цього місяця",
-    target: "Ціль",
-    limit: "Ліміт",
-    dailyLimit: "Денний ліміт",
-    noMonthlyProfitTarget:
-      "Місячну ціль прибутку не встановлено.",
-    noWinRateTarget: "Ціль win rate не встановлено.",
-    noDrawdownLimit: "Ліміт drawdown не встановлено.",
-    noDailyTradeLimit:
-      "Денний ліміт trade не встановлено.",
-
-    performanceTargets: "Цілі performance",
-    monthlyGoals: "Місячні цілі",
-    monthlyProfitGoalPlaceholder:
-      "Місячна ціль прибутку",
-    monthlyWinRateGoalPlaceholder:
-      "Місячна ціль win rate %",
-    maxDrawdownLimitPlaceholder:
-      "Ліміт максимального drawdown %",
-    maxTradesPerDayPlaceholder:
-      "Максимум trade на день",
-    saveGoals: "Зберегти цілі",
-
-    operatingFramework: "Операційний framework",
-    disciplineRules: "Правила дисципліни",
-    rules: [
-      {
-        title: "Без revenge trading",
-        description:
-          "Не відкривай новий trade, щоб емоційно відіграти втрату.",
-      },
-      {
-        title: "Без імпульсивних входів",
-        description:
-          "Кожен вхід має мати валідний setup і чітку причину.",
-      },
-      {
-        title: "Поважай ліміти ризику",
-        description:
-          "Акаунт має залишатися в межах drawdown і частоти операцій.",
-      },
-      {
-        title: "Зупинись після емоційних помилок",
-        description:
-          "Коли якість виконання падає, пріоритетом стає захист.",
-      },
-      {
-        title: "Процес перед прибутком",
-        description:
-          "Ціль — захищати стабільність, а не гнатися за одним результатом.",
-      },
-    ],
-
-    profitProgress: "Прогрес прибутку",
-    monthlyTarget: "Місячна ціль",
-    currentProgress: "Поточний прогрес",
-    monthlyProfitTargetReached:
-      "Місячну ціль прибутку досягнуто.",
-    remainingToReachTarget:
-      "залишилось до досягнення цілі.",
-    setMonthlyProfitTarget:
-      "Встанови місячну ціль прибутку, щоб відстежувати прогрес.",
-    winRateProgress: "Прогрес Win Rate",
-    drawdownUsage: "Використання drawdown",
-
-    controlSignals: "Контрольні сигнали",
-    riskGuardrails: "Захисні межі ризику",
-    busiestDay: "Найактивніший день",
-    busiestDayDescription:
-      "Максимальна кількість trade, відкритих за один день цього місяця.",
-    dailyLimitUsage: "Використання денного ліміту",
-    dailyLimitUsageDescription:
-      "Розраховано на основі найактивнішого торгового дня.",
-    closedTrades: "Закриті trade",
-    closedTradesDescription:
-      "Використовуються для розрахунку поточного win rate.",
+      "Capital protection overrides pace, opportunity, and the urge to force activity.",
   },
-
-  ru: {
-    disciplineSystem: "Система дисциплины",
-    accountControlCenter: "Центр контроля аккаунта",
-    title: "Правила и цели",
+  {
+    title: "Frequency is a control",
     description:
-      "Устанавливай месячные цели, определяй лимиты аккаунта и держи операционные правила видимыми до того, как результат станет эмоциональным.",
-    backToAccountHub: "Назад в Account Hub",
-
-    monthlyPnl: "Месячный PnL",
-    winRate: "Win Rate",
-    maxDrawdown: "Максимальный drawdown",
-    tradesThisMonth: "Trade за месяц",
-    target: "Цель",
-    limit: "Лимит",
-    dailyLimit: "Дневной лимит",
-    noMonthlyProfitTarget:
-      "Месячная цель прибыли не задана.",
-    noWinRateTarget: "Цель win rate не задана.",
-    noDrawdownLimit: "Лимит drawdown не задан.",
-    noDailyTradeLimit:
-      "Дневной лимит trade не задан.",
-
-    performanceTargets: "Цели performance",
-    monthlyGoals: "Месячные цели",
-    monthlyProfitGoalPlaceholder:
-      "Месячная цель прибыли",
-    monthlyWinRateGoalPlaceholder:
-      "Месячная цель win rate %",
-    maxDrawdownLimitPlaceholder:
-      "Лимит максимального drawdown %",
-    maxTradesPerDayPlaceholder:
-      "Максимум trade в день",
-    saveGoals: "Сохранить цели",
-
-    operatingFramework: "Операционный framework",
-    disciplineRules: "Правила дисциплины",
-    rules: [
-      {
-        title: "Без revenge trading",
-        description:
-          "Не открывай новый trade, чтобы эмоционально отыграть убыток.",
-      },
-      {
-        title: "Без импульсивных входов",
-        description:
-          "Каждый вход должен иметь валидный setup и ясную причину.",
-      },
-      {
-        title: "Соблюдай лимиты риска",
-        description:
-          "Аккаунт должен оставаться внутри лимитов drawdown и частоты сделок.",
-      },
-      {
-        title: "Остановись после эмоциональных ошибок",
-        description:
-          "Если качество execution падает, приоритетом становится защита.",
-      },
-      {
-        title: "Процесс перед прибылью",
-        description:
-          "Цель — защищать стабильность, а не гнаться за одним результатом.",
-      },
-    ],
-
-    profitProgress: "Прогресс прибыли",
-    monthlyTarget: "Месячная цель",
-    currentProgress: "Текущий прогресс",
-    monthlyProfitTargetReached:
-      "Месячная цель прибыли достигнута.",
-    remainingToReachTarget:
-      "осталось до достижения цели.",
-    setMonthlyProfitTarget:
-      "Установи месячную цель прибыли, чтобы отслеживать прогресс.",
-    winRateProgress: "Прогресс Win Rate",
-    drawdownUsage: "Использование drawdown",
-
-    controlSignals: "Контрольные сигналы",
-    riskGuardrails: "Защитные рамки риска",
-    busiestDay: "Самый активный день",
-    busiestDayDescription:
-      "Максимальное количество trade, открытых за один день в этом месяце.",
-    dailyLimitUsage: "Использование дневного лимита",
-    dailyLimitUsageDescription:
-      "Рассчитано по самому активному торговому дню.",
-    closedTrades: "Закрытые trade",
-    closedTradesDescription:
-      "Используются для расчета текущего win rate.",
+      "The busiest day matters because overtrading usually starts before the PnL shows it.",
   },
-
-  es: {
-    disciplineSystem: "Sistema de disciplina",
-    accountControlCenter: "Centro de control de cuenta",
-    title: "Reglas y objetivos",
+  {
+    title: "Process before profit",
     description:
-      "Define objetivos mensuales, establece los límites de la cuenta y mantén visibles las reglas operativas antes de que el rendimiento se vuelva emocional.",
-    backToAccountHub: "Volver al Account Hub",
-
-    monthlyPnl: "PnL mensual",
-    winRate: "Win Rate",
-    maxDrawdown: "Drawdown máximo",
-    tradesThisMonth: "Trades este mes",
-    target: "Objetivo",
-    limit: "Límite",
-    dailyLimit: "Límite diario",
-    noMonthlyProfitTarget:
-      "No hay objetivo mensual de beneficio.",
-    noWinRateTarget: "No hay objetivo de win rate.",
-    noDrawdownLimit: "No hay límite de drawdown.",
-    noDailyTradeLimit:
-      "No hay límite diario de trades.",
-
-    performanceTargets: "Objetivos de rendimiento",
-    monthlyGoals: "Objetivos mensuales",
-    monthlyProfitGoalPlaceholder:
-      "Objetivo mensual de beneficio",
-    monthlyWinRateGoalPlaceholder:
-      "Objetivo mensual de win rate %",
-    maxDrawdownLimitPlaceholder:
-      "Límite máximo de drawdown %",
-    maxTradesPerDayPlaceholder:
-      "Máximo de trades por día",
-    saveGoals: "Guardar objetivos",
-
-    operatingFramework: "Marco operativo",
-    disciplineRules: "Reglas de disciplina",
-    rules: [
-      {
-        title: "Sin revenge trading",
-        description:
-          "No abras un nuevo trade para recuperar emocionalmente una pérdida.",
-      },
-      {
-        title: "Sin entradas impulsivas",
-        description:
-          "Cada entrada debe venir de un setup válido y una razón clara.",
-      },
-      {
-        title: "Respeta los límites de riesgo",
-        description:
-          "La cuenta debe mantenerse dentro de los límites de drawdown y frecuencia operativa.",
-      },
-      {
-        title: "Detente después de errores emocionales",
-        description:
-          "Si la calidad de ejecución baja, la prioridad pasa a ser la protección.",
-      },
-      {
-        title: "Proceso antes que beneficio",
-        description:
-          "El objetivo es proteger la consistencia, no perseguir un único resultado.",
-      },
-    ],
-
-    profitProgress: "Progreso de beneficio",
-    monthlyTarget: "Objetivo mensual",
-    currentProgress: "Progreso actual",
-    monthlyProfitTargetReached:
-      "Objetivo mensual de beneficio alcanzado.",
-    remainingToReachTarget:
-      "restante para alcanzar el objetivo.",
-    setMonthlyProfitTarget:
-      "Define un objetivo mensual de beneficio para seguir el progreso.",
-    winRateProgress: "Progreso Win Rate",
-    drawdownUsage: "Uso del drawdown",
-
-    controlSignals: "Señales de control",
-    riskGuardrails: "Guardrails de riesgo",
-    busiestDay: "Día más activo",
-    busiestDayDescription:
-      "Máximo de trades abiertos en un solo día este mes.",
-    dailyLimitUsage: "Uso del límite diario",
-    dailyLimitUsageDescription:
-      "Basado en el día de trading más activo.",
-    closedTrades: "Trades cerrados",
-    closedTradesDescription:
-      "Usados para calcular el win rate actual.",
+      "Goals are execution standards. They should guide behavior, not invite chasing.",
   },
-
-  fr: {
-    disciplineSystem: "Système de discipline",
-    accountControlCenter: "Centre de contrôle du compte",
-    title: "Règles et objectifs",
-    description:
-      "Définis les objectifs mensuels, fixe les limites du compte et garde les règles opérationnelles visibles avant que la performance devienne émotionnelle.",
-    backToAccountHub: "Retour à l’Account Hub",
-
-    monthlyPnl: "PnL mensuel",
-    winRate: "Win Rate",
-    maxDrawdown: "Drawdown maximal",
-    tradesThisMonth: "Trades ce mois-ci",
-    target: "Objectif",
-    limit: "Limite",
-    dailyLimit: "Limite quotidienne",
-    noMonthlyProfitTarget:
-      "Aucun objectif de profit mensuel défini.",
-    noWinRateTarget: "Aucun objectif de win rate défini.",
-    noDrawdownLimit: "Aucune limite de drawdown définie.",
-    noDailyTradeLimit:
-      "Aucune limite quotidienne de trades définie.",
-
-    performanceTargets: "Objectifs de performance",
-    monthlyGoals: "Objectifs mensuels",
-    monthlyProfitGoalPlaceholder:
-      "Objectif de profit mensuel",
-    monthlyWinRateGoalPlaceholder:
-      "Objectif win rate mensuel %",
-    maxDrawdownLimitPlaceholder:
-      "Limite de drawdown maximal %",
-    maxTradesPerDayPlaceholder:
-      "Maximum de trades par jour",
-    saveGoals: "Enregistrer les objectifs",
-
-    operatingFramework: "Cadre opérationnel",
-    disciplineRules: "Règles de discipline",
-    rules: [
-      {
-        title: "Pas de revenge trading",
-        description:
-          "N’ouvre pas un nouveau trade pour récupérer émotionnellement une perte.",
-      },
-      {
-        title: "Pas d’entrées impulsives",
-        description:
-          "Chaque entrée doit venir d’un setup valide et d’une raison claire.",
-      },
-      {
-        title: "Respecte les limites de risque",
-        description:
-          "Le compte doit rester dans les limites de drawdown et de fréquence opérationnelle.",
-      },
-      {
-        title: "Arrête-toi après des erreurs émotionnelles",
-        description:
-          "Si la qualité d’exécution baisse, la priorité devient la protection.",
-      },
-      {
-        title: "Le processus avant le profit",
-        description:
-          "L’objectif est de protéger la constance, pas de courir après un seul résultat.",
-      },
-    ],
-
-    profitProgress: "Progression du profit",
-    monthlyTarget: "Objectif mensuel",
-    currentProgress: "Progression actuelle",
-    monthlyProfitTargetReached:
-      "Objectif de profit mensuel atteint.",
-    remainingToReachTarget:
-      "restant pour atteindre l’objectif.",
-    setMonthlyProfitTarget:
-      "Définis un objectif de profit mensuel pour suivre la progression.",
-    winRateProgress: "Progression Win Rate",
-    drawdownUsage: "Utilisation du drawdown",
-
-    controlSignals: "Signaux de contrôle",
-    riskGuardrails: "Garde-fous de risque",
-    busiestDay: "Jour le plus actif",
-    busiestDayDescription:
-      "Nombre maximal de trades ouverts en une journée ce mois-ci.",
-    dailyLimitUsage: "Utilisation de la limite quotidienne",
-    dailyLimitUsageDescription:
-      "Basé sur la journée de trading la plus active.",
-    closedTrades: "Trades clôturés",
-    closedTradesDescription:
-      "Utilisés pour calculer le win rate actuel.",
-  },
-
-  de: {
-    disciplineSystem: "Disziplin-System",
-    accountControlCenter: "Account-Kontrollzentrum",
-    title: "Regeln & Ziele",
-    description:
-      "Setze monatliche Ziele, definiere Account-Limits und halte operative Regeln sichtbar, bevor Performance emotional wird.",
-    backToAccountHub: "Zurück zum Account Hub",
-
-    monthlyPnl: "Monatlicher PnL",
-    winRate: "Win Rate",
-    maxDrawdown: "Maximaler Drawdown",
-    tradesThisMonth: "Trades diesen Monat",
-    target: "Ziel",
-    limit: "Limit",
-    dailyLimit: "Tageslimit",
-    noMonthlyProfitTarget:
-      "Kein monatliches Gewinnziel gesetzt.",
-    noWinRateTarget: "Kein Win-Rate-Ziel gesetzt.",
-    noDrawdownLimit: "Kein Drawdown-Limit gesetzt.",
-    noDailyTradeLimit:
-      "Kein tägliches Trade-Limit gesetzt.",
-
-    performanceTargets: "Performance-Ziele",
-    monthlyGoals: "Monatliche Ziele",
-    monthlyProfitGoalPlaceholder:
-      "Monatliches Gewinnziel",
-    monthlyWinRateGoalPlaceholder:
-      "Monatliches Win-Rate-Ziel %",
-    maxDrawdownLimitPlaceholder:
-      "Maximales Drawdown-Limit %",
-    maxTradesPerDayPlaceholder:
-      "Maximale Trades pro Tag",
-    saveGoals: "Ziele speichern",
-
-    operatingFramework: "Operatives Framework",
-    disciplineRules: "Disziplin-Regeln",
-    rules: [
-      {
-        title: "Kein Revenge Trading",
-        description:
-          "Öffne keinen neuen Trade, um einen Verlust emotional zurückzuholen.",
-      },
-      {
-        title: "Keine impulsiven Einstiege",
-        description:
-          "Jeder Einstieg muss aus einem validen Setup und einem klaren Grund entstehen.",
-      },
-      {
-        title: "Risikogrenzen respektieren",
-        description:
-          "Der Account muss innerhalb der Drawdown- und Trade-Frequenz-Limits bleiben.",
-      },
-      {
-        title: "Nach emotionalen Fehlern stoppen",
-        description:
-          "Wenn die Execution-Qualität fällt, wird Schutz zur Priorität.",
-      },
-      {
-        title: "Prozess vor Profit",
-        description:
-          "Das Ziel ist, Konsistenz zu schützen, nicht ein einzelnes Ergebnis zu jagen.",
-      },
-    ],
-
-    profitProgress: "Gewinnfortschritt",
-    monthlyTarget: "Monatliches Ziel",
-    currentProgress: "Aktueller Fortschritt",
-    monthlyProfitTargetReached:
-      "Monatliches Gewinnziel erreicht.",
-    remainingToReachTarget:
-      "verbleibend bis zum Ziel.",
-    setMonthlyProfitTarget:
-      "Setze ein monatliches Gewinnziel, um den Fortschritt zu verfolgen.",
-    winRateProgress: "Win-Rate-Fortschritt",
-    drawdownUsage: "Drawdown-Nutzung",
-
-    controlSignals: "Kontrollsignale",
-    riskGuardrails: "Risiko-Leitplanken",
-    busiestDay: "Aktivster Tag",
-    busiestDayDescription:
-      "Maximale Anzahl an Trades, die diesen Monat an einem Tag eröffnet wurden.",
-    dailyLimitUsage: "Nutzung des Tageslimits",
-    dailyLimitUsageDescription:
-      "Basierend auf dem aktivsten Trading-Tag.",
-    closedTrades: "Geschlossene Trades",
-    closedTradesDescription:
-      "Wird zur Berechnung der aktuellen Win Rate genutzt.",
-  },
-};
+];
 
 function formatPercent(
   value: number,
-  language?: string | null,
-  digits = 2
+  language: AppLanguage,
+  digits = 0
 ) {
   return (
-    new Intl.NumberFormat(
-      getLocaleFromLanguage(language),
-      {
-        minimumFractionDigits: digits,
-        maximumFractionDigits: digits,
-      }
-    ).format(value) + "%"
+    new Intl.NumberFormat(getLocaleFromLanguage(language), {
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits,
+    }).format(value) + "%"
   );
 }
 
-function getResultTone(value: number) {
-  if (value > 0) {
-    return "text-green-400";
+function formatMonthLabel(date: Date, language: AppLanguage) {
+  return new Intl.DateTimeFormat(getLocaleFromLanguage(language), {
+    month: "long",
+    year: "numeric",
+  }).format(date);
+}
+
+function clampPercent(value: number) {
+  if (!Number.isFinite(value)) return 0;
+  return Math.min(Math.max(value, 0), 100);
+}
+
+function getMetricTone(value: number) {
+  if (value > 0) return "text-positive";
+  if (value < 0) return "text-negative";
+  return "text-muted";
+}
+
+function getStandardState({
+  configured,
+  breached,
+  met,
+}: {
+  configured: boolean;
+  breached?: boolean;
+  met?: boolean;
+}) {
+  if (!configured) {
+    return { label: "Not set", tone: "neutral" as const };
   }
 
-  if (value < 0) {
-    return "text-red-400";
+  if (breached) {
+    return { label: "Breached", tone: "warning" as const };
   }
 
-  return "text-yellow-400";
+  if (met) {
+    return { label: "Met", tone: "positive" as const };
+  }
+
+  return { label: "Active", tone: "info" as const };
+}
+
+function StatusPill({
+  children,
+  tone = "neutral",
+}: {
+  children: ReactNode;
+  tone?: "neutral" | "info" | "positive" | "warning";
+}) {
+  const tones = {
+    neutral: "border-flash/[0.12] bg-surface-2 text-muted",
+    info: "border-accent-bright/25 bg-accent-bright/[0.08] text-accent-bright",
+    positive: "border-positive/25 bg-positive/[0.08] text-positive",
+    warning: "border-warning/25 bg-warning/[0.08] text-warning",
+  };
+
+  return (
+    <span
+      className={`inline-flex items-center rounded-pill border-[0.5px] px-3 py-1 text-micro font-medium uppercase tracking-label ${tones[tone]}`}
+    >
+      {children}
+    </span>
+  );
+}
+
+function SectionHeader({
+  eyebrow,
+  title,
+  children,
+}: {
+  eyebrow: string;
+  title: string;
+  children?: ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <div className="flex items-center gap-2">
+          <SignatureEdge orientation="vertical" className="h-4" />
+          <p className="text-micro uppercase tracking-label text-accent-bright">
+            {eyebrow}
+          </p>
+        </div>
+        <h2 className="mt-2 text-section text-flash">{title}</h2>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function EmptyState({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="rounded-inner border-[0.5px] border-dashed border-flash/[0.12] bg-surface-2 p-5">
+      <p className="text-body font-medium text-flash">{title}</p>
+      <p className="mt-2 text-caption text-muted">{description}</p>
+    </div>
+  );
 }
 
 function ProgressBar({
   value,
-  tone = "bg-accent",
+  tone = "info",
 }: {
   value: number;
-  tone?: string;
+  tone?: "info" | "positive" | "warning" | "negative";
 }) {
-  const width = Math.min(
-    Math.max(value, 0),
-    100
-  );
+  const tones = {
+    info: "bg-accent-bright",
+    positive: "bg-positive",
+    warning: "bg-warning",
+    negative: "bg-negative",
+  };
 
   return (
-    <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/10">
+    <div className="mt-4 h-2 overflow-hidden rounded-pill bg-surface-1">
       <div
-        className={`h-full rounded-full ${tone}`}
-        style={{
-          width: `${width}%`,
-        }}
+        className={`h-full rounded-pill transition-all duration-base ${tones[tone]}`}
+        style={{ width: `${clampPercent(value)}%` }}
       />
     </div>
   );
 }
 
-function StatCard({
-  label,
-  value,
-  description,
-  icon: Icon,
-  tone = "text-white",
-}: StatCardProps) {
+function StandardCard({ standard }: { standard: Standard }) {
+  const Icon = standard.icon;
+
   return (
-    <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+    <Card className="reveal-rise p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-sm text-gray-400">
-            {label}
+          <p className="text-micro uppercase tracking-label text-muted-faint">
+            {standard.label}
           </p>
-
-          <h2 className={`mt-3 text-3xl font-black ${tone}`}>
-            {value}
-          </h2>
+          <p className="mt-3 text-metric tabular-nums text-flash">
+            {standard.value}
+          </p>
+          <p className="mt-2 text-caption text-muted">{standard.detail}</p>
         </div>
-
-        <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-accent-bright">
-          <Icon size={20} />
+        <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-3 text-muted">
+          <Icon size={18} />
         </div>
       </div>
+      <div className="mt-4">
+        <StatusPill tone={standard.configured ? "info" : "neutral"}>
+          {standard.configured ? "Configured" : "Not set"}
+        </StatusPill>
+      </div>
+    </Card>
+  );
+}
 
-      <p className="mt-4 text-sm leading-6 text-gray-500">
-        {description}
-      </p>
-    </div>
+function FormField({
+  name,
+  label,
+  placeholder,
+  defaultValue,
+  step,
+}: {
+  name: string;
+  label: string;
+  placeholder: string;
+  defaultValue: number | string;
+  step?: string;
+}) {
+  return (
+    <label className="block">
+      <span className="text-micro uppercase tracking-label text-muted-faint">
+        {label}
+      </span>
+      <input
+        name={name}
+        type="number"
+        step={step}
+        placeholder={placeholder}
+        defaultValue={defaultValue}
+        className="mt-2 w-full rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-2 px-4 py-3 text-sm text-white outline-none transition-all duration-base placeholder:text-muted-faint focus:border-accent-bright/45 focus:ring-2 focus:ring-accent-bright/10"
+      />
+    </label>
   );
 }
 
@@ -826,9 +297,7 @@ export default async function RulesPage({
     redirect(`/accounts/${accountId}/dashboard`);
   }
 
-  if (
-    membership.tradingAccount.status === "ARCHIVED"
-  ) {
+  if (membership.tradingAccount.status === "ARCHIVED") {
     redirect(`/accounts/${accountId}/dashboard`);
   }
 
@@ -845,32 +314,19 @@ export default async function RulesPage({
     },
   });
 
-  const language = normalizeAppLanguage(
-    currentUser.appLanguage
-  );
-
-  const t = rulesLabels[language];
-
+  const language = normalizeAppLanguage(currentUser.appLanguage);
   const account = membership.tradingAccount;
   const currency = account.currency || "USD";
 
   const now = new Date();
   const month = now.getMonth();
   const year = now.getFullYear();
-
   const monthStart = new Date(year, month, 1);
   const monthEnd = new Date(year, month + 1, 1);
+  const monthLabel = formatMonthLabel(now, language);
 
-  const monthLabel = now.toLocaleDateString(
-    getLocaleFromLanguage(language),
-    {
-      month: "long",
-      year: "numeric",
-    }
-  );
-
-  const goal =
-    await prisma.tradingGoal.findUnique({
+  const [goal, trades] = await Promise.all([
+    prisma.tradingGoal.findUnique({
       where: {
         tradingAccountId_month_year: {
           tradingAccountId: accountId,
@@ -878,511 +334,508 @@ export default async function RulesPage({
           year,
         },
       },
-    });
-
-  const trades = await prisma.trade.findMany({
-    where: {
-      tradingAccountId: accountId,
-      openDate: {
-        gte: monthStart,
-        lt: monthEnd,
+    }),
+    prisma.trade.findMany({
+      where: {
+        tradingAccountId: accountId,
+        openDate: {
+          gte: monthStart,
+          lt: monthEnd,
+        },
       },
-    },
-    orderBy: [
-      {
-        openDate: "asc",
+      orderBy: [
+        {
+          openDate: "asc",
+        },
+        {
+          id: "asc",
+        },
+      ],
+      select: {
+        id: true,
+        openDate: true,
+        outcome: true,
+        resultUsd: true,
+        drawdownPercent: true,
       },
-      {
-        id: "asc",
-      },
-    ],
-  });
+    }),
+  ]);
 
   const totalPnl = trades.reduce(
-    (acc, trade) => acc + (trade.resultUsd || 0),
+    (sum, trade) => sum + (trade.resultUsd || 0),
     0
   );
-
   const closedTrades = trades.filter(
     (trade) =>
       trade.outcome === "win" ||
       trade.outcome === "loss" ||
       trade.outcome === "be"
   );
-
-  const wins = closedTrades.filter(
-    (trade) => trade.outcome === "win"
-  ).length;
-
+  const wins = closedTrades.filter((trade) => trade.outcome === "win").length;
   const winRate =
-    closedTrades.length > 0
-      ? (wins / closedTrades.length) * 100
-      : 0;
-
+    closedTrades.length > 0 ? (wins / closedTrades.length) * 100 : null;
   const maxDrawdown =
     trades.length > 0
       ? Math.abs(
-        Math.min(
-          ...trades.map(
-            (trade) =>
-              trade.drawdownPercent || 0
-          )
+          Math.min(...trades.map((trade) => trade.drawdownPercent || 0))
         )
-      )
-      : 0;
+      : null;
 
   const tradesByDay = new Map<string, number>();
 
   for (const trade of trades) {
     const key = trade.openDate.toDateString();
-    tradesByDay.set(
-      key,
-      (tradesByDay.get(key) || 0) + 1
-    );
+    tradesByDay.set(key, (tradesByDay.get(key) || 0) + 1);
   }
 
   const busiestDayTrades =
-    tradesByDay.size > 0
-      ? Math.max(...tradesByDay.values())
-      : 0;
+    tradesByDay.size > 0 ? Math.max(...tradesByDay.values()) : null;
 
-  const monthlyProfitGoal =
-    goal?.monthlyProfitGoal || 0;
-
-  const monthlyWinRateGoal =
-    goal?.monthlyWinRateGoal || 0;
-
-  const maxDrawdownLimit =
-    goal?.maxDrawdownLimit || 0;
-
-  const maxTradesPerDay =
-    goal?.maxTradesPerDay || 0;
+  const monthlyProfitGoal = goal?.monthlyProfitGoal ?? null;
+  const monthlyWinRateGoal = goal?.monthlyWinRateGoal ?? null;
+  const maxDrawdownLimit = goal?.maxDrawdownLimit ?? null;
+  const maxTradesPerDay = goal?.maxTradesPerDay ?? null;
+  const configuredStandards = [
+    monthlyProfitGoal,
+    monthlyWinRateGoal,
+    maxDrawdownLimit,
+    maxTradesPerDay,
+  ].filter((value) => value !== null).length;
+  const hasTrades = trades.length > 0;
+  const hasAnyStandard = configuredStandards > 0;
 
   const profitProgress =
-    monthlyProfitGoal > 0
+    monthlyProfitGoal && monthlyProfitGoal !== 0
       ? (totalPnl / monthlyProfitGoal) * 100
-      : 0;
-
+      : null;
   const winRateProgress =
-    monthlyWinRateGoal > 0
+    monthlyWinRateGoal && winRate !== null
       ? (winRate / monthlyWinRateGoal) * 100
-      : 0;
-
+      : null;
   const drawdownUsage =
-    maxDrawdownLimit > 0
+    maxDrawdownLimit && maxDrawdown !== null
       ? (maxDrawdown / maxDrawdownLimit) * 100
-      : 0;
-
+      : null;
   const tradeLimitUsage =
-    maxTradesPerDay > 0
+    maxTradesPerDay && busiestDayTrades !== null
       ? (busiestDayTrades / maxTradesPerDay) * 100
-      : 0;
-
-  const profitRemaining =
-    monthlyProfitGoal > 0
-      ? monthlyProfitGoal - totalPnl
       : null;
 
+  const profitState = getStandardState({
+    configured: monthlyProfitGoal !== null,
+    met: monthlyProfitGoal !== null && totalPnl >= monthlyProfitGoal,
+  });
+  const winRateState = getStandardState({
+    configured: monthlyWinRateGoal !== null,
+    met:
+      monthlyWinRateGoal !== null &&
+      winRate !== null &&
+      winRate >= monthlyWinRateGoal,
+  });
+  const drawdownState = getStandardState({
+    configured: maxDrawdownLimit !== null,
+    breached:
+      maxDrawdownLimit !== null &&
+      maxDrawdown !== null &&
+      maxDrawdown > maxDrawdownLimit,
+  });
+  const frequencyState = getStandardState({
+    configured: maxTradesPerDay !== null,
+    breached:
+      maxTradesPerDay !== null &&
+      busiestDayTrades !== null &&
+      busiestDayTrades > maxTradesPerDay,
+  });
+
+  const standards: Standard[] = [
+    {
+      key: "profit",
+      label: "Monthly profit standard",
+      value:
+        monthlyProfitGoal !== null
+          ? formatCurrencyByLanguage(monthlyProfitGoal, currency, language)
+          : "Not set",
+      detail: "Defines what counts as enough for the month.",
+      icon: TrendingUp,
+      configured: monthlyProfitGoal !== null,
+    },
+    {
+      key: "win-rate",
+      label: "Win-rate standard",
+      value:
+        monthlyWinRateGoal !== null
+          ? formatPercent(monthlyWinRateGoal, language)
+          : "Not set",
+      detail: "Sets the minimum quality bar for closed trades.",
+      icon: Target,
+      configured: monthlyWinRateGoal !== null,
+    },
+    {
+      key: "drawdown",
+      label: "Drawdown boundary",
+      value:
+        maxDrawdownLimit !== null
+          ? formatPercent(maxDrawdownLimit, language)
+          : "Not set",
+      detail: "Marks when protection overrides activity.",
+      icon: ShieldCheck,
+      configured: maxDrawdownLimit !== null,
+    },
+    {
+      key: "frequency",
+      label: "Daily frequency cap",
+      value:
+        maxTradesPerDay !== null ? String(maxTradesPerDay) : "Not set",
+      detail: "Limits the most common path into overtrading.",
+      icon: Activity,
+      configured: maxTradesPerDay !== null,
+    },
+  ];
+
   return (
-    <div className="space-y-10">
-      <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(250,204,21,0.14),transparent_35%),radial-gradient(circle_at_bottom_left,color-mix(in_srgb,var(--color-accent)_8%,transparent),transparent_35%)]" />
-
-        <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
-          <div>
-            <div className="mb-6 flex flex-wrap items-center gap-3">
-              <span className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-yellow-300">
-                {t.disciplineSystem}
-              </span>
-
-              <span className="rounded-full border border-white/10 bg-black/20 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-gray-300">
-                {monthLabel}
-              </span>
-            </div>
-
-            <p className="text-sm text-gray-400">
-              {t.accountControlCenter}
-            </p>
-
-            <h1 className="mt-3 text-5xl font-black tracking-tight text-white sm:text-6xl">
-              {t.title}
-            </h1>
-
-            <p className="mt-6 max-w-3xl text-base leading-7 text-gray-400">
-              {t.description}
+    <div className="space-y-8">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <p className="text-micro uppercase tracking-hero text-muted-faint">
+            Discipline control
+          </p>
+          <h1 className="mt-3 text-hero text-flash">Rules & Goals</h1>
+          <div className="mt-4 max-w-3xl">
+            <SignatureEdge orientation="horizontal" className="mb-4 max-w-40" />
+            <p className="text-body text-muted">
+              The account rulebook. Standards are written before execution so
+              profit, drawdown, and frequency do not become emotional decisions.
             </p>
           </div>
-
-          <Link
-            href={`/accounts/${accountId}`}
-            className="w-fit rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-bold text-white transition hover:bg-white/[0.08]"
-          >
-            {t.backToAccountHub}
-          </Link>
         </div>
-      </section>
 
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <StatCard
-          label={t.monthlyPnl}
-          value={formatCurrencyByLanguage(
-            totalPnl,
-            currency,
-            language
-          )}
-          description={
-            monthlyProfitGoal > 0
-              ? `${t.target}: ${formatCurrencyByLanguage(
-                monthlyProfitGoal,
-                currency,
-                language
-              )}`
-              : t.noMonthlyProfitTarget
-          }
-          icon={TrendingUp}
-          tone={getResultTone(totalPnl)}
-        />
-
-        <StatCard
-          label={t.winRate}
-          value={formatPercent(winRate, language)}
-          description={
-            monthlyWinRateGoal > 0
-              ? `${t.target}: ${formatPercent(
-                monthlyWinRateGoal,
-                language
-              )}`
-              : t.noWinRateTarget
-          }
-          icon={Target}
-          tone={
-            winRate >= monthlyWinRateGoal &&
-              monthlyWinRateGoal > 0
-              ? "text-green-400"
-              : "text-yellow-400"
-          }
-        />
-
-        <StatCard
-          label={t.maxDrawdown}
-          value={formatPercent(maxDrawdown, language)}
-          description={
-            maxDrawdownLimit > 0
-              ? `${t.limit}: ${formatPercent(
-                maxDrawdownLimit,
-                language
-              )}`
-              : t.noDrawdownLimit
-          }
-          icon={ShieldCheck}
-          tone={
-            maxDrawdownLimit > 0 &&
-              maxDrawdown > maxDrawdownLimit
-              ? "text-red-400"
-              : "text-yellow-300"
-          }
-        />
-
-        <StatCard
-          label={t.tradesThisMonth}
-          value={trades.length}
-          description={
-            maxTradesPerDay > 0
-              ? `${t.dailyLimit}: ${maxTradesPerDay}`
-              : t.noDailyTradeLimit
-          }
-          icon={Activity}
-          tone="text-accent-bright"
-        />
-      </section>
-
-      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <form
-          action={saveTradingGoals.bind(
-            null,
-            accountId
-          )}
-          className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6"
+        <Link
+          href={`/accounts/${accountId}`}
+          className="inline-flex items-center justify-center gap-2 rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-2 px-4 py-3 text-sm font-medium text-muted transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/45 hover:text-accent-bright"
         >
-          <div className="mb-6 flex items-start justify-between gap-4">
-            <div>
-              <p className="text-sm text-gray-400">
-                {t.performanceTargets}
-              </p>
+          <ArrowLeft size={16} />
+          Account hub
+        </Link>
+      </div>
 
-              <h2 className="mt-1 text-2xl font-black text-white">
-                {t.monthlyGoals}
-              </h2>
+      <Card variant="hero" className="reveal-rise">
+        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+          <div>
+            <div className="flex flex-wrap items-center gap-3">
+              <StatusPill tone="info">{account.name}</StatusPill>
+              <StatusPill>{monthLabel}</StatusPill>
+              <StatusPill tone={hasAnyStandard ? "info" : "warning"}>
+                {hasAnyStandard ? "Rulebook active" : "Standards missing"}
+              </StatusPill>
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-accent">
-              <Gauge size={20} />
-            </div>
+            <h2 className="mt-6 max-w-3xl text-section text-flash">
+              Discipline is the primary control surface.
+            </h2>
+            <p className="mt-4 max-w-3xl text-body text-muted">
+              This page does not duplicate analytics. It defines the operating
+              contract and shows only whether the current month is respecting
+              that contract.
+            </p>
           </div>
 
           <div className="space-y-4">
-            <input
+            <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-5">
+              <div className="flex items-center justify-between gap-4">
+                <p className="text-micro uppercase tracking-label text-muted-faint">
+                  Standards configured
+                </p>
+                <p className="text-body font-medium text-flash">
+                  {configuredStandards}/4
+                </p>
+              </div>
+              <ProgressBar value={(configuredStandards / 4) * 100} />
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
+                <p className="text-micro uppercase tracking-label text-muted-faint">
+                  Month sample
+                </p>
+                <p className="mt-2 text-body text-flash">
+                  {hasTrades ? `${trades.length} trades` : "No trades yet"}
+                </p>
+              </div>
+              <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
+                <p className="text-micro uppercase tracking-label text-muted-faint">
+                  Permission
+                </p>
+                <p className="mt-2 text-body text-flash">Server gated</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {standards.map((standard) => (
+          <StandardCard key={standard.key} standard={standard} />
+        ))}
+      </section>
+
+      <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+        <Card>
+          <SectionHeader eyebrow="Execution standards" title="Set the rulebook">
+            <StatusPill tone="info">Current month</StatusPill>
+          </SectionHeader>
+
+          <form
+            action={saveTradingGoals.bind(null, accountId)}
+            className="mt-6 space-y-4"
+          >
+            <FormField
               name="monthlyProfitGoal"
-              type="number"
+              label="Monthly profit"
+              placeholder="Example: 2500"
+              defaultValue={monthlyProfitGoal ?? ""}
               step="0.01"
-              placeholder={
-                t.monthlyProfitGoalPlaceholder
-              }
-              defaultValue={
-                goal?.monthlyProfitGoal || ""
-              }
-              className="w-full rounded-2xl border border-white/10 bg-black/20 p-4 text-white outline-none transition placeholder:text-gray-600 focus:border-green-500/40"
             />
-
-            <input
+            <FormField
               name="monthlyWinRateGoal"
-              type="number"
+              label="Win-rate goal"
+              placeholder="Example: 55"
+              defaultValue={monthlyWinRateGoal ?? ""}
               step="0.01"
-              placeholder={
-                t.monthlyWinRateGoalPlaceholder
-              }
-              defaultValue={
-                goal?.monthlyWinRateGoal || ""
-              }
-              className="w-full rounded-2xl border border-white/10 bg-black/20 p-4 text-white outline-none transition placeholder:text-gray-600 focus:border-green-500/40"
             />
-
-            <input
+            <FormField
               name="maxDrawdownLimit"
-              type="number"
+              label="Max drawdown"
+              placeholder="Example: 5"
+              defaultValue={maxDrawdownLimit ?? ""}
               step="0.01"
-              placeholder={
-                t.maxDrawdownLimitPlaceholder
-              }
-              defaultValue={
-                goal?.maxDrawdownLimit || ""
-              }
-              className="w-full rounded-2xl border border-white/10 bg-black/20 p-4 text-white outline-none transition placeholder:text-gray-600 focus:border-green-500/40"
             />
-
-            <input
+            <FormField
               name="maxTradesPerDay"
-              type="number"
-              placeholder={
-                t.maxTradesPerDayPlaceholder
-              }
-              defaultValue={
-                goal?.maxTradesPerDay || ""
-              }
-              className="w-full rounded-2xl border border-white/10 bg-black/20 p-4 text-white outline-none transition placeholder:text-gray-600 focus:border-green-500/40"
+              label="Max trades per day"
+              placeholder="Example: 4"
+              defaultValue={maxTradesPerDay ?? ""}
             />
 
             <button
               type="submit"
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-accent p-4 font-black text-white transition hover:bg-accent-bright"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-inner border-[0.5px] border-accent-bright/30 bg-accent-bright/[0.08] px-5 py-3 text-sm font-semibold text-accent-bright transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/55"
             >
-              <Save size={18} />
-              {t.saveGoals}
+              <Save size={17} />
+              Save standards
             </button>
-          </div>
-        </form>
+          </form>
+        </Card>
 
-        <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <div className="mb-6 flex items-start justify-between gap-4">
-            <div>
-              <p className="text-sm text-gray-400">
-                {t.operatingFramework}
-              </p>
+        <Card>
+          <SectionHeader eyebrow="Operating charter" title="Discipline rules">
+            <StatusPill>{rulebook.length} rules</StatusPill>
+          </SectionHeader>
 
-              <h2 className="mt-1 text-2xl font-black text-white">
-                {t.disciplineRules}
-              </h2>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-yellow-300">
-              <ListChecks size={20} />
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            {t.rules.map((rule) => (
+          <div className="mt-6 space-y-3">
+            {rulebook.map((rule, index) => (
               <div
                 key={rule.title}
-                className="rounded-2xl border border-white/10 bg-black/20 p-4"
+                className="flex gap-4 rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4"
               >
-                <p className="font-bold text-white">
-                  {rule.title}
-                </p>
-
-                <p className="mt-2 text-sm leading-6 text-gray-500">
-                  {rule.description}
-                </p>
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-1 text-caption font-semibold text-accent-bright">
+                  {index + 1}
+                </div>
+                <div>
+                  <p className="text-body font-medium text-flash">{rule.title}</p>
+                  <p className="mt-2 text-caption leading-5 text-muted">
+                    {rule.description}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
-        </div>
+        </Card>
       </section>
 
-      <section className="grid grid-cols-1 gap-6 xl:grid-cols-4">
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <p className="text-sm text-gray-400">
-                {t.profitProgress}
-              </p>
+      <section className="space-y-5">
+        <SectionHeader eyebrow="Monthly enforcement" title="Current control signals">
+          <StatusPill tone={hasTrades ? "info" : "neutral"}>
+            {hasTrades ? "Measured" : "Waiting for trades"}
+          </StatusPill>
+        </SectionHeader>
 
-              <h2 className="mt-1 text-2xl font-black text-white">
-                {t.monthlyTarget}
-              </h2>
-            </div>
-
-            <CalendarDays className="text-accent" />
-          </div>
-
-          <div className="mt-6">
-            <div className="flex items-center justify-between gap-4 text-sm">
-              <span className="text-gray-400">
-                {t.currentProgress}
-              </span>
-
-              <span className={getResultTone(totalPnl)}>
-                {formatPercent(
-                  profitProgress,
-                  language,
-                  0
-                )}
-              </span>
-            </div>
-
-            <ProgressBar value={profitProgress} />
-
-            <p className="mt-4 text-sm leading-6 text-gray-500">
-              {profitRemaining !== null
-                ? profitRemaining <= 0
-                  ? t.monthlyProfitTargetReached
-                  : `${formatCurrencyByLanguage(
-                    profitRemaining,
-                    currency,
-                    language
-                  )} ${t.remainingToReachTarget}`
-                : t.setMonthlyProfitTarget}
-            </p>
-          </div>
-        </div>
-
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            {t.winRateProgress}
-          </p>
-
-          <h2 className="mt-3 text-3xl font-black text-white">
-            {formatPercent(
-              winRateProgress,
-              language,
-              0
-            )}
-          </h2>
-
-          <ProgressBar
-            value={winRateProgress}
-            tone="bg-cyan-300"
+        {!hasTrades ? (
+          <EmptyState
+            title="No current-month trades"
+            description="Control signals will remain limited until real trades exist for this month."
           />
-        </div>
-
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            {t.drawdownUsage}
-          </p>
-
-          <h2
-            className={`mt-3 text-3xl font-black ${drawdownUsage > 100
-                ? "text-red-400"
-                : "text-yellow-300"
-              }`}
-          >
-            {formatPercent(
-              drawdownUsage,
-              language,
-              0
-            )}
-          </h2>
-
-          <ProgressBar
-            value={drawdownUsage}
-            tone={
-              drawdownUsage > 100
-                ? "bg-red-400"
-                : "bg-yellow-300"
-            }
-          />
-        </div>
-      </section>
-
-      <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-        <div className="mb-6 flex items-start gap-4">
-          <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-3 text-red-300">
-            <AlertTriangle size={20} />
-          </div>
-
-          <div>
-            <p className="text-sm text-gray-400">
-              {t.controlSignals}
-            </p>
-
-            <h2 className="mt-1 text-2xl font-black text-white">
-              {t.riskGuardrails}
-            </h2>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-sm text-gray-400">
-              {t.busiestDay}
-            </p>
-
-            <h3 className="mt-3 text-3xl font-black text-white">
-              {busiestDayTrades}
-            </h3>
-
-            <p className="mt-2 text-sm text-gray-500">
-              {t.busiestDayDescription}
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-sm text-gray-400">
-              {t.dailyLimitUsage}
-            </p>
-
-            <h3
-              className={`mt-3 text-3xl font-black ${tradeLimitUsage > 100
-                  ? "text-red-400"
-                  : "text-yellow-300"
-                }`}
-            >
-              {formatPercent(
-                tradeLimitUsage,
-                language,
-                0
+        ) : (
+          <div className="grid gap-4 xl:grid-cols-4">
+            <Card className="p-5">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-micro uppercase tracking-label text-muted-faint">
+                    Monthly PnL
+                  </p>
+                  <p className={`mt-3 text-metric ${getMetricTone(totalPnl)}`}>
+                    {formatCurrencyByLanguage(totalPnl, currency, language)}
+                  </p>
+                </div>
+                <StatusPill tone={profitState.tone}>{profitState.label}</StatusPill>
+              </div>
+              {profitProgress !== null ? (
+                <>
+                  <ProgressBar
+                    value={profitProgress}
+                    tone={profitProgress >= 100 ? "positive" : "info"}
+                  />
+                  <p className="mt-3 text-caption text-muted">
+                    {formatPercent(profitProgress, language)} of the configured
+                    monthly profit standard.
+                  </p>
+                </>
+              ) : (
+                <p className="mt-4 text-caption text-muted">
+                  No monthly profit standard is configured.
+                </p>
               )}
-            </h3>
+            </Card>
 
-            <p className="mt-2 text-sm text-gray-500">
-              {t.dailyLimitUsageDescription}
-            </p>
+            <Card className="p-5">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-micro uppercase tracking-label text-muted-faint">
+                    Win rate
+                  </p>
+                  <p className="mt-3 text-metric text-flash">
+                    {winRate !== null
+                      ? formatPercent(winRate, language)
+                      : "Not measured"}
+                  </p>
+                </div>
+                <StatusPill tone={winRateState.tone}>
+                  {winRateState.label}
+                </StatusPill>
+              </div>
+              {winRateProgress !== null ? (
+                <>
+                  <ProgressBar
+                    value={winRateProgress}
+                    tone={winRateProgress >= 100 ? "positive" : "info"}
+                  />
+                  <p className="mt-3 text-caption text-muted">
+                    Based on {closedTrades.length} closed trades.
+                  </p>
+                </>
+              ) : (
+                <p className="mt-4 text-caption text-muted">
+                  Add closed trades and a win-rate standard to measure this.
+                </p>
+              )}
+            </Card>
+
+            <Card className="p-5">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-micro uppercase tracking-label text-muted-faint">
+                    Drawdown usage
+                  </p>
+                  <p
+                    className={`mt-3 text-metric ${
+                      drawdownState.tone === "warning"
+                        ? "text-warning"
+                        : "text-flash"
+                    }`}
+                  >
+                    {drawdownUsage !== null
+                      ? formatPercent(drawdownUsage, language)
+                      : "Not set"}
+                  </p>
+                </div>
+                <StatusPill tone={drawdownState.tone}>
+                  {drawdownState.label}
+                </StatusPill>
+              </div>
+              {drawdownUsage !== null ? (
+                <>
+                  <ProgressBar
+                    value={drawdownUsage}
+                    tone={drawdownUsage > 100 ? "warning" : "info"}
+                  />
+                  <p className="mt-3 text-caption text-muted">
+                    Current max drawdown:{" "}
+                    {maxDrawdown !== null
+                      ? formatPercent(maxDrawdown, language)
+                      : "not measured"}
+                    .
+                  </p>
+                </>
+              ) : (
+                <p className="mt-4 text-caption text-muted">
+                  No drawdown boundary is configured.
+                </p>
+              )}
+            </Card>
+
+            <Card className="p-5">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-micro uppercase tracking-label text-muted-faint">
+                    Frequency usage
+                  </p>
+                  <p
+                    className={`mt-3 text-metric ${
+                      frequencyState.tone === "warning"
+                        ? "text-warning"
+                        : "text-flash"
+                    }`}
+                  >
+                    {tradeLimitUsage !== null
+                      ? formatPercent(tradeLimitUsage, language)
+                      : "Not set"}
+                  </p>
+                </div>
+                <StatusPill tone={frequencyState.tone}>
+                  {frequencyState.label}
+                </StatusPill>
+              </div>
+              {tradeLimitUsage !== null ? (
+                <>
+                  <ProgressBar
+                    value={tradeLimitUsage}
+                    tone={tradeLimitUsage > 100 ? "warning" : "info"}
+                  />
+                  <p className="mt-3 text-caption text-muted">
+                    Busiest day: {busiestDayTrades ?? 0} trades.
+                  </p>
+                </>
+              ) : (
+                <p className="mt-4 text-caption text-muted">
+                  No daily trade frequency cap is configured.
+                </p>
+              )}
+            </Card>
           </div>
-
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-sm text-gray-400">
-              {t.closedTrades}
-            </p>
-
-            <h3 className="mt-3 text-3xl font-black text-accent-bright">
-              {closedTrades.length}
-            </h3>
-
-            <p className="mt-2 text-sm text-gray-500">
-              {t.closedTradesDescription}
-            </p>
-          </div>
-        </div>
+        )}
       </section>
+
+      <Card className="p-5">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-4">
+            <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-3 text-muted">
+              <LockKeyhole size={18} />
+            </div>
+            <div>
+              <p className="text-body font-medium text-flash">
+                Rules are protected by account permissions.
+              </p>
+              <p className="mt-1 text-caption text-muted">
+                This page uses the existing server-side manager/account-control
+                gate, and the save action validates the same permissions again.
+              </p>
+            </div>
+          </div>
+          <StatusPill tone="info">
+            <CheckCircle2 size={13} className="mr-2" />
+            Server enforced
+          </StatusPill>
+        </div>
+      </Card>
     </div>
   );
 }
