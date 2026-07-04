@@ -4,16 +4,12 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   useEffect,
-  useCallback,
-  useLayoutEffect,
   useMemo,
-  useRef,
   useState,
   useTransition,
 } from "react";
 
 import VoltisLightningLoader from "@/components/VoltisLightningLoader";
-import SignatureEdge from "@/components/ui/SignatureEdge";
 
 import {
   LayoutDashboard,
@@ -69,6 +65,7 @@ type AccountLink = {
   path: string;
   label: string;
   icon: LucideIcon;
+  group: "workspace" | "tools" | "control";
   canShow?: (
     permissions: AccountPermissions
   ) => boolean;
@@ -78,7 +75,7 @@ type SidebarLink = {
   href: string;
   label: string;
   icon: LucideIcon;
-  group?: "workspace" | "general";
+  group?: "workspace" | "tools" | "control";
 };
 
 type SidebarProps = {
@@ -113,6 +110,8 @@ type SidebarLabels = {
   archive: string;
 
   workspaceGroup: string;
+  toolsGroup: string;
+  controlGroup: string;
   generalGroup: string;
   systemGroup: string;
 
@@ -152,6 +151,8 @@ const sidebarLabels: Record<
     archive: "Archivio",
 
     workspaceGroup: "WORKSPACE",
+    toolsGroup: "TOOLS",
+    controlGroup: "CONTROL",
     generalGroup: "GENERALE",
     systemGroup: "SYSTEM",
 
@@ -187,6 +188,8 @@ const sidebarLabels: Record<
     archive: "Archive",
 
     workspaceGroup: "WORKSPACE",
+    toolsGroup: "TOOLS",
+    controlGroup: "CONTROL",
     generalGroup: "GENERAL",
     systemGroup: "SYSTEM",
 
@@ -222,6 +225,8 @@ const sidebarLabels: Record<
     archive: "Archive",
 
     workspaceGroup: "WORKSPACE",
+    toolsGroup: "TOOLS",
+    controlGroup: "CONTROL",
     generalGroup: "ЗАГАЛЬНЕ",
     systemGroup: "SYSTEM",
 
@@ -257,6 +262,8 @@ const sidebarLabels: Record<
     archive: "Archive",
 
     workspaceGroup: "WORKSPACE",
+    toolsGroup: "TOOLS",
+    controlGroup: "CONTROL",
     generalGroup: "ОБЩЕЕ",
     systemGroup: "SYSTEM",
 
@@ -292,6 +299,8 @@ const sidebarLabels: Record<
     archive: "Archivo",
 
     workspaceGroup: "WORKSPACE",
+    toolsGroup: "TOOLS",
+    controlGroup: "CONTROL",
     generalGroup: "GENERAL",
     systemGroup: "SYSTEM",
 
@@ -327,6 +336,8 @@ const sidebarLabels: Record<
     archive: "Archive",
 
     workspaceGroup: "WORKSPACE",
+    toolsGroup: "TOOLS",
+    controlGroup: "CONTROL",
     generalGroup: "GÉNÉRAL",
     systemGroup: "SYSTEM",
 
@@ -362,6 +373,8 @@ const sidebarLabels: Record<
     archive: "Archiv",
 
     workspaceGroup: "WORKSPACE",
+    toolsGroup: "TOOLS",
+    controlGroup: "CONTROL",
     generalGroup: "ALLGEMEIN",
     systemGroup: "SYSTEM",
 
@@ -378,26 +391,31 @@ const baseLinks: AccountLink[] = [
     path: "dashboard",
     label: "Dashboard",
     icon: LayoutDashboard,
+    group: "workspace",
   },
   {
     path: "diary",
     label: "Trading Diary",
     icon: BookOpen,
+    group: "workspace",
   },
   {
     path: "calendar",
     label: "Calendar",
     icon: CalendarDays,
+    group: "workspace",
   },
   {
     path: "equity",
     label: "Equity",
     icon: LineChart,
+    group: "workspace",
   },
   {
     path: "analytics",
     label: "Analytics",
     icon: BarChart3,
+    group: "tools",
     canShow: (permissions) =>
       isManager(permissions) ||
       permissions.canViewAnalytics,
@@ -406,6 +424,7 @@ const baseLinks: AccountLink[] = [
     path: "reports",
     label: "Reports",
     icon: FileText,
+    group: "tools",
     canShow: (permissions) =>
       isManager(permissions) ||
       permissions.canViewReports,
@@ -414,6 +433,7 @@ const baseLinks: AccountLink[] = [
     path: "copilot",
     label: "Copilot",
     icon: Bot,
+    group: "tools",
     canShow: (permissions) =>
       isManager(permissions) ||
       permissions.canViewCopilot,
@@ -422,6 +442,7 @@ const baseLinks: AccountLink[] = [
     path: "playbook",
     label: "Playbook",
     icon: ClipboardCheck,
+    group: "tools",
     canShow: (permissions) =>
       isManager(permissions) ||
       permissions.canCreateTrades,
@@ -430,6 +451,7 @@ const baseLinks: AccountLink[] = [
     path: "workspace",
     label: "Workspace Intelligence",
     icon: Users,
+    group: "tools",
     canShow: (permissions) =>
       isManager(permissions) ||
       permissions.canViewMembers,
@@ -438,11 +460,13 @@ const baseLinks: AccountLink[] = [
     path: "sessions",
     label: "Sessions",
     icon: BookOpen,
+    group: "tools",
   },
   {
     path: "rules",
     label: "Rules & Goals",
     icon: Target,
+    group: "control",
     canShow: (permissions) =>
       isManager(permissions) ||
       permissions.canManageAccount,
@@ -451,6 +475,7 @@ const baseLinks: AccountLink[] = [
     path: "integrations",
     label: "Integrations",
     icon: ArrowLeftRight,
+    group: "control",
     canShow: (permissions) =>
       isManager(permissions) ||
       permissions.canManageAccount,
@@ -621,26 +646,31 @@ export default function Sidebar({
           href: "/admin",
           label: t.adminPanel,
           icon: Shield,
+          group: "control" as const,
         },
         {
           href: "/admin/accounts",
           label: t.accountsManagement,
           icon: Users,
+          group: "control" as const,
         },
         {
           href: "/admin/support",
           label: t.supportTickets,
           icon: FileText,
+          group: "control" as const,
         },
         {
           href: "/admin/updates",
           label: t.appUpdates,
           icon: Megaphone,
+          group: "control" as const,
         },
         {
           href: "/admin/maintenance",
           label: t.maintenance,
           icon: ShieldAlert,
+          group: "control" as const,
         },
       ];
     }
@@ -670,7 +700,7 @@ export default function Sidebar({
             t
           ),
           icon: link.icon,
-          group: "workspace" as const,
+          group: link.group,
         })),
       ];
     }
@@ -698,7 +728,7 @@ export default function Sidebar({
         href: "/updates",
         label: t.updates,
         icon: Megaphone,
-        group: "general" as const,
+        group: "control" as const,
       },
     ];
   }, [
@@ -720,14 +750,21 @@ export default function Sidebar({
         id: "workspace",
         label: t.workspaceGroup,
         items: links.filter(
-          (link) => link.group !== "general"
+          (link) => link.group === "workspace"
         ),
       },
       {
-        id: "general",
-        label: t.systemGroup,
+        id: "tools",
+        label: t.toolsGroup,
         items: links.filter(
-          (link) => link.group === "general"
+          (link) => link.group === "tools"
+        ),
+      },
+      {
+        id: "control",
+        label: t.controlGroup,
+        items: links.filter(
+          (link) => link.group === "control"
         ),
       },
     ].filter((group) => group.items.length > 0);
@@ -744,63 +781,12 @@ export default function Sidebar({
     return active?.href;
   }, [links, pathname]);
 
-  const navRef = useRef<HTMLElement>(null);
-  const linkRefs = useRef(
-    new Map<string, HTMLAnchorElement>()
-  );
-
-  const [edgeRect, setEdgeRect] = useState<{
-    top: number;
-    height: number;
-  } | null>(null);
-
-  const updateEdgeRect = useCallback(() => {
-    const navEl = navRef.current;
-    const activeEl = activeHref
-      ? linkRefs.current.get(activeHref)
-      : null;
-
-    if (navEl && activeEl) {
-      const navTop = navEl.getBoundingClientRect().top;
-      const linkRect = activeEl.getBoundingClientRect();
-
-      setEdgeRect({
-        top: linkRect.top - navTop,
-        height: linkRect.height,
-      });
-    } else {
-      setEdgeRect(null);
-    }
-  }, [activeHref]);
-
-  useLayoutEffect(() => {
-    const frame = window.requestAnimationFrame(updateEdgeRect);
-
-    return () => {
-      window.cancelAnimationFrame(frame);
-    };
-  }, [
-    updateEdgeRect,
-    isCollapsed,
-    groupedLinks,
-    isPending,
-    pendingHref,
-  ]);
-
-  useEffect(() => {
-    window.addEventListener("resize", updateEdgeRect);
-
-    return () => {
-      window.removeEventListener("resize", updateEdgeRect);
-    };
-  }, [updateEdgeRect]);
-
   return (
     <>
       {open && (
         <div
           onClick={onClose}
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-black/60 lg:hidden"
         />
       )}
 
@@ -811,7 +797,7 @@ export default function Sidebar({
         onMouseLeave={() =>
           setCollapsed(true)
         }
-        className={`faded-scroll sidebar-scrollbar-none fixed left-0 top-0 z-50 flex h-screen flex-col overflow-y-auto bg-[linear-gradient(90deg,var(--color-surface-1)_0%,var(--color-surface-1)_88%,color-mix(in_srgb,var(--color-surface-1)_70%,transparent)_96%,transparent_100%)] p-4 pt-[calc(env(safe-area-inset-top)+1rem)] transition-all duration-500 ease-out after:pointer-events-none after:absolute after:bottom-0 after:right-0 after:top-0 after:z-30 after:w-7 after:bg-gradient-to-r after:from-surface-1/65 after:to-transparent after:backdrop-blur-[1px] after:content-[''] lg:sticky lg:z-40 lg:pt-4 ${isCollapsed
+        className={`sidebar-scrollbar-none fixed left-0 top-0 z-50 flex h-screen flex-col overflow-y-auto bg-surface-1 p-4 pt-[calc(env(safe-area-inset-top)+1rem)] transition-all duration-500 ease-out lg:sticky lg:z-40 lg:pt-4 ${isCollapsed
           ? "w-[88px]"
           : "w-72 lg:w-64"
           } ${open
@@ -874,23 +860,7 @@ export default function Sidebar({
 
         <div className="mt-4 border-t border-white/[0.06]" />
 
-        <nav
-          ref={navRef}
-          className="sidebar-scrollbar-none relative mt-6 flex flex-1 flex-col gap-4 text-sm"
-        >
-          {edgeRect && (
-            <SignatureEdge
-              orientation="vertical"
-              pulse
-              className="absolute left-0 z-10 transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)]"
-              style={{
-                top: 0,
-                height: edgeRect.height,
-                transform: `translateY(${edgeRect.top}px)`,
-              }}
-            />
-          )}
-
+        <nav className="sidebar-scrollbar-none relative mt-6 flex flex-1 flex-col gap-4 text-sm">
           {permissionsLoading &&
             accountId &&
             !isAdminArea &&
@@ -920,13 +890,6 @@ export default function Sidebar({
                     <Link
                       key={link.href}
                       href={link.href}
-                      ref={(el) => {
-                        if (el) {
-                          linkRefs.current.set(link.href, el);
-                        } else {
-                          linkRefs.current.delete(link.href);
-                        }
-                      }}
                       onClick={(e) => {
                         if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
                         e.preventDefault();
@@ -934,12 +897,12 @@ export default function Sidebar({
                         setPendingHref(link.href);
                         startTransition(() => router.push(link.href));
                       }}
-                      className={`group flex items-center rounded-xl transition-colors duration-base ${isCollapsed
+                      className={`group flex items-center rounded-2xl border transition-colors duration-base ${isCollapsed
                         ? "justify-center px-3 py-3"
                         : "gap-3 px-4 py-3"
                         } ${active
-                          ? "bg-gradient-to-r from-accent/15 via-accent/[0.04] to-transparent text-white"
-                          : "text-gray-300 hover:bg-white/5 hover:text-white"
+                          ? "border-accent/20 bg-white/[0.075] text-white"
+                          : "border-transparent text-gray-300 hover:bg-white/[0.045] hover:text-white"
                         }`}
                     >
                       {isThisPending ? (
@@ -949,7 +912,7 @@ export default function Sidebar({
                           size={18}
                           className={
                             active
-                              ? "text-accent-bright"
+                              ? "text-white"
                               : "text-muted transition-colors duration-base group-hover:text-accent-bright"
                           }
                         />
