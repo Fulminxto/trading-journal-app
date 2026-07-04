@@ -811,7 +811,7 @@ export default function Sidebar({
         onMouseLeave={() =>
           setCollapsed(true)
         }
-        className={`faded-scroll sidebar-scrollbar-none fixed left-0 top-0 z-50 flex h-screen flex-col overflow-y-auto bg-[linear-gradient(90deg,var(--color-surface-1)_0%,var(--color-surface-1)_70%,color-mix(in_srgb,var(--color-surface-1)_72%,transparent)_86%,transparent_100%)] p-4 pt-[calc(env(safe-area-inset-top)+1rem)] transition-all duration-500 ease-out after:pointer-events-none after:absolute after:bottom-0 after:right-0 after:top-0 after:z-30 after:w-16 after:bg-gradient-to-r after:from-surface-1 after:via-surface-1/70 after:to-transparent after:backdrop-blur-[3px] after:content-[''] lg:sticky lg:z-40 lg:pt-4 ${isCollapsed
+        className={`faded-scroll sidebar-scrollbar-none fixed left-0 top-0 z-50 flex h-screen flex-col overflow-y-auto bg-[linear-gradient(90deg,var(--color-surface-1)_0%,var(--color-surface-1)_88%,color-mix(in_srgb,var(--color-surface-1)_70%,transparent)_96%,transparent_100%)] p-4 pt-[calc(env(safe-area-inset-top)+1rem)] transition-all duration-500 ease-out after:pointer-events-none after:absolute after:bottom-0 after:right-0 after:top-0 after:z-30 after:w-7 after:bg-gradient-to-r after:from-surface-1/65 after:to-transparent after:backdrop-blur-[1px] after:content-[''] lg:sticky lg:z-40 lg:pt-4 ${isCollapsed
           ? "w-[88px]"
           : "w-72 lg:w-64"
           } ${open
