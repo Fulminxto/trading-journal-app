@@ -25,13 +25,6 @@ import Card from "@/components/ui/Card";
 import SignatureEdge from "@/components/ui/SignatureEdge";
 import { pageDensity } from "@/lib/page-density";
 
-// Same halo gradient Card.tsx uses on hover - reused here so the
-// calendar grid's "hover che accende" (REBRAND_BLUEPRINT.md) matches
-// the signature spark language everywhere else, instead of stacking a
-// separate glow effect on top of a scale transform.
-const CELL_HALO =
-  "radial-gradient(circle at top right, color-mix(in srgb, var(--color-halo) 26%, transparent) 0%, transparent 60%)";
-
 type CalendarLabels = {
   tradingCalendar: string;
   currentMonth: string;
@@ -990,24 +983,6 @@ export default async function CalendarPage({
           >
             {t.backToAccountHub}
           </Link>
-
-          <div className="flex items-center gap-3">
-            <Link
-              href={`/accounts/${accountId}/calendar?month=${previousMonth}&year=${previousYear}`}
-              className="flex h-12 w-12 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.12] text-white transition-colors duration-base hover:bg-white/[0.08]"
-              aria-label={t.previousMonth}
-            >
-              <ChevronLeft size={20} />
-            </Link>
-
-            <Link
-              href={`/accounts/${accountId}/calendar?month=${nextMonth}&year=${nextYear}`}
-              className="flex h-12 w-12 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.12] text-white transition-colors duration-base hover:bg-white/[0.08]"
-              aria-label={t.nextMonth}
-            >
-              <ChevronRight size={20} />
-            </Link>
-          </div>
         </div>
       </div>
 
@@ -1120,7 +1095,7 @@ export default async function CalendarPage({
           this page exists for, so it gets the hero treatment every
           other card on this page doesn't. */}
       <div className="reveal-rise" style={{ animationDelay: "140ms" }}>
-        <Card variant="hero" interactive className={`relative ${pageDensity.calendar.panel}`}>
+        <Card variant="hero" className={`relative ${pageDensity.calendar.panel}`}>
           <SignatureEdge
             orientation="vertical"
             className="absolute bottom-6 left-0 top-6"
@@ -1133,11 +1108,29 @@ export default async function CalendarPage({
                   {t.calendarMatrix}
                 </p>
 
-                <h2 className="text-section mt-1 capitalize text-white">
-                  {t.monthPerformance(
-                    monthName
-                  )}
-                </h2>
+                <div className="mt-1 flex flex-wrap items-center gap-3">
+                  <Link
+                    href={`/accounts/${accountId}/calendar?month=${previousMonth}&year=${previousYear}`}
+                    className="flex h-9 w-9 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.12] text-muted transition-colors duration-base hover:border-accent-bright/30 hover:text-white"
+                    aria-label={t.previousMonth}
+                  >
+                    <ChevronLeft size={17} />
+                  </Link>
+
+                  <h2 className="text-section capitalize text-white">
+                    {t.monthPerformance(
+                      monthName
+                    )}
+                  </h2>
+
+                  <Link
+                    href={`/accounts/${accountId}/calendar?month=${nextMonth}&year=${nextYear}`}
+                    className="flex h-9 w-9 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.12] text-muted transition-colors duration-base hover:border-accent-bright/30 hover:text-white"
+                    aria-label={t.nextMonth}
+                  >
+                    <ChevronRight size={17} />
+                  </Link>
+                </div>
               </div>
 
               <div className="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[0.14em] text-muted">
@@ -1234,26 +1227,25 @@ export default async function CalendarPage({
                     return (
                       <div
                         key={day}
-                        className={`group relative border-r border-b border-white/[0.08] ${pageDensity.calendar.dayCell} transition-colors duration-base last:border-r-0 hover:border-accent-bright/30`}
+                        className={`group relative border-r border-b border-white/[0.08] ${pageDensity.calendar.dayCell} transition-colors duration-base last:border-r-0 hover:border-accent-bright/20 hover:bg-white/[0.025]`}
                         style={{
                           backgroundColor: positive
-                            ? `color-mix(in srgb, var(--color-positive) ${6 + intensity * 18}%, transparent)`
+                            ? `color-mix(in srgb, var(--color-positive) ${4 + intensity * 10}%, transparent)`
                             : negative
-                              ? `color-mix(in srgb, var(--color-negative) ${6 + intensity * 18}%, transparent)`
+                              ? `color-mix(in srgb, var(--color-negative) ${4 + intensity * 10}%, transparent)`
                               : undefined,
                         }}
                       >
                         <div
                           aria-hidden="true"
-                          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-base group-hover:opacity-100"
-                          style={{ background: CELL_HALO }}
+                          className="pointer-events-none absolute inset-x-3 top-2 h-px bg-accent-bright/35 opacity-0 transition-opacity duration-base group-hover:opacity-100"
                         />
 
                         <div className="relative mb-5 flex items-center justify-between">
                           <div
-                            className={`flex h-10 w-10 items-center justify-center rounded-full text-sm font-black ${isToday
+                            className={`flex h-10 w-10 items-center justify-center rounded-full text-sm font-black transition-colors duration-base ${isToday
                                 ? "bg-accent-bright text-bg-deep"
-                                : "bg-white/5 text-white"
+                                : "bg-white/5 text-white group-hover:bg-white/[0.08]"
                               }`}
                           >
                             {day}
