@@ -3,11 +3,11 @@
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 
-import { changePassword } from "./actions";
 import {
   normalizeAppLanguage,
   type AppLanguage,
 } from "@/lib/i18n";
+import { changePassword } from "./actions";
 
 type ChangePasswordLabels = {
   currentPassword: string;
@@ -18,64 +18,53 @@ type ChangePasswordLabels = {
   hide: string;
 };
 
-const labels: Record<AppLanguage, ChangePasswordLabels> = {
-  it: {
-    currentPassword: "Password attuale",
-    newPassword: "Nuova password",
-    confirmPassword: "Conferma nuova password",
-    submit: "Aggiorna password",
-    show: "Mostra password",
-    hide: "Nascondi password",
-  },
-  en: {
-    currentPassword: "Current password",
-    newPassword: "New password",
-    confirmPassword: "Confirm new password",
-    submit: "Update password",
-    show: "Show password",
-    hide: "Hide password",
-  },
-  uk: {
-    currentPassword: "Поточний пароль",
-    newPassword: "Новий пароль",
-    confirmPassword: "Підтвердіть новий пароль",
-    submit: "Оновити пароль",
-    show: "Показати пароль",
-    hide: "Сховати пароль",
-  },
-  ru: {
-    currentPassword: "Текущий пароль",
-    newPassword: "Новый пароль",
-    confirmPassword: "Подтвердите новый пароль",
-    submit: "Обновить пароль",
-    show: "Показать пароль",
-    hide: "Скрыть пароль",
-  },
-  es: {
-    currentPassword: "Contraseña actual",
-    newPassword: "Nueva contraseña",
-    confirmPassword: "Confirmar nueva contraseña",
-    submit: "Actualizar contraseña",
-    show: "Mostrar contraseña",
-    hide: "Ocultar contraseña",
-  },
-  fr: {
-    currentPassword: "Mot de passe actuel",
-    newPassword: "Nouveau mot de passe",
-    confirmPassword: "Confirmer le nouveau mot de passe",
-    submit: "Mettre à jour le mot de passe",
-    show: "Afficher le mot de passe",
-    hide: "Masquer le mot de passe",
-  },
-  de: {
-    currentPassword: "Aktuelles Passwort",
-    newPassword: "Neues Passwort",
-    confirmPassword: "Neues Passwort bestätigen",
-    submit: "Passwort aktualisieren",
-    show: "Passwort anzeigen",
-    hide: "Passwort ausblenden",
-  },
+const baseLabels: ChangePasswordLabels = {
+  currentPassword: "Current password",
+  newPassword: "New password",
+  confirmPassword: "Confirm new password",
+  submit: "Update password",
+  show: "Show password",
+  hide: "Hide password",
 };
+
+const labels: Record<AppLanguage, ChangePasswordLabels> = {
+  it: baseLabels,
+  en: baseLabels,
+  uk: baseLabels,
+  ru: baseLabels,
+  es: baseLabels,
+  fr: baseLabels,
+  de: baseLabels,
+};
+
+function PasswordField({
+  name,
+  label,
+  type = "password",
+  children,
+}: {
+  name: string;
+  label: string;
+  type?: string;
+  children?: React.ReactNode;
+}) {
+  return (
+    <label className="block">
+      <span className="text-micro uppercase tracking-label text-muted-faint">
+        {label}
+      </span>
+      <div className="relative mt-2">
+        <input
+          name={name}
+          type={type}
+          required
+          className="w-full rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-2 px-4 py-3 pr-12 text-sm text-flash outline-none transition-all duration-base focus:border-accent-bright/45 focus:ring-2 focus:ring-accent-bright/10"
+        />
+        {children}
+      </div>
+    </label>
+  );
+}
 
 export default function ChangePasswordForm({
   appLanguage,
@@ -83,66 +72,34 @@ export default function ChangePasswordForm({
   appLanguage?: string | null;
 }) {
   const [showNew, setShowNew] = useState(false);
-
   const lang = normalizeAppLanguage(appLanguage);
   const t = labels[lang] ?? labels.en;
 
   return (
     <form action={changePassword} className="space-y-4">
-      <div>
-        <p className="mb-2 text-sm text-gray-400">
-          {t.currentPassword}
-        </p>
+      <PasswordField name="currentPassword" label={t.currentPassword} />
 
-        <input
-          name="currentPassword"
-          type="password"
-          required
-          className="w-full rounded-2xl border border-white/10 bg-surface-2 p-4 outline-none focus:border-green-500/40"
-        />
-      </div>
+      <PasswordField
+        name="newPassword"
+        label={t.newPassword}
+        type={showNew ? "text" : "password"}
+      >
+        <button
+          type="button"
+          onClick={() => setShowNew(!showNew)}
+          aria-label={showNew ? t.hide : t.show}
+          title={showNew ? t.hide : t.show}
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-muted transition-colors duration-fast hover:text-accent-bright"
+        >
+          {showNew ? <EyeOff size={18} /> : <Eye size={18} />}
+        </button>
+      </PasswordField>
 
-      <div>
-        <p className="mb-2 text-sm text-gray-400">
-          {t.newPassword}
-        </p>
-
-        <div className="relative">
-          <input
-            name="newPassword"
-            type={showNew ? "text" : "password"}
-            required
-            className="w-full rounded-2xl border border-white/10 bg-surface-2 p-4 pr-12 outline-none focus:border-green-500/40"
-          />
-
-          <button
-            type="button"
-            onClick={() => setShowNew(!showNew)}
-            aria-label={showNew ? t.hide : t.show}
-            title={showNew ? t.hide : t.show}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 transition hover:text-white"
-          >
-            {showNew ? <EyeOff size={18} /> : <Eye size={18} />}
-          </button>
-        </div>
-      </div>
-
-      <div>
-        <p className="mb-2 text-sm text-gray-400">
-          {t.confirmPassword}
-        </p>
-
-        <input
-          name="confirmPassword"
-          type="password"
-          required
-          className="w-full rounded-2xl border border-white/10 bg-surface-2 p-4 outline-none focus:border-green-500/40"
-        />
-      </div>
+      <PasswordField name="confirmPassword" label={t.confirmPassword} />
 
       <button
         type="submit"
-        className="w-full rounded-2xl bg-accent p-4 font-bold text-white transition hover:bg-accent-bright"
+        className="w-full rounded-inner border-[0.5px] border-accent-bright/30 bg-accent-bright/[0.08] px-5 py-3 text-sm font-semibold text-accent-bright transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/55"
       >
         {t.submit}
       </button>

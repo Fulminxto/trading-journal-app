@@ -1,25 +1,28 @@
-﻿import {
-  User,
+import type { ReactNode } from "react";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import {
+  ArrowRight,
   BadgeCheck,
   Briefcase,
   Clock3,
+  IdCard,
   KeyRound,
   LineChart,
-  Shield,
+  Save,
+  ShieldCheck,
   Target,
   TrendingUp,
+  Upload,
+  User,
   Wallet,
+  type LucideIcon,
 } from "lucide-react";
 
-import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
-import Link from "next/link";
-
-import { updateProfile } from "./actions";
-import ChangePasswordForm from "./ChangePasswordForm";
 import GlobalToast from "@/components/GlobalToast";
-
+import Card from "@/components/ui/Card";
+import SignatureEdge from "@/components/ui/SignatureEdge";
+import { auth } from "@/lib/auth";
 import {
   formatCurrencyByLanguage,
   formatDateByLanguage,
@@ -27,605 +30,11 @@ import {
   normalizeAppLanguage,
   type AppLanguage,
 } from "@/lib/i18n";
-
-type ProfileLabels = {
-  never: string;
-  online: string;
-  offline: string;
-  complete: string;
-  open: string;
-
-  profileCenter: string;
-  traderProfile: string;
-  profileDescription: string;
-
-  accounts: string;
-  trades: string;
-  totalPnl: string;
-  winRate: string;
-
-  lastLogin: string;
-  lastActivity: string;
-  logins: string;
-
-  personalInformation: string;
-  editProfile: string;
-  profileImage: string;
-  uploadAvatar: string;
-  uploadAvatarDescription: string;
-  displayName: string;
-  displayNamePlaceholder: string;
-  username: string;
-  usernamePlaceholder: string;
-  workspaceName: string;
-  workspaceNamePlaceholder: string;
-  timezone: string;
-  bio: string;
-  bioPlaceholder: string;
-
-  tradingIdentity: string;
-  tradingPreferences: string;
-  tradingStyle: string;
-  selectStyle: string;
-  favoriteMarket: string;
-  selectMarket: string;
-  preferredSession: string;
-  selectSession: string;
-  riskPerTrade: string;
-  preferredBroker: string;
-  preferredBrokerPlaceholder: string;
-  setupStyle: string;
-  setupStylePlaceholder: string;
-  saveProfile: string;
-
-  completion: string;
-  profileScore: string;
-  profileCompleted: string;
-
-  workspace: string;
-  accountAccess: string;
-  noLinkedAccounts: string;
-
-  activity: string;
-  recentTrades: string;
-  noRecentTrades: string;
-
-  security: string;
-  changePassword: string;
-
-  access: string;
-  securityStatus: string;
-  authentication: string;
-  protected: string;
-  accountRole: string;
-};
-
-const labels: Record<AppLanguage, ProfileLabels> = {
-  it: {
-    never: "Mai",
-    online: "Online",
-    offline: "Offline",
-    complete: "Completo",
-    open: "Apri",
-
-    profileCenter: "Centro profilo",
-    traderProfile: "Profilo Trader",
-    profileDescription:
-      "Gestisci identità, preferenze operative, stile di trading e informazioni personali usate da VOLTIS per personalizzare l’esperienza.",
-
-    accounts: "Account",
-    trades: "Trade",
-    totalPnl: "PnL totale",
-    winRate: "Win Rate",
-
-    lastLogin: "Ultimo login",
-    lastActivity: "Ultima attività",
-    logins: "Login",
-
-    personalInformation: "Informazioni personali",
-    editProfile: "Modifica profilo",
-    profileImage: "Immagine profilo",
-    uploadAvatar: "Carica avatar",
-    uploadAvatarDescription:
-      "Carica un’immagine profilo in formato JPG, PNG o WEBP. Dimensione massima: 5MB.",
-    displayName: "Nome visualizzato",
-    displayNamePlaceholder: "Nome visualizzato",
-    username: "Username",
-    usernamePlaceholder: "Username",
-    workspaceName: "Nome workspace",
-    workspaceNamePlaceholder: "Nome workspace",
-    timezone: "Fuso orario",
-    bio: "Bio",
-    bioPlaceholder:
-      "Descrivi brevemente il tuo profilo da trader...",
-
-    tradingIdentity: "Identità di trading",
-    tradingPreferences: "Preferenze operative",
-    tradingStyle: "Stile di trading",
-    selectStyle: "Seleziona stile",
-    favoriteMarket: "Mercato preferito",
-    selectMarket: "Seleziona mercato",
-    preferredSession: "Sessione preferita",
-    selectSession: "Seleziona sessione",
-    riskPerTrade: "Rischio per trade %",
-    preferredBroker: "Broker preferito",
-    preferredBrokerPlaceholder: "Broker / Prop Firm",
-    setupStyle: "Stile setup",
-    setupStylePlaceholder: "Breakout, Pullback, SMC...",
-    saveProfile: "Salva profilo",
-
-    completion: "Completamento",
-    profileScore: "Punteggio profilo",
-    profileCompleted: "Profilo completato",
-
-    workspace: "Workspace",
-    accountAccess: "Accesso account",
-    noLinkedAccounts: "Nessun account collegato.",
-
-    activity: "Attività",
-    recentTrades: "Trade recenti",
-    noRecentTrades: "Nessun trade recente.",
-
-    security: "Sicurezza",
-    changePassword: "Cambia password",
-
-    access: "Accesso",
-    securityStatus: "Stato sicurezza",
-    authentication: "Autenticazione",
-    protected: "Protetto",
-    accountRole: "Ruolo account",
-  },
-
-  en: {
-    never: "Never",
-    online: "Online",
-    offline: "Offline",
-    complete: "Complete",
-    open: "Open",
-
-    profileCenter: "Profile Center",
-    traderProfile: "Trader Profile",
-    profileDescription:
-      "Manage identity, operating preferences, trading style and personal information used by VOLTIS to personalize the experience.",
-
-    accounts: "Accounts",
-    trades: "Trades",
-    totalPnl: "Total PnL",
-    winRate: "Win Rate",
-
-    lastLogin: "Last Login",
-    lastActivity: "Last Activity",
-    logins: "Logins",
-
-    personalInformation: "Personal Information",
-    editProfile: "Edit Profile",
-    profileImage: "Profile Image",
-    uploadAvatar: "Upload avatar",
-    uploadAvatarDescription:
-      "Upload a profile image in JPG, PNG or WEBP format. Maximum size: 5MB.",
-    displayName: "Display Name",
-    displayNamePlaceholder: "Display name",
-    username: "Username",
-    usernamePlaceholder: "Username",
-    workspaceName: "Workspace Name",
-    workspaceNamePlaceholder: "Workspace name",
-    timezone: "Timezone",
-    bio: "Bio",
-    bioPlaceholder:
-      "Briefly describe your trader profile...",
-
-    tradingIdentity: "Trading Identity",
-    tradingPreferences: "Trading Preferences",
-    tradingStyle: "Trading Style",
-    selectStyle: "Select style",
-    favoriteMarket: "Favorite Market",
-    selectMarket: "Select market",
-    preferredSession: "Preferred Session",
-    selectSession: "Select session",
-    riskPerTrade: "Risk Per Trade %",
-    preferredBroker: "Preferred Broker",
-    preferredBrokerPlaceholder: "Broker / Prop Firm",
-    setupStyle: "Setup Style",
-    setupStylePlaceholder: "Breakout, Pullback, SMC...",
-    saveProfile: "Save Profile",
-
-    completion: "Completion",
-    profileScore: "Profile Score",
-    profileCompleted: "Profile completed",
-
-    workspace: "Workspace",
-    accountAccess: "Account Access",
-    noLinkedAccounts: "No linked accounts.",
-
-    activity: "Activity",
-    recentTrades: "Recent Trades",
-    noRecentTrades: "No recent trades.",
-
-    security: "Security",
-    changePassword: "Change password",
-
-    access: "Access",
-    securityStatus: "Security Status",
-    authentication: "Authentication",
-    protected: "Protected",
-    accountRole: "Account Role",
-  },
-
-  uk: {
-    never: "Ніколи",
-    online: "Онлайн",
-    offline: "Офлайн",
-    complete: "Заповнено",
-    open: "Відкрити",
-
-    profileCenter: "Центр профілю",
-    traderProfile: "Профіль трейдера",
-    profileDescription:
-      "Керуйте особистістю, операційними налаштуваннями, стилем трейдингу та персональною інформацією, яку VOLTIS використовує для персоналізації досвіду.",
-
-    accounts: "Акаунти",
-    trades: "Угоди",
-    totalPnl: "Загальний PnL",
-    winRate: "Win Rate",
-
-    lastLogin: "Останній вхід",
-    lastActivity: "Остання активність",
-    logins: "Входи",
-
-    personalInformation: "Особиста інформація",
-    editProfile: "Редагувати профіль",
-    profileImage: "Зображення профілю",
-    uploadAvatar: "Завантажити аватар",
-    uploadAvatarDescription:
-      "Завантажте зображення профілю у форматі JPG, PNG або WEBP. Максимальний розмір: 5MB.",
-    displayName: "Відображуване ім’я",
-    displayNamePlaceholder: "Відображуване ім’я",
-    username: "Ім’я користувача",
-    usernamePlaceholder: "Ім’я користувача",
-    workspaceName: "Назва workspace",
-    workspaceNamePlaceholder: "Назва workspace",
-    timezone: "Часовий пояс",
-    bio: "Біо",
-    bioPlaceholder:
-      "Коротко опишіть свій профіль трейдера...",
-
-    tradingIdentity: "Трейдингова ідентичність",
-    tradingPreferences: "Операційні налаштування",
-    tradingStyle: "Стиль трейдингу",
-    selectStyle: "Виберіть стиль",
-    favoriteMarket: "Улюблений ринок",
-    selectMarket: "Виберіть ринок",
-    preferredSession: "Бажана сесія",
-    selectSession: "Виберіть сесію",
-    riskPerTrade: "Ризик на угоду %",
-    preferredBroker: "Бажаний брокер",
-    preferredBrokerPlaceholder: "Брокер / Prop Firm",
-    setupStyle: "Стиль сетапу",
-    setupStylePlaceholder: "Breakout, Pullback, SMC...",
-    saveProfile: "Зберегти профіль",
-
-    completion: "Заповнення",
-    profileScore: "Оцінка профілю",
-    profileCompleted: "Профіль заповнено",
-
-    workspace: "Workspace",
-    accountAccess: "Доступ до акаунтів",
-    noLinkedAccounts: "Немає підключених акаунтів.",
-
-    activity: "Активність",
-    recentTrades: "Останні угоди",
-    noRecentTrades: "Немає останніх угод.",
-
-    security: "Безпека",
-    changePassword: "Змінити пароль",
-
-    access: "Доступ",
-    securityStatus: "Статус безпеки",
-    authentication: "Аутентифікація",
-    protected: "Захищено",
-    accountRole: "Роль акаунта",
-  },
-
-  ru: {
-    never: "Никогда",
-    online: "Онлайн",
-    offline: "Офлайн",
-    complete: "Заполнено",
-    open: "Открыть",
-
-    profileCenter: "Центр профиля",
-    traderProfile: "Профиль трейдера",
-    profileDescription:
-      "Управляйте личностью, операционными настройками, стилем трейдинга и персональной информацией, которую VOLTIS использует для персонализации опыта.",
-
-    accounts: "Аккаунты",
-    trades: "Сделки",
-    totalPnl: "Общий PnL",
-    winRate: "Win Rate",
-
-    lastLogin: "Последний вход",
-    lastActivity: "Последняя активность",
-    logins: "Входы",
-
-    personalInformation: "Личная информация",
-    editProfile: "Редактировать профиль",
-    profileImage: "Изображение профиля",
-    uploadAvatar: "Загрузить аватар",
-    uploadAvatarDescription:
-      "Загрузите изображение профиля в формате JPG, PNG или WEBP. Максимальный размер: 5MB.",
-    displayName: "Отображаемое имя",
-    displayNamePlaceholder: "Отображаемое имя",
-    username: "Имя пользователя",
-    usernamePlaceholder: "Имя пользователя",
-    workspaceName: "Название workspace",
-    workspaceNamePlaceholder: "Название workspace",
-    timezone: "Часовой пояс",
-    bio: "Био",
-    bioPlaceholder:
-      "Кратко опишите свой профиль трейдера...",
-
-    tradingIdentity: "Трейдинговая идентичность",
-    tradingPreferences: "Операционные настройки",
-    tradingStyle: "Стиль трейдинга",
-    selectStyle: "Выберите стиль",
-    favoriteMarket: "Любимый рынок",
-    selectMarket: "Выберите рынок",
-    preferredSession: "Предпочитаемая сессия",
-    selectSession: "Выберите сессию",
-    riskPerTrade: "Риск на сделку %",
-    preferredBroker: "Предпочитаемый брокер",
-    preferredBrokerPlaceholder: "Брокер / Prop Firm",
-    setupStyle: "Стиль сетапа",
-    setupStylePlaceholder: "Breakout, Pullback, SMC...",
-    saveProfile: "Сохранить профиль",
-
-    completion: "Заполнение",
-    profileScore: "Оценка профиля",
-    profileCompleted: "Профиль заполнен",
-
-    workspace: "Workspace",
-    accountAccess: "Доступ к аккаунтам",
-    noLinkedAccounts: "Нет подключенных аккаунтов.",
-
-    activity: "Активность",
-    recentTrades: "Последние сделки",
-    noRecentTrades: "Нет последних сделок.",
-
-    security: "Безопасность",
-    changePassword: "Изменить пароль",
-
-    access: "Доступ",
-    securityStatus: "Статус безопасности",
-    authentication: "Аутентификация",
-    protected: "Защищено",
-    accountRole: "Роль аккаунта",
-  },
-
-  es: {
-    never: "Nunca",
-    online: "Online",
-    offline: "Offline",
-    complete: "Completo",
-    open: "Abrir",
-
-    profileCenter: "Centro de perfil",
-    traderProfile: "Perfil del trader",
-    profileDescription:
-      "Gestiona identidad, preferencias operativas, estilo de trading e información personal usada por VOLTIS para personalizar la experiencia.",
-
-    accounts: "Cuentas",
-    trades: "Trades",
-    totalPnl: "PnL total",
-    winRate: "Win Rate",
-
-    lastLogin: "Último login",
-    lastActivity: "Última actividad",
-    logins: "Logins",
-
-    personalInformation: "Información personal",
-    editProfile: "Editar perfil",
-    profileImage: "Imagen de perfil",
-    uploadAvatar: "Subir avatar",
-    uploadAvatarDescription:
-      "Sube una imagen de perfil en formato JPG, PNG o WEBP. Tamaño máximo: 5MB.",
-    displayName: "Nombre visible",
-    displayNamePlaceholder: "Nombre visible",
-    username: "Usuario",
-    usernamePlaceholder: "Usuario",
-    workspaceName: "Nombre del workspace",
-    workspaceNamePlaceholder: "Nombre del workspace",
-    timezone: "Zona horaria",
-    bio: "Bio",
-    bioPlaceholder:
-      "Describe brevemente tu perfil como trader...",
-
-    tradingIdentity: "Identidad de trading",
-    tradingPreferences: "Preferencias operativas",
-    tradingStyle: "Estilo de trading",
-    selectStyle: "Selecciona estilo",
-    favoriteMarket: "Mercado favorito",
-    selectMarket: "Selecciona mercado",
-    preferredSession: "Sesión preferida",
-    selectSession: "Selecciona sesión",
-    riskPerTrade: "Riesgo por trade %",
-    preferredBroker: "Broker preferido",
-    preferredBrokerPlaceholder: "Broker / Prop Firm",
-    setupStyle: "Estilo de setup",
-    setupStylePlaceholder: "Breakout, Pullback, SMC...",
-    saveProfile: "Guardar perfil",
-
-    completion: "Completado",
-    profileScore: "Puntuación del perfil",
-    profileCompleted: "Perfil completado",
-
-    workspace: "Workspace",
-    accountAccess: "Acceso a cuentas",
-    noLinkedAccounts: "No hay cuentas vinculadas.",
-
-    activity: "Actividad",
-    recentTrades: "Trades recientes",
-    noRecentTrades: "No hay trades recientes.",
-
-    security: "Seguridad",
-    changePassword: "Cambiar contraseña",
-
-    access: "Acceso",
-    securityStatus: "Estado de seguridad",
-    authentication: "Autenticación",
-    protected: "Protegido",
-    accountRole: "Rol de cuenta",
-  },
-
-  fr: {
-    never: "Jamais",
-    online: "En ligne",
-    offline: "Hors ligne",
-    complete: "Complet",
-    open: "Ouvrir",
-
-    profileCenter: "Centre du profil",
-    traderProfile: "Profil trader",
-    profileDescription:
-      "Gérez l’identité, les préférences opérationnelles, le style de trading et les informations personnelles utilisées par VOLTIS pour personnaliser l’expérience.",
-
-    accounts: "Comptes",
-    trades: "Trades",
-    totalPnl: "PnL total",
-    winRate: "Win Rate",
-
-    lastLogin: "Dernière connexion",
-    lastActivity: "Dernière activité",
-    logins: "Connexions",
-
-    personalInformation: "Informations personnelles",
-    editProfile: "Modifier le profil",
-    profileImage: "Image de profil",
-    uploadAvatar: "Téléverser un avatar",
-    uploadAvatarDescription:
-      "Téléversez une image de profil au format JPG, PNG ou WEBP. Taille maximale : 5MB.",
-    displayName: "Nom affiché",
-    displayNamePlaceholder: "Nom affiché",
-    username: "Nom d’utilisateur",
-    usernamePlaceholder: "Nom d’utilisateur",
-    workspaceName: "Nom du workspace",
-    workspaceNamePlaceholder: "Nom du workspace",
-    timezone: "Fuseau horaire",
-    bio: "Bio",
-    bioPlaceholder:
-      "Décrivez brièvement votre profil de trader...",
-
-    tradingIdentity: "Identité de trading",
-    tradingPreferences: "Préférences opérationnelles",
-    tradingStyle: "Style de trading",
-    selectStyle: "Sélectionner un style",
-    favoriteMarket: "Marché préféré",
-    selectMarket: "Sélectionner un marché",
-    preferredSession: "Session préférée",
-    selectSession: "Sélectionner une session",
-    riskPerTrade: "Risque par trade %",
-    preferredBroker: "Broker préféré",
-    preferredBrokerPlaceholder: "Broker / Prop Firm",
-    setupStyle: "Style de setup",
-    setupStylePlaceholder: "Breakout, Pullback, SMC...",
-    saveProfile: "Enregistrer le profil",
-
-    completion: "Complétion",
-    profileScore: "Score du profil",
-    profileCompleted: "Profil complété",
-
-    workspace: "Workspace",
-    accountAccess: "Accès aux comptes",
-    noLinkedAccounts: "Aucun compte lié.",
-
-    activity: "Activité",
-    recentTrades: "Trades récents",
-    noRecentTrades: "Aucun trade récent.",
-
-    security: "Sécurité",
-    changePassword: "Changer le mot de passe",
-
-    access: "Accès",
-    securityStatus: "Statut de sécurité",
-    authentication: "Authentification",
-    protected: "Protégé",
-    accountRole: "Rôle du compte",
-  },
-
-  de: {
-    never: "Nie",
-    online: "Online",
-    offline: "Offline",
-    complete: "Vollständig",
-    open: "Öffnen",
-
-    profileCenter: "Profil-Center",
-    traderProfile: "Trader-Profil",
-    profileDescription:
-      "Verwalte Identität, operative Präferenzen, Trading-Stil und persönliche Informationen, die VOLTIS zur Personalisierung der Erfahrung nutzt.",
-
-    accounts: "Konten",
-    trades: "Trades",
-    totalPnl: "Gesamt-PnL",
-    winRate: "Win Rate",
-
-    lastLogin: "Letzter Login",
-    lastActivity: "Letzte Aktivität",
-    logins: "Logins",
-
-    personalInformation: "Persönliche Informationen",
-    editProfile: "Profil bearbeiten",
-    profileImage: "Profilbild",
-    uploadAvatar: "Avatar hochladen",
-    uploadAvatarDescription:
-      "Lade ein Profilbild im JPG-, PNG- oder WEBP-Format hoch. Maximale Größe: 5MB.",
-    displayName: "Anzeigename",
-    displayNamePlaceholder: "Anzeigename",
-    username: "Benutzername",
-    usernamePlaceholder: "Benutzername",
-    workspaceName: "Workspace-Name",
-    workspaceNamePlaceholder: "Workspace-Name",
-    timezone: "Zeitzone",
-    bio: "Bio",
-    bioPlaceholder:
-      "Beschreibe kurz dein Trader-Profil...",
-
-    tradingIdentity: "Trading-Identität",
-    tradingPreferences: "Operative Präferenzen",
-    tradingStyle: "Trading-Stil",
-    selectStyle: "Stil auswählen",
-    favoriteMarket: "Bevorzugter Markt",
-    selectMarket: "Markt auswählen",
-    preferredSession: "Bevorzugte Session",
-    selectSession: "Session auswählen",
-    riskPerTrade: "Risiko pro Trade %",
-    preferredBroker: "Bevorzugter Broker",
-    preferredBrokerPlaceholder: "Broker / Prop Firm",
-    setupStyle: "Setup-Stil",
-    setupStylePlaceholder: "Breakout, Pullback, SMC...",
-    saveProfile: "Profil speichern",
-
-    completion: "Vollständigkeit",
-    profileScore: "Profil-Score",
-    profileCompleted: "Profil vervollständigt",
-
-    workspace: "Workspace",
-    accountAccess: "Kontozugriff",
-    noLinkedAccounts: "Keine verknüpften Konten.",
-
-    activity: "Aktivität",
-    recentTrades: "Aktuelle Trades",
-    noRecentTrades: "Keine aktuellen Trades.",
-
-    security: "Sicherheit",
-    changePassword: "Passwort ändern",
-
-    access: "Zugriff",
-    securityStatus: "Sicherheitsstatus",
-    authentication: "Authentifizierung",
-    protected: "Geschützt",
-    accountRole: "Kontorolle",
-  },
-};
+import { prisma } from "@/lib/prisma";
+import ChangePasswordForm from "./ChangePasswordForm";
+import { updateProfile } from "./actions";
+
+type Tone = "neutral" | "info" | "positive" | "negative";
 
 function getInitials(name: string) {
   return name
@@ -637,11 +46,213 @@ function getInitials(name: string) {
 }
 
 function isOnline(date?: Date | null) {
-  if (!date) {
-    return false;
-  }
-
+  if (!date) return false;
   return Date.now() - new Date(date).getTime() < 5 * 60 * 1000;
+}
+
+function valueTone(value: number) {
+  if (value > 0) return "text-positive";
+  if (value < 0) return "text-negative";
+  return "text-muted";
+}
+
+function StatusPill({
+  children,
+  tone = "neutral",
+}: {
+  children: ReactNode;
+  tone?: Tone;
+}) {
+  const tones = {
+    neutral: "border-flash/[0.12] bg-surface-2 text-muted",
+    info: "border-accent-bright/25 bg-accent-bright/[0.08] text-accent-bright",
+    positive: "border-positive/25 bg-positive/[0.08] text-positive",
+    negative: "border-negative/25 bg-negative/[0.08] text-negative",
+  };
+
+  return (
+    <span
+      className={`inline-flex items-center rounded-pill border-[0.5px] px-3 py-1 text-micro font-medium uppercase tracking-label ${tones[tone]}`}
+    >
+      {children}
+    </span>
+  );
+}
+
+function SectionHeader({
+  eyebrow,
+  title,
+  children,
+}: {
+  eyebrow: string;
+  title: string;
+  children?: ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <div className="flex items-center gap-2">
+          <SignatureEdge orientation="vertical" className="h-4" />
+          <p className="text-micro uppercase tracking-label text-accent-bright">
+            {eyebrow}
+          </p>
+        </div>
+        <h2 className="mt-2 text-section text-flash">{title}</h2>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function StatCard({
+  label,
+  value,
+  detail,
+  icon: Icon,
+  tone = "neutral",
+}: {
+  label: string;
+  value: string;
+  detail: string;
+  icon: LucideIcon;
+  tone?: Tone;
+}) {
+  const toneClass =
+    tone === "positive"
+      ? "text-positive"
+      : tone === "negative"
+        ? "text-negative"
+        : "text-flash";
+
+  return (
+    <Card className="reveal-rise p-5">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-micro uppercase tracking-label text-muted-faint">
+            {label}
+          </p>
+          <p className={`mt-3 text-metric tabular-nums ${toneClass}`}>
+            {value}
+          </p>
+          <p className="mt-2 text-caption leading-5 text-muted">{detail}</p>
+        </div>
+        <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-3 text-muted">
+          <Icon size={18} />
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function EmptyState({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="rounded-inner border-[0.5px] border-dashed border-flash/[0.12] bg-surface-2 p-5">
+      <p className="text-body font-medium text-flash">{title}</p>
+      <p className="mt-2 text-caption leading-5 text-muted">{description}</p>
+    </div>
+  );
+}
+
+function TextField({
+  name,
+  label,
+  defaultValue,
+  placeholder,
+  type = "text",
+  required = false,
+  step,
+}: {
+  name: string;
+  label: string;
+  defaultValue?: string | number | null;
+  placeholder: string;
+  type?: string;
+  required?: boolean;
+  step?: string;
+}) {
+  return (
+    <label className="block">
+      <span className="text-micro uppercase tracking-label text-muted-faint">
+        {label}
+      </span>
+      <input
+        name={name}
+        type={type}
+        step={step}
+        defaultValue={defaultValue ?? ""}
+        placeholder={placeholder}
+        required={required}
+        className="mt-2 w-full rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-2 px-4 py-3 text-sm text-flash outline-none transition-all duration-base placeholder:text-muted-faint focus:border-accent-bright/45 focus:ring-2 focus:ring-accent-bright/10"
+      />
+    </label>
+  );
+}
+
+function SelectField({
+  name,
+  label,
+  defaultValue,
+  placeholder,
+  options,
+}: {
+  name: string;
+  label: string;
+  defaultValue?: string | null;
+  placeholder: string;
+  options: string[];
+}) {
+  return (
+    <label className="block">
+      <span className="text-micro uppercase tracking-label text-muted-faint">
+        {label}
+      </span>
+      <select
+        name={name}
+        defaultValue={defaultValue ?? ""}
+        className="mt-2 w-full rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-2 px-4 py-3 text-sm text-flash outline-none transition-all duration-base focus:border-accent-bright/45 focus:ring-2 focus:ring-accent-bright/10"
+      >
+        <option value="">{placeholder}</option>
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function TextAreaField({
+  name,
+  label,
+  defaultValue,
+  placeholder,
+}: {
+  name: string;
+  label: string;
+  defaultValue?: string | null;
+  placeholder: string;
+}) {
+  return (
+    <label className="block md:col-span-2">
+      <span className="text-micro uppercase tracking-label text-muted-faint">
+        {label}
+      </span>
+      <textarea
+        name={name}
+        defaultValue={defaultValue ?? ""}
+        placeholder={placeholder}
+        rows={4}
+        className="mt-2 w-full resize-none rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-2 px-4 py-3 text-sm text-flash outline-none transition-all duration-base placeholder:text-muted-faint focus:border-accent-bright/45 focus:ring-2 focus:ring-accent-bright/10"
+      />
+    </label>
+  );
 }
 
 export default async function ProfilePage({
@@ -652,7 +263,6 @@ export default async function ProfilePage({
   }>;
 }) {
   const query = await searchParams;
-
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -663,7 +273,6 @@ export default async function ProfilePage({
     where: {
       id: session.user.id,
     },
-
     include: {
       memberships: {
         include: {
@@ -675,7 +284,6 @@ export default async function ProfilePage({
           },
         },
       },
-
       createdTrades: {
         orderBy: {
           openDate: "desc",
@@ -690,36 +298,23 @@ export default async function ProfilePage({
   }
 
   const appLanguage = normalizeAppLanguage(user.appLanguage);
-  const t = labels[appLanguage];
   const currency = user.defaultCurrency ?? "USD";
-
   const displayName = user.name || user.username;
   const initials = getInitials(displayName);
+  const online = isOnline(user.lastActivityAt);
 
   const accounts = user.memberships.map(
     (membership) => membership.tradingAccount
   );
-
-  const allTrades = accounts.flatMap(
-    (account) => account.trades
-  );
-
+  const allTrades = accounts.flatMap((account) => account.trades);
   const totalAccounts = accounts.length;
   const totalTrades = allTrades.length;
-
   const totalPnl = allTrades.reduce(
     (acc, trade) => acc + (trade.resultUsd || 0),
     0
   );
-
-  const wins = allTrades.filter(
-    (trade) => trade.outcome === "win"
-  ).length;
-
-  const winRate =
-    totalTrades > 0 ? (wins / totalTrades) * 100 : 0;
-
-  const online = isOnline(user.lastActivityAt);
+  const wins = allTrades.filter((trade) => trade.outcome === "win").length;
+  const winRate = totalTrades > 0 ? (wins / totalTrades) * 100 : null;
 
   const profileCompletionItems = [
     user.name,
@@ -734,95 +329,61 @@ export default async function ProfilePage({
     user.preferredBroker,
     user.setupStyle,
   ];
-
   const completedProfileItems =
     profileCompletionItems.filter(Boolean).length;
-
   const profileCompletion = Math.round(
-    (completedProfileItems / profileCompletionItems.length) *
-    100
+    (completedProfileItems / profileCompletionItems.length) * 100
   );
 
   const formatCurrency = (value: number) =>
-    formatCurrencyByLanguage(
-      value,
-      currency,
-      appLanguage
-    );
-
-  const formatDateTime = (date?: Date | null) => {
-    if (!date) {
-      return t.never;
-    }
-
-    return formatDateTimeByLanguage(
-      date,
-      appLanguage
-    );
-  };
-
+    formatCurrencyByLanguage(value, currency, appLanguage);
+  const formatDateTime = (date?: Date | null) =>
+    date ? formatDateTimeByLanguage(date, appLanguage) : "Never";
   const formatShortDate = (date: Date) =>
-    formatDateByLanguage(
-      date,
-      appLanguage
-    );
-
-  const statCards = [
+    formatDateByLanguage(date, appLanguage);
+  const securityRows: Array<{
+    label: string;
+    value: string;
+    icon: LucideIcon;
+  }> = [
+    { label: "Authentication", value: "Protected", icon: ShieldCheck },
+    { label: "System role", value: user.role, icon: IdCard },
     {
-      label: t.accounts,
-      value: totalAccounts,
-      tone: "text-white",
-      icon: Wallet,
+      label: "Two-factor",
+      value: user.twoFactorEnabled ? "Enabled" : "Not enabled",
+      icon: KeyRound,
     },
+    { label: "Email", value: user.email ? user.email : "Not set", icon: BadgeCheck },
     {
-      label: t.trades,
-      value: totalTrades,
-      tone: "text-white",
-      icon: LineChart,
+      label: "Last activity",
+      value: formatDateTime(user.lastActivityAt),
+      icon: Clock3,
     },
-    {
-      label: t.totalPnl,
-      value: formatCurrency(totalPnl),
-      tone:
-        totalPnl >= 0
-          ? "text-accent"
-          : "text-red-400",
-      icon: TrendingUp,
-    },
-    {
-      label: t.winRate,
-      value: `${winRate.toFixed(2)}%`,
-      tone:
-        winRate >= 50
-          ? "text-accent"
-          : "text-red-400",
-      icon: Target,
-    },
+    { label: "Login count", value: String(user.loginCount), icon: Briefcase },
   ];
 
   return (
-    <div className="space-y-12">
-      <GlobalToast status={query.toast} />
+    <div className="space-y-8">
+      <GlobalToast status={query.toast} language={appLanguage} />
 
       <div>
-        <p className="text-sm text-accent">
-          {t.profileCenter}
+        <p className="text-micro uppercase tracking-hero text-muted-faint">
+          Private identity / account surface
         </p>
-
-        <h1 className="mt-2 flex items-center gap-3 text-3xl font-bold sm:text-4xl">
-          <User className="text-accent" />
-          {t.traderProfile}
-        </h1>
-
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-400">
-          {t.profileDescription}
-        </p>
+        <h1 className="mt-3 text-hero text-flash">Profile</h1>
+        <div className="mt-4 max-w-3xl">
+          <SignatureEdge orientation="horizontal" className="mb-4 max-w-40" />
+          <p className="text-body text-muted">
+            Manage the private identity, access posture, and operating
+            preferences attached to your VOLTIS account.
+          </p>
+        </div>
       </div>
 
-      <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] p-6">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex items-center gap-5">
-            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-green-500/20 bg-accent/10">
+      <Card variant="hero" className="reveal-rise">
+        <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
+            <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-card border-[0.5px] border-flash/[0.12] bg-surface-2">
               {user.image ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -831,499 +392,308 @@ export default async function ProfilePage({
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="text-3xl font-black text-accent">
+                <span className="text-metric-lg text-accent-bright">
                   {initials}
-                </div>
+                </span>
               )}
             </div>
 
-            <div>
+            <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-3">
-                <h2 className="text-3xl font-black text-white">
-                  {displayName}
-                </h2>
-
-                <span
-                  className={`rounded-xl px-3 py-1 text-xs font-black uppercase tracking-[0.16em] ${online
-                      ? "bg-accent/10 text-accent"
-                      : "bg-white/10 text-gray-400"
-                    }`}
-                >
-                  {online ? t.online : t.offline}
-                </span>
+                <h2 className="text-section text-flash">{displayName}</h2>
+                <StatusPill tone={online ? "info" : "neutral"}>
+                  {online ? "Online" : "Offline"}
+                </StatusPill>
               </div>
-
-              <p className="mt-1 text-sm text-gray-400">
-                @{user.username}
-              </p>
-
-              <div className="mt-3 flex flex-wrap gap-2">
-                <span className="rounded-xl bg-white/10 px-3 py-1 text-xs font-bold text-gray-300">
-                  {user.role}
-                </span>
-
-                <span className="rounded-xl bg-accent/10 px-3 py-1 text-xs font-bold text-accent">
-                  {profileCompletion}% {t.complete}
-                </span>
+              <p className="mt-2 text-body text-muted">@{user.username}</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <StatusPill>{user.role}</StatusPill>
+                <StatusPill tone="info">{profileCompletion}% complete</StatusPill>
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:w-[520px]">
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <p className="text-xs text-gray-500">
-                {t.lastLogin}
+          <div className="grid gap-3 sm:grid-cols-3">
+            <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
+              <p className="text-micro uppercase tracking-label text-muted-faint">
+                Last login
               </p>
-
-              <h3 className="mt-2 text-sm font-bold text-white">
+              <p className="mt-2 text-caption leading-5 text-flash">
                 {formatDateTime(user.lastLoginAt)}
-              </h3>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <p className="text-xs text-gray-500">
-                {t.lastActivity}
               </p>
-
-              <h3 className="mt-2 text-sm font-bold text-white">
+            </div>
+            <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
+              <p className="text-micro uppercase tracking-label text-muted-faint">
+                Last activity
+              </p>
+              <p className="mt-2 text-caption leading-5 text-flash">
                 {formatDateTime(user.lastActivityAt)}
-              </h3>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <p className="text-xs text-gray-500">
-                {t.logins}
               </p>
-
-              <h3 className="mt-2 text-sm font-bold text-white">
+            </div>
+            <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
+              <p className="text-micro uppercase tracking-label text-muted-faint">
+                Logins
+              </p>
+              <p className="mt-2 text-caption leading-5 text-flash">
                 {user.loginCount}
-              </h3>
+              </p>
             </div>
           </div>
         </div>
-      </div>
+      </Card>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {statCards.map((card) => {
-          const Icon = card.icon;
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <StatCard
+          label="Accounts"
+          value={String(totalAccounts)}
+          detail="Trading accounts linked to this identity."
+          icon={Wallet}
+        />
+        <StatCard
+          label="Trades"
+          value={String(totalTrades)}
+          detail="Trades available through linked accounts."
+          icon={LineChart}
+        />
+        <StatCard
+          label="Total PnL"
+          value={totalTrades > 0 ? formatCurrency(totalPnl) : "Not measured"}
+          detail="Only calculated when trade data exists."
+          icon={TrendingUp}
+          tone={totalTrades > 0 && totalPnl > 0 ? "positive" : totalPnl < 0 ? "negative" : "neutral"}
+        />
+        <StatCard
+          label="Win rate"
+          value={winRate === null ? "Not measured" : `${winRate.toFixed(2)}%`}
+          detail="No fake rate is shown before trades exist."
+          icon={Target}
+          tone={winRate !== null && winRate >= 50 ? "positive" : winRate !== null ? "negative" : "neutral"}
+        />
+      </section>
 
-          return (
-            <div
-              key={card.label}
-              className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
-            >
-              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-accent">
-                <Icon size={20} />
+      <section className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
+        <Card>
+          <SectionHeader eyebrow="Identity" title="Personal profile">
+            <StatusPill tone="info">Private</StatusPill>
+          </SectionHeader>
+
+          <form action={updateProfile} className="mt-6 space-y-8">
+            <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-5">
+              <div className="flex items-start gap-4">
+                <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-1 p-3 text-muted">
+                  <Upload size={18} />
+                </div>
+                <div>
+                  <p className="text-body font-medium text-flash">
+                    Profile image
+                  </p>
+                  <p className="mt-2 text-caption leading-5 text-muted">
+                    JPG, PNG, or WEBP. Maximum size: 5MB. The server validates
+                    file type, size, and image signature before upload.
+                  </p>
+                </div>
               </div>
-
-              <p className="text-sm text-gray-400">
-                {card.label}
-              </p>
-
-              <h2 className={`mt-2 text-2xl font-black ${card.tone}`}>
-                {card.value}
-              </h2>
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.3fr_0.7fr]">
-        <form
-          action={updateProfile}
-          className="rounded-3xl border border-white/10 bg-white/[0.03] p-6"
-        >
-          <div className="mb-6">
-            <p className="text-sm text-gray-400">
-              {t.personalInformation}
-            </p>
-
-            <h2 className="mt-1 text-2xl font-bold">
-              {t.editProfile}
-            </h2>
-
-            <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-5">
-              <p className="text-sm text-gray-400">
-                {t.profileImage}
-              </p>
-
-              <h3 className="mt-2 text-lg font-bold">
-                {t.uploadAvatar}
-              </h3>
-
-              <p className="mt-2 text-sm text-gray-500">
-                {t.uploadAvatarDescription}
-              </p>
-
               <input
                 type="file"
                 name="profileImage"
                 accept="image/jpeg,image/png,image/webp"
-                className="mt-4 w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 text-sm text-gray-300 outline-none file:mr-4 file:rounded-xl file:border-0 file:bg-accent file:px-4 file:py-2 file:font-bold file:text-white hover:file:bg-accent-bright"
+                className="mt-4 w-full rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-1 px-4 py-3 text-sm text-muted outline-none file:mr-4 file:rounded-inner file:border-0 file:bg-accent-bright/[0.12] file:px-4 file:py-2 file:text-sm file:font-medium file:text-accent-bright hover:file:bg-accent-bright/[0.18]"
               />
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div>
-              <p className="mb-2 text-sm text-gray-400">
-                {t.displayName}
-              </p>
-
-              <input
+            <div className="grid gap-4 md:grid-cols-2">
+              <TextField
                 name="name"
-                defaultValue={user.name || ""}
-                placeholder={t.displayNamePlaceholder}
-                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+                label="Display name"
+                defaultValue={user.name}
+                placeholder="Display name"
               />
-            </div>
-
-            <div>
-              <p className="mb-2 text-sm text-gray-400">
-                {t.username}
-              </p>
-
-              <input
+              <TextField
                 name="username"
+                label="Username"
                 defaultValue={user.username}
-                placeholder={t.usernamePlaceholder}
-                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+                placeholder="Username"
                 required
               />
-            </div>
-
-            <div>
-              <p className="mb-2 text-sm text-gray-400">
-                {t.workspaceName}
-              </p>
-
-              <input
+              <TextField
                 name="workspaceName"
-                defaultValue={user.workspaceName || ""}
-                placeholder={t.workspaceNamePlaceholder}
-                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+                label="Workspace name"
+                defaultValue={user.workspaceName}
+                placeholder="Workspace name"
               />
-            </div>
-
-            <div>
-              <p className="mb-2 text-sm text-gray-400">
-                {t.timezone}
-              </p>
-
-              <input
+              <TextField
                 name="timezone"
-                defaultValue={user.timezone || ""}
+                label="Timezone"
+                defaultValue={user.timezone}
                 placeholder="Europe/Rome"
-                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
               />
-            </div>
-
-            <div className="md:col-span-2">
-              <p className="mb-2 text-sm text-gray-400">
-                {t.bio}
-              </p>
-
-              <textarea
+              <TextAreaField
                 name="bio"
-                defaultValue={user.bio || ""}
-                placeholder={t.bioPlaceholder}
-                className="min-h-[120px] w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-              />
-            </div>
-          </div>
-
-          <div className="mt-8">
-            <p className="text-sm text-gray-400">
-              {t.tradingIdentity}
-            </p>
-
-            <h2 className="mt-1 text-2xl font-bold">
-              {t.tradingPreferences}
-            </h2>
-          </div>
-
-          <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div>
-              <p className="mb-2 text-sm text-gray-400">
-                {t.tradingStyle}
-              </p>
-
-              <select
-                name="tradingStyle"
-                defaultValue={user.tradingStyle || ""}
-                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-              >
-                <option value="">
-                  {t.selectStyle}
-                </option>
-
-                <option value="Scalping">
-                  Scalping
-                </option>
-
-                <option value="Day Trading">
-                  Day Trading
-                </option>
-
-                <option value="Swing Trading">
-                  Swing Trading
-                </option>
-
-                <option value="Position Trading">
-                  Position Trading
-                </option>
-              </select>
-            </div>
-
-            <div>
-              <p className="mb-2 text-sm text-gray-400">
-                {t.favoriteMarket}
-              </p>
-
-              <select
-                name="favoriteMarket"
-                defaultValue={user.favoriteMarket || ""}
-                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-              >
-                <option value="">
-                  {t.selectMarket}
-                </option>
-
-                <option value="Forex">
-                  Forex
-                </option>
-
-                <option value="Gold">
-                  Gold
-                </option>
-
-                <option value="Crypto">
-                  Crypto
-                </option>
-
-                <option value="Indices">
-                  Indices
-                </option>
-
-                <option value="Commodities">
-                  Commodities
-                </option>
-              </select>
-            </div>
-
-            <div>
-              <p className="mb-2 text-sm text-gray-400">
-                {t.preferredSession}
-              </p>
-
-              <select
-                name="preferredSession"
-                defaultValue={user.preferredSession || ""}
-                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-              >
-                <option value="">
-                  {t.selectSession}
-                </option>
-
-                <option value="Asia">
-                  Asia
-                </option>
-
-                <option value="London">
-                  London
-                </option>
-
-                <option value="New York">
-                  New York
-                </option>
-
-                <option value="Overlap">
-                  Overlap
-                </option>
-              </select>
-            </div>
-
-            <div>
-              <p className="mb-2 text-sm text-gray-400">
-                {t.riskPerTrade}
-              </p>
-
-              <input
-                name="riskPerTrade"
-                type="number"
-                step="0.01"
-                defaultValue={user.riskPerTrade ?? ""}
-                placeholder="1"
-                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+                label="Bio"
+                defaultValue={user.bio}
+                placeholder="Briefly describe your trader profile."
               />
             </div>
 
             <div>
-              <p className="mb-2 text-sm text-gray-400">
-                {t.preferredBroker}
-              </p>
-
-              <input
-                name="preferredBroker"
-                defaultValue={user.preferredBroker || ""}
-                placeholder={t.preferredBrokerPlaceholder}
-                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
+              <SectionHeader
+                eyebrow="Operating preferences"
+                title="Trading identity"
               />
-            </div>
-
-            <div>
-              <p className="mb-2 text-sm text-gray-400">
-                {t.setupStyle}
-              </p>
-
-              <input
-                name="setupStyle"
-                defaultValue={user.setupStyle || ""}
-                placeholder={t.setupStylePlaceholder}
-                className="w-full rounded-2xl border border-white/10 bg-zinc-900 p-4 outline-none focus:border-green-500/40"
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            className="mt-6 rounded-2xl bg-accent px-6 py-4 font-bold text-white transition hover:bg-accent-bright"
-          >
-            {t.saveProfile}
-          </button>
-        </form>
-
-        <div className="space-y-6">
-          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-            <div className="mb-5 flex items-center gap-3">
-              <BadgeCheck
-                size={22}
-                className="text-accent"
-              />
-
-              <div>
-                <p className="text-sm text-gray-400">
-                  {t.completion}
-                </p>
-
-                <h2 className="text-2xl font-bold">
-                  {t.profileScore}
-                </h2>
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-              <p className="text-sm text-gray-400">
-                {t.profileCompleted}
-              </p>
-
-              <h3 className="mt-2 text-4xl font-black text-accent">
-                {profileCompletion}%
-              </h3>
-
-              <div className="mt-4 h-2 rounded-full bg-white/10">
-                <div
-                  className="h-2 rounded-full bg-accent"
-                  style={{
-                    width: `${profileCompletion}%`,
-                  }}
+              <div className="mt-5 grid gap-4 md:grid-cols-2">
+                <SelectField
+                  name="tradingStyle"
+                  label="Trading style"
+                  defaultValue={user.tradingStyle}
+                  placeholder="Select style"
+                  options={[
+                    "Scalping",
+                    "Day Trading",
+                    "Swing Trading",
+                    "Position Trading",
+                  ]}
+                />
+                <SelectField
+                  name="favoriteMarket"
+                  label="Favorite market"
+                  defaultValue={user.favoriteMarket}
+                  placeholder="Select market"
+                  options={[
+                    "Forex",
+                    "Gold",
+                    "Crypto",
+                    "Indices",
+                    "Commodities",
+                  ]}
+                />
+                <SelectField
+                  name="preferredSession"
+                  label="Preferred session"
+                  defaultValue={user.preferredSession}
+                  placeholder="Select session"
+                  options={["Asia", "London", "New York", "Overlap"]}
+                />
+                <TextField
+                  name="riskPerTrade"
+                  label="Risk per trade %"
+                  type="number"
+                  step="0.01"
+                  defaultValue={user.riskPerTrade}
+                  placeholder="1"
+                />
+                <TextField
+                  name="preferredBroker"
+                  label="Preferred broker"
+                  defaultValue={user.preferredBroker}
+                  placeholder="Broker / Prop Firm"
+                />
+                <TextField
+                  name="setupStyle"
+                  label="Setup style"
+                  defaultValue={user.setupStyle}
+                  placeholder="Breakout, Pullback, SMC"
                 />
               </div>
             </div>
-          </div>
 
-          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-            <div className="mb-5 flex items-center gap-3">
-              <Briefcase
-                size={22}
-                className="text-accent"
-              />
-
-              <div>
-                <p className="text-sm text-gray-400">
-                  {t.workspace}
-                </p>
-
-                <h2 className="text-2xl font-bold">
-                  {t.accountAccess}
-                </h2>
-              </div>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-caption leading-5 text-muted">
+                Profile data personalizes the app experience. Security-sensitive
+                changes remain server-side.
+              </p>
+              <button
+                type="submit"
+                className="inline-flex items-center justify-center gap-2 rounded-inner border-[0.5px] border-accent-bright/30 bg-accent-bright/[0.08] px-5 py-3 text-sm font-semibold text-accent-bright transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/55"
+              >
+                <Save size={17} />
+                Save profile
+              </button>
             </div>
+          </form>
+        </Card>
 
-            <div className="space-y-3">
+        <div className="space-y-6">
+          <Card>
+            <SectionHeader eyebrow="Completion" title="Identity readiness">
+              <StatusPill tone="info">{profileCompletion}%</StatusPill>
+            </SectionHeader>
+            <div className="mt-6 rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-5">
+              <div className="flex items-center justify-between gap-4">
+                <p className="text-caption text-muted">Completed fields</p>
+                <p className="text-caption text-flash">
+                  {completedProfileItems}/{profileCompletionItems.length}
+                </p>
+              </div>
+              <div className="mt-4 h-2 rounded-pill bg-surface-1">
+                <div
+                  className="h-2 rounded-pill bg-accent-bright"
+                  style={{ width: `${profileCompletion}%` }}
+                />
+              </div>
+              <p className="mt-4 text-caption leading-5 text-muted">
+                This is a setup completeness indicator, not a quality score.
+              </p>
+            </div>
+          </Card>
+
+          <Card>
+            <SectionHeader eyebrow="Workspace" title="Account access">
+              <StatusPill>{user.memberships.length} linked</StatusPill>
+            </SectionHeader>
+            <div className="mt-6 space-y-3">
               {user.memberships.length > 0 ? (
                 user.memberships.map((membership) => (
                   <Link
                     key={membership.id}
                     href={`/accounts/${membership.tradingAccount.id}`}
-                    className="block rounded-2xl border border-white/10 bg-black/20 p-4 transition hover:bg-white/[0.04]"
+                    className="block rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4 transition-all duration-base hover:-translate-y-0.5 hover:border-accent-bright/40"
                   >
                     <div className="flex items-center justify-between gap-4">
-                      <div>
-                        <p className="font-bold text-white">
+                      <div className="min-w-0">
+                        <p className="truncate text-body font-medium text-flash">
                           {membership.tradingAccount.name}
                         </p>
-
-                        <p className="mt-1 text-xs text-gray-500">
-                          {membership.tradingAccount.type} · {membership.role}
+                        <p className="mt-1 text-caption text-muted">
+                          {membership.tradingAccount.type} / {membership.role}
                         </p>
                       </div>
-
-                      <span className="rounded-xl bg-white/10 px-3 py-1 text-xs font-bold text-gray-300">
-                        {t.open}
-                      </span>
+                      <ArrowRight size={16} className="shrink-0 text-muted" />
                     </div>
                   </Link>
                 ))
               ) : (
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-5 text-sm text-gray-400">
-                  {t.noLinkedAccounts}
-                </div>
+                <EmptyState
+                  title="No linked accounts"
+                  description="Account access will appear here after you create or join a trading account."
+                />
               )}
             </div>
-          </div>
+          </Card>
 
-          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-            <div className="mb-5 flex items-center gap-3">
-              <Clock3
-                size={22}
-                className="text-accent"
-              />
-
-              <div>
-                <p className="text-sm text-gray-400">
-                  {t.activity}
-                </p>
-
-                <h2 className="text-2xl font-bold">
-                  {t.recentTrades}
-                </h2>
-              </div>
-            </div>
-
-            <div className="space-y-3">
+          <Card>
+            <SectionHeader eyebrow="Activity" title="Recent trades">
+              <StatusPill>{user.createdTrades.length} loaded</StatusPill>
+            </SectionHeader>
+            <div className="mt-6 space-y-3">
               {user.createdTrades.length > 0 ? (
                 user.createdTrades.map((trade) => (
                   <div
                     key={trade.id}
-                    className="rounded-2xl border border-white/10 bg-black/20 p-4"
+                    className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4"
                   >
                     <div className="flex items-center justify-between gap-4">
                       <div>
-                        <p className="font-bold text-white">
+                        <p className="text-body font-medium text-flash">
                           {trade.symbol}
                         </p>
-
-                        <p className="mt-1 text-xs text-gray-500">
+                        <p className="mt-1 text-caption text-muted">
                           {formatShortDate(trade.openDate)}
                         </p>
                       </div>
-
                       <span
-                        className={`rounded-xl px-3 py-1 text-xs font-bold ${(trade.resultUsd || 0) >= 0
-                            ? "bg-accent/10 text-accent"
-                            : "bg-red-500/10 text-red-400"
-                          }`}
+                        className={`rounded-pill border-[0.5px] border-flash/[0.08] bg-surface-1 px-3 py-1 text-caption font-medium ${valueTone(
+                          trade.resultUsd || 0
+                        )}`}
                       >
                         {formatCurrency(trade.resultUsd || 0)}
                       </span>
@@ -1331,77 +701,50 @@ export default async function ProfilePage({
                   </div>
                 ))
               ) : (
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-5 text-sm text-gray-400">
-                  {t.noRecentTrades}
-                </div>
+                <EmptyState
+                  title="No recent trades"
+                  description="Recent trades created by this identity will appear here when they exist."
+                />
               )}
             </div>
-          </div>
+          </Card>
 
-          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-            <div className="mb-5 flex items-center gap-3">
-              <KeyRound
-                size={22}
-                className="text-accent"
-              />
-
-              <div>
-                <p className="text-sm text-gray-400">
-                  {t.security}
-                </p>
-
-                <h2 className="text-2xl font-bold">
-                  {t.changePassword}
-                </h2>
-              </div>
+          <Card>
+            <SectionHeader eyebrow="Security" title="Change password">
+              <StatusPill tone="info">Protected</StatusPill>
+            </SectionHeader>
+            <div className="mt-6">
+              <ChangePasswordForm appLanguage={appLanguage} />
             </div>
+          </Card>
 
-            <ChangePasswordForm appLanguage={appLanguage} />
-          </div>
-
-          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-            <div className="mb-5 flex items-center gap-3">
-              <Shield
-                size={22}
-                className="text-accent"
-              />
-
-              <div>
-                <p className="text-sm text-gray-400">
-                  {t.access}
-                </p>
-
-                <h2 className="text-2xl font-bold">
-                  {t.securityStatus}
-                </h2>
-              </div>
+          <Card>
+            <SectionHeader eyebrow="Access" title="Security status">
+              <StatusPill>{user.status}</StatusPill>
+            </SectionHeader>
+            <div className="mt-6 grid gap-3">
+              {securityRows.map(({ label, value, icon: RowIcon }) => {
+                return (
+                  <div
+                    key={label}
+                    className="flex items-center gap-3 rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4"
+                  >
+                    <RowIcon size={17} className="shrink-0 text-muted" />
+                    <div className="min-w-0">
+                      <p className="text-micro uppercase tracking-label text-muted-faint">
+                        {label}
+                      </p>
+                      <p className="mt-1 break-words text-caption text-flash">
+                        {value}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-
-            <div className="space-y-3">
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <p className="text-sm text-gray-400">
-                  {t.authentication}
-                </p>
-
-                <h3 className="mt-1 font-bold text-white">
-                  {t.protected}
-                </h3>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <p className="text-sm text-gray-400">
-                  {t.accountRole}
-                </p>
-
-                <h3 className="mt-1 font-bold text-white">
-                  {user.role}
-                </h3>
-              </div>
-            </div>
-          </div>
+          </Card>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
-
