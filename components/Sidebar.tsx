@@ -811,7 +811,7 @@ export default function Sidebar({
         onMouseLeave={() =>
           setCollapsed(true)
         }
-        className={`faded-scroll sidebar-scrollbar-none fixed left-0 top-0 z-50 flex h-screen flex-col overflow-y-auto border-r border-flash/[0.12] bg-surface-1 p-4 pt-[calc(env(safe-area-inset-top)+1rem)] shadow-[24px_0_56px_rgba(6,10,26,0.28)] transition-all duration-500 ease-out after:pointer-events-none after:absolute after:inset-y-0 after:right-0 after:w-8 after:bg-gradient-to-l after:from-bg-base/55 after:via-bg-base/20 after:to-transparent after:backdrop-blur-[2px] after:content-[''] lg:sticky lg:z-40 lg:pt-4 ${isCollapsed
+        className={`faded-scroll sidebar-scrollbar-none fixed left-0 top-0 z-50 flex h-screen flex-col overflow-y-auto bg-[linear-gradient(90deg,var(--color-surface-1)_0%,var(--color-surface-1)_76%,color-mix(in_srgb,var(--color-surface-1)_72%,transparent)_88%,transparent_100%)] p-4 pt-[calc(env(safe-area-inset-top)+1rem)] transition-all duration-500 ease-out after:pointer-events-none after:absolute after:inset-y-0 after:right-0 after:w-14 after:bg-gradient-to-r after:from-transparent after:via-bg-base/10 after:to-bg-base/45 after:backdrop-blur-[3px] after:content-[''] lg:sticky lg:z-40 lg:pt-4 ${isCollapsed
           ? "w-[88px]"
           : "w-72 lg:w-64"
           } ${open

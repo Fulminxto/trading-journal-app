@@ -134,8 +134,7 @@ export default function ScopeBar({
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div className="relative z-0 rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-1/85 px-2.5 py-2 shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-xl">
-      <div className="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-flash/18 to-transparent" />
+    <div className="relative z-0 py-1">
       <div
         className={`relative flex flex-col gap-2 sm:flex-row sm:items-center ${
           mode === "all" ? "sm:justify-between" : ""

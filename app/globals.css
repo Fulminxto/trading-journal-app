@@ -241,14 +241,21 @@ input[type="number"] {
 }
 
 .sidebar-scrollbar-none {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }
 
 .sidebar-scrollbar-none::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  display: none;
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+  background: transparent !important;
+}
+
+.sidebar-scrollbar-none::-webkit-scrollbar-track,
+.sidebar-scrollbar-none::-webkit-scrollbar-thumb {
+  display: none !important;
+  background: transparent !important;
 }
 
 @media print {
