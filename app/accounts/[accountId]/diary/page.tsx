@@ -22,6 +22,7 @@ import {
   getPeriodRange,
   getPeriodSuffix,
 } from "@/lib/scope";
+import { pageDensity } from "@/lib/page-density";
 
 import { deleteAccountTrade } from "./actions";
 
@@ -1329,7 +1330,7 @@ export default async function DiaryPage({
     : undefined;
 
   return (
-    <div className="space-y-8">
+    <div className={pageDensity.diary.page}>
       <div className="reveal-rise" style={{ animationDelay: "0ms" }}>
         <div className="flex items-center gap-3">
           <SignatureEdge orientation="vertical" className="h-4" />
@@ -1404,11 +1405,11 @@ export default async function DiaryPage({
       />
 
       <div
-        className="reveal-rise grid grid-cols-2 gap-4 xl:grid-cols-4"
+        className={`reveal-rise grid grid-cols-2 ${pageDensity.diary.grid} xl:grid-cols-4`}
         style={{ animationDelay: "60ms" }}
       >
         {keyMetrics.map((stat) => (
-          <Card key={stat.label} interactive className="p-5">
+          <Card key={stat.label} interactive className={pageDensity.diary.panel}>
             <p className="text-sm text-muted">
               {stat.label}
             </p>
@@ -1613,19 +1614,19 @@ export default async function DiaryPage({
         <table className="w-full border-collapse">
           <thead className="bg-white/[0.04] text-left text-xs uppercase tracking-[0.12em] text-muted">
             <tr>
-              <th className="p-4">{t.date}</th>
+              <th className={pageDensity.diary.tableCell}>{t.date}</th>
               {isSharedAccount && (
-                <th className="p-4">{t.trader}</th>
+                <th className={pageDensity.diary.tableCell}>{t.trader}</th>
               )}
-              <th className="p-4">{t.symbol}</th>
-              <th className="p-4">{t.sync}</th>
-              <th className="p-4">{t.direction}</th>
-              <th className="p-4">{t.outcome}</th>
-              <th className="p-4">{t.result}</th>
-              <th className="p-4">{t.equity}</th>
-              <th className="p-4">{t.strategy}</th>
-              <th className="p-4">R:R</th>
-              <th className="p-4">{t.actions}</th>
+              <th className={pageDensity.diary.tableCell}>{t.symbol}</th>
+              <th className={pageDensity.diary.tableCell}>{t.sync}</th>
+              <th className={pageDensity.diary.tableCell}>{t.direction}</th>
+              <th className={pageDensity.diary.tableCell}>{t.outcome}</th>
+              <th className={pageDensity.diary.tableCell}>{t.result}</th>
+              <th className={pageDensity.diary.tableCell}>{t.equity}</th>
+              <th className={pageDensity.diary.tableCell}>{t.strategy}</th>
+              <th className={pageDensity.diary.tableCell}>R:R</th>
+              <th className={pageDensity.diary.tableCell}>{t.actions}</th>
             </tr>
           </thead>
 
@@ -1808,7 +1809,7 @@ export default async function DiaryPage({
       </div>
 
       <div
-        className="reveal-rise space-y-4 lg:hidden"
+        className={`reveal-rise ${pageDensity.diary.mobileStack} lg:hidden`}
         style={{ animationDelay: "260ms" }}
       >
         {periodTrades.length === 0 ? (

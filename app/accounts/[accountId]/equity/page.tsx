@@ -31,6 +31,7 @@ import {
   getPeriodRange,
   getPeriodSuffix,
 } from "@/lib/scope";
+import { pageDensity } from "@/lib/page-density";
 
 type StatCardProps = {
   label: string;
@@ -955,7 +956,7 @@ export default async function EquityPage({
   ];
 
   return (
-    <div className="space-y-10">
+    <div className={pageDensity.equity.page}>
       <div
         className="reveal-rise flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between"
         style={{ animationDelay: "0ms" }}
@@ -1012,7 +1013,7 @@ export default async function EquityPage({
 
       {/* PRIMARY - the equity curve, dominant, alone. */}
       <div className="reveal-rise" style={{ animationDelay: "60ms" }}>
-        <Card variant="hero" interactive className="relative p-6 sm:p-8">
+        <Card variant="hero" interactive className={`relative ${pageDensity.equity.hero}`}>
           <SignatureEdge
             orientation="vertical"
             className="absolute bottom-8 left-0 top-8"
@@ -1053,7 +1054,7 @@ export default async function EquityPage({
 
       {/* SECONDARY - 4 compact metrics. */}
       <div
-        className="reveal-rise grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4"
+        className={`reveal-rise grid grid-cols-1 ${pageDensity.equity.grid} md:grid-cols-2 xl:grid-cols-4`}
         style={{ animationDelay: "120ms" }}
       >
         {stats.map((stat) => (
@@ -1082,8 +1083,8 @@ export default async function EquityPage({
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(220px,1fr)]">
-          <Card className="p-6">
+        <div className={`grid grid-cols-1 ${pageDensity.equity.grid} xl:grid-cols-[minmax(0,2fr)_minmax(220px,1fr)]`}>
+          <Card className={pageDensity.equity.panel}>
             <p className="mb-4 text-sm leading-6 text-muted">
               {t.underwaterDescription}
             </p>
@@ -1091,8 +1092,8 @@ export default async function EquityPage({
             <DrawdownChart data={underwaterData} language={language} />
           </Card>
 
-          <div className="grid gap-4">
-            <Card interactive className="p-6">
+          <div className={`grid ${pageDensity.equity.grid}`}>
+            <Card interactive className={pageDensity.equity.panel}>
               <p className="text-sm text-muted">
                 {t.equityPeak + periodSuffix}
               </p>
@@ -1106,7 +1107,7 @@ export default async function EquityPage({
               </p>
             </Card>
 
-            <Card interactive className="p-6">
+            <Card interactive className={pageDensity.equity.panel}>
               <p className="text-sm text-muted">
                 {t.lowestEquity + periodSuffix}
               </p>
@@ -1128,10 +1129,10 @@ export default async function EquityPage({
           /best/worst - the "KPI echo" pattern REBRAND_BLUEPRINT.md
           names as one of the four diseases). */}
       <div
-        className="reveal-rise grid grid-cols-1 gap-4 md:grid-cols-2"
+        className={`reveal-rise grid grid-cols-1 ${pageDensity.equity.grid} md:grid-cols-2`}
         style={{ animationDelay: "240ms" }}
       >
-        <Card interactive className="p-6">
+        <Card interactive className={pageDensity.equity.panel}>
           <p className="text-sm text-muted">
             {t.tradeSplitTitle}
           </p>
@@ -1154,7 +1155,7 @@ export default async function EquityPage({
           </div>
         </Card>
 
-        <Card interactive className="p-6">
+        <Card interactive className={pageDensity.equity.panel}>
           <p className="text-sm text-muted">
             {t.extremesTitle}
           </p>
@@ -1181,7 +1182,7 @@ export default async function EquityPage({
       </div>
 
       <div className="reveal-rise" style={{ animationDelay: "300ms" }}>
-        <Card className="p-6">
+        <Card className={pageDensity.equity.panel}>
           <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-sm text-muted">

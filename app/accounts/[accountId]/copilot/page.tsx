@@ -29,6 +29,7 @@ import {
   getCopilotLabels,
   getCopilotStatusLabel,
 } from "@/components/copilot/CopilotI18n";
+import { pageDensity } from "@/lib/page-density";
 import { renderCopilotText } from "@/components/copilot/CopilotTextRenderer";
 
 const MIN_TRADES_FOR_CONTEXT = 5;
@@ -418,9 +419,9 @@ export default async function CopilotPage({
   ];
 
   return (
-    <div className="space-y-8">
-      <Card variant="hero" className="p-6 sm:p-10">
-        <div className="grid gap-8 xl:grid-cols-[1fr_360px] xl:items-end">
+    <div className={pageDensity.copilot.page}>
+      <Card variant="hero" className={pageDensity.copilot.hero}>
+        <div className={`grid ${pageDensity.copilot.sectionGrid} xl:grid-cols-[1fr_360px] xl:items-end`}>
           <div>
             <div className="flex flex-wrap items-center gap-3">
               <SignatureEdge orientation="vertical" className="h-4" />
@@ -526,15 +527,15 @@ export default async function CopilotPage({
         />
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-        <Card className="p-6 sm:p-8">
+      <section className={`grid ${pageDensity.copilot.sectionGrid} xl:grid-cols-[1.15fr_0.85fr]`}>
+        <Card className={pageDensity.copilot.panel}>
           <SectionHeader
             eyebrow="Structured prompts"
             title="Ask for operating decisions, not market predictions"
             description="These prompts route the assistant toward review, risk, discipline, and process. They avoid unsupported forecasting and keep the system inside account data."
           />
 
-          <div className="mt-6 grid gap-3 md:grid-cols-2">
+          <div className={`mt-6 grid ${pageDensity.copilot.promptGrid} md:grid-cols-2`}>
             {promptExamples.map((prompt) => (
               <Card key={prompt} variant="inner" className="p-4">
                 <div className="flex items-start gap-3">
@@ -551,7 +552,7 @@ export default async function CopilotPage({
           </div>
         </Card>
 
-        <Card className="p-6 sm:p-8">
+        <Card className={pageDensity.copilot.panel}>
           <SectionHeader
             eyebrow="Current directive"
             title={
@@ -589,8 +590,8 @@ export default async function CopilotPage({
         </Card>
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-3">
-        <Card className="p-6 sm:p-8 xl:col-span-2">
+      <section className={`grid ${pageDensity.copilot.sectionGrid} xl:grid-cols-3`}>
+        <Card className={`${pageDensity.copilot.panel} xl:col-span-2`}>
           <SectionHeader
             eyebrow={t.components.dailyFeed.eyebrow}
             title="Intelligence queue"
@@ -621,7 +622,7 @@ export default async function CopilotPage({
           </div>
         </Card>
 
-        <Card className="p-6 sm:p-8">
+        <Card className={pageDensity.copilot.panel}>
           <SectionHeader
             eyebrow="Protection"
             title="Risk guard"
@@ -681,8 +682,8 @@ export default async function CopilotPage({
         </Card>
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-2">
-        <Card className="p-6 sm:p-8">
+      <section className={`grid ${pageDensity.copilot.sectionGrid} xl:grid-cols-2`}>
+        <Card className={pageDensity.copilot.panel}>
           <SectionHeader
             eyebrow={t.page.reviewTimeline}
             title={t.page.persistentReviewMemory}
@@ -717,7 +718,7 @@ export default async function CopilotPage({
           </div>
         </Card>
 
-        <Card className="p-6 sm:p-8">
+        <Card className={pageDensity.copilot.panel}>
           <SectionHeader
             eyebrow={t.page.memorySystem}
             title={t.page.activeOperationalMemory}
@@ -746,8 +747,8 @@ export default async function CopilotPage({
         </Card>
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-3">
-        <Card className="p-6 sm:p-8 xl:col-span-2">
+      <section className={`grid ${pageDensity.copilot.sectionGrid} xl:grid-cols-3`}>
+        <Card className={`${pageDensity.copilot.panel} xl:col-span-2`}>
           <SectionHeader
             eyebrow={t.components.patternMemory.eyebrow}
             title={t.components.patternMemory.title}
@@ -776,7 +777,7 @@ export default async function CopilotPage({
           </div>
         </Card>
 
-        <Card className="p-6 sm:p-8">
+        <Card className={pageDensity.copilot.panel}>
           <SectionHeader
             eyebrow="Latest review"
             title={

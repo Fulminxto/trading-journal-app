@@ -27,6 +27,7 @@ import {
   getPeriodRange,
   getPeriodSuffix,
 } from "@/lib/scope";
+import { pageDensity } from "@/lib/page-density";
 
 // Below this many trades in the selected period, the report shows an
 // honest "not enough data" fallback for every interpretive verdict
@@ -579,7 +580,7 @@ export default async function ReportsPage({
   });
 
   return (
-    <div className="space-y-8 print:space-y-0 print:bg-bg-base">
+    <div className={pageDensity.reports.page}>
       <PDFCompactReport
         appLanguage={language}
         currency={currency}
@@ -599,13 +600,13 @@ export default async function ReportsPage({
         hasEnoughData={hasEnoughData}
       />
 
-      <div className="web-report-content space-y-8">
+      <div className={`web-report-content ${pageDensity.reports.webStack}`}>
         {/* Hero-dossier: the report's cover page. Deliberately not
             `variant="hero"` - no cut-corner facet, no pulsing edge. A
             tribunal document sits still; it doesn't have the same
             "alive" crystal signature every other page's hero uses. */}
         <div className="print-hidden">
-          <Card className="border-[0.5px] border-flash/[0.14] p-6 sm:p-10">
+          <Card className={`border-[0.5px] border-flash/[0.14] ${pageDensity.reports.panel}`}>
             <div className="flex items-center gap-3">
               <SignatureEdge orientation="vertical" pulse={false} className="h-4" />
               <p className="text-sm text-muted">{t.heroEyebrow}</p>
@@ -668,8 +669,8 @@ export default async function ReportsPage({
           <ReportsNavigation appLanguage={language} />
         </div>
 
-        <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
-          <Card interactive className="p-6">
+        <div className={`grid grid-cols-2 ${pageDensity.reports.grid} xl:grid-cols-4`}>
+          <Card interactive className="p-5">
             <p className="text-sm text-muted">
               {t.totalTrades}{periodSuffix}
             </p>
@@ -683,7 +684,7 @@ export default async function ReportsPage({
             </p>
           </Card>
 
-          <Card interactive className="p-6">
+          <Card interactive className="p-5">
             <p className="text-sm text-muted">
               {t.totalPnl}{periodSuffix}
             </p>
@@ -700,7 +701,7 @@ export default async function ReportsPage({
             </p>
           </Card>
 
-          <Card interactive className="p-6">
+          <Card interactive className="p-5">
             <p className="text-sm text-muted">
               {t.winRate}{periodSuffix}
             </p>
@@ -716,7 +717,7 @@ export default async function ReportsPage({
             </p>
           </Card>
 
-          <Card interactive className="p-6">
+          <Card interactive className="p-5">
             <p className="text-sm text-muted">
               {t.behavioralRisk}{periodSuffix}
             </p>

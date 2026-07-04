@@ -23,6 +23,7 @@ import {
 import MemberSelector from "@/components/MemberSelector";
 import Card from "@/components/ui/Card";
 import SignatureEdge from "@/components/ui/SignatureEdge";
+import { pageDensity } from "@/lib/page-density";
 
 // Same halo gradient Card.tsx uses on hover - reused here so the
 // calendar grid's "hover che accende" (REBRAND_BLUEPRINT.md) matches
@@ -932,7 +933,7 @@ export default async function CalendarPage({
         : t.flat;
 
   return (
-    <div className="space-y-10">
+    <div className={pageDensity.calendar.page}>
       {isSharedAccount && (
         <MemberSelector
           members={accountMembers.map((m) => ({
@@ -1011,7 +1012,7 @@ export default async function CalendarPage({
       </div>
 
       <section
-        className="reveal-rise grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4"
+        className={`reveal-rise grid grid-cols-1 ${pageDensity.calendar.grid} sm:grid-cols-2 xl:grid-cols-4`}
         style={{ animationDelay: "60ms" }}
       >
         <StatCard
@@ -1044,7 +1045,7 @@ export default async function CalendarPage({
       </section>
 
       <section
-        className="reveal-rise grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4"
+        className={`reveal-rise grid grid-cols-1 ${pageDensity.calendar.grid} md:grid-cols-2 xl:grid-cols-4`}
         style={{ animationDelay: "100ms" }}
       >
         <Card interactive className="p-6">
@@ -1119,7 +1120,7 @@ export default async function CalendarPage({
           this page exists for, so it gets the hero treatment every
           other card on this page doesn't. */}
       <div className="reveal-rise" style={{ animationDelay: "140ms" }}>
-        <Card variant="hero" interactive className="relative p-4 sm:p-6">
+        <Card variant="hero" interactive className={`relative ${pageDensity.calendar.panel}`}>
           <SignatureEdge
             orientation="vertical"
             className="absolute bottom-6 left-0 top-6"
@@ -1233,7 +1234,7 @@ export default async function CalendarPage({
                     return (
                       <div
                         key={day}
-                        className="group relative min-h-[150px] border-r border-b border-white/[0.08] p-4 transition-colors duration-base last:border-r-0 hover:border-accent-bright/30"
+                        className={`group relative border-r border-b border-white/[0.08] ${pageDensity.calendar.dayCell} transition-colors duration-base last:border-r-0 hover:border-accent-bright/30`}
                         style={{
                           backgroundColor: positive
                             ? `color-mix(in srgb, var(--color-positive) ${6 + intensity * 18}%, transparent)`
@@ -1340,7 +1341,7 @@ export default async function CalendarPage({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div className={`grid grid-cols-1 ${pageDensity.calendar.grid} md:grid-cols-3`}>
             <Card variant="inner" className="p-5">
               <p className="text-sm text-muted">
                 {t.activity}

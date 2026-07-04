@@ -32,6 +32,7 @@ import {
   getPeriodRange,
   getPeriodSuffix,
 } from "@/lib/scope";
+import { pageDensity } from "@/lib/page-density";
 
 function getBestWinStreak(
   trades: {
@@ -1399,7 +1400,7 @@ export default async function AnalyticsPage({
     : undefined;
 
   return (
-    <div className="space-y-8">
+    <div className={pageDensity.analytics.page}>
       <div className="reveal-rise" style={{ animationDelay: "0ms" }}>
         <div className="flex items-center gap-3">
           <SignatureEdge orientation="vertical" className="h-4" />
@@ -1426,7 +1427,7 @@ export default async function AnalyticsPage({
       </div>
 
       <div
-        className="reveal-rise grid grid-cols-2 gap-4 xl:grid-cols-4"
+        className={`reveal-rise grid grid-cols-2 ${pageDensity.analytics.grid} xl:grid-cols-4`}
         style={{ animationDelay: "100ms" }}
       >
         {advancedStats.map((stat) => (
@@ -1440,7 +1441,7 @@ export default async function AnalyticsPage({
         ))}
       </div>
 
-      <Card className="reveal-rise p-6 sm:p-8" style={{ animationDelay: "140ms" }}>
+      <Card className={`reveal-rise ${pageDensity.analytics.panel}`} style={{ animationDelay: "140ms" }}>
         <p className="text-xs font-black uppercase tracking-[0.18em] text-muted-faint">
           {t.psychologySubtitle}
         </p>
@@ -1448,22 +1449,22 @@ export default async function AnalyticsPage({
           {t.psychologyTitle}
         </h2>
 
-        <div className="mt-6 grid grid-cols-3 gap-3">
-          <Card variant="inner" className="p-4 text-center">
+        <div className={`mt-6 grid grid-cols-3 ${pageDensity.analytics.grid}`}>
+          <Card variant="inner" className={`${pageDensity.analytics.inner} text-center`}>
             <p className="text-xs text-muted">{t.confidence}</p>
             <h3 className="mt-2 text-2xl font-black text-accent-bright">
               {avgConfidence}
               <span className="text-sm text-muted-faint">/10</span>
             </h3>
           </Card>
-          <Card variant="inner" className="p-4 text-center">
+          <Card variant="inner" className={`${pageDensity.analytics.inner} text-center`}>
             <p className="text-xs text-muted">{t.execution}</p>
             <h3 className="mt-2 text-2xl font-black text-accent">
               {avgExecution}
               <span className="text-sm text-muted-faint">/10</span>
             </h3>
           </Card>
-          <Card variant="inner" className="p-4 text-center">
+          <Card variant="inner" className={`${pageDensity.analytics.inner} text-center`}>
             <p className="text-xs text-muted">{t.setupQuality}</p>
             <h3 className="mt-2 text-2xl font-black text-white">
               {avgSetupQuality}
@@ -1472,7 +1473,7 @@ export default async function AnalyticsPage({
           </Card>
         </div>
 
-        <div className="mt-8 space-y-5 border-t border-white/[0.06] pt-8">
+        <div className={`mt-6 ${pageDensity.analytics.sectionStack} border-t border-white/[0.06] pt-6`}>
           <SubCaption>{t.qualityBreakdownLabel}</SubCaption>
 
           <QualityBreakdownRow
@@ -1489,7 +1490,7 @@ export default async function AnalyticsPage({
           />
         </div>
 
-        <div className="mt-8 border-t border-white/[0.06] pt-8">
+        <div className="mt-6 border-t border-white/[0.06] pt-6">
           <SubCaption>{t.emotionalPerformance}</SubCaption>
 
           {Object.keys(emotionalStats).length === 0 ? (
@@ -1497,7 +1498,7 @@ export default async function AnalyticsPage({
               {t.noEmotionalStates}
             </p>
           ) : (
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+            <div className={`grid grid-cols-1 ${pageDensity.analytics.grid} md:grid-cols-3`}>
               {Object.entries(emotionalStats).map(([state, stats]) => {
                 const stateWinRate =
                   stats.trades > 0
@@ -1505,7 +1506,7 @@ export default async function AnalyticsPage({
                     : 0;
 
                 return (
-                  <Card key={state} variant="inner" className="p-4">
+                  <Card key={state} variant="inner" className={pageDensity.analytics.inner}>
                     <div className="flex items-center justify-between">
                       <p className="font-bold text-white">{state}</p>
                       <span
@@ -1535,7 +1536,7 @@ export default async function AnalyticsPage({
           )}
         </div>
 
-        <div className="mt-8 border-t border-white/[0.06] pt-8">
+        <div className="mt-6 border-t border-white/[0.06] pt-6">
           <SubCaption>{t.trendLabel}</SubCaption>
 
           {hasPsychologyTrend ? (
@@ -1553,7 +1554,7 @@ export default async function AnalyticsPage({
       </Card>
 
       <div
-        className="reveal-rise grid grid-cols-1 gap-4 xl:grid-cols-2"
+        className={`reveal-rise grid grid-cols-1 ${pageDensity.analytics.grid} xl:grid-cols-2`}
         style={{ animationDelay: "180ms" }}
       >
         <SymbolPerformance
@@ -1565,7 +1566,7 @@ export default async function AnalyticsPage({
           appLanguage={language}
         />
 
-        <Card className="p-6">
+        <Card className={pageDensity.analytics.panel}>
           <p className="text-xs font-black uppercase tracking-[0.18em] text-muted-faint">
             {t.tradeDirectionEyebrow}
           </p>
@@ -1573,8 +1574,8 @@ export default async function AnalyticsPage({
             {t.longVsShort}
           </h2>
 
-          <div className="mt-6 space-y-3">
-            <Card variant="inner" className="p-4">
+          <div className={`mt-6 ${pageDensity.analytics.sectionStack}`}>
+            <Card variant="inner" className={pageDensity.analytics.inner}>
               <div className="flex items-center justify-between">
                 <p className="text-muted">{t.longTrades}</p>
                 <p className="font-bold text-white">{longTrades.length}</p>
@@ -1596,7 +1597,7 @@ export default async function AnalyticsPage({
               </p>
             </Card>
 
-            <Card variant="inner" className="p-4">
+            <Card variant="inner" className={pageDensity.analytics.inner}>
               <div className="flex items-center justify-between">
                 <p className="text-muted">{t.shortTrades}</p>
                 <p className="font-bold text-white">{shortTrades.length}</p>
@@ -1632,7 +1633,7 @@ export default async function AnalyticsPage({
       </div>
 
       <div
-        className="reveal-rise grid grid-cols-1 gap-4 xl:grid-cols-2"
+        className={`reveal-rise grid grid-cols-1 ${pageDensity.analytics.grid} xl:grid-cols-2`}
         style={{ animationDelay: "240ms" }}
       >
         <SessionPerformance
@@ -1642,7 +1643,7 @@ export default async function AnalyticsPage({
         />
 
         {isSharedAccount && (
-          <Card className="p-6">
+          <Card className={pageDensity.analytics.panel}>
             <p className="text-xs font-black uppercase tracking-[0.18em] text-muted-faint">
               {t.teamAnalyticsEyebrow}
             </p>
@@ -1650,7 +1651,7 @@ export default async function AnalyticsPage({
               {t.traderLeaderboard}
             </h2>
 
-            <div className="mt-6 space-y-3">
+            <div className={`mt-6 ${pageDensity.analytics.sectionStack}`}>
               {Object.values(traderStats)
                 .sort((a, b) => b.pnl - a.pnl)
                 .map((trader, index) => {
@@ -1660,7 +1661,7 @@ export default async function AnalyticsPage({
                       : "0";
 
                   return (
-                    <Card key={trader.name} variant="inner" className="p-4">
+                    <Card key={trader.name} variant="inner" className={pageDensity.analytics.inner}>
                       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                         <div className="flex items-center gap-3">
                           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-inner bg-accent-bright/10 text-sm font-bold text-accent-bright">
@@ -1713,7 +1714,7 @@ export default async function AnalyticsPage({
       </div>
 
       <Card
-        className="reveal-rise p-6 sm:p-8"
+        className={`reveal-rise ${pageDensity.analytics.panel}`}
         style={{ animationDelay: "260ms" }}
       >
         <p className="text-xs font-black uppercase tracking-[0.18em] text-muted-faint">
@@ -1723,8 +1724,8 @@ export default async function AnalyticsPage({
           {t.monthlyDashboard}
         </h2>
 
-        <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Card variant="inner" className="p-4">
+        <div className={`mt-6 grid grid-cols-2 ${pageDensity.analytics.grid} sm:grid-cols-4`}>
+          <Card variant="inner" className={pageDensity.analytics.inner}>
             <p className="text-xs text-muted-faint">{t.bestMonth}</p>
             <h3 className="mt-2 text-sm font-bold text-green-400">
               {bestMonth?.[0] || "—"}
@@ -1734,7 +1735,7 @@ export default async function AnalyticsPage({
             </p>
           </Card>
 
-          <Card variant="inner" className="p-4">
+          <Card variant="inner" className={pageDensity.analytics.inner}>
             <p className="text-xs text-muted-faint">{t.worstMonth}</p>
             <h3 className="mt-2 text-sm font-bold text-red-400">
               {worstMonth?.[0] || "—"}
@@ -1744,14 +1745,14 @@ export default async function AnalyticsPage({
             </p>
           </Card>
 
-          <Card variant="inner" className="p-4">
+          <Card variant="inner" className={pageDensity.analytics.inner}>
             <p className="text-xs text-muted-faint">{t.greenMonths}</p>
             <h3 className="mt-2 text-2xl font-black text-green-400">
               {greenMonths}
             </h3>
           </Card>
 
-          <Card variant="inner" className="p-4">
+          <Card variant="inner" className={pageDensity.analytics.inner}>
             <p className="text-xs text-muted-faint">{t.redMonths}</p>
             <h3 className="mt-2 text-2xl font-black text-red-400">
               {redMonths}
@@ -1759,7 +1760,7 @@ export default async function AnalyticsPage({
           </Card>
         </div>
 
-        <div className="mt-6 space-y-3">
+        <div className={`mt-6 ${pageDensity.analytics.sectionStack}`}>
           {Object.entries(monthlyStats)
             .reverse()
             .map(([month, stats]) => {
@@ -1769,7 +1770,7 @@ export default async function AnalyticsPage({
                   : "0";
 
               return (
-                <Card key={month} variant="inner" className="p-4">
+                <Card key={month} variant="inner" className={pageDensity.analytics.inner}>
                   <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                     <div>
                       <h3 className="font-bold text-white">{month}</h3>
@@ -1814,10 +1815,10 @@ export default async function AnalyticsPage({
       </Card>
 
       <div
-        className="reveal-rise grid grid-cols-1 gap-4 xl:grid-cols-2"
+        className={`reveal-rise grid grid-cols-1 ${pageDensity.analytics.grid} xl:grid-cols-2`}
         style={{ animationDelay: "280ms" }}
       >
-        <Card className="p-6">
+        <Card className={pageDensity.analytics.panel}>
           <p className="text-xs font-black uppercase tracking-[0.18em] text-muted-faint">
             {t.mistakesEyebrow}
           </p>
@@ -1825,14 +1826,14 @@ export default async function AnalyticsPage({
             {t.recurringMistakes}
           </h2>
 
-          <div className="mt-6 space-y-3">
+          <div className={`mt-6 ${pageDensity.analytics.sectionStack}`}>
             {Object.entries(mistakesStats).length === 0 ? (
               <p className="text-sm text-muted-faint">{t.noMistakes}</p>
             ) : (
               Object.entries(mistakesStats)
                 .sort((a, b) => b[1].count - a[1].count)
                 .map(([mistake, stats]) => (
-                  <Card key={mistake} variant="inner" className="p-4">
+                  <Card key={mistake} variant="inner" className={pageDensity.analytics.inner}>
                     <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                       <div>
                         <h3 className="font-bold text-white">{mistake}</h3>

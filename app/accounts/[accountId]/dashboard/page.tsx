@@ -19,6 +19,7 @@ import {
   getPeriodRange,
   getPeriodSuffix,
 } from "@/lib/scope";
+import { pageDensity } from "@/lib/page-density";
 
 function formatCurrency(
   value: number,
@@ -1167,8 +1168,8 @@ export default async function DashboardPage({
         ];
 
   return (
-    <div className="mx-auto w-full max-w-[1500px] space-y-8">
-      <div className="space-y-4">
+    <div className={pageDensity.dashboard.page}>
+      <div className={pageDensity.dashboard.header}>
         <div className="flex flex-col gap-3 xl:flex-row xl:items-end xl:justify-between">
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center gap-3">
@@ -1225,7 +1226,7 @@ export default async function DashboardPage({
 
       {/* PRIMARY — the equity curve is the one hero, full width, dominant. */}
       <div className="reveal-rise" style={{ animationDelay: "40ms" }}>
-        <Card variant="hero" interactive className="relative p-5 sm:p-6">
+        <Card variant="hero" interactive className={`relative ${pageDensity.dashboard.hero}`}>
           <SignatureEdge
             orientation="vertical"
             className="absolute bottom-6 left-0 top-6"
@@ -1253,7 +1254,7 @@ export default async function DashboardPage({
               </Card>
             )}
 
-            <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            <div className={`mt-6 grid grid-cols-2 ${pageDensity.dashboard.grid} sm:grid-cols-4`}>
               <div>
                 <p className="text-xs text-muted-faint">
                   {t.currentProfit}
@@ -1315,7 +1316,7 @@ export default async function DashboardPage({
       </div>
 
       {/* SECONDARY — 4 compact metrics, staggered entrance. */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className={`grid grid-cols-1 ${pageDensity.dashboard.grid} sm:grid-cols-2 xl:grid-cols-4`}>
         <div className="reveal-rise" style={{ animationDelay: "120ms" }}>
           <DashboardStatCard
             label={t.totalPnl + periodSuffix}
@@ -1352,10 +1353,10 @@ export default async function DashboardPage({
       {/* TERTIARY — Risk sits as a peer among the summary cards, not
           beside the hero, so it never competes with the one dominant truth. */}
       <div
-        className="reveal-rise grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4"
+        className={`reveal-rise grid grid-cols-1 ${pageDensity.dashboard.grid} sm:grid-cols-2 xl:grid-cols-4`}
         style={{ animationDelay: "320ms" }}
       >
-        <Card interactive className="p-6">
+        <Card interactive className={pageDensity.dashboard.panel}>
           <p className="text-sm text-muted">
             {t.risk}
           </p>
@@ -1413,7 +1414,7 @@ export default async function DashboardPage({
           </div>
         </Card>
 
-        <Card interactive className="p-6">
+        <Card interactive className={pageDensity.dashboard.panel}>
           <p className="text-sm text-muted">
             {t.outcomeSplit}
           </p>
@@ -1445,7 +1446,7 @@ export default async function DashboardPage({
           </div>
         </Card>
 
-        <Card interactive className="p-6">
+        <Card interactive className={pageDensity.dashboard.panel}>
           <p className="text-sm text-muted">
             {t.averages}
           </p>
@@ -1481,7 +1482,7 @@ export default async function DashboardPage({
           </div>
         </Card>
 
-        <Card interactive className="p-6">
+        <Card interactive className={pageDensity.dashboard.panel}>
           <p className="text-sm text-muted">
             {t.extremes}
           </p>
@@ -1512,7 +1513,7 @@ export default async function DashboardPage({
       </div>
 
       <div
-        className="reveal-rise grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(300px,1fr)]"
+        className={`reveal-rise grid grid-cols-1 ${pageDensity.dashboard.grid} xl:grid-cols-[minmax(0,2fr)_minmax(300px,1fr)]`}
         style={{ animationDelay: "420ms" }}
       >
         <Card interactive className="p-5 sm:p-6">
