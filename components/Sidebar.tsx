@@ -811,7 +811,7 @@ export default function Sidebar({
         onMouseLeave={() =>
           setCollapsed(true)
         }
-        className={`faded-scroll sidebar-scrollbar-none fixed left-0 top-0 z-50 flex h-screen flex-col overflow-y-auto bg-[linear-gradient(90deg,var(--color-surface-1)_0%,var(--color-surface-1)_76%,color-mix(in_srgb,var(--color-surface-1)_72%,transparent)_88%,transparent_100%)] p-4 pt-[calc(env(safe-area-inset-top)+1rem)] transition-all duration-500 ease-out after:pointer-events-none after:absolute after:inset-y-0 after:right-0 after:w-14 after:bg-gradient-to-r after:from-transparent after:via-bg-base/10 after:to-bg-base/45 after:backdrop-blur-[3px] after:content-[''] lg:sticky lg:z-40 lg:pt-4 ${isCollapsed
+        className={`faded-scroll sidebar-scrollbar-none fixed left-0 top-0 z-50 flex h-screen flex-col overflow-y-auto bg-[linear-gradient(90deg,var(--color-surface-1)_0%,var(--color-surface-1)_70%,color-mix(in_srgb,var(--color-surface-1)_72%,transparent)_86%,transparent_100%)] p-4 pt-[calc(env(safe-area-inset-top)+1rem)] transition-all duration-500 ease-out after:pointer-events-none after:absolute after:bottom-0 after:right-0 after:top-0 after:z-30 after:w-16 after:bg-gradient-to-r after:from-surface-1 after:via-surface-1/70 after:to-transparent after:backdrop-blur-[3px] after:content-[''] lg:sticky lg:z-40 lg:pt-4 ${isCollapsed
           ? "w-[88px]"
           : "w-72 lg:w-64"
           } ${open
@@ -876,7 +876,7 @@ export default function Sidebar({
 
         <nav
           ref={navRef}
-          className="relative mt-6 flex flex-1 flex-col gap-4 text-sm"
+          className="sidebar-scrollbar-none relative mt-6 flex flex-1 flex-col gap-4 text-sm"
         >
           {edgeRect && (
             <SignatureEdge
