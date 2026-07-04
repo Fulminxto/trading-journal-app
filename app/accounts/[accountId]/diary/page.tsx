@@ -1441,7 +1441,17 @@ export default async function DiaryPage({
         className="reveal-rise rounded-card border-[0.5px] border-flash/[0.1] bg-surface-1 p-4"
         style={{ animationDelay: "140ms" }}
       >
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+          <div className="shrink-0">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent-bright">
+              {t.filtersEyebrow}
+            </p>
+            <h2 className="mt-1 text-lg font-bold text-white">
+              {t.filtersTitle}
+            </h2>
+          </div>
+
+          <div className="flex flex-1 flex-wrap items-center gap-2">
           <select
             name="symbol"
             defaultValue={filters.symbol || ""}
@@ -1546,6 +1556,7 @@ export default async function DiaryPage({
               {t.resetFilters}
             </Link>
           )}
+          </div>
         </div>
 
         {activeFilterChips.length > 0 && (
@@ -1608,208 +1619,198 @@ export default async function DiaryPage({
       </div>
 
       <div
-        className="reveal-rise hidden overflow-x-auto rounded-card border-[0.5px] border-flash/[0.1] bg-surface-1 lg:block"
+        className="reveal-rise hidden rounded-card border-[0.5px] border-flash/[0.1] bg-surface-1 p-4 lg:block"
         style={{ animationDelay: "220ms" }}
       >
-        <table className="w-full border-collapse">
-          <thead className="bg-white/[0.04] text-left text-xs uppercase tracking-[0.12em] text-muted">
-            <tr>
-              <th className={pageDensity.diary.tableCell}>{t.date}</th>
-              {isSharedAccount && (
-                <th className={pageDensity.diary.tableCell}>{t.trader}</th>
-              )}
-              <th className={pageDensity.diary.tableCell}>{t.symbol}</th>
-              <th className={pageDensity.diary.tableCell}>{t.sync}</th>
-              <th className={pageDensity.diary.tableCell}>{t.direction}</th>
-              <th className={pageDensity.diary.tableCell}>{t.outcome}</th>
-              <th className={pageDensity.diary.tableCell}>{t.result}</th>
-              <th className={pageDensity.diary.tableCell}>{t.equity}</th>
-              <th className={pageDensity.diary.tableCell}>{t.strategy}</th>
-              <th className={pageDensity.diary.tableCell}>R:R</th>
-              <th className={pageDensity.diary.tableCell}>{t.actions}</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {periodTrades.map((trade) => (
-              <tr
-                key={trade.id}
-                className="border-t border-white/[0.06] transition-colors duration-base hover:bg-accent/[0.03]"
-              >
-                <td className="p-4">
-                  <div className="font-semibold">
-                    {formatDateByLanguage(
-                      trade.openDate,
-                      language
-                    )}
-                  </div>
-
-                  <div className="text-xs text-muted-faint">
-                    {trade.openTime || "-"}
-                  </div>
-                </td>
-
-                {isSharedAccount && (
-                  <td className="p-4">
-                    <span className="rounded-full bg-white/10 px-3 py-1 text-sm font-semibold text-white">
-                      {trade.createdBy?.name ||
-                        trade.createdBy?.username ||
-                        t.unknownTrader}
-                    </span>
-                  </td>
+        {periodTrades.length === 0 ? (
+          <Card variant="inner" className="border-dashed p-10 text-center">
+            {allTrades.length === 0 ? (
+              <p className="font-medium text-muted">{t.noTradesAccount}</p>
+            ) : (
+              <div className="space-y-3">
+                <p className="text-muted">{t.noTrades}</p>
+                {activeDateConflict && (
+                  <p className="text-sm text-yellow-400">{t.emptyFiltersHint}</p>
                 )}
+                <Link
+                  href={`/accounts/${accountId}/diary`}
+                  className="inline-block rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-2 text-sm text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.08]"
+                >
+                  {t.resetAllFilters}
+                </Link>
+              </div>
+            )}
+          </Card>
+        ) : (
+          <div className="relative space-y-3 before:absolute before:bottom-5 before:left-6 before:top-5 before:w-px before:bg-gradient-to-b before:from-accent-bright/10 before:via-accent-bright/35 before:to-accent/10 before:content-['']">
+            {periodTrades.map((trade) => (
+              <ListRow
+                key={trade.id}
+                className="relative ml-2 !p-0 !pl-10"
+              >
+                <span
+                  className={`absolute left-3 top-6 h-3 w-3 rounded-full border bg-surface-1 ${
+                    (trade.resultUsd || 0) >= 0
+                      ? "border-green-400/50 shadow-[0_0_0_4px_rgba(74,222,128,0.06)]"
+                      : "border-red-400/50 shadow-[0_0_0_4px_rgba(248,113,113,0.06)]"
+                  }`}
+                  aria-hidden="true"
+                />
 
-                <td className="p-4 font-semibold">
-                  {trade.symbol}
-                </td>
-
-                <td className="p-4">
-                  <div className="flex flex-col gap-2">
-                    <span
-                      className={`w-fit rounded-full border px-3 py-1 text-xs font-bold ${getTradeSourceClass(
-                        trade.source
-                      )}`}
-                    >
-                      {getTradeSourceLabel(
-                        trade.source,
-                        t
+                <div className="grid grid-cols-[130px_minmax(0,1.15fr)_140px_150px_190px] items-center gap-4 rounded-inner border-[0.5px] border-white/[0.06] bg-bg-base/30 px-4 py-3">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-faint">
+                      {formatDateByLanguage(
+                        trade.openDate,
+                        language
                       )}
-                    </span>
-
-                    {trade.needsReview && (
-                      <span className="w-fit rounded-full border border-yellow-500/20 bg-yellow-500/10 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-yellow-300">
-                        {t.needsReview}
-                      </span>
+                    </p>
+                    <p className="mt-1 text-sm font-semibold text-white">
+                      {trade.openTime || "-"}
+                    </p>
+                    {isSharedAccount && (
+                      <p className="mt-1 truncate text-xs text-muted-faint">
+                        {t.trader}:{" "}
+                        {trade.createdBy?.name ||
+                          trade.createdBy?.username ||
+                          t.unknownTrader}
+                      </p>
                     )}
                   </div>
-                </td>
 
-                <td
-                  className={`p-4 font-semibold ${trade.direction === "LONG"
-                      ? "text-green-400"
-                      : "text-red-400"
-                    }`}
-                >
-                  {trade.direction}
-                </td>
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="text-lg font-black text-white">
+                        {trade.symbol}
+                      </h3>
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-semibold ${getOutcomeClass(
+                          trade.outcome
+                        )}`}
+                      >
+                        {getOutcomeLabel(trade.outcome, t)}
+                      </span>
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                          trade.direction === "LONG"
+                            ? "bg-accent/10 text-accent"
+                            : "bg-red-500/10 text-red-400"
+                        }`}
+                      >
+                        {trade.direction}
+                      </span>
+                    </div>
 
-                <td className="p-4">
-                  <span
-                    className={`rounded-full px-3 py-1 text-sm font-semibold ${getOutcomeClass(
-                      trade.outcome
-                    )}`}
-                  >
-                    {getOutcomeLabel(trade.outcome, t)}
-                  </span>
-                </td>
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
+                      <span
+                        className={`w-fit rounded-full border px-3 py-1 text-xs font-bold ${getTradeSourceClass(
+                          trade.source
+                        )}`}
+                      >
+                        {getTradeSourceLabel(
+                          trade.source,
+                          t
+                        )}
+                      </span>
+                      {trade.needsReview && (
+                        <span className="w-fit rounded-full border border-yellow-500/20 bg-yellow-500/10 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-yellow-300">
+                          {t.needsReview}
+                        </span>
+                      )}
+                    </div>
+                  </div>
 
-                <td
-                  className={`p-4 font-bold ${(trade.resultUsd || 0) >= 0
-                      ? "text-green-400"
-                      : "text-red-400"
-                    }`}
-                >
-                  {formatCurrencyByLanguage(
-                    trade.resultUsd || 0,
-                    currency,
-                    language
-                  )}
-                </td>
+                  <div>
+                    <p className="text-xs text-muted-faint">{t.result}</p>
+                    <p
+                      className={`mt-1 text-lg font-black ${(trade.resultUsd || 0) >= 0
+                          ? "text-green-400"
+                          : "text-red-400"
+                        }`}
+                    >
+                      {formatCurrencyByLanguage(
+                        trade.resultUsd || 0,
+                        currency,
+                        language
+                      )}
+                    </p>
+                    <p className="mt-1 text-xs text-muted">
+                      {t.equity}:{" "}
+                      <span className="font-semibold text-white">
+                        {formatCurrencyByLanguage(
+                          trade.equity || account.initialBalance,
+                          currency,
+                          language
+                        )}
+                      </span>
+                    </p>
+                  </div>
 
-                <td className="p-4 font-semibold">
-                  {formatCurrencyByLanguage(
-                    trade.equity || account.initialBalance,
-                    currency,
-                    language
-                  )}
-                </td>
+                  <div className="text-sm">
+                    <p className="text-xs text-muted-faint">{t.strategy}</p>
+                    <p className="mt-1 truncate font-semibold text-gray-300">
+                      {trade.strategy || "-"}
+                    </p>
+                    <p className="mt-1 text-xs text-muted">
+                      R:R{" "}
+                      <span className="font-semibold text-white">
+                        {trade.riskReward || "-"}
+                      </span>
+                    </p>
+                  </div>
 
-                <td className="p-4 text-gray-300">
-                  {trade.strategy || "-"}
-                </td>
-
-                <td className="p-4 text-gray-300">
-                  {trade.riskReward || "-"}
-                </td>
-
-                <td className="p-4">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-end gap-2">
                     <Link
                       href={`/accounts/${accountId}/diary/${trade.id}/replay`}
-                      className="inline-flex items-center justify-center rounded-inner border-[0.5px] border-flash/[0.1] p-2 text-muted transition-colors duration-base hover:text-accent-bright"
+                      className="inline-flex items-center gap-1.5 rounded-inner border-[0.5px] border-accent-bright/20 bg-accent-bright/[0.04] px-3 py-2 text-sm font-semibold text-accent-bright transition-colors duration-base hover:bg-accent-bright/[0.08]"
                       title="Replay"
                     >
                       <PlayCircle size={15} />
+                      Replay
                     </Link>
                     {canEditTrades || canDeleteTrades ? (
-                    <div className="flex gap-3">
-                      {canEditTrades && (
-                        <Link
-                          href={`/accounts/${accountId}/diary/${trade.id}/edit`}
-                          className="rounded-inner bg-white/10 px-3 py-2 text-sm transition-colors duration-base hover:bg-white/20"
-                        >
-                          {t.edit}
-                        </Link>
-                      )}
-
-                      {canDeleteTrades && (
-                        <form
-                          action={deleteAccountTrade.bind(
-                            null,
-                            accountId,
-                            trade.id
-                          )}
-                        >
-                          <button
-                            type="submit"
-                            className="rounded-inner bg-red-500/10 px-3 py-2 text-sm text-red-400 transition-colors duration-base hover:bg-red-500/20"
+                      <div className="flex gap-2">
+                        {canEditTrades && (
+                          <Link
+                            href={`/accounts/${accountId}/diary/${trade.id}/edit`}
+                            className="rounded-inner bg-white/10 px-3 py-2 text-sm transition-colors duration-base hover:bg-white/20"
                           >
-                            {t.delete}
-                          </button>
-                        </form>
-                      )}
-                    </div>
-                  ) : (
-                    <span className="rounded-inner bg-white/[0.06] px-3 py-2 text-xs font-semibold text-muted">
-                      {t.readOnly}
-                    </span>
-                  )}
-                  </div>
-                </td>
-              </tr>
-            ))}
+                            {t.edit}
+                          </Link>
+                        )}
 
-            {periodTrades.length === 0 && (
-              <tr>
-                <td
-                  colSpan={isSharedAccount ? 11 : 10}
-                  className="p-10 text-center"
-                >
-                  {allTrades.length === 0 ? (
-                    <p className="font-medium text-muted">{t.noTradesAccount}</p>
-                  ) : (
-                    <div className="space-y-3">
-                      <p className="text-muted">{t.noTrades}</p>
-                      {activeDateConflict && (
-                        <p className="text-sm text-yellow-400">{t.emptyFiltersHint}</p>
-                      )}
-                      <Link
-                        href={`/accounts/${accountId}/diary`}
-                        className="inline-block rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-2 text-sm text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.08]"
-                      >
-                        {t.resetAllFilters}
-                      </Link>
-                    </div>
-                  )}
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+                        {canDeleteTrades && (
+                          <form
+                            action={deleteAccountTrade.bind(
+                              null,
+                              accountId,
+                              trade.id
+                            )}
+                          >
+                            <button
+                              type="submit"
+                              className="rounded-inner bg-red-500/10 px-3 py-2 text-sm text-red-400 transition-colors duration-base hover:bg-red-500/20"
+                            >
+                              {t.delete}
+                            </button>
+                          </form>
+                        )}
+                      </div>
+                    ) : (
+                      <span className="rounded-inner bg-white/[0.06] px-3 py-2 text-xs font-semibold text-muted">
+                        {t.readOnly}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </ListRow>
+            ))}
+          </div>
+        )}
       </div>
 
       <div
-        className={`reveal-rise ${pageDensity.diary.mobileStack} lg:hidden`}
+        className={`reveal-rise ${pageDensity.diary.mobileStack} lg:hidden ${periodTrades.length > 0 ? "relative before:absolute before:bottom-8 before:left-5 before:top-8 before:w-px before:bg-gradient-to-b before:from-accent-bright/10 before:via-accent-bright/30 before:to-accent/10 before:content-['']" : ""}`}
         style={{ animationDelay: "260ms" }}
       >
         {periodTrades.length === 0 ? (
@@ -1833,7 +1834,15 @@ export default async function DiaryPage({
           </Card>
         ) : (
           periodTrades.map((trade) => (
-            <ListRow key={trade.id} className="p-6">
+            <ListRow key={trade.id} className="relative !p-6 !pl-10">
+              <span
+                className={`absolute left-4 top-8 h-3 w-3 rounded-full border bg-surface-1 ${
+                  (trade.resultUsd || 0) >= 0
+                    ? "border-green-400/50 shadow-[0_0_0_4px_rgba(74,222,128,0.06)]"
+                    : "border-red-400/50 shadow-[0_0_0_4px_rgba(248,113,113,0.06)]"
+                }`}
+                aria-hidden="true"
+              />
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <p className="text-xs uppercase tracking-[0.18em] text-muted-faint">
