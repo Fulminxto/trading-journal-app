@@ -9,12 +9,12 @@ export default function PDFReportFooter({
   const t = getReportLabels(appLanguage);
 
   return (
-    <div className="hidden print:hidden report-card mt-10 rounded-[28px] border border-white/10 bg-black/30 p-6 text-center backdrop-blur-xl">
+    <div className="print:hidden report-card mt-10 rounded-card border-[0.5px] border-flash/[0.1] bg-surface-1 p-6 text-center">
       <p className="text-xs uppercase tracking-[0.25em] text-accent-bright">
         VOLTIS Intelligence System
       </p>
 
-      <p className="mt-3 text-sm text-gray-400">
+      <p className="mt-3 text-sm text-muted">
         {t.generatedBy}
       </p>
     </div>

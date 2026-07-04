@@ -2,40 +2,146 @@ import {
   getReportLabels,
   type ReportI18nProps,
 } from "@/components/reports/ReportI18n";
-import { getReportInsightLabels } from "@/components/reports/ReportInsightI18n";
-
+import Card from "@/components/ui/Card";
+import SignatureEdge from "@/components/ui/SignatureEdge";
 
 type Props = ReportI18nProps & {
   emotionalTrades: number;
   lowConfidenceTrades: number;
   weakExecutionTrades: number;
-  totalTrades: number;
+  losses: number;
+  behavioralRisk: number;
+  averageWin: number;
+  averageLoss: number;
+  hasEnoughData: boolean;
 };
 
-export default function BehavioralReportCard({ emotionalTrades, lowConfidenceTrades, weakExecutionTrades, totalTrades, appLanguage }: Props) {
+function getRiskTone(value: number) {
+  if (value >= 60) return "text-red-400";
+  if (value >= 35) return "text-yellow-400";
+  return "text-green-400";
+}
+
+/**
+ * Risk & Discipline chapter. Used to be this card plus RiskManagementReport
+ * (its own synthetic "controlled/moderate/exposure" verdict blending the
+ * same avgWin/avgLoss/behavioralRisk shown here) - folded the one real
+ * number RiskManagementReport added (the risk/reward ratio) in here and
+ * dropped its separately-invented verdict in favor of one shared tone
+ * driven by the same behavioralRisk tiers Analytics' RiskConcentration
+ * uses (>=60 high / >=35 medium / else low).
+ */
+export default function BehavioralReportCard({
+  emotionalTrades,
+  lowConfidenceTrades,
+  weakExecutionTrades,
+  losses,
+  behavioralRisk,
+  averageWin,
+  averageLoss,
+  hasEnoughData,
+  appLanguage,
+}: Props) {
   const t = getReportLabels(appLanguage);
-  const i = getReportInsightLabels(appLanguage);
-  const behavioralRisk = totalTrades > 0 ? Math.round(((emotionalTrades + lowConfidenceTrades + weakExecutionTrades) / totalTrades) * 100) : 0;
-  const isHigh = behavioralRisk >= 50;
-  const isWatch = !isHigh && behavioralRisk >= 25;
-  const riskLabel = isHigh ? i.highBehavioralRisk : isWatch ? i.behaviorWatchlist : i.stableBehavior;
-  const riskTone = isHigh ? "text-red-400" : isWatch ? "text-yellow-400" : "text-green-400";
-  const summary = isHigh ? i.behavioralHighMessage : isWatch ? i.behavioralWatchMessage : i.behavioralStableMessage;
+  const riskReward = averageLoss !== 0 ? (averageWin / Math.abs(averageLoss)).toFixed(2) : "0.00";
+
+  const isControlled = behavioralRisk < 35;
+  const isModerate = !isControlled && behavioralRisk < 60;
+
+  const status = isControlled
+    ? t.riskControlledStatus
+    : isModerate
+      ? t.riskModerateStatus
+      : t.riskExposureStatus;
+
+  const message = isControlled
+    ? t.riskControlledMessage
+    : isModerate
+      ? t.riskModerateMessage
+      : t.riskHighExposureMessage;
+
+  const tone = getRiskTone(behavioralRisk);
 
   return (
-    <div className="report-card relative overflow-hidden rounded-[36px] border border-white/10 bg-gradient-to-br from-[#140909] via-[#171020] to-black p-8">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.12),transparent_35%)]" />
-      <div className="relative z-10">
-        <p className="text-sm uppercase tracking-[0.25em] text-red-400">{i.behavioralReport}</p>
-        <h2 className="mt-3 text-4xl font-black text-white">{i.traderBehaviorAnalysis}</h2>
-        <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-4">
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5"><p className="text-sm text-gray-400">{i.riskScore}</p><h3 className={`mt-3 text-4xl font-black ${riskTone}`}>{behavioralRisk}%</h3></div>
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5"><p className="text-sm text-gray-400">{i.status}</p><h3 className={`mt-3 text-2xl font-black ${riskTone}`}>{riskLabel}</h3></div>
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5"><p className="text-sm text-gray-400">{t.emotionalTrades}</p><h3 className="mt-3 text-4xl font-black text-yellow-400">{emotionalTrades}</h3></div>
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5"><p className="text-sm text-gray-400">{t.weakExecutions}</p><h3 className="mt-3 text-4xl font-black text-red-400">{weakExecutionTrades}</h3></div>
-        </div>
-        <div className="mt-8 rounded-2xl border border-white/10 bg-black/20 p-5"><p className="text-sm text-gray-400">{i.aiBehavioralSummary}</p><h3 className="mt-3 text-xl font-black leading-relaxed text-white">{summary}</h3></div>
+    <Card variant="hero" className="report-card p-6 sm:p-10">
+      <div className="flex items-center gap-3">
+        <SignatureEdge orientation="vertical" className="h-4" />
+        <p className="text-sm text-muted">{t.riskDisciplineSubtitle}</p>
       </div>
-    </div>
+
+      <h2 className="mt-4 text-hero text-white">
+        {t.riskDisciplineTitle}
+      </h2>
+
+      <p className="mt-4 text-xs font-black uppercase tracking-[0.18em] text-muted-faint">
+        {t.riskFactorsLabel}
+      </p>
+
+      <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4">
+        <Card variant="inner" className="p-5">
+          <p className="text-sm text-muted-faint">{t.emotionalTrades}</p>
+          <h3 className="mt-3 text-3xl font-black text-yellow-400">
+            {emotionalTrades}
+          </h3>
+        </Card>
+
+        <Card variant="inner" className="p-5">
+          <p className="text-sm text-muted-faint">{t.lowConfidenceTrades}</p>
+          <h3 className="mt-3 text-3xl font-black text-yellow-400">
+            {lowConfidenceTrades}
+          </h3>
+        </Card>
+
+        <Card variant="inner" className="p-5">
+          <p className="text-sm text-muted-faint">{t.weakExecutions}</p>
+          <h3 className="mt-3 text-3xl font-black text-red-400">
+            {weakExecutionTrades}
+          </h3>
+        </Card>
+
+        <Card variant="inner" className="p-5">
+          <p className="text-sm text-muted-faint">{t.losses}</p>
+          <h3 className="mt-3 text-3xl font-black text-red-400">
+            {losses}
+          </h3>
+        </Card>
+      </div>
+
+      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <Card variant="inner" className="p-5">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-sm text-muted-faint">{t.behavioralRisk}</p>
+            <p className={`text-2xl font-black ${tone}`}>{behavioralRisk}%</p>
+          </div>
+        </Card>
+
+        <Card variant="inner" className="p-5">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-sm text-muted-faint">{t.riskRewardRatio}</p>
+            <p className="text-2xl font-black text-accent-bright">{riskReward}</p>
+          </div>
+        </Card>
+      </div>
+
+      <Card variant="inner" className="mt-6 p-5">
+        {hasEnoughData ? (
+          <>
+            <h3 className={`text-lg font-black ${tone}`}>{status}</h3>
+            <p className="mt-3 max-w-3xl text-sm leading-relaxed text-gray-300">
+              {message}
+            </p>
+          </>
+        ) : (
+          <>
+            <h3 className="text-lg font-black text-muted-faint">
+              {t.notEnoughDataTitle}
+            </h3>
+            <p className="mt-3 max-w-3xl text-sm leading-relaxed text-gray-300">
+              {t.notEnoughDataMessage}
+            </p>
+          </>
+        )}
+      </Card>
+    </Card>
   );
 }

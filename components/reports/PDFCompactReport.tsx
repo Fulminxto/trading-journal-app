@@ -18,6 +18,8 @@ type Props = ReportI18nProps & {
     behavioralRisk: number;
     emotionalTrades: number;
     weakExecutionTrades: number;
+    primaryFocus: string;
+    hasEnoughData: boolean;
 };
 
 export default function PDFCompactReport({
@@ -33,6 +35,8 @@ export default function PDFCompactReport({
     behavioralRisk,
     emotionalTrades,
     weakExecutionTrades,
+    primaryFocus,
+    hasEnoughData,
     appLanguage,
     currency,
 }: Props) {
@@ -102,9 +106,11 @@ export default function PDFCompactReport({
                         {t.pdfExecutiveSummary}
                     </h2>
                     <p className="mt-3 text-sm leading-relaxed">
-                        {totalPnl >= 0
-                            ? t.pdfPositive
-                            : t.pdfNegative}
+                        {hasEnoughData
+                            ? totalPnl >= 0
+                                ? t.pdfPositive
+                                : t.pdfNegative
+                            : t.notEnoughDataMessage}
                     </p>
                 </div>
 
@@ -113,11 +119,13 @@ export default function PDFCompactReport({
                         {t.pdfBehavioralRisk}
                     </h2>
                     <p className="mt-3 text-sm leading-relaxed">
-                        {t.pdfBehavior(
-                            behavioralRisk,
-                            emotionalTrades,
-                            weakExecutionTrades
-                        )}
+                        {hasEnoughData
+                            ? t.pdfBehavior(
+                                behavioralRisk,
+                                emotionalTrades,
+                                weakExecutionTrades
+                            )
+                            : t.notEnoughDataMessage}
                     </p>
                 </div>
             </section>
@@ -154,11 +162,7 @@ export default function PDFCompactReport({
                         {t.aiCoachingFocus}
                     </h2>
                     <p className="mt-3 text-sm leading-relaxed">
-                        {disciplineScore >= 80
-                            ? t.pdfFocusHigh
-                            : disciplineScore >= 60
-                                ? t.pdfFocusMedium
-                                : t.pdfFocusLow}
+                        {hasEnoughData ? primaryFocus : t.notEnoughDataMessage}
                     </p>
                 </div>
             </section>

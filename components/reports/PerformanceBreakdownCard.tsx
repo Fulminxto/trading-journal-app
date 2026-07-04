@@ -3,6 +3,7 @@ import {
   getReportLabels,
   type ReportI18nProps,
 } from "@/components/reports/ReportI18n";
+import Card from "@/components/ui/Card";
 
 type Props = ReportI18nProps & {
   wins: number;
@@ -10,104 +11,102 @@ type Props = ReportI18nProps & {
   breakEven: number;
   averageWin: number;
   averageLoss: number;
+  profitFactor: number;
+  hasEnoughData: boolean;
 };
 
+/**
+ * Performance & Edge chapter. Used to be this card plus a separate
+ * EdgeAnalysisReport computing its own "edge score" from a weighted blend
+ * of winRate/disciplineScore already shown elsewhere - dropped that in
+ * favor of the one real number (profit factor) and the same
+ * averageWin > |averageLoss| verdict this card already used.
+ */
 export default function PerformanceBreakdownCard({
   wins,
   losses,
   breakEven,
   averageWin,
   averageLoss,
+  profitFactor,
+  hasEnoughData,
   appLanguage,
   currency,
 }: Props) {
   const t = getReportLabels(appLanguage);
+  const isPositiveEdge = averageWin > Math.abs(averageLoss);
 
   return (
-    <div className="report-card relative overflow-hidden rounded-[36px] border border-white/10 bg-gradient-to-br from-[#071018] via-[#111827] to-black p-8">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_10%,transparent)_35%)]" />
+    <Card className="report-card p-6 sm:p-10">
+      <p className="text-sm uppercase tracking-[0.2em] text-accent-bright">
+        {t.performanceBreakdown}
+      </p>
 
-      <div className="relative z-10">
-        <p className="text-sm uppercase tracking-[0.25em] text-accent-bright">
-          {t.performanceBreakdown}
+      <h2 className="mt-3 text-section text-white">
+        {t.executionSummary}
+      </h2>
+
+      <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-5">
+        <Card variant="inner" className="p-5">
+          <p className="text-sm text-muted-faint">{t.wins}</p>
+          <h3 className="mt-3 text-3xl font-black text-green-400">
+            {wins}
+          </h3>
+        </Card>
+
+        <Card variant="inner" className="p-5">
+          <p className="text-sm text-muted-faint">{t.losses}</p>
+          <h3 className="mt-3 text-3xl font-black text-red-400">
+            {losses}
+          </h3>
+        </Card>
+
+        <Card variant="inner" className="p-5">
+          <p className="text-sm text-muted-faint">{t.breakEven}</p>
+          <h3 className="mt-3 text-3xl font-black text-yellow-400">
+            {breakEven}
+          </h3>
+        </Card>
+
+        <Card variant="inner" className="p-5">
+          <p className="text-sm text-muted-faint">{t.avgWin}</p>
+          <h3 className="mt-3 text-2xl font-black text-green-400">
+            {formatReportCurrency(averageWin, currency, appLanguage)}
+          </h3>
+        </Card>
+
+        <Card variant="inner" className="p-5">
+          <p className="text-sm text-muted-faint">{t.avgLoss}</p>
+          <h3 className="mt-3 text-2xl font-black text-red-400">
+            {formatReportCurrency(averageLoss, currency, appLanguage)}
+          </h3>
+        </Card>
+      </div>
+
+      <Card variant="inner" className="mt-6 p-5">
+        <div className="flex items-center justify-between gap-4">
+          <p className="text-sm text-muted-faint">{t.profitFactorLabel}</p>
+          <p className={`text-2xl font-black ${profitFactor >= 1 ? "text-green-400" : "text-red-400"}`}>
+            {profitFactor.toFixed(2)}
+          </p>
+        </div>
+      </Card>
+
+      <Card variant="inner" className="mt-6 p-5">
+        <p className="text-sm text-muted-faint">
+          {t.aiPerformanceInsight}
         </p>
 
-        <h2 className="mt-3 text-4xl font-black text-white">
-          {t.executionSummary}
-        </h2>
-
-        <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-5">
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-sm text-gray-400">
-              {t.wins}
-            </p>
-
-            <h3 className="mt-3 text-4xl font-black text-green-400">
-              {wins}
-            </h3>
-          </div>
-
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-sm text-gray-400">
-              {t.losses}
-            </p>
-
-            <h3 className="mt-3 text-4xl font-black text-red-400">
-              {losses}
-            </h3>
-          </div>
-
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-sm text-gray-400">
-              {t.breakEven}
-            </p>
-
-            <h3 className="mt-3 text-4xl font-black text-yellow-400">
-              {breakEven}
-            </h3>
-          </div>
-
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-sm text-gray-400">
-              {t.avgWin}
-            </p>
-
-            <h3 className="mt-3 text-3xl font-black text-green-400">
-              {formatReportCurrency(
-                averageWin,
-                currency,
-                appLanguage
-              )}
-            </h3>
-          </div>
-
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-sm text-gray-400">
-              {t.avgLoss}
-            </p>
-
-            <h3 className="mt-3 text-3xl font-black text-red-400">
-              {formatReportCurrency(
-                averageLoss,
-                currency,
-                appLanguage
-              )}
-            </h3>
-          </div>
-        </div>
-
-        <div className="mt-8 rounded-2xl border border-white/10 bg-black/20 p-5">
-          <p className="text-sm text-gray-400">
-            {t.aiPerformanceInsight}
-          </p>
-
-          <h3 className="mt-3 text-xl font-black leading-relaxed text-white">
-            {averageWin > Math.abs(averageLoss)
-              ? t.performancePositive
-              : t.performanceFragile}
+        {hasEnoughData ? (
+          <h3 className="mt-3 text-lg font-black leading-relaxed text-white">
+            {isPositiveEdge ? t.performancePositive : t.performanceFragile}
           </h3>
-        </div>
-      </div>
-    </div>
+        ) : (
+          <h3 className="mt-3 text-lg font-black leading-relaxed text-muted-faint">
+            {t.notEnoughDataMessage}
+          </h3>
+        )}
+      </Card>
+    </Card>
   );
 }

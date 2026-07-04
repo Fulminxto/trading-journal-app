@@ -3,12 +3,15 @@ import {
   getReportLabels,
   type ReportI18nProps,
 } from "@/components/reports/ReportI18n";
+import Card from "@/components/ui/Card";
+import SignatureEdge from "@/components/ui/SignatureEdge";
 
 type Props = ReportI18nProps & {
   totalPnl: number;
   winRate: number;
   disciplineScore: number;
   behavioralRisk: number;
+  hasEnoughData: boolean;
 };
 
 export default function ExecutiveSummaryCard({
@@ -16,6 +19,7 @@ export default function ExecutiveSummaryCard({
   winRate,
   disciplineScore,
   behavioralRisk,
+  hasEnoughData,
   appLanguage,
   currency,
 }: Props) {
@@ -48,93 +52,80 @@ export default function ExecutiveSummaryCard({
       : t.executiveRisk;
 
   return (
-    <div className="report-card relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-[#0C1430] via-[#0d1726] to-black p-10">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_10%,transparent)_35%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.08),transparent_35%)]" />
+    <Card variant="hero" className="report-card p-6 sm:p-10">
+      <div className="flex items-center gap-3">
+        <SignatureEdge orientation="vertical" className="h-4" />
+        <p className="text-sm text-muted">{t.executiveSummary}</p>
+      </div>
 
-      <div className="relative z-10">
-        <p className="text-sm uppercase tracking-[0.3em] text-accent-bright">
-          {t.executiveSummary}
+      <h2 className="mt-4 text-hero text-white">
+        {t.aiStrategicOverview}
+      </h2>
+
+      <div className="mt-8 grid grid-cols-2 gap-4 xl:grid-cols-4">
+        <Card variant="inner" className="p-5">
+          <p className="text-sm text-muted-faint">{t.pnlStatus}</p>
+          <h3
+            className={`mt-3 text-metric-lg ${totalPnl >= 0 ? "text-green-400" : "text-red-400"}`}
+          >
+            {formatReportCurrency(totalPnl, currency, appLanguage)}
+          </h3>
+        </Card>
+
+        <Card variant="inner" className="p-5">
+          <p className="text-sm text-muted-faint">{t.winRate}</p>
+          <h3 className="mt-3 text-metric-lg text-accent-bright">
+            {winRate}%
+          </h3>
+        </Card>
+
+        <Card variant="inner" className="p-5">
+          <p className="text-sm text-muted-faint">{t.discipline}</p>
+          <h3 className="mt-3 text-metric-lg text-accent">
+            {disciplineScore}
+          </h3>
+        </Card>
+
+        <Card variant="inner" className="p-5">
+          <p className="text-sm text-muted-faint">{t.behavioralRisk}</p>
+          <h3
+            className={`mt-3 text-metric-lg ${behavioralRisk >= 50
+                ? "text-red-400"
+                : behavioralRisk >= 25
+                  ? "text-yellow-400"
+                  : "text-green-400"
+              }`}
+          >
+            {behavioralRisk}%
+          </h3>
+        </Card>
+      </div>
+
+      <Card variant="inner" className="mt-8 p-5">
+        <p className="text-sm text-muted-faint">
+          {t.aiExecutiveAssessment}
         </p>
 
-        <h2 className="mt-4 text-5xl font-black tracking-tight text-white">
-          {t.aiStrategicOverview}
-        </h2>
-
-        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-4">
-          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
-            <p className="text-sm text-gray-400">
-              {t.pnlStatus}
-            </p>
-
-            <h3
-              className={`mt-4 text-4xl font-black ${totalPnl >= 0
-                  ? "text-green-400"
-                  : "text-red-400"
-                }`}
-            >
-              {formatReportCurrency(
-                totalPnl,
-                currency,
-                appLanguage
-              )}
+        {hasEnoughData ? (
+          <>
+            <h3 className={`mt-3 text-xl font-black ${overallTone}`}>
+              {overallStatus}
             </h3>
-          </div>
-
-          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
-            <p className="text-sm text-gray-400">
-              {t.winRate}
+            <p className="mt-3 max-w-3xl text-sm leading-relaxed text-gray-300">
+              {assessment}
             </p>
-
-            <h3 className="mt-4 text-4xl font-black text-accent-bright">
-              {winRate}%
+          </>
+        ) : (
+          <>
+            <h3 className="mt-3 text-xl font-black text-muted-faint">
+              {t.notEnoughDataTitle}
             </h3>
-          </div>
-
-          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
-            <p className="text-sm text-gray-400">
-              {t.discipline}
+            <p className="mt-3 max-w-3xl text-sm leading-relaxed text-gray-300">
+              {t.notEnoughDataMessage}
             </p>
-
-            <h3 className="mt-4 text-4xl font-black text-violet-400">
-              {disciplineScore}
-            </h3>
-          </div>
-
-          <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
-            <p className="text-sm text-gray-400">
-              {t.behavioralRisk}
-            </p>
-
-            <h3
-              className={`mt-4 text-4xl font-black ${behavioralRisk >= 50
-                  ? "text-red-400"
-                  : behavioralRisk >= 25
-                    ? "text-yellow-400"
-                    : "text-green-400"
-                }`}
-            >
-              {behavioralRisk}%
-            </h3>
-          </div>
-        </div>
-
-        <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-6">
-          <p className="text-sm text-gray-400">
-            {t.aiExecutiveAssessment}
-          </p>
-
-          <h3
-            className={`mt-4 text-3xl font-black ${overallTone}`}
-          >
-            {overallStatus}
-          </h3>
-
-          <p className="mt-4 max-w-4xl text-base leading-relaxed text-gray-300">
-            {assessment}
-          </p>
-        </div>
-      </div>
-    </div>
+          </>
+        )}
+      </Card>
+    </Card>
   );
 }

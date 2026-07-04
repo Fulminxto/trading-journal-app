@@ -2,33 +2,18 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
-import WeeklyReportCard from "@/components/reports/WeeklyReportCard";
-import MonthlyReportCard from "@/components/reports/MonthlyReportCard";
 import BehavioralReportCard from "@/components/reports/BehavioralReportCard";
 import PerformanceBreakdownCard from "@/components/reports/PerformanceBreakdownCard";
-import TraderEvolutionReport from "@/components/reports/TraderEvolutionReport";
 import ExecutiveSummaryCard from "@/components/reports/ExecutiveSummaryCard";
-import AICoachingReport from "@/components/reports/AICoachingReport";
-import RiskManagementReport from "@/components/reports/RiskManagementReport";
-import ConsistencyIntelligenceReport from "@/components/reports/ConsistencyIntelligenceReport";
-import PsychologicalStabilityReport from "@/components/reports/PsychologicalStabilityReport";
-import PerformanceForecastReport from "@/components/reports/PerformanceForecastReport";
-import GrowthRoadmapReport from "@/components/reports/GrowthRoadmapReport";
-import EdgeAnalysisReport from "@/components/reports/EdgeAnalysisReport";
-import DecisionQualityReport from "@/components/reports/DecisionQualityReport";
-import ExecutionIntelligenceReport from "@/components/reports/ExecutionIntelligenceReport";
-import SetupIntelligenceReport from "@/components/reports/SetupIntelligenceReport";
-import ConfidenceIntelligenceReport from "@/components/reports/ConfidenceIntelligenceReport";
-import DisciplineIntelligenceReport from "@/components/reports/DisciplineIntelligenceReport";
-import EmotionalIntelligenceReport from "@/components/reports/EmotionalIntelligenceReport";
-import TraderIdentityReport from "@/components/reports/TraderIdentityReport";
-import CognitivePerformanceReport from "@/components/reports/CognitivePerformanceReport";
-import MentalResilienceReport from "@/components/reports/MentalResilienceReport";
+import PsychologyMindsetCard from "@/components/reports/PsychologyMindsetCard";
+import GrowthFocusCard from "@/components/reports/GrowthFocusCard";
 import ReportsNavigation from "@/components/reports/ReportsNavigation";
 import PrintReportButton from "@/components/reports/PrintReportButton";
-import PDFReportHeader from "@/components/reports/PDFReportHeader";
 import PDFReportFooter from "@/components/reports/PDFReportFooter";
 import PDFCompactReport from "@/components/reports/PDFCompactReport";
+
+import Card from "@/components/ui/Card";
+import SignatureEdge from "@/components/ui/SignatureEdge";
 
 import {
   formatCurrencyByLanguage,
@@ -42,6 +27,13 @@ import {
   getPeriodSuffix,
 } from "@/lib/scope";
 
+// Below this many trades in the selected period, the report shows an
+// honest "not enough data" fallback for every interpretive verdict
+// instead of a confident-sounding label computed from a handful of
+// trades. Raw counts (PnL, win/loss) still display - only the tiered
+// status/verdict text is gated.
+const MIN_TRADES_FOR_VERDICT = 5;
+
 type ReportsLabels = {
   heroEyebrow: string;
   heroTitle: string;
@@ -54,18 +46,9 @@ type ReportsLabels = {
   behavioralRisk: string;
   behavioralRiskDescription: string;
 
-  executiveFocus: string;
-  edgeQuality: string;
-  profitFactorDescription: (lossRate: number) => string;
-
   strongSample: string;
   growingSample: string;
   earlySample: string;
-
-  waitingForData: string;
-  healthy: string;
-  profitableMonitorBehavior: string;
-  needsReview: string;
 
   focusReduceBehavioralRisk: string;
   focusImproveRiskReward: string;
@@ -78,7 +61,7 @@ const reportsLabels: Record<
   ReportsLabels
 > = {
   it: {
-    heroEyebrow: "VOLTIS AI Reports",
+    heroEyebrow: "VOLTIS Intelligence Reports",
     heroTitle: "Report Intelligence",
     heroDescription:
       "Un riepilogo operativo per leggere performance, comportamento, rischio, disciplina ed evoluzione del trader.",
@@ -91,20 +74,9 @@ const reportsLabels: Record<
     behavioralRiskDescription:
       "Emozione, confidence, esecuzione",
 
-    executiveFocus: "Focus esecutivo",
-    edgeQuality: "Qualità edge",
-    profitFactorDescription: (lossRate) =>
-      `Profit factor basato su gross profit e gross loss. Loss rate: ${lossRate}%.`,
-
     strongSample: "Campione solido",
     growingSample: "Campione in crescita",
     earlySample: "Campione iniziale",
-
-    waitingForData: "In attesa di dati",
-    healthy: "Sano",
-    profitableMonitorBehavior:
-      "Profittevole, monitora il comportamento",
-    needsReview: "Da revisionare",
 
     focusReduceBehavioralRisk:
       "Riduci il rischio comportamentale prima di aumentare il volume.",
@@ -113,11 +85,11 @@ const reportsLabels: Record<
     focusReviewSetups:
       "Rivedi setup e qualità degli ingressi.",
     focusProtectEdge:
-      "Proteggi l’edge attuale con esecuzione costante.",
+      "Proteggi l'edge attuale con esecuzione costante.",
   },
 
   en: {
-    heroEyebrow: "VOLTIS AI Reports",
+    heroEyebrow: "VOLTIS Intelligence Reports",
     heroTitle: "Intelligence Reports",
     heroDescription:
       "An operational summary to read performance, behavior, risk, discipline and trader evolution.",
@@ -130,20 +102,9 @@ const reportsLabels: Record<
     behavioralRiskDescription:
       "Emotion, confidence, execution",
 
-    executiveFocus: "Executive focus",
-    edgeQuality: "Edge quality",
-    profitFactorDescription: (lossRate) =>
-      `Profit factor based on gross profit and gross loss. Loss rate is ${lossRate}%.`,
-
     strongSample: "Strong sample",
     growingSample: "Growing sample",
     earlySample: "Early sample",
-
-    waitingForData: "Waiting for data",
-    healthy: "Healthy",
-    profitableMonitorBehavior:
-      "Profitable, monitor behavior",
-    needsReview: "Needs review",
 
     focusReduceBehavioralRisk:
       "Reduce behavioral risk before scaling volume.",
@@ -156,7 +117,7 @@ const reportsLabels: Record<
   },
 
   uk: {
-    heroEyebrow: "VOLTIS AI Reports",
+    heroEyebrow: "VOLTIS Intelligence Reports",
     heroTitle: "Інтелектуальні звіти",
     heroDescription:
       "Операційний підсумок для аналізу результатів, поведінки, ризику, дисципліни та розвитку трейдера.",
@@ -169,20 +130,9 @@ const reportsLabels: Record<
     behavioralRiskDescription:
       "Емоції, впевненість, виконання",
 
-    executiveFocus: "Операційний фокус",
-    edgeQuality: "Якість переваги",
-    profitFactorDescription: (lossRate) =>
-      `Profit factor на основі валового прибутку та валових збитків. Loss rate: ${lossRate}%.`,
-
     strongSample: "Сильна вибірка",
     growingSample: "Вибірка зростає",
     earlySample: "Початкова вибірка",
-
-    waitingForData: "Очікування даних",
-    healthy: "Здоровий стан",
-    profitableMonitorBehavior:
-      "Прибутково, контролюй поведінку",
-    needsReview: "Потребує перегляду",
 
     focusReduceBehavioralRisk:
       "Зменш поведінковий ризик перед збільшенням обсягу.",
@@ -195,7 +145,7 @@ const reportsLabels: Record<
   },
 
   ru: {
-    heroEyebrow: "VOLTIS AI Reports",
+    heroEyebrow: "VOLTIS Intelligence Reports",
     heroTitle: "Интеллектуальные отчеты",
     heroDescription:
       "Операционный обзор для анализа результатов, поведения, риска, дисциплины и развития трейдера.",
@@ -208,20 +158,9 @@ const reportsLabels: Record<
     behavioralRiskDescription:
       "Эмоции, уверенность, исполнение",
 
-    executiveFocus: "Операционный фокус",
-    edgeQuality: "Качество преимущества",
-    profitFactorDescription: (lossRate) =>
-      `Profit factor на основе валовой прибыли и валового убытка. Loss rate: ${lossRate}%.`,
-
     strongSample: "Сильная выборка",
     growingSample: "Растущая выборка",
     earlySample: "Начальная выборка",
-
-    waitingForData: "Ожидание данных",
-    healthy: "Здоровое состояние",
-    profitableMonitorBehavior:
-      "Прибыльно, следи за поведением",
-    needsReview: "Требует анализа",
 
     focusReduceBehavioralRisk:
       "Снизь поведенческий риск перед увеличением объема.",
@@ -234,7 +173,7 @@ const reportsLabels: Record<
   },
 
   es: {
-    heroEyebrow: "VOLTIS AI Reports",
+    heroEyebrow: "VOLTIS Intelligence Reports",
     heroTitle: "Informes de inteligencia",
     heroDescription:
       "Un resumen operativo para leer rendimiento, comportamiento, riesgo, disciplina y evolución del trader.",
@@ -247,20 +186,9 @@ const reportsLabels: Record<
     behavioralRiskDescription:
       "Emoción, confianza, ejecución",
 
-    executiveFocus: "Foco ejecutivo",
-    edgeQuality: "Calidad del edge",
-    profitFactorDescription: (lossRate) =>
-      `Profit factor basado en beneficio bruto y pérdida bruta. Loss rate: ${lossRate}%.`,
-
     strongSample: "Muestra sólida",
     growingSample: "Muestra en crecimiento",
     earlySample: "Muestra inicial",
-
-    waitingForData: "Esperando datos",
-    healthy: "Saludable",
-    profitableMonitorBehavior:
-      "Rentable, monitorea el comportamiento",
-    needsReview: "Necesita revisión",
 
     focusReduceBehavioralRisk:
       "Reduce el riesgo conductual antes de aumentar volumen.",
@@ -273,8 +201,8 @@ const reportsLabels: Record<
   },
 
   fr: {
-    heroEyebrow: "VOLTIS AI Reports",
-    heroTitle: "Rapports d’intelligence",
+    heroEyebrow: "VOLTIS Intelligence Reports",
+    heroTitle: "Rapports d'intelligence",
     heroDescription:
       "Un résumé opérationnel pour lire performance, comportement, risque, discipline et évolution du trader.",
 
@@ -286,33 +214,22 @@ const reportsLabels: Record<
     behavioralRiskDescription:
       "Émotion, confiance, exécution",
 
-    executiveFocus: "Focus exécutif",
-    edgeQuality: "Qualité de l’edge",
-    profitFactorDescription: (lossRate) =>
-      `Profit factor basé sur le profit brut et la perte brute. Loss rate : ${lossRate}%.`,
-
     strongSample: "Échantillon solide",
     growingSample: "Échantillon en croissance",
     earlySample: "Échantillon initial",
 
-    waitingForData: "En attente de données",
-    healthy: "Sain",
-    profitableMonitorBehavior:
-      "Rentable, surveille le comportement",
-    needsReview: "À revoir",
-
     focusReduceBehavioralRisk:
-      "Réduis le risque comportemental avant d’augmenter le volume.",
+      "Réduis le risque comportemental avant d'augmenter le volume.",
     focusImproveRiskReward:
-      "Améliore l’équilibre risque/rendement et le contrôle des pertes.",
+      "Améliore l'équilibre risque/rendement et le contrôle des pertes.",
     focusReviewSetups:
       "Revois les setups et la qualité des entrées.",
     focusProtectEdge:
-      "Protège l’edge actuel avec une exécution constante.",
+      "Protège l'edge actuel avec une exécution constante.",
   },
 
   de: {
-    heroEyebrow: "VOLTIS AI Reports",
+    heroEyebrow: "VOLTIS Intelligence Reports",
     heroTitle: "Intelligence-Berichte",
     heroDescription:
       "Eine operative Zusammenfassung zur Analyse von Performance, Verhalten, Risiko, Disziplin und Trader-Entwicklung.",
@@ -325,20 +242,9 @@ const reportsLabels: Record<
     behavioralRiskDescription:
       "Emotion, Vertrauen, Ausführung",
 
-    executiveFocus: "Operativer Fokus",
-    edgeQuality: "Edge-Qualität",
-    profitFactorDescription: (lossRate) =>
-      `Profit Factor basierend auf Bruttogewinn und Bruttoverlust. Loss Rate: ${lossRate}%.`,
-
     strongSample: "Starke Stichprobe",
     growingSample: "Wachsende Stichprobe",
     earlySample: "Frühe Stichprobe",
-
-    waitingForData: "Warten auf Daten",
-    healthy: "Gesund",
-    profitableMonitorBehavior:
-      "Profitabel, Verhalten beobachten",
-    needsReview: "Benötigt Review",
 
     focusReduceBehavioralRisk:
       "Reduziere Verhaltensrisiko, bevor du Volumen erhöhst.",
@@ -504,9 +410,9 @@ export default async function ReportsPage({
 
   const periodTrades = dateRange
     ? trades.filter(
-        (t) =>
-          t.openDate >= dateRange.gte &&
-          t.openDate < dateRange.lte
+        (trade) =>
+          trade.openDate >= dateRange.gte &&
+          trade.openDate < dateRange.lte
       )
     : trades;
 
@@ -562,11 +468,6 @@ export default async function ReportsPage({
   const winRate =
     closedTrades > 0
       ? Math.round((wins / closedTrades) * 100)
-      : 0;
-
-  const lossRate =
-    closedTrades > 0
-      ? Math.round((losses / closedTrades) * 100)
       : 0;
 
   const averageWin =
@@ -640,15 +541,7 @@ export default async function ReportsPage({
         ? t.growingSample
         : t.earlySample;
 
-  const accountStatus =
-    totalTrades === 0
-      ? t.waitingForData
-      : totalPnl >= 0 &&
-        behavioralRisk < 35
-        ? t.healthy
-        : totalPnl >= 0
-          ? t.profitableMonitorBehavior
-          : t.needsReview;
+  const hasEnoughData = totalTrades >= MIN_TRADES_FOR_VERDICT;
 
   const primaryFocus =
     behavioralRisk >= 50
@@ -669,7 +562,7 @@ export default async function ReportsPage({
     : undefined;
 
   return (
-    <div className="space-y-12 print:space-y-0 print:bg-bg-base">
+    <div className="space-y-8 print:space-y-0 print:bg-bg-base">
       <div className="print:hidden">
         <ScopeBar
           members={members}
@@ -700,145 +593,114 @@ export default async function ReportsPage({
         behavioralRisk={behavioralRisk}
         emotionalTrades={emotionalTrades}
         weakExecutionTrades={weakExecutionTrades}
+        primaryFocus={primaryFocus}
+        hasEnoughData={hasEnoughData}
       />
 
-      <div className="web-report-content space-y-12">
+      <div className="web-report-content space-y-8">
         <div className="print-hidden">
-          <PDFReportHeader
-            appLanguage={language}
-            currency={currency}
-            totalTrades={totalTrades}
-            totalPnl={totalPnl}
-            winRate={winRate}
-          />
+          <Card variant="hero" className="p-6 sm:p-10">
+            <div className="flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
+              <div>
+                <div className="flex items-center gap-3">
+                  <SignatureEdge orientation="vertical" className="h-4" />
+                  <p className="text-sm text-muted">{t.heroEyebrow}</p>
+                </div>
+
+                <h1 className="mt-4 text-hero text-white">
+                  {t.heroTitle}
+                </h1>
+
+                <p className="mt-6 max-w-2xl text-sm leading-relaxed text-muted">
+                  {t.heroDescription}
+                </p>
+              </div>
+
+              <div className="grid shrink-0 gap-4 sm:min-w-72">
+                <Card variant="inner" className="p-5">
+                  <p className="text-xs font-black uppercase tracking-[0.18em] text-muted-faint">
+                    {t.totalTrades}{periodSuffix}
+                  </p>
+                  <p className="mt-3 text-3xl font-black text-accent-bright">
+                    {totalTrades}
+                  </p>
+                  <p className="mt-2 text-sm text-muted">
+                    {hasEnoughData ? reportReadiness : t.earlySample}
+                  </p>
+                </Card>
+                <PrintReportButton appLanguage={language} />
+              </div>
+            </div>
+          </Card>
         </div>
 
-        <div className="print-hidden relative overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-[#070b14] via-[#0f1726] to-black p-8 shadow-2xl shadow-cyan-500/5">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_12%,transparent),transparent_35%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.10),transparent_35%)]" />
-
-          <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
-            <div>
-              <p className="text-sm uppercase tracking-[0.25em] text-accent-bright">
-                {t.heroEyebrow}
-              </p>
-
-              <h1 className="mt-4 text-5xl font-black tracking-tight text-white xl:text-6xl">
-                {t.heroTitle}
-              </h1>
-
-              <p className="mt-6 max-w-3xl text-base leading-relaxed text-gray-400 xl:text-lg">
-                {t.heroDescription}
-              </p>
-            </div>
-
-            <div className="shrink-0">
-              <PrintReportButton appLanguage={language} />
-            </div>
-          </div>
+        <div className="print-hidden">
+          <ReportsNavigation appLanguage={language} />
         </div>
 
-        <ReportsNavigation appLanguage={language} />
-
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
-            <p className="text-sm text-gray-400">
+        <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
+          <Card interactive className="p-6">
+            <p className="text-sm text-muted">
               {t.totalTrades}{periodSuffix}
             </p>
 
-            <h2 className="mt-4 text-4xl font-black text-accent-bright">
+            <h2 className="mt-4 text-metric-lg text-accent-bright">
               {totalTrades}
             </h2>
 
-            <p className="mt-3 text-sm text-gray-500">
+            <p className="mt-3 text-sm text-muted-faint">
               {reportReadiness}
             </p>
-          </div>
+          </Card>
 
-          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
-            <p className="text-sm text-gray-400">
+          <Card interactive className="p-6">
+            <p className="text-sm text-muted">
               {t.totalPnl}{periodSuffix}
             </p>
 
             <h2
-              className={`mt-4 text-4xl font-black ${getResultTone(
-                totalPnl
-              )}`}
+              className={`mt-4 text-metric-lg ${getResultTone(totalPnl)}`}
             >
               {formatCurrency(totalPnl)}
             </h2>
 
-            <p className="mt-3 text-sm text-gray-500">
+            <p className="mt-3 text-sm text-muted-faint">
               {t.average}{" "}
               {formatCurrency(averageResult)}
             </p>
-          </div>
+          </Card>
 
-          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
-            <p className="text-sm text-gray-400">
+          <Card interactive className="p-6">
+            <p className="text-sm text-muted">
               {t.winRate}{periodSuffix}
             </p>
 
             <h2
-              className={`mt-4 text-4xl font-black ${getScoreTone(
-                winRate
-              )}`}
+              className={`mt-4 text-metric-lg ${getScoreTone(winRate)}`}
             >
               {winRate}%
             </h2>
 
-            <p className="mt-3 text-sm text-gray-500">
+            <p className="mt-3 text-sm text-muted-faint">
               {wins}W / {losses}L / {breakEven}BE
             </p>
-          </div>
+          </Card>
 
-          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
-            <p className="text-sm text-gray-400">
+          <Card interactive className="p-6">
+            <p className="text-sm text-muted">
               {t.behavioralRisk}{periodSuffix}
             </p>
 
             <h2
-              className={`mt-4 text-4xl font-black ${getRiskTone(
-                behavioralRisk
-              )}`}
+              className={`mt-4 text-metric-lg ${getRiskTone(behavioralRisk)}`}
             >
               {behavioralRisk}%
             </h2>
 
-            <p className="mt-3 text-sm text-gray-500">
+            <p className="mt-3 text-sm text-muted-faint">
               {t.behavioralRiskDescription}
             </p>
-          </div>
-        </div>
-
-        <div className="print-hidden grid grid-cols-1 gap-6 xl:grid-cols-3">
-          <div className="rounded-[32px] border border-white/10 bg-white/[0.04] p-6 xl:col-span-2">
-            <p className="text-sm uppercase tracking-[0.2em] text-accent-bright">
-              {t.executiveFocus}
-            </p>
-
-            <h2 className="mt-3 text-3xl font-black text-white">
-              {accountStatus}
-            </h2>
-
-            <p className="mt-4 max-w-3xl text-sm leading-6 text-gray-400">
-              {primaryFocus}
-            </p>
-          </div>
-
-          <div className="rounded-[32px] border border-white/10 bg-white/[0.04] p-6">
-            <p className="text-sm uppercase tracking-[0.2em] text-accent-bright">
-              {t.edgeQuality}
-            </p>
-
-            <h2 className="mt-3 text-3xl font-black text-white">
-              {profitFactor.toFixed(2)}
-            </h2>
-
-            <p className="mt-4 text-sm leading-6 text-gray-400">
-              {t.profitFactorDescription(lossRate)}
-            </p>
-          </div>
+          </Card>
         </div>
 
         <div id="executive">
@@ -849,55 +711,11 @@ export default async function ReportsPage({
             winRate={winRate}
             disciplineScore={disciplineScore}
             behavioralRisk={behavioralRisk}
+            hasEnoughData={hasEnoughData}
           />
         </div>
 
-        <div
-          id="weekly"
-          className="print-hidden"
-        >
-          <WeeklyReportCard
-            appLanguage={language}
-            currency={currency}
-            totalTrades={totalTrades}
-            totalPnl={totalPnl}
-            winRate={winRate}
-          />
-        </div>
-
-        <div
-          id="monthly"
-          className="report-section"
-        >
-          <MonthlyReportCard
-            appLanguage={language}
-            currency={currency}
-            totalTrades={totalTrades}
-            totalPnl={totalPnl}
-            winRate={winRate}
-            emotionalTrades={emotionalTrades}
-            disciplineScore={disciplineScore}
-          />
-        </div>
-
-        <div
-          id="behavior"
-          className="report-section"
-        >
-          <BehavioralReportCard
-            appLanguage={language}
-            currency={currency}
-            emotionalTrades={emotionalTrades}
-            lowConfidenceTrades={lowConfidenceTrades}
-            weakExecutionTrades={weakExecutionTrades}
-            totalTrades={totalTrades}
-          />
-        </div>
-
-        <div
-          id="performance"
-          className="report-section"
-        >
+        <div id="performance">
           <PerformanceBreakdownCard
             appLanguage={language}
             currency={currency}
@@ -906,248 +724,44 @@ export default async function ReportsPage({
             breakEven={breakEven}
             averageWin={averageWin}
             averageLoss={averageLoss}
+            profitFactor={profitFactor}
+            hasEnoughData={hasEnoughData}
           />
         </div>
 
-        <div
-          id="evolution"
-          className="print-hidden report-section"
-        >
-          <TraderEvolutionReport
-            appLanguage={language}
-            currency={currency}
-            disciplineScore={disciplineScore}
-            winRate={winRate}
-            emotionalTrades={emotionalTrades}
-            totalTrades={totalTrades}
-          />
-        </div>
-
-        <div
-          id="coaching"
-          className="report-section"
-        >
-          <AICoachingReport
-            appLanguage={language}
-            currency={currency}
-            disciplineScore={disciplineScore}
-            behavioralRisk={behavioralRisk}
-            winRate={winRate}
-            emotionalTrades={emotionalTrades}
-          />
-        </div>
-
-        <div
-          id="risk"
-          className="report-section"
-        >
-          <RiskManagementReport
-            appLanguage={language}
-            currency={currency}
-            averageLoss={averageLoss}
-            averageWin={averageWin}
-            behavioralRisk={behavioralRisk}
-            losses={losses}
-          />
-        </div>
-
-        <div
-          id="consistency"
-          className="print-hidden report-section"
-        >
-          <ConsistencyIntelligenceReport
-            appLanguage={language}
-            currency={currency}
-            disciplineScore={disciplineScore}
-            winRate={winRate}
-            totalTrades={totalTrades}
-            emotionalTrades={emotionalTrades}
-          />
-        </div>
-
-        <div
-          id="psychology"
-          className="print-hidden report-section"
-        >
-          <PsychologicalStabilityReport
+        <div id="risk">
+          <BehavioralReportCard
             appLanguage={language}
             currency={currency}
             emotionalTrades={emotionalTrades}
-            totalTrades={totalTrades}
-            behavioralRisk={behavioralRisk}
-            disciplineScore={disciplineScore}
-          />
-        </div>
-
-        <div
-          id="forecast"
-          className="print-hidden report-section"
-        >
-          <PerformanceForecastReport
-            appLanguage={language}
-            currency={currency}
-            winRate={winRate}
-            disciplineScore={disciplineScore}
-            behavioralRisk={behavioralRisk}
-            totalPnl={totalPnl}
-          />
-        </div>
-
-        <div
-          id="growth"
-          className="print-hidden report-section"
-        >
-          <GrowthRoadmapReport
-            appLanguage={language}
-            currency={currency}
-            disciplineScore={disciplineScore}
-            behavioralRisk={behavioralRisk}
-            winRate={winRate}
-          />
-        </div>
-
-        <div
-          id="edge"
-          className="print-hidden report-section"
-        >
-          <EdgeAnalysisReport
-            appLanguage={language}
-            currency={currency}
-            averageWin={averageWin}
-            averageLoss={averageLoss}
-            winRate={winRate}
-            disciplineScore={disciplineScore}
-          />
-        </div>
-
-        <div
-          id="decision"
-          className="print-hidden report-section"
-        >
-          <DecisionQualityReport
-            appLanguage={language}
-            currency={currency}
-            disciplineScore={disciplineScore}
-            behavioralRisk={behavioralRisk}
-            winRate={winRate}
-            emotionalTrades={emotionalTrades}
-          />
-        </div>
-
-        <div
-          id="execution"
-          className="print-hidden report-section"
-        >
-          <ExecutionIntelligenceReport
-            appLanguage={language}
-            currency={currency}
-            weakExecutionTrades={weakExecutionTrades}
-            totalTrades={totalTrades}
-            disciplineScore={disciplineScore}
-            averageWin={averageWin}
-            averageLoss={averageLoss}
-          />
-        </div>
-
-        <div
-          id="setup"
-          className="print-hidden report-section"
-        >
-          <SetupIntelligenceReport
-            appLanguage={language}
-            currency={currency}
-            totalTrades={totalTrades}
-            disciplineScore={disciplineScore}
-            averageWin={averageWin}
-            averageLoss={averageLoss}
-            winRate={winRate}
-          />
-        </div>
-
-        <div
-          id="confidence"
-          className="print-hidden report-section"
-        >
-          <ConfidenceIntelligenceReport
-            appLanguage={language}
-            currency={currency}
-            lowConfidenceTrades={lowConfidenceTrades}
-            totalTrades={totalTrades}
-            disciplineScore={disciplineScore}
-            winRate={winRate}
-          />
-        </div>
-
-        <div
-          id="discipline"
-          className="print-hidden report-section"
-        >
-          <DisciplineIntelligenceReport
-            appLanguage={language}
-            currency={currency}
-            disciplineScore={disciplineScore}
-            behavioralRisk={behavioralRisk}
-            emotionalTrades={emotionalTrades}
-            totalTrades={totalTrades}
-          />
-        </div>
-
-        <div
-          id="emotion"
-          className="print-hidden report-section"
-        >
-          <EmotionalIntelligenceReport
-            appLanguage={language}
-            currency={currency}
-            emotionalTrades={emotionalTrades}
-            totalTrades={totalTrades}
-            behavioralRisk={behavioralRisk}
-            disciplineScore={disciplineScore}
-          />
-        </div>
-
-        <div
-          id="identity"
-          className="print-hidden report-section"
-        >
-          <TraderIdentityReport
-            appLanguage={language}
-            currency={currency}
-            disciplineScore={disciplineScore}
-            behavioralRisk={behavioralRisk}
-            winRate={winRate}
-            emotionalTrades={emotionalTrades}
-            totalTrades={totalTrades}
-          />
-        </div>
-
-        <div
-          id="cognitive"
-          className="print-hidden report-section"
-        >
-          <CognitivePerformanceReport
-            appLanguage={language}
-            currency={currency}
-            disciplineScore={disciplineScore}
-            behavioralRisk={behavioralRisk}
             lowConfidenceTrades={lowConfidenceTrades}
             weakExecutionTrades={weakExecutionTrades}
-            totalTrades={totalTrades}
+            losses={losses}
+            behavioralRisk={behavioralRisk}
+            averageWin={averageWin}
+            averageLoss={averageLoss}
+            hasEnoughData={hasEnoughData}
           />
         </div>
 
-        <div
-          id="resilience"
-          className="print-hidden report-section"
-        >
-          <MentalResilienceReport
+        <div id="psychology">
+          <PsychologyMindsetCard
             appLanguage={language}
             currency={currency}
-            disciplineScore={disciplineScore}
-            behavioralRisk={behavioralRisk}
             emotionalTrades={emotionalTrades}
-            losses={losses}
             totalTrades={totalTrades}
+            behavioralRisk={behavioralRisk}
+            disciplineScore={disciplineScore}
+            hasEnoughData={hasEnoughData}
+          />
+        </div>
+
+        <div id="growth" className="print-hidden">
+          <GrowthFocusCard
+            appLanguage={language}
+            currency={currency}
+            primaryFocus={primaryFocus}
+            hasEnoughData={hasEnoughData}
           />
         </div>
 
