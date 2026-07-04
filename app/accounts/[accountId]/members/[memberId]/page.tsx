@@ -1,170 +1,147 @@
+import type { ReactNode } from "react";
 import {
   ArrowLeft,
-  BarChart3,
-  Trophy,
-  Activity,
-  Target,
+  BadgeCheck,
+  BrainCircuit,
+  Crown,
+  FileText,
+  KeyRound,
+  LockKeyhole,
+  ShieldCheck,
+  SquarePen,
+  Trash2,
+  UserCog,
+  Users,
 } from "lucide-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
+import Card from "@/components/ui/Card";
+import SignatureEdge from "@/components/ui/SignatureEdge";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
-import {
-  formatCurrencyByLanguage,
-  normalizeAppLanguage,
-  type AppLanguage,
-} from "@/lib/i18n";
 
-type MemberPerformanceLabels = {
-  memberPerformance: string;
+type PermissionItem = {
+  label: string;
+  enabled: boolean;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
   description: string;
-  back: string;
-  totalTrades: string;
-  winRate: string;
-  totalPnl: string;
-  bestSymbol: string;
-  bestTrade: string;
-  winLoss: string;
-  win: string;
-  loss: string;
-  operatingFocus: string;
-  mostUsedInstrument: string;
-  noSymbol: string;
 };
 
-const memberPerformanceLabels: Record<
-  AppLanguage,
-  MemberPerformanceLabels
-> = {
-  it: {
-    memberPerformance: "Performance membro",
-    description:
-      "Analisi operativa individuale del membro su questo account.",
-    back: "Indietro",
-    totalTrades: "Trade totali",
-    winRate: "Win rate",
-    totalPnl: "PnL totale",
-    bestSymbol: "Miglior simbolo",
-    bestTrade: "Miglior trade",
-    winLoss: "Win / Loss",
-    win: "win",
-    loss: "loss",
-    operatingFocus: "Focus operativo",
-    mostUsedInstrument: "Strumento più utilizzato",
-    noSymbol: "N/D",
-  },
+function formatDate(value: Date | null | undefined) {
+  if (!value) return "No activity recorded";
 
-  en: {
-    memberPerformance: "Member Performance",
-    description:
-      "Individual operational analysis of this member on the selected account.",
-    back: "Back",
-    totalTrades: "Total Trades",
-    winRate: "Win Rate",
-    totalPnl: "Total PnL",
-    bestSymbol: "Best Symbol",
-    bestTrade: "Best Trade",
-    winLoss: "Win / Loss",
-    win: "win",
-    loss: "loss",
-    operatingFocus: "Operating Focus",
-    mostUsedInstrument: "Most used instrument",
-    noSymbol: "N/A",
-  },
+  return new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(value);
+}
 
-  uk: {
-    memberPerformance: "Результативність учасника",
-    description:
-      "Індивідуальний операційний аналіз цього учасника в обраному акаунті.",
-    back: "Назад",
-    totalTrades: "Усього угод",
-    winRate: "Відсоток виграшів",
-    totalPnl: "Загальний PnL",
-    bestSymbol: "Найкращий символ",
-    bestTrade: "Найкраща угода",
-    winLoss: "Win / Loss",
-    win: "win",
-    loss: "loss",
-    operatingFocus: "Операційний фокус",
-    mostUsedInstrument: "Найчастіше використаний інструмент",
-    noSymbol: "Н/Д",
-  },
+function getRoleLabel(role: string, isOwner = false) {
+  if (isOwner) return "Owner";
+  if (role === "MANAGER") return "Admin";
+  if (role === "VIEWER") return "Viewer";
+  return "Member";
+}
 
-  ru: {
-    memberPerformance: "Результативность участника",
-    description:
-      "Индивидуальный операционный анализ этого участника в выбранном аккаунте.",
-    back: "Назад",
-    totalTrades: "Всего сделок",
-    winRate: "Процент выигрышей",
-    totalPnl: "Общий PnL",
-    bestSymbol: "Лучший символ",
-    bestTrade: "Лучшая сделка",
-    winLoss: "Win / Loss",
-    win: "win",
-    loss: "loss",
-    operatingFocus: "Операционный фокус",
-    mostUsedInstrument: "Самый используемый инструмент",
-    noSymbol: "Н/Д",
-  },
+function getRoleDescription(role: string, isOwner = false) {
+  if (isOwner) return "Protected creator identity with account-level authority.";
+  if (role === "MANAGER") return "Administrative access with management authority when permissions allow it.";
+  if (role === "VIEWER") return "Observation-first access. Execution capabilities are intentionally narrow.";
+  return "Execution contributor with permissions set explicitly by the account admins.";
+}
 
-  es: {
-    memberPerformance: "Rendimiento del miembro",
-    description:
-      "Análisis operativo individual de este miembro en la cuenta seleccionada.",
-    back: "Atrás",
-    totalTrades: "Trades totales",
-    winRate: "Win rate",
-    totalPnl: "PnL total",
-    bestSymbol: "Mejor símbolo",
-    bestTrade: "Mejor trade",
-    winLoss: "Win / Loss",
-    win: "win",
-    loss: "loss",
-    operatingFocus: "Enfoque operativo",
-    mostUsedInstrument: "Instrumento más utilizado",
-    noSymbol: "N/D",
-  },
+function StatusPill({
+  children,
+  tone = "neutral",
+}: {
+  children: ReactNode;
+  tone?: "neutral" | "info" | "positive" | "warning";
+}) {
+  const tones = {
+    neutral: "border-flash/[0.12] bg-surface-2 text-muted",
+    info: "border-accent-bright/25 bg-accent-bright/[0.08] text-accent-bright",
+    positive: "border-positive/25 bg-positive/[0.08] text-positive",
+    warning: "border-warning/25 bg-warning/[0.08] text-warning",
+  };
 
-  fr: {
-    memberPerformance: "Performance du membre",
-    description:
-      "Analyse opérationnelle individuelle de ce membre sur le compte sélectionné.",
-    back: "Retour",
-    totalTrades: "Trades totaux",
-    winRate: "Win rate",
-    totalPnl: "PnL total",
-    bestSymbol: "Meilleur symbole",
-    bestTrade: "Meilleur trade",
-    winLoss: "Win / Loss",
-    win: "win",
-    loss: "loss",
-    operatingFocus: "Focus opérationnel",
-    mostUsedInstrument: "Instrument le plus utilisé",
-    noSymbol: "N/A",
-  },
+  return (
+    <span
+      className={`inline-flex items-center rounded-pill border-[0.5px] px-3 py-1 text-micro font-medium uppercase tracking-label ${tones[tone]}`}
+    >
+      {children}
+    </span>
+  );
+}
 
-  de: {
-    memberPerformance: "Mitglieder-Performance",
-    description:
-      "Individuelle operative Analyse dieses Mitglieds im ausgewählten Konto.",
-    back: "Zurück",
-    totalTrades: "Trades gesamt",
-    winRate: "Win Rate",
-    totalPnl: "Gesamt-PnL",
-    bestSymbol: "Bestes Symbol",
-    bestTrade: "Bester Trade",
-    winLoss: "Win / Loss",
-    win: "win",
-    loss: "loss",
-    operatingFocus: "Operativer Fokus",
-    mostUsedInstrument: "Meistgenutztes Instrument",
-    noSymbol: "N/V",
-  },
-};
+function SectionHeader({
+  eyebrow,
+  title,
+  children,
+}: {
+  eyebrow: string;
+  title: string;
+  children?: ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <div className="flex items-center gap-2">
+          <SignatureEdge orientation="vertical" className="h-4" />
+          <p className="text-micro uppercase tracking-label text-accent-bright">
+            {eyebrow}
+          </p>
+        </div>
+        <h2 className="mt-2 text-section text-flash">{title}</h2>
+      </div>
+      {children}
+    </div>
+  );
+}
 
-export default async function MemberPerformancePage({
+function PermissionRow({ permission }: { permission: PermissionItem }) {
+  const Icon = permission.icon;
+
+  return (
+    <div className="flex flex-col gap-4 rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex items-start gap-4">
+        <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-1 p-3 text-muted">
+          <Icon size={18} />
+        </div>
+        <div>
+          <p className="text-body font-medium text-flash">{permission.label}</p>
+          <p className="mt-1 text-caption text-muted">{permission.description}</p>
+        </div>
+      </div>
+      <StatusPill tone={permission.enabled ? "positive" : "neutral"}>
+        {permission.enabled ? "Allowed" : "Off"}
+      </StatusPill>
+    </div>
+  );
+}
+
+function SummaryCard({
+  label,
+  value,
+  detail,
+}: {
+  label: string;
+  value: string;
+  detail: string;
+}) {
+  return (
+    <Card className="p-5">
+      <p className="text-micro uppercase tracking-label text-muted-faint">
+        {label}
+      </p>
+      <p className="mt-3 text-metric text-flash">{value}</p>
+      <p className="mt-2 text-caption text-muted">{detail}</p>
+    </Card>
+  );
+}
+
+export default async function MemberAccessPage({
   params,
 }: {
   params: Promise<{
@@ -180,254 +157,284 @@ export default async function MemberPerformancePage({
 
   const { accountId, memberId } = await params;
 
-  const currentUser = await prisma.user.findUnique({
+  const membership = await prisma.accountMember.findFirst({
     where: {
-      id: session.user.id,
+      userId: session.user.id,
+      tradingAccountId: accountId,
     },
-    select: {
-      appLanguage: true,
-      defaultCurrency: true,
+    include: {
+      tradingAccount: true,
     },
   });
-
-  const language = normalizeAppLanguage(
-    currentUser?.appLanguage
-  );
-
-  const t = memberPerformanceLabels[language];
-
-  const membership =
-    await prisma.accountMember.findFirst({
-      where: {
-        userId: session.user.id,
-        tradingAccountId: accountId,
-      },
-      include: {
-        tradingAccount: true,
-      },
-    });
 
   if (!membership) {
     redirect("/accounts");
   }
 
-  if (
-    membership.tradingAccount.status ===
-    "ARCHIVED"
-  ) {
+  if (membership.tradingAccount.status === "ARCHIVED") {
     redirect(`/accounts/${accountId}/dashboard`);
   }
 
-  if (
-    membership.role !== "MANAGER" &&
-    !membership.canViewMembers
-  ) {
+  if (membership.role !== "MANAGER" && !membership.canViewMembers) {
     redirect(`/accounts/${accountId}/dashboard`);
   }
 
-  const targetMembership =
-    await prisma.accountMember.findFirst({
-      where: {
-        userId: memberId,
-        tradingAccountId: accountId,
-      },
-      include: {
-        user: true,
-      },
-    });
+  const targetMembership = await prisma.accountMember.findFirst({
+    where: {
+      userId: memberId,
+      tradingAccountId: accountId,
+    },
+    include: {
+      user: true,
+    },
+  });
 
   if (!targetMembership) {
     redirect(`/accounts/${accountId}/members`);
   }
 
-  const member = targetMembership.user;
-
-  const currency =
-    membership.tradingAccount.currency ??
-    currentUser?.defaultCurrency ??
-    "USD";
-
-  const trades = await prisma.trade.findMany({
-    where: {
-      tradingAccountId: accountId,
-      createdById: memberId,
+  const isOwner = targetMembership.userId === membership.tradingAccount.createdById;
+  const displayName =
+    targetMembership.user.name ?? targetMembership.user.username;
+  const operationalPermissions: PermissionItem[] = [
+    {
+      label: "Create trades",
+      enabled: targetMembership.canCreateTrades,
+      icon: SquarePen,
+      description: "Allows this member to add new account trade records.",
     },
-    orderBy: [
-      {
-        openDate: "desc",
-      },
-      {
-        openTime: "desc",
-      },
-      {
-        createdAt: "desc",
-      },
-    ],
-  });
-
-  const totalTrades = trades.length;
-
-  const wins = trades.filter(
-    (trade) => trade.outcome === "win"
-  ).length;
-
-  const losses = trades.filter(
-    (trade) => trade.outcome === "loss"
-  ).length;
-
-  const winRate =
-    totalTrades > 0
-      ? Math.round((wins / totalTrades) * 100)
-      : 0;
-
-  const totalPnl = trades.reduce(
-    (sum, trade) =>
-      sum + (trade.resultUsd || 0),
-    0
-  );
-
-  const bestTrade =
-    trades.length > 0
-      ? Math.max(
-        ...trades.map(
-          (trade) => trade.resultUsd || 0
-        )
-      )
-      : 0;
-
-  const symbols = trades.reduce<
-    Record<string, number>
-  >((acc, trade) => {
-    acc[trade.symbol] =
-      (acc[trade.symbol] || 0) + 1;
-
-    return acc;
-  }, {});
-
-  const bestSymbol =
-    Object.entries(symbols).sort(
-      (a, b) => b[1] - a[1]
-    )[0]?.[0] || t.noSymbol;
+    {
+      label: "Edit trades",
+      enabled: targetMembership.canEditTrades,
+      icon: FileText,
+      description: "Allows corrections to existing trade records.",
+    },
+    {
+      label: "Delete trades",
+      enabled: targetMembership.canDeleteTrades,
+      icon: Trash2,
+      description: "Allows destructive trade removal through protected actions.",
+    },
+  ];
+  const roomPermissions: PermissionItem[] = [
+    {
+      label: "Analytics",
+      enabled: targetMembership.canViewAnalytics,
+      icon: BrainCircuit,
+      description: "Grants access to analytical review rooms for this account.",
+    },
+    {
+      label: "Reports",
+      enabled: targetMembership.canViewReports,
+      icon: FileText,
+      description: "Grants access to executive report surfaces.",
+    },
+    {
+      label: "Copilot",
+      enabled: targetMembership.canViewCopilot,
+      icon: BadgeCheck,
+      description: "Grants access to account-scoped rule-based intelligence.",
+    },
+    {
+      label: "Members",
+      enabled: targetMembership.canViewMembers,
+      icon: Users,
+      description: "Allows this member to view the account access roster.",
+    },
+  ];
+  const controlPermissions: PermissionItem[] = [
+    {
+      label: "Manage members",
+      enabled: targetMembership.canManageMembers,
+      icon: UserCog,
+      description: "Allows invitations and member removal when server checks pass.",
+    },
+    {
+      label: "Manage roles",
+      enabled: targetMembership.canManageRoles,
+      icon: KeyRound,
+      description: "Allows role and permission changes when server checks pass.",
+    },
+    {
+      label: "Manage account",
+      enabled: targetMembership.canManageAccount,
+      icon: ShieldCheck,
+      description: "Reserved account-management authority.",
+    },
+  ];
+  const allPermissions = [
+    ...operationalPermissions,
+    ...roomPermissions,
+    ...controlPermissions,
+  ];
+  const allowedCount = allPermissions.filter((permission) => permission.enabled).length;
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between gap-6">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <p className="text-sm text-gray-400">
-            {t.memberPerformance}
+          <p className="text-micro uppercase tracking-hero text-muted-faint">
+            Access dossier
           </p>
-
-          <h1 className="mt-2 flex items-center gap-3 text-4xl font-black text-white">
-            <BarChart3 className="text-accent-bright" />
-            {member.name || member.username}
-          </h1>
-
-          <p className="mt-4 max-w-3xl text-sm leading-relaxed text-gray-400">
-            {t.description}
-          </p>
+          <h1 className="mt-3 text-hero text-flash">{displayName}</h1>
+          <div className="mt-4 max-w-3xl">
+            <SignatureEdge orientation="horizontal" className="mb-4 max-w-40" />
+            <p className="text-body text-muted">
+              This page describes access, not performance. It reflects the
+              account membership record used by server-side permission checks.
+            </p>
+          </div>
         </div>
 
         <Link
           href={`/accounts/${accountId}/members`}
-          className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-3 text-sm text-gray-300 transition hover:bg-white/[0.05]"
+          className="inline-flex items-center justify-center gap-2 rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-2 px-4 py-3 text-sm font-medium text-muted transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/45 hover:text-accent-bright"
         >
           <ArrowLeft size={16} />
-          {t.back}
+          Back to members
         </Link>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-4">
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-          <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
-            {t.totalTrades}
-          </p>
+      <Card variant="hero" className="reveal-rise">
+        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+          <div>
+            <div className="flex flex-wrap items-center gap-3">
+              <StatusPill tone={isOwner ? "info" : "neutral"}>
+                {getRoleLabel(targetMembership.role, isOwner)}
+              </StatusPill>
+              {targetMembership.userId === session.user.id && (
+                <StatusPill tone="info">You</StatusPill>
+              )}
+              {isOwner && <StatusPill tone="warning">Protected identity</StatusPill>}
+            </div>
 
-          <p className="mt-4 text-3xl font-black text-white">
-            {totalTrades}
-          </p>
+            <h2 className="mt-6 max-w-3xl text-section text-flash">
+              {getRoleDescription(targetMembership.role, isOwner)}
+            </h2>
+            <p className="mt-4 max-w-3xl text-body text-muted">
+              Changes to this member should be made from the Members control
+              room. The underlying actions keep membership and role validation
+              server-side.
+            </p>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+            <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
+              <p className="text-micro uppercase tracking-label text-muted-faint">
+                Username
+              </p>
+              <p className="mt-2 text-body text-flash">
+                @{targetMembership.user.username}
+              </p>
+            </div>
+            <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
+              <p className="text-micro uppercase tracking-label text-muted-faint">
+                Joined
+              </p>
+              <p className="mt-2 text-body text-flash">
+                {formatDate(targetMembership.createdAt)}
+              </p>
+            </div>
+            <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
+              <p className="text-micro uppercase tracking-label text-muted-faint">
+                Last seen
+              </p>
+              <p className="mt-2 text-body text-flash">
+                {formatDate(
+                  targetMembership.user.lastActivityAt ??
+                    targetMembership.user.lastSeenAt
+                )}
+              </p>
+            </div>
+          </div>
         </div>
+      </Card>
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-          <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
-            {t.winRate}
-          </p>
+      <section className="grid gap-4 md:grid-cols-3">
+        <SummaryCard
+          label="Allowed permissions"
+          value={`${allowedCount}/${allPermissions.length}`}
+          detail="Total access switches currently enabled."
+        />
+        <SummaryCard
+          label="Execution"
+          value={`${operationalPermissions.filter((permission) => permission.enabled).length}/3`}
+          detail="Trade creation, editing, and deletion authority."
+        />
+        <SummaryCard
+          label="Control"
+          value={`${controlPermissions.filter((permission) => permission.enabled).length}/3`}
+          detail="Member, role, and account management authority."
+        />
+      </section>
 
-          <p className="mt-4 text-3xl font-black text-white">
-            {winRate}%
-          </p>
+      <section className="grid gap-6 xl:grid-cols-[1fr_0.9fr]">
+        <Card>
+          <SectionHeader eyebrow="Execution" title="Trade controls" />
+          <div className="mt-6 space-y-3">
+            {operationalPermissions.map((permission) => (
+              <PermissionRow key={permission.label} permission={permission} />
+            ))}
+          </div>
+        </Card>
+
+        <Card>
+          <SectionHeader eyebrow="Rooms" title="Visible intelligence surfaces" />
+          <div className="mt-6 space-y-3">
+            {roomPermissions.map((permission) => (
+              <PermissionRow key={permission.label} permission={permission} />
+            ))}
+          </div>
+        </Card>
+      </section>
+
+      <Card>
+        <SectionHeader eyebrow="Authority" title="Management permissions">
+          <StatusPill tone={controlPermissions.some((permission) => permission.enabled) ? "info" : "neutral"}>
+            {controlPermissions.some((permission) => permission.enabled)
+              ? "Control enabled"
+              : "No management access"}
+          </StatusPill>
+        </SectionHeader>
+        <div className="mt-6 grid gap-3 lg:grid-cols-3">
+          {controlPermissions.map((permission) => (
+            <PermissionRow key={permission.label} permission={permission} />
+          ))}
         </div>
+      </Card>
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-          <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
-            {t.totalPnl}
-          </p>
-
-          <p
-            className={`mt-4 text-3xl font-black ${totalPnl >= 0
-                ? "text-accent-bright"
-                : "text-red-300"
-              }`}
-          >
-            {formatCurrencyByLanguage(
-              totalPnl,
-              currency,
-              language
-            )}
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-          <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
-            {t.bestSymbol}
-          </p>
-
-          <p className="mt-4 text-3xl font-black text-white">
-            {bestSymbol}
-          </p>
-        </div>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="rounded-[32px] border border-accent-bright/20 bg-accent-bright/10 p-6">
-          <Trophy className="text-accent-bright" />
-
-          <h2 className="mt-4 text-2xl font-black text-white">
-            {t.bestTrade}
-          </h2>
-
-          <p className="mt-4 text-3xl font-black text-accent-bright">
-            {formatCurrencyByLanguage(
-              bestTrade,
-              currency,
-              language
-            )}
-          </p>
-        </div>
-
-        <div className="rounded-[32px] border border-white/10 bg-white/[0.03] p-6">
-          <Activity className="text-accent-bright" />
-
-          <h2 className="mt-4 text-2xl font-black text-white">
-            {t.winLoss}
-          </h2>
-
-          <p className="mt-4 text-sm text-gray-300">
-            {wins} {t.win} · {losses} {t.loss}
-          </p>
-        </div>
-
-        <div className="rounded-[32px] border border-white/10 bg-white/[0.03] p-6">
-          <Target className="text-accent-bright" />
-
-          <h2 className="mt-4 text-2xl font-black text-white">
-            {t.operatingFocus}
-          </h2>
-
-          <p className="mt-4 text-sm text-gray-300">
-            {t.mostUsedInstrument}: {bestSymbol}
-          </p>
-        </div>
-      </div>
+      <section className="grid gap-4 lg:grid-cols-4">
+        {[
+          {
+            icon: Crown,
+            title: "Owner",
+            text: "Account creator. Protected from removal and role reduction.",
+          },
+          {
+            icon: ShieldCheck,
+            title: "Admin",
+            text: "Highest operational role below owner, with explicit management switches.",
+          },
+          {
+            icon: UserCog,
+            title: "Member",
+            text: "Execution participant with clear trade and room permissions.",
+          },
+          {
+            icon: LockKeyhole,
+            title: "Viewer",
+            text: "Observation role for constrained, low-risk access.",
+          },
+        ].map((item) => (
+          <Card key={item.title} className="p-5">
+            <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-3 text-muted">
+              <item.icon size={18} />
+            </div>
+            <p className="mt-4 text-body font-medium text-flash">{item.title}</p>
+            <p className="mt-2 text-caption text-muted">{item.text}</p>
+          </Card>
+        ))}
+      </section>
     </div>
   );
 }
