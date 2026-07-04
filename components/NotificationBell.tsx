@@ -1,10 +1,23 @@
 "use client";
 
-import { Bell, CheckCheck, Loader2 } from "lucide-react";
+import {
+  ArrowRight,
+  Bell,
+  CheckCheck,
+  Inbox,
+  Loader2,
+  ShieldCheck,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+
+import {
+  acceptInvite,
+  declineInvite,
+} from "@/app/accounts/[accountId]/members/actions";
 import { CRYSTAL_FACE } from "@/components/ui/Card";
 import ListRow from "@/components/ui/ListRow";
 import {
@@ -13,10 +26,6 @@ import {
   type AppLanguage,
 } from "@/lib/i18n";
 import { getNotificationTypeLabel } from "@/lib/notifications";
-import {
-  acceptInvite,
-  declineInvite,
-} from "@/app/accounts/[accountId]/members/actions";
 
 type NotificationItem = {
   id: string;
@@ -31,61 +40,31 @@ type NotificationItem = {
 type PanelCopy = {
   bell: string;
   title: string;
+  commandSurface: string;
   markAllAsRead: string;
   viewAll: string;
-  empty: string;
+  emptyTitle: string;
+  emptyDescription: string;
+};
+
+const basePanelCopy: PanelCopy = {
+  bell: "Notifications",
+  title: "Notifications",
+  commandSurface: "Command surface",
+  markAllAsRead: "Mark all read",
+  viewAll: "View all",
+  emptyTitle: "No notifications",
+  emptyDescription: "Important account updates will appear here.",
 };
 
 const panelCopy: Record<AppLanguage, PanelCopy> = {
-  it: {
-    bell: "Notifiche",
-    title: "Notifiche",
-    markAllAsRead: "Segna tutte come lette",
-    viewAll: "Vedi tutte",
-    empty: "Nessuna notifica per ora.",
-  },
-  en: {
-    bell: "Notifications",
-    title: "Notifications",
-    markAllAsRead: "Mark all as read",
-    viewAll: "View all",
-    empty: "No notifications for now.",
-  },
-  uk: {
-    bell: "Сповіщення",
-    title: "Сповіщення",
-    markAllAsRead: "Позначити все як прочитане",
-    viewAll: "Переглянути всі",
-    empty: "Поки що немає сповіщень.",
-  },
-  ru: {
-    bell: "Уведомления",
-    title: "Уведомления",
-    markAllAsRead: "Отметить все как прочитанные",
-    viewAll: "Посмотреть все",
-    empty: "Пока нет уведомлений.",
-  },
-  es: {
-    bell: "Notificaciones",
-    title: "Notificaciones",
-    markAllAsRead: "Marcar todo como leído",
-    viewAll: "Ver todas",
-    empty: "No hay notificaciones por ahora.",
-  },
-  fr: {
-    bell: "Notifications",
-    title: "Notifications",
-    markAllAsRead: "Tout marquer comme lu",
-    viewAll: "Voir toutes",
-    empty: "Aucune notification pour le moment.",
-  },
-  de: {
-    bell: "Benachrichtigungen",
-    title: "Benachrichtigungen",
-    markAllAsRead: "Alle als gelesen markieren",
-    viewAll: "Alle anzeigen",
-    empty: "Derzeit keine Benachrichtigungen.",
-  },
+  it: basePanelCopy,
+  en: basePanelCopy,
+  uk: basePanelCopy,
+  ru: basePanelCopy,
+  es: basePanelCopy,
+  fr: basePanelCopy,
+  de: basePanelCopy,
 };
 
 type InviteCopy = {
@@ -96,56 +75,22 @@ type InviteCopy = {
   declineError: string;
 };
 
+const baseInviteCopy: InviteCopy = {
+  accept: "Accept",
+  decline: "Decline",
+  declineSuccess: "Invite declined.",
+  acceptError: "Could not accept invite. Try again.",
+  declineError: "Could not decline invite. Try again.",
+};
+
 const inviteCopy: Record<AppLanguage, InviteCopy> = {
-  it: {
-    accept: "Accetta",
-    decline: "Rifiuta",
-    declineSuccess: "Invito rifiutato.",
-    acceptError: "Impossibile accettare l'invito. Riprova.",
-    declineError: "Impossibile rifiutare l'invito. Riprova.",
-  },
-  en: {
-    accept: "Accept",
-    decline: "Decline",
-    declineSuccess: "Invite declined.",
-    acceptError: "Could not accept invite. Try again.",
-    declineError: "Could not decline invite. Try again.",
-  },
-  uk: {
-    accept: "Прийняти",
-    decline: "Відхилити",
-    declineSuccess: "Запрошення відхилено.",
-    acceptError: "Не вдалося прийняти запрошення. Спробуйте ще раз.",
-    declineError: "Не вдалося відхилити запрошення. Спробуйте ще раз.",
-  },
-  ru: {
-    accept: "Принять",
-    decline: "Отклонить",
-    declineSuccess: "Приглашение отклонено.",
-    acceptError: "Не удалось принять приглашение. Попробуйте снова.",
-    declineError: "Не удалось отклонить приглашение. Попробуйте снова.",
-  },
-  es: {
-    accept: "Aceptar",
-    decline: "Rechazar",
-    declineSuccess: "Invitación rechazada.",
-    acceptError: "No se pudo aceptar la invitación. Inténtalo de nuevo.",
-    declineError: "No se pudo rechazar la invitación. Inténtalo de nuevo.",
-  },
-  fr: {
-    accept: "Accepter",
-    decline: "Refuser",
-    declineSuccess: "Invitation refusée.",
-    acceptError: "Impossible d'accepter l'invitation. Réessayez.",
-    declineError: "Impossible de refuser l'invitation. Réessayez.",
-  },
-  de: {
-    accept: "Annehmen",
-    decline: "Ablehnen",
-    declineSuccess: "Einladung abgelehnt.",
-    acceptError: "Einladung konnte nicht angenommen werden. Versuche es erneut.",
-    declineError: "Einladung konnte nicht abgelehnt werden. Versuche es erneut.",
-  },
+  it: baseInviteCopy,
+  en: baseInviteCopy,
+  uk: baseInviteCopy,
+  ru: baseInviteCopy,
+  es: baseInviteCopy,
+  fr: baseInviteCopy,
+  de: baseInviteCopy,
 };
 
 const RELATIVE_TIME_UNITS: {
@@ -179,16 +124,21 @@ function formatRelativeTime(value: string, locale: string) {
 
 function extractAccountId(link: string | null): string | null {
   if (!link) return null;
-  // link format: /accounts/{accountId}/members
   const parts = link.split("/");
   return parts[2] || null;
 }
 
-export default function NotificationBell({
-  language,
-}: {
-  language?: string;
-}) {
+function NotificationIcon({ type }: { type: string }) {
+  const Icon = type === "ACCOUNT_INVITE" ? Users : ShieldCheck;
+
+  return (
+    <span className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-2 text-muted transition-colors duration-fast group-hover:text-accent-bright">
+      <Icon size={15} />
+    </span>
+  );
+}
+
+export default function NotificationBell({ language }: { language?: string }) {
   const [count, setCount] = useState(0);
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
@@ -316,17 +266,13 @@ export default function NotificationBell({
     }
   }
 
-  async function handleNotificationClick(
-    notification: NotificationItem
-  ) {
+  async function handleNotificationClick(notification: NotificationItem) {
     setOpen(false);
 
     if (!notification.read) {
       setNotifications((current) =>
         current.map((item) =>
-          item.id === notification.id
-            ? { ...item, read: true }
-            : item
+          item.id === notification.id ? { ...item, read: true } : item
         )
       );
       setCount((current) => Math.max(0, current - 1));
@@ -361,7 +307,6 @@ export default function NotificationBell({
     try {
       await markNotificationRead(notification);
       await acceptInvite(accountId);
-      // acceptInvite redirects to the account dashboard — page navigates away.
     } catch {
       setLoadingInvite(null);
       toast.error(ti.acceptError);
@@ -402,7 +347,7 @@ export default function NotificationBell({
         onClick={handleToggle}
         aria-label={count > 0 ? `${t.bell} (${count})` : t.bell}
         title={t.bell}
-        className="relative overflow-hidden rounded-inner border-[0.5px] border-flash/[0.1] p-3 shadow-2xl backdrop-blur-xl transition-all duration-300"
+        className="relative overflow-hidden rounded-inner border-[0.5px] border-flash/[0.1] p-3 shadow-[0_8px_28px_rgba(0,0,0,0.3)] backdrop-blur-xl transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/45"
         style={{ background: CRYSTAL_FACE }}
       >
         <Bell size={18} className="relative z-10 text-muted" />
@@ -410,152 +355,172 @@ export default function NotificationBell({
         {count > 0 && (
           <span
             aria-hidden="true"
-            className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-accent-bright shadow-[0_0_6px_rgba(91,224,255,0.7)]"
+            className="absolute right-2.5 top-2.5 h-2 w-2 rounded-pill bg-accent-bright"
           />
         )}
       </button>
 
       {open && (
         <div
-          className="absolute right-0 mt-3 w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-card border-[0.5px] border-flash/[0.1] shadow-2xl sm:w-96"
+          className="absolute right-0 z-50 mt-3 w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-card border-[0.5px] border-flash/[0.1] shadow-[0_18px_60px_rgba(0,0,0,0.45)] sm:w-96"
           style={{ background: CRYSTAL_FACE }}
         >
-          <div className="flex items-center justify-between border-b border-white/10 p-4">
-            <p className="text-sm font-bold text-white">{t.title}</p>
+          <div className="border-b-[0.5px] border-flash/[0.08] p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-micro uppercase tracking-label text-muted-faint">
+                  {t.commandSurface}
+                </p>
+                <h2 className="mt-1 text-subsection text-flash">{t.title}</h2>
+              </div>
 
-            {count > 0 && (
-              <button
-                type="button"
-                onClick={handleMarkAllAsRead}
-                className="flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-accent transition-colors hover:bg-accent/10"
-              >
-                <CheckCheck size={14} />
-                {t.markAllAsRead}
-              </button>
-            )}
+              {count > 0 && (
+                <button
+                  type="button"
+                  onClick={handleMarkAllAsRead}
+                  className="inline-flex items-center gap-1.5 rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-2 px-3 py-2 text-caption font-medium text-muted transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/45 hover:text-accent-bright"
+                >
+                  <CheckCheck size={14} />
+                  {t.markAllAsRead}
+                </button>
+              )}
+            </div>
           </div>
 
-          <div className="max-h-[70vh] overflow-y-auto">
+          <div className="max-h-[70vh] space-y-2 overflow-y-auto p-2">
             {loading ? (
-              <div className="space-y-2 p-4">
+              <div className="space-y-2 p-2">
                 {Array.from({ length: 4 }).map((_, index) => (
                   <div
                     key={index}
-                    className="h-16 animate-pulse rounded-xl bg-white/5"
+                    className="h-20 animate-pulse rounded-inner border-[0.5px] border-flash/[0.06] bg-surface-2"
                   />
                 ))}
               </div>
             ) : notifications.length > 0 ? (
-              <div className="divide-y divide-white/5">
-                {notifications.map((notification) =>
-                  notification.type === "ACCOUNT_INVITE" ? (
-                    <ListRow
-                      key={notification.id}
-                      className={`flex flex-col gap-1.5 ${
-                        notification.read ? "" : "bg-accent/[0.04]"
-                      }`}
-                    >
-                      <div className="flex items-center gap-2">
-                        {!notification.read && (
-                          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                        )}
-
-                        <span className="rounded-lg bg-white/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-gray-300">
-                          {getNotificationTypeLabel(
-                            notification.type,
-                            appLanguage
+              notifications.map((notification) =>
+                notification.type === "ACCOUNT_INVITE" ? (
+                  <ListRow
+                    key={notification.id}
+                    className={`flex flex-col gap-3 ${
+                      notification.read
+                        ? "bg-transparent"
+                        : "border-accent-bright/25 bg-accent-bright/[0.06]"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <NotificationIcon type={notification.type} />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          {!notification.read && (
+                            <span className="h-1.5 w-1.5 shrink-0 rounded-pill bg-accent-bright" />
                           )}
-                        </span>
-
-                        <span className="ml-auto shrink-0 text-[11px] text-muted-faint">
-                          {formatRelativeTime(notification.createdAt, locale)}
-                        </span>
+                          <span className="rounded-pill border-[0.5px] border-flash/[0.1] bg-surface-2 px-2 py-0.5 text-micro uppercase tracking-label text-muted">
+                            {getNotificationTypeLabel(
+                              notification.type,
+                              appLanguage
+                            )}
+                          </span>
+                          <span className="ml-auto shrink-0 text-micro text-muted-faint">
+                            {formatRelativeTime(notification.createdAt, locale)}
+                          </span>
+                        </div>
+                        <p className="mt-2 text-body font-medium text-flash">
+                          {notification.title}
+                        </p>
+                        <p className="mt-1 line-clamp-2 text-caption leading-5 text-muted">
+                          {notification.message}
+                        </p>
                       </div>
+                    </div>
 
-                      <p className="text-sm font-semibold text-white">
-                        {notification.title}
-                      </p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleAccept(notification)}
+                        disabled={loadingInvite === notification.id}
+                        className="inline-flex items-center justify-center gap-1.5 rounded-inner border-[0.5px] border-accent-bright/30 bg-accent-bright/[0.08] px-3 py-2 text-caption font-semibold text-accent-bright transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/55 disabled:opacity-60"
+                      >
+                        {loadingInvite === notification.id ? (
+                          <Loader2 size={12} className="animate-spin" />
+                        ) : null}
+                        {ti.accept}
+                      </button>
 
-                      <p className="line-clamp-2 text-xs text-muted">
-                        {notification.message}
-                      </p>
-
-                      <div className="mt-1 flex gap-2">
-                        <button
-                          type="button"
-                          onClick={() => handleAccept(notification)}
-                          disabled={loadingInvite === notification.id}
-                          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-accent px-3 py-2 text-xs font-bold text-black transition hover:bg-accent-bright disabled:opacity-60"
-                        >
-                          {loadingInvite === notification.id ? (
-                            <Loader2 size={12} className="animate-spin" />
-                          ) : null}
-                          {ti.accept}
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => handleDecline(notification)}
-                          disabled={loadingInvite === notification.id}
-                          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-white/10 px-3 py-2 text-xs font-bold text-gray-300 transition hover:bg-white/5 disabled:opacity-60"
-                        >
-                          {loadingInvite === notification.id ? (
-                            <Loader2 size={12} className="animate-spin" />
-                          ) : null}
-                          {ti.decline}
-                        </button>
-                      </div>
-                    </ListRow>
-                  ) : (
-                    <ListRow
-                      key={notification.id}
-                      onClick={() => handleNotificationClick(notification)}
-                      className={`flex flex-col gap-1.5 ${
-                        notification.read ? "" : "bg-accent/[0.04]"
-                      }`}
-                    >
-                      <div className="flex items-center gap-2">
-                        {!notification.read && (
-                          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                        )}
-
-                        <span className="rounded-lg bg-white/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-gray-300">
-                          {getNotificationTypeLabel(
-                            notification.type,
-                            appLanguage
+                      <button
+                        type="button"
+                        onClick={() => handleDecline(notification)}
+                        disabled={loadingInvite === notification.id}
+                        className="inline-flex items-center justify-center gap-1.5 rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-2 px-3 py-2 text-caption font-semibold text-muted transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/45 hover:text-accent-bright disabled:opacity-60"
+                      >
+                        {loadingInvite === notification.id ? (
+                          <Loader2 size={12} className="animate-spin" />
+                        ) : null}
+                        {ti.decline}
+                      </button>
+                    </div>
+                  </ListRow>
+                ) : (
+                  <ListRow
+                    key={notification.id}
+                    onClick={() => handleNotificationClick(notification)}
+                    className={`flex flex-col gap-2 ${
+                      notification.read
+                        ? "bg-transparent"
+                        : "border-accent-bright/25 bg-accent-bright/[0.06]"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <NotificationIcon type={notification.type} />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          {!notification.read && (
+                            <span className="h-1.5 w-1.5 shrink-0 rounded-pill bg-accent-bright" />
                           )}
-                        </span>
-
-                        <span className="ml-auto shrink-0 text-[11px] text-muted-faint">
-                          {formatRelativeTime(notification.createdAt, locale)}
-                        </span>
+                          <span className="rounded-pill border-[0.5px] border-flash/[0.1] bg-surface-2 px-2 py-0.5 text-micro uppercase tracking-label text-muted">
+                            {getNotificationTypeLabel(
+                              notification.type,
+                              appLanguage
+                            )}
+                          </span>
+                          <span className="ml-auto shrink-0 text-micro text-muted-faint">
+                            {formatRelativeTime(notification.createdAt, locale)}
+                          </span>
+                        </div>
+                        <p className="mt-2 text-body font-medium text-flash">
+                          {notification.title}
+                        </p>
+                        <p className="mt-1 line-clamp-2 text-caption leading-5 text-muted">
+                          {notification.message}
+                        </p>
                       </div>
-
-                      <p className="text-sm font-semibold text-white">
-                        {notification.title}
-                      </p>
-
-                      <p className="line-clamp-2 text-xs text-muted">
-                        {notification.message}
-                      </p>
-                    </ListRow>
-                  )
-                )}
-              </div>
+                    </div>
+                  </ListRow>
+                )
+              )
             ) : (
-              <div className="p-8 text-center text-sm text-muted-faint">
-                {t.empty}
+              <div className="m-2 rounded-inner border-[0.5px] border-dashed border-flash/[0.12] bg-surface-2 p-6 text-center">
+                <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-1 text-muted">
+                  <Inbox size={18} />
+                </div>
+                <p className="mt-4 text-body font-medium text-flash">
+                  {t.emptyTitle}
+                </p>
+                <p className="mt-2 text-caption leading-5 text-muted">
+                  {t.emptyDescription}
+                </p>
               </div>
             )}
           </div>
 
-          <div className="border-t border-white/10 p-2">
+          <div className="border-t-[0.5px] border-flash/[0.08] p-2">
             <Link
               href="/notifications"
               onClick={() => setOpen(false)}
-              className="flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-semibold text-gray-300 transition-colors hover:bg-white/5 hover:text-white"
+              className="flex items-center justify-center gap-2 rounded-inner px-3 py-3 text-sm font-medium text-muted transition-all duration-fast hover:bg-surface-2 hover:text-accent-bright"
             >
               {t.viewAll}
+              <ArrowRight size={15} />
             </Link>
           </div>
         </div>
