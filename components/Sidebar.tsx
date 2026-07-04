@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   useEffect,
+  useCallback,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -21,6 +22,8 @@ import {
   LineChart,
   Target,
   Users,
+  Activity,
+  Archive,
   Shield,
   ArrowLeftRight,
   X,
@@ -104,9 +107,12 @@ type SidebarLabels = {
   updates: string;
   switchAccount: string;
   accounts: string;
+  activity: string;
+  archive: string;
 
   workspaceGroup: string;
   generalGroup: string;
+  systemGroup: string;
 
   adminPanel: string;
   accountsManagement: string;
@@ -139,9 +145,12 @@ const sidebarLabels: Record<
     updates: "Aggiornamenti",
     switchAccount: "Cambia account",
     accounts: "Account",
+    activity: "Attivita",
+    archive: "Archivio",
 
     workspaceGroup: "WORKSPACE",
     generalGroup: "GENERALE",
+    systemGroup: "SYSTEM",
 
     adminPanel: "Pannello Admin",
     accountsManagement: "Gestione Account",
@@ -170,9 +179,12 @@ const sidebarLabels: Record<
     updates: "Updates",
     switchAccount: "Switch Account",
     accounts: "Accounts",
+    activity: "Activity",
+    archive: "Archive",
 
     workspaceGroup: "WORKSPACE",
     generalGroup: "GENERAL",
+    systemGroup: "SYSTEM",
 
     adminPanel: "Admin Panel",
     accountsManagement: "Accounts Management",
@@ -201,9 +213,12 @@ const sidebarLabels: Record<
     updates: "Оновлення",
     switchAccount: "Змінити акаунт",
     accounts: "Акаунти",
+    activity: "Activity",
+    archive: "Archive",
 
     workspaceGroup: "WORKSPACE",
     generalGroup: "ЗАГАЛЬНЕ",
+    systemGroup: "SYSTEM",
 
     adminPanel: "Адмін-панель",
     accountsManagement: "Керування акаунтами",
@@ -232,9 +247,12 @@ const sidebarLabels: Record<
     updates: "Обновления",
     switchAccount: "Сменить аккаунт",
     accounts: "Аккаунты",
+    activity: "Activity",
+    archive: "Archive",
 
     workspaceGroup: "WORKSPACE",
     generalGroup: "ОБЩЕЕ",
+    systemGroup: "SYSTEM",
 
     adminPanel: "Админ-панель",
     accountsManagement: "Управление аккаунтами",
@@ -263,9 +281,12 @@ const sidebarLabels: Record<
     updates: "Actualizaciones",
     switchAccount: "Cambiar cuenta",
     accounts: "Cuentas",
+    activity: "Actividad",
+    archive: "Archivo",
 
     workspaceGroup: "WORKSPACE",
     generalGroup: "GENERAL",
+    systemGroup: "SYSTEM",
 
     adminPanel: "Panel Admin",
     accountsManagement: "Gestión de cuentas",
@@ -294,9 +315,12 @@ const sidebarLabels: Record<
     updates: "Mises à jour",
     switchAccount: "Changer de compte",
     accounts: "Comptes",
+    activity: "Activite",
+    archive: "Archive",
 
     workspaceGroup: "WORKSPACE",
     generalGroup: "GÉNÉRAL",
+    systemGroup: "SYSTEM",
 
     adminPanel: "Panneau Admin",
     accountsManagement: "Gestion des comptes",
@@ -325,9 +349,12 @@ const sidebarLabels: Record<
     updates: "Updates",
     switchAccount: "Konto wechseln",
     accounts: "Konten",
+    activity: "Aktivitat",
+    archive: "Archiv",
 
     workspaceGroup: "WORKSPACE",
     generalGroup: "ALLGEMEIN",
+    systemGroup: "SYSTEM",
 
     adminPanel: "Admin-Bereich",
     accountsManagement: "Kontoverwaltung",
@@ -624,18 +651,6 @@ export default function Sidebar({
           icon: link.icon,
           group: "workspace" as const,
         })),
-        {
-          href: "/updates",
-          label: t.updates,
-          icon: Megaphone,
-          group: "general" as const,
-        },
-        {
-          href: "/accounts",
-          label: t.switchAccount,
-          icon: ArrowLeftRight,
-          group: "general" as const,
-        },
       ];
     }
 
@@ -644,11 +659,25 @@ export default function Sidebar({
         href: "/accounts",
         label: t.accounts,
         icon: Users,
+        group: "workspace" as const,
+      },
+      {
+        href: "/activities",
+        label: t.activity,
+        icon: Activity,
+        group: "workspace" as const,
+      },
+      {
+        href: "/accounts/manage",
+        label: t.archive,
+        icon: Archive,
+        group: "workspace" as const,
       },
       {
         href: "/updates",
         label: t.updates,
         icon: Megaphone,
+        group: "general" as const,
       },
     ];
   }, [
@@ -675,7 +704,7 @@ export default function Sidebar({
       },
       {
         id: "general",
-        label: t.generalGroup,
+        label: t.systemGroup,
         items: links.filter(
           (link) => link.group === "general"
         ),
@@ -704,7 +733,7 @@ export default function Sidebar({
     height: number;
   } | null>(null);
 
-  useLayoutEffect(() => {
+  const updateEdgeRect = useCallback(() => {
     const navEl = navRef.current;
     const activeEl = activeHref
       ? linkRefs.current.get(activeHref)
@@ -721,7 +750,29 @@ export default function Sidebar({
     } else {
       setEdgeRect(null);
     }
-  }, [activeHref, isCollapsed, groupedLinks]);
+  }, [activeHref]);
+
+  useLayoutEffect(() => {
+    const frame = window.requestAnimationFrame(updateEdgeRect);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+    };
+  }, [
+    updateEdgeRect,
+    isCollapsed,
+    groupedLinks,
+    isPending,
+    pendingHref,
+  ]);
+
+  useEffect(() => {
+    window.addEventListener("resize", updateEdgeRect);
+
+    return () => {
+      window.removeEventListener("resize", updateEdgeRect);
+    };
+  }, [updateEdgeRect]);
 
   return (
     <>
@@ -739,7 +790,7 @@ export default function Sidebar({
         onMouseLeave={() =>
           setCollapsed(true)
         }
-        className={`faded-scroll fixed left-0 top-0 z-50 flex h-screen flex-col overflow-y-auto border-r border-white/10 bg-surface-1 p-4 pt-[calc(env(safe-area-inset-top)+1rem)] transition-all duration-500 ease-out lg:sticky lg:z-40 lg:pt-4 ${isCollapsed
+        className={`faded-scroll fixed left-0 top-0 z-50 flex h-screen flex-col overflow-y-auto border-r border-white/[0.06] bg-surface-1 p-4 pt-[calc(env(safe-area-inset-top)+1rem)] shadow-[18px_0_42px_rgba(6,10,26,0.2)] transition-all duration-500 ease-out [scrollbar-width:none] after:pointer-events-none after:absolute after:inset-y-0 after:right-0 after:w-5 after:bg-gradient-to-l after:from-bg-base/35 after:to-transparent after:backdrop-blur-[1px] after:content-[''] [&::-webkit-scrollbar]:hidden lg:sticky lg:z-40 lg:pt-4 ${isCollapsed
           ? "w-[88px]"
           : "w-72 lg:w-64"
           } ${open
@@ -902,8 +953,11 @@ export default function Sidebar({
           <div className="mt-4 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
             <div className="border-t border-white/[0.06]" />
             <div className="pt-3 text-center">
-              <p className="text-[9px] uppercase tracking-[0.28em] text-white/[0.18]">
-                Private Trading OS · v0.1.0
+              <p className="text-[9px] font-semibold uppercase tracking-[0.28em] text-white/[0.22]">
+                TRADING OS
+              </p>
+              <p className="mt-1 text-[9px] uppercase tracking-[0.18em] text-muted-faint/60">
+                VOLTIS v0.1.0
               </p>
             </div>
           </div>

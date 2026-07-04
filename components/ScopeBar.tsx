@@ -134,9 +134,10 @@ export default function ScopeBar({
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div className="space-y-3">
+    <div className="relative z-0 rounded-card border-[0.5px] border-flash/[0.1] bg-surface-1/90 p-3 shadow-[0_10px_32px_rgba(0,0,0,0.22)] backdrop-blur-xl sm:p-4">
+      <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-flash/20 to-transparent" />
       <div
-        className={`flex flex-col gap-4 sm:flex-row sm:items-center ${
+        className={`relative flex flex-col gap-3 sm:flex-row sm:items-center ${
           mode === "all" ? "sm:justify-between" : ""
         } ${
           isPending ? "pointer-events-none" : ""
@@ -144,7 +145,7 @@ export default function ScopeBar({
       >
         {/* ── LEFT: Trader pills (shared accounts only) ── */}
         {showTrader && isShared && (
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3 rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2/60 px-3 py-2">
             <p className="shrink-0 text-xs font-semibold uppercase tracking-wider text-muted-faint">
               {TRADER_LABEL[lang]}
             </p>
@@ -199,7 +200,7 @@ export default function ScopeBar({
 
         {/* ── RIGHT: Period pills + navigator ── */}
         {showPeriod && (
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3 rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2/60 px-3 py-2">
           <p className="shrink-0 text-xs font-semibold uppercase tracking-wider text-muted-faint">
             {PERIOD_LABEL[lang]}
           </p>
@@ -250,7 +251,7 @@ export default function ScopeBar({
 
       {/* ── Scope description row ── */}
       {showDescription && (
-        <p className="text-xs text-muted-faint">
+        <p className="relative mt-3 border-t-[0.5px] border-flash/[0.06] pt-3 text-xs text-muted-faint">
           {scopeDescription}
         </p>
       )}

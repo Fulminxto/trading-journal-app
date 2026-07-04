@@ -27,6 +27,9 @@ import {
 } from "@/lib/i18n";
 import { getNotificationTypeLabel } from "@/lib/notifications";
 
+const OVERLAY_FACE =
+  "linear-gradient(160deg, rgba(7,16,24,0.98) 0%, rgba(10,16,32,0.98) 58%, rgba(7,16,24,0.96) 100%)";
+
 type NotificationItem = {
   id: string;
   type: string;
@@ -362,10 +365,10 @@ export default function NotificationBell({ language }: { language?: string }) {
 
       {open && (
         <div
-          className="absolute right-0 z-50 mt-3 w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-card border-[0.5px] border-flash/[0.1] shadow-[0_18px_60px_rgba(0,0,0,0.45)] sm:w-96"
-          style={{ background: CRYSTAL_FACE }}
+          className="absolute right-0 z-50 mt-3 w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-card border-[0.5px] border-flash/[0.14] shadow-[0_22px_70px_rgba(0,0,0,0.58)] backdrop-blur-2xl sm:w-96"
+          style={{ background: OVERLAY_FACE }}
         >
-          <div className="border-b-[0.5px] border-flash/[0.08] p-4">
+          <div className="border-b-[0.5px] border-flash/[0.08] bg-surface-2/55 p-4">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-micro uppercase tracking-label text-muted-faint">

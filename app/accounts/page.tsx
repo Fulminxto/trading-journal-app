@@ -337,10 +337,6 @@ export default async function AccountsPage() {
     currentUser.canCreatePersonalAccounts ||
     currentUser.canCreateSharedAccounts;
 
-  const canAccessAdmin =
-    currentUser.role === "FOUNDER" ||
-    currentUser.role === "ADMIN";
-
   const memberships =
     await prisma.accountMember.findMany({
       where: {
@@ -567,24 +563,6 @@ export default async function AccountsPage() {
                 <Settings size={16} />
                 {t.manageAccounts}
               </Link>
-            )}
-
-            {canAccessAdmin && (
-              <>
-                <Link
-                  href="/admin"
-                  className="rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-3 text-sm text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.04]"
-                >
-                  {t.admin}
-                </Link>
-
-                <Link
-                  href="/admin/accounts"
-                  className="rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-3 text-sm text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.04]"
-                >
-                  {t.platformAccounts}
-                </Link>
-              </>
             )}
           </div>
         </div>

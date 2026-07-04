@@ -20,6 +20,9 @@ import {
   type AppLanguage,
 } from "@/lib/i18n";
 
+const OVERLAY_FACE =
+  "linear-gradient(160deg, rgba(7,16,24,0.98) 0%, rgba(10,16,32,0.98) 58%, rgba(7,16,24,0.96) 100%)";
+
 type TopbarUser = {
   name: string | null;
   username: string;
@@ -210,10 +213,10 @@ export default function Topbar({
 
           {profileOpen && (
             <div
-              className="absolute right-0 mt-3 w-60 overflow-hidden rounded-card border-[0.5px] border-flash/[0.1] shadow-2xl"
-              style={{ background: CRYSTAL_FACE }}
+              className="absolute right-0 mt-3 w-60 overflow-hidden rounded-card border-[0.5px] border-flash/[0.14] shadow-[0_22px_70px_rgba(0,0,0,0.58)] backdrop-blur-2xl"
+              style={{ background: OVERLAY_FACE }}
             >
-              <div className="border-b border-white/10 p-4">
+              <div className="border-b border-white/10 bg-surface-2/55 p-4">
                 <div className="flex items-center gap-3">
                   <span
                     className="flex h-10 w-10 items-center justify-center rounded-full border-[0.5px] border-flash/[0.1] text-sm font-bold text-accent-bright"
