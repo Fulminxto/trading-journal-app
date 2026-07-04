@@ -8,11 +8,6 @@ export type AnalyticsI18nProps = {
 };
 
 type AnalyticsLabels = {
-    psychologyHeatmap: string;
-    emotionalStatePerformance: string;
-    noEmotionalStates: string;
-    emotionalHeatmapDescription: string;
-
     performanceInsights: string;
     voltisIntelligence: string;
     performanceHealth: string;
@@ -35,10 +30,6 @@ type AnalyticsLabels = {
     bestSymbolText: (symbol: string) => string;
     noMarketEdgeText: string;
 
-    setupHeatmap: string;
-    setupQualityPerformance: string;
-    setupHeatmapDescription: string;
-
     performanceHeatmap: string;
     weekdayPerformance: string;
     weekdayHeatmapDescription: string;
@@ -46,12 +37,6 @@ type AnalyticsLabels = {
 
 const labels: Record<AppLanguage, AnalyticsLabels> = {
     it: {
-        psychologyHeatmap: "Psychology Heatmap",
-        emotionalStatePerformance: "Performance per stato emotivo",
-        noEmotionalStates: "Nessuno stato emotivo registrato.",
-        emotionalHeatmapDescription:
-            "VOLTIS collega stato emotivo e performance per individuare pattern psicologici ricorrenti.",
-
         performanceInsights: "Performance insights",
         voltisIntelligence: "VOLTIS Intelligence",
         performanceHealth: "Salute performance",
@@ -82,11 +67,6 @@ const labels: Record<AppLanguage, AnalyticsLabels> = {
         noMarketEdgeText:
             "Non ci sono ancora abbastanza dati per identificare un mercato dominante.",
 
-        setupHeatmap: "Setup Heatmap",
-        setupQualityPerformance: "Performance qualità setup",
-        setupHeatmapDescription:
-            "VOLTIS confronta qualità del setup e risultato economico per capire quali condizioni tecniche generano edge reale.",
-
         performanceHeatmap: "Performance Heatmap",
         weekdayPerformance: "Performance per giorno",
         weekdayHeatmapDescription:
@@ -94,12 +74,6 @@ const labels: Record<AppLanguage, AnalyticsLabels> = {
     },
 
     en: {
-        psychologyHeatmap: "Psychology Heatmap",
-        emotionalStatePerformance: "Emotional State Performance",
-        noEmotionalStates: "No emotional state recorded.",
-        emotionalHeatmapDescription:
-            "VOLTIS connects emotional state and performance to identify recurring psychological patterns.",
-
         performanceInsights: "Performance insights",
         voltisIntelligence: "VOLTIS Intelligence",
         performanceHealth: "Performance Health",
@@ -130,11 +104,6 @@ const labels: Record<AppLanguage, AnalyticsLabels> = {
         noMarketEdgeText:
             "There is not enough data yet to identify a dominant market.",
 
-        setupHeatmap: "Setup Heatmap",
-        setupQualityPerformance: "Setup Quality Performance",
-        setupHeatmapDescription:
-            "VOLTIS compares setup quality and economic result to understand which technical conditions generate real edge.",
-
         performanceHeatmap: "Performance Heatmap",
         weekdayPerformance: "Weekday Performance",
         weekdayHeatmapDescription:
@@ -142,12 +111,6 @@ const labels: Record<AppLanguage, AnalyticsLabels> = {
     },
 
     uk: {
-        psychologyHeatmap: "Теплова карта психології",
-        emotionalStatePerformance: "Performance за емоційним станом",
-        noEmotionalStates: "Емоційні стани ще не зареєстровані.",
-        emotionalHeatmapDescription:
-            "VOLTIS пов’язує емоційний стан і performance, щоб виявляти повторювані психологічні патерни.",
-
         performanceInsights: "Інсайти performance",
         voltisIntelligence: "VOLTIS Intelligence",
         performanceHealth: "Стан performance",
@@ -178,11 +141,6 @@ const labels: Record<AppLanguage, AnalyticsLabels> = {
         noMarketEdgeText:
             "Ще недостатньо даних, щоб визначити домінуючий ринок.",
 
-        setupHeatmap: "Теплова карта сетапів",
-        setupQualityPerformance: "Performance якості сетапів",
-        setupHeatmapDescription:
-            "VOLTIS порівнює якість сетапу та фінансовий результат, щоб зрозуміти, які технічні умови створюють реальний edge.",
-
         performanceHeatmap: "Теплова карта performance",
         weekdayPerformance: "Performance за днями тижня",
         weekdayHeatmapDescription:
@@ -190,12 +148,6 @@ const labels: Record<AppLanguage, AnalyticsLabels> = {
     },
 
     ru: {
-        psychologyHeatmap: "Тепловая карта психологии",
-        emotionalStatePerformance: "Performance по эмоциональному состоянию",
-        noEmotionalStates: "Эмоциональные состояния еще не зарегистрированы.",
-        emotionalHeatmapDescription:
-            "VOLTIS связывает эмоциональное состояние и performance, чтобы выявлять повторяющиеся психологические паттерны.",
-
         performanceInsights: "Инсайты performance",
         voltisIntelligence: "VOLTIS Intelligence",
         performanceHealth: "Состояние performance",
@@ -226,11 +178,6 @@ const labels: Record<AppLanguage, AnalyticsLabels> = {
         noMarketEdgeText:
             "Пока недостаточно данных, чтобы определить доминирующий рынок.",
 
-        setupHeatmap: "Тепловая карта сетапов",
-        setupQualityPerformance: "Performance качества сетапов",
-        setupHeatmapDescription:
-            "VOLTIS сравнивает качество сетапа и финансовый результат, чтобы понять, какие технические условия создают реальный edge.",
-
         performanceHeatmap: "Тепловая карта performance",
         weekdayPerformance: "Performance по дням недели",
         weekdayHeatmapDescription:
@@ -238,12 +185,6 @@ const labels: Record<AppLanguage, AnalyticsLabels> = {
     },
 
     es: {
-        psychologyHeatmap: "Mapa de psicología",
-        emotionalStatePerformance: "Performance por estado emocional",
-        noEmotionalStates: "No hay estados emocionales registrados.",
-        emotionalHeatmapDescription:
-            "VOLTIS conecta estado emocional y performance para identificar patrones psicológicos recurrentes.",
-
         performanceInsights: "Insights de performance",
         voltisIntelligence: "VOLTIS Intelligence",
         performanceHealth: "Salud de performance",
@@ -274,11 +215,6 @@ const labels: Record<AppLanguage, AnalyticsLabels> = {
         noMarketEdgeText:
             "Aún no hay suficientes datos para identificar un mercado dominante.",
 
-        setupHeatmap: "Mapa de setups",
-        setupQualityPerformance: "Performance de calidad de setup",
-        setupHeatmapDescription:
-            "VOLTIS compara calidad del setup y resultado económico para entender qué condiciones técnicas generan edge real.",
-
         performanceHeatmap: "Mapa de performance",
         weekdayPerformance: "Performance por día",
         weekdayHeatmapDescription:
@@ -286,12 +222,6 @@ const labels: Record<AppLanguage, AnalyticsLabels> = {
     },
 
     fr: {
-        psychologyHeatmap: "Heatmap psychologie",
-        emotionalStatePerformance: "Performance par état émotionnel",
-        noEmotionalStates: "Aucun état émotionnel enregistré.",
-        emotionalHeatmapDescription:
-            "VOLTIS relie état émotionnel et performance pour identifier les schémas psychologiques récurrents.",
-
         performanceInsights: "Insights performance",
         voltisIntelligence: "VOLTIS Intelligence",
         performanceHealth: "Santé de performance",
@@ -322,11 +252,6 @@ const labels: Record<AppLanguage, AnalyticsLabels> = {
         noMarketEdgeText:
             "Il n’y a pas encore assez de données pour identifier un marché dominant.",
 
-        setupHeatmap: "Heatmap setups",
-        setupQualityPerformance: "Performance qualité setup",
-        setupHeatmapDescription:
-            "VOLTIS compare la qualité du setup et le résultat économique pour comprendre quelles conditions techniques génèrent un edge réel.",
-
         performanceHeatmap: "Heatmap performance",
         weekdayPerformance: "Performance par jour",
         weekdayHeatmapDescription:
@@ -334,12 +259,6 @@ const labels: Record<AppLanguage, AnalyticsLabels> = {
     },
 
     de: {
-        psychologyHeatmap: "Psychologie-Heatmap",
-        emotionalStatePerformance: "Performance nach emotionalem Zustand",
-        noEmotionalStates: "Noch kein emotionaler Zustand erfasst.",
-        emotionalHeatmapDescription:
-            "VOLTIS verbindet emotionalen Zustand und Performance, um wiederkehrende psychologische Muster zu erkennen.",
-
         performanceInsights: "Performance Insights",
         voltisIntelligence: "VOLTIS Intelligence",
         performanceHealth: "Performance Health",
@@ -369,11 +288,6 @@ const labels: Record<AppLanguage, AnalyticsLabels> = {
             `${symbol} scheint das Instrument mit dem stärksten operativen Edge zu sein.`,
         noMarketEdgeText:
             "Es gibt noch nicht genug Daten, um einen dominanten Markt zu identifizieren.",
-
-        setupHeatmap: "Setup-Heatmap",
-        setupQualityPerformance: "Setup-Qualitätsperformance",
-        setupHeatmapDescription:
-            "VOLTIS vergleicht Setup-Qualität und finanzielles Ergebnis, um zu verstehen, welche technischen Bedingungen echten Edge erzeugen.",
 
         performanceHeatmap: "Performance-Heatmap",
         weekdayPerformance: "Performance nach Wochentag",

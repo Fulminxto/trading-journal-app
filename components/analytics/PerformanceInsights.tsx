@@ -1,3 +1,4 @@
+import Card from "@/components/ui/Card";
 import AnalyticsSection from "./AnalyticsSection";
 import {
   getAnalyticsLabels,
@@ -38,7 +39,7 @@ export default function PerformanceInsights({
       label: winRate >= 50 ? t.stable : t.review,
       tone:
         winRate >= 50
-          ? "text-cyan-400"
+          ? "text-accent-bright"
           : "text-yellow-400",
       text:
         winRate >= 50
@@ -50,7 +51,7 @@ export default function PerformanceInsights({
       label: averageRR >= 1.5 ? t.healthy : t.weak,
       tone:
         averageRR >= 1.5
-          ? "text-violet-400"
+          ? "text-accent"
           : "text-yellow-400",
       text:
         averageRR >= 1.5
@@ -62,7 +63,7 @@ export default function PerformanceInsights({
       label: bestSymbol || t.pending,
       tone: bestSymbol
         ? "text-green-400"
-        : "text-gray-400",
+        : "text-muted-faint",
       text: bestSymbol
         ? t.bestSymbolText(bestSymbol)
         : t.noMarketEdgeText,
@@ -70,36 +71,35 @@ export default function PerformanceInsights({
   ];
 
   return (
-    <div className="xl:col-span-2">
-      <AnalyticsSection
-        subtitle={t.performanceInsights}
-        title={t.voltisIntelligence}
-      >
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {insights.map((insight) => (
-            <div
-              key={insight.title}
-              className="group rounded-3xl border border-white/10 bg-black/20 p-5 transition-all duration-300 hover:border-accent-bright/20 hover:bg-white/[0.04]"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <p className="font-bold text-white">
-                  {insight.title}
-                </p>
-
-                <span
-                  className={`rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-bold ${insight.tone}`}
-                >
-                  {insight.label}
-                </span>
-              </div>
-
-              <p className="mt-4 text-sm leading-relaxed text-gray-400">
-                {insight.text}
+    <AnalyticsSection
+      subtitle={t.performanceInsights}
+      title={t.voltisIntelligence}
+    >
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {insights.map((insight) => (
+          <Card
+            key={insight.title}
+            variant="inner"
+            className="p-5"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <p className="font-bold text-white">
+                {insight.title}
               </p>
+
+              <span
+                className={`rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-bold ${insight.tone}`}
+              >
+                {insight.label}
+              </span>
             </div>
-          ))}
-        </div>
-      </AnalyticsSection>
-    </div>
+
+            <p className="mt-4 text-sm leading-relaxed text-muted">
+              {insight.text}
+            </p>
+          </Card>
+        ))}
+      </div>
+    </AnalyticsSection>
   );
 }

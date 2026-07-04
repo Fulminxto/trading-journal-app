@@ -2,29 +2,18 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
+import Card from "@/components/ui/Card";
+import SignatureEdge from "@/components/ui/SignatureEdge";
 import AnalyticsStatCard from "@/components/analytics/AnalyticsStatCard";
-import PerformanceIntelligence from "@/components/analytics/PerformanceIntelligence";
+import RiskConcentration from "@/components/analytics/RiskConcentration";
+import QualityBreakdownRow from "@/components/analytics/QualityBreakdown";
+import PsychologyTrendChart from "@/components/analytics/PsychologyTrendChart";
 import SymbolPerformance from "@/components/analytics/SymbolPerformance";
 import SessionPerformance from "@/components/analytics/SessionPerformance";
 import PerformanceInsights from "@/components/analytics/PerformanceInsights";
-import PsychologyAnalytics from "@/components/analytics/PsychologyAnalytics";
-import AnalyticsHero from "@/components/analytics/AnalyticsHero";
 import WeekdayHeatmap from "@/components/analytics/WeekdayHeatmap";
-import EmotionalStateHeatmap from "@/components/analytics/EmotionalStateHeatmap";
-import ConfidencePerformanceHeatmap from "@/components/analytics/ConfidencePerformanceHeatmap";
-import ExecutionQualityHeatmap from "@/components/analytics/ExecutionQualityHeatmap";
-import SetupQualityHeatmap from "@/components/analytics/SetupQualityHeatmap";
-import BehavioralRiskHeatmap from "@/components/analytics/BehavioralRiskHeatmap";
-import RiskConcentrationMatrix from "@/components/analytics/RiskConcentrationMatrix";
-import ExecutionTrendChart from "@/components/analytics/ExecutionTrendChart";
-import ConfidenceEvolutionChart from "@/components/analytics/ConfidenceEvolutionChart";
-import EmotionalTimelineChart from "@/components/analytics/EmotionalTimelineChart";
-import DisciplineEvolutionChart from "@/components/analytics/DisciplineEvolutionChart";
-import ConsistencyCurveChart from "@/components/analytics/ConsistencyCurveChart";
-import PsychologicalStabilityCurve from "@/components/analytics/PsychologicalStabilityCurve";
 
 import {
-  BarChart3,
   TrendingUp,
   TrendingDown,
   Target,
@@ -68,36 +57,25 @@ function getBestWinStreak(
 }
 
 type AnalyticsLabels = {
-  grossProfit: string;
-  grossLoss: string;
   profitFactor: string;
   bestWinStreak: string;
+  averageWin: string;
+  averageLoss: string;
   advancedStatsEyebrow: string;
   analyticsTitle: string;
-  totalTrades: string;
-  winRate: string;
-  averageRR: string;
-  totalPnl: string;
   tradeDirectionEyebrow: string;
   longVsShort: string;
   longTrades: string;
   shortTrades: string;
   winrate: string;
-  tradeResultsEyebrow: string;
-  bestResults: string;
-  bestTrade: string;
-  worstTrade: string;
-  outcomeBreakdownEyebrow: string;
-  outcomeBreakdownTitle: string;
-  wins: string;
-  losses: string;
-  breakEven: string;
   mistakesEyebrow: string;
   recurringMistakes: string;
   noMistakes: string;
   repeatedTimes: (count: number) => string;
-  setupQualityEyebrow: string;
-  setupPerformance: string;
+  qualityBreakdownLabel: string;
+  psychologySubtitle: string;
+  psychologyTitle: string;
+  trendLabel: string;
   trades: string;
   teamAnalyticsEyebrow: string;
   traderLeaderboard: string;
@@ -108,13 +86,12 @@ type AnalyticsLabels = {
   worstMonth: string;
   greenMonths: string;
   redMonths: string;
-  aiInsightsEyebrow: string;
-  performanceInsights: string;
-  noInsights: string;
   tradingPsychologyEyebrow: string;
   emotionalPerformance: string;
   pnl: string;
   wr: string;
+  wins: string;
+  totalPnl: string;
   lowConfidence: string;
   mediumConfidence: string;
   highConfidence: string;
@@ -130,12 +107,7 @@ type AnalyticsLabels = {
   confidence: string;
   execution: string;
   setupQuality: string;
-  bestEmotionalState: (state: string, rate: string) => string;
-  mostExpensiveMistake: (mistake: string) => string;
-  longBetter: string;
-  shortBetter: string;
-  solidExecution: string;
-  focusRisk: string;
+  noEmotionalStates: string;
 };
 
 const analyticsLabels: Record<
@@ -143,37 +115,26 @@ const analyticsLabels: Record<
   AnalyticsLabels
 > = {
   it: {
-    grossProfit: "Profitto lordo",
-    grossLoss: "Perdita lorda",
     profitFactor: "Profit Factor",
     bestWinStreak: "Migliore serie di win",
+    averageWin: "Win media",
+    averageLoss: "Loss media",
     advancedStatsEyebrow: "Statistiche avanzate",
     analyticsTitle: "Analytics",
-    totalTrades: "Trade totali",
-    winRate: "Win Rate",
-    averageRR: "RR medio",
-    totalPnl: "PnL totale",
     tradeDirectionEyebrow: "Direzione trade",
     longVsShort: "Long vs Short",
     longTrades: "Trade Long",
     shortTrades: "Trade Short",
     winrate: "winrate",
-    tradeResultsEyebrow: "Risultati trade",
-    bestResults: "Migliori risultati",
-    bestTrade: "Miglior trade",
-    worstTrade: "Peggior trade",
-    outcomeBreakdownEyebrow: "Distribuzione esiti",
-    outcomeBreakdownTitle: "Breakdown risultati",
-    wins: "Win",
-    losses: "Loss",
-    breakEven: "Break Even",
     mistakesEyebrow: "Analisi errori",
     recurringMistakes: "Errori ricorrenti",
     noMistakes: "Nessun errore registrato nei trade.",
     repeatedTimes: (count) =>
       `Ripetuto ${count} ${count === 1 ? "volta" : "volte"}`,
-    setupQualityEyebrow: "Qualità setup",
-    setupPerformance: "Performance setup",
+    qualityBreakdownLabel: "Qualità a confronto",
+    psychologySubtitle: "Intelligence psicologica",
+    psychologyTitle: "Psicologia trader",
+    trendLabel: "Execution & Confidence nel tempo",
     trades: "trade",
     teamAnalyticsEyebrow: "Analytics team",
     traderLeaderboard: "Classifica trader",
@@ -184,13 +145,12 @@ const analyticsLabels: Record<
     worstMonth: "Mese peggiore",
     greenMonths: "Mesi positivi",
     redMonths: "Mesi negativi",
-    aiInsightsEyebrow: "AI Insights",
-    performanceInsights: "Insight performance",
-    noInsights: "Non ci sono ancora abbastanza dati.",
     tradingPsychologyEyebrow: "Psicologia trading",
     emotionalPerformance: "Performance emotiva",
     pnl: "PnL",
     wr: "WR",
+    wins: "Win",
+    totalPnl: "PnL totale",
     lowConfidence: "Bassa fiducia",
     mediumConfidence: "Fiducia media",
     highConfidence: "Alta fiducia",
@@ -203,55 +163,33 @@ const analyticsLabels: Record<
     weakSetups: "Setup deboli",
     emotionalTrades: "Trade emotivi",
     psychology: "Psicologia",
-    confidence: "Fiducia",
+    confidence: "Confidence",
     execution: "Execution",
     setupQuality: "Qualità setup",
-    bestEmotionalState: (state, rate) =>
-      `Migliore stato emotivo: ${state} (${rate}% WR)`,
-    mostExpensiveMistake: (mistake) =>
-      `Errore più costoso: ${mistake}`,
-    longBetter:
-      "I trade Long stanno performando meglio dei trade Short.",
-    shortBetter:
-      "I trade Short stanno performando meglio dei trade Long.",
-    solidExecution:
-      "La tua esecuzione complessiva è attualmente molto solida.",
-    focusRisk:
-      "Concentrati sulla gestione del rischio e sulla selezione dei trade.",
+    noEmotionalStates: "Nessuno stato emotivo registrato.",
   },
 
   en: {
-    grossProfit: "Gross Profit",
-    grossLoss: "Gross Loss",
     profitFactor: "Profit Factor",
     bestWinStreak: "Best Win Streak",
+    averageWin: "Average Win",
+    averageLoss: "Average Loss",
     advancedStatsEyebrow: "Advanced statistics",
     analyticsTitle: "Analytics",
-    totalTrades: "Total Trades",
-    winRate: "Win Rate",
-    averageRR: "Average RR",
-    totalPnl: "Total PnL",
     tradeDirectionEyebrow: "Trade Direction",
     longVsShort: "Long vs Short",
     longTrades: "Long Trades",
     shortTrades: "Short Trades",
     winrate: "winrate",
-    tradeResultsEyebrow: "Trade Results",
-    bestResults: "Best results",
-    bestTrade: "Best Trade",
-    worstTrade: "Worst Trade",
-    outcomeBreakdownEyebrow: "Outcome Breakdown",
-    outcomeBreakdownTitle: "Results breakdown",
-    wins: "Wins",
-    losses: "Losses",
-    breakEven: "Break Even",
     mistakesEyebrow: "Mistakes Analytics",
     recurringMistakes: "Recurring mistakes",
     noMistakes: "No mistakes recorded in trades.",
     repeatedTimes: (count) =>
       `Repeated ${count} ${count === 1 ? "time" : "times"}`,
-    setupQualityEyebrow: "Setup Quality",
-    setupPerformance: "Setup Performance",
+    qualityBreakdownLabel: "Quality Breakdown",
+    psychologySubtitle: "Psychology intelligence",
+    psychologyTitle: "Trader Psychology",
+    trendLabel: "Execution & Confidence Over Time",
     trades: "trades",
     teamAnalyticsEyebrow: "Team Analytics",
     traderLeaderboard: "Trader Leaderboard",
@@ -262,13 +200,12 @@ const analyticsLabels: Record<
     worstMonth: "Worst Month",
     greenMonths: "Green Months",
     redMonths: "Red Months",
-    aiInsightsEyebrow: "AI Insights",
-    performanceInsights: "Performance Insights",
-    noInsights: "There is not enough data yet.",
     tradingPsychologyEyebrow: "Trading Psychology",
     emotionalPerformance: "Emotional Performance",
     pnl: "PnL",
     wr: "WR",
+    wins: "Wins",
+    totalPnl: "Total PnL",
     lowConfidence: "Low Confidence",
     mediumConfidence: "Medium Confidence",
     highConfidence: "High Confidence",
@@ -284,52 +221,30 @@ const analyticsLabels: Record<
     confidence: "Confidence",
     execution: "Execution",
     setupQuality: "Setup Quality",
-    bestEmotionalState: (state, rate) =>
-      `Best emotional state: ${state} (${rate}% WR)`,
-    mostExpensiveMistake: (mistake) =>
-      `Most expensive mistake: ${mistake}`,
-    longBetter:
-      "Long trades are currently performing better than Short trades.",
-    shortBetter:
-      "Short trades are currently performing better than Long trades.",
-    solidExecution:
-      "Your overall execution quality is currently very solid.",
-    focusRisk:
-      "Focus on risk management and trade selection.",
+    noEmotionalStates: "No emotional state recorded.",
   },
 
   uk: {
-    grossProfit: "Валовий прибуток",
-    grossLoss: "Валовий збиток",
     profitFactor: "Profit Factor",
-    bestWinStreak: "Найкраща серія перемог",
+    bestWinStreak: "Найкраща серія win",
+    averageWin: "Середній виграш",
+    averageLoss: "Середній збиток",
     advancedStatsEyebrow: "Розширена статистика",
     analyticsTitle: "Аналітика",
-    totalTrades: "Усього угод",
-    winRate: "Win Rate",
-    averageRR: "Середній RR",
-    totalPnl: "Загальний PnL",
     tradeDirectionEyebrow: "Напрямок угод",
     longVsShort: "Long vs Short",
     longTrades: "Long угоди",
     shortTrades: "Short угоди",
     winrate: "winrate",
-    tradeResultsEyebrow: "Результати угод",
-    bestResults: "Найкращі результати",
-    bestTrade: "Найкраща угода",
-    worstTrade: "Найгірша угода",
-    outcomeBreakdownEyebrow: "Розподіл результатів",
-    outcomeBreakdownTitle: "Breakdown результатів",
-    wins: "Перемоги",
-    losses: "Збитки",
-    breakEven: "Break Even",
     mistakesEyebrow: "Аналітика помилок",
     recurringMistakes: "Повторювані помилки",
     noMistakes: "У трейдах ще не зафіксовано помилок.",
     repeatedTimes: (count) =>
       `Повторено ${count} ${count === 1 ? "раз" : "рази"}`,
-    setupQualityEyebrow: "Якість сетапу",
-    setupPerformance: "Performance сетапів",
+    qualityBreakdownLabel: "Порівняння якості",
+    psychologySubtitle: "Психологічна аналітика",
+    psychologyTitle: "Психологія трейдера",
+    trendLabel: "Execution і Confidence у часі",
     trades: "угод",
     teamAnalyticsEyebrow: "Аналітика команди",
     traderLeaderboard: "Рейтинг трейдерів",
@@ -340,13 +255,12 @@ const analyticsLabels: Record<
     worstMonth: "Найгірший місяць",
     greenMonths: "Позитивні місяці",
     redMonths: "Негативні місяці",
-    aiInsightsEyebrow: "AI Insights",
-    performanceInsights: "Інсайти performance",
-    noInsights: "Поки недостатньо даних.",
     tradingPsychologyEyebrow: "Психологія трейдингу",
     emotionalPerformance: "Емоційна performance",
     pnl: "PnL",
     wr: "WR",
+    wins: "Win",
+    totalPnl: "Загальний PnL",
     lowConfidence: "Низька впевненість",
     mediumConfidence: "Середня впевненість",
     highConfidence: "Висока впевненість",
@@ -362,52 +276,30 @@ const analyticsLabels: Record<
     confidence: "Впевненість",
     execution: "Виконання",
     setupQuality: "Якість сетапу",
-    bestEmotionalState: (state, rate) =>
-      `Найкращий емоційний стан: ${state} (${rate}% WR)`,
-    mostExpensiveMistake: (mistake) =>
-      `Найдорожча помилка: ${mistake}`,
-    longBetter:
-      "Long угоди зараз працюють краще, ніж Short угоди.",
-    shortBetter:
-      "Short угоди зараз працюють краще, ніж Long угоди.",
-    solidExecution:
-      "Твоя загальна якість виконання зараз дуже сильна.",
-    focusRisk:
-      "Зосередься на ризик-менеджменті та відборі угод.",
+    noEmotionalStates: "Емоційні стани ще не зареєстровані.",
   },
 
   ru: {
-    grossProfit: "Валовая прибыль",
-    grossLoss: "Валовый убыток",
     profitFactor: "Profit Factor",
     bestWinStreak: "Лучшая серия побед",
+    averageWin: "Средний выигрыш",
+    averageLoss: "Средний убыток",
     advancedStatsEyebrow: "Расширенная статистика",
     analyticsTitle: "Аналитика",
-    totalTrades: "Всего сделок",
-    winRate: "Win Rate",
-    averageRR: "Средний RR",
-    totalPnl: "Общий PnL",
     tradeDirectionEyebrow: "Направление сделок",
     longVsShort: "Long vs Short",
     longTrades: "Long сделки",
     shortTrades: "Short сделки",
     winrate: "winrate",
-    tradeResultsEyebrow: "Результаты сделок",
-    bestResults: "Лучшие результаты",
-    bestTrade: "Лучшая сделка",
-    worstTrade: "Худшая сделка",
-    outcomeBreakdownEyebrow: "Разбор результатов",
-    outcomeBreakdownTitle: "Breakdown результатов",
-    wins: "Победы",
-    losses: "Убытки",
-    breakEven: "Break Even",
     mistakesEyebrow: "Аналитика ошибок",
     recurringMistakes: "Повторяющиеся ошибки",
     noMistakes: "В сделках пока нет зарегистрированных ошибок.",
     repeatedTimes: (count) =>
       `Повторено ${count} ${count === 1 ? "раз" : "раза"}`,
-    setupQualityEyebrow: "Качество сетапа",
-    setupPerformance: "Performance сетапов",
+    qualityBreakdownLabel: "Сравнение качества",
+    psychologySubtitle: "Психологическая аналитика",
+    psychologyTitle: "Психология трейдера",
+    trendLabel: "Execution и Confidence во времени",
     trades: "сделок",
     teamAnalyticsEyebrow: "Аналитика команды",
     traderLeaderboard: "Рейтинг трейдеров",
@@ -418,13 +310,12 @@ const analyticsLabels: Record<
     worstMonth: "Худший месяц",
     greenMonths: "Положительные месяцы",
     redMonths: "Отрицательные месяцы",
-    aiInsightsEyebrow: "AI Insights",
-    performanceInsights: "Инсайты performance",
-    noInsights: "Пока недостаточно данных.",
     tradingPsychologyEyebrow: "Психология трейдинга",
     emotionalPerformance: "Эмоциональная performance",
     pnl: "PnL",
     wr: "WR",
+    wins: "Win",
+    totalPnl: "Общий PnL",
     lowConfidence: "Низкая уверенность",
     mediumConfidence: "Средняя уверенность",
     highConfidence: "Высокая уверенность",
@@ -440,52 +331,30 @@ const analyticsLabels: Record<
     confidence: "Уверенность",
     execution: "Исполнение",
     setupQuality: "Качество сетапа",
-    bestEmotionalState: (state, rate) =>
-      `Лучшее эмоциональное состояние: ${state} (${rate}% WR)`,
-    mostExpensiveMistake: (mistake) =>
-      `Самая дорогая ошибка: ${mistake}`,
-    longBetter:
-      "Long сделки сейчас показывают результат лучше, чем Short сделки.",
-    shortBetter:
-      "Short сделки сейчас показывают результат лучше, чем Long сделки.",
-    solidExecution:
-      "Общее качество твоего исполнения сейчас очень сильное.",
-    focusRisk:
-      "Сфокусируйся на риск-менеджменте и отборе сделок.",
+    noEmotionalStates: "Эмоциональные состояния еще не зарегистрированы.",
   },
 
   es: {
-    grossProfit: "Beneficio bruto",
-    grossLoss: "Pérdida bruta",
     profitFactor: "Profit Factor",
     bestWinStreak: "Mejor racha ganadora",
+    averageWin: "Ganancia media",
+    averageLoss: "Pérdida media",
     advancedStatsEyebrow: "Estadísticas avanzadas",
     analyticsTitle: "Analítica",
-    totalTrades: "Trades totales",
-    winRate: "Win Rate",
-    averageRR: "RR medio",
-    totalPnl: "PnL total",
     tradeDirectionEyebrow: "Dirección del trade",
     longVsShort: "Long vs Short",
     longTrades: "Trades Long",
     shortTrades: "Trades Short",
     winrate: "winrate",
-    tradeResultsEyebrow: "Resultados de trades",
-    bestResults: "Mejores resultados",
-    bestTrade: "Mejor trade",
-    worstTrade: "Peor trade",
-    outcomeBreakdownEyebrow: "Desglose de resultados",
-    outcomeBreakdownTitle: "Breakdown de resultados",
-    wins: "Ganadas",
-    losses: "Perdidas",
-    breakEven: "Break Even",
     mistakesEyebrow: "Analítica de errores",
     recurringMistakes: "Errores recurrentes",
     noMistakes: "No hay errores registrados en los trades.",
     repeatedTimes: (count) =>
       `Repetido ${count} ${count === 1 ? "vez" : "veces"}`,
-    setupQualityEyebrow: "Calidad del setup",
-    setupPerformance: "Performance del setup",
+    qualityBreakdownLabel: "Comparativa de calidad",
+    psychologySubtitle: "Intelligence psicológica",
+    psychologyTitle: "Psicología del trader",
+    trendLabel: "Execution y Confidence en el tiempo",
     trades: "trades",
     teamAnalyticsEyebrow: "Analítica del equipo",
     traderLeaderboard: "Ranking de traders",
@@ -496,13 +365,12 @@ const analyticsLabels: Record<
     worstMonth: "Peor mes",
     greenMonths: "Meses positivos",
     redMonths: "Meses negativos",
-    aiInsightsEyebrow: "AI Insights",
-    performanceInsights: "Insights de performance",
-    noInsights: "Todavía no hay suficientes datos.",
     tradingPsychologyEyebrow: "Psicología del trading",
     emotionalPerformance: "Performance emocional",
     pnl: "PnL",
     wr: "WR",
+    wins: "Ganadas",
+    totalPnl: "PnL total",
     lowConfidence: "Baja confianza",
     mediumConfidence: "Confianza media",
     highConfidence: "Alta confianza",
@@ -518,52 +386,30 @@ const analyticsLabels: Record<
     confidence: "Confianza",
     execution: "Ejecución",
     setupQuality: "Calidad del setup",
-    bestEmotionalState: (state, rate) =>
-      `Mejor estado emocional: ${state} (${rate}% WR)`,
-    mostExpensiveMistake: (mistake) =>
-      `Error más costoso: ${mistake}`,
-    longBetter:
-      "Los trades Long actualmente funcionan mejor que los Short.",
-    shortBetter:
-      "Los trades Short actualmente funcionan mejor que los Long.",
-    solidExecution:
-      "Tu ejecución general actualmente es muy sólida.",
-    focusRisk:
-      "Concéntrate en la gestión del riesgo y la selección de trades.",
+    noEmotionalStates: "No hay estados emocionales registrados.",
   },
 
   fr: {
-    grossProfit: "Profit brut",
-    grossLoss: "Perte brute",
     profitFactor: "Profit Factor",
     bestWinStreak: "Meilleure série de gains",
+    averageWin: "Gain moyen",
+    averageLoss: "Perte moyenne",
     advancedStatsEyebrow: "Statistiques avancées",
     analyticsTitle: "Analytics",
-    totalTrades: "Trades totaux",
-    winRate: "Win Rate",
-    averageRR: "RR moyen",
-    totalPnl: "PnL total",
     tradeDirectionEyebrow: "Direction des trades",
     longVsShort: "Long vs Short",
     longTrades: "Trades Long",
     shortTrades: "Trades Short",
     winrate: "winrate",
-    tradeResultsEyebrow: "Résultats des trades",
-    bestResults: "Meilleurs résultats",
-    bestTrade: "Meilleur trade",
-    worstTrade: "Pire trade",
-    outcomeBreakdownEyebrow: "Répartition des résultats",
-    outcomeBreakdownTitle: "Breakdown des résultats",
-    wins: "Gagnants",
-    losses: "Perdants",
-    breakEven: "Break Even",
     mistakesEyebrow: "Analyse des erreurs",
     recurringMistakes: "Erreurs récurrentes",
     noMistakes: "Aucune erreur enregistrée dans les trades.",
     repeatedTimes: (count) =>
       `Répété ${count} ${count === 1 ? "fois" : "fois"}`,
-    setupQualityEyebrow: "Qualité du setup",
-    setupPerformance: "Performance des setups",
+    qualityBreakdownLabel: "Comparatif de qualité",
+    psychologySubtitle: "Intelligence psychologique",
+    psychologyTitle: "Psychologie du trader",
+    trendLabel: "Execution & Confidence dans le temps",
     trades: "trades",
     teamAnalyticsEyebrow: "Analytics équipe",
     traderLeaderboard: "Classement des traders",
@@ -574,13 +420,12 @@ const analyticsLabels: Record<
     worstMonth: "Pire mois",
     greenMonths: "Mois positifs",
     redMonths: "Mois négatifs",
-    aiInsightsEyebrow: "AI Insights",
-    performanceInsights: "Insights performance",
-    noInsights: "Il n’y a pas encore assez de données.",
     tradingPsychologyEyebrow: "Psychologie du trading",
     emotionalPerformance: "Performance émotionnelle",
     pnl: "PnL",
     wr: "WR",
+    wins: "Gagnants",
+    totalPnl: "PnL total",
     lowConfidence: "Faible confiance",
     mediumConfidence: "Confiance moyenne",
     highConfidence: "Haute confiance",
@@ -596,52 +441,30 @@ const analyticsLabels: Record<
     confidence: "Confiance",
     execution: "Exécution",
     setupQuality: "Qualité du setup",
-    bestEmotionalState: (state, rate) =>
-      `Meilleur état émotionnel : ${state} (${rate}% WR)`,
-    mostExpensiveMistake: (mistake) =>
-      `Erreur la plus coûteuse : ${mistake}`,
-    longBetter:
-      "Les trades Long performent actuellement mieux que les trades Short.",
-    shortBetter:
-      "Les trades Short performent actuellement mieux que les trades Long.",
-    solidExecution:
-      "Ton exécution globale est actuellement très solide.",
-    focusRisk:
-      "Concentre-toi sur la gestion du risque et la sélection des trades.",
+    noEmotionalStates: "Aucun état émotionnel enregistré.",
   },
 
   de: {
-    grossProfit: "Bruttogewinn",
-    grossLoss: "Bruttoverlust",
     profitFactor: "Profit Factor",
     bestWinStreak: "Beste Gewinnserie",
+    averageWin: "Durchschnittlicher Gewinn",
+    averageLoss: "Durchschnittlicher Verlust",
     advancedStatsEyebrow: "Erweiterte Statistiken",
     analyticsTitle: "Analytics",
-    totalTrades: "Trades gesamt",
-    winRate: "Win Rate",
-    averageRR: "Durchschnittlicher RR",
-    totalPnl: "Gesamt-PnL",
     tradeDirectionEyebrow: "Trade-Richtung",
     longVsShort: "Long vs Short",
     longTrades: "Long Trades",
     shortTrades: "Short Trades",
     winrate: "Winrate",
-    tradeResultsEyebrow: "Trade-Ergebnisse",
-    bestResults: "Beste Ergebnisse",
-    bestTrade: "Bester Trade",
-    worstTrade: "Schlechtester Trade",
-    outcomeBreakdownEyebrow: "Ergebnisübersicht",
-    outcomeBreakdownTitle: "Ergebnis-Breakdown",
-    wins: "Gewinne",
-    losses: "Verluste",
-    breakEven: "Break Even",
     mistakesEyebrow: "Fehleranalyse",
     recurringMistakes: "Wiederkehrende Fehler",
     noMistakes: "Keine Fehler in den Trades erfasst.",
     repeatedTimes: (count) =>
       `${count} ${count === 1 ? "Mal" : "Mal"} wiederholt`,
-    setupQualityEyebrow: "Setup-Qualität",
-    setupPerformance: "Setup-Performance",
+    qualityBreakdownLabel: "Qualitätsvergleich",
+    psychologySubtitle: "Psychologie Intelligence",
+    psychologyTitle: "Trader-Psychologie",
+    trendLabel: "Execution & Confidence im Zeitverlauf",
     trades: "Trades",
     teamAnalyticsEyebrow: "Team Analytics",
     traderLeaderboard: "Trader-Rangliste",
@@ -652,13 +475,12 @@ const analyticsLabels: Record<
     worstMonth: "Schlechtester Monat",
     greenMonths: "Positive Monate",
     redMonths: "Negative Monate",
-    aiInsightsEyebrow: "AI Insights",
-    performanceInsights: "Performance Insights",
-    noInsights: "Es gibt noch nicht genug Daten.",
     tradingPsychologyEyebrow: "Trading-Psychologie",
     emotionalPerformance: "Emotionale Performance",
     pnl: "PnL",
     wr: "WR",
+    wins: "Gewinne",
+    totalPnl: "Gesamt-PnL",
     lowConfidence: "Geringes Vertrauen",
     mediumConfidence: "Mittleres Vertrauen",
     highConfidence: "Hohes Vertrauen",
@@ -674,21 +496,17 @@ const analyticsLabels: Record<
     confidence: "Vertrauen",
     execution: "Ausführung",
     setupQuality: "Setup-Qualität",
-    bestEmotionalState: (state, rate) =>
-      `Bester emotionaler Zustand: ${state} (${rate}% WR)`,
-    mostExpensiveMistake: (mistake) =>
-      `Teuerster Fehler: ${mistake}`,
-    longBetter:
-      "Long Trades performen aktuell besser als Short Trades.",
-    shortBetter:
-      "Short Trades performen aktuell besser als Long Trades.",
-    solidExecution:
-      "Deine gesamte Ausführung ist aktuell sehr solide.",
-    focusRisk:
-      "Konzentriere dich auf Risikomanagement und Trade-Auswahl.",
+    noEmotionalStates: "Noch kein emotionaler Zustand erfasst.",
   },
 };
 
+function SubCaption({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="mb-4 text-xs font-black uppercase tracking-[0.15em] text-muted-faint">
+      {children}
+    </p>
+  );
+}
 
 export default async function AnalyticsPage({
   params,
@@ -761,7 +579,7 @@ export default async function AnalyticsPage({
 
   const formatCurrency = (
     value: number,
-    currency: string
+    currency: string = account.currency
   ) =>
     formatCurrencyByLanguage(
       value,
@@ -813,8 +631,6 @@ export default async function AnalyticsPage({
     : trades;
 
   const periodSuffix = getPeriodSuffix(period, ref, language);
-
-  const totalTrades = periodTrades.length;
 
   const wins = periodTrades.filter(
     (trade) => trade.outcome === "win"
@@ -882,26 +698,6 @@ export default async function AnalyticsPage({
           (trade.riskReward || 0),
         0
       ) / periodTrades.length
-      : 0;
-
-  const bestTrade =
-    periodTrades.length > 0
-      ? Math.max(
-        ...periodTrades.map(
-          (trade) =>
-            trade.resultUsd || 0
-        )
-      )
-      : 0;
-
-  const worstTrade =
-    periodTrades.length > 0
-      ? Math.min(
-        ...periodTrades.map(
-          (trade) =>
-            trade.resultUsd || 0
-        )
-      )
       : 0;
 
   const symbolStats: Record<
@@ -1027,8 +823,8 @@ export default async function AnalyticsPage({
   }
 
   const winRate =
-    totalTrades > 0
-      ? (wins.length / totalTrades) * 100
+    periodTrades.length > 0
+      ? (wins.length / periodTrades.length) * 100
       : 0;
 
   const longWinRate =
@@ -1174,76 +970,6 @@ export default async function AnalyticsPage({
       trade.resultUsd || 0;
   }
 
-  const insights: string[] = [];
-
-  const bestEmotion =
-    Object.entries(emotionalStats).sort(
-      (a, b) => {
-        const aRate =
-          a[1].trades > 0
-            ? a[1].wins /
-            a[1].trades
-            : 0;
-
-        const bRate =
-          b[1].trades > 0
-            ? b[1].wins /
-            b[1].trades
-            : 0;
-
-        return bRate - aRate;
-      }
-    )[0];
-
-  if (bestEmotion) {
-    const rate =
-      bestEmotion[1].trades > 0
-        ? (
-          (bestEmotion[1].wins /
-            bestEmotion[1].trades) *
-          100
-        ).toFixed(0)
-        : "0";
-
-    insights.push(
-      t.bestEmotionalState(bestEmotion[0], rate)
-    );
-  }
-
-  const worstMistake =
-    Object.entries(mistakesStats).sort(
-      (a, b) =>
-        a[1].pnl - b[1].pnl
-    )[0];
-
-  if (worstMistake) {
-    insights.push(
-      t.mostExpensiveMistake(worstMistake[0])
-    );
-  }
-
-  if (longWinRate > shortWinRate) {
-    insights.push(
-      t.longBetter
-    );
-  } else if (
-    shortWinRate > longWinRate
-  ) {
-    insights.push(
-      t.shortBetter
-    );
-  }
-
-  if (winRate >= 60) {
-    insights.push(
-      t.solidExecution
-    );
-  } else if (winRate <= 40) {
-    insights.push(
-      t.focusRisk
-    );
-  }
-
   const traderStats: Record<
     string,
     {
@@ -1305,47 +1031,39 @@ export default async function AnalyticsPage({
       (a, b) => a[1].pnl - b[1].pnl
     )[0];
 
-  const cards = [
-    {
-      label: t.totalTrades + periodSuffix,
-      value: totalTrades,
-      tone: "text-white",
-      icon: BarChart3,
-    },
+  // ── Advanced stats (Dashboard-exclusive economics) ───────────────────────
 
+  const advancedStats = [
     {
-      label: t.winRate + periodSuffix,
-      value: `${winRate.toFixed(2)}%`,
+      label: t.profitFactor + periodSuffix,
+      value: profitFactor.toFixed(2),
       tone:
-        winRate >= 50
+        profitFactor >= 1
           ? "text-green-400"
           : "text-red-400",
-      icon: Target,
-    },
-
-    {
-      label: t.averageRR + periodSuffix,
-      value: averageRR.toFixed(2),
-      tone: "text-yellow-400",
       icon: CandlestickChart,
     },
-
     {
-      label: t.totalPnl + periodSuffix,
-      value: formatCurrency(
-        totalPnl,
-        account.currency
-      ),
-      tone:
-        totalPnl >= 0
-          ? "text-green-400"
-          : "text-red-400",
-      icon:
-        totalPnl >= 0
-          ? TrendingUp
-          : TrendingDown,
+      label: t.bestWinStreak + periodSuffix,
+      value: bestWinStreak,
+      tone: "text-white",
+      icon: Target,
+    },
+    {
+      label: t.averageWin + periodSuffix,
+      value: formatCurrency(averageWin),
+      tone: "text-green-400",
+      icon: TrendingUp,
+    },
+    {
+      label: t.averageLoss + periodSuffix,
+      value: formatCurrency(Math.abs(averageLoss)),
+      tone: "text-red-400",
+      icon: TrendingDown,
     },
   ];
+
+  // ── Weekday breakdown ─────────────────────────────────────────────────
 
   const weekdayMap = {
     Sun: 0,
@@ -1384,40 +1102,7 @@ export default async function AnalyticsPage({
     pnl,
   }));
 
-  const emotionalStateMap = periodTrades.reduce(
-    (acc, trade) => {
-      const emotion =
-        trade.emotionalState || t.traderFallback;
-
-      if (!acc[emotion]) {
-        acc[emotion] = {
-          count: 0,
-          pnl: 0,
-        };
-      }
-
-      acc[emotion].count += 1;
-      acc[emotion].pnl += trade.resultUsd || 0;
-
-      return acc;
-    },
-    {} as Record<
-      string,
-      {
-        count: number;
-        pnl: number;
-      }
-    >
-  );
-
-  const emotionalStateHeatmapData =
-    Object.entries(emotionalStateMap).map(
-      ([emotion, stats]) => ({
-        emotion,
-        count: stats.count,
-        pnl: stats.pnl,
-      })
-    );
+  // ── Quality breakdown (confidence / execution / setup) ──────────────────
 
   const confidenceHeatmapData = [
     {
@@ -1538,60 +1223,55 @@ export default async function AnalyticsPage({
   const setupHeatmapData = [
     {
       level: t.weakSetup,
-      count: periodTrades.filter(
-        (trade) =>
-          (trade.setupQuality || 0) > 0 &&
-          (trade.setupQuality || 0) <= 4
-      ).length,
-      pnl: periodTrades
-        .filter(
-          (trade) =>
-            (trade.setupQuality || 0) > 0 &&
-            (trade.setupQuality || 0) <= 4
-        )
-        .reduce(
-          (acc, trade) =>
-            acc + (trade.resultUsd || 0),
-          0
-        ),
+      count: setupQualityStats.low.trades,
+      pnl: setupQualityStats.low.pnl,
     },
     {
       level: t.averageSetup,
-      count: periodTrades.filter(
-        (trade) =>
-          (trade.setupQuality || 0) >= 5 &&
-          (trade.setupQuality || 0) <= 7
-      ).length,
-      pnl: periodTrades
-        .filter(
-          (trade) =>
-            (trade.setupQuality || 0) >= 5 &&
-            (trade.setupQuality || 0) <= 7
-        )
-        .reduce(
-          (acc, trade) =>
-            acc + (trade.resultUsd || 0),
-          0
-        ),
+      count: setupQualityStats.medium.trades,
+      pnl: setupQualityStats.medium.pnl,
     },
     {
       level: t.eliteSetup,
-      count: periodTrades.filter(
-        (trade) =>
-          (trade.setupQuality || 0) >= 8
-      ).length,
-      pnl: periodTrades
-        .filter(
-          (trade) =>
-            (trade.setupQuality || 0) >= 8
-        )
-        .reduce(
-          (acc, trade) =>
-            acc + (trade.resultUsd || 0),
-          0
-        ),
+      count: setupQualityStats.high.trades,
+      pnl: setupQualityStats.high.pnl,
     },
   ];
+
+  const avgConfidence =
+    periodTrades.length > 0
+      ? Math.round(
+        periodTrades.reduce(
+          (acc, trade) =>
+            acc + (trade.confidence || 0),
+          0
+        ) / periodTrades.length
+      )
+      : 0;
+
+  const avgExecution =
+    periodTrades.length > 0
+      ? Math.round(
+        periodTrades.reduce(
+          (acc, trade) =>
+            acc + (trade.executionRating || 0),
+          0
+        ) / periodTrades.length
+      )
+      : 0;
+
+  const avgSetupQuality =
+    periodTrades.length > 0
+      ? Math.round(
+        periodTrades.reduce(
+          (acc, trade) =>
+            acc + (trade.setupQuality || 0),
+          0
+        ) / periodTrades.length
+      )
+      : 0;
+
+  // ── Risk concentration (behavioral) ─────────────────────────────────────
 
   function getRiskSeverity(
     count: number,
@@ -1638,13 +1318,13 @@ export default async function AnalyticsPage({
       trade.emotionalState.length > 0
   ).length;
 
-  const behavioralRiskHeatmapData = [
+  const behavioralRiskData = [
     {
       factor: t.lowConfidence,
       count: lowConfidenceCount,
       severity: getRiskSeverity(
         lowConfidenceCount,
-        trades.length
+        periodTrades.length
       ),
     },
     {
@@ -1652,7 +1332,7 @@ export default async function AnalyticsPage({
       count: weakExecutionCount,
       severity: getRiskSeverity(
         weakExecutionCount,
-        trades.length
+        periodTrades.length
       ),
     },
     {
@@ -1660,7 +1340,7 @@ export default async function AnalyticsPage({
       count: weakSetupCount,
       severity: getRiskSeverity(
         weakSetupCount,
-        trades.length
+        periodTrades.length
       ),
     },
     {
@@ -1668,1096 +1348,508 @@ export default async function AnalyticsPage({
       count: emotionalCount,
       severity: getRiskSeverity(
         emotionalCount,
-        trades.length
+        periodTrades.length
       ),
     },
   ];
 
-  const riskConcentrationData = [
-    {
-      label: t.psychology,
-      value:
-        periodTrades.length > 0
-          ? Math.round(
-            (emotionalCount / periodTrades.length) *
-            100
-          )
-          : 0,
-    },
-    {
-      label: t.confidence,
-      value:
-        periodTrades.length > 0
-          ? Math.round(
-            (lowConfidenceCount /
-              periodTrades.length) *
-            100
-          )
-          : 0,
-    },
-    {
-      label: t.execution,
-      value:
-        periodTrades.length > 0
-          ? Math.round(
-            (weakExecutionCount /
-              periodTrades.length) *
-            100
-          )
-          : 0,
-    },
-    {
-      label: t.setupQuality,
-      value:
-        periodTrades.length > 0
-          ? Math.round(
-            (weakSetupCount / periodTrades.length) *
-            100
-          )
-          : 0,
-    },
-  ];
+  // ── Psychology trend: execution + confidence, one chart ─────────────────
 
-  const executionTrendData = periodTrades
-    .filter(
-      (trade) =>
-        typeof trade.executionRating === "number"
-    )
-    .map((trade) => ({
-      date: new Date(trade.openDate).toLocaleDateString(
-        locale,
-        {
-          day: "2-digit",
-          month: "2-digit",
-        }
-      ),
-      execution: trade.executionRating || 0,
-    }));
+  const psychologyTrendData = periodTrades.map((trade) => ({
+    date: new Date(trade.openDate).toLocaleDateString(
+      locale,
+      {
+        day: "2-digit",
+        month: "2-digit",
+      }
+    ),
+    execution:
+      typeof trade.executionRating === "number"
+        ? trade.executionRating
+        : null,
+    confidence:
+      typeof trade.confidence === "number"
+        ? trade.confidence
+        : null,
+  }));
 
-  const confidenceEvolutionData = periodTrades
-    .filter(
-      (trade) =>
-        typeof trade.confidence === "number"
-    )
-    .map((trade) => ({
-      date: new Date(trade.openDate).toLocaleDateString(
-        locale,
-        {
-          day: "2-digit",
-          month: "2-digit",
-        }
-      ),
-      confidence: trade.confidence || 0,
-    }));
+  const hasPsychologyTrend = psychologyTrendData.some(
+    (point) => point.execution !== null || point.confidence !== null
+  );
 
-  const emotionalTimelineData = periodTrades
-    .filter(
-      (trade) =>
-        trade.emotionalState &&
-        trade.emotionalState.length > 0
-    )
-    .map((trade) => ({
-      date: new Date(trade.openDate).toLocaleDateString(
-        locale,
-        {
-          day: "2-digit",
-          month: "2-digit",
-        }
-      ),
-      emotional: 1,
-    }));
-
-  const disciplineEvolutionData = periodTrades
-    .filter(
-      (trade) =>
-        typeof trade.executionRating === "number" ||
-        typeof trade.setupQuality === "number"
-    )
-    .map((trade) => {
-      const execution =
-        trade.executionRating || 0;
-
-      const setupQuality =
-        trade.setupQuality || 0;
-
-      const discipline =
-        Math.round(
-          (execution + setupQuality) / 2
-        );
-
-      return {
-        date: new Date(trade.openDate).toLocaleDateString(
-          locale,
-          {
-            day: "2-digit",
-            month: "2-digit",
-          }
-        ),
-        discipline,
-      };
-    });
-
-  const consistencyCurveData = periodTrades.map((trade) => {
-    const execution =
-      trade.executionRating || 0;
-
-    const setupQuality =
-      trade.setupQuality || 0;
-
-    const confidence =
-      trade.confidence || 0;
-
-    const tradeScore = Math.round(
-      execution * 4 +
-      setupQuality * 4 +
-      confidence * 2
-    );
-
-    return {
-      date: new Date(trade.openDate).toLocaleDateString(
-        locale,
-        {
-          day: "2-digit",
-          month: "2-digit",
-        }
-      ),
-      consistency: Math.min(100, tradeScore),
-    };
-  });
-
-  const psychologicalStabilityData = periodTrades.map((trade) => {
-    const confidence =
-      trade.confidence || 0;
-
-    const hasEmotion =
-      trade.emotionalState &&
-      trade.emotionalState.length > 0;
-
-    const stability = Math.max(
-      0,
-      Math.min(
-        100,
-        Math.round(
-          confidence * 10 -
-          (hasEmotion ? 20 : 0)
-        )
-      )
-    );
-
-    return {
-      date: new Date(trade.openDate).toLocaleDateString(
-        locale,
-        {
-          day: "2-digit",
-          month: "2-digit",
-        }
-      ),
-      stability,
-    };
-  });
+  const scopeMembers = isSharedAccount
+    ? accountMembers.map((m) => ({
+        id: m.user.id,
+        name: m.user.name,
+        username: m.user.username,
+      }))
+    : undefined;
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-8">
       <ScopeBar
         accountId={accountId}
-        members={
-          isSharedAccount
-            ? accountMembers.map((m) => ({
-                id: m.user.id,
-                name: m.user.name,
-                username: m.user.username,
-              }))
-            : undefined
-        }
+        members={scopeMembers}
         selectedMemberId={selectedMemberId}
         currentPeriod={period}
         currentRef={ref}
         appLanguage={language}
       />
 
-      <AnalyticsHero
-        accountName={account.name}
-        totalPnl={formatCurrency(
-          totalPnl,
-          account.currency
-        )}
-        winRate={winRate}
-        totalTrades={periodTrades.length}
-        appLanguage={language}
-      />
-
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            {t.grossProfit + periodSuffix}
-          </p>
-
-          <h2 className="mt-2 text-2xl font-black text-accent">
-            {formatCurrency(
-              grossProfit,
-              account.currency
-            )}
-          </h2>
+      <div className="reveal-rise" style={{ animationDelay: "0ms" }}>
+        <div className="flex items-center gap-3">
+          <SignatureEdge orientation="vertical" className="h-4" />
+          <p className="text-sm text-muted">{t.advancedStatsEyebrow}</p>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            {t.grossLoss + periodSuffix}
-          </p>
-
-          <h2 className="mt-2 text-2xl font-black text-red-400">
-            {formatCurrency(
-              grossLoss,
-              account.currency
-            )}
-          </h2>
-        </div>
-
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            {t.profitFactor + periodSuffix}
-          </p>
-
-          <h2 className={`mt-2 text-2xl font-black ${profitFactor >= 1
-              ? "text-green-400"
-              : "text-red-400"
-            }`}>
-            {profitFactor.toFixed(2)}
-          </h2>
-        </div>
-
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-sm text-gray-400">
-            {t.bestWinStreak + periodSuffix}
-          </p>
-
-          <h2 className="mt-2 text-2xl font-black text-white">
-            {bestWinStreak}
-          </h2>
-        </div>
+        <h1 className="mt-1 text-hero">{t.analyticsTitle}</h1>
       </div>
 
-      <div>
-        <p className="text-sm text-gray-400">
-          {t.advancedStatsEyebrow}
-        </p>
-
-        <h1 className="mt-2 flex items-center gap-3 text-3xl font-bold sm:text-4xl">
-          <BarChart3 className="text-accent" />
-          {t.analyticsTitle}
-        </h1>
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {cards.map((card) => (
+      <div
+        className="reveal-rise grid grid-cols-2 gap-4 xl:grid-cols-4"
+        style={{ animationDelay: "60ms" }}
+      >
+        {advancedStats.map((stat) => (
           <AnalyticsStatCard
-            key={card.label}
-            label={card.label}
-            value={card.value}
-            tone={card.tone}
-            icon={card.icon}
+            key={stat.label}
+            label={stat.label}
+            value={stat.value}
+            tone={stat.tone}
+            icon={stat.icon}
           />
         ))}
       </div>
 
-      <PerformanceIntelligence
-        averageWin={formatCurrency(
-          averageWin,
-          account.currency
-        )}
-        averageLoss={formatCurrency(
-          Math.abs(averageLoss),
-          account.currency
-        )}
-        profitFactor={profitFactor.toFixed(2)}
-        bestWinStreak={bestWinStreak}
-        appLanguage={language}
-      />
+      <div className="reveal-rise" style={{ animationDelay: "100ms" }}>
+        <RiskConcentration
+          data={behavioralRiskData}
+          appLanguage={language}
+        />
+      </div>
 
-      <PerformanceInsights
-        winRate={winRate}
-        averageRR={averageRR}
-        totalPnl={totalPnl}
-        bestSymbol={bestSymbol?.[0]}
-        appLanguage={language}
-      />
+      <Card className="reveal-rise p-6 sm:p-10" style={{ animationDelay: "140ms" }}>
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-muted-faint">
+          {t.psychologySubtitle}
+        </p>
+        <h2 className="mt-2 text-section text-white">
+          {t.psychologyTitle}
+        </h2>
 
-      <WeekdayHeatmap
-        data={weekdayHeatmapData}
-        appLanguage={language}
-      />
+        <div className="mt-6 grid grid-cols-3 gap-3">
+          <Card variant="inner" className="p-4 text-center">
+            <p className="text-xs text-muted">{t.confidence}</p>
+            <h3 className="mt-2 text-2xl font-black text-accent-bright">
+              {avgConfidence}
+              <span className="text-sm text-muted-faint">/10</span>
+            </h3>
+          </Card>
+          <Card variant="inner" className="p-4 text-center">
+            <p className="text-xs text-muted">{t.execution}</p>
+            <h3 className="mt-2 text-2xl font-black text-accent">
+              {avgExecution}
+              <span className="text-sm text-muted-faint">/10</span>
+            </h3>
+          </Card>
+          <Card variant="inner" className="p-4 text-center">
+            <p className="text-xs text-muted">{t.setupQuality}</p>
+            <h3 className="mt-2 text-2xl font-black text-white">
+              {avgSetupQuality}
+              <span className="text-sm text-muted-faint">/10</span>
+            </h3>
+          </Card>
+        </div>
 
-      <EmotionalStateHeatmap
-        data={emotionalStateHeatmapData}
-        appLanguage={language}
-      />
+        <div className="mt-8 space-y-5 border-t border-white/[0.06] pt-8">
+          <SubCaption>{t.qualityBreakdownLabel}</SubCaption>
 
-      <ConfidencePerformanceHeatmap
-        data={confidenceHeatmapData}
-        appLanguage={language}
-      />
+          <QualityBreakdownRow
+            label={t.confidence}
+            items={confidenceHeatmapData}
+          />
+          <QualityBreakdownRow
+            label={t.execution}
+            items={executionHeatmapData}
+          />
+          <QualityBreakdownRow
+            label={t.setupQuality}
+            items={setupHeatmapData}
+          />
+        </div>
 
-      <ExecutionQualityHeatmap
-        data={executionHeatmapData}
-        appLanguage={language}
-      />
+        <div className="mt-8 border-t border-white/[0.06] pt-8">
+          <SubCaption>{t.emotionalPerformance}</SubCaption>
 
-      <SetupQualityHeatmap
-        data={setupHeatmapData}
-        appLanguage={language}
-      />
+          {Object.keys(emotionalStats).length === 0 ? (
+            <p className="text-sm text-muted-faint">
+              {t.noEmotionalStates}
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+              {Object.entries(emotionalStats).map(([state, stats]) => {
+                const stateWinRate =
+                  stats.trades > 0
+                    ? (stats.wins / stats.trades) * 100
+                    : 0;
 
-      <BehavioralRiskHeatmap
-        data={behavioralRiskHeatmapData}
-        appLanguage={language}
-      />
+                return (
+                  <Card key={state} variant="inner" className="p-4">
+                    <div className="flex items-center justify-between">
+                      <p className="font-bold text-white">{state}</p>
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-xs font-bold ${
+                          stateWinRate >= 50
+                            ? "bg-green-500/10 text-green-400"
+                            : "bg-red-500/10 text-red-400"
+                        }`}
+                      >
+                        {stateWinRate.toFixed(0)}%
+                      </span>
+                    </div>
+                    <p className="mt-2 text-xs text-muted">
+                      {stats.trades} {t.trades}
+                    </p>
+                    <p
+                      className={`mt-1 text-sm font-bold ${
+                        stats.pnl >= 0 ? "text-green-400" : "text-red-400"
+                      }`}
+                    >
+                      {formatCurrency(stats.pnl)}
+                    </p>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
+        </div>
 
-      <RiskConcentrationMatrix
-        risks={riskConcentrationData}
-        appLanguage={language}
-      />
+        <div className="mt-8 border-t border-white/[0.06] pt-8">
+          <SubCaption>{t.trendLabel}</SubCaption>
 
-      <ExecutionTrendChart
-        data={executionTrendData}
-      />
+          {hasPsychologyTrend ? (
+            <PsychologyTrendChart
+              data={psychologyTrendData}
+              executionLabel={t.execution}
+              confidenceLabel={t.confidence}
+            />
+          ) : (
+            <p className="text-sm text-muted-faint">
+              {t.noEmotionalStates}
+            </p>
+          )}
+        </div>
+      </Card>
 
-      <ConfidenceEvolutionChart
-        data={confidenceEvolutionData}
-      />
-
-      <EmotionalTimelineChart
-        data={emotionalTimelineData}
-      />
-
-      <DisciplineEvolutionChart
-        data={disciplineEvolutionData}
-      />
-
-      <ConsistencyCurveChart
-        data={consistencyCurveData}
-      />
-
-      <PsychologicalStabilityCurve
-        data={psychologicalStabilityData}
-      />
-
-      <PsychologyAnalytics
-        averageConfidence={
-          Math.round(
-            periodTrades.reduce(
-              (acc, trade) =>
-                acc + (trade.confidence || 0),
-              0
-            ) / Math.max(periodTrades.length, 1)
-          )
-        }
-        averageExecution={
-          Math.round(
-            periodTrades.reduce(
-              (acc, trade) =>
-                acc +
-                (trade.executionRating || 0),
-              0
-            ) / Math.max(periodTrades.length, 1)
-          )
-        }
-        averageSetupQuality={
-          Math.round(
-            periodTrades.reduce(
-              (acc, trade) =>
-                acc +
-                (trade.setupQuality || 0),
-              0
-            ) / Math.max(periodTrades.length, 1)
-          )
-        }
-        appLanguage={language}
-      />
-
-      <div className="grid grid-cols-1 gap-8 xl:grid-cols-2">
+      <div
+        className="reveal-rise grid grid-cols-1 gap-6 xl:grid-cols-2"
+        style={{ animationDelay: "180ms" }}
+      >
         <SymbolPerformance
           bestSymbol={bestSymbol}
           worstSymbol={worstSymbol}
           mostTraded={mostTraded}
           currency={account.currency}
           formatCurrency={formatCurrency}
-        appLanguage={language}
-      />
-      </div>
+          appLanguage={language}
+        />
 
-      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-        <p className="text-sm text-gray-400">
-          {t.tradeDirectionEyebrow}
-        </p>
-
-        <h2 className="mt-1 text-2xl font-bold">
-          {t.longVsShort}
-        </h2>
-
-        <div className="mt-6 space-y-4">
-          <div className="rounded-2xl bg-black/20 p-4">
-            <div className="flex items-center justify-between">
-              <p className="text-gray-400">
-                {t.longTrades}
-              </p>
-
-              <p className="font-bold text-white">
-                {longTrades.length}
-              </p>
-            </div>
-
-            <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
-              <div
-                className="h-full rounded-full bg-accent"
-                style={{
-                  width: `${Math.min(
-                    longWinRate,
-                    100
-                  )}%`,
-                }}
-              />
-            </div>
-
-            <p className="mt-2 text-sm text-accent">
-              {longWinRate.toFixed(2)}%
-              {t.winrate}
-            </p>
-          </div>
-
-          <div className="rounded-2xl bg-black/20 p-4">
-            <div className="flex items-center justify-between">
-              <p className="text-gray-400">
-                {t.shortTrades}
-              </p>
-
-              <p className="font-bold text-white">
-                {shortTrades.length}
-              </p>
-            </div>
-
-            <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
-              <div
-                className="h-full rounded-full bg-red-400"
-                style={{
-                  width: `${Math.min(
-                    shortWinRate,
-                    100
-                  )}%`,
-                }}
-              />
-            </div>
-
-            <p className="mt-2 text-sm text-red-400">
-              {shortWinRate.toFixed(2)}%
-              {t.winrate}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-        <p className="text-sm text-gray-400">
-          {t.tradeResultsEyebrow}
-        </p>
-
-        <h2 className="mt-1 text-2xl font-bold">
-          {t.bestResults}
-        </h2>
-
-        <div className="mt-6 space-y-4">
-          <div className="rounded-2xl bg-black/20 p-4">
-            <p className="text-sm text-gray-500">
-              {t.bestTrade}
-            </p>
-
-            <h3 className="mt-2 text-2xl font-bold text-accent">
-              {formatCurrency(
-                bestTrade,
-                account.currency
-              )}
-            </h3>
-          </div>
-
-          <div className="rounded-2xl bg-black/20 p-4">
-            <p className="text-sm text-gray-500">
-              {t.worstTrade}
-            </p>
-
-            <h3 className="mt-2 text-2xl font-bold text-red-400">
-              {formatCurrency(
-                worstTrade,
-                account.currency
-              )}
-            </h3>
-          </div>
-        </div>
-      </div>
-
-      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-        <SessionPerformance
-          londonTrades={
-            periodTrades.filter(
-              (trade) =>
-                trade.session === "London"
-            ).length
-          }
-          newYorkTrades={
-            periodTrades.filter(
-              (trade) =>
-                trade.session === "New York"
-            ).length
-          }
-          asianTrades={
-            periodTrades.filter(
-              (trade) =>
-                trade.session === "Asian"
-            ).length
-          }
-        appLanguage={language}
-      />
-      </div>
-
-      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-        <p className="text-sm text-gray-400">
-          {t.outcomeBreakdownEyebrow}
-        </p>
-
-        <h2 className="mt-1 text-2xl font-bold">
-          {t.outcomeBreakdownTitle}
-        </h2>
-
-        <div className="mt-6 space-y-4">
-          <div className="flex items-center justify-between rounded-2xl bg-black/20 p-4">
-            <p className="text-gray-400">
-              {t.wins}
-            </p>
-
-            <p className="font-bold text-accent">
-              {wins.length}
-            </p>
-          </div>
-
-          <div className="flex items-center justify-between rounded-2xl bg-black/20 p-4">
-            <p className="text-gray-400">
-              {t.losses}
-            </p>
-
-            <p className="font-bold text-red-400">
-              {losses.length}
-            </p>
-          </div>
-
-          <div className="flex items-center justify-between rounded-2xl bg-black/20 p-4">
-            <p className="text-gray-400">
-              {t.breakEven}
-            </p>
-
-            <p className="font-bold text-yellow-400">
-              {periodTrades.filter(
-                (trade) =>
-                  trade.outcome === "be"
-              ).length}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
-        <p className="text-sm text-gray-400">
-          {t.mistakesEyebrow}
-        </p>
-
-        <h2 className="mt-1 text-2xl font-bold">
-          {t.recurringMistakes}
-        </h2>
-
-        <div className="mt-6 space-y-4">
-          {Object.entries(mistakesStats).length === 0 ? (
-            <p className="text-sm text-gray-500">
-              {t.noMistakes}
-            </p>
-          ) : (
-            Object.entries(mistakesStats)
-              .sort((a, b) => b[1].count - a[1].count)
-              .map(([mistake, stats]) => (
-                <div
-                  key={mistake}
-                  className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/20 p-4 md:flex-row md:items-center md:justify-between"
-                >
-                  <div>
-                    <h3 className="font-bold text-white">
-                      {mistake}
-                    </h3>
-
-                    <p className="mt-1 text-sm text-gray-500">
-                      {t.repeatedTimes(stats.count)}
-                    </p>
-                  </div>
-
-                  <p
-                    className={`font-bold ${stats.pnl >= 0
-                      ? "text-green-400"
-                      : "text-red-400"
-                      }`}
-                  >
-                    {formatCurrency(stats.pnl, account.currency)}
-                  </p>
-                </div>
-              ))
-          )}
-        </div>
-      </div>
-
-      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
-        <p className="text-sm text-gray-400">
-          {t.setupQualityEyebrow}
-        </p>
-
-        <h2 className="mt-1 text-2xl font-bold">
-          {t.setupPerformance}
-        </h2>
-
-        <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
-          {Object.entries(
-            setupQualityStats
-          ).map(([level, stats]) => {
-            const wr =
-              stats.trades > 0
-                ? (
-                  (stats.wins /
-                    stats.trades) *
-                  100
-                ).toFixed(0)
-                : "0";
-
-            return (
-              <div
-                key={level}
-                className="rounded-2xl border border-white/10 bg-black/20 p-5"
-              >
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-bold capitalize text-white">
-                    {level}
-                  </h3>
-
-                  <div
-                    className={`rounded-xl px-3 py-1 text-xs font-bold ${Number(wr) >= 50
-                      ? "bg-accent/10 text-accent"
-                      : "bg-red-500/10 text-red-400"
-                      }`}
-                  >
-                    {wr}%
-                  </div>
-                </div>
-
-                <div className="mt-5 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm text-gray-500">
-                      {t.trades}
-                    </p>
-
-                    <p className="font-bold text-white">
-                      {stats.trades}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm text-gray-500">
-                      {t.wins}
-                    </p>
-
-                    <p className="font-bold text-accent">
-                      {stats.wins}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm text-gray-500">
-                      {t.pnl}
-                    </p>
-
-                    <p
-                      className={`font-bold ${stats.pnl >= 0
-                        ? "text-green-400"
-                        : "text-red-400"
-                        }`}
-                    >
-                      {formatCurrency(
-                        stats.pnl,
-                        account.currency
-                      )}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {isSharedAccount && (
-        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
-          <p className="text-sm text-gray-400">
-            {t.teamAnalyticsEyebrow}
+        <Card className="p-6">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-muted-faint">
+            {t.tradeDirectionEyebrow}
           </p>
-
-          <h2 className="mt-1 text-2xl font-bold">
-            {t.traderLeaderboard}
+          <h2 className="mt-2 text-section text-white">
+            {t.longVsShort}
           </h2>
 
-          <div className="mt-6 space-y-4">
-            {Object.values(traderStats)
-              .sort((a, b) => b.pnl - a.pnl)
-              .map((trader, index) => {
-                const wr =
-                  trader.trades > 0
-                    ? (
-                      (trader.wins /
-                        trader.trades) *
-                      100
-                    ).toFixed(0)
-                    : "0";
+          <div className="mt-6 space-y-3">
+            <Card variant="inner" className="p-4">
+              <div className="flex items-center justify-between">
+                <p className="text-muted">{t.longTrades}</p>
+                <p className="font-bold text-white">{longTrades.length}</p>
+              </div>
 
-                return (
-                  <div
-                    key={trader.name}
-                    className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-black/20 p-5 md:flex-row md:items-center md:justify-between"
-                  >
-                    <div>
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-accent/10 font-bold text-accent">
-                          #{index + 1}
-                        </div>
+              <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
+                <div
+                  className="h-full rounded-full bg-accent-bright"
+                  style={{ width: `${Math.min(longWinRate, 100)}%` }}
+                />
+              </div>
 
-                        <div>
-                          <h3 className="text-lg font-bold text-white">
-                            {trader.name}
-                          </h3>
+              <p
+                className={`mt-2 text-sm font-semibold ${
+                  longWinRate >= 50 ? "text-green-400" : "text-red-400"
+                }`}
+              >
+                {longWinRate.toFixed(2)}% {t.winrate}
+              </p>
+            </Card>
 
-                          <p className="text-sm text-gray-500">
-                            {trader.trades} {t.trades}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+            <Card variant="inner" className="p-4">
+              <div className="flex items-center justify-between">
+                <p className="text-muted">{t.shortTrades}</p>
+                <p className="font-bold text-white">{shortTrades.length}</p>
+              </div>
 
-                    <div className="flex flex-wrap gap-6">
-                      <div>
-                        <p className="text-xs text-gray-500">
-                          {t.wr}
-                        </p>
+              <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
+                <div
+                  className="h-full rounded-full bg-accent"
+                  style={{ width: `${Math.min(shortWinRate, 100)}%` }}
+                />
+              </div>
 
-                        <p className="font-bold text-white">
-                          {wr}%
-                        </p>
-                      </div>
-
-                      <div>
-                        <p className="text-xs text-gray-500">
-                          {t.wins}
-                        </p>
-
-                        <p className="font-bold text-accent">
-                          {trader.wins}
-                        </p>
-                      </div>
-
-                      <div>
-                        <p className="text-xs text-gray-500">
-                          {t.pnl}
-                        </p>
-
-                        <p
-                          className={`font-bold ${trader.pnl >= 0
-                            ? "text-green-400"
-                            : "text-red-400"
-                            }`}
-                        >
-                          {formatCurrency(
-                            trader.pnl,
-                            account.currency
-                          )}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+              <p
+                className={`mt-2 text-sm font-semibold ${
+                  shortWinRate >= 50 ? "text-green-400" : "text-red-400"
+                }`}
+              >
+                {shortWinRate.toFixed(2)}% {t.winrate}
+              </p>
+            </Card>
           </div>
-        </div>
-      )}
+        </Card>
+      </div>
 
-      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
-        <p className="text-sm text-gray-400">
+      <div
+        className="reveal-rise"
+        style={{ animationDelay: "220ms" }}
+      >
+        <WeekdayHeatmap
+          data={weekdayHeatmapData}
+          appLanguage={language}
+        />
+      </div>
+
+      <div
+        className="reveal-rise grid grid-cols-1 gap-6 xl:grid-cols-2"
+        style={{ animationDelay: "240ms" }}
+      >
+        <SessionPerformance
+          sessions={Object.entries(sessionStats)}
+          formatCurrency={(value) => formatCurrency(value)}
+          appLanguage={language}
+        />
+
+        {isSharedAccount && (
+          <Card className="p-6">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-muted-faint">
+              {t.teamAnalyticsEyebrow}
+            </p>
+            <h2 className="mt-2 text-section text-white">
+              {t.traderLeaderboard}
+            </h2>
+
+            <div className="mt-6 space-y-3">
+              {Object.values(traderStats)
+                .sort((a, b) => b.pnl - a.pnl)
+                .map((trader, index) => {
+                  const wr =
+                    trader.trades > 0
+                      ? ((trader.wins / trader.trades) * 100).toFixed(0)
+                      : "0";
+
+                  return (
+                    <Card key={trader.name} variant="inner" className="p-4">
+                      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-inner bg-accent-bright/10 text-sm font-bold text-accent-bright">
+                            #{index + 1}
+                          </div>
+
+                          <div>
+                            <h3 className="font-bold text-white">
+                              {trader.name}
+                            </h3>
+                            <p className="text-xs text-muted-faint">
+                              {trader.trades} {t.trades}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-wrap gap-5">
+                          <div>
+                            <p className="text-xs text-muted-faint">{t.wr}</p>
+                            <p className="font-bold text-white">{wr}%</p>
+                          </div>
+
+                          <div>
+                            <p className="text-xs text-muted-faint">{t.wins}</p>
+                            <p className="font-bold text-white">
+                              {trader.wins}
+                            </p>
+                          </div>
+
+                          <div>
+                            <p className="text-xs text-muted-faint">{t.pnl}</p>
+                            <p
+                              className={`font-bold ${
+                                trader.pnl >= 0
+                                  ? "text-green-400"
+                                  : "text-red-400"
+                              }`}
+                            >
+                              {formatCurrency(trader.pnl)}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  );
+                })}
+            </div>
+          </Card>
+        )}
+      </div>
+
+      <Card
+        className="reveal-rise p-6 sm:p-10"
+        style={{ animationDelay: "260ms" }}
+      >
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-muted-faint">
           {t.monthlyPerformanceEyebrow}
         </p>
-
-        <h2 className="mt-1 text-2xl font-bold">
+        <h2 className="mt-2 text-section text-white">
           {t.monthlyDashboard}
         </h2>
 
-        <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-            <p className="text-sm text-gray-500">
-              {t.bestMonth}
-            </p>
-
-            <h3 className="mt-2 text-lg font-bold text-accent">
-              {bestMonth?.[0] || "-"}
+        <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <Card variant="inner" className="p-4">
+            <p className="text-xs text-muted-faint">{t.bestMonth}</p>
+            <h3 className="mt-2 text-sm font-bold text-green-400">
+              {bestMonth?.[0] || "—"}
             </h3>
-
-            <p className="mt-1 text-sm text-accent">
-              {bestMonth
-                ? formatCurrency(
-                  bestMonth[1].pnl,
-                  account.currency
-                )
-                : "-"}
+            <p className="mt-1 text-sm text-green-400">
+              {bestMonth ? formatCurrency(bestMonth[1].pnl) : "—"}
             </p>
-          </div>
+          </Card>
 
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-            <p className="text-sm text-gray-500">
-              {t.worstMonth}
-            </p>
-
-            <h3 className="mt-2 text-lg font-bold text-red-400">
-              {worstMonth?.[0] || "-"}
+          <Card variant="inner" className="p-4">
+            <p className="text-xs text-muted-faint">{t.worstMonth}</p>
+            <h3 className="mt-2 text-sm font-bold text-red-400">
+              {worstMonth?.[0] || "—"}
             </h3>
-
             <p className="mt-1 text-sm text-red-400">
-              {worstMonth
-                ? formatCurrency(
-                  worstMonth[1].pnl,
-                  account.currency
-                )
-                : "-"}
+              {worstMonth ? formatCurrency(worstMonth[1].pnl) : "—"}
             </p>
-          </div>
+          </Card>
 
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-            <p className="text-sm text-gray-500">
-              {t.greenMonths}
-            </p>
-
-            <h3 className="mt-2 text-2xl font-bold text-accent">
+          <Card variant="inner" className="p-4">
+            <p className="text-xs text-muted-faint">{t.greenMonths}</p>
+            <h3 className="mt-2 text-2xl font-black text-green-400">
               {greenMonths}
             </h3>
-          </div>
+          </Card>
 
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-            <p className="text-sm text-gray-500">
-              {t.redMonths}
-            </p>
-
-            <h3 className="mt-2 text-2xl font-bold text-red-400">
+          <Card variant="inner" className="p-4">
+            <p className="text-xs text-muted-faint">{t.redMonths}</p>
+            <h3 className="mt-2 text-2xl font-black text-red-400">
               {redMonths}
             </h3>
-          </div>
+          </Card>
         </div>
 
-        <div className="mt-6 space-y-4">
+        <div className="mt-6 space-y-3">
           {Object.entries(monthlyStats)
             .reverse()
             .map(([month, stats]) => {
               const wr =
                 stats.trades > 0
-                  ? (
-                    (stats.wins /
-                      stats.trades) *
-                    100
-                  ).toFixed(0)
+                  ? ((stats.wins / stats.trades) * 100).toFixed(0)
                   : "0";
 
               return (
-                <div
-                  key={month}
-                  className="card-hover flex flex-col gap-4 rounded-2xl border border-white/10 bg-black/20 p-5 md:flex-row md:items-center md:justify-between"
-                >
-                  <div>
-                    <h3 className="text-lg font-bold text-white">
-                      {month}
-                    </h3>
-
-                    <p className="mt-1 text-sm text-gray-500">
-                      {stats.trades} {t.trades}
-                    </p>
-                  </div>
-
-                  <div className="flex flex-wrap gap-6">
+                <Card key={month} variant="inner" className="p-4">
+                  <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                     <div>
-                      <p className="text-xs text-gray-500">
-                        {t.wr}
-                      </p>
-
-                      <p
-                        className={`font-bold ${Number(wr) >= 50
-                          ? "text-green-400"
-                          : "text-red-400"
-                          }`}
-                      >
-                        {wr}%
+                      <h3 className="font-bold text-white">{month}</h3>
+                      <p className="text-xs text-muted-faint">
+                        {stats.trades} {t.trades}
                       </p>
                     </div>
 
-                    <div>
-                      <p className="text-xs text-gray-500">
-                        {t.wins}
-                      </p>
-
-                      <p className="font-bold text-accent">
-                        {stats.wins}
-                      </p>
-                    </div>
-
-                    <div>
-                      <p className="text-xs text-gray-500">
-                        {t.pnl}
-                      </p>
-
-                      <p
-                        className={`font-bold ${stats.pnl >= 0
-                          ? "text-green-400"
-                          : "text-red-400"
+                    <div className="flex flex-wrap gap-5">
+                      <div>
+                        <p className="text-xs text-muted-faint">{t.wr}</p>
+                        <p
+                          className={`font-bold ${
+                            Number(wr) >= 50 ? "text-green-400" : "text-red-400"
                           }`}
-                      >
-                        {formatCurrency(
-                          stats.pnl,
-                          account.currency
-                        )}
-                      </p>
+                        >
+                          {wr}%
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="text-xs text-muted-faint">{t.wins}</p>
+                        <p className="font-bold text-white">{stats.wins}</p>
+                      </div>
+
+                      <div>
+                        <p className="text-xs text-muted-faint">{t.pnl}</p>
+                        <p
+                          className={`font-bold ${
+                            stats.pnl >= 0 ? "text-green-400" : "text-red-400"
+                          }`}
+                        >
+                          {formatCurrency(stats.pnl)}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Card>
               );
             })}
         </div>
-      </div>
+      </Card>
 
-      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
-        <p className="text-sm text-gray-400">
-          {t.aiInsightsEyebrow}
-        </p>
+      <div
+        className="reveal-rise grid grid-cols-1 gap-6 xl:grid-cols-2"
+        style={{ animationDelay: "280ms" }}
+      >
+        <Card className="p-6">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-muted-faint">
+            {t.mistakesEyebrow}
+          </p>
+          <h2 className="mt-2 text-section text-white">
+            {t.recurringMistakes}
+          </h2>
 
-        <h2 className="mt-1 text-2xl font-bold">
-          {t.performanceInsights}
-        </h2>
+          <div className="mt-6 space-y-3">
+            {Object.entries(mistakesStats).length === 0 ? (
+              <p className="text-sm text-muted-faint">{t.noMistakes}</p>
+            ) : (
+              Object.entries(mistakesStats)
+                .sort((a, b) => b[1].count - a[1].count)
+                .map(([mistake, stats]) => (
+                  <Card key={mistake} variant="inner" className="p-4">
+                    <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                      <div>
+                        <h3 className="font-bold text-white">{mistake}</h3>
+                        <p className="mt-1 text-xs text-muted-faint">
+                          {t.repeatedTimes(stats.count)}
+                        </p>
+                      </div>
 
-        <div className="mt-6 space-y-4">
-          {insights.length === 0 ? (
-            <p className="text-sm text-gray-500">
-              {t.noInsights}
-            </p>
-          ) : (
-            insights.map((insight) => (
-              <div
-                key={insight}
-                className="rounded-2xl border border-white/10 bg-black/20 p-4"
-              >
-                <p className="text-sm leading-6 text-gray-300">
-                  {insight}
-                </p>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-
-      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 xl:col-span-2">
-        <p className="text-sm text-gray-400">
-          {t.tradingPsychologyEyebrow}
-        </p>
-
-        <h2 className="mt-1 text-2xl font-bold">
-          {t.emotionalPerformance}
-        </h2>
-
-        <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {Object.entries(
-            emotionalStats
-          ).map(([state, stats]) => {
-            const stateWinRate =
-              stats.trades > 0
-                ? (stats.wins /
-                  stats.trades) *
-                100
-                : 0;
-
-            return (
-              <div
-                key={state}
-                className="rounded-2xl border border-white/10 bg-black/20 p-5"
-              >
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-bold text-white">
-                    {state}
-                  </h3>
-
-                  <div
-                    className={`rounded-xl px-3 py-1 text-xs font-bold ${stateWinRate >= 50
-                      ? "bg-accent/10 text-accent"
-                      : "bg-red-500/10 text-red-400"
-                      }`}
-                  >
-                    {stateWinRate.toFixed(0)}%
-                  </div>
-                </div>
-
-                <div className="mt-5 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm text-gray-500">
-                      {t.trades}
-                    </p>
-
-                    <p className="font-bold text-white">
-                      {stats.trades}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm text-gray-500">
-                      {t.wins}
-                    </p>
-
-                    <p className="font-bold text-accent">
-                      {stats.wins}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm text-gray-500">
-                      {t.totalPnl}
-                    </p>
-
-                    <p
-                      className={`font-bold ${stats.pnl >= 0
-                        ? "text-green-400"
-                        : "text-red-400"
+                      <p
+                        className={`font-bold ${
+                          stats.pnl >= 0 ? "text-green-400" : "text-red-400"
                         }`}
-                    >
-                      {formatCurrency(
-                        stats.pnl,
-                        account.currency
-                      )}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+                      >
+                        {formatCurrency(stats.pnl)}
+                      </p>
+                    </div>
+                  </Card>
+                ))
+            )}
+          </div>
+        </Card>
+
+        <PerformanceInsights
+          winRate={winRate}
+          averageRR={averageRR}
+          totalPnl={totalPnl}
+          bestSymbol={bestSymbol?.[0]}
+          appLanguage={language}
+        />
       </div>
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-

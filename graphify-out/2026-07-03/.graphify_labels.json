@@ -145,5 +145,7 @@
   "143": "preview.tsx",
   "144": "instrumentation-client.ts",
   "145": "vitest.config.ts",
-  "146": "vitest.shims.d.ts"
+  "146": "vitest.shims.d.ts",
+  "147": "OnboardingModal.tsx",
+  "148": "isNeutralColor"
 }

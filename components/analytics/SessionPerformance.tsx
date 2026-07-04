@@ -1,106 +1,124 @@
-﻿import { normalizeAppLanguage, type AppLanguage } from "@/lib/i18n";
+import { normalizeAppLanguage, type AppLanguage } from "@/lib/i18n";
+import Card from "@/components/ui/Card";
 import AnalyticsSection from "./AnalyticsSection";
 
+type SessionStats = {
+  trades: number;
+  wins: number;
+  pnl: number;
+};
+
 type Props = {
-  londonTrades: number;
-  newYorkTrades: number;
-  asianTrades: number;
+  sessions: [string, SessionStats][];
+  formatCurrency: (value: number) => string;
   appLanguage?: string | null;
 };
 
 type Labels = {
   subtitle: string;
   title: string;
-  london: string;
-  newYork: string;
-  asian: string;
+  trades: string;
+  wr: string;
+  noSessions: string;
 };
 
 const labels: Record<AppLanguage, Labels> = {
   it: {
     subtitle: "Intelligence sessioni",
     title: "Sessioni di trading",
-    london: "Sessione Londra",
-    newYork: "Sessione New York",
-    asian: "Sessione asiatica",
+    trades: "trade",
+    wr: "WR",
+    noSessions: "Nessuna sessione registrata.",
   },
   en: {
     subtitle: "Session intelligence",
     title: "Trading Sessions",
-    london: "London Session",
-    newYork: "New York Session",
-    asian: "Asian Session",
+    trades: "trades",
+    wr: "WR",
+    noSessions: "No session recorded.",
   },
   uk: {
     subtitle: "Аналітика сесій",
     title: "Торгові сесії",
-    london: "Лондонська сесія",
-    newYork: "Нью-Йоркська сесія",
-    asian: "Азійська сесія",
+    trades: "угод",
+    wr: "WR",
+    noSessions: "Сесії ще не зареєстровано.",
   },
   ru: {
     subtitle: "Аналитика сессий",
     title: "Торговые сессии",
-    london: "Лондонская сессия",
-    newYork: "Нью-Йоркская сессия",
-    asian: "Азиатская сессия",
+    trades: "сделок",
+    wr: "WR",
+    noSessions: "Сессии еще не зарегистрированы.",
   },
   es: {
     subtitle: "Intelligence de sesiones",
     title: "Sesiones de trading",
-    london: "Sesión Londres",
-    newYork: "Sesión New York",
-    asian: "Sesión asiática",
+    trades: "trades",
+    wr: "WR",
+    noSessions: "No hay sesiones registradas.",
   },
   fr: {
     subtitle: "Intelligence des sessions",
     title: "Sessions de trading",
-    london: "Session Londres",
-    newYork: "Session New York",
-    asian: "Session asiatique",
+    trades: "trades",
+    wr: "WR",
+    noSessions: "Aucune session enregistrée.",
   },
   de: {
     subtitle: "Session Intelligence",
     title: "Trading-Sessions",
-    london: "London Session",
-    newYork: "New York Session",
-    asian: "Asien Session",
+    trades: "Trades",
+    wr: "WR",
+    noSessions: "Keine Session erfasst.",
   },
 };
 
 export default function SessionPerformance({
-  londonTrades,
-  newYorkTrades,
-  asianTrades,
+  sessions,
+  formatCurrency,
   appLanguage,
 }: Props) {
   const language = normalizeAppLanguage(appLanguage);
   const t = labels[language];
 
+  const sorted = [...sessions].sort((a, b) => b[1].pnl - a[1].pnl);
+
   return (
     <AnalyticsSection subtitle={t.subtitle} title={t.title}>
-      <div className="space-y-4">
-        <div className="rounded-2xl bg-black/20 p-4">
-          <div className="flex items-center justify-between">
-            <span className="text-gray-400">{t.london}</span>
-            <span className="font-bold text-accent-bright">{londonTrades}</span>
-          </div>
-        </div>
+      {sorted.length === 0 ? (
+        <p className="text-sm text-muted-faint">{t.noSessions}</p>
+      ) : (
+        <div className="space-y-3">
+          {sorted.map(([session, stats]) => {
+            const wr =
+              stats.trades > 0
+                ? ((stats.wins / stats.trades) * 100).toFixed(0)
+                : "0";
 
-        <div className="rounded-2xl bg-black/20 p-4">
-          <div className="flex items-center justify-between">
-            <span className="text-gray-400">{t.newYork}</span>
-            <span className="font-bold text-violet-400">{newYorkTrades}</span>
-          </div>
-        </div>
+            return (
+              <Card key={session} variant="inner" className="p-4">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="font-bold text-white">{session}</p>
+                    <p className="text-xs text-muted-faint">
+                      {stats.trades} {t.trades} &middot; {t.wr} {wr}%
+                    </p>
+                  </div>
 
-        <div className="rounded-2xl bg-black/20 p-4">
-          <div className="flex items-center justify-between">
-            <span className="text-gray-400">{t.asian}</span>
-            <span className="font-bold text-yellow-400">{asianTrades}</span>
-          </div>
+                  <p
+                    className={`font-bold ${
+                      stats.pnl >= 0 ? "text-green-400" : "text-red-400"
+                    }`}
+                  >
+                    {formatCurrency(stats.pnl)}
+                  </p>
+                </div>
+              </Card>
+            );
+          })}
         </div>
-      </div>
+      )}
     </AnalyticsSection>
   );
 }

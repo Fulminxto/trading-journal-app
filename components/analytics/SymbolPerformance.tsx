@@ -1,4 +1,5 @@
 ﻿import { normalizeAppLanguage, type AppLanguage } from "@/lib/i18n";
+import Card from "@/components/ui/Card";
 import AnalyticsSection from "./AnalyticsSection";
 
 type SymbolStats = {
@@ -99,60 +100,60 @@ export default function SymbolPerformance({
 
   return (
     <AnalyticsSection subtitle={t.subtitle} title={t.title}>
-      <div className="space-y-4">
-        <div className="rounded-2xl bg-black/20 p-4">
-          <p className="text-sm text-gray-500">
+      <div className="space-y-3">
+        <Card variant="inner" className="p-4">
+          <p className="text-sm text-muted-faint">
             {t.bestSymbol}
           </p>
 
           <div className="mt-2 flex items-center justify-between">
-            <h3 className="text-xl font-bold text-accent">
-              {bestSymbol?.[0] || "-"}
+            <h3 className="text-xl font-bold text-green-400">
+              {bestSymbol?.[0] || "—"}
             </h3>
 
-            <p className="font-semibold text-accent">
+            <p className="font-semibold text-green-400">
               {bestSymbol
                 ? formatCurrency(bestSymbol[1].pnl, currency)
-                : "-"}
+                : "—"}
             </p>
           </div>
-        </div>
+        </Card>
 
-        <div className="rounded-2xl bg-black/20 p-4">
-          <p className="text-sm text-gray-500">
+        <Card variant="inner" className="p-4">
+          <p className="text-sm text-muted-faint">
             {t.worstSymbol}
           </p>
 
           <div className="mt-2 flex items-center justify-between">
             <h3 className="text-xl font-bold text-red-400">
-              {worstSymbol?.[0] || "-"}
+              {worstSymbol?.[0] || "—"}
             </h3>
 
             <p className="font-semibold text-red-400">
               {worstSymbol
                 ? formatCurrency(worstSymbol[1].pnl, currency)
-                : "-"}
+                : "—"}
             </p>
           </div>
-        </div>
+        </Card>
 
-        <div className="rounded-2xl bg-black/20 p-4">
-          <p className="text-sm text-gray-500">
+        <Card variant="inner" className="p-4">
+          <p className="text-sm text-muted-faint">
             {t.mostTraded}
           </p>
 
           <div className="mt-2 flex items-center justify-between">
             <h3 className="text-xl font-bold text-white">
-              {mostTraded?.[0] || "-"}
+              {mostTraded?.[0] || "—"}
             </h3>
 
-            <p className="font-semibold text-gray-400">
+            <p className="font-semibold text-muted">
               {mostTraded
                 ? `${mostTraded[1].trades} ${t.trades}`
-                : "-"}
+                : "—"}
             </p>
           </div>
-        </div>
+        </Card>
       </div>
     </AnalyticsSection>
   );
