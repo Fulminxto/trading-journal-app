@@ -1,13 +1,16 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
   CalendarDays,
   CheckCircle2,
+  ClipboardCheck,
   ClipboardList,
   Clock3,
+  Gauge,
   Save,
-  Star,
-  TrendingUp,
+  ShieldCheck,
+  Target,
+  TriangleAlert,
   type LucideIcon,
 } from "lucide-react";
 
@@ -18,6 +21,8 @@ import {
   normalizeAppLanguage,
 } from "@/lib/i18n";
 import ScopeBar from "@/components/ScopeBar";
+import Card from "@/components/ui/Card";
+import SignatureEdge from "@/components/ui/SignatureEdge";
 import {
   parseScopeParams,
   getPeriodRange,
@@ -25,14 +30,9 @@ import {
 } from "@/lib/scope";
 
 import { createTradingSession } from "./actions";
-import SessionsHero from "@/components/sessions/SessionsHero";
-import SessionInsightCard from "@/components/sessions/SessionInsightCard";
-import PostMarketIntelligence from "@/components/sessions/PostMarketIntelligence";
-import BehaviorWarningCard from "@/components/sessions/BehaviorWarningCard";
-import ExecutionIntelligence from "@/components/sessions/ExecutionIntelligence";
 import { getSessionsCopy } from "@/components/sessions/SessionI18n";
 
-type StatCardProps = {
+type MetricCardProps = {
   title: string;
   value: string | number;
   description: string;
@@ -40,35 +40,75 @@ type StatCardProps = {
   tone?: string;
 };
 
-function StatCard({
+type FieldBlockProps = {
+  label: string;
+  value: string | null;
+  warning?: boolean;
+};
+
+const inputClass =
+  "w-full rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-2 px-4 py-3 text-sm text-white outline-none transition-all duration-base placeholder:text-muted-faint focus:border-accent-bright/45 focus:ring-2 focus:ring-accent-bright/10";
+
+function MetricCard({
   title,
   value,
   description,
   icon: Icon,
   tone = "text-white",
-}: StatCardProps) {
+}: MetricCardProps) {
   return (
-    <div className="card-hover rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+    <Card interactive className="p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-sm text-gray-400">
+          <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted-faint">
             {title}
           </p>
-
-          <h2 className={`mt-3 text-3xl font-black ${tone}`}>
+          <h2 className={`mt-3 text-metric-lg ${tone}`}>
             {value}
           </h2>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-accent-bright">
-          <Icon size={20} />
+        <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-3 text-muted transition-colors duration-fast group-hover:text-accent-bright">
+          <Icon size={18} />
         </div>
       </div>
 
-      <p className="mt-4 text-sm leading-6 text-gray-500">
+      <p className="mt-4 text-sm leading-6 text-muted">
         {description}
       </p>
-    </div>
+    </Card>
+  );
+}
+
+function FieldBlock({
+  label,
+  value,
+  warning = false,
+}: FieldBlockProps) {
+  if (!value) {
+    return null;
+  }
+
+  return (
+    <Card
+      variant="inner"
+      className={
+        warning
+          ? "border-negative/20 bg-negative/[0.04] p-4"
+          : "p-4"
+      }
+    >
+      <p
+        className={`text-xs font-medium uppercase tracking-[0.16em] ${
+          warning ? "text-negative" : "text-muted-faint"
+        }`}
+      >
+        {label}
+      </p>
+      <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-gray-300">
+        {value}
+      </p>
+    </Card>
   );
 }
 
@@ -82,6 +122,37 @@ function getScoreTone(score: number) {
   }
 
   return "text-yellow-300";
+}
+
+function getReadinessTone(rate: number) {
+  if (rate >= 80) {
+    return "text-green-400";
+  }
+
+  if (rate >= 50) {
+    return "text-yellow-300";
+  }
+
+  return "text-red-400";
+}
+
+function getEmotionTone(value?: string | null) {
+  if (!value) {
+    return "border-flash/[0.1] text-muted";
+  }
+
+  if (
+    value === "STRESSED" ||
+    value === "IMPULSIVE"
+  ) {
+    return "border-negative/25 bg-negative/[0.06] text-negative";
+  }
+
+  if (value === "TIRED") {
+    return "border-warning/25 bg-warning/[0.06] text-warning";
+  }
+
+  return "border-accent-bright/20 bg-accent-bright/[0.06] text-accent-bright";
 }
 
 function formatPercent(
@@ -223,9 +294,9 @@ export default async function SessionsPage({
 
   const periodSessions = dateRange
     ? sessions.filter(
-        (s) =>
-          s.date >= dateRange.gte &&
-          s.date < dateRange.lte
+        (tradingSession) =>
+          tradingSession.date >= dateRange.gte &&
+          tradingSession.date < dateRange.lte
       )
     : sessions;
 
@@ -235,17 +306,23 @@ export default async function SessionsPage({
     appLanguage
   );
 
+  const scoredSessions = periodSessions.filter(
+    (tradingSession) =>
+      tradingSession.finalScore !== null &&
+      tradingSession.finalScore !== undefined
+  );
+
   const averageScore =
-    periodSessions.length > 0
+    scoredSessions.length > 0
       ? Math.round(
-        periodSessions.reduce(
-          (acc, tradingSession) =>
-            acc +
-            (tradingSession.finalScore || 0),
-          0
-        ) / periodSessions.length
-      )
-      : 0;
+          scoredSessions.reduce(
+            (acc, tradingSession) =>
+              acc +
+              (tradingSession.finalScore || 0),
+            0
+          ) / scoredSessions.length
+        )
+      : null;
 
   const focusedSessions = periodSessions.filter(
     (tradingSession) =>
@@ -266,6 +343,8 @@ export default async function SessionsPage({
 
   const lowScoreSessions = periodSessions.filter(
     (tradingSession) =>
+      tradingSession.finalScore !== null &&
+      tradingSession.finalScore !== undefined &&
       (tradingSession.finalScore || 0) <= 4
   ).length;
 
@@ -275,17 +354,33 @@ export default async function SessionsPage({
   const reviewCompletionRate =
     periodSessions.length > 0
       ? (reviewedSessions / periodSessions.length) * 100
-      : 0;
+      : null;
 
   const highScoreRate =
+    scoredSessions.length > 0
+      ? (highScoreSessions / scoredSessions.length) * 100
+      : null;
+
+  const planningRate =
     periodSessions.length > 0
-      ? (highScoreSessions / periodSessions.length) * 100
-      : 0;
+      ? (focusedSessions / periodSessions.length) * 100
+      : null;
 
   const lastSession = periodSessions[0];
 
-  const inputClass =
-    "w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-accent-bright/30 focus:bg-white/[0.03] focus:ring-4 focus:ring-accent-bright/10";
+  const readinessLabel =
+    periodSessions.length === 0
+      ? t.page.emptySessions
+      : pendingReviews > 0 || lowScoreSessions > 0
+        ? t.common.warningsActive
+        : t.common.stable;
+
+  const readinessTone =
+    pendingReviews > 0 || lowScoreSessions > 0
+      ? "text-warning"
+      : "text-accent-bright";
+
+  const noDataLabel = "Not measured";
 
   const members = isSharedAccount
     ? accountMembers.map((m) => ({
@@ -297,7 +392,7 @@ export default async function SessionsPage({
     : undefined;
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-8">
       <ScopeBar
         members={members}
         selectedMemberId={selectedMemberId}
@@ -307,51 +402,77 @@ export default async function SessionsPage({
         accountId={accountId}
       />
 
-      <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_14%,transparent),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.08),transparent_35%)]" />
-
-        <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
+      <Card variant="hero" className="p-6 sm:p-10">
+        <div className="grid gap-8 xl:grid-cols-[1fr_360px] xl:items-end">
           <div>
-            <div className="mb-6 flex flex-wrap items-center gap-3">
-              <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
+            <div className="flex flex-wrap items-center gap-3">
+              <SignatureEdge orientation="vertical" className="h-4" />
+              <p className="text-sm text-muted">
                 {t.page.workspaceBadge}
-              </span>
+              </p>
 
-              <span className="rounded-full border border-white/10 bg-black/20 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-gray-300">
+              <span className="rounded-pill border-[0.5px] border-flash/[0.12] px-3 py-1 text-xs font-medium uppercase tracking-[0.16em] text-muted">
                 {membership.tradingAccount.name}
               </span>
             </div>
 
-            <p className="text-sm text-gray-400">
+            <p className="mt-6 text-xs font-medium uppercase tracking-[0.18em] text-muted-faint">
               {t.page.titleSmall}
             </p>
 
-            <h1 className="mt-3 text-5xl font-black tracking-tight text-white sm:text-6xl">
+            <h1 className="mt-3 text-hero text-white">
               {t.page.title}
             </h1>
 
-            <p className="mt-6 max-w-3xl text-base leading-7 text-gray-400">
+            <p className="mt-5 max-w-3xl text-sm leading-7 text-muted">
               {t.page.description}
             </p>
           </div>
 
-          <Link
-            href={`/accounts/${accountId}`}
-            className="w-fit rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-bold text-white transition hover:bg-white/[0.08]"
-          >
-            {t.page.backToAccountHub}
-          </Link>
-        </div>
-      </section>
+          <Card variant="inner" className="p-5">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted-faint">
+                  Operating room
+                </p>
+                <p className={`mt-3 text-2xl font-black ${readinessTone}`}>
+                  {readinessLabel}
+                </p>
+              </div>
+              <ShieldCheck className="text-accent-bright" size={24} />
+            </div>
 
-      <SessionsHero
-        totalSessions={periodSessions.length}
-        averageScore={averageScore}
-        appLanguage={appLanguage}
-      />
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-bg-base/40 p-3">
+                <p className="text-xs text-muted-faint">
+                  {t.page.totalSessions}
+                </p>
+                <p className="mt-1 text-2xl font-black text-accent-bright">
+                  {periodSessions.length}
+                </p>
+              </div>
+              <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-bg-base/40 p-3">
+                <p className="text-xs text-muted-faint">
+                  {t.page.reviewedSessions}
+                </p>
+                <p className="mt-1 text-2xl font-black text-white">
+                  {reviewedSessions}
+                </p>
+              </div>
+            </div>
+
+            <Link
+              href={`/accounts/${accountId}`}
+              className="mt-5 inline-flex w-full items-center justify-center rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-3 text-sm font-medium text-muted transition-colors duration-fast hover:border-accent-bright/40 hover:text-accent-bright"
+            >
+              {t.page.backToAccountHub}
+            </Link>
+          </Card>
+        </div>
+      </Card>
 
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <StatCard
+        <MetricCard
           title={`${t.page.totalSessions}${periodSuffix}`}
           value={periodSessions.length}
           description={t.page.totalSessionsDescription}
@@ -359,264 +480,356 @@ export default async function SessionsPage({
           tone="text-accent-bright"
         />
 
-        <StatCard
+        <MetricCard
           title={`${t.page.averageScore}${periodSuffix}`}
-          value={`${averageScore}/10`}
+          value={
+            averageScore !== null
+              ? `${averageScore}/10`
+              : noDataLabel
+          }
           description={t.page.averageScoreDescription}
-          icon={Star}
-          tone={getScoreTone(averageScore)}
+          icon={Gauge}
+          tone={
+            averageScore !== null
+              ? getScoreTone(averageScore)
+              : "text-muted-faint"
+          }
         />
 
-        <StatCard
+        <MetricCard
           title={`${t.page.reviewCompletion}${periodSuffix}`}
-          value={formatPercent(
-            reviewCompletionRate,
-            appLanguage
-          )}
+          value={
+            reviewCompletionRate !== null
+              ? formatPercent(
+                  reviewCompletionRate,
+                  appLanguage
+                )
+              : noDataLabel
+          }
           description={t.page.reviewCompletionDescription}
           icon={CheckCircle2}
-          tone="text-violet-400"
+          tone={
+            reviewCompletionRate !== null
+              ? getReadinessTone(reviewCompletionRate)
+              : "text-muted-faint"
+          }
         />
 
-        <StatCard
+        <MetricCard
           title={`${t.page.highQualitySessions}${periodSuffix}`}
-          value={formatPercent(
-            highScoreRate,
-            appLanguage
-          )}
+          value={
+            highScoreRate !== null
+              ? formatPercent(
+                  highScoreRate,
+                  appLanguage
+                )
+              : noDataLabel
+          }
           description={t.page.highQualitySessionsDescription}
-          icon={TrendingUp}
-          tone="text-accent"
+          icon={Target}
+          tone={
+            highScoreRate !== null
+              ? "text-green-400"
+              : "text-muted-faint"
+          }
         />
       </section>
 
-      <section className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        <SessionInsightCard
-          title={t.page.focusedSessions}
-          value={focusedSessions}
-          tone="text-accent-bright"
-          description={t.page.focusedSessionsDescription}
-        />
-
-        <SessionInsightCard
-          title={t.page.reviewedSessions}
-          value={reviewedSessions}
-          tone="text-violet-400"
-          description={t.page.reviewedSessionsDescription}
-        />
-
-        <SessionInsightCard
-          title={t.page.highScoreSessions}
-          value={highScoreSessions}
-          tone="text-accent"
-          description={t.page.highScoreSessionsDescription}
-        />
-      </section>
-
-      <section className="grid items-stretch gap-6 xl:grid-cols-3">
-        <div className="flex xl:col-span-2 [&>*]:h-full [&>*]:w-full">
-          <PostMarketIntelligence
-            reviewedSessions={reviewedSessions}
-            pendingReviews={pendingReviews}
-            highScoreSessions={highScoreSessions}
-            appLanguage={appLanguage}
-          />
-        </div>
-
-        <div className="flex [&>*]:h-full [&>*]:w-full">
-          <BehaviorWarningCard
-            lowScoreSessions={lowScoreSessions}
-            pendingReviews={pendingReviews}
-            appLanguage={appLanguage}
-          />
-        </div>
-      </section>
-
-      <ExecutionIntelligence
-        lowScoreSessions={lowScoreSessions}
-        highScoreSessions={highScoreSessions}
-        reviewedSessions={reviewedSessions}
-        totalSessions={periodSessions.length}
-        appLanguage={appLanguage}
-      />
-
-      {canCreateSessions && (
-        <form
-          action={createTradingSession.bind(
-            null,
-            accountId
-          )}
-          className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl"
-        >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_8%,transparent),transparent_35%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.06),transparent_35%)]" />
-
-          <div className="relative z-10">
-            <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <section className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
+        {canCreateSessions && (
+          <Card className="p-6 sm:p-8">
+            <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
               <div>
-                <p className="text-sm text-gray-400">
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-accent-bright">
                   {t.page.newSessionEyebrow}
                 </p>
-
-                <h2 className="mt-1 text-3xl font-black text-white">
+                <h2 className="mt-3 text-section text-white">
                   {t.page.preMarketPlanning}
                 </h2>
-
-                <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-500">
+                <p className="mt-3 max-w-3xl text-sm leading-6 text-muted">
                   {t.page.preMarketDescription}
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-accent-bright">
+              <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-3 text-muted">
                 <ClipboardList size={22} />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              <input
-                name="date"
-                type="date"
-                required
-                className={inputClass}
-              />
+            <form
+              action={createTradingSession.bind(
+                null,
+                accountId
+              )}
+              className="mt-8 space-y-6"
+            >
+              <Card variant="inner" className="p-5">
+                <div className="mb-5 flex items-center gap-3">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-pill border-[0.5px] border-accent-bright/30 bg-accent-bright/[0.08] text-xs font-black text-accent-bright">
+                    1
+                  </span>
+                  <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
+                    Pre-market brief
+                  </p>
+                </div>
 
-              <input
-                name="title"
-                placeholder={t.page.titlePlaceholder}
-                className={inputClass}
-              />
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                  <input
+                    name="date"
+                    type="date"
+                    required
+                    className={inputClass}
+                  />
 
-              <select
-                name="sessionType"
-                className={inputClass}
-              >
-                <option value="">
-                  {t.page.sessionTypePlaceholder}
-                </option>
+                  <input
+                    name="title"
+                    placeholder={t.page.titlePlaceholder}
+                    className={inputClass}
+                  />
 
-                <option value="ASIA">
-                  {t.options.asia}
-                </option>
+                  <select
+                    name="sessionType"
+                    className={inputClass}
+                  >
+                    <option value="">
+                      {t.page.sessionTypePlaceholder}
+                    </option>
+                    <option value="ASIA">
+                      {t.options.asia}
+                    </option>
+                    <option value="LONDON">
+                      {t.options.london}
+                    </option>
+                    <option value="NEW_YORK">
+                      {t.options.newYork}
+                    </option>
+                    <option value="OVERLAP">
+                      {t.options.overlap}
+                    </option>
+                  </select>
 
-                <option value="LONDON">
-                  {t.options.london}
-                </option>
+                  <input
+                    name="marketBias"
+                    placeholder={t.page.marketBiasPlaceholder}
+                    className={inputClass}
+                  />
 
-                <option value="NEW_YORK">
-                  {t.options.newYork}
-                </option>
+                  <input
+                    name="focus"
+                    placeholder={t.page.focusPlaceholder}
+                    className={inputClass}
+                  />
 
-                <option value="OVERLAP">
-                  {t.options.overlap}
-                </option>
-              </select>
+                  <select
+                    name="emotionalState"
+                    className={inputClass}
+                  >
+                    <option value="">
+                      {t.page.emotionalStatePlaceholder}
+                    </option>
+                    <option value="CALM">
+                      {t.options.calm}
+                    </option>
+                    <option value="FOCUSED">
+                      {t.options.focused}
+                    </option>
+                    <option value="CONFIDENT">
+                      {t.options.confident}
+                    </option>
+                    <option value="TIRED">
+                      {t.options.tired}
+                    </option>
+                    <option value="STRESSED">
+                      {t.options.stressed}
+                    </option>
+                    <option value="IMPULSIVE">
+                      {t.options.impulsive}
+                    </option>
+                  </select>
+                </div>
+              </Card>
 
-              <input
-                name="marketBias"
-                placeholder={t.page.marketBiasPlaceholder}
-                className={inputClass}
-              />
+              <Card variant="inner" className="p-5">
+                <div className="mb-5 flex items-center gap-3">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-pill border-[0.5px] border-accent-bright/30 bg-accent-bright/[0.08] text-xs font-black text-accent-bright">
+                    2
+                  </span>
+                  <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
+                    Execution contract
+                  </p>
+                </div>
 
-              <input
-                name="focus"
-                placeholder={t.page.focusPlaceholder}
-                className={inputClass}
-              />
+                <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+                  <textarea
+                    name="checklist"
+                    placeholder={t.page.checklistPlaceholder}
+                    className={`${inputClass} min-h-[128px]`}
+                  />
 
-              <select
-                name="emotionalState"
-                className={inputClass}
-              >
-                <option value="">
-                  {t.page.emotionalStatePlaceholder}
-                </option>
+                  <textarea
+                    name="goals"
+                    placeholder={t.page.goalsPlaceholder}
+                    className={`${inputClass} min-h-[128px]`}
+                  />
 
-                <option value="CALM">
-                  {t.options.calm}
-                </option>
+                  <textarea
+                    name="mistakesToAvoid"
+                    placeholder={t.page.mistakesPlaceholder}
+                    className={`${inputClass} min-h-[128px]`}
+                  />
 
-                <option value="FOCUSED">
-                  {t.options.focused}
-                </option>
+                  <textarea
+                    name="sessionReview"
+                    placeholder={t.page.reviewPlaceholder}
+                    className={`${inputClass} min-h-[128px] xl:col-span-2`}
+                  />
 
-                <option value="CONFIDENT">
-                  {t.options.confident}
-                </option>
+                  <div className="grid gap-4 sm:grid-cols-[1fr_auto] xl:grid-cols-1">
+                    <input
+                      name="finalScore"
+                      type="number"
+                      min="1"
+                      max="10"
+                      placeholder={t.page.finalScorePlaceholder}
+                      className={inputClass}
+                    />
 
-                <option value="TIRED">
-                  {t.options.tired}
-                </option>
+                    <button
+                      type="submit"
+                      className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-inner bg-[linear-gradient(120deg,var(--color-accent),#3f86e8_60%,var(--color-accent-bright))] px-5 py-3 text-sm font-semibold text-white transition-all duration-fast hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(0,0,0,0.3),0_0_22px_rgba(52,168,255,0.12)]"
+                    >
+                      <Save size={17} />
+                      {t.page.saveSession}
+                    </button>
+                  </div>
+                </div>
+              </Card>
+            </form>
+          </Card>
+        )}
 
-                <option value="STRESSED">
-                  {t.options.stressed}
-                </option>
+        <div className="grid gap-4">
+          <Card className="p-6">
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-accent-bright">
+              Review discipline
+            </p>
+            <h2 className="mt-3 text-section text-white">
+              {t.insights.postMarketTitle}
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-muted">
+              {periodSessions.length === 0
+                ? t.page.emptySessions
+                : t.insights.executionDescription}
+            </p>
 
-                <option value="IMPULSIVE">
-                  {t.options.impulsive}
-                </option>
-              </select>
+            <div className="mt-6 grid gap-3">
+              <Card variant="inner" className="p-4">
+                <div className="flex items-center justify-between gap-4">
+                  <p className="text-sm text-muted">
+                    {t.insights.postMarketEyebrow}
+                  </p>
+                  <p className="text-2xl font-black text-accent-bright">
+                    {reviewedSessions}
+                  </p>
+                </div>
+              </Card>
 
-              <textarea
-                name="checklist"
-                placeholder={t.page.checklistPlaceholder}
-                className={`${inputClass} min-h-[120px]`}
-              />
+              <Card variant="inner" className="p-4">
+                <div className="flex items-center justify-between gap-4">
+                  <p className="text-sm text-muted">
+                    {t.insights.pendingReview}
+                  </p>
+                  <p
+                    className={`text-2xl font-black ${
+                      pendingReviews > 0
+                        ? "text-warning"
+                        : "text-muted-faint"
+                    }`}
+                  >
+                    {pendingReviews}
+                  </p>
+                </div>
+              </Card>
 
-              <textarea
-                name="goals"
-                placeholder={t.page.goalsPlaceholder}
-                className={`${inputClass} min-h-[120px]`}
-              />
+              <Card variant="inner" className="p-4">
+                <div className="flex items-center justify-between gap-4">
+                  <p className="text-sm text-muted">
+                    {t.page.focusedSessions}
+                  </p>
+                  <p className="text-2xl font-black text-white">
+                    {planningRate !== null
+                      ? formatPercent(
+                          planningRate,
+                          appLanguage
+                        )
+                      : noDataLabel}
+                  </p>
+                </div>
+              </Card>
+            </div>
+          </Card>
 
-              <textarea
-                name="mistakesToAvoid"
-                placeholder={t.page.mistakesPlaceholder}
-                className={`${inputClass} min-h-[120px]`}
-              />
-
-              <textarea
-                name="sessionReview"
-                placeholder={t.page.reviewPlaceholder}
-                className={`${inputClass} min-h-[120px] sm:col-span-2`}
-              />
-
-              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
-                <input
-                  name="finalScore"
-                  type="number"
-                  min="1"
-                  max="10"
-                  placeholder={t.page.finalScorePlaceholder}
-                  className={inputClass}
-                />
-
-                <button
-                  type="submit"
-                  className="flex h-full min-h-[52px] items-center justify-center gap-2 rounded-2xl bg-accent px-5 py-4 font-black text-white transition hover:bg-accent-bright"
-                >
-                  <Save size={18} />
-                  {t.page.saveSession}
-                </button>
+          <Card className="p-6">
+            <div className="flex items-start gap-4">
+              <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-3 text-muted">
+                <TriangleAlert size={20} />
+              </div>
+              <div>
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-faint">
+                  {t.insights.behaviorEyebrow}
+                </p>
+                <h3 className="mt-2 text-subsection text-white">
+                  {t.insights.behaviorTitle}
+                </h3>
+                <p className="mt-3 text-sm leading-6 text-muted">
+                  {periodSessions.length === 0
+                    ? t.page.emptySessions
+                    : t.insights.behaviorDescription}
+                </p>
               </div>
             </div>
-          </div>
-        </form>
-      )}
+
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              <Card variant="inner" className="p-4">
+                <p className="text-xs text-muted-faint">
+                  {t.insights.lowScoreSessions}
+                </p>
+                <p
+                  className={`mt-2 text-2xl font-black ${
+                    lowScoreSessions > 0
+                      ? "text-negative"
+                      : "text-muted-faint"
+                  }`}
+                >
+                  {lowScoreSessions}
+                </p>
+              </Card>
+              <Card variant="inner" className="p-4">
+                <p className="text-xs text-muted-faint">
+                  {t.insights.highScore}
+                </p>
+                <p className="mt-2 text-2xl font-black text-green-400">
+                  {highScoreSessions}
+                </p>
+              </Card>
+            </div>
+          </Card>
+        </div>
+      </section>
 
       <section className="space-y-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-sm text-gray-400">
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-faint">
               {t.page.sessionHistory}
             </p>
-
-            <h2 className="mt-1 text-3xl font-black text-white">
+            <h2 className="mt-2 text-section text-white">
               {t.page.recentSessions}
             </h2>
           </div>
 
           {lastSession && (
-            <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-gray-400">
+            <div className="flex items-center gap-2 rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-1 px-4 py-3 text-sm text-muted">
               <Clock3 size={16} />
               {t.page.last}:{" "}
               {formatDate(
@@ -628,53 +841,65 @@ export default async function SessionsPage({
         </div>
 
         {periodSessions.length === 0 ? (
-          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-10 text-center text-gray-500">
-            {t.page.emptySessions}
-          </div>
+          <Card className="p-8 text-center">
+            <ClipboardCheck
+              className="mx-auto text-muted"
+              size={26}
+            />
+            <h3 className="mt-4 text-subsection text-white">
+              {t.page.emptySessions}
+            </h3>
+            <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-muted">
+              {t.page.preMarketDescription}
+            </p>
+          </Card>
         ) : (
-          periodSessions.map((tradingSession) => {
-            const hasFinalScore =
-              tradingSession.finalScore !== null &&
-              tradingSession.finalScore !== undefined;
+          <div className="space-y-4">
+            {periodSessions.map((tradingSession) => {
+              const hasFinalScore =
+                tradingSession.finalScore !== null &&
+                tradingSession.finalScore !== undefined;
 
-            return (
-              <div
-                key={tradingSession.id}
-                className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl transition-all duration-300 hover:border-accent-bright/20 hover:bg-white/[0.06]"
-              >
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--color-accent-bright)_6%,transparent),transparent_35%)] opacity-0 transition group-hover:opacity-100" />
-
-                <div className="relative z-10">
-                  <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+              return (
+                <Card
+                  key={tradingSession.id}
+                  interactive
+                  className="p-5 sm:p-6"
+                >
+                  <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                     <div>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted-faint">
                         {formatDate(
                           tradingSession.date,
                           appLanguage
                         )}
                       </p>
 
-                      <h2 className="mt-1 text-2xl font-bold text-white">
+                      <h3 className="mt-2 text-subsection text-white">
                         {tradingSession.title ||
                           t.page.defaultSessionTitle}
-                      </h2>
+                      </h3>
 
-                      <div className="mt-3 flex flex-wrap gap-3">
+                      <div className="mt-4 flex flex-wrap gap-2">
                         {tradingSession.sessionType && (
-                          <span className="rounded-xl bg-blue-500/10 px-3 py-1 text-sm text-blue-400">
+                          <span className="rounded-pill border-[0.5px] border-accent-bright/20 bg-accent-bright/[0.06] px-3 py-1 text-xs font-medium uppercase tracking-[0.12em] text-accent-bright">
                             {tradingSession.sessionType}
                           </span>
                         )}
 
                         {tradingSession.emotionalState && (
-                          <span className="rounded-xl bg-yellow-500/10 px-3 py-1 text-sm text-yellow-400">
+                          <span
+                            className={`rounded-pill border-[0.5px] px-3 py-1 text-xs font-medium uppercase tracking-[0.12em] ${getEmotionTone(
+                              tradingSession.emotionalState
+                            )}`}
+                          >
                             {tradingSession.emotionalState}
                           </span>
                         )}
 
                         {hasFinalScore && (
                           <span
-                            className={`rounded-xl bg-white/10 px-3 py-1 text-sm ${getScoreTone(
+                            className={`rounded-pill border-[0.5px] border-flash/[0.1] bg-surface-2 px-3 py-1 text-xs font-medium uppercase tracking-[0.12em] ${getScoreTone(
                               tradingSession.finalScore || 0
                             )}`}
                           >
@@ -686,86 +911,54 @@ export default async function SessionsPage({
                     </div>
 
                     {tradingSession.marketBias && (
-                      <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm">
-                        <p className="text-gray-500">
+                      <Card variant="inner" className="min-w-56 p-4">
+                        <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted-faint">
                           {t.page.marketBias}
                         </p>
-
-                        <p className="mt-1 font-bold text-white">
+                        <p className="mt-2 text-sm font-semibold text-white">
                           {tradingSession.marketBias}
                         </p>
-                      </div>
+                      </Card>
                     )}
                   </div>
 
                   <div className="mt-6 grid grid-cols-1 gap-4 xl:grid-cols-2">
-                    {tradingSession.focus && (
-                      <div className="rounded-2xl bg-black/20 p-4">
-                        <p className="text-sm text-gray-500">
-                          {t.page.focus}
-                        </p>
+                    <FieldBlock
+                      label={t.page.focus}
+                      value={tradingSession.focus}
+                    />
 
-                        <p className="mt-2 text-gray-300">
-                          {tradingSession.focus}
-                        </p>
-                      </div>
-                    )}
+                    <FieldBlock
+                      label={t.page.goals}
+                      value={tradingSession.goals}
+                    />
 
-                    {tradingSession.goals && (
-                      <div className="rounded-2xl bg-black/20 p-4">
-                        <p className="text-sm text-gray-500">
-                          {t.page.goals}
-                        </p>
+                    <FieldBlock
+                      label={t.page.checklist}
+                      value={tradingSession.checklist}
+                    />
 
-                        <p className="mt-2 whitespace-pre-wrap text-gray-300">
-                          {tradingSession.goals}
-                        </p>
-                      </div>
-                    )}
-
-                    {tradingSession.checklist && (
-                      <div className="rounded-2xl bg-black/20 p-4">
-                        <p className="text-sm text-gray-500">
-                          {t.page.checklist}
-                        </p>
-
-                        <p className="mt-2 whitespace-pre-wrap text-gray-300">
-                          {tradingSession.checklist}
-                        </p>
-                      </div>
-                    )}
-
-                    {tradingSession.mistakesToAvoid && (
-                      <div className="rounded-2xl border border-red-500/10 bg-red-500/[0.03] p-4">
-                        <p className="text-sm text-red-400">
-                          {t.page.mistakesToAvoid}
-                        </p>
-
-                        <p className="mt-2 whitespace-pre-wrap text-gray-300">
-                          {tradingSession.mistakesToAvoid}
-                        </p>
-                      </div>
-                    )}
+                    <FieldBlock
+                      label={t.page.mistakesToAvoid}
+                      value={tradingSession.mistakesToAvoid}
+                      warning
+                    />
                   </div>
 
                   {tradingSession.sessionReview && (
-                    <div className="mt-5 rounded-2xl border border-accent/10  param($m) $m.Value -replace 'green-500', 'accent'  p-4">
-                      <p className="text-sm text-accent">
-                        {t.page.sessionReview}
-                      </p>
-
-                      <p className="mt-2 whitespace-pre-wrap text-gray-300">
-                        {tradingSession.sessionReview}
-                      </p>
+                    <div className="mt-4">
+                      <FieldBlock
+                        label={t.page.sessionReview}
+                        value={tradingSession.sessionReview}
+                      />
                     </div>
                   )}
-                </div>
-              </div>
-            );
-          })
+                </Card>
+              );
+            })}
+          </div>
         )}
       </section>
     </div>
   );
 }
-
