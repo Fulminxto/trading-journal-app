@@ -134,10 +134,10 @@ export default function ScopeBar({
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div className="relative z-0 rounded-card border-[0.5px] border-flash/[0.1] bg-surface-1/90 p-3 shadow-[0_10px_32px_rgba(0,0,0,0.22)] backdrop-blur-xl sm:p-4">
-      <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-flash/20 to-transparent" />
+    <div className="relative z-0 rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-1/85 px-2.5 py-2 shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+      <div className="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-flash/18 to-transparent" />
       <div
-        className={`relative flex flex-col gap-3 sm:flex-row sm:items-center ${
+        className={`relative flex flex-col gap-2 sm:flex-row sm:items-center ${
           mode === "all" ? "sm:justify-between" : ""
         } ${
           isPending ? "pointer-events-none" : ""
@@ -145,19 +145,19 @@ export default function ScopeBar({
       >
         {/* ── LEFT: Trader pills (shared accounts only) ── */}
         {showTrader && isShared && (
-          <div className="flex flex-wrap items-center gap-3 rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2/60 px-3 py-2">
-            <p className="shrink-0 text-xs font-semibold uppercase tracking-wider text-muted-faint">
+          <div className="flex min-w-0 flex-wrap items-center gap-2">
+            <p className="shrink-0 text-micro font-medium uppercase tracking-label text-muted-faint">
               {TRADER_LABEL[lang]}
             </p>
 
-            <div className={`flex flex-wrap gap-2 ${isPending ? "opacity-50" : ""}`}>
+            <div className={`flex min-w-0 flex-wrap gap-1.5 ${isPending ? "opacity-50" : ""}`}>
               {/* All traders pill */}
               <Pill
                 active={!selectedMemberId}
                 onClick={() => selectTrader("")}
                 avatar={
                   <span
-                    className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
+                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[9px] font-bold ${
                       !selectedMemberId
                         ? "bg-accent/20 text-accent"
                         : "bg-white/10 text-muted"
@@ -166,6 +166,7 @@ export default function ScopeBar({
                     {ALL_TRADERS_LABEL[lang][0].toUpperCase()}
                   </span>
                 }
+                className="px-2 py-1 text-xs"
               >
                 {ALL_TRADERS_LABEL[lang]}
               </Pill>
@@ -180,7 +181,7 @@ export default function ScopeBar({
                     onClick={() => selectTrader(member.id)}
                     avatar={
                       <span
-                        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
+                        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[9px] font-bold ${
                           isActive
                             ? "bg-accent/20 text-accent"
                             : "bg-white/10 text-muted"
@@ -189,6 +190,7 @@ export default function ScopeBar({
                         {displayName[0].toUpperCase()}
                       </span>
                     }
+                    className="px-2 py-1 text-xs"
                   >
                     {displayName}
                   </Pill>
@@ -200,18 +202,19 @@ export default function ScopeBar({
 
         {/* ── RIGHT: Period pills + navigator ── */}
         {showPeriod && (
-        <div className="flex flex-wrap items-center gap-3 rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2/60 px-3 py-2">
-          <p className="shrink-0 text-xs font-semibold uppercase tracking-wider text-muted-faint">
+        <div className="flex min-w-0 flex-wrap items-center gap-2">
+          <p className="shrink-0 text-micro font-medium uppercase tracking-label text-muted-faint">
             {PERIOD_LABEL[lang]}
           </p>
 
-          <div className={`flex flex-wrap items-center gap-2 ${isPending ? "opacity-50" : ""}`}>
+          <div className={`flex min-w-0 flex-wrap items-center gap-1.5 ${isPending ? "opacity-50" : ""}`}>
             {/* Preset pills */}
             {PRESETS.map((preset) => (
               <Pill
                 key={preset}
                 active={currentPeriod === preset}
                 onClick={() => selectPeriod(preset)}
+                className="px-2 py-1 text-xs"
               >
                 {getPeriodPresetLabel(preset, lang)}
               </Pill>
@@ -219,22 +222,22 @@ export default function ScopeBar({
 
             {/* Navigator: only when a specific period is active */}
             {currentPeriod !== "all" && currentRef && (
-              <div className="flex items-center gap-1 rounded-2xl border border-white/10 bg-white/[0.03] px-1 py-1">
+              <div className="flex items-center gap-1 rounded-pill border border-white/10 bg-white/[0.03] px-1 py-0.5">
                 <button
                   onClick={() => navigate(-1)}
-                  className="flex h-7 w-7 items-center justify-center rounded-xl text-muted transition hover:bg-white/10 hover:text-white"
+                  className="flex h-6 w-6 items-center justify-center rounded-pill text-muted transition hover:bg-white/10 hover:text-white"
                   aria-label="Previous"
                 >
                   ‹
                 </button>
 
-                <span className="min-w-[120px] px-2 text-center text-sm text-white">
+                <span className="min-w-[96px] px-1.5 text-center text-xs text-white">
                   {navigatorLabel}
                 </span>
 
                 <button
                   onClick={() => navigate(1)}
-                  className="flex h-7 w-7 items-center justify-center rounded-xl text-muted transition hover:bg-white/10 hover:text-white"
+                  className="flex h-6 w-6 items-center justify-center rounded-pill text-muted transition hover:bg-white/10 hover:text-white"
                   aria-label="Next"
                 >
                   ›
@@ -244,14 +247,14 @@ export default function ScopeBar({
           </div>
 
           {/* Loading indicator */}
-          {isPending && <VoltisLightningLoader size={20} />}
+          {isPending && <VoltisLightningLoader size={16} />}
         </div>
         )}
       </div>
 
       {/* ── Scope description row ── */}
       {showDescription && (
-        <p className="relative mt-3 border-t-[0.5px] border-flash/[0.06] pt-3 text-xs text-muted-faint">
+        <p className="relative mt-2 text-micro text-muted-faint">
           {scopeDescription}
         </p>
       )}

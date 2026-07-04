@@ -71,6 +71,7 @@ export default function EquityChart({ data, language }: Props) {
   const firstEquity = data[0]?.equity || 0;
   const lastEquity = data[data.length - 1]?.equity || 0;
   const isPositive = lastEquity >= firstEquity;
+  const hasSeries = data.length > 1;
 
   const lang = normalizeAppLanguage(language);
   const tl = tooltipLabels[lang];
@@ -82,14 +83,18 @@ export default function EquityChart({ data, language }: Props) {
 
   return (
     <div className="relative h-[390px] min-h-[390px] w-full min-w-0 overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.03] p-4 backdrop-blur-xl">
-      <div
-        className="pointer-events-none absolute inset-0 opacity-80 blur-3xl"
-        style={{
-          background: `radial-gradient(circle at 50% 10%, ${glowColor}, transparent 45%)`,
-        }}
-      />
+      {hasSeries && (
+        <>
+          <div
+            className="pointer-events-none absolute inset-0 opacity-80 blur-3xl"
+            style={{
+              background: `radial-gradient(circle at 50% 10%, ${glowColor}, transparent 45%)`,
+            }}
+          />
 
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,color-mix(in_srgb,var(--color-accent-bright)_6%,transparent),transparent_35%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,color-mix(in_srgb,var(--color-accent-bright)_6%,transparent),transparent_35%)]" />
+        </>
+      )}
 
       <ResponsiveContainer width="100%" height={355}>
         <AreaChart
@@ -166,20 +171,31 @@ export default function EquityChart({ data, language }: Props) {
             }}
           />
 
-          <Area
-            type="monotone"
-            dataKey="equity"
-            stroke="transparent"
-            fill="url(#equityGradient)"
-            animationDuration={900}
-          />
+          {hasSeries && (
+            <Area
+              type="monotone"
+              dataKey="equity"
+              stroke="transparent"
+              fill="url(#equityGradient)"
+              animationDuration={900}
+            />
+          )}
 
           <Line
             type="monotone"
             dataKey="equity"
             stroke={mainColor}
-            strokeWidth={3.5}
-            dot={false}
+            strokeWidth={hasSeries ? 3.5 : 0}
+            dot={
+              hasSeries
+                ? false
+                : {
+                    r: 5,
+                    stroke: "#0C1430",
+                    strokeWidth: 3,
+                    fill: mainColor,
+                  }
+            }
             activeDot={{
               r: 6,
               stroke: "#0C1430",

@@ -29,6 +29,7 @@ import {
   X,
   BarChart3,
   Bot,
+  ClipboardCheck,
   FileText,
   Megaphone,
   ShieldAlert,
@@ -99,6 +100,7 @@ type SidebarLabels = {
   analytics: string;
   reports: string;
   copilot: string;
+  playbook: string;
   workspace: string;
   sessions: string;
   rules: string;
@@ -137,6 +139,7 @@ const sidebarLabels: Record<
     analytics: "Analytics",
     reports: "Reports",
     copilot: "Copilot",
+    playbook: "Playbook",
     workspace: "Workspace Intelligence",
     sessions: "Sessions",
     rules: "Rules & Goals",
@@ -171,6 +174,7 @@ const sidebarLabels: Record<
     analytics: "Analytics",
     reports: "Reports",
     copilot: "Copilot",
+    playbook: "Playbook",
     workspace: "Workspace Intelligence",
     sessions: "Sessions",
     rules: "Rules & Goals",
@@ -205,6 +209,7 @@ const sidebarLabels: Record<
     analytics: "Аналітика",
     reports: "Звіти",
     copilot: "Copilot",
+    playbook: "Playbook",
     workspace: "Workspace Intelligence",
     sessions: "Сесії",
     rules: "Правила та цілі",
@@ -239,6 +244,7 @@ const sidebarLabels: Record<
     analytics: "Аналитика",
     reports: "Отчеты",
     copilot: "Copilot",
+    playbook: "Playbook",
     workspace: "Workspace Intelligence",
     sessions: "Сессии",
     rules: "Правила и цели",
@@ -273,6 +279,7 @@ const sidebarLabels: Record<
     analytics: "Analítica",
     reports: "Informes",
     copilot: "Copilot",
+    playbook: "Playbook",
     workspace: "Workspace Intelligence",
     sessions: "Sesiones",
     rules: "Reglas y objetivos",
@@ -307,6 +314,7 @@ const sidebarLabels: Record<
     analytics: "Analytics",
     reports: "Rapports",
     copilot: "Copilot",
+    playbook: "Playbook",
     workspace: "Workspace Intelligence",
     sessions: "Sessions",
     rules: "Règles et objectifs",
@@ -341,6 +349,7 @@ const sidebarLabels: Record<
     analytics: "Analytics",
     reports: "Berichte",
     copilot: "Copilot",
+    playbook: "Playbook",
     workspace: "Workspace Intelligence",
     sessions: "Sessions",
     rules: "Regeln & Ziele",
@@ -410,6 +419,14 @@ const baseLinks: AccountLink[] = [
       permissions.canViewCopilot,
   },
   {
+    path: "playbook",
+    label: "Playbook",
+    icon: ClipboardCheck,
+    canShow: (permissions) =>
+      isManager(permissions) ||
+      permissions.canCreateTrades,
+  },
+  {
     path: "workspace",
     label: "Workspace Intelligence",
     icon: Users,
@@ -471,6 +488,10 @@ function getAccountLinkLabel(
 
   if (path === "copilot") {
     return labels.copilot;
+  }
+
+  if (path === "playbook") {
+    return labels.playbook;
   }
 
   if (path === "workspace") {
@@ -790,7 +811,7 @@ export default function Sidebar({
         onMouseLeave={() =>
           setCollapsed(true)
         }
-        className={`faded-scroll fixed left-0 top-0 z-50 flex h-screen flex-col overflow-y-auto border-r border-white/[0.06] bg-surface-1 p-4 pt-[calc(env(safe-area-inset-top)+1rem)] shadow-[18px_0_42px_rgba(6,10,26,0.2)] transition-all duration-500 ease-out [scrollbar-width:none] after:pointer-events-none after:absolute after:inset-y-0 after:right-0 after:w-5 after:bg-gradient-to-l after:from-bg-base/35 after:to-transparent after:backdrop-blur-[1px] after:content-[''] [&::-webkit-scrollbar]:hidden lg:sticky lg:z-40 lg:pt-4 ${isCollapsed
+        className={`faded-scroll sidebar-scrollbar-none fixed left-0 top-0 z-50 flex h-screen flex-col overflow-y-auto border-r border-flash/[0.12] bg-surface-1 p-4 pt-[calc(env(safe-area-inset-top)+1rem)] shadow-[24px_0_56px_rgba(6,10,26,0.28)] transition-all duration-500 ease-out after:pointer-events-none after:absolute after:inset-y-0 after:right-0 after:w-8 after:bg-gradient-to-l after:from-bg-base/55 after:via-bg-base/20 after:to-transparent after:backdrop-blur-[2px] after:content-[''] lg:sticky lg:z-40 lg:pt-4 ${isCollapsed
           ? "w-[88px]"
           : "w-72 lg:w-64"
           } ${open

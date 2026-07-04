@@ -35,6 +35,7 @@ type AccountsCopy = {
   overviewEyebrow: string;
   welcomeBack: string;
   heroDescription: string;
+  operatingSummary: (activeAccounts: string, totalTrades: string) => string;
 
   manageAccounts: string;
   createAccount: string;
@@ -70,6 +71,8 @@ const accountsCopy: Record<AppLanguage, AccountsCopy> = {
     welcomeBack: "Bentornato",
     heroDescription:
       "Panoramica pulita dei tuoi account operativi. Qui apri e analizzi; la gestione completa rimane nella sezione Manage My Accounts.",
+    operatingSummary: (activeAccounts, totalTrades) =>
+      `Sistema stabile · ${activeAccounts} account attivi · ${totalTrades} trade registrati`,
 
     manageAccounts: "Gestisci account",
     createAccount: "Crea account",
@@ -104,6 +107,8 @@ const accountsCopy: Record<AppLanguage, AccountsCopy> = {
     welcomeBack: "Welcome back",
     heroDescription:
       "A clean overview of your operating accounts. Open and analyze from here; full management remains inside Manage My Accounts.",
+    operatingSummary: (activeAccounts, totalTrades) =>
+      `System stable · ${activeAccounts} active accounts · ${totalTrades} trades recorded`,
 
     manageAccounts: "Manage My Accounts",
     createAccount: "Create Account",
@@ -138,6 +143,8 @@ const accountsCopy: Record<AppLanguage, AccountsCopy> = {
     welcomeBack: "З поверненням",
     heroDescription:
       "Чистий огляд ваших робочих акаунтів. Тут ви відкриваєте та аналізуєте; повне керування залишається в розділі керування акаунтами.",
+    operatingSummary: (activeAccounts, totalTrades) =>
+      `System stable · ${activeAccounts} active accounts · ${totalTrades} trades recorded`,
 
     manageAccounts: "Керувати акаунтами",
     createAccount: "Створити акаунт",
@@ -172,6 +179,8 @@ const accountsCopy: Record<AppLanguage, AccountsCopy> = {
     welcomeBack: "С возвращением",
     heroDescription:
       "Чистый обзор ваших рабочих аккаунтов. Здесь вы открываете и анализируете; полное управление остается в разделе управления аккаунтами.",
+    operatingSummary: (activeAccounts, totalTrades) =>
+      `System stable · ${activeAccounts} active accounts · ${totalTrades} trades recorded`,
 
     manageAccounts: "Управлять аккаунтами",
     createAccount: "Создать аккаунт",
@@ -206,6 +215,8 @@ const accountsCopy: Record<AppLanguage, AccountsCopy> = {
     welcomeBack: "Bienvenido de nuevo",
     heroDescription:
       "Una vista limpia de tus cuentas operativas. Desde aquí abres y analizas; la gestión completa queda dentro de Manage My Accounts.",
+    operatingSummary: (activeAccounts, totalTrades) =>
+      `Sistema estable · ${activeAccounts} cuentas activas · ${totalTrades} trades registrados`,
 
     manageAccounts: "Gestionar cuentas",
     createAccount: "Crear cuenta",
@@ -240,6 +251,8 @@ const accountsCopy: Record<AppLanguage, AccountsCopy> = {
     welcomeBack: "Bon retour",
     heroDescription:
       "Une vue claire de vos comptes opérationnels. Ouvrez et analysez ici; la gestion complète reste dans Manage My Accounts.",
+    operatingSummary: (activeAccounts, totalTrades) =>
+      `Systeme stable · ${activeAccounts} comptes actifs · ${totalTrades} trades enregistres`,
 
     manageAccounts: "Gérer mes comptes",
     createAccount: "Créer un compte",
@@ -274,6 +287,8 @@ const accountsCopy: Record<AppLanguage, AccountsCopy> = {
     welcomeBack: "Willkommen zurück",
     heroDescription:
       "Eine klare Übersicht deiner operativen Konten. Hier öffnest und analysierst du; die vollständige Verwaltung bleibt in Manage My Accounts.",
+    operatingSummary: (activeAccounts, totalTrades) =>
+      `System stabil · ${activeAccounts} aktive Konten · ${totalTrades} Trades erfasst`,
 
     manageAccounts: "Konten verwalten",
     createAccount: "Konto erstellen",
@@ -379,6 +394,11 @@ export default async function AccountsPage() {
     (acc, membership) =>
       acc + membership.tradingAccount.trades.length,
     0
+  );
+
+  const operatingSummary = t.operatingSummary(
+    formatNumberByLanguage(activeMemberships.length, language),
+    formatNumberByLanguage(totalTrades, language)
   );
 
   const totalPnl = memberships.reduce(
@@ -543,6 +563,10 @@ export default async function AccountsPage() {
 
             <p className="mt-4 max-w-2xl text-sm leading-6 text-muted">
               {t.heroDescription}
+            </p>
+
+            <p className="mt-4 inline-flex rounded-pill border-[0.5px] border-flash/[0.1] bg-surface-2/70 px-3 py-1.5 text-micro uppercase tracking-label text-muted">
+              {operatingSummary}
             </p>
           </div>
 

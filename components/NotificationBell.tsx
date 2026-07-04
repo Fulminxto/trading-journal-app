@@ -6,6 +6,7 @@ import {
   CheckCheck,
   Inbox,
   Loader2,
+  RefreshCw,
   ShieldCheck,
   Users,
 } from "lucide-react";
@@ -45,6 +46,7 @@ type PanelCopy = {
   title: string;
   commandSurface: string;
   markAllAsRead: string;
+  refresh: string;
   viewAll: string;
   emptyTitle: string;
   emptyDescription: string;
@@ -55,13 +57,17 @@ const basePanelCopy: PanelCopy = {
   title: "Notifications",
   commandSurface: "Command surface",
   markAllAsRead: "Mark all read",
+  refresh: "Refresh",
   viewAll: "View all",
   emptyTitle: "No notifications",
   emptyDescription: "Important account updates will appear here.",
 };
 
 const panelCopy: Record<AppLanguage, PanelCopy> = {
-  it: basePanelCopy,
+  it: {
+    ...basePanelCopy,
+    refresh: "Aggiorna",
+  },
   en: basePanelCopy,
   uk: basePanelCopy,
   ru: basePanelCopy,
@@ -235,6 +241,21 @@ export default function NotificationBell({ language }: { language?: string }) {
     }
   }
 
+  async function handleRefresh() {
+    setLoading(true);
+
+    try {
+      const result = await fetchNotifications();
+
+      if (result) {
+        setNotifications(result.notifications);
+        setCount(result.unreadCount);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
   async function handleMarkAllAsRead() {
     setNotifications((current) =>
       current.map((item) => ({ ...item, read: true }))
@@ -377,6 +398,20 @@ export default function NotificationBell({ language }: { language?: string }) {
                 <h2 className="mt-1 text-subsection text-flash">{t.title}</h2>
               </div>
 
+              <div className="flex shrink-0 items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleRefresh}
+                  disabled={loading}
+                  className="inline-flex items-center gap-1.5 rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-2 px-3 py-2 text-caption font-medium text-muted transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/45 hover:text-accent-bright disabled:pointer-events-none disabled:opacity-60"
+                >
+                  <RefreshCw
+                    size={14}
+                    className={loading ? "animate-spin" : ""}
+                  />
+                  {t.refresh}
+                </button>
+
               {count > 0 && (
                 <button
                   type="button"
@@ -387,6 +422,7 @@ export default function NotificationBell({ language }: { language?: string }) {
                   {t.markAllAsRead}
                 </button>
               )}
+              </div>
             </div>
           </div>
 
