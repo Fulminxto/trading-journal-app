@@ -28,6 +28,7 @@ import {
   getPeriodRange,
   getPeriodSuffix,
 } from "@/lib/scope";
+import { pageDensity } from "@/lib/page-density";
 
 import { createTradingSession } from "./actions";
 import { getSessionsCopy } from "@/components/sessions/SessionI18n";
@@ -392,17 +393,11 @@ export default async function SessionsPage({
     : undefined;
 
   return (
-    <div className="space-y-8">
-      <ScopeBar
-        members={members}
-        selectedMemberId={selectedMemberId}
-        currentPeriod={period}
-        currentRef={ref}
-        appLanguage={appLanguage}
-        accountId={accountId}
-      />
-
-      <Card variant="hero" className="p-6 sm:p-10">
+    <div className="space-y-6">
+      <Card
+        variant="hero"
+        className={`p-6 sm:p-10 ${pageDensity.topbarSafeArea}`}
+      >
         <div className="grid gap-8 xl:grid-cols-[1fr_360px] xl:items-end">
           <div>
             <div className="flex flex-wrap items-center gap-3">
@@ -470,6 +465,15 @@ export default async function SessionsPage({
           </Card>
         </div>
       </Card>
+
+      <ScopeBar
+        members={members}
+        selectedMemberId={selectedMemberId}
+        currentPeriod={period}
+        currentRef={ref}
+        appLanguage={appLanguage}
+        accountId={accountId}
+      />
 
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <MetricCard

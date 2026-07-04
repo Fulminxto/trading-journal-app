@@ -30,7 +30,7 @@ export default function PageHeader({
 }: PageHeaderProps) {
   return (
     <header
-      className={`relative overflow-hidden rounded-card border-[0.5px] border-flash/[0.1] bg-surface-1/90 px-5 py-5 shadow-[0_10px_36px_rgba(0,0,0,0.26)] backdrop-blur-xl sm:px-6 lg:pr-44 ${className}`.trim()}
+      className={`relative overflow-hidden rounded-card border-[0.5px] border-flash/[0.1] bg-surface-1/90 px-5 py-5 shadow-[0_10px_36px_rgba(0,0,0,0.26)] backdrop-blur-xl sm:px-6 lg:pr-[18rem] xl:pr-[20rem] ${className}`.trim()}
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-flash/25 to-transparent" />
       <SignatureEdge

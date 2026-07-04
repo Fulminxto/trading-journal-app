@@ -37,7 +37,7 @@ export default function AppShell({
       <main className="relative min-h-screen flex-1 overflow-x-hidden">
         <Topbar user={user} onOpenSidebar={() => setSidebarOpen(true)} />
 
-        <div className="p-4 pt-[calc(env(safe-area-inset-top)+5rem)] sm:p-6 sm:pt-[calc(env(safe-area-inset-top)+5.5rem)] lg:p-8 lg:pt-14">
+        <div className="p-4 pt-[calc(env(safe-area-inset-top)+5rem)] sm:p-6 sm:pt-[calc(env(safe-area-inset-top)+5.5rem)] lg:p-8 lg:pt-8">
           {children}
 
           <footer className="mt-16 hidden border-t border-white/5 pt-6 text-center print:hidden">

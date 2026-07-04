@@ -606,7 +606,7 @@ export default async function ReportsPage({
             tribunal document sits still; it doesn't have the same
             "alive" crystal signature every other page's hero uses. */}
         <div className="print-hidden">
-          <Card className={`border-[0.5px] border-flash/[0.14] ${pageDensity.reports.panel}`}>
+          <Card className={`border-[0.5px] border-flash/[0.14] ${pageDensity.reports.panel} ${pageDensity.topbarSafeArea}`}>
             <div className="flex items-center gap-3">
               <SignatureEdge orientation="vertical" pulse={false} className="h-4" />
               <p className="text-sm text-muted">{t.heroEyebrow}</p>

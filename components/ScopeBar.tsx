@@ -134,7 +134,7 @@ export default function ScopeBar({
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div className="relative z-0 py-1">
+    <div className="relative z-0 py-0.5">
       <div
         className={`relative flex flex-col gap-2 sm:flex-row sm:items-center ${
           mode === "all" ? "sm:justify-between" : ""
@@ -253,7 +253,7 @@ export default function ScopeBar({
 
       {/* ── Scope description row ── */}
       {showDescription && (
-        <p className="relative mt-2 text-micro text-muted-faint">
+        <p className="relative mt-1.5 text-micro text-muted-faint">
           {scopeDescription}
         </p>
       )}

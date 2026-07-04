@@ -941,7 +941,7 @@ export default async function CalendarPage({
       )}
 
       <div
-        className="reveal-rise flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between"
+        className={`reveal-rise flex flex-col gap-4 lg:pr-[18rem] xl:pr-[20rem] xl:flex-row xl:items-end xl:justify-between`}
         style={{ animationDelay: "0ms" }}
       >
         <div>

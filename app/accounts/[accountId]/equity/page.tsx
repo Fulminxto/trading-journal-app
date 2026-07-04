@@ -958,7 +958,7 @@ export default async function EquityPage({
   return (
     <div className={pageDensity.equity.page}>
       <div
-        className="reveal-rise flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between"
+        className={`reveal-rise flex flex-col gap-4 ${pageDensity.topbarSafeArea} xl:flex-row xl:items-end xl:justify-between`}
         style={{ animationDelay: "0ms" }}
       >
         <div>

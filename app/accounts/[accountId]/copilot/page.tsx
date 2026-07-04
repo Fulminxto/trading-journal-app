@@ -420,7 +420,10 @@ export default async function CopilotPage({
 
   return (
     <div className={pageDensity.copilot.page}>
-      <Card variant="hero" className={pageDensity.copilot.hero}>
+      <Card
+        variant="hero"
+        className={`${pageDensity.copilot.hero} ${pageDensity.topbarSafeArea}`}
+      >
         <div className={`grid ${pageDensity.copilot.sectionGrid} xl:grid-cols-[1fr_360px] xl:items-end`}>
           <div>
             <div className="flex flex-wrap items-center gap-3">

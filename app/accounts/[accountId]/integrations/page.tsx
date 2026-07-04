@@ -436,10 +436,10 @@ export default async function IntegrationsPage({
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <GlobalToast status={query.toast} language={language} />
 
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex flex-col gap-4 lg:pr-[18rem] xl:pr-[20rem] lg:flex-row lg:items-center lg:justify-between">
         <div>
           <p className="text-micro uppercase tracking-hero text-muted-faint">
             Secure connection control

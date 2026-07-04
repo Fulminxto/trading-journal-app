@@ -1170,7 +1170,7 @@ export default async function DashboardPage({
   return (
     <div className={pageDensity.dashboard.page}>
       <div className={pageDensity.dashboard.header}>
-        <div className="flex flex-col gap-3 xl:flex-row xl:items-end xl:justify-between">
+        <div className={pageDensity.headerRow}>
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center gap-3">
               <SignatureEdge orientation="vertical" className="h-4" />
@@ -1194,24 +1194,27 @@ export default async function DashboardPage({
               </span>
             </div>
 
-            <ScopeBar
-              accountId={accountId}
-              members={
-                isSharedAccount
-                  ? accountMembers.map((m) => ({
-                      id: m.user.id,
-                      name: m.user.name,
-                      username: m.user.username,
-                    }))
-                  : undefined
-              }
-              selectedMemberId={selectedMemberId}
-              currentPeriod={period}
-              currentRef={ref}
-              appLanguage={language}
-              mode="trader"
-            />
           </div>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <ScopeBar
+            accountId={accountId}
+            members={
+              isSharedAccount
+                ? accountMembers.map((m) => ({
+                    id: m.user.id,
+                    name: m.user.name,
+                    username: m.user.username,
+                  }))
+                : undefined
+            }
+            selectedMemberId={selectedMemberId}
+            currentPeriod={period}
+            currentRef={ref}
+            appLanguage={language}
+            mode="trader"
+          />
 
           <ScopeBar
             accountId={accountId}

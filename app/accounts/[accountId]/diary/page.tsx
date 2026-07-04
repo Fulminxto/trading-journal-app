@@ -1331,7 +1331,10 @@ export default async function DiaryPage({
 
   return (
     <div className={pageDensity.diary.page}>
-      <div className="reveal-rise" style={{ animationDelay: "0ms" }}>
+      <div
+        className={`reveal-rise ${pageDensity.topbarSafeArea}`}
+        style={{ animationDelay: "0ms" }}
+      >
         <div className="flex items-center gap-3">
           <SignatureEdge orientation="vertical" className="h-4" />
           <p className="text-sm text-muted">
