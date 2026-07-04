@@ -563,17 +563,6 @@ export default async function ReportsPage({
 
   return (
     <div className="space-y-8 print:space-y-0 print:bg-bg-base">
-      <div className="print:hidden">
-        <ScopeBar
-          members={members}
-          selectedMemberId={selectedMemberId ?? undefined}
-          currentPeriod={period}
-          currentRef={ref}
-          appLanguage={language}
-          accountId={accountId}
-        />
-      </div>
-
       <PDFCompactReport
         appLanguage={language}
         currency={currency}
@@ -632,6 +621,17 @@ export default async function ReportsPage({
               </div>
             </div>
           </Card>
+        </div>
+
+        <div className="print:hidden">
+          <ScopeBar
+            members={members}
+            selectedMemberId={selectedMemberId ?? undefined}
+            currentPeriod={period}
+            currentRef={ref}
+            appLanguage={language}
+            accountId={accountId}
+          />
         </div>
 
         <div className="print-hidden">

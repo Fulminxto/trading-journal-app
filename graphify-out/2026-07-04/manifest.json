@@ -380,8 +380,8 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/analytics/page.tsx": {
-    "mtime": 1782156612.6782057,
-    "ast_hash": "f4c75f6ba4eacc07d19a4ba353ed6a20",
+    "mtime": 1783114252.2551167,
+    "ast_hash": "11af929250f2ca4371a27594ef9875cf",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/calendar/loading.tsx": {
@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/copilot/page.tsx": {
-    "mtime": 1783074586.6442678,
-    "ast_hash": "786ad17c34d001adef7cd68d201b0935",
+    "mtime": 1783155595.893558,
+    "ast_hash": "a2710e2f1edb6172d74891f141332432",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/dashboard/loading.tsx": {
@@ -470,13 +470,13 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/integrations/page.tsx": {
-    "mtime": 1782317520.1182513,
-    "ast_hash": "ef28aca2167d777ed9cdab66f179f651",
+    "mtime": 1783159898.595497,
+    "ast_hash": "e966f7012c96cabbcc7f3f8f15a6a255",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/members/[memberId]/page.tsx": {
-    "mtime": 1782317520.201527,
-    "ast_hash": "6986cef4fcdba533a60a7b33c871d438",
+    "mtime": 1783156562.983429,
+    "ast_hash": "9825181d50bc058c1a7cfe94304f6a63",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/members/actions.ts": {
@@ -495,8 +495,8 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/members/page.tsx": {
-    "mtime": 1782422353.2617853,
-    "ast_hash": "d068f0083f72acfd256569b8e19843dd",
+    "mtime": 1783156580.6671078,
+    "ast_hash": "aab2d41eb758d4d89b6911084d55d9d8",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/page.tsx": {
@@ -505,13 +505,13 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/playbook/actions.ts": {
-    "mtime": 1782317520.271811,
-    "ast_hash": "c4079992765b4eb5b46362c0dd2654a1",
+    "mtime": 1783160421.9232073,
+    "ast_hash": "53c655b19ffec00790e19cb93e21d07c",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/playbook/page.tsx": {
-    "mtime": 1782317520.18515,
-    "ast_hash": "4a3a66a3e4a8bd7cd049e78f7f8cbe18",
+    "mtime": 1783160426.939168,
+    "ast_hash": "9ed83a03ad72f4103543dbcded68709a",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/playbook/strategy-form.tsx": {
@@ -525,8 +525,8 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/reports/page.tsx": {
-    "mtime": 1782558820.6702795,
-    "ast_hash": "4ba840a98ba2410feb100941c2330e0e",
+    "mtime": 1783154419.9250906,
+    "ast_hash": "f313a40ee07e42fd27ce52915242b0ce",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/rules/actions.ts": {
@@ -540,8 +540,8 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/rules/page.tsx": {
-    "mtime": 1783074560.9838169,
-    "ast_hash": "e86e15550f54f25942ae9dbd0a058d65",
+    "mtime": 1783159166.2599237,
+    "ast_hash": "97cd6f60b64e01e766dc8d9536cd138c",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/sessions/actions.ts": {
@@ -555,8 +555,8 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/sessions/page.tsx": {
-    "mtime": 1782158441.6850333,
-    "ast_hash": "3701ee65dd64495fca6f5c68465d52a2",
+    "mtime": 1783155069.038319,
+    "ast_hash": "43f08034c9ff214b59313d2dbb051946",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/workspace/loading.tsx": {
@@ -565,8 +565,8 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/workspace/page.tsx": {
-    "mtime": 1782422332.0037177,
-    "ast_hash": "debb621369d90a65100622caf0b20fca",
+    "mtime": 1783157759.7567487,
+    "ast_hash": "2c2e43c6033a1bc57dc47909b317af93",
     "semantic_hash": ""
   },
   "app/accounts/actions.ts": {
@@ -775,8 +775,8 @@
     "semantic_hash": ""
   },
   "app/notifications/page.tsx": {
-    "mtime": 1782317488.410914,
-    "ast_hash": "c2d6002eca86a7290dedf3c419bb80a1",
+    "mtime": 1783161586.092412,
+    "ast_hash": "63242e1b2b57b6b41ad0ba328f090a30",
     "semantic_hash": ""
   },
   "app/page.tsx": {
@@ -785,8 +785,8 @@
     "semantic_hash": ""
   },
   "app/profile/ChangePasswordForm.tsx": {
-    "mtime": 1782559226.0042293,
-    "ast_hash": "564c4f2c4290ac7424e7f55ea0af85d2",
+    "mtime": 1783162617.2191076,
+    "ast_hash": "a95a5519068b54fc20d0bd66bf4f7dca",
     "semantic_hash": ""
   },
   "app/profile/actions.ts": {
@@ -800,8 +800,8 @@
     "semantic_hash": ""
   },
   "app/profile/page.tsx": {
-    "mtime": 1781864579.4126053,
-    "ast_hash": "243852bce9de0a3e0b2fb1e366d9ce4f",
+    "mtime": 1783162683.1962335,
+    "ast_hash": "b9b5d5d34a83ff043c1fdfb19fbf4c9c",
     "semantic_hash": ""
   },
   "app/settings/actions.ts": {
@@ -875,8 +875,8 @@
     "semantic_hash": ""
   },
   "components/NotificationBell.tsx": {
-    "mtime": 1783075984.6894574,
-    "ast_hash": "561642c63cca60bdc692b494aab7bcb5",
+    "mtime": 1783161363.955656,
+    "ast_hash": "c5571b911696b68b29fbf78faeac5c94",
     "semantic_hash": ""
   },
   "components/OnboardingModal.tsx": {
@@ -939,114 +939,39 @@
     "ast_hash": "e741c1ceeedc2a6565a7d96cc67ff5a9",
     "semantic_hash": ""
   },
-  "components/analytics/AnalyticsHero.tsx": {
-    "mtime": 1782558959.546102,
-    "ast_hash": "1a76f7473b10981b9fbd45df9e9816a6",
-    "semantic_hash": ""
-  },
   "components/analytics/AnalyticsI18n.ts": {
-    "mtime": 1780466169.3165014,
-    "ast_hash": "71fc081411f5e7a413cf8bf3d5a2c250",
+    "mtime": 1783113956.283142,
+    "ast_hash": "2b7e54d2aad154193a51147bb312c956",
     "semantic_hash": ""
   },
   "components/analytics/AnalyticsSection.tsx": {
-    "mtime": 1781609922.6283987,
-    "ast_hash": "35795002f31b81453bc85731db2a256d",
+    "mtime": 1783113672.7821498,
+    "ast_hash": "51d27358464f79f093e7078df3f496ac",
     "semantic_hash": ""
   },
   "components/analytics/AnalyticsStatCard.tsx": {
-    "mtime": 1781609937.0644045,
-    "ast_hash": "5dc176ab95837a62feacfa35c39eba02",
-    "semantic_hash": ""
-  },
-  "components/analytics/BehavioralRiskHeatmap.tsx": {
-    "mtime": 1780482692.6512556,
-    "ast_hash": "58209628dad78b8bdb59b69fed4020fd",
-    "semantic_hash": ""
-  },
-  "components/analytics/ConfidenceEvolutionChart.tsx": {
-    "mtime": 1781779790.3643143,
-    "ast_hash": "4f4694ad574dadfec1284edd40946850",
-    "semantic_hash": ""
-  },
-  "components/analytics/ConfidencePerformanceHeatmap.tsx": {
-    "mtime": 1781609948.0052686,
-    "ast_hash": "6a91c6a7cf2806cd0272e510ebd552b5",
-    "semantic_hash": ""
-  },
-  "components/analytics/ConsistencyCurveChart.tsx": {
-    "mtime": 1781779806.704831,
-    "ast_hash": "205730455ba5b31a40bf9696e3024b39",
-    "semantic_hash": ""
-  },
-  "components/analytics/DisciplineEvolutionChart.tsx": {
-    "mtime": 1781779807.7093973,
-    "ast_hash": "14e2d2284074ea620b7ef823d7d5f2bf",
-    "semantic_hash": ""
-  },
-  "components/analytics/EmotionalStateHeatmap.tsx": {
-    "mtime": 1780466190.5372436,
-    "ast_hash": "f71db8166627ff279f3bf01fd072d1a7",
-    "semantic_hash": ""
-  },
-  "components/analytics/EmotionalTimelineChart.tsx": {
-    "mtime": 1780344712.9613125,
-    "ast_hash": "ee6178ad32e559526f51694ddef38760",
-    "semantic_hash": ""
-  },
-  "components/analytics/ExecutionQualityHeatmap.tsx": {
-    "mtime": 1780482699.9720876,
-    "ast_hash": "c8ffe6d5f18f959d9176661e34b990bf",
-    "semantic_hash": ""
-  },
-  "components/analytics/ExecutionTrendChart.tsx": {
-    "mtime": 1781779808.7292373,
-    "ast_hash": "55caff9072417e67b65ec751e8031e14",
+    "mtime": 1783113681.3944101,
+    "ast_hash": "b8f777f58a2d946f9cee8a232a2533b6",
     "semantic_hash": ""
   },
   "components/analytics/PerformanceInsights.tsx": {
-    "mtime": 1781609990.318305,
-    "ast_hash": "ff9a39725d9ffbf56de34875c08e0f39",
-    "semantic_hash": ""
-  },
-  "components/analytics/PerformanceIntelligence.tsx": {
-    "mtime": 1781609995.1819074,
-    "ast_hash": "3ef5e23edf0d0f520096d72d4c916ac2",
-    "semantic_hash": ""
-  },
-  "components/analytics/PsychologicalStabilityCurve.tsx": {
-    "mtime": 1781779809.665511,
-    "ast_hash": "b480bfe85e7f77b4762fb04e3ad4ea8a",
-    "semantic_hash": ""
-  },
-  "components/analytics/PsychologyAnalytics.tsx": {
-    "mtime": 1781609998.6553433,
-    "ast_hash": "e967dbc0e4e215111ad838bbcf63d0da",
-    "semantic_hash": ""
-  },
-  "components/analytics/RiskConcentrationMatrix.tsx": {
-    "mtime": 1780482710.2844105,
-    "ast_hash": "1b7df469042d5c12c074554646a2e047",
+    "mtime": 1783113890.3211746,
+    "ast_hash": "f54bef70c51eb08103d0dc72758589f4",
     "semantic_hash": ""
   },
   "components/analytics/SessionPerformance.tsx": {
-    "mtime": 1781610002.794512,
-    "ast_hash": "a1d19d6eb275ebcec11ecced25f3ad5a",
-    "semantic_hash": ""
-  },
-  "components/analytics/SetupQualityHeatmap.tsx": {
-    "mtime": 1781609979.5445745,
-    "ast_hash": "8455ca2144b6b32e96b7659796cc6edf",
+    "mtime": 1783113832.245476,
+    "ast_hash": "97327a24f770982f58135b4e5637f7e5",
     "semantic_hash": ""
   },
   "components/analytics/SymbolPerformance.tsx": {
-    "mtime": 1781610006.0153968,
-    "ast_hash": "3d68783b0218b67ae8ae382e356bce64",
+    "mtime": 1783113849.4344969,
+    "ast_hash": "ff71186e7c054bb387a7220b8c4768c1",
     "semantic_hash": ""
   },
   "components/analytics/WeekdayHeatmap.tsx": {
-    "mtime": 1781609972.1306446,
-    "ast_hash": "34da66f8c4511b0e132b0013db85800c",
+    "mtime": 1783113864.1464672,
+    "ast_hash": "be68c80e9d597280dd8a8fbe08fc04c3",
     "semantic_hash": ""
   },
   "components/copilot/AIReviewEngineCard.tsx": {
@@ -1080,8 +1005,8 @@
     "semantic_hash": ""
   },
   "components/copilot/CopilotConversationCard.tsx": {
-    "mtime": 1781609683.9422908,
-    "ast_hash": "fea7d4f49cf770beef9f3c5c2c3f17d2",
+    "mtime": 1783155570.9254556,
+    "ast_hash": "252450413123e503e3a72eb662f84a0b",
     "semantic_hash": ""
   },
   "components/copilot/CopilotHero.tsx": {
@@ -1204,149 +1129,44 @@
     "ast_hash": "15b0d13a8dd74e151b1d131d110f6be0",
     "semantic_hash": ""
   },
-  "components/reports/AICoachingReport.tsx": {
-    "mtime": 1781622867.1968853,
-    "ast_hash": "b659f9f11f4c115dc8ddc9ce96a755da",
-    "semantic_hash": ""
-  },
   "components/reports/BehavioralReportCard.tsx": {
-    "mtime": 1780409288.3395817,
-    "ast_hash": "ddc6645bbba598f5651fa47f98bac90c",
-    "semantic_hash": ""
-  },
-  "components/reports/CognitivePerformanceReport.tsx": {
-    "mtime": 1781623065.0879295,
-    "ast_hash": "9e3b9a0585867dbe577c17a088c52e88",
-    "semantic_hash": ""
-  },
-  "components/reports/ConfidenceIntelligenceReport.tsx": {
-    "mtime": 1781626360.7119331,
-    "ast_hash": "707d8684740f75bba400da6c92a27fa8",
-    "semantic_hash": ""
-  },
-  "components/reports/ConsistencyIntelligenceReport.tsx": {
-    "mtime": 1781626362.0712283,
-    "ast_hash": "065b4b534750cc0008d1c9081ff8f348",
-    "semantic_hash": ""
-  },
-  "components/reports/DecisionQualityReport.tsx": {
-    "mtime": 1781626359.3390176,
-    "ast_hash": "822b19c5c05d81442cc6ab262b0d3afc",
-    "semantic_hash": ""
-  },
-  "components/reports/DisciplineIntelligenceReport.tsx": {
-    "mtime": 1780410131.0684047,
-    "ast_hash": "74ae0d593fdd125730b13f2dab93118d",
-    "semantic_hash": ""
-  },
-  "components/reports/EdgeAnalysisReport.tsx": {
-    "mtime": 1781626363.0052545,
-    "ast_hash": "ed679b4527e52628f4017764661230cb",
-    "semantic_hash": ""
-  },
-  "components/reports/EmotionalIntelligenceReport.tsx": {
-    "mtime": 1781623016.7680964,
-    "ast_hash": "b7b9b4b1b0aadaae305c154c7a4f9970",
-    "semantic_hash": ""
-  },
-  "components/reports/ExecutionIntelligenceReport.tsx": {
-    "mtime": 1781626364.335135,
-    "ast_hash": "b74c81410f6cbe6be40ce6bb3e2ee940",
+    "mtime": 1783153503.7645,
+    "ast_hash": "e89a6d7c59a73aef4fcedbd93d50b662",
     "semantic_hash": ""
   },
   "components/reports/ExecutiveSummaryCard.tsx": {
-    "mtime": 1781779820.9219398,
-    "ast_hash": "0bfb5ea6ff9c2aea4fd3f5db45a34d0f",
-    "semantic_hash": ""
-  },
-  "components/reports/GrowthRoadmapReport.tsx": {
-    "mtime": 1781623016.7736034,
-    "ast_hash": "65ed84c7c9531c8c0ed928ffc6808aa2",
-    "semantic_hash": ""
-  },
-  "components/reports/MentalResilienceReport.tsx": {
-    "mtime": 1781623016.7771251,
-    "ast_hash": "4c0e36baf7c61450a5383c4260698bb9",
-    "semantic_hash": ""
-  },
-  "components/reports/MonthlyReportCard.tsx": {
-    "mtime": 1781622747.7514894,
-    "ast_hash": "278cb83e98cc226bab1986c0978a57ad",
+    "mtime": 1783153460.3230486,
+    "ast_hash": "8f663bfb2b7cbd9edf73de5d4180ade5",
     "semantic_hash": ""
   },
   "components/reports/PDFCompactReport.tsx": {
-    "mtime": 1782558821.5940468,
-    "ast_hash": "3a01f00625abb4601ef25aaf94f59cda",
+    "mtime": 1783154433.2018833,
+    "ast_hash": "38a6215373a2df479f584a085da44646",
     "semantic_hash": ""
   },
   "components/reports/PDFReportFooter.tsx": {
-    "mtime": 1781622803.3176441,
-    "ast_hash": "8e4eba354d60bf572f5f2c45ae3f192e",
-    "semantic_hash": ""
-  },
-  "components/reports/PDFReportHeader.tsx": {
-    "mtime": 1781779822.8953707,
-    "ast_hash": "495916e29e5ae2900fb1aea9235e4ab5",
+    "mtime": 1783153570.8916206,
+    "ast_hash": "d33f348486091df4127ff5820bc9423b",
     "semantic_hash": ""
   },
   "components/reports/PerformanceBreakdownCard.tsx": {
-    "mtime": 1781622787.237113,
-    "ast_hash": "77f3cb435dc16e2b2a74af20aef78483",
-    "semantic_hash": ""
-  },
-  "components/reports/PerformanceForecastReport.tsx": {
-    "mtime": 1781626365.6864195,
-    "ast_hash": "c4897d8ff9b66558f14f1d370e168cb3",
+    "mtime": 1783153481.6799345,
+    "ast_hash": "c6b1d641f948168c6796cc3d46ca5746",
     "semantic_hash": ""
   },
   "components/reports/PrintReportButton.tsx": {
-    "mtime": 1781622799.471868,
-    "ast_hash": "092ebd7a73eb5eecfc9a1f4843dda443",
-    "semantic_hash": ""
-  },
-  "components/reports/PsychologicalStabilityReport.tsx": {
-    "mtime": 1781623016.7901535,
-    "ast_hash": "fed10d3eb42dbc19c31e1273b08832f1",
+    "mtime": 1783154466.5645702,
+    "ast_hash": "c349b76c47ea3e5cf5d2668f74bb8475",
     "semantic_hash": ""
   },
   "components/reports/ReportI18n.ts": {
-    "mtime": 1780410769.668529,
-    "ast_hash": "9d8879e1d8f86783c8e4a590150af126",
-    "semantic_hash": ""
-  },
-  "components/reports/ReportInsightI18n.ts": {
-    "mtime": 1780410747.3154519,
-    "ast_hash": "e3935f2bfa723cf774c645553d06c30d",
+    "mtime": 1783154458.25302,
+    "ast_hash": "7fb2e86ed51875690c4a083975537fc1",
     "semantic_hash": ""
   },
   "components/reports/ReportsNavigation.tsx": {
-    "mtime": 1781622871.288429,
-    "ast_hash": "4bb0d2905b9fac28922f6666260ac231",
-    "semantic_hash": ""
-  },
-  "components/reports/RiskManagementReport.tsx": {
-    "mtime": 1781623016.7957127,
-    "ast_hash": "b594d7181af26ee16b5224425059a474",
-    "semantic_hash": ""
-  },
-  "components/reports/SetupIntelligenceReport.tsx": {
-    "mtime": 1781623016.7997148,
-    "ast_hash": "406bc5f78308624af021f8f158bddde8",
-    "semantic_hash": ""
-  },
-  "components/reports/TraderEvolutionReport.tsx": {
-    "mtime": 1781623016.804741,
-    "ast_hash": "ab5b6fcc18d39aa84b407f54da5f5e7a",
-    "semantic_hash": ""
-  },
-  "components/reports/TraderIdentityReport.tsx": {
-    "mtime": 1781626366.6831193,
-    "ast_hash": "ebcfcad478551a28b0dd8043e27b0e8f",
-    "semantic_hash": ""
-  },
-  "components/reports/WeeklyReportCard.tsx": {
-    "mtime": 1781622776.574301,
-    "ast_hash": "e48d14d78867b31d8d2c60288e740fd1",
+    "mtime": 1783153590.5105836,
+    "ast_hash": "88391f6e6e0dd326cf75e54944ce44f1",
     "semantic_hash": ""
   },
   "components/sessions/BehaviorWarningCard.tsx": {
@@ -1385,8 +1205,8 @@
     "semantic_hash": ""
   },
   "components/skeletons/AnalyticsSkeleton.tsx": {
-    "mtime": 1780679968.7532532,
-    "ast_hash": "7a1d1590ebb825e7199200719d9d6a51",
+    "mtime": 1783114305.1832073,
+    "ast_hash": "861c066d7ccd0b978640711cf74f673a",
     "semantic_hash": ""
   },
   "components/skeletons/CalendarSkeleton.tsx": {
@@ -1750,8 +1570,8 @@
     "semantic_hash": ""
   },
   ".impeccable/hook.cache.json": {
-    "mtime": 1783112920.754125,
-    "ast_hash": "dc3ceb197c56351cedb41cae1afe0e7e",
+    "mtime": 1783153732.652894,
+    "ast_hash": "231986faef513a37d93f52d1206921e9",
     "semantic_hash": ""
   },
   "lib/permissions.ts": {
@@ -1792,6 +1612,31 @@
   "components/equity/DrawdownChart.tsx": {
     "mtime": 1783090712.291228,
     "ast_hash": "c6786026d682345cd4f9aed9265ca51e",
+    "semantic_hash": ""
+  },
+  "components/analytics/PsychologyTrendChart.tsx": {
+    "mtime": 1783113783.2409544,
+    "ast_hash": "7eac780ec4cae5bec902f76432369eba",
+    "semantic_hash": ""
+  },
+  "components/analytics/QualityBreakdown.tsx": {
+    "mtime": 1783113728.8945477,
+    "ast_hash": "e4628fb0c503b08d046b20c124963f64",
+    "semantic_hash": ""
+  },
+  "components/analytics/RiskConcentration.tsx": {
+    "mtime": 1783113703.8116827,
+    "ast_hash": "7424fda67dee5540e4c5fc38ae7aa935",
+    "semantic_hash": ""
+  },
+  "components/reports/GrowthFocusCard.tsx": {
+    "mtime": 1783153558.7922316,
+    "ast_hash": "6f0044e02274fb24e9c049266bd6ce41",
+    "semantic_hash": ""
+  },
+  "components/reports/PsychologyMindsetCard.tsx": {
+    "mtime": 1783153522.656963,
+    "ast_hash": "ec5f2edc56dcbbb26c938b4c4d9ef91d",
     "semantic_hash": ""
   }
 }

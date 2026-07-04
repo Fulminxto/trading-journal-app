@@ -1387,15 +1387,6 @@ export default async function AnalyticsPage({
 
   return (
     <div className="space-y-8">
-      <ScopeBar
-        accountId={accountId}
-        members={scopeMembers}
-        selectedMemberId={selectedMemberId}
-        currentPeriod={period}
-        currentRef={ref}
-        appLanguage={language}
-      />
-
       <div className="reveal-rise" style={{ animationDelay: "0ms" }}>
         <div className="flex items-center gap-3">
           <SignatureEdge orientation="vertical" className="h-4" />
@@ -1405,9 +1396,25 @@ export default async function AnalyticsPage({
         <h1 className="mt-1 text-hero">{t.analyticsTitle}</h1>
       </div>
 
+      <ScopeBar
+        accountId={accountId}
+        members={scopeMembers}
+        selectedMemberId={selectedMemberId}
+        currentPeriod={period}
+        currentRef={ref}
+        appLanguage={language}
+      />
+
+      <div className="reveal-rise" style={{ animationDelay: "60ms" }}>
+        <RiskConcentration
+          data={behavioralRiskData}
+          appLanguage={language}
+        />
+      </div>
+
       <div
         className="reveal-rise grid grid-cols-2 gap-4 xl:grid-cols-4"
-        style={{ animationDelay: "60ms" }}
+        style={{ animationDelay: "100ms" }}
       >
         {advancedStats.map((stat) => (
           <AnalyticsStatCard
@@ -1418,13 +1425,6 @@ export default async function AnalyticsPage({
             icon={stat.icon}
           />
         ))}
-      </div>
-
-      <div className="reveal-rise" style={{ animationDelay: "100ms" }}>
-        <RiskConcentration
-          data={behavioralRiskData}
-          appLanguage={language}
-        />
       </div>
 
       <Card className="reveal-rise p-6 sm:p-10" style={{ animationDelay: "140ms" }}>

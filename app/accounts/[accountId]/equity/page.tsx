@@ -956,23 +956,6 @@ export default async function EquityPage({
 
   return (
     <div className="space-y-10">
-      <ScopeBar
-        accountId={accountId}
-        members={
-          isSharedAccount
-            ? accountMembers.map((m) => ({
-                id: m.user.id,
-                name: m.user.name,
-                username: m.user.username,
-              }))
-            : undefined
-        }
-        selectedMemberId={selectedMemberId}
-        currentPeriod={period}
-        currentRef={ref}
-        appLanguage={language}
-      />
-
       <div
         className="reveal-rise flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between"
         style={{ animationDelay: "0ms" }}
@@ -1009,6 +992,23 @@ export default async function EquityPage({
           {t.backToAccountHub}
         </Link>
       </div>
+
+      <ScopeBar
+        accountId={accountId}
+        members={
+          isSharedAccount
+            ? accountMembers.map((m) => ({
+                id: m.user.id,
+                name: m.user.name,
+                username: m.user.username,
+              }))
+            : undefined
+        }
+        selectedMemberId={selectedMemberId}
+        currentPeriod={period}
+        currentRef={ref}
+        appLanguage={language}
+      />
 
       {/* PRIMARY - the equity curve, dominant, alone. */}
       <div className="reveal-rise" style={{ animationDelay: "60ms" }}>
