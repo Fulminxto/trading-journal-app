@@ -32,7 +32,7 @@ const CTA_GRADIENT =
   "linear-gradient(120deg, #2E62E6, #3f86e8 60%, #5BE0FF)";
 
 const selectClass =
-  "rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-2 px-3 py-2 text-sm text-white outline-none transition-colors duration-base focus:border-accent-bright/50";
+  "min-h-10 w-full rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-2 px-3 py-2 text-sm text-white outline-none transition-colors duration-base focus:border-accent-bright/50";
 
 type DiaryLabels = {
   filteredPnl: string;
@@ -1427,11 +1427,11 @@ export default async function DiaryPage({
 
       <form
         action={`/accounts/${accountId}/diary`}
-        className="reveal-rise rounded-card border-[0.5px] border-flash/[0.1] bg-surface-1 p-4"
+        className="reveal-rise rounded-card border-[0.5px] border-flash/[0.08] bg-surface-1/95 p-5"
         style={{ animationDelay: "140ms" }}
       >
-        <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
-          <div className="shrink-0">
+        <div className="space-y-4">
+          <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent-bright">
               {t.filtersEyebrow}
             </p>
@@ -1440,7 +1440,8 @@ export default async function DiaryPage({
             </h2>
           </div>
 
-          <div className="flex flex-1 flex-wrap items-center gap-2">
+          <div className="space-y-3">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-4">
           <select
             name="symbol"
             defaultValue={filters.symbol || ""}
@@ -1474,6 +1475,20 @@ export default async function DiaryPage({
           </select>
 
           <select
+            name="strategyId"
+            defaultValue={filters.strategyId || ""}
+            className={selectClass}
+          >
+            <option value="">{t.allStrategies}</option>
+            {strategies.map((s) => (
+              <option key={s.id} value={s.id}>{s.name}</option>
+            ))}
+          </select>
+            </div>
+
+            <div className="grid grid-cols-1 gap-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(360px,1.4fr)_auto_auto]">
+
+          <select
             name="source"
             defaultValue={filters.source || ""}
             className={selectClass}
@@ -1493,24 +1508,13 @@ export default async function DiaryPage({
             <option value="true">{t.needsReview}</option>
           </select>
 
-          <select
-            name="strategyId"
-            defaultValue={filters.strategyId || ""}
-            className={selectClass}
-          >
-            <option value="">{t.allStrategies}</option>
-            {strategies.map((s) => (
-              <option key={s.id} value={s.id}>{s.name}</option>
-            ))}
-          </select>
-
-          <div className={`flex items-center gap-2 rounded-inner border-[0.5px] px-3 py-1.5 ${activeDateConflict ? "border-yellow-500/40 bg-yellow-500/[0.06]" : "border-accent-bright/30 bg-accent-bright/[0.04]"}`}>
+          <div className={`flex min-h-10 flex-wrap items-center gap-2 rounded-inner border-[0.5px] px-3 py-2 ${activeDateConflict ? "border-yellow-500/40 bg-yellow-500/[0.06]" : "border-flash/[0.1] bg-surface-2"}`}>
             <div className="dt-wrap">
               <input
                 name="from"
                 type="date"
                 defaultValue={filters.from || ""}
-                className="bg-transparent pr-6 text-sm text-gray-300 outline-none"
+                className="w-[8.5rem] bg-transparent pr-6 text-sm text-gray-300 outline-none"
               />
               <span className="dt-icon" aria-hidden="true"><CalendarIcon /></span>
             </div>
@@ -1520,7 +1524,7 @@ export default async function DiaryPage({
                 name="to"
                 type="date"
                 defaultValue={filters.to || ""}
-                className="bg-transparent pr-6 text-sm text-gray-300 outline-none"
+                className="w-[8.5rem] bg-transparent pr-6 text-sm text-gray-300 outline-none"
               />
               <span className="dt-icon" aria-hidden="true"><CalendarIcon /></span>
             </div>
@@ -1532,7 +1536,7 @@ export default async function DiaryPage({
           <button
             type="submit"
             style={{ background: CTA_GRADIENT }}
-            className="rounded-inner px-4 py-2 text-sm font-semibold text-white transition-shadow duration-base hover:shadow-[0_0_24px_color-mix(in_srgb,var(--color-accent)_18%,transparent)]"
+            className="min-h-10 rounded-inner px-4 py-2 text-sm font-semibold text-white transition-shadow duration-base hover:shadow-[0_0_24px_color-mix(in_srgb,var(--color-accent)_18%,transparent)]"
           >
             {t.applyFilters}
           </button>
@@ -1540,7 +1544,7 @@ export default async function DiaryPage({
           {hasActiveFilters && (
             <Link
               href={`/accounts/${accountId}/diary`}
-              className="rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-2 text-sm text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.06]"
+              className="inline-flex min-h-10 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.1] px-4 py-2 text-sm text-muted transition-colors duration-base hover:bg-white/[0.05] hover:text-white"
             >
               {t.resetFilters}
             </Link>
@@ -1566,6 +1570,7 @@ export default async function DiaryPage({
             )}
           </div>
         )}
+        </div>
       </form>
 
       <div

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
   CalendarDays,
@@ -444,12 +443,6 @@ export default async function SessionsPage({
               </div>
             </div>
 
-            <Link
-              href={`/accounts/${accountId}`}
-              className="mt-5 inline-flex w-full items-center justify-center rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-3 text-sm font-medium text-muted transition-colors duration-fast hover:border-accent-bright/40 hover:text-accent-bright"
-            >
-              {t.page.backToAccountHub}
-            </Link>
           </Card>
         </div>
       </Card>

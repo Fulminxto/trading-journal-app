@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import {
-  ArrowLeft,
   Crown,
   DoorOpen,
   Eye,
@@ -320,13 +319,6 @@ export default async function MembersPage({
           </div>
         </div>
 
-        <Link
-          href={`/accounts/${accountId}`}
-          className="inline-flex items-center justify-center gap-2 rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-2 px-4 py-3 text-sm font-medium text-muted transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/45 hover:text-accent-bright"
-        >
-          <ArrowLeft size={16} />
-          Back to account
-        </Link>
       </div>
 
       <Card variant="hero" className="reveal-rise">

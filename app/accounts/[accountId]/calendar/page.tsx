@@ -950,14 +950,6 @@ export default async function CalendarPage({
           </span>
         ) : undefined
       }
-      action={
-        <Link
-          href={`/accounts/${accountId}`}
-          className="rounded-inner border-[0.5px] border-flash/[0.12] px-5 py-3 text-sm text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.06]"
-        >
-          {t.backToAccountHub}
-        </Link>
-      }
       supportLine={t.heroDescription}
       scopeBar={
         <ScopeBar

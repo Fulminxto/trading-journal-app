@@ -1,7 +1,5 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
-  ArrowLeft,
   BarChart3,
   LineChart as LineChartIcon,
   ShieldAlert,
@@ -969,15 +967,6 @@ export default async function EquityPage({
         <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
           {t.heroBadge}
         </span>
-      }
-      action={
-        <Link
-          href={`/accounts/${accountId}`}
-          className="flex w-fit items-center gap-2 rounded-inner border-[0.5px] border-flash/[0.12] px-5 py-3 text-sm text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.04]"
-        >
-          <ArrowLeft size={17} />
-          {t.backToAccountHub}
-        </Link>
       }
       scopeBar={
         <ScopeBar
