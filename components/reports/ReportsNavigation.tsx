@@ -69,8 +69,8 @@ export default function ReportsNavigation({
   }, []);
 
   return (
-    <nav className="print-hidden sticky top-4 z-30 border-b border-white/[0.08] bg-bg-deep/85 backdrop-blur">
-      <div className="flex gap-6 overflow-x-auto">
+    <nav className="print-hidden sticky top-4 z-30 border-b border-white/[0.06] bg-bg-deep/35 backdrop-blur-sm">
+      <div className="flex gap-6 overflow-x-auto px-0.5">
         {sectionIds.map((id) => {
           const isActive = activeSection === id;
 
@@ -79,7 +79,7 @@ export default function ReportsNavigation({
               key={id}
               href={`#${id}`}
               onClick={() => setActiveSection(id)}
-              className={`relative shrink-0 px-0.5 pb-2 pt-1 text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors duration-base ${
+              className={`relative shrink-0 px-0.5 pb-1.5 pt-0.5 text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors duration-base ${
                 isActive
                   ? "text-white"
                   : "text-muted-faint hover:text-muted"
@@ -88,7 +88,7 @@ export default function ReportsNavigation({
             >
               {t[id]}
               <span
-                className={`absolute inset-x-0 bottom-0 h-px rounded-full transition-all duration-base ${
+                className={`absolute inset-x-0 bottom-[-1px] h-px rounded-full transition-all duration-base ${
                   isActive
                     ? "bg-accent-bright opacity-100"
                     : "bg-transparent opacity-0"

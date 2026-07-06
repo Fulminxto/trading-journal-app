@@ -22,7 +22,7 @@ export default function ReportChapterHeader({
   action,
 }: Props) {
   return (
-    <div className="mb-8 flex flex-col gap-4 border-b border-white/10 pb-6 sm:flex-row sm:items-start sm:justify-between">
+    <div className="mb-8 flex flex-col gap-4 border-b border-white/10 pb-6 lg:flex-row lg:items-start lg:justify-between">
       <div className="flex items-start gap-6">
         <span className="text-6xl font-black leading-none tracking-tight text-white/10 tabular-nums sm:text-7xl">
           {number}
@@ -40,7 +40,7 @@ export default function ReportChapterHeader({
       </div>
 
       {action && (
-        <div className="shrink-0 sm:pt-1">
+        <div className="flex shrink-0 items-center border-white/10 lg:border-l lg:pl-5 lg:pt-1">
           {action}
         </div>
       )}

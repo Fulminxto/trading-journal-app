@@ -16,7 +16,7 @@ export default function PrintReportButton({
     <button
       type="button"
       onClick={() => window.print()}
-      className="print-hidden inline-flex items-center gap-2 rounded-pill border-[0.5px] border-white/10 bg-white/[0.04] px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.13em] text-white transition-colors duration-base hover:border-accent-bright/30 hover:bg-white/[0.07]"
+      className="print-hidden inline-flex items-center gap-2 rounded-pill border-[0.5px] border-accent-bright/25 bg-white/[0.055] px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.13em] text-white shadow-[0_0_0_1px_rgba(255,255,255,0.02)] transition-colors duration-base hover:border-accent-bright/45 hover:bg-accent-bright/[0.08]"
     >
       <FileText size={14} className="text-accent-bright" />
       {t.exportPdf}
