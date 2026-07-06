@@ -69,7 +69,7 @@ export default function ReportsNavigation({
   }, []);
 
   return (
-    <nav className="print-hidden sticky top-4 z-30 border-b border-white/[0.06] bg-bg-deep/35 backdrop-blur-sm">
+    <nav className="print-hidden sticky top-4 z-30 border-b border-white/[0.06]">
       <div className="flex gap-6 overflow-x-auto px-0.5">
         {sectionIds.map((id) => {
           const isActive = activeSection === id;
