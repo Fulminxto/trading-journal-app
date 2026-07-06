@@ -1177,6 +1177,7 @@ export default async function DashboardPage({
         </>
       }
       title={t.dashboardAccount}
+      supportLine="Get a complete overview of performance, risk, discipline and recent trading activity."
       badges={
         <>
           <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-semibold text-white">

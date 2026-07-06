@@ -498,13 +498,9 @@ export default async function RulesPage({
             Discipline control
           </p>
           <h1 className="mt-3 text-hero text-flash">Rules & Goals</h1>
-          <div className="mt-4 max-w-3xl">
-            <SignatureEdge orientation="horizontal" className="mb-4 max-w-40" />
-            <p className="text-body text-muted">
-              The account rulebook. Standards are written before execution so
-              profit, drawdown, and frequency do not become emotional decisions.
-            </p>
-          </div>
+          <p className="mt-2 max-w-3xl text-sm text-muted">
+            Build your trading playbook and measure how consistently you follow it.
+          </p>
         </div>
 
       </div>

@@ -963,6 +963,7 @@ export default async function EquityPage({
         </>
       }
       title={t.heroTitle}
+      supportLine="Monitor capital growth, drawdown and long-term account progression."
       badges={
         <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
           {t.heroBadge}

@@ -950,7 +950,7 @@ export default async function CalendarPage({
           </span>
         ) : undefined
       }
-      supportLine={t.heroDescription}
+      supportLine="Spot daily patterns, consistency and behavioral trends across every trading session."
       scopeBar={
         <ScopeBar
           accountId={accountId}

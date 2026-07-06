@@ -443,14 +443,9 @@ export default async function IntegrationsPage({
             Secure connection control
           </p>
           <h1 className="mt-3 text-hero text-flash">Integrations</h1>
-          <div className="mt-4 max-w-3xl">
-            <SignatureEdge orientation="horizontal" className="mb-4 max-w-40" />
-            <p className="text-body text-muted">
-              Configure how trade data may enter this account. VOLTIS currently
-              stores only non-sensitive identifiers and never asks for broker
-              API keys, MT5 passwords, or raw secrets here.
-            </p>
-          </div>
+          <p className="mt-2 max-w-3xl text-sm text-muted">
+            Connect external platforms and automate your trading workflow.
+          </p>
         </div>
 
       </div>

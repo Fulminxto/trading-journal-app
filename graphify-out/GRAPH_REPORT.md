@@ -1,7 +1,7 @@
-# Graph Report - VOLTIS  (2026-07-06)
+# Graph Report - VOLTIS  (2026-07-07)
 
 ## Corpus Check
-- 331 files · ~355,042 words
+- 331 files · ~355,051 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `85e139e8`
+- Built from commit: `d98ac61b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -187,15 +187,15 @@
 
 ### Community 0 - "page.tsx"
 Cohesion: 0.03
-Nodes (100): addManualContextText(), applyGlobalBarLabelState(), applyPlaceholderSizingStyles(), averageRgb01(), buildAnnotationsForCapture(), buildPinElement(), buildSvelteExpressionTextMap(), buildSveltePropValuesFromLiveElement() (+92 more)
+Nodes (94): acceptedDomAlreadyClean(), addManualContextText(), applyGlobalBarLabelState(), applyPlaceholderSizingStyles(), averageRgb01(), buildAnnotationsForCapture(), buildPinElement(), buildPlaceholderResizeHandles() (+86 more)
 
 ### Community 1 - "page.tsx"
 Cohesion: 0.14
 Nodes (9): NewTradeLabels, NewTradePage(), EditTradeLabels, EditTradePage(), formatDateForInput(), getTradeSourceClass(), getTradeSourceLabel(), Input() (+1 more)
 
 ### Community 2 - "page.tsx"
-Cohesion: 0.11
-Nodes (52): applyEditing(), buildLocatorForLeaf(), cancelEditing(), cancelEditingToPicking(), cancelInsertConfigure(), cleanupAcceptedSession(), clearAnnotations(), clearInsertPicking() (+44 more)
+Cohesion: 0.14
+Nodes (43): applyEditing(), buildLocatorForLeaf(), cancelEditing(), cancelEditingToPicking(), cancelInsertConfigure(), cleanupAcceptedSession(), clearAnnotations(), clearInsertPicking() (+35 more)
 
 ### Community 3 - "permissions.ts"
 Cohesion: 0.04
@@ -234,8 +234,8 @@ Cohesion: 0.25
 Nodes (12): FORBIDDEN_MANUAL_EDIT_TEXT_CHARS, INSERT_POSITIONS, isValidId(), isValidVariantId(), validateAnnotationFields(), validateEvent(), validateInsertGenerate(), validateManualEditEvent() (+4 more)
 
 ### Community 12 - "ListRow.tsx"
-Cohesion: 0.08
-Nodes (49): abortSvelteComponentInjection(), applySavedSessionMeta(), buildInsertPlaceholderSnapshotFromDom(), buildPickedAnchorSnapshot(), captureAndEmit(), checkpointPayload(), clampVariantIndex(), cleanup() (+41 more)
+Cohesion: 0.07
+Nodes (52): abortSvelteComponentInjection(), applySavedSessionMeta(), buildInsertPlaceholderSnapshotFromDom(), buildPickedAnchorSnapshot(), captureAndEmit(), checkpointPayload(), clampVariantIndex(), cleanup() (+44 more)
 
 ### Community 13 - "Pill.tsx"
 Cohesion: 0.06
@@ -267,7 +267,7 @@ Nodes (43): detectUrl(), runVisualContrastFallback(), serializeDesignSystemForBr
 
 ### Community 20 - "el"
 Cohesion: 0.08
-Nodes (46): checkPageTypography(), checkStaticPageTypography(), checkPageTypography(), actionLabel(), applyConfigureBarChrome(), bindConfigureCountPillTooltip(), bindConfigureInlineControlHover(), buildConfigureActionControl() (+38 more)
+Nodes (44): checkPageTypography(), checkStaticPageTypography(), checkPageTypography(), actionLabel(), applyConfigureBarChrome(), bindConfigureCountPillTooltip(), bindConfigureInlineControlHover(), buildConfigureActionControl() (+36 more)
 
 ### Community 21 - "design-system.mjs"
 Cohesion: 0.09
@@ -278,8 +278,8 @@ Cohesion: 0.07
 Nodes (49): ACK_EXTS, ALLOWED_EXTS, applyConfigSource(), applyDetectorConfigSource(), applyPatchText(), clampByte(), CO_SCAN_STYLE_NAMES, coLocatedStylesheets() (+41 more)
 
 ### Community 23 - "stopVoice"
-Cohesion: 0.10
-Nodes (36): armPageChatForTyping(), clearSteerAwaitTimer(), collapsePageChat(), createLiveBrowserDomHelpers(), expandPageChat(), focusConfigureInput(), focusPageChatInput(), focusSteerChat() (+28 more)
+Cohesion: 0.07
+Nodes (49): armPageChatForTyping(), clearSteerAwaitTimer(), collapsePageChat(), configureVoiceContext(), createLiveBrowserDomHelpers(), expandPageChat(), finishVoiceSession(), focusConfigureInput() (+41 more)
 
 ### Community 24 - "live-commit-manual-edits.mjs"
 Cohesion: 0.09
@@ -310,8 +310,8 @@ Cohesion: 0.08
 Nodes (35): addOpToManualApplyChunk(), APPLY_EVENT_HARD_TIMEOUT_MS, APPLY_EVENT_SOFT_DEADLINE_MS, buildManualApplyAgentAction(), clearManualApplyTransaction(), collectManualApplyFiles(), compactManualApplyBatch(), compactManualApplyCandidates() (+27 more)
 
 ### Community 31 - "showToast"
-Cohesion: 0.11
-Nodes (39): confirm(), brandMarkSvg(), clearStoredManualApplyState(), copyToClipboard(), dismissToast(), fetchPendingCount(), handleManualEditActivity(), hideAgentPollTooltip() (+31 more)
+Cohesion: 0.10
+Nodes (43): confirm(), brandMarkSvg(), clearStoredManualApplyState(), copyToClipboard(), dismissToast(), fetchPendingCount(), handleManualEditActivity(), hideAgentPollTooltip() (+35 more)
 
 ### Community 32 - "hook-admin.mjs"
 Cohesion: 0.14
@@ -402,12 +402,12 @@ Cohesion: 0.10
 Nodes (18): Button(), ButtonProps, Large, Primary, Secondary, Small, Story, Header() (+10 more)
 
 ### Community 54 - "mountSvelteComponentVariant"
-Cohesion: 0.11
-Nodes (27): acceptedDomAlreadyClean(), applyOriginalAttrsToSvelteAnchor(), applySvelteComponentVariantStyle(), commitAcceptedSvelteComponentToDom(), elementMatchesOriginalMarkup(), ensureAcceptedDomClean(), extractSvelteComponentStyle(), findAcceptedRuntimeWrappers() (+19 more)
+Cohesion: 0.17
+Nodes (19): applyOriginalAttrsToSvelteAnchor(), applySvelteComponentVariantStyle(), commitAcceptedSvelteComponentToDom(), elementMatchesOriginalMarkup(), extractSvelteComponentStyle(), findLiveElementForOriginalMarkup(), findLiveElementForSvelteManifest(), findLiveElementFromAnchorSnapshot() (+11 more)
 
 ### Community 55 - "refreshParamsPanel"
-Cohesion: 0.15
-Nodes (19): applyParamDefaults(), applyParamValue(), closedClipPath(), getVisibleVariantEl(), hideParamsPanel(), openTunePopover(), pickVariantContent(), popoverDirection() (+11 more)
+Cohesion: 0.11
+Nodes (25): applyParamDefaults(), applyParamValue(), closedClipPath(), closeTunePopover(), ensureInsertPlaceholder(), findInsertAnchorInDom(), getVisibleVariantEl(), hideParamsPanel() (+17 more)
 
 ### Community 56 - "actions.ts"
 Cohesion: 0.12
@@ -451,7 +451,7 @@ Nodes (21): resolveProjectRoot(), firstExisting(), getDesignSidecarCandidates(),
 
 ### Community 66 - "onAnnotDown"
 Cohesion: 0.17
-Nodes (18): applyPlaceholderDimensions(), beginEditPin(), cancelEditingPin(), clampPlaceholderSize(), finalizeEditingPin(), initAnnotOverlay(), localCoords(), materializePlaceholderWidth() (+10 more)
+Nodes (17): applyPlaceholderDimensions(), beginEditPin(), cancelEditingPin(), clampPlaceholderSize(), initAnnotOverlay(), localCoords(), materializePlaceholderWidth(), onAnnotDown() (+9 more)
 
 ### Community 67 - "activity.ts"
 Cohesion: 0.27
@@ -710,8 +710,8 @@ _Questions this graph is uniquely positioned to answer:_
 - **What connects `COMMON_DEV_PORTS`, `SCANNABLE_EXT`, `SOURCE_DIRS` to the rest of the system?**
   _536 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `page.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.02991026919242273 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.030973451327433628 - nodes in this community are weakly interconnected._
 - **Should `page.tsx` be split into smaller, more focused modules?**
   _Cohesion score 0.1437908496732026 - nodes in this community are weakly interconnected._
 - **Should `page.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.10784313725490197 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.13732004429678848 - nodes in this community are weakly interconnected._

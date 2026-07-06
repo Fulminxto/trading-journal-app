@@ -444,11 +444,8 @@ export default async function CopilotPage({
               Command Center
             </h1>
 
-            <p className="mt-5 max-w-3xl text-sm leading-7 text-muted">
-              Copilot reads account data, recurring patterns, review notes,
-              and rule-based safety signals. It is an operating layer, not a
-              black-box chatbot, and every visible conclusion is tied to data
-              the account already contains.
+            <p className="mt-2 max-w-3xl text-sm text-muted">
+              Use AI to review performance, uncover patterns and improve decision making.
             </p>
           </div>
 

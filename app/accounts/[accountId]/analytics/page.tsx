@@ -1408,6 +1408,7 @@ export default async function AnalyticsPage({
         </>
       }
       title={t.analyticsTitle}
+      supportLine="Discover statistical patterns and behavioral insights hidden in your trading data."
       scopeBar={
         <ScopeBar
           accountId={accountId}

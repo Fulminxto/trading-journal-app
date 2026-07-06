@@ -1338,6 +1338,7 @@ export default async function DiaryPage({
         </>
       }
       title={t.title}
+      supportLine="Record, review and improve every trade with structured execution insights."
       badges={
         isReadOnly ? (
           <div className="rounded-full bg-white/[0.06] px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-muted">

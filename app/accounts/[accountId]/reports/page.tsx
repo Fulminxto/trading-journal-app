@@ -608,6 +608,7 @@ export default async function ReportsPage({
             </>
           }
           title={t.heroTitle}
+          supportLine="Generate executive reports that summarize performance, risk and trading behavior."
           scopeBar={
             <ScopeBar
               members={members}

@@ -309,14 +309,9 @@ export default async function MembersPage({
             Access control
           </p>
           <h1 className="mt-3 text-hero text-flash">Members</h1>
-          <div className="mt-4 max-w-3xl">
-            <SignatureEdge orientation="horizontal" className="mb-4 max-w-40" />
-            <p className="text-body text-muted">
-              Manage who can enter this account, what each role can control, and
-              which operating rooms are visible. Permissions shown here are
-              enforced by server-side membership checks.
-            </p>
-          </div>
+          <p className="mt-2 max-w-3xl text-sm text-muted">
+            Manage traders, permissions and collaboration inside this shared account.
+          </p>
         </div>
 
       </div>

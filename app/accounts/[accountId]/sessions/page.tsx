@@ -409,6 +409,9 @@ export default async function SessionsPage({
             <h1 className="mt-3 text-hero text-white">
               {t.page.title}
             </h1>
+            <p className="mt-2 max-w-3xl text-sm text-muted">
+              Plan, execute and review every trading session with a structured workflow.
+            </p>
           </div>
 
           <Card variant="inner" className="p-5">

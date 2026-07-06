@@ -556,6 +556,9 @@ export default async function WorkspacePage({
             Account command hub &middot; {account.name}
           </p>
           <h1 className="mt-3 text-hero text-flash">Workspace</h1>
+          <p className="mt-2 max-w-3xl text-sm text-muted">
+            Configure your account environment and organize the tools you use every day.
+          </p>
         </div>
 
       </div>
