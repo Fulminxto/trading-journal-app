@@ -21,7 +21,7 @@ import {
   type AppLanguage,
 } from "@/lib/i18n";
 import AccountPageShell from "@/components/AccountPageShell";
-import MemberSelector from "@/components/MemberSelector";
+import ScopeBar from "@/components/ScopeBar";
 import Card from "@/components/ui/Card";
 import SignatureEdge from "@/components/ui/SignatureEdge";
 import { pageDensity } from "@/lib/page-density";
@@ -738,14 +738,6 @@ export default async function CalendarPage({
     month: "long",
   });
 
-  const monthLabel = new Date(
-    year,
-    month
-  ).toLocaleString(locale, {
-    month: "long",
-    year: "numeric",
-  });
-
   const previousMonth =
     month === 0
       ? 11
@@ -926,15 +918,31 @@ export default async function CalendarPage({
         ? t.negative
         : t.flat;
 
+  const buildMonthHref = (
+    targetMonth: number,
+    targetYear: number
+  ) => {
+    const params = new URLSearchParams({
+      month: String(targetMonth),
+      year: String(targetYear),
+    });
+
+    if (selectedMemberId) {
+      params.set("member", selectedMemberId);
+    }
+
+    return `/accounts/${accountId}/calendar?${params.toString()}`;
+  };
+
   return (
     <AccountPageShell
       className={pageDensity.calendar.page}
       eyebrow={
         <>
-          {t.tradingCalendar} &middot; {account.name}
+          {account.name}
         </>
       }
-      title={monthLabel}
+      title={t.tradingCalendar}
       badges={
         isCurrentMonth ? (
           <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
@@ -952,52 +960,23 @@ export default async function CalendarPage({
       }
       supportLine={t.heroDescription}
       scopeBar={
-        <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-          {isSharedAccount ? (
-            <div className="[&>div]:mb-0">
-              <MemberSelector
-                members={accountMembers.map((m) => ({
+        <ScopeBar
+          accountId={accountId}
+          members={
+            isSharedAccount
+              ? accountMembers.map((m) => ({
                   id: m.user.id,
                   name: m.user.name,
                   username: m.user.username,
-                }))}
-                selectedMemberId={selectedMemberId}
-                accountId={accountId}
-                appLanguage={language}
-              />
-            </div>
-          ) : (
-            <div />
-          )}
-
-          <div className="flex min-w-0 flex-wrap items-center gap-2 sm:justify-end">
-            <p className="shrink-0 text-micro font-medium uppercase tracking-label text-muted-faint">
-              {t.monthlyPerformanceView}
-            </p>
-
-            <div className="flex items-center gap-1 rounded-pill border border-white/10 bg-white/[0.03] px-1 py-0.5">
-              <Link
-                href={`/accounts/${accountId}/calendar?month=${previousMonth}&year=${previousYear}`}
-                className="flex h-6 w-6 items-center justify-center rounded-pill text-muted transition hover:bg-white/10 hover:text-white"
-                aria-label={t.previousMonth}
-              >
-                <ChevronLeft size={14} />
-              </Link>
-
-              <span className="min-w-[120px] px-1.5 text-center text-xs capitalize text-white">
-                {monthName}
-              </span>
-
-              <Link
-                href={`/accounts/${accountId}/calendar?month=${nextMonth}&year=${nextYear}`}
-                className="flex h-6 w-6 items-center justify-center rounded-pill text-muted transition hover:bg-white/10 hover:text-white"
-                aria-label={t.nextMonth}
-              >
-                <ChevronRight size={14} />
-              </Link>
-            </div>
-          </div>
-        </div>
+                }))
+              : undefined
+          }
+          selectedMemberId={selectedMemberId}
+          currentPeriod="all"
+          currentRef=""
+          appLanguage={language}
+          mode="trader"
+        />
       }
     >
 
@@ -1130,29 +1109,65 @@ export default async function CalendarPage({
                 </h2>
               </div>
 
-              <div className="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[0.14em] text-muted">
-                <div className="flex items-center gap-2">
-                  <CircleDot
-                    size={14}
-                    className="text-green-400"
-                  />
-                  {t.profit}
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">
+                <div className="flex min-w-0 flex-wrap items-center gap-2 sm:justify-end">
+                  <p className="shrink-0 text-micro font-medium uppercase tracking-label text-muted-faint">
+                    {t.monthlyPerformanceView}
+                  </p>
+
+                  <div className="flex items-center gap-1 rounded-pill border border-white/10 bg-white/[0.03] px-1 py-0.5">
+                    <Link
+                      href={buildMonthHref(
+                        previousMonth,
+                        previousYear
+                      )}
+                      className="flex h-6 w-6 items-center justify-center rounded-pill text-muted transition hover:bg-white/10 hover:text-white"
+                      aria-label={t.previousMonth}
+                    >
+                      <ChevronLeft size={14} />
+                    </Link>
+
+                    <span className="min-w-[120px] px-1.5 text-center text-xs capitalize text-white">
+                      {monthName}
+                    </span>
+
+                    <Link
+                      href={buildMonthHref(
+                        nextMonth,
+                        nextYear
+                      )}
+                      className="flex h-6 w-6 items-center justify-center rounded-pill text-muted transition hover:bg-white/10 hover:text-white"
+                      aria-label={t.nextMonth}
+                    >
+                      <ChevronRight size={14} />
+                    </Link>
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <CircleDot
-                    size={14}
-                    className="text-red-400"
-                  />
-                  {t.loss}
-                </div>
+                <div className="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[0.14em] text-muted">
+                  <div className="flex items-center gap-2">
+                    <CircleDot
+                      size={14}
+                      className="text-green-400"
+                    />
+                    {t.profit}
+                  </div>
 
-                <div className="flex items-center gap-2">
-                  <CircleDot
-                    size={14}
-                    className="text-muted-faint"
-                  />
-                  {t.noResult}
+                  <div className="flex items-center gap-2">
+                    <CircleDot
+                      size={14}
+                      className="text-red-400"
+                    />
+                    {t.loss}
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <CircleDot
+                      size={14}
+                      className="text-muted-faint"
+                    />
+                    {t.noResult}
+                  </div>
                 </div>
               </div>
             </div>
