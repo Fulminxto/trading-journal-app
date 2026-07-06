@@ -20,6 +20,7 @@ import {
   normalizeAppLanguage,
   type AppLanguage,
 } from "@/lib/i18n";
+import AccountPageShell from "@/components/AccountPageShell";
 import MemberSelector from "@/components/MemberSelector";
 import Card from "@/components/ui/Card";
 import SignatureEdge from "@/components/ui/SignatureEdge";
@@ -926,65 +927,79 @@ export default async function CalendarPage({
         : t.flat;
 
   return (
-    <div className={pageDensity.calendar.page}>
-      {isSharedAccount && (
-        <MemberSelector
-          members={accountMembers.map((m) => ({
-            id: m.user.id,
-            name: m.user.name,
-            username: m.user.username,
-          }))}
-          selectedMemberId={selectedMemberId}
-          accountId={accountId}
-          appLanguage={language}
-        />
-      )}
+    <AccountPageShell
+      className={pageDensity.calendar.page}
+      eyebrow={
+        <>
+          {t.tradingCalendar} &middot; {account.name}
+        </>
+      }
+      title={monthLabel}
+      badges={
+        isCurrentMonth ? (
+          <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
+            {t.currentMonth}
+          </span>
+        ) : undefined
+      }
+      action={
+        <Link
+          href={`/accounts/${accountId}`}
+          className="rounded-inner border-[0.5px] border-flash/[0.12] px-5 py-3 text-sm text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.06]"
+        >
+          {t.backToAccountHub}
+        </Link>
+      }
+      supportLine={t.heroDescription}
+      scopeBar={
+        <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+          {isSharedAccount ? (
+            <div className="[&>div]:mb-0">
+              <MemberSelector
+                members={accountMembers.map((m) => ({
+                  id: m.user.id,
+                  name: m.user.name,
+                  username: m.user.username,
+                }))}
+                selectedMemberId={selectedMemberId}
+                accountId={accountId}
+                appLanguage={language}
+              />
+            </div>
+          ) : (
+            <div />
+          )}
 
-      <div
-        className={`reveal-rise flex flex-col gap-4 lg:pr-[18rem] xl:pr-[20rem] xl:flex-row xl:items-end xl:justify-between`}
-        style={{ animationDelay: "0ms" }}
-      >
-        <div>
-          <div className="mb-4 flex flex-wrap items-center gap-3">
-            <SignatureEdge orientation="vertical" className="h-4" />
+          <div className="flex min-w-0 flex-wrap items-center gap-2 sm:justify-end">
+            <p className="shrink-0 text-micro font-medium uppercase tracking-label text-muted-faint">
+              {t.monthlyPerformanceView}
+            </p>
 
-            <span className="rounded-full bg-white/[0.06] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-muted">
-              {t.tradingCalendar}
-            </span>
+            <div className="flex items-center gap-1 rounded-pill border border-white/10 bg-white/[0.03] px-1 py-0.5">
+              <Link
+                href={`/accounts/${accountId}/calendar?month=${previousMonth}&year=${previousYear}`}
+                className="flex h-6 w-6 items-center justify-center rounded-pill text-muted transition hover:bg-white/10 hover:text-white"
+                aria-label={t.previousMonth}
+              >
+                <ChevronLeft size={14} />
+              </Link>
 
-            <span className="rounded-full bg-white/[0.06] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-muted">
-              {account.name}
-            </span>
-
-            {isCurrentMonth && (
-              <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
-                {t.currentMonth}
+              <span className="min-w-[120px] px-1.5 text-center text-xs capitalize text-white">
+                {monthName}
               </span>
-            )}
+
+              <Link
+                href={`/accounts/${accountId}/calendar?month=${nextMonth}&year=${nextYear}`}
+                className="flex h-6 w-6 items-center justify-center rounded-pill text-muted transition hover:bg-white/10 hover:text-white"
+                aria-label={t.nextMonth}
+              >
+                <ChevronRight size={14} />
+              </Link>
+            </div>
           </div>
-
-          <p className="text-sm text-muted">
-            {t.monthlyPerformanceView}
-          </p>
-
-          <h1 className="text-hero mt-3 capitalize break-words">
-            {monthLabel}
-          </h1>
-
-          <p className="mt-4 max-w-3xl text-base leading-7 text-muted">
-            {t.heroDescription}
-          </p>
         </div>
-
-        <div className="flex flex-wrap items-center gap-3">
-          <Link
-            href={`/accounts/${accountId}`}
-            className="rounded-inner border-[0.5px] border-flash/[0.12] px-5 py-3 text-sm text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.06]"
-          >
-            {t.backToAccountHub}
-          </Link>
-        </div>
-      </div>
+      }
+    >
 
       <section
         className={`reveal-rise grid grid-cols-1 ${pageDensity.calendar.grid} sm:grid-cols-2 xl:grid-cols-4`}
@@ -1108,29 +1123,11 @@ export default async function CalendarPage({
                   {t.calendarMatrix}
                 </p>
 
-                <div className="mt-1 flex flex-wrap items-center gap-3">
-                  <Link
-                    href={`/accounts/${accountId}/calendar?month=${previousMonth}&year=${previousYear}`}
-                    className="flex h-9 w-9 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.12] text-muted transition-colors duration-base hover:border-accent-bright/30 hover:text-white"
-                    aria-label={t.previousMonth}
-                  >
-                    <ChevronLeft size={17} />
-                  </Link>
-
-                  <h2 className="text-section capitalize text-white">
-                    {t.monthPerformance(
-                      monthName
-                    )}
-                  </h2>
-
-                  <Link
-                    href={`/accounts/${accountId}/calendar?month=${nextMonth}&year=${nextYear}`}
-                    className="flex h-9 w-9 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.12] text-muted transition-colors duration-base hover:border-accent-bright/30 hover:text-white"
-                    aria-label={t.nextMonth}
-                  >
-                    <ChevronRight size={17} />
-                  </Link>
-                </div>
+                <h2 className="mt-1 text-section capitalize text-white">
+                  {t.monthPerformance(
+                    monthName
+                  )}
+                </h2>
               </div>
 
               <div className="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[0.14em] text-muted">
@@ -1382,6 +1379,6 @@ export default async function CalendarPage({
           </div>
         </Card>
       </section>
-    </div>
+    </AccountPageShell>
   );
 }

@@ -2,8 +2,8 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
+import AccountPageShell from "@/components/AccountPageShell";
 import Card from "@/components/ui/Card";
-import SignatureEdge from "@/components/ui/SignatureEdge";
 import AnalyticsStatCard from "@/components/analytics/AnalyticsStatCard";
 import RiskConcentration from "@/components/analytics/RiskConcentration";
 import QualityBreakdownRow from "@/components/analytics/QualityBreakdown";
@@ -1400,29 +1400,25 @@ export default async function AnalyticsPage({
     : undefined;
 
   return (
-    <div className={pageDensity.analytics.page}>
-      <div
-        className={`reveal-rise ${pageDensity.topbarSafeArea}`}
-        style={{ animationDelay: "0ms" }}
-      >
-        <div className="flex items-center gap-3">
-          <SignatureEdge orientation="vertical" className="h-4" />
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-muted">
-            {t.advancedStatsEyebrow} &middot; {account.name}
-          </p>
-        </div>
-
-        <h1 className="mt-1 text-hero">{t.analyticsTitle}</h1>
-      </div>
-
-      <ScopeBar
-        accountId={accountId}
-        members={scopeMembers}
-        selectedMemberId={selectedMemberId}
-        currentPeriod={period}
-        currentRef={ref}
-        appLanguage={language}
-      />
+    <AccountPageShell
+      className={pageDensity.analytics.page}
+      eyebrow={
+        <>
+          {t.advancedStatsEyebrow} &middot; {account.name}
+        </>
+      }
+      title={t.analyticsTitle}
+      scopeBar={
+        <ScopeBar
+          accountId={accountId}
+          members={scopeMembers}
+          selectedMemberId={selectedMemberId}
+          currentPeriod={period}
+          currentRef={ref}
+          appLanguage={language}
+        />
+      }
+    >
 
       <div className="reveal-rise" style={{ animationDelay: "60ms" }}>
         <RiskConcentration
@@ -1869,6 +1865,6 @@ export default async function AnalyticsPage({
           appLanguage={language}
         />
       </div>
-    </div>
+    </AccountPageShell>
   );
 }

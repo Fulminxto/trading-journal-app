@@ -13,8 +13,8 @@ import PDFReportFooter from "@/components/reports/PDFReportFooter";
 import PDFCompactReport from "@/components/reports/PDFCompactReport";
 import { getReportLabels } from "@/components/reports/ReportI18n";
 
+import AccountPageShell from "@/components/AccountPageShell";
 import Card from "@/components/ui/Card";
-import SignatureEdge from "@/components/ui/SignatureEdge";
 
 import {
   formatCurrencyByLanguage,
@@ -600,40 +600,27 @@ export default async function ReportsPage({
         hasEnoughData={hasEnoughData}
       />
 
-      <div className={`web-report-content ${pageDensity.reports.webStack}`}>
-        {/* Hero-dossier: the report's cover page. Deliberately not
-            `variant="hero"` - no cut-corner facet, no pulsing edge. A
-            tribunal document sits still; it doesn't have the same
-            "alive" crystal signature every other page's hero uses. */}
-        <div className="print-hidden">
-          <Card className={`border-[0.5px] border-flash/[0.14] ${pageDensity.reports.panel} ${pageDensity.topbarSafeArea}`}>
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <SignatureEdge orientation="vertical" pulse={false} className="h-4" />
-                <p className="text-xs font-black uppercase tracking-[0.18em] text-muted">
-                  {t.heroEyebrow} &middot; {account.name}
-                </p>
-              </div>
-
-              <PrintReportButton appLanguage={language} />
-            </div>
-
-            <h1 className="mt-4 text-hero text-white">
-              {t.heroTitle}
-            </h1>
-          </Card>
-        </div>
-
-        <div className="print:hidden">
-          <ScopeBar
-            members={members}
-            selectedMemberId={selectedMemberId ?? undefined}
-            currentPeriod={period}
-            currentRef={ref}
-            appLanguage={language}
-            accountId={accountId}
-          />
-        </div>
+      <div className="web-report-content">
+        <AccountPageShell
+          className={pageDensity.reports.webStack}
+          eyebrow={
+            <>
+              {t.heroEyebrow} &middot; {account.name}
+            </>
+          }
+          title={t.heroTitle}
+          action={<PrintReportButton appLanguage={language} />}
+          scopeBar={
+            <ScopeBar
+              members={members}
+              selectedMemberId={selectedMemberId ?? undefined}
+              currentPeriod={period}
+              currentRef={ref}
+              appLanguage={language}
+              accountId={accountId}
+            />
+          }
+        >
 
         <div className="print-hidden">
           <ReportsNavigation appLanguage={language} />
@@ -769,6 +756,7 @@ export default async function ReportsPage({
         <div className="print-hidden">
           <PDFReportFooter appLanguage={language} />
         </div>
+        </AccountPageShell>
       </div>
     </div>
   );
