@@ -10,6 +10,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+import AccountPageShell from "@/components/AccountPageShell";
 import EquityChart from "@/components/EquityChart";
 import DrawdownChart from "@/components/equity/DrawdownChart";
 import Card from "@/components/ui/Card";
@@ -956,27 +957,20 @@ export default async function EquityPage({
   ];
 
   return (
-    <div className={pageDensity.equity.page}>
-      <div
-        className={`reveal-rise flex flex-col gap-4 ${pageDensity.topbarSafeArea} xl:flex-row xl:items-end xl:justify-between`}
-        style={{ animationDelay: "0ms" }}
-      >
-        <div>
-          <div className="mb-3 flex flex-wrap items-center gap-3">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-muted">
-              {t.heroEyebrow} &middot; {account.name}
-            </p>
-
-            <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
-              {t.heroBadge}
-            </span>
-          </div>
-
-          <h1 className="text-hero">
-            {t.heroTitle}
-          </h1>
-        </div>
-
+    <AccountPageShell
+      className={pageDensity.equity.page}
+      eyebrow={
+        <>
+          {t.heroEyebrow} &middot; {account.name}
+        </>
+      }
+      title={t.heroTitle}
+      badges={
+        <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
+          {t.heroBadge}
+        </span>
+      }
+      action={
         <Link
           href={`/accounts/${accountId}`}
           className="flex w-fit items-center gap-2 rounded-inner border-[0.5px] border-flash/[0.12] px-5 py-3 text-sm text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.04]"
@@ -984,24 +978,26 @@ export default async function EquityPage({
           <ArrowLeft size={17} />
           {t.backToAccountHub}
         </Link>
-      </div>
-
-      <ScopeBar
-        accountId={accountId}
-        members={
-          isSharedAccount
-            ? accountMembers.map((m) => ({
-                id: m.user.id,
-                name: m.user.name,
-                username: m.user.username,
-              }))
-            : undefined
-        }
-        selectedMemberId={selectedMemberId}
-        currentPeriod={period}
-        currentRef={ref}
-        appLanguage={language}
-      />
+      }
+      scopeBar={
+        <ScopeBar
+          accountId={accountId}
+          members={
+            isSharedAccount
+              ? accountMembers.map((m) => ({
+                  id: m.user.id,
+                  name: m.user.name,
+                  username: m.user.username,
+                }))
+              : undefined
+          }
+          selectedMemberId={selectedMemberId}
+          currentPeriod={period}
+          currentRef={ref}
+          appLanguage={language}
+        />
+      }
+    >
 
       {/* PRIMARY - the equity curve, dominant, alone. */}
       <div className="reveal-rise" style={{ animationDelay: "60ms" }}>
@@ -1354,6 +1350,6 @@ export default async function EquityPage({
           )}
         </Card>
       </div>
-    </div>
+    </AccountPageShell>
   );
 }

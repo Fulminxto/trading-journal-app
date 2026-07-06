@@ -415,8 +415,8 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/dashboard/page.tsx": {
-    "mtime": 1783351236.082623,
-    "ast_hash": "2b59d490b8161fa2cf4569bdb437d739",
+    "mtime": 1783352401.4224858,
+    "ast_hash": "4f5ea2c64c63a02943ef3987a42d5472",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/diary/[tradeId]/edit/page.tsx": {
@@ -445,8 +445,8 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/diary/page.tsx": {
-    "mtime": 1783351223.1890466,
-    "ast_hash": "1c25ce5f3b84bd1fd64eb6389870858d",
+    "mtime": 1783352450.9339926,
+    "ast_hash": "feaab773d6ca981e224f4681cdeed0c3",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/equity/loading.tsx": {
@@ -455,8 +455,8 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/equity/page.tsx": {
-    "mtime": 1783351261.7670608,
-    "ast_hash": "d8ca9345807072de121ec7ec7f9e6589",
+    "mtime": 1783352490.6613977,
+    "ast_hash": "e24ffa1bfda444d281c82d08c7ba29f6",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/integrations/actions.ts": {
@@ -1652,6 +1652,11 @@
   "lib/page-density.ts": {
     "mtime": 1783191971.837052,
     "ast_hash": "56a8a7b51306e4652ea2a3e7feedf22a",
+    "semantic_hash": ""
+  },
+  "components/AccountPageShell.tsx": {
+    "mtime": 1783352338.7942104,
+    "ast_hash": "5d048cb6ec7a7b38bd90a130bbfb36ac",
     "semantic_hash": ""
   }
 }

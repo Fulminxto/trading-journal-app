@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
+import AccountPageShell from "@/components/AccountPageShell";
 import EquityChart from "@/components/EquityChart";
 import DashboardStatCard from "@/components/dashboard/DashboardStatCard";
 import ScopeBar from "@/components/ScopeBar";
@@ -1168,35 +1169,26 @@ export default async function DashboardPage({
         ];
 
   return (
-    <div className={pageDensity.dashboard.page}>
-      <div className={pageDensity.dashboard.header}>
-        <div className={pageDensity.headerRow}>
-          <div className="flex flex-col gap-1.5">
-            <div className="flex items-center gap-3">
-              <SignatureEdge orientation="vertical" className="h-4" />
+    <AccountPageShell
+      className={pageDensity.dashboard.page}
+      eyebrow={
+        <>
+          VOLTIS DASHBOARD &middot; {account.name}
+        </>
+      }
+      title={t.dashboardAccount}
+      badges={
+        <>
+          <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-semibold text-white">
+            {accountHealth}
+          </span>
 
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-accent-bright">
-                VOLTIS DASHBOARD &middot; {account.name}
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-              <h1 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
-                {t.dashboardAccount}
-              </h1>
-
-              <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-semibold text-white">
-                {accountHealth}
-              </span>
-
-              <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-3 py-1 text-xs font-semibold text-accent-bright">
-                Score {consistencyScore}/100 / {scoreTierLabel}
-              </span>
-            </div>
-
-          </div>
-        </div>
-
+          <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-3 py-1 text-xs font-semibold text-accent-bright">
+            Score {consistencyScore}/100 / {scoreTierLabel}
+          </span>
+        </>
+      }
+      scopeBar={
         <ScopeBar
           accountId={accountId}
           members={
@@ -1213,7 +1205,8 @@ export default async function DashboardPage({
           currentRef={ref}
           appLanguage={language}
         />
-      </div>
+      }
+    >
 
       {/* PRIMARY — the equity curve is the one hero, full width, dominant. */}
       <div className="reveal-rise" style={{ animationDelay: "40ms" }}>
@@ -1683,6 +1676,6 @@ export default async function DashboardPage({
         </div>
       </details>
 
-    </div>
+    </AccountPageShell>
   );
 }

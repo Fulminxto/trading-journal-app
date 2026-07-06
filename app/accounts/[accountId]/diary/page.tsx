@@ -12,11 +12,11 @@ import {
   type AppLanguage,
 } from "@/lib/i18n";
 
+import AccountPageShell from "@/components/AccountPageShell";
 import ExecutionInsights from "@/components/diary/ExecutionInsights";
 import ScopeBar from "@/components/ScopeBar";
 import Card from "@/components/ui/Card";
 import ListRow from "@/components/ui/ListRow";
-import SignatureEdge from "@/components/ui/SignatureEdge";
 import {
   parseScopeParams,
   getPeriodRange,
@@ -1330,76 +1330,68 @@ export default async function DiaryPage({
     : undefined;
 
   return (
-    <div className={pageDensity.diary.page}>
-      <div
-        className={`reveal-rise ${pageDensity.topbarSafeArea}`}
-        style={{ animationDelay: "0ms" }}
-      >
-        <div className="flex items-center gap-3">
-          <SignatureEdge orientation="vertical" className="h-4" />
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-muted">
-            {t.operationalRegister} &middot; {account.name}
+    <AccountPageShell
+      className={pageDensity.diary.page}
+      eyebrow={
+        <>
+          {t.operationalRegister} &middot; {account.name}
+        </>
+      }
+      title={t.title}
+      badges={
+        isReadOnly ? (
+          <div className="rounded-full bg-white/[0.06] px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-muted">
+            {t.readOnly}
+          </div>
+        ) : undefined
+      }
+      scopeBar={
+        <ScopeBar
+          members={scopeMembers}
+          selectedMemberId={selectedTraderId ?? undefined}
+          currentPeriod={period}
+          currentRef={ref}
+          appLanguage={language}
+          accountId={accountId}
+        />
+      }
+    >
+      {selectedMember && (
+        <Card variant="inner" className="p-5">
+          <p className="text-xs uppercase tracking-[0.2em] text-accent-bright">
+            {t.memberFilterActive}
           </p>
 
-          {isReadOnly && (
-            <div className="rounded-full bg-white/[0.06] px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-muted">
-              {t.readOnly}
-            </div>
-          )}
-        </div>
+          <h2 className="mt-2 text-xl font-black text-white">
+            {t.viewingOnlyTradesOf}{" "}
+            {selectedMember.name ||
+              selectedMember.username}
+          </h2>
 
-        <div className="mt-1 flex flex-wrap items-center gap-4">
-          <h1 className="text-hero">
-            {t.title}
-          </h1>
-        </div>
+          <Link
+            href={`/accounts/${accountId}/diary`}
+            className="mt-4 inline-flex rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-3 text-sm font-bold text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.05]"
+          >
+            {t.clearFilter}
+          </Link>
+        </Card>
+      )}
 
-        {selectedMember && (
-          <Card variant="inner" className="mt-4 p-5">
-            <p className="text-xs uppercase tracking-[0.2em] text-accent-bright">
-              {t.memberFilterActive}
-            </p>
+      {isReadOnly && (
+        <Card variant="inner" className="p-5">
+          <p className="text-xs uppercase tracking-[0.2em] text-muted">
+            {t.readOnlyMode}
+          </p>
 
-            <h2 className="mt-2 text-xl font-black text-white">
-              {t.viewingOnlyTradesOf}{" "}
-              {selectedMember.name ||
-                selectedMember.username}
-            </h2>
+          <h2 className="mt-2 text-xl font-black text-white">
+            {t.readOnlyTitle}
+          </h2>
 
-            <Link
-              href={`/accounts/${accountId}/diary`}
-              className="mt-4 inline-flex rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-3 text-sm font-bold text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.05]"
-            >
-              {t.clearFilter}
-            </Link>
-          </Card>
-        )}
-
-        {isReadOnly && (
-          <Card variant="inner" className="mt-4 p-5">
-            <p className="text-xs uppercase tracking-[0.2em] text-muted">
-              {t.readOnlyMode}
-            </p>
-
-            <h2 className="mt-2 text-xl font-black text-white">
-              {t.readOnlyTitle}
-            </h2>
-
-            <p className="mt-3 text-sm text-muted">
-              {t.readOnlyDescription}
-            </p>
-          </Card>
-        )}
-      </div>
-
-      <ScopeBar
-        members={scopeMembers}
-        selectedMemberId={selectedTraderId ?? undefined}
-        currentPeriod={period}
-        currentRef={ref}
-        appLanguage={language}
-        accountId={accountId}
-      />
+          <p className="mt-3 text-sm text-muted">
+            {t.readOnlyDescription}
+          </p>
+        </Card>
+      )}
 
       <div
         className={`reveal-rise grid grid-cols-2 ${pageDensity.diary.grid} xl:grid-cols-4`}
@@ -2008,7 +2000,7 @@ export default async function DiaryPage({
           ))
         )}
       </div>
-    </div>
+    </AccountPageShell>
   );
 }
 
