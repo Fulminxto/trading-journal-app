@@ -609,7 +609,6 @@ export default async function ReportsPage({
             </>
           }
           title={t.heroTitle}
-          action={<PrintReportButton appLanguage={language} />}
           scopeBar={
             <ScopeBar
               members={members}
@@ -700,6 +699,7 @@ export default async function ReportsPage({
             disciplineScore={disciplineScore}
             behavioralRisk={behavioralRisk}
             hasEnoughData={hasEnoughData}
+            action={<PrintReportButton appLanguage={language} />}
           />
         </div>
 

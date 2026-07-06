@@ -1,7 +1,10 @@
+import type { ReactNode } from "react";
+
 type Props = {
   number: string;
   subtitle: string;
   title: string;
+  action?: ReactNode;
 };
 
 /**
@@ -16,22 +19,31 @@ export default function ReportChapterHeader({
   number,
   subtitle,
   title,
+  action,
 }: Props) {
   return (
-    <div className="mb-8 flex items-start gap-6 border-b border-white/10 pb-6">
-      <span className="text-6xl font-black leading-none tracking-tight text-white/10 tabular-nums sm:text-7xl">
-        {number}
-      </span>
+    <div className="mb-8 flex flex-col gap-4 border-b border-white/10 pb-6 sm:flex-row sm:items-start sm:justify-between">
+      <div className="flex items-start gap-6">
+        <span className="text-6xl font-black leading-none tracking-tight text-white/10 tabular-nums sm:text-7xl">
+          {number}
+        </span>
 
-      <div className="pt-1">
-        <p className="text-xs font-black uppercase tracking-[0.25em] text-accent-bright">
-          {subtitle}
-        </p>
+        <div className="pt-1">
+          <p className="text-xs font-black uppercase tracking-[0.25em] text-accent-bright">
+            {subtitle}
+          </p>
 
-        <h2 className="mt-2 text-section text-white">
-          {title}
-        </h2>
+          <h2 className="mt-2 text-section text-white">
+            {title}
+          </h2>
+        </div>
       </div>
+
+      {action && (
+        <div className="shrink-0 sm:pt-1">
+          {action}
+        </div>
+      )}
     </div>
   );
 }

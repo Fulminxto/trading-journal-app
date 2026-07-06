@@ -17,13 +17,13 @@ export default function ReportsNavigation({
   const t = getReportLabels(appLanguage);
 
   return (
-    <div className="print-hidden sticky top-4 z-30 rounded-card border-[0.5px] border-flash/[0.1] bg-surface-1 p-4">
-      <div className="flex gap-3 overflow-x-auto">
+    <div className="print-hidden sticky top-4 z-30 rounded-card border-[0.5px] border-white/[0.07] bg-surface-1/85 p-2.5 backdrop-blur">
+      <div className="flex gap-2 overflow-x-auto">
         {sectionIds.map((id) => (
           <a
             key={id}
             href={`#${id}`}
-            className="shrink-0 rounded-full border-[0.5px] border-flash/[0.12] px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-muted transition-colors duration-base hover:border-accent-bright/40 hover:text-accent-bright"
+            className="shrink-0 rounded-full border-[0.5px] border-white/[0.08] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted transition-colors duration-base hover:border-accent-bright/30 hover:bg-white/[0.03] hover:text-accent-bright"
           >
             {t[id]}
           </a>

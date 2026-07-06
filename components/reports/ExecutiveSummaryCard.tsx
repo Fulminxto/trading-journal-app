@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 import {
   formatReportCurrency,
   getReportLabels,
@@ -12,6 +14,7 @@ type Props = ReportI18nProps & {
   disciplineScore: number;
   behavioralRisk: number;
   hasEnoughData: boolean;
+  action?: ReactNode;
 };
 
 export default function ExecutiveSummaryCard({
@@ -22,6 +25,7 @@ export default function ExecutiveSummaryCard({
   hasEnoughData,
   appLanguage,
   currency,
+  action,
 }: Props) {
   const t = getReportLabels(appLanguage);
 
@@ -57,6 +61,7 @@ export default function ExecutiveSummaryCard({
         number="01"
         subtitle={t.executiveSummary}
         title={t.aiStrategicOverview}
+        action={action}
       />
 
       <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
