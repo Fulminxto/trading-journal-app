@@ -134,15 +134,15 @@ export default function ScopeBar({
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div className="relative z-0 py-0.5">
+    <div className="relative z-0 w-full py-0.5">
       <div
-        className={`relative flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between ${
+        className={`relative flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-6 ${
           isPending ? "pointer-events-none" : ""
         }`}
       >
         {/* ── LEFT: Trader pills (shared accounts only) ── */}
         {showTrader && isShared && (
-          <div className="flex min-w-0 flex-wrap items-center gap-2">
+          <div className="flex w-full min-w-0 flex-wrap items-center gap-2 sm:w-auto">
             <p className="shrink-0 text-micro font-medium uppercase tracking-label text-muted-faint">
               {TRADER_LABEL[lang]}
             </p>
@@ -199,53 +199,53 @@ export default function ScopeBar({
 
         {/* ── RIGHT: Period pills + navigator ── */}
         {showPeriod && (
-        <div className="flex min-w-0 flex-wrap items-center gap-2 sm:ml-auto sm:justify-end">
-          <p className="shrink-0 text-micro font-medium uppercase tracking-label text-muted-faint">
-            {PERIOD_LABEL[lang]}
-          </p>
+          <div className="flex w-full min-w-0 flex-wrap items-center gap-2 sm:w-auto sm:justify-end">
+            <p className="shrink-0 text-micro font-medium uppercase tracking-label text-muted-faint">
+              {PERIOD_LABEL[lang]}
+            </p>
 
-          <div className={`flex min-w-0 flex-wrap items-center gap-1.5 ${isPending ? "opacity-50" : ""}`}>
-            {/* Preset pills */}
-            {PRESETS.map((preset) => (
-              <Pill
-                key={preset}
-                active={currentPeriod === preset}
-                onClick={() => selectPeriod(preset)}
-                className="px-2 py-1 text-xs"
-              >
-                {getPeriodPresetLabel(preset, lang)}
-              </Pill>
-            ))}
-
-            {/* Navigator: only when a specific period is active */}
-            {currentPeriod !== "all" && currentRef && (
-              <div className="flex items-center gap-1 rounded-pill border border-white/10 bg-white/[0.03] px-1 py-0.5">
-                <button
-                  onClick={() => navigate(-1)}
-                  className="flex h-6 w-6 items-center justify-center rounded-pill text-muted transition hover:bg-white/10 hover:text-white"
-                  aria-label="Previous"
+            <div className={`flex min-w-0 flex-wrap items-center gap-1.5 ${isPending ? "opacity-50" : ""}`}>
+              {/* Preset pills */}
+              {PRESETS.map((preset) => (
+                <Pill
+                  key={preset}
+                  active={currentPeriod === preset}
+                  onClick={() => selectPeriod(preset)}
+                  className="px-2 py-1 text-xs"
                 >
-                  ‹
-                </button>
+                  {getPeriodPresetLabel(preset, lang)}
+                </Pill>
+              ))}
 
-                <span className="min-w-[96px] px-1.5 text-center text-xs text-white">
-                  {navigatorLabel}
-                </span>
+              {/* Navigator: only when a specific period is active */}
+              {currentPeriod !== "all" && currentRef && (
+                <div className="flex items-center gap-1 rounded-pill border border-white/10 bg-white/[0.03] px-1 py-0.5">
+                  <button
+                    onClick={() => navigate(-1)}
+                    className="flex h-6 w-6 items-center justify-center rounded-pill text-muted transition hover:bg-white/10 hover:text-white"
+                    aria-label="Previous"
+                  >
+                    ‹
+                  </button>
 
-                <button
-                  onClick={() => navigate(1)}
-                  className="flex h-6 w-6 items-center justify-center rounded-pill text-muted transition hover:bg-white/10 hover:text-white"
-                  aria-label="Next"
-                >
-                  ›
-                </button>
-              </div>
-            )}
+                  <span className="min-w-[96px] px-1.5 text-center text-xs text-white">
+                    {navigatorLabel}
+                  </span>
+
+                  <button
+                    onClick={() => navigate(1)}
+                    className="flex h-6 w-6 items-center justify-center rounded-pill text-muted transition hover:bg-white/10 hover:text-white"
+                    aria-label="Next"
+                  >
+                    ›
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Loading indicator */}
+            {isPending && <VoltisLightningLoader size={16} />}
           </div>
-
-          {/* Loading indicator */}
-          {isPending && <VoltisLightningLoader size={16} />}
-        </div>
         )}
       </div>
 
