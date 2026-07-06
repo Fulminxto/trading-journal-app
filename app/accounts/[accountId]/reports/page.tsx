@@ -607,50 +607,20 @@ export default async function ReportsPage({
             "alive" crystal signature every other page's hero uses. */}
         <div className="print-hidden">
           <Card className={`border-[0.5px] border-flash/[0.14] ${pageDensity.reports.panel} ${pageDensity.topbarSafeArea}`}>
-            <div className="flex items-center gap-3">
-              <SignatureEdge orientation="vertical" pulse={false} className="h-4" />
-              <p className="text-sm text-muted">{t.heroEyebrow}</p>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <SignatureEdge orientation="vertical" pulse={false} className="h-4" />
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-muted">
+                  {t.heroEyebrow} &middot; {account.name}
+                </p>
+              </div>
+
+              <PrintReportButton appLanguage={language} />
             </div>
 
             <h1 className="mt-4 text-hero text-white">
               {t.heroTitle}
             </h1>
-
-            <p className="mt-6 max-w-2xl text-sm leading-relaxed text-muted">
-              {t.heroDescription}
-            </p>
-
-            {/* Document stamp: who this was prepared for, when, and the
-                sample it covers - the export-forward, archivable identity
-                stated once, not repeated per chapter. */}
-            <div className="mt-8 flex flex-wrap items-center gap-x-10 gap-y-4 border-y border-white/10 py-5">
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-faint">
-                  {rt.preparedFor}
-                </p>
-                <p className="mt-1 font-bold text-white">{traderName}</p>
-              </div>
-
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-faint">
-                  {rt.generatedOn}
-                </p>
-                <p className="mt-1 font-bold text-white">{generatedDate}</p>
-              </div>
-
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-faint">
-                  {t.totalTrades}{periodSuffix}
-                </p>
-                <p className="mt-1 font-bold text-accent-bright">
-                  {totalTrades} &middot; {hasEnoughData ? reportReadiness : t.earlySample}
-                </p>
-              </div>
-
-              <div className="ml-auto">
-                <PrintReportButton appLanguage={language} />
-              </div>
-            </div>
           </Card>
         </div>
 

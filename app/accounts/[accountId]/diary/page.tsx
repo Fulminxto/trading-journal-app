@@ -1337,9 +1337,15 @@ export default async function DiaryPage({
       >
         <div className="flex items-center gap-3">
           <SignatureEdge orientation="vertical" className="h-4" />
-          <p className="text-sm text-muted">
-            {t.operationalRegister}
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-muted">
+            {t.operationalRegister} &middot; {account.name}
           </p>
+
+          {isReadOnly && (
+            <div className="rounded-full bg-white/[0.06] px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-muted">
+              {t.readOnly}
+            </div>
+          )}
         </div>
 
         <div className="mt-1 flex flex-wrap items-center gap-4">
@@ -1384,18 +1390,6 @@ export default async function DiaryPage({
             </p>
           </Card>
         )}
-
-        <div className="mt-2 flex flex-wrap items-center gap-3">
-          <p className="text-sm text-muted-faint">
-            {t.account}: {account.name}
-          </p>
-
-          {isReadOnly && (
-            <div className="rounded-full bg-white/[0.06] px-4 py-1 text-xs font-black uppercase tracking-[0.2em] text-muted">
-              {t.readOnly}
-            </div>
-          )}
-        </div>
       </div>
 
       <ScopeBar

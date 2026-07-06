@@ -402,26 +402,14 @@ export default async function SessionsPage({
           <div>
             <div className="flex flex-wrap items-center gap-3">
               <SignatureEdge orientation="vertical" className="h-4" />
-              <p className="text-sm text-muted">
-                {t.page.workspaceBadge}
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-muted">
+                {t.page.workspaceBadge} &middot; {membership.tradingAccount.name}
               </p>
-
-              <span className="rounded-pill border-[0.5px] border-flash/[0.12] px-3 py-1 text-xs font-medium uppercase tracking-[0.16em] text-muted">
-                {membership.tradingAccount.name}
-              </span>
             </div>
-
-            <p className="mt-6 text-xs font-medium uppercase tracking-[0.18em] text-muted-faint">
-              {t.page.titleSmall}
-            </p>
 
             <h1 className="mt-3 text-hero text-white">
               {t.page.title}
             </h1>
-
-            <p className="mt-5 max-w-3xl text-sm leading-7 text-muted">
-              {t.page.description}
-            </p>
           </div>
 
           <Card variant="inner" className="p-5">

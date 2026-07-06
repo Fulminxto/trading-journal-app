@@ -1263,7 +1263,7 @@ export default async function AccountPage({
           <div className="xl:col-span-3">
             <div className="mb-6 flex flex-wrap items-center gap-3">
               <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
-                {t.hubBadge}
+                {t.selectedAccount} &middot; {t.hubBadge}
               </span>
 
               <span className="rounded-full bg-white/[0.06] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-muted">
@@ -1275,17 +1275,9 @@ export default async function AccountPage({
               </span>
             </div>
 
-            <p className="text-sm text-muted">
-              {t.selectedAccount}
-            </p>
-
-            <h1 className="text-hero mt-3 break-words">
+            <h1 className="text-hero break-words">
               {account.name}
             </h1>
-
-            <p className="mt-6 max-w-3xl text-base leading-7 text-muted">
-              {t.heroDescription}
-            </p>
 
             {canManageMembers && (
               <Link

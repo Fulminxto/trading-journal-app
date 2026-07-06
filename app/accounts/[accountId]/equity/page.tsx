@@ -962,27 +962,19 @@ export default async function EquityPage({
         style={{ animationDelay: "0ms" }}
       >
         <div>
-          <div className="mb-4 flex flex-wrap items-center gap-3">
+          <div className="mb-3 flex flex-wrap items-center gap-3">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-muted">
+              {t.heroEyebrow} &middot; {account.name}
+            </p>
+
             <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
               {t.heroBadge}
             </span>
-
-            <span className="rounded-full bg-white/[0.06] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-muted">
-              {account.name}
-            </span>
           </div>
 
-          <p className="text-sm text-muted">
-            {t.heroEyebrow}
-          </p>
-
-          <h1 className="text-hero mt-3">
+          <h1 className="text-hero">
             {t.heroTitle}
           </h1>
-
-          <p className="mt-4 max-w-3xl text-base leading-7 text-muted">
-            {t.heroDescription}
-          </p>
         </div>
 
         <Link

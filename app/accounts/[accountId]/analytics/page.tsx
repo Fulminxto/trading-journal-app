@@ -1407,7 +1407,9 @@ export default async function AnalyticsPage({
       >
         <div className="flex items-center gap-3">
           <SignatureEdge orientation="vertical" className="h-4" />
-          <p className="text-sm text-muted">{t.advancedStatsEyebrow}</p>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-muted">
+            {t.advancedStatsEyebrow} &middot; {account.name}
+          </p>
         </div>
 
         <h1 className="mt-1 text-hero">{t.analyticsTitle}</h1>

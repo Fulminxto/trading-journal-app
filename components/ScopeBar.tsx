@@ -125,7 +125,7 @@ export default function ScopeBar({
   const navigatorLabel = getPeriodLabel(currentPeriod, currentRef, lang);
   const showTrader = mode === "all" || mode === "trader";
   const showPeriod = mode === "all" || mode === "period";
-  const showDescription = mode === "all";
+  const showDescription = false;
 
   if (mode === "trader" && !isShared) {
     return null;
@@ -136,9 +136,7 @@ export default function ScopeBar({
   return (
     <div className="relative z-0 py-0.5">
       <div
-        className={`relative flex flex-col gap-2 sm:flex-row sm:items-center ${
-          mode === "all" ? "sm:justify-between" : ""
-        } ${
+        className={`relative flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between ${
           isPending ? "pointer-events-none" : ""
         }`}
       >
@@ -201,7 +199,7 @@ export default function ScopeBar({
 
         {/* ── RIGHT: Period pills + navigator ── */}
         {showPeriod && (
-        <div className="flex min-w-0 flex-wrap items-center gap-2">
+        <div className="flex min-w-0 flex-wrap items-center gap-2 sm:ml-auto sm:justify-end">
           <p className="shrink-0 text-micro font-medium uppercase tracking-label text-muted-faint">
             {PERIOD_LABEL[lang]}
           </p>

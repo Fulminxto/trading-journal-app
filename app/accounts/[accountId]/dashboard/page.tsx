@@ -1176,13 +1176,13 @@ export default async function DashboardPage({
               <SignatureEdge orientation="vertical" className="h-4" />
 
               <p className="text-xs font-black uppercase tracking-[0.28em] text-accent-bright">
-                VOLTIS DASHBOARD
+                VOLTIS DASHBOARD &middot; {account.name}
               </p>
             </div>
 
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
               <h1 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
-                {account.name}
+                {t.dashboardAccount}
               </h1>
 
               <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-semibold text-white">
@@ -1197,34 +1197,22 @@ export default async function DashboardPage({
           </div>
         </div>
 
-        <div className="flex flex-col gap-2">
-          <ScopeBar
-            accountId={accountId}
-            members={
-              isSharedAccount
-                ? accountMembers.map((m) => ({
-                    id: m.user.id,
-                    name: m.user.name,
-                    username: m.user.username,
-                  }))
-                : undefined
-            }
-            selectedMemberId={selectedMemberId}
-            currentPeriod={period}
-            currentRef={ref}
-            appLanguage={language}
-            mode="trader"
-          />
-
-          <ScopeBar
-            accountId={accountId}
-            selectedMemberId={selectedMemberId}
-            currentPeriod={period}
-            currentRef={ref}
-            appLanguage={language}
-            mode="period"
-          />
-        </div>
+        <ScopeBar
+          accountId={accountId}
+          members={
+            isSharedAccount
+              ? accountMembers.map((m) => ({
+                  id: m.user.id,
+                  name: m.user.name,
+                  username: m.user.username,
+                }))
+              : undefined
+          }
+          selectedMemberId={selectedMemberId}
+          currentPeriod={period}
+          currentRef={ref}
+          appLanguage={language}
+        />
       </div>
 
       {/* PRIMARY — the equity curve is the one hero, full width, dominant. */}

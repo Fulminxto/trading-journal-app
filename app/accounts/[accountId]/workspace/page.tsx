@@ -553,17 +553,9 @@ export default async function WorkspacePage({
       <div className="flex flex-col gap-4 lg:pr-[18rem] xl:pr-[20rem] lg:flex-row lg:items-center lg:justify-between">
         <div>
           <p className="text-micro uppercase tracking-hero text-muted-faint">
-            Account command hub
+            Account command hub &middot; {account.name}
           </p>
           <h1 className="mt-3 text-hero text-flash">Workspace</h1>
-          <div className="mt-4 max-w-3xl">
-            <SignatureEdge orientation="horizontal" className="mb-4 max-w-40" />
-            <p className="text-body text-muted">
-              A routing room for this account. It shows what is ready, what is
-              limited, and where to go next without duplicating performance,
-              access-control, or analytics pages.
-            </p>
-          </div>
         </div>
 
         <Link
