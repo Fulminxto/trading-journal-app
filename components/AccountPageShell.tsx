@@ -26,11 +26,10 @@ export default function AccountPageShell({
 }: AccountPageShellProps) {
   return (
     <div className={`space-y-6 ${className}`.trim()}>
-      <section
-        className={`reveal-rise space-y-4 ${pageDensity.topbarSafeArea}`}
-        style={{ animationDelay: "0ms" }}
-      >
-        <header className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+      <section className="reveal-rise space-y-4" style={{ animationDelay: "0ms" }}>
+        <header
+          className={`flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between ${pageDensity.topbarSafeArea}`}
+        >
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-3">
               <SignatureEdge orientation="vertical" className="h-4" />
@@ -62,7 +61,7 @@ export default function AccountPageShell({
           )}
         </header>
 
-        {scopeBar && <div>{scopeBar}</div>}
+        {scopeBar && <div className="w-full">{scopeBar}</div>}
       </section>
 
       {children}
