@@ -7,7 +7,6 @@ import PerformanceBreakdownCard from "@/components/reports/PerformanceBreakdownC
 import ExecutiveSummaryCard from "@/components/reports/ExecutiveSummaryCard";
 import PsychologyMindsetCard from "@/components/reports/PsychologyMindsetCard";
 import GrowthFocusCard from "@/components/reports/GrowthFocusCard";
-import ReportsNavigation from "@/components/reports/ReportsNavigation";
 import PrintReportButton from "@/components/reports/PrintReportButton";
 import PDFReportFooter from "@/components/reports/PDFReportFooter";
 import PDFCompactReport from "@/components/reports/PDFCompactReport";
@@ -620,10 +619,6 @@ export default async function ReportsPage({
             />
           }
         >
-
-        <div className="print-hidden">
-          <ReportsNavigation appLanguage={language} />
-        </div>
 
         <div className={`grid grid-cols-2 ${pageDensity.reports.grid} xl:grid-cols-4`}>
           <Card interactive className="p-5">
