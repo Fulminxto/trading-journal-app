@@ -25,7 +25,7 @@ export default function AccountPageShell({
   className = "",
 }: AccountPageShellProps) {
   return (
-    <div className={`space-y-6 ${className}`.trim()}>
+    <div className={`space-y-5 ${className}`.trim()}>
       <section className="reveal-rise space-y-4" style={{ animationDelay: "0ms" }}>
         <header
           className={`flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between ${pageDensity.topbarSafeArea}`}

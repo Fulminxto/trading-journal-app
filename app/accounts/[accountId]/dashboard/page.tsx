@@ -170,7 +170,7 @@ const dashboardLabels: Record<
     accountStatus: "Stato account",
     accountStatusDescription:
       "Snapshot basato su profitto, drawdown e comportamento recente dell’account.",
-    dashboardAccount: "Dashboard account",
+    dashboardAccount: "Account Dashboard",
 
     accountType: "Tipo account",
     initialBalance: "Saldo iniziale",
@@ -262,7 +262,7 @@ const dashboardLabels: Record<
     accountStatus: "Account Status",
     accountStatusDescription:
       "Snapshot based on profit, drawdown and recent account behavior.",
-    dashboardAccount: "Dashboard account",
+    dashboardAccount: "Account Dashboard",
 
     accountType: "Account Type",
     initialBalance: "Initial Balance",
