@@ -159,5 +159,7 @@
   "157": "RecoveryIntelligenceCard.tsx",
   "158": "CriticalAlertCard.tsx",
   "159": "ElevatedRiskCard.tsx",
-  "160": "ElevatedRiskCard.tsx"
+  "160": "ElevatedRiskCard.tsx",
+  "161": "PsychologyTrendChart.tsx",
+  "162": "Pill.tsx"
 }
