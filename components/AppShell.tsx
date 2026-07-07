@@ -34,7 +34,7 @@ export default function AppShell({
         iconVariant={user?.appIconVariant ?? "classic"}
       />
 
-      <main className="relative min-h-screen flex-1 overflow-x-hidden">
+      <main className="app-scrollbar relative min-h-screen flex-1 overflow-x-hidden">
         <Topbar user={user} onOpenSidebar={() => setSidebarOpen(true)} />
 
         <div className="p-4 pt-[calc(env(safe-area-inset-top)+5rem)] sm:p-6 sm:pt-[calc(env(safe-area-inset-top)+5.5rem)] lg:p-8 lg:pt-8">
