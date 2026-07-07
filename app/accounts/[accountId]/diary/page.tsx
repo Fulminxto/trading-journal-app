@@ -1426,22 +1426,37 @@ export default async function DiaryPage({
       />
       </div>
 
-      <form
-        action={`/accounts/${accountId}/diary`}
-        className="reveal-rise rounded-card border-[0.5px] border-flash/[0.08] bg-surface-1/95 p-5"
+      <div
+        className="reveal-rise space-y-3"
         style={{ animationDelay: "140ms" }}
       >
-        <div className="space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent-bright">
-              {t.filtersEyebrow}
+            <p className="text-sm text-muted">
+              {t.historyEyebrow}
             </p>
-            <h2 className="mt-1 text-lg font-bold text-white">
-              {t.filtersTitle}
+
+            <h2 className="text-2xl font-bold">
+              {t.historyTitle}
             </h2>
           </div>
 
-          <div className="space-y-3">
+          {canCreateTrades && (
+            <Link
+              href={`/accounts/${accountId}/diary/new`}
+              style={{ background: CTA_GRADIENT }}
+              className="inline-flex items-center gap-1.5 rounded-inner px-4 py-2 text-sm font-semibold text-white transition-shadow duration-base hover:shadow-[0_0_24px_color-mix(in_srgb,var(--color-accent)_18%,transparent)]"
+            >
+              + {t.newTradeTitle}
+            </Link>
+          )}
+        </div>
+
+      <form
+        action={`/accounts/${accountId}/diary`}
+        className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-1/55 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
+      >
+        <div className="space-y-2">
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-4">
           <select
             name="symbol"
@@ -1554,7 +1569,7 @@ export default async function DiaryPage({
         </div>
 
         {activeFilterChips.length > 0 && (
-          <div className="mt-3 flex flex-wrap items-center gap-2">
+          <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-white/[0.04] pt-3">
             <span className="text-xs text-muted-faint">{t.activeFilters}</span>
             {activeFilterChips.map((chip) => (
               <span
@@ -1571,34 +1586,7 @@ export default async function DiaryPage({
             )}
           </div>
         )}
-        </div>
       </form>
-
-      <div
-        className="reveal-rise space-y-3"
-        style={{ animationDelay: "180ms" }}
-      >
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p className="text-sm text-muted">
-              {t.historyEyebrow}
-            </p>
-
-            <h2 className="text-2xl font-bold">
-              {t.historyTitle}
-            </h2>
-          </div>
-
-          {canCreateTrades && (
-            <Link
-              href={`/accounts/${accountId}/diary/new`}
-              style={{ background: CTA_GRADIENT }}
-              className="inline-flex items-center gap-1.5 rounded-inner px-4 py-2 text-sm font-semibold text-white transition-shadow duration-base hover:shadow-[0_0_24px_color-mix(in_srgb,var(--color-accent)_18%,transparent)]"
-            >
-              + {t.newTradeTitle}
-            </Link>
-          )}
-        </div>
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
           <p className="text-xs text-muted-faint">
