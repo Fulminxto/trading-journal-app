@@ -1,16 +1,16 @@
 # Graph Report - VOLTIS  (2026-07-07)
 
 ## Corpus Check
-- 331 files · ~355,051 words
+- 331 files · ~355,137 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3334 nodes · 7867 edges · 161 communities (148 shown, 13 thin omitted)
+- 3334 nodes · 7867 edges · 160 communities (149 shown, 11 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 117 edges (avg confidence: 0.67)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d98ac61b`
+- Built from commit: `4aaad3cc`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -154,7 +154,6 @@
 - [[_COMMUNITY_page.tsx|page.tsx]]
 - [[_COMMUNITY_ConsistencyScoreCard.tsx|ConsistencyScoreCard.tsx]]
 - [[_COMMUNITY_EmotionalStabilityCard.tsx|EmotionalStabilityCard.tsx]]
-- [[_COMMUNITY_RecoveryStatusCard.tsx|RecoveryStatusCard.tsx]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `auth()` - 132 edges
@@ -183,11 +182,11 @@
 ## Import Cycles
 - None detected.
 
-## Communities (161 total, 13 thin omitted)
+## Communities (160 total, 11 thin omitted)
 
 ### Community 0 - "page.tsx"
 Cohesion: 0.03
-Nodes (94): acceptedDomAlreadyClean(), addManualContextText(), applyGlobalBarLabelState(), applyPlaceholderSizingStyles(), averageRgb01(), buildAnnotationsForCapture(), buildPinElement(), buildPlaceholderResizeHandles() (+86 more)
+Nodes (102): acceptedDomAlreadyClean(), addManualContextText(), applyGlobalBarLabelState(), applyPlaceholderSizingStyles(), averageRgb01(), buildAnnotationsForCapture(), buildPinElement(), buildSvelteExpressionTextMap() (+94 more)
 
 ### Community 1 - "page.tsx"
 Cohesion: 0.14
@@ -226,8 +225,8 @@ Cohesion: 0.28
 Nodes (11): ALLOWED_IMAGE_TYPES, changePassword(), getExtensionFromMimeType(), getNumber(), getStoragePathFromPublicUrl(), getString(), hasValidImageSignature(), removePreviousProfileImage() (+3 more)
 
 ### Community 10 - "actions.ts"
-Cohesion: 0.11
-Nodes (23): AdminActivityPage(), GET(), POST(), POST(), GET(), DELETE(), getString(), POST() (+15 more)
+Cohesion: 0.08
+Nodes (35): AdminAccountsPage(), AdminActivityPage(), formatAdminDate(), getAdminI18n(), valueLabel(), MaintenancePage(), AdminSupportPage(), AdminTicketPage() (+27 more)
 
 ### Community 11 - "NotificationBell.tsx"
 Cohesion: 0.25
@@ -243,7 +242,7 @@ Nodes (65): addBrowserFindings(), addVisualContrastFindings(), addVisualContrast
 
 ### Community 14 - "page.tsx"
 Cohesion: 0.14
-Nodes (11): ConfidenceStabilityCard(), Props, CopilotHero(), getCopilotLabels(), MandatoryReviewCard(), Props, PerformanceTimelineCard(), Props (+3 more)
+Nodes (13): CopilotHero(), getCopilotLabels(), CriticalAlertCard(), Props, MandatoryReviewCard(), Props, PerformanceTimelineCard(), Props (+5 more)
 
 ### Community 15 - "DrawdownChart.tsx"
 Cohesion: 0.17
@@ -267,7 +266,7 @@ Nodes (43): detectUrl(), runVisualContrastFallback(), serializeDesignSystemForBr
 
 ### Community 20 - "el"
 Cohesion: 0.08
-Nodes (44): checkPageTypography(), checkStaticPageTypography(), checkPageTypography(), actionLabel(), applyConfigureBarChrome(), bindConfigureCountPillTooltip(), bindConfigureInlineControlHover(), buildConfigureActionControl() (+36 more)
+Nodes (46): checkPageTypography(), checkStaticPageTypography(), checkPageTypography(), actionLabel(), applyConfigureBarChrome(), bindConfigureCountPillTooltip(), bindConfigureInlineControlHover(), buildConfigureActionControl() (+38 more)
 
 ### Community 21 - "design-system.mjs"
 Cohesion: 0.09
@@ -406,8 +405,8 @@ Cohesion: 0.17
 Nodes (19): applyOriginalAttrsToSvelteAnchor(), applySvelteComponentVariantStyle(), commitAcceptedSvelteComponentToDom(), elementMatchesOriginalMarkup(), extractSvelteComponentStyle(), findLiveElementForOriginalMarkup(), findLiveElementForSvelteManifest(), findLiveElementFromAnchorSnapshot() (+11 more)
 
 ### Community 55 - "refreshParamsPanel"
-Cohesion: 0.11
-Nodes (25): applyParamDefaults(), applyParamValue(), closedClipPath(), closeTunePopover(), ensureInsertPlaceholder(), findInsertAnchorInDom(), getVisibleVariantEl(), hideParamsPanel() (+17 more)
+Cohesion: 0.20
+Nodes (15): applyParamDefaults(), applyParamValue(), closedClipPath(), closeTunePopover(), getVisibleVariantEl(), hideParamsPanel(), openTunePopover(), popoverDirection() (+7 more)
 
 ### Community 56 - "actions.ts"
 Cohesion: 0.12
@@ -546,8 +545,8 @@ Cohesion: 0.20
 Nodes (10): detectCsp(), INLINE_HEADER_SIGNALS, LAYOUT_EXTS, MONOREPO_HELPER_SIGNALS, NUXT_ROUTE_RULES_SIGNALS, NUXT_SECURITY_SIGNALS, SCAN_EXTS, SKIP_DIRS (+2 more)
 
 ### Community 91 - "normalizeIgnoreValueEntries"
-Cohesion: 0.10
-Nodes (27): AdminAccountsPage(), AdminCopy, AdminCopyOverride, adminLocales, deAdminCopy, enAdminCopy, esAdminCopy, formatAdminDate() (+19 more)
+Cohesion: 0.13
+Nodes (15): AdminCopy, AdminCopyOverride, adminLocales, deAdminCopy, enAdminCopy, esAdminCopy, formatAdminDateTime(), formatAdminMoney() (+7 more)
 
 ### Community 92 - "palette.mjs"
 Cohesion: 0.24
@@ -578,8 +577,8 @@ Cohesion: 0.33
 Nodes (8): appendStyleToLiveUiRoot(), appendToLiveUiRoot(), escapeCssIdent(), getLiveUiElementById(), LIVE_CHROME_MOUNT_CONTRACT, LIVE_UI_COMPONENT_IDS, LIVE_UI_SURFACES, resolveLiveUiRoot()
 
 ### Community 99 - "page.tsx"
-Cohesion: 0.18
-Nodes (8): CopilotI18nProps, CriticalAlertCard(), Props, DailyIntelligenceFeed(), Props, Pattern, PatternMemoryCard(), Props
+Cohesion: 0.17
+Nodes (7): ConfidenceStabilityCard(), Props, CopilotI18nProps, DailyIntelligenceFeed(), Props, ElevatedRiskCard(), Props
 
 ### Community 100 - "scripts"
 Cohesion: 0.22
@@ -685,6 +684,10 @@ Nodes (10): getLiveSessionsDir(), applyEvent(), baseSnapshot(), COMPLETED_PHASES
 Cohesion: 0.33
 Nodes (9): generateAnalysis(), getCopilotAccess(), getLimitedString(), getString(), sendCopilotMessage(), CopilotConversationCard(), Message, Props (+1 more)
 
+### Community 156 - "ElevatedRiskCard.tsx"
+Cohesion: 0.50
+Nodes (3): Pattern, PatternMemoryCard(), Props
+
 ### Community 157 - "page.tsx"
 Cohesion: 0.27
 Nodes (5): formatDate(), getRoleDescription(), getRoleLabel(), MemberAccessPage(), PermissionItem
@@ -696,7 +699,7 @@ Nodes (5): ConsistencyScoreCard(), getLabel(), getTone(), Labels, Props
 ## Knowledge Gaps
 - **536 isolated node(s):** `COMMON_DEV_PORTS`, `SCANNABLE_EXT`, `SOURCE_DIRS`, `PRODUCT_NAMES`, `DESIGN_NAMES` (+531 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **13 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -710,7 +713,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **What connects `COMMON_DEV_PORTS`, `SCANNABLE_EXT`, `SOURCE_DIRS` to the rest of the system?**
   _536 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `page.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.030973451327433628 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.02933884297520661 - nodes in this community are weakly interconnected._
 - **Should `page.tsx` be split into smaller, more focused modules?**
   _Cohesion score 0.1437908496732026 - nodes in this community are weakly interconnected._
 - **Should `page.tsx` be split into smaller, more focused modules?**

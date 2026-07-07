@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { PlayCircle } from "lucide-react";
+import { ChevronDown, PlayCircle, SlidersHorizontal } from "lucide-react";
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -1161,6 +1161,18 @@ export default async function DiaryPage({
 
   const activeDateConflict =
     period !== "all" && Boolean(filters.from || filters.to);
+  const hasDateRangeFilter = Boolean(filters.from || filters.to);
+  const activeFilterCount = [
+    filters.symbol,
+    filters.outcome,
+    filters.direction,
+    filters.source,
+    filters.needsReview,
+    selectedTraderId,
+    filters.strategyId,
+    hasDateRangeFilter,
+    period !== "all",
+  ].filter(Boolean).length;
 
   const activeFilterChips: string[] = [];
   if (filters.symbol) activeFilterChips.push(filters.symbol);
@@ -1452,11 +1464,34 @@ export default async function DiaryPage({
           )}
         </div>
 
-      <form
-        action={`/accounts/${accountId}/diary`}
-        className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-1/55 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
-      >
-        <div className="space-y-2">
+        <details className="group rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-1/45 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
+          <summary className="flex min-h-10 cursor-pointer list-none flex-wrap items-center gap-2 rounded-inner px-2 outline-none transition-colors duration-base hover:bg-white/[0.04] focus-visible:ring-2 focus-visible:ring-accent-bright/40 [&::-webkit-details-marker]:hidden">
+            <span className="inline-flex items-center gap-2 rounded-full border-[0.5px] border-flash/[0.12] bg-surface-2 px-3 py-1.5 text-sm font-semibold text-white">
+              <SlidersHorizontal size={14} aria-hidden="true" />
+              Filters
+              <ChevronDown
+                size={14}
+                className="text-muted-faint transition-transform duration-base group-open:rotate-180"
+                aria-hidden="true"
+              />
+            </span>
+            {activeFilterCount > 0 && (
+              <span className="rounded-full bg-accent-bright/[0.08] px-2.5 py-1 text-xs font-semibold text-accent-bright">
+                {activeFilterCount} active
+              </span>
+            )}
+            {hasDateRangeFilter && (
+              <span className="rounded-full bg-white/[0.05] px-2.5 py-1 text-xs text-muted">
+                Date range
+              </span>
+            )}
+          </summary>
+
+          <form
+            action={`/accounts/${accountId}/diary`}
+            className="mt-2 border-t border-white/[0.04] pt-3"
+          >
+            <div className="space-y-2">
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-4">
           <select
             name="symbol"
@@ -1586,7 +1621,8 @@ export default async function DiaryPage({
             )}
           </div>
         )}
-      </form>
+          </form>
+        </details>
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
           <p className="text-xs text-muted-faint">
