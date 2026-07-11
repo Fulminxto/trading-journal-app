@@ -12,7 +12,8 @@ type Props = ReportI18nProps & {
   breakEven: number;
   averageWin: number;
   averageLoss: number;
-  profitFactor: number;
+  profitFactor: number | null;
+  hasGrossLoss: boolean;
   hasEnoughData: boolean;
 };
 
@@ -30,6 +31,7 @@ export default function PerformanceBreakdownCard({
   averageWin,
   averageLoss,
   profitFactor,
+  hasGrossLoss,
   hasEnoughData,
   appLanguage,
   currency,
@@ -48,35 +50,35 @@ export default function PerformanceBreakdownCard({
       <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
         <Card variant="inner" className="p-5">
           <p className="text-sm text-muted-faint">{t.wins}</p>
-          <h3 className="mt-3 text-3xl font-black text-green-400">
+          <h3 className={`mt-3 text-3xl font-black ${wins > 0 ? "text-green-400" : "text-white"}`}>
             {wins}
           </h3>
         </Card>
 
         <Card variant="inner" className="p-5">
           <p className="text-sm text-muted-faint">{t.losses}</p>
-          <h3 className="mt-3 text-3xl font-black text-red-400">
+          <h3 className={`mt-3 text-3xl font-black ${losses > 0 ? "text-red-400" : "text-white"}`}>
             {losses}
           </h3>
         </Card>
 
         <Card variant="inner" className="p-5">
           <p className="text-sm text-muted-faint">{t.breakEven}</p>
-          <h3 className="mt-3 text-3xl font-black text-yellow-400">
+          <h3 className={`mt-3 text-3xl font-black ${breakEven > 0 ? "text-yellow-400" : "text-white"}`}>
             {breakEven}
           </h3>
         </Card>
 
         <Card variant="inner" className="p-5">
           <p className="text-sm text-muted-faint">{t.avgWin}</p>
-          <h3 className="mt-3 text-2xl font-black text-green-400">
+          <h3 className={`mt-3 text-2xl font-black ${averageWin > 0 ? "text-green-400" : "text-white"}`}>
             {formatReportCurrency(averageWin, currency, appLanguage)}
           </h3>
         </Card>
 
         <Card variant="inner" className="p-5">
           <p className="text-sm text-muted-faint">{t.avgLoss}</p>
-          <h3 className="mt-3 text-2xl font-black text-red-400">
+          <h3 className={`mt-3 text-2xl font-black ${averageLoss < 0 ? "text-red-400" : "text-white"}`}>
             {formatReportCurrency(averageLoss, currency, appLanguage)}
           </h3>
         </Card>
@@ -85,8 +87,16 @@ export default function PerformanceBreakdownCard({
       <Card variant="inner" className="mt-6 p-5">
         <div className="flex items-center justify-between gap-4">
           <p className="text-sm text-muted-faint">{t.profitFactorLabel}</p>
-          <p className={`text-2xl font-black ${profitFactor >= 1 ? "text-green-400" : "text-red-400"}`}>
-            {profitFactor.toFixed(2)}
+          <p
+            className={`text-2xl font-black ${
+              profitFactor === null
+                ? "text-muted-faint"
+                : profitFactor >= 1
+                  ? "text-green-400"
+                  : "text-red-400"
+            }`}
+          >
+            {profitFactor === null ? "—" : profitFactor.toFixed(2)}
           </p>
         </div>
       </Card>
@@ -100,9 +110,18 @@ export default function PerformanceBreakdownCard({
           <h3 className="mt-3 text-lg font-black leading-relaxed text-white">
             {isPositiveEdge ? t.performancePositive : t.performanceFragile}
           </h3>
+        ) : !hasGrossLoss ? (
+          <>
+            <h3 className="mt-3 text-lg font-black leading-relaxed text-muted-faint">
+              Limited execution sample
+            </h3>
+            <p className="mt-3 max-w-3xl text-sm leading-relaxed text-gray-300">
+              Profit factor and average loss require losing-trade observations. Continue recording complete executions before evaluating efficiency.
+            </p>
+          </>
         ) : (
           <h3 className="mt-3 text-lg font-black leading-relaxed text-muted-faint">
-            {t.notEnoughDataMessage}
+            Early execution sample. More closed trades are required before evaluating efficiency.
           </h3>
         )}
       </Card>

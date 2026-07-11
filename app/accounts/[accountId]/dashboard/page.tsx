@@ -12,6 +12,7 @@ import Card from "@/components/ui/Card";
 import ListRow from "@/components/ui/ListRow";
 import SignatureEdge from "@/components/ui/SignatureEdge";
 import {
+  formatDateByLanguage,
   normalizeAppLanguage,
   type AppLanguage,
 } from "@/lib/i18n";
@@ -49,6 +50,14 @@ function getResultTone(value: number) {
   return "text-yellow-400";
 }
 
+function getLossTone(value: number) {
+  return value < 0 ? "text-red-400" : "text-white";
+}
+
+function getDrawdownTone(value: number) {
+  return value < 0 ? "text-red-400" : "text-white";
+}
+
 function getDateLabel(
   date: Date,
   language: AppLanguage
@@ -71,6 +80,13 @@ function getDateLabel(
   return new Date(date).toLocaleDateString(locale, {
     day: "2-digit",
     month: "2-digit",
+  });
+}
+
+function getRecentTradeDateLabel(date: Date) {
+  return formatDateByLanguage(date, "en", {
+    day: "numeric",
+    month: "short",
   });
 }
 
@@ -976,9 +992,13 @@ export default async function DashboardPage({
       100
       : 0;
 
+  const profitTarget = account.profitTarget;
+  const hasProfitTarget =
+    profitTarget !== null && profitTarget !== undefined;
+
   const remainingToTarget =
-    account.profitTarget
-      ? account.profitTarget - currentProfitPercent
+    hasProfitTarget
+      ? profitTarget - currentProfitPercent
       : null;
 
   const winRate =
@@ -1008,9 +1028,7 @@ export default async function DashboardPage({
   const profitFactor =
     Math.abs(grossLoss) > 0
       ? grossProfit / Math.abs(grossLoss)
-      : grossProfit > 0
-        ? grossProfit
-        : 0;
+      : null;
 
   const bestTrade =
     periodTrades.length > 0
@@ -1242,7 +1260,7 @@ export default async function DashboardPage({
             <div className={`mt-6 grid grid-cols-2 ${pageDensity.dashboard.grid} sm:grid-cols-4`}>
               <div>
                 <p className="text-xs text-muted-faint">
-                  {t.currentProfit}
+                  {t.accountGrowth}
                 </p>
 
                 <p className={`mt-1 text-lg font-black ${getResultTone(currentProfitPercent)}`}>
@@ -1255,10 +1273,14 @@ export default async function DashboardPage({
                   {t.target}
                 </p>
 
-                <p className="mt-1 text-lg font-black text-accent">
-                  {account.profitTarget
-                    ? formatPercent(account.profitTarget)
-                    : "-"}
+                <p
+                  className={`mt-1 text-lg font-black ${
+                    hasProfitTarget ? "text-accent" : "text-muted-faint"
+                  }`}
+                >
+                  {hasProfitTarget
+                    ? formatPercent(profitTarget)
+                    : "Not set"}
                 </p>
               </div>
 
@@ -1269,14 +1291,16 @@ export default async function DashboardPage({
 
                 <p
                   className={`mt-1 text-lg font-black ${
-                    remainingToTarget !== null && remainingToTarget <= 0
-                      ? "text-green-400"
-                      : "text-yellow-400"
+                    remainingToTarget === null
+                      ? "text-muted-faint"
+                      : remainingToTarget <= 0
+                        ? "text-green-400"
+                        : "text-yellow-400"
                   }`}
                 >
                   {remainingToTarget !== null
                     ? formatPercent(remainingToTarget)
-                    : "-"}
+                    : "Not set"}
                 </p>
               </div>
 
@@ -1352,7 +1376,7 @@ export default async function DashboardPage({
                 {t.maxDrawdown + periodSuffix}
               </p>
 
-              <p className="mt-1 text-2xl font-black text-red-400">
+              <p className={`mt-1 text-2xl font-black ${getDrawdownTone(maxDrawdown)}`}>
                 {formatPercent(maxDrawdown)}
               </p>
             </div>
@@ -1408,7 +1432,7 @@ export default async function DashboardPage({
             <div className="flex items-center justify-between gap-4">
               <span className="text-muted">{t.wins}</span>
               <div className="text-right">
-                <span className="font-black text-accent">{wins}</span>
+                <span className="font-black text-green-400">{wins}</span>
                 <span className="ml-2 text-muted-faint">{formatPercent(winRate)}</span>
               </div>
             </div>
@@ -1453,15 +1477,23 @@ export default async function DashboardPage({
 
             <div className="flex items-center justify-between gap-4">
               <span className="text-muted">{t.averageLoss + periodSuffix}</span>
-              <span className="font-black text-red-400">
+              <span className={`font-black ${getLossTone(averageLoss)}`}>
                 {formatCurrency(averageLoss, currency)}
               </span>
             </div>
 
             <div className="flex items-center justify-between gap-4">
               <span className="text-muted">{t.profitFactor + periodSuffix}</span>
-              <span className={`font-black ${profitFactor >= 1 ? "text-green-400" : "text-red-400"}`}>
-                {profitFactor.toFixed(2)}
+              <span
+                className={`font-black ${
+                  profitFactor === null
+                    ? "text-muted-faint"
+                    : profitFactor >= 1
+                      ? "text-green-400"
+                      : "text-red-400"
+                }`}
+              >
+                {profitFactor === null ? "—" : profitFactor.toFixed(2)}
               </span>
             </div>
           </div>
@@ -1489,7 +1521,7 @@ export default async function DashboardPage({
 
             <div className="flex items-center justify-between gap-4">
               <span className="text-muted">{t.maxDrawdown + periodSuffix}</span>
-              <span className="font-black text-red-400">
+              <span className={`font-black ${getDrawdownTone(maxDrawdown)}`}>
                 {formatPercent(maxDrawdown)}
               </span>
             </div>
@@ -1541,7 +1573,7 @@ export default async function DashboardPage({
                       </div>
 
                       <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-faint">
-                        <span>{getDateLabel(trade.openDate, language)}</span>
+                        <span>{getRecentTradeDateLabel(trade.openDate)}</span>
                         {trade.session ? (
                           <span>{trade.session}</span>
                         ) : null}

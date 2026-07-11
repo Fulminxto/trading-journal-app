@@ -31,6 +31,18 @@ function getIntensity(value: number) {
   return "";
 }
 
+function getValueTone(value: number) {
+  if (value > 0) {
+    return "text-green-400";
+  }
+
+  if (value < 0) {
+    return "text-red-400";
+  }
+
+  return "text-white";
+}
+
 export default function WeekdayHeatmap({
   data,
   appLanguage,
@@ -47,7 +59,7 @@ export default function WeekdayHeatmap({
         {t.weekdayPerformance}
       </h2>
 
-      <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-5">
+      <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-7">
         {data.map((item) => (
           <Card
             key={item.day}
@@ -58,8 +70,8 @@ export default function WeekdayHeatmap({
               {item.day}
             </p>
 
-            <h3 className="mt-2 text-lg font-black text-white">
-              {item.pnl >= 0 ? "+" : ""}
+            <h3 className={`mt-2 text-lg font-black ${getValueTone(item.pnl)}`}>
+              {item.pnl > 0 ? "+" : ""}
               {item.pnl.toFixed(0)}
             </h3>
           </Card>

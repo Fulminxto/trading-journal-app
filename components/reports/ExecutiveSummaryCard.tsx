@@ -13,6 +13,8 @@ type Props = ReportI18nProps & {
   winRate: number;
   disciplineScore: number;
   behavioralRisk: number;
+  totalTrades: number;
+  hasSufficientBehavioralData: boolean;
   hasEnoughData: boolean;
   action?: ReactNode;
 };
@@ -22,6 +24,8 @@ export default function ExecutiveSummaryCard({
   winRate,
   disciplineScore,
   behavioralRisk,
+  totalTrades,
+  hasSufficientBehavioralData,
   hasEnoughData,
   appLanguage,
   currency,
@@ -68,7 +72,13 @@ export default function ExecutiveSummaryCard({
         <Card variant="inner" className="p-5">
           <p className="text-sm text-muted-faint">{t.pnlStatus}</p>
           <h3
-            className={`mt-3 text-metric-lg ${totalPnl >= 0 ? "text-green-400" : "text-red-400"}`}
+            className={`mt-3 text-metric-lg ${
+              totalPnl > 0
+                ? "text-green-400"
+                : totalPnl < 0
+                  ? "text-red-400"
+                  : "text-white"
+            }`}
           >
             {formatReportCurrency(totalPnl, currency, appLanguage)}
           </h3>
@@ -83,22 +93,29 @@ export default function ExecutiveSummaryCard({
 
         <Card variant="inner" className="p-5">
           <p className="text-sm text-muted-faint">{t.discipline}</p>
-          <h3 className="mt-3 text-metric-lg text-accent">
-            {disciplineScore}
+          <h3
+            className={`mt-3 text-metric-lg ${
+              hasSufficientBehavioralData ? "text-accent" : "text-muted-faint"
+            }`}
+          >
+            {hasSufficientBehavioralData ? disciplineScore : "Not assessed"}
           </h3>
         </Card>
 
         <Card variant="inner" className="p-5">
           <p className="text-sm text-muted-faint">{t.behavioralRisk}</p>
           <h3
-            className={`mt-3 text-metric-lg ${behavioralRisk >= 50
-                ? "text-red-400"
-                : behavioralRisk >= 25
-                  ? "text-yellow-400"
-                  : "text-green-400"
-              }`}
+            className={`mt-3 text-metric-lg ${
+              hasSufficientBehavioralData
+                ? behavioralRisk >= 50
+                  ? "text-red-400"
+                  : behavioralRisk >= 25
+                    ? "text-yellow-400"
+                    : "text-green-400"
+                : "text-accent-bright"
+            }`}
           >
-            {behavioralRisk}%
+            {hasSufficientBehavioralData ? `${behavioralRisk}%` : "Not available"}
           </h3>
         </Card>
       </div>
@@ -120,10 +137,10 @@ export default function ExecutiveSummaryCard({
         ) : (
           <>
             <h3 className="mt-3 text-xl font-black text-muted-faint">
-              {t.notEnoughDataTitle}
+              Early sample
             </h3>
             <p className="mt-3 max-w-3xl text-sm leading-relaxed text-gray-300">
-              {t.notEnoughDataMessage}
+              The account is currently {totalPnl > 0 ? "profitable" : totalPnl < 0 ? "negative" : "flat"}, but {totalTrades} {totalTrades === 1 ? "trade is" : "trades are"} not sufficient to assess consistency, discipline and risk stability.
             </p>
           </>
         )}

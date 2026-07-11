@@ -87,6 +87,18 @@ const labels: Record<AppLanguage, Labels> = {
   },
 };
 
+function getPnlTone(value: number) {
+  if (value > 0) {
+    return "text-green-400";
+  }
+
+  if (value < 0) {
+    return "text-red-400";
+  }
+
+  return "text-white";
+}
+
 export default function SymbolPerformance({
   bestSymbol,
   worstSymbol,
@@ -107,11 +119,19 @@ export default function SymbolPerformance({
           </p>
 
           <div className="mt-2 flex items-center justify-between">
-            <h3 className="text-xl font-bold text-green-400">
+            <h3
+              className={`text-xl font-bold ${
+                bestSymbol ? getPnlTone(bestSymbol[1].pnl) : "text-muted-faint"
+              }`}
+            >
               {bestSymbol?.[0] || "—"}
             </h3>
 
-            <p className="font-semibold text-green-400">
+            <p
+              className={`font-semibold ${
+                bestSymbol ? getPnlTone(bestSymbol[1].pnl) : "text-muted-faint"
+              }`}
+            >
               {bestSymbol
                 ? formatCurrency(bestSymbol[1].pnl, currency)
                 : "—"}
@@ -125,11 +145,19 @@ export default function SymbolPerformance({
           </p>
 
           <div className="mt-2 flex items-center justify-between">
-            <h3 className="text-xl font-bold text-red-400">
+            <h3
+              className={`text-xl font-bold ${
+                worstSymbol ? getPnlTone(worstSymbol[1].pnl) : "text-muted-faint"
+              }`}
+            >
               {worstSymbol?.[0] || "—"}
             </h3>
 
-            <p className="font-semibold text-red-400">
+            <p
+              className={`font-semibold ${
+                worstSymbol ? getPnlTone(worstSymbol[1].pnl) : "text-muted-faint"
+              }`}
+            >
               {worstSymbol
                 ? formatCurrency(worstSymbol[1].pnl, currency)
                 : "—"}

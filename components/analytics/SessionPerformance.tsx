@@ -87,7 +87,15 @@ export default function SessionPerformance({
   return (
     <AnalyticsSection subtitle={t.subtitle} title={t.title}>
       {sorted.length === 0 ? (
-        <p className="text-sm text-muted-faint">{t.noSessions}</p>
+        <Card variant="inner" className="p-4">
+          <p className="text-sm font-bold text-white">
+            No session data
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-muted-faint">
+            Record trading sessions to compare performance
+            across London, New York, Asia and custom sessions.
+          </p>
+        </Card>
       ) : (
         <div className="space-y-3">
           {sorted.map(([session, stats]) => {
@@ -108,7 +116,11 @@ export default function SessionPerformance({
 
                   <p
                     className={`font-bold ${
-                      stats.pnl >= 0 ? "text-green-400" : "text-red-400"
+                      stats.pnl > 0
+                        ? "text-green-400"
+                        : stats.pnl < 0
+                          ? "text-red-400"
+                          : "text-white"
                     }`}
                   >
                     {formatCurrency(stats.pnl)}

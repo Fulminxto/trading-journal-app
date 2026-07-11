@@ -518,15 +518,34 @@ input[type="number"] {
   }
 
   @page {
-    size: A4;
-    margin: 6mm;
+    size: A4 portrait;
+    margin: 0;
   }
 
-  .pdf-only {
-    display: block !important;
-    width: 100% !important;
-    min-height: auto !important;
-    max-height: none !important;
+  html,
+  body {
+    width: 210mm !important;
+    min-width: 210mm !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    overflow: hidden !important;
+  }
+
+  body > div,
+  main,
+  .app-scrollbar,
+  .app-scrollbar > div,
+  .reports-print-root {
+    width: 210mm !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
     overflow: visible !important;
   }
 
@@ -534,40 +553,65 @@ input[type="number"] {
   .print-hidden,
   aside,
   nav,
-  button {
-    display: none !important;
-  }
-
-  .pdf-only {
-    transform: scale(0.96);
-    transform-origin: top left;
-    width: 104% !important;
-  }
-
-  html,
-  body {
-    height: 297mm !important;
-    overflow: hidden !important;
-  }
-
-  .web-report-content,
-  .print-hidden,
-  aside,
-  nav,
-  button {
+  button,
+  .app-scrollbar > .fixed,
+  .app-scrollbar > div.fixed,
+  [data-sonner-toaster] {
     display: none !important;
   }
 
   .pdf-only {
     display: block !important;
+    position: relative !important;
+    box-sizing: border-box !important;
+    width: 210mm !important;
+    min-width: 210mm !important;
+    max-width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: #0C1430 !important;
+    transform: none !important;
+    page-break-before: auto !important;
+    break-before: auto !important;
+    page-break-after: auto !important;
+    break-after: auto !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 
   .pdf-page {
-    width: 100% !important;
-    max-height: 280mm !important;
+    width: 104% !important;
+    box-sizing: border-box !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    margin: 0 !important;
     overflow: hidden !important;
+    background: #0C1430 !important;
+    transform: scale(0.96);
+    transform-origin: top left;
     page-break-after: avoid !important;
     break-after: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  html::before,
+  html::after,
+  body::before,
+  body::after,
+  .reports-print-root::before,
+  .reports-print-root::after,
+  .pdf-only::before,
+  .pdf-only::after,
+  .pdf-page::before,
+  .pdf-page::after {
+    display: none !important;
+    content: none !important;
   }
 }
 

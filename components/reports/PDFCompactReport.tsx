@@ -16,6 +16,7 @@ type Props = ReportI18nProps & {
     averageLoss: number;
     disciplineScore: number;
     behavioralRisk: number;
+    hasSufficientBehavioralData: boolean;
     emotionalTrades: number;
     weakExecutionTrades: number;
     primaryFocus: string;
@@ -33,6 +34,7 @@ export default function PDFCompactReport({
     averageLoss,
     disciplineScore,
     behavioralRisk,
+    hasSufficientBehavioralData,
     emotionalTrades,
     weakExecutionTrades,
     primaryFocus,
@@ -43,7 +45,8 @@ export default function PDFCompactReport({
     const t = getReportLabels(appLanguage);
 
     return (
-        <div className="pdf-only pdf-page min-h-0 bg-bg-base p-4 text-white">
+        <div className="pdf-only">
+            <div className="pdf-page min-h-0 bg-bg-base p-4 text-white">
             <section className="mb-6 border-b border-gray-300 pb-4">
                 <p className="text-xs uppercase tracking-[0.3em] text-gray-300">
                     {t.voltisIntelligenceReport}
@@ -95,7 +98,9 @@ export default function PDFCompactReport({
                         {t.discipline}
                     </p>
                     <h2 className="text-2xl font-black">
-                        {disciplineScore}
+                        {hasSufficientBehavioralData
+                            ? disciplineScore
+                            : "Not assessed"}
                     </h2>
                 </div>
             </section>
@@ -120,12 +125,13 @@ export default function PDFCompactReport({
                     </h2>
                     <p className="mt-3 text-sm leading-relaxed">
                         {hasEnoughData
+                            && hasSufficientBehavioralData
                             ? t.pdfBehavior(
                                 behavioralRisk,
                                 emotionalTrades,
                                 weakExecutionTrades
                             )
-                            : t.notEnoughDataMessage}
+                            : "Behavioral risk is not available because confidence, execution and emotion data are not recorded."}
                     </p>
                 </div>
             </section>
@@ -174,6 +180,7 @@ export default function PDFCompactReport({
                     {t.preparedFor} {userName}
                 </span>
             </footer>
+            </div>
         </div>
     );
 }

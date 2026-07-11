@@ -1,5 +1,6 @@
 "use client";
 
+import { useId } from "react";
 import {
   Area,
   AreaChart,
@@ -54,7 +55,16 @@ const emptyLabels: Record<
   de: { title: "Keine Equity-Daten", description: "Beginne mit der Aufzeichnung von Trades, um deine Equity-Kurve zu erstellen." },
 };
 
+const equityChartColors = {
+  line: "#5BE0FF",
+  fill: "#2C74E8",
+  glow: "rgba(91,224,255,0.14)",
+  cursor: "rgba(91,224,255,0.25)",
+  dotStroke: "#0C1430",
+};
+
 export default function EquityChart({ data, language }: Props) {
+  const gradientId = `equityGradient-${useId().replace(/:/g, "")}`;
   const hasData = data.length > 0;
 
   if (!hasData) {
@@ -68,18 +78,10 @@ export default function EquityChart({ data, language }: Props) {
     );
   }
 
-  const firstEquity = data[0]?.equity || 0;
-  const lastEquity = data[data.length - 1]?.equity || 0;
-  const isPositive = lastEquity >= firstEquity;
   const hasSeries = data.length > 1;
 
   const lang = normalizeAppLanguage(language);
   const tl = tooltipLabels[lang];
-
-  const mainColor = isPositive ? "#22c55e" : "#ef4444";
-  const glowColor = isPositive
-    ? "rgba(34,197,94,0.22)"
-    : "rgba(239,68,68,0.22)";
 
   return (
     <div className="relative h-[390px] min-h-[390px] w-full min-w-0 overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.03] p-4 backdrop-blur-xl">
@@ -88,7 +90,7 @@ export default function EquityChart({ data, language }: Props) {
           <div
             className="pointer-events-none absolute inset-0 opacity-80 blur-3xl"
             style={{
-              background: `radial-gradient(circle at 50% 10%, ${glowColor}, transparent 45%)`,
+              background: `radial-gradient(circle at 50% 10%, ${equityChartColors.glow}, transparent 45%)`,
             }}
           />
 
@@ -108,15 +110,15 @@ export default function EquityChart({ data, language }: Props) {
         >
           <defs>
             <linearGradient
-              id="equityGradient"
+              id={gradientId}
               x1="0"
               y1="0"
               x2="0"
               y2="1"
             >
-              <stop offset="0%" stopColor={mainColor} stopOpacity={0.35} />
-              <stop offset="55%" stopColor={mainColor} stopOpacity={0.1} />
-              <stop offset="100%" stopColor={mainColor} stopOpacity={0} />
+              <stop offset="0%" stopColor={equityChartColors.line} stopOpacity={0.24} />
+              <stop offset="55%" stopColor={equityChartColors.fill} stopOpacity={0.08} />
+              <stop offset="100%" stopColor={equityChartColors.fill} stopOpacity={0} />
             </linearGradient>
           </defs>
 
@@ -148,7 +150,7 @@ export default function EquityChart({ data, language }: Props) {
 
           <Tooltip
             cursor={{
-              stroke: "rgba(34,211,238,0.25)",
+              stroke: equityChartColors.cursor,
               strokeWidth: 1,
             }}
             formatter={(value) => [
@@ -176,7 +178,7 @@ export default function EquityChart({ data, language }: Props) {
               type="monotone"
               dataKey="equity"
               stroke="transparent"
-              fill="url(#equityGradient)"
+              fill={`url(#${gradientId})`}
               animationDuration={900}
             />
           )}
@@ -184,23 +186,23 @@ export default function EquityChart({ data, language }: Props) {
           <Line
             type="monotone"
             dataKey="equity"
-            stroke={mainColor}
+            stroke={equityChartColors.line}
             strokeWidth={hasSeries ? 3.5 : 0}
             dot={
               hasSeries
                 ? false
                 : {
                     r: 5,
-                    stroke: "#0C1430",
+                    stroke: equityChartColors.dotStroke,
                     strokeWidth: 3,
-                    fill: mainColor,
+                    fill: equityChartColors.line,
                   }
             }
             activeDot={{
               r: 6,
-              stroke: "#0C1430",
+              stroke: equityChartColors.dotStroke,
               strokeWidth: 3,
-              fill: mainColor,
+              fill: equityChartColors.line,
             }}
             animationDuration={900}
           />

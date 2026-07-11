@@ -57,6 +57,28 @@ function getBestWinStreak(
   return bestStreak;
 }
 
+function isRecordedScore(value: number | null | undefined) {
+  return typeof value === "number" && value > 0;
+}
+
+function getPnlTone(value: number) {
+  if (value > 0) {
+    return "text-green-400";
+  }
+
+  if (value < 0) {
+    return "text-red-400";
+  }
+
+  return "text-white";
+}
+
+function getLossTone(value: number) {
+  return value < 0 ? "text-red-400" : "text-white";
+}
+
+const MIN_BEHAVIORAL_DATA_POINTS = 3;
+
 type AnalyticsLabels = {
   profitFactor: string;
   bestWinStreak: string;
@@ -684,21 +706,23 @@ export default async function AnalyticsPage({
   const profitFactor =
     Math.abs(grossLoss) > 0
       ? grossProfit / Math.abs(grossLoss)
-      : grossProfit > 0
-        ? grossProfit
-        : 0;
+      : null;
 
   const bestWinStreak =
     getBestWinStreak(periodTrades);
 
+  const riskRewardTrades = periodTrades.filter(
+    (trade) => typeof trade.riskReward === "number"
+  );
+
   const averageRR =
-    periodTrades.length > 0
-      ? periodTrades.reduce(
+    riskRewardTrades.length > 0
+      ? riskRewardTrades.reduce(
         (acc, trade) =>
           acc +
           (trade.riskReward || 0),
         0
-      ) / periodTrades.length
+      ) / riskRewardTrades.length
       : 0;
 
   const symbolStats: Record<
@@ -742,6 +766,8 @@ export default async function AnalyticsPage({
       (a, b) =>
         b[1].trades - a[1].trades
     )[0];
+
+  const symbolCount = Object.keys(symbolStats).length;
 
   const mistakesStats: Record<
     string,
@@ -1014,7 +1040,7 @@ export default async function AnalyticsPage({
 
   const greenMonths =
     monthlyEntries.filter(
-      ([, stats]) => stats.pnl >= 0
+      ([, stats]) => stats.pnl > 0
     ).length;
 
   const redMonths =
@@ -1037,11 +1063,13 @@ export default async function AnalyticsPage({
   const advancedStats = [
     {
       label: t.profitFactor + periodSuffix,
-      value: profitFactor.toFixed(2),
+      value: profitFactor === null ? "—" : profitFactor.toFixed(2),
       tone:
-        profitFactor >= 1
-          ? "text-green-400"
-          : "text-red-400",
+        profitFactor === null
+          ? "text-muted-faint"
+          : profitFactor >= 1
+            ? "text-green-400"
+            : "text-red-400",
       icon: CandlestickChart,
     },
     {
@@ -1053,13 +1081,13 @@ export default async function AnalyticsPage({
     {
       label: t.averageWin + periodSuffix,
       value: formatCurrency(averageWin),
-      tone: "text-green-400",
+      tone: averageWin > 0 ? "text-green-400" : "text-white",
       icon: TrendingUp,
     },
     {
       label: t.averageLoss + periodSuffix,
       value: formatCurrency(Math.abs(averageLoss)),
-      tone: "text-red-400",
+      tone: getLossTone(averageLoss),
       icon: TrendingDown,
     },
   ];
@@ -1067,13 +1095,13 @@ export default async function AnalyticsPage({
   // ── Weekday breakdown ─────────────────────────────────────────────────
 
   const weekdayMap = {
-    Sun: 0,
     Mon: 0,
     Tue: 0,
     Wed: 0,
     Thu: 0,
     Fri: 0,
     Sat: 0,
+    Sun: 0,
   };
 
   periodTrades.forEach((trade) => {
@@ -1239,38 +1267,68 @@ export default async function AnalyticsPage({
     },
   ];
 
+  const confidenceTrades = periodTrades.filter((trade) =>
+    isRecordedScore(trade.confidence)
+  );
+
+  const executionTrades = periodTrades.filter((trade) =>
+    isRecordedScore(trade.executionRating)
+  );
+
+  const setupQualityTrades = periodTrades.filter((trade) =>
+    isRecordedScore(trade.setupQuality)
+  );
+
+  const emotionalStateTrades = periodTrades.filter(
+    (trade) =>
+      typeof trade.emotionalState === "string" &&
+      trade.emotionalState.trim().length > 0
+  );
+
+  const behavioralDataPointCount =
+    confidenceTrades.length +
+    executionTrades.length +
+    setupQualityTrades.length +
+    emotionalStateTrades.length;
+
+  const hasSufficientBehavioralData =
+    behavioralDataPointCount >= MIN_BEHAVIORAL_DATA_POINTS &&
+    confidenceTrades.length > 0 &&
+    executionTrades.length > 0 &&
+    setupQualityTrades.length > 0;
+
   const avgConfidence =
-    periodTrades.length > 0
+    confidenceTrades.length > 0
       ? Math.round(
-        periodTrades.reduce(
+        confidenceTrades.reduce(
           (acc, trade) =>
-            acc + (trade.confidence || 0),
+            acc + (trade.confidence ?? 0),
           0
-        ) / periodTrades.length
+        ) / confidenceTrades.length
       )
-      : 0;
+      : null;
 
   const avgExecution =
-    periodTrades.length > 0
+    executionTrades.length > 0
       ? Math.round(
-        periodTrades.reduce(
+        executionTrades.reduce(
           (acc, trade) =>
-            acc + (trade.executionRating || 0),
+            acc + (trade.executionRating ?? 0),
           0
-        ) / periodTrades.length
+        ) / executionTrades.length
       )
-      : 0;
+      : null;
 
   const avgSetupQuality =
-    periodTrades.length > 0
+    setupQualityTrades.length > 0
       ? Math.round(
-        periodTrades.reduce(
+        setupQualityTrades.reduce(
           (acc, trade) =>
-            acc + (trade.setupQuality || 0),
+            acc + (trade.setupQuality ?? 0),
           0
-        ) / periodTrades.length
+        ) / setupQualityTrades.length
       )
-      : 0;
+      : null;
 
   // ── Risk concentration (behavioral) ─────────────────────────────────────
 
@@ -1297,27 +1355,23 @@ export default async function AnalyticsPage({
 
   const lowConfidenceCount = periodTrades.filter(
     (trade) =>
-      (trade.confidence || 0) > 0 &&
-      (trade.confidence || 0) <= 4
+      isRecordedScore(trade.confidence) &&
+      (trade.confidence ?? 0) <= 4
   ).length;
 
   const weakExecutionCount = periodTrades.filter(
     (trade) =>
-      (trade.executionRating || 0) > 0 &&
-      (trade.executionRating || 0) <= 4
+      isRecordedScore(trade.executionRating) &&
+      (trade.executionRating ?? 0) <= 4
   ).length;
 
   const weakSetupCount = periodTrades.filter(
     (trade) =>
-      (trade.setupQuality || 0) > 0 &&
-      (trade.setupQuality || 0) <= 4
+      isRecordedScore(trade.setupQuality) &&
+      (trade.setupQuality ?? 0) <= 4
   ).length;
 
-  const emotionalCount = periodTrades.filter(
-    (trade) =>
-      trade.emotionalState &&
-      trade.emotionalState.length > 0
-  ).length;
+  const emotionalCount = emotionalStateTrades.length;
 
   // Severity-sorted, worst first - the "truth engine" always leads with
   // whatever is most dangerous right now rather than a fixed factor
@@ -1334,7 +1388,7 @@ export default async function AnalyticsPage({
       count: lowConfidenceCount,
       severity: getRiskSeverity(
         lowConfidenceCount,
-        periodTrades.length
+        confidenceTrades.length
       ),
     },
     {
@@ -1342,7 +1396,7 @@ export default async function AnalyticsPage({
       count: weakExecutionCount,
       severity: getRiskSeverity(
         weakExecutionCount,
-        periodTrades.length
+        executionTrades.length
       ),
     },
     {
@@ -1350,7 +1404,7 @@ export default async function AnalyticsPage({
       count: weakSetupCount,
       severity: getRiskSeverity(
         weakSetupCount,
-        periodTrades.length
+        setupQualityTrades.length
       ),
     },
     {
@@ -1358,7 +1412,7 @@ export default async function AnalyticsPage({
       count: emotionalCount,
       severity: getRiskSeverity(
         emotionalCount,
-        periodTrades.length
+        emotionalStateTrades.length
       ),
     },
   ].sort(
@@ -1424,6 +1478,7 @@ export default async function AnalyticsPage({
       <div className="reveal-rise" style={{ animationDelay: "60ms" }}>
         <RiskConcentration
           data={behavioralRiskData}
+          hasSufficientData={hasSufficientBehavioralData}
           appLanguage={language}
         />
       </div>
@@ -1451,6 +1506,8 @@ export default async function AnalyticsPage({
           {t.psychologyTitle}
         </h2>
 
+        {hasSufficientBehavioralData ? (
+          <>
         <div className={`mt-6 grid grid-cols-3 ${pageDensity.analytics.grid}`}>
           <Card variant="inner" className={`${pageDensity.analytics.inner} text-center`}>
             <p className="text-xs text-muted">{t.confidence}</p>
@@ -1526,7 +1583,7 @@ export default async function AnalyticsPage({
                     </p>
                     <p
                       className={`mt-1 text-sm font-bold ${
-                        stats.pnl >= 0 ? "text-green-400" : "text-red-400"
+                        getPnlTone(stats.pnl)
                       }`}
                     >
                       {formatCurrency(stats.pnl)}
@@ -1553,6 +1610,35 @@ export default async function AnalyticsPage({
             </p>
           )}
         </div>
+          </>
+        ) : (
+          <div className="mt-6 space-y-4">
+            <div className="rounded-inner border border-accent-bright/15 bg-accent-bright/[0.04] p-4">
+              <p className="text-sm font-bold text-white">
+                Behavioral data not available
+              </p>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
+                Record confidence, execution quality and setup quality
+                in your trades to unlock behavioral analytics.
+              </p>
+            </div>
+
+            <div className={`grid grid-cols-1 ${pageDensity.analytics.grid} sm:grid-cols-3`}>
+              {[
+                [t.confidence, confidenceTrades.length],
+                [t.execution, executionTrades.length],
+                [t.setupQuality, setupQualityTrades.length],
+              ].map(([label, count]) => (
+                <Card key={label} variant="inner" className={pageDensity.analytics.inner}>
+                  <p className="text-xs text-muted">{label}</p>
+                  <p className="mt-2 text-sm font-bold text-muted-faint">
+                    {Number(count) > 0 ? "Recorded" : "Not recorded"}
+                  </p>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
       </Card>
 
       <div
@@ -1592,7 +1678,11 @@ export default async function AnalyticsPage({
 
               <p
                 className={`mt-2 text-sm font-semibold ${
-                  longWinRate >= 50 ? "text-green-400" : "text-red-400"
+                  longTrades.length === 0
+                    ? "text-white"
+                    : longWinRate >= 50
+                      ? "text-green-400"
+                      : "text-red-400"
                 }`}
               >
                 {longWinRate.toFixed(2)}% {t.winrate}
@@ -1614,7 +1704,11 @@ export default async function AnalyticsPage({
 
               <p
                 className={`mt-2 text-sm font-semibold ${
-                  shortWinRate >= 50 ? "text-green-400" : "text-red-400"
+                  shortTrades.length === 0
+                    ? "text-white"
+                    : shortWinRate >= 50
+                      ? "text-green-400"
+                      : "text-red-400"
                 }`}
               >
                 {shortWinRate.toFixed(2)}% {t.winrate}
@@ -1697,9 +1791,7 @@ export default async function AnalyticsPage({
                             <p className="text-xs text-muted-faint">{t.pnl}</p>
                             <p
                               className={`font-bold ${
-                                trader.pnl >= 0
-                                  ? "text-green-400"
-                                  : "text-red-400"
+                                getPnlTone(trader.pnl)
                               }`}
                             >
                               {formatCurrency(trader.pnl)}
@@ -1729,20 +1821,20 @@ export default async function AnalyticsPage({
         <div className={`mt-6 grid grid-cols-2 ${pageDensity.analytics.grid} sm:grid-cols-4`}>
           <Card variant="inner" className={pageDensity.analytics.inner}>
             <p className="text-xs text-muted-faint">{t.bestMonth}</p>
-            <h3 className="mt-2 text-sm font-bold text-green-400">
+            <h3 className={`mt-2 text-sm font-bold ${bestMonth ? getPnlTone(bestMonth[1].pnl) : "text-muted-faint"}`}>
               {bestMonth?.[0] || "—"}
             </h3>
-            <p className="mt-1 text-sm text-green-400">
+            <p className={`mt-1 text-sm ${bestMonth ? getPnlTone(bestMonth[1].pnl) : "text-muted-faint"}`}>
               {bestMonth ? formatCurrency(bestMonth[1].pnl) : "—"}
             </p>
           </Card>
 
           <Card variant="inner" className={pageDensity.analytics.inner}>
             <p className="text-xs text-muted-faint">{t.worstMonth}</p>
-            <h3 className="mt-2 text-sm font-bold text-red-400">
+            <h3 className={`mt-2 text-sm font-bold ${worstMonth ? getPnlTone(worstMonth[1].pnl) : "text-muted-faint"}`}>
               {worstMonth?.[0] || "—"}
             </h3>
-            <p className="mt-1 text-sm text-red-400">
+            <p className={`mt-1 text-sm ${worstMonth ? getPnlTone(worstMonth[1].pnl) : "text-muted-faint"}`}>
               {worstMonth ? formatCurrency(worstMonth[1].pnl) : "—"}
             </p>
           </Card>
@@ -1802,7 +1894,7 @@ export default async function AnalyticsPage({
                         <p className="text-xs text-muted-faint">{t.pnl}</p>
                         <p
                           className={`font-bold ${
-                            stats.pnl >= 0 ? "text-green-400" : "text-red-400"
+                            getPnlTone(stats.pnl)
                           }`}
                         >
                           {formatCurrency(stats.pnl)}
@@ -1817,7 +1909,7 @@ export default async function AnalyticsPage({
       </Card>
 
       <div
-        className={`reveal-rise grid grid-cols-1 ${pageDensity.analytics.grid} xl:grid-cols-2`}
+        className="reveal-rise space-y-6"
         style={{ animationDelay: "280ms" }}
       >
         <Card className={pageDensity.analytics.panel}>
@@ -1830,7 +1922,15 @@ export default async function AnalyticsPage({
 
           <div className={`mt-6 ${pageDensity.analytics.sectionStack}`}>
             {Object.entries(mistakesStats).length === 0 ? (
-              <p className="text-sm text-muted-faint">{t.noMistakes}</p>
+              <Card variant="inner" className={pageDensity.analytics.inner}>
+                <p className="text-sm font-bold text-white">
+                  No recorded mistakes
+                </p>
+                <p className="mt-2 text-sm leading-relaxed text-muted-faint">
+                  Add mistakes or execution notes to your trades
+                  to detect recurring behavioral patterns.
+                </p>
+              </Card>
             ) : (
               Object.entries(mistakesStats)
                 .sort((a, b) => b[1].count - a[1].count)
@@ -1846,7 +1946,7 @@ export default async function AnalyticsPage({
 
                       <p
                         className={`font-bold ${
-                          stats.pnl >= 0 ? "text-green-400" : "text-red-400"
+                          getPnlTone(stats.pnl)
                         }`}
                       >
                         {formatCurrency(stats.pnl)}
@@ -1862,7 +1962,10 @@ export default async function AnalyticsPage({
           winRate={winRate}
           averageRR={averageRR}
           totalPnl={totalPnl}
+          tradeCount={periodTrades.length}
+          hasRiskRewardData={riskRewardTrades.length > 0}
           bestSymbol={bestSymbol?.[0]}
+          symbolCount={symbolCount}
           appLanguage={language}
         />
       </div>

@@ -9,6 +9,18 @@ type QualityBreakdownRowProps = {
   }[];
 };
 
+function getPnlTone(value: number) {
+  if (value > 0) {
+    return "text-green-400";
+  }
+
+  if (value < 0) {
+    return "text-red-400";
+  }
+
+  return "text-white";
+}
+
 /**
  * One labeled row of 3 buckets (e.g. weak/average/elite) with count + PnL.
  * Confidence, Execution and Setup Quality used to each get a full-width
@@ -36,10 +48,10 @@ export default function QualityBreakdownRow({
 
             <p
               className={`mt-1 text-xs font-bold ${
-                item.pnl >= 0 ? "text-green-400" : "text-red-400"
+                getPnlTone(item.pnl)
               }`}
             >
-              {item.pnl >= 0 ? "+" : ""}
+              {item.pnl > 0 ? "+" : ""}
               {item.pnl.toFixed(0)}
             </p>
           </Card>

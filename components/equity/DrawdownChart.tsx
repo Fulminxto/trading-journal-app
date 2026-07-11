@@ -67,6 +67,14 @@ export default function DrawdownChart({ data, language }: Props) {
   }
 
   const tl = tooltipLabels[lang];
+  const hasRealDrawdown = data.some(
+    (point) => Math.abs(point.drawdown) > 0
+  );
+  const lineColor = hasRealDrawdown ? "#F87171" : "#5BE0FF";
+  const fillColor = hasRealDrawdown ? "#F87171" : "#5BE0FF";
+  const cursorColor = hasRealDrawdown
+    ? "rgba(248,113,113,0.3)"
+    : "rgba(91,224,255,0.22)";
 
   return (
     <div className="relative h-[220px] min-h-[220px] w-full min-w-0 overflow-hidden rounded-inner border-[0.5px] border-white/[0.08] bg-surface-2 p-4">
@@ -77,8 +85,12 @@ export default function DrawdownChart({ data, language }: Props) {
         >
           <defs>
             <linearGradient id="drawdownGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#F87171" stopOpacity={0} />
-              <stop offset="100%" stopColor="#F87171" stopOpacity={0.28} />
+              <stop offset="0%" stopColor={fillColor} stopOpacity={0} />
+              <stop
+                offset="100%"
+                stopColor={fillColor}
+                stopOpacity={hasRealDrawdown ? 0.28 : 0}
+              />
             </linearGradient>
           </defs>
 
@@ -107,7 +119,7 @@ export default function DrawdownChart({ data, language }: Props) {
           />
 
           <Tooltip
-            cursor={{ stroke: "rgba(248,113,113,0.3)", strokeWidth: 1 }}
+            cursor={{ stroke: cursorColor, strokeWidth: 1 }}
             formatter={(value) => [`${Number(value).toFixed(2)}%`, tl.drawdown]}
             labelFormatter={(label) => `${tl.date} ${label}`}
             contentStyle={{
@@ -126,7 +138,7 @@ export default function DrawdownChart({ data, language }: Props) {
           <Area
             type="monotone"
             dataKey="drawdown"
-            stroke="#F87171"
+            stroke={lineColor}
             strokeWidth={2}
             fill="url(#drawdownGradient)"
             animationDuration={900}

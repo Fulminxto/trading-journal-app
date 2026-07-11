@@ -11,6 +11,7 @@ type Props = {
     count: number;
     severity: "low" | "medium" | "high";
   }[];
+  hasSufficientData: boolean;
   appLanguage?: string | null;
 };
 
@@ -21,6 +22,9 @@ type Labels = {
   lowRisk: string;
   mediumRisk: string;
   highRisk: string;
+  insufficientData: string;
+  unavailable: string;
+  unavailableDescription: string;
 };
 
 const labels: Record<AppLanguage, Labels> = {
@@ -32,6 +36,10 @@ const labels: Record<AppLanguage, Labels> = {
     lowRisk: "rischio basso",
     mediumRisk: "rischio medio",
     highRisk: "rischio alto",
+    insufficientData: "dati insufficienti",
+    unavailable: "Rischio comportamentale non disponibile",
+    unavailableDescription:
+      "Registra confidence, execution e qualità setup per generare uno score di concentrazione affidabile.",
   },
   en: {
     eyebrow: "AI Risk Matrix",
@@ -41,6 +49,10 @@ const labels: Record<AppLanguage, Labels> = {
     lowRisk: "low risk",
     mediumRisk: "medium risk",
     highRisk: "high risk",
+    insufficientData: "insufficient data",
+    unavailable: "Behavioral risk unavailable",
+    unavailableDescription:
+      "Record confidence, execution and setup quality to generate a reliable concentration score.",
   },
   uk: {
     eyebrow: "AI матриця ризику",
@@ -50,6 +62,10 @@ const labels: Record<AppLanguage, Labels> = {
     lowRisk: "низький ризик",
     mediumRisk: "середній ризик",
     highRisk: "високий ризик",
+    insufficientData: "insufficient data",
+    unavailable: "Behavioral risk unavailable",
+    unavailableDescription:
+      "Record confidence, execution and setup quality to generate a reliable concentration score.",
   },
   ru: {
     eyebrow: "AI матрица риска",
@@ -59,6 +75,10 @@ const labels: Record<AppLanguage, Labels> = {
     lowRisk: "низкий риск",
     mediumRisk: "средний риск",
     highRisk: "высокий риск",
+    insufficientData: "insufficient data",
+    unavailable: "Behavioral risk unavailable",
+    unavailableDescription:
+      "Record confidence, execution and setup quality to generate a reliable concentration score.",
   },
   es: {
     eyebrow: "AI Risk Matrix",
@@ -68,6 +88,10 @@ const labels: Record<AppLanguage, Labels> = {
     lowRisk: "riesgo bajo",
     mediumRisk: "riesgo medio",
     highRisk: "riesgo alto",
+    insufficientData: "insufficient data",
+    unavailable: "Behavioral risk unavailable",
+    unavailableDescription:
+      "Record confidence, execution and setup quality to generate a reliable concentration score.",
   },
   fr: {
     eyebrow: "AI Risk Matrix",
@@ -77,6 +101,10 @@ const labels: Record<AppLanguage, Labels> = {
     lowRisk: "risque faible",
     mediumRisk: "risque moyen",
     highRisk: "risque élevé",
+    insufficientData: "insufficient data",
+    unavailable: "Behavioral risk unavailable",
+    unavailableDescription:
+      "Record confidence, execution and setup quality to generate a reliable concentration score.",
   },
   de: {
     eyebrow: "AI Risk Matrix",
@@ -86,6 +114,10 @@ const labels: Record<AppLanguage, Labels> = {
     lowRisk: "niedriges Risiko",
     mediumRisk: "mittleres Risiko",
     highRisk: "hohes Risiko",
+    insufficientData: "insufficient data",
+    unavailable: "Behavioral risk unavailable",
+    unavailableDescription:
+      "Record confidence, execution and setup quality to generate a reliable concentration score.",
   },
 };
 
@@ -115,6 +147,7 @@ function getSeverityLabel(
 
 export default function RiskConcentration({
   data,
+  hasSufficientData,
   appLanguage,
 }: Props) {
   const language = normalizeAppLanguage(appLanguage);
@@ -126,7 +159,13 @@ export default function RiskConcentration({
   const [primary, ...rest] = data;
 
   return (
-    <Card className="border-[0.5px] border-red-500/25 p-6 sm:p-10">
+    <Card
+      className={`border-[0.5px] ${
+        hasSufficientData
+          ? "border-red-500/25 p-6 sm:p-10"
+          : "border-accent-bright/15 p-5 sm:p-7"
+      }`}
+    >
       <div className="flex items-center gap-3">
         <SignatureEdge orientation="vertical" pulse={false} className="h-4" />
         <p className="text-sm text-muted">{t.eyebrow}</p>
@@ -136,6 +175,7 @@ export default function RiskConcentration({
         {t.title}
       </h2>
 
+      {hasSufficientData && primary ? (
       <div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-[1.3fr_1fr]">
         <Card
           variant="inner"
@@ -172,8 +212,24 @@ export default function RiskConcentration({
           ))}
         </div>
       </div>
+      ) : (
+        <Card
+          variant="inner"
+          className="mt-6 border border-accent-bright/15 bg-accent-bright/[0.04] p-5 sm:p-6"
+        >
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-accent-bright">
+            {t.insufficientData}
+          </p>
+          <h3 className="mt-3 text-xl font-black text-white">
+            {t.unavailable}
+          </h3>
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted">
+            {t.unavailableDescription}
+          </p>
+        </Card>
+      )}
 
-      <p className="mt-8 max-w-2xl text-sm leading-relaxed text-muted">
+      <p className={`${hasSufficientData ? "mt-8" : "mt-5"} max-w-2xl text-sm leading-relaxed text-muted`}>
         {t.description}
       </p>
     </Card>

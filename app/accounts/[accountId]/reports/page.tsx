@@ -10,8 +10,6 @@ import GrowthFocusCard from "@/components/reports/GrowthFocusCard";
 import PrintReportButton from "@/components/reports/PrintReportButton";
 import PDFReportFooter from "@/components/reports/PDFReportFooter";
 import PDFCompactReport from "@/components/reports/PDFCompactReport";
-import { getReportLabels } from "@/components/reports/ReportI18n";
-
 import AccountPageShell from "@/components/AccountPageShell";
 import Card from "@/components/ui/Card";
 
@@ -33,7 +31,8 @@ import { pageDensity } from "@/lib/page-density";
 // instead of a confident-sounding label computed from a handful of
 // trades. Raw counts (PnL, win/loss) still display - only the tiered
 // status/verdict text is gated.
-const MIN_TRADES_FOR_VERDICT = 5;
+const MIN_REPORT_SAMPLE_SIZE = 5;
+const MIN_BEHAVIORAL_DATA_POINTS = 3;
 
 type ReportsLabels = {
   heroEyebrow: string;
@@ -267,7 +266,7 @@ function getResultTone(value: number) {
     return "text-red-400";
   }
 
-  return "text-yellow-400";
+  return "text-white";
 }
 
 function getRiskTone(value: number) {
@@ -292,6 +291,10 @@ function getScoreTone(value: number) {
   }
 
   return "text-red-400";
+}
+
+function isRecordedScore(value: number | null | undefined) {
+  return typeof value === "number" && value > 0;
 }
 
 export default async function ReportsPage({
@@ -485,30 +488,54 @@ export default async function ReportsPage({
   const profitFactor =
     Math.abs(grossLoss) > 0
       ? grossProfit / Math.abs(grossLoss)
-      : grossProfit > 0
-        ? grossProfit
-        : 0;
+      : null;
 
-  const emotionalTrades = periodTrades.filter(
+  const confidenceTrades = periodTrades.filter((trade) =>
+    isRecordedScore(trade.confidence)
+  );
+
+  const executionTrades = periodTrades.filter((trade) =>
+    isRecordedScore(trade.executionRating)
+  );
+
+  const setupQualityTrades = periodTrades.filter((trade) =>
+    isRecordedScore(trade.setupQuality)
+  );
+
+  const emotionalStateTrades = periodTrades.filter(
     (trade) =>
-      trade.emotionalState &&
-      trade.emotionalState.length > 0
-  ).length;
+      typeof trade.emotionalState === "string" &&
+      trade.emotionalState.trim().length > 0
+  );
+
+  const behavioralDataPointCount =
+    confidenceTrades.length +
+    executionTrades.length +
+    setupQualityTrades.length +
+    emotionalStateTrades.length;
+
+  const hasSufficientBehavioralData =
+    behavioralDataPointCount >= MIN_BEHAVIORAL_DATA_POINTS &&
+    confidenceTrades.length > 0 &&
+    executionTrades.length > 0 &&
+    setupQualityTrades.length > 0;
+
+  const emotionalTrades = emotionalStateTrades.length;
 
   const lowConfidenceTrades = periodTrades.filter(
     (trade) =>
-      (trade.confidence || 0) > 0 &&
-      (trade.confidence || 0) <= 4
+      isRecordedScore(trade.confidence) &&
+      (trade.confidence ?? 0) <= 4
   ).length;
 
   const weakExecutionTrades = periodTrades.filter(
     (trade) =>
-      (trade.executionRating || 0) > 0 &&
-      (trade.executionRating || 0) <= 4
+      isRecordedScore(trade.executionRating) &&
+      (trade.executionRating ?? 0) <= 4
   ).length;
 
   const disciplineScore =
-    closedTrades > 0
+    closedTrades > 0 && hasSufficientBehavioralData
       ? Math.max(
         0,
         Math.min(
@@ -522,7 +549,7 @@ export default async function ReportsPage({
       : 0;
 
   const behavioralRisk =
-    totalTrades > 0
+    totalTrades > 0 && hasSufficientBehavioralData
       ? Math.min(
         100,
         Math.round(
@@ -542,12 +569,16 @@ export default async function ReportsPage({
         ? t.growingSample
         : t.earlySample;
 
-  const hasEnoughData = totalTrades >= MIN_TRADES_FOR_VERDICT;
+  const hasEnoughData = totalTrades >= MIN_REPORT_SAMPLE_SIZE;
+  const hasRiskRewardData = losses > 0;
+  const hasEmotionalData = emotionalStateTrades.length > 0;
 
   const primaryFocus =
-    behavioralRisk >= 50
+    !hasEnoughData || !hasSufficientBehavioralData
+      ? "Build a reliable operating sample"
+      : behavioralRisk >= 50
       ? t.focusReduceBehavioralRisk
-      : profitFactor < 1
+      : profitFactor !== null && profitFactor < 1
         ? t.focusImproveRiskReward
         : winRate < 45
           ? t.focusReviewSetups
@@ -570,16 +601,8 @@ export default async function ReportsPage({
     session.user.name ??
     "Trader";
 
-  const rt = getReportLabels(language);
-
-  const generatedDate = new Date().toLocaleDateString(language, {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-
   return (
-    <div className={pageDensity.reports.page}>
+    <div className={`reports-print-root ${pageDensity.reports.page}`}>
       <PDFCompactReport
         appLanguage={language}
         currency={currency}
@@ -593,6 +616,7 @@ export default async function ReportsPage({
         averageLoss={averageLoss}
         disciplineScore={disciplineScore}
         behavioralRisk={behavioralRisk}
+        hasSufficientBehavioralData={hasSufficientBehavioralData}
         emotionalTrades={emotionalTrades}
         weakExecutionTrades={weakExecutionTrades}
         primaryFocus={primaryFocus}
@@ -622,7 +646,7 @@ export default async function ReportsPage({
         >
 
         <div className={`grid grid-cols-2 ${pageDensity.reports.grid} xl:grid-cols-4`}>
-          <Card interactive className="p-5">
+          <Card className="p-5">
             <p className="text-sm text-muted">
               {t.totalTrades}{periodSuffix}
             </p>
@@ -636,7 +660,7 @@ export default async function ReportsPage({
             </p>
           </Card>
 
-          <Card interactive className="p-5">
+          <Card className="p-5">
             <p className="text-sm text-muted">
               {t.totalPnl}{periodSuffix}
             </p>
@@ -653,7 +677,7 @@ export default async function ReportsPage({
             </p>
           </Card>
 
-          <Card interactive className="p-5">
+          <Card className="p-5">
             <p className="text-sm text-muted">
               {t.winRate}{periodSuffix}
             </p>
@@ -669,19 +693,25 @@ export default async function ReportsPage({
             </p>
           </Card>
 
-          <Card interactive className="p-5">
+          <Card className="p-5">
             <p className="text-sm text-muted">
               {t.behavioralRisk}{periodSuffix}
             </p>
 
             <h2
-              className={`mt-4 text-metric-lg ${getRiskTone(behavioralRisk)}`}
+              className={`mt-4 text-metric-lg ${
+                hasSufficientBehavioralData
+                  ? getRiskTone(behavioralRisk)
+                  : "text-accent-bright"
+              }`}
             >
-              {behavioralRisk}%
+              {hasSufficientBehavioralData ? `${behavioralRisk}%` : "Not available"}
             </h2>
 
             <p className="mt-3 text-sm text-muted-faint">
-              {t.behavioralRiskDescription}
+              {hasSufficientBehavioralData
+                ? t.behavioralRiskDescription
+                : "Confidence, execution and emotion data not recorded."}
             </p>
           </Card>
         </div>
@@ -694,6 +724,8 @@ export default async function ReportsPage({
             winRate={winRate}
             disciplineScore={disciplineScore}
             behavioralRisk={behavioralRisk}
+            totalTrades={totalTrades}
+            hasSufficientBehavioralData={hasSufficientBehavioralData}
             hasEnoughData={hasEnoughData}
             action={<PrintReportButton appLanguage={language} />}
           />
@@ -709,6 +741,7 @@ export default async function ReportsPage({
             averageWin={averageWin}
             averageLoss={averageLoss}
             profitFactor={profitFactor}
+            hasGrossLoss={hasRiskRewardData}
             hasEnoughData={hasEnoughData}
           />
         </div>
@@ -724,6 +757,11 @@ export default async function ReportsPage({
             behavioralRisk={behavioralRisk}
             averageWin={averageWin}
             averageLoss={averageLoss}
+            hasEmotionalData={hasEmotionalData}
+            hasConfidenceData={confidenceTrades.length > 0}
+            hasExecutionData={executionTrades.length > 0}
+            hasSufficientBehavioralData={hasSufficientBehavioralData}
+            hasRiskRewardData={hasRiskRewardData}
             hasEnoughData={hasEnoughData}
           />
         </div>
@@ -736,6 +774,8 @@ export default async function ReportsPage({
             totalTrades={totalTrades}
             behavioralRisk={behavioralRisk}
             disciplineScore={disciplineScore}
+            hasEmotionalData={hasEmotionalData}
+            hasSufficientBehavioralData={hasSufficientBehavioralData}
             hasEnoughData={hasEnoughData}
           />
         </div>
@@ -745,6 +785,7 @@ export default async function ReportsPage({
             appLanguage={language}
             currency={currency}
             primaryFocus={primaryFocus}
+            hasSufficientBehavioralData={hasSufficientBehavioralData}
             hasEnoughData={hasEnoughData}
           />
         </div>

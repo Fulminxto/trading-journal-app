@@ -13,6 +13,11 @@ type Props = ReportI18nProps & {
   behavioralRisk: number;
   averageWin: number;
   averageLoss: number;
+  hasEmotionalData: boolean;
+  hasConfidenceData: boolean;
+  hasExecutionData: boolean;
+  hasSufficientBehavioralData: boolean;
+  hasRiskRewardData: boolean;
   hasEnoughData: boolean;
 };
 
@@ -39,11 +44,18 @@ export default function BehavioralReportCard({
   behavioralRisk,
   averageWin,
   averageLoss,
+  hasEmotionalData,
+  hasConfidenceData,
+  hasExecutionData,
+  hasSufficientBehavioralData,
+  hasRiskRewardData,
   hasEnoughData,
   appLanguage,
 }: Props) {
   const t = getReportLabels(appLanguage);
-  const riskReward = averageLoss !== 0 ? (averageWin / Math.abs(averageLoss)).toFixed(2) : "0.00";
+  const riskReward = hasRiskRewardData
+    ? (averageWin / Math.abs(averageLoss)).toFixed(2)
+    : "Not recorded";
 
   const isControlled = behavioralRisk < 35;
   const isModerate = !isControlled && behavioralRisk < 60;
@@ -60,7 +72,9 @@ export default function BehavioralReportCard({
       ? t.riskModerateMessage
       : t.riskHighExposureMessage;
 
-  const tone = getRiskTone(behavioralRisk);
+  const tone = hasSufficientBehavioralData
+    ? getRiskTone(behavioralRisk)
+    : "text-accent-bright";
 
   return (
     <Card className="report-card p-6 sm:p-10">
@@ -77,28 +91,28 @@ export default function BehavioralReportCard({
       <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4">
         <Card variant="inner" className="p-5">
           <p className="text-sm text-muted-faint">{t.emotionalTrades}</p>
-          <h3 className="mt-3 text-3xl font-black text-yellow-400">
-            {emotionalTrades}
+          <h3 className={`mt-3 text-3xl font-black ${hasEmotionalData && emotionalTrades > 0 ? "text-yellow-400" : "text-white"}`}>
+            {hasEmotionalData ? emotionalTrades : "Not recorded"}
           </h3>
         </Card>
 
         <Card variant="inner" className="p-5">
           <p className="text-sm text-muted-faint">{t.lowConfidenceTrades}</p>
-          <h3 className="mt-3 text-3xl font-black text-yellow-400">
-            {lowConfidenceTrades}
+          <h3 className={`mt-3 text-3xl font-black ${hasConfidenceData && lowConfidenceTrades > 0 ? "text-yellow-400" : "text-white"}`}>
+            {hasConfidenceData ? lowConfidenceTrades : "Not recorded"}
           </h3>
         </Card>
 
         <Card variant="inner" className="p-5">
           <p className="text-sm text-muted-faint">{t.weakExecutions}</p>
-          <h3 className="mt-3 text-3xl font-black text-red-400">
-            {weakExecutionTrades}
+          <h3 className={`mt-3 text-3xl font-black ${hasExecutionData && weakExecutionTrades > 0 ? "text-red-400" : "text-white"}`}>
+            {hasExecutionData ? weakExecutionTrades : "Not recorded"}
           </h3>
         </Card>
 
         <Card variant="inner" className="p-5">
           <p className="text-sm text-muted-faint">{t.losses}</p>
-          <h3 className="mt-3 text-3xl font-black text-red-400">
+          <h3 className={`mt-3 text-3xl font-black ${losses > 0 ? "text-red-400" : "text-white"}`}>
             {losses}
           </h3>
         </Card>
@@ -108,20 +122,24 @@ export default function BehavioralReportCard({
         <Card variant="inner" className="p-5">
           <div className="flex items-center justify-between gap-4">
             <p className="text-sm text-muted-faint">{t.behavioralRisk}</p>
-            <p className={`text-2xl font-black ${tone}`}>{behavioralRisk}%</p>
+            <p className={`text-2xl font-black ${tone}`}>
+              {hasSufficientBehavioralData ? `${behavioralRisk}%` : "Not available"}
+            </p>
           </div>
         </Card>
 
         <Card variant="inner" className="p-5">
           <div className="flex items-center justify-between gap-4">
             <p className="text-sm text-muted-faint">{t.riskRewardRatio}</p>
-            <p className="text-2xl font-black text-accent-bright">{riskReward}</p>
+            <p className={`text-2xl font-black ${hasRiskRewardData ? "text-accent-bright" : "text-muted-faint"}`}>
+              {riskReward}
+            </p>
           </div>
         </Card>
       </div>
 
       <Card variant="inner" className="mt-6 p-5">
-        {hasEnoughData ? (
+        {hasEnoughData && hasSufficientBehavioralData ? (
           <>
             <h3 className={`text-lg font-black ${tone}`}>{status}</h3>
             <p className="mt-3 max-w-3xl text-sm leading-relaxed text-gray-300">
@@ -131,10 +149,10 @@ export default function BehavioralReportCard({
         ) : (
           <>
             <h3 className="text-lg font-black text-muted-faint">
-              {t.notEnoughDataTitle}
+              Behavioral data unavailable
             </h3>
             <p className="mt-3 max-w-3xl text-sm leading-relaxed text-gray-300">
-              {t.notEnoughDataMessage}
+              Record confidence, execution quality, emotional state and risk/reward to evaluate discipline and behavioral exposure.
             </p>
           </>
         )}

@@ -15,10 +15,10 @@ export default function AnalyticsStatCard({
   icon: Icon,
 }: Props) {
   return (
-    <Card interactive className="group p-5">
+    <Card className="p-5">
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted">{label}</p>
-        <IconTile size="sm">
+        <IconTile size="sm" interactive={false}>
           <Icon size={16} />
         </IconTile>
       </div>

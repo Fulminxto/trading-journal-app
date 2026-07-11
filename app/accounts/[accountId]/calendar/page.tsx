@@ -1,10 +1,6 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
   CalendarDays,
-  ChevronLeft,
-  ChevronRight,
-  CircleDot,
   Flame,
   Minus,
   TrendingDown,
@@ -23,8 +19,8 @@ import {
 import AccountPageShell from "@/components/AccountPageShell";
 import ScopeBar from "@/components/ScopeBar";
 import Card from "@/components/ui/Card";
-import SignatureEdge from "@/components/ui/SignatureEdge";
 import { pageDensity } from "@/lib/page-density";
+import CalendarMatrix from "./CalendarMatrix";
 
 type CalendarLabels = {
   tradingCalendar: string;
@@ -695,6 +691,16 @@ export default async function CalendarPage({
       wins: number;
       losses: number;
       be: number;
+      tradesList: {
+        id: number;
+        symbol: string;
+        direction: string | null;
+        outcome: string | null;
+        resultUsd: number | null;
+        openDate: string;
+        openTime: string | null;
+        closeDate: string | null;
+      }[];
     }
   > = {};
 
@@ -710,6 +716,7 @@ export default async function CalendarPage({
         wins: 0,
         losses: 0,
         be: 0,
+        tradesList: [],
       };
     }
 
@@ -729,6 +736,17 @@ export default async function CalendarPage({
     if (trade.outcome === "be") {
       grouped[day].be += 1;
     }
+
+    grouped[day].tradesList.push({
+      id: trade.id,
+      symbol: trade.symbol,
+      direction: trade.direction,
+      outcome: trade.outcome,
+      resultUsd: trade.resultUsd,
+      openDate: trade.openDate.toISOString(),
+      openTime: trade.openTime,
+      closeDate: trade.closeDate?.toISOString() ?? null,
+    });
   }
 
   const monthName = new Date(
@@ -918,22 +936,6 @@ export default async function CalendarPage({
         ? t.negative
         : t.flat;
 
-  const buildMonthHref = (
-    targetMonth: number,
-    targetYear: number
-  ) => {
-    const params = new URLSearchParams({
-      month: String(targetMonth),
-      year: String(targetYear),
-    });
-
-    if (selectedMemberId) {
-      params.set("member", selectedMemberId);
-    }
-
-    return `/accounts/${accountId}/calendar?${params.toString()}`;
-  };
-
   return (
     <AccountPageShell
       className={pageDensity.calendar.page}
@@ -1009,66 +1011,66 @@ export default async function CalendarPage({
         className={`reveal-rise grid grid-cols-1 ${pageDensity.calendar.grid} md:grid-cols-2 xl:grid-cols-4`}
         style={{ animationDelay: "100ms" }}
       >
-        <Card interactive className="p-6">
-          <div className="flex items-center gap-3">
-            <TrendingUp
-              className="text-green-400"
-              size={21}
-            />
+        <Card className="p-4">
+          <div className="flex items-center justify-between gap-3">
             <p className="text-sm text-muted">
               {t.positiveDays}
             </p>
+            <TrendingUp
+              className="text-green-400"
+              size={18}
+            />
           </div>
 
-          <h2 className="mt-4 text-3xl font-black text-green-400">
+          <h2 className="mt-2 text-2xl font-black text-green-400">
             {positiveDays}
           </h2>
         </Card>
 
-        <Card interactive className="p-6">
-          <div className="flex items-center gap-3">
-            <TrendingDown
-              className="text-red-400"
-              size={21}
-            />
+        <Card className="p-4">
+          <div className="flex items-center justify-between gap-3">
             <p className="text-sm text-muted">
               {t.negativeDays}
             </p>
+            <TrendingDown
+              className="text-red-400"
+              size={18}
+            />
           </div>
 
-          <h2 className="mt-4 text-3xl font-black text-red-400">
+          <h2 className="mt-2 text-2xl font-black text-red-400">
             {negativeDays}
           </h2>
         </Card>
 
-        <Card interactive className="p-6">
-          <div className="flex items-center gap-3">
-            <Minus
-              className="text-yellow-300"
-              size={21}
-            />
+        <Card className="p-4">
+          <div className="flex items-center justify-between gap-3">
             <p className="text-sm text-muted">
               {t.flatDays}
             </p>
+            <Minus
+              className="text-yellow-300"
+              size={18}
+            />
           </div>
 
-          <h2 className="mt-4 text-3xl font-black text-yellow-300">
+          <h2 className="mt-2 text-2xl font-black text-yellow-300">
             {flatDays}
           </h2>
         </Card>
 
-        <Card interactive className="p-6">
-          <div className="flex items-center gap-3">
-            <Flame
-              className="text-accent-bright"
-              size={21}
-            />
+        <Card className="p-4">
+          <div className="flex items-center justify-between gap-3">
             <p className="text-sm text-muted">
               {t.avgTradesPerActiveDay}
             </p>
+            <Flame
+              className="text-accent-bright"
+              size={18}
+            />
           </div>
 
-          <h2 className="mt-4 text-3xl font-black text-accent-bright">
+          <h2 className="mt-2 text-2xl font-black text-accent-bright">
             {formatNumber(
               averageTradesPerActiveDay,
               language
@@ -1077,243 +1079,40 @@ export default async function CalendarPage({
         </Card>
       </section>
 
-      {/* PRIMARY - the monthly performance map is the dominant truth
-          this page exists for, so it gets the hero treatment every
-          other card on this page doesn't. */}
-      <div className="reveal-rise" style={{ animationDelay: "140ms" }}>
-        <Card variant="hero" className={`relative ${pageDensity.calendar.panel}`}>
-          <SignatureEdge
-            orientation="vertical"
-            className="absolute bottom-6 left-0 top-6"
-          />
-
-          <div className="pl-4">
-            <div className="mb-6 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-              <div>
-                <p className="text-sm text-muted">
-                  {t.calendarMatrix}
-                </p>
-
-                <h2 className="mt-1 text-section capitalize text-white">
-                  {t.monthPerformance(
-                    monthName
-                  )}
-                </h2>
-              </div>
-
-              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">
-                <div className="flex min-w-0 flex-wrap items-center gap-2 sm:justify-end">
-                  <p className="shrink-0 text-micro font-medium uppercase tracking-label text-muted-faint">
-                    {t.monthlyPerformanceView}
-                  </p>
-
-                  <div className="flex items-center gap-1 rounded-pill border border-white/10 bg-white/[0.03] px-1 py-0.5">
-                    <Link
-                      href={buildMonthHref(
-                        previousMonth,
-                        previousYear
-                      )}
-                      className="flex h-6 w-6 items-center justify-center rounded-pill text-muted transition hover:bg-white/10 hover:text-white"
-                      aria-label={t.previousMonth}
-                    >
-                      <ChevronLeft size={14} />
-                    </Link>
-
-                    <span className="min-w-[120px] px-1.5 text-center text-xs capitalize text-white">
-                      {monthName}
-                    </span>
-
-                    <Link
-                      href={buildMonthHref(
-                        nextMonth,
-                        nextYear
-                      )}
-                      className="flex h-6 w-6 items-center justify-center rounded-pill text-muted transition hover:bg-white/10 hover:text-white"
-                      aria-label={t.nextMonth}
-                    >
-                      <ChevronRight size={14} />
-                    </Link>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[0.14em] text-muted">
-                  <div className="flex items-center gap-2">
-                    <CircleDot
-                      size={14}
-                      className="text-green-400"
-                    />
-                    {t.profit}
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <CircleDot
-                      size={14}
-                      className="text-red-400"
-                    />
-                    {t.loss}
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <CircleDot
-                      size={14}
-                      className="text-muted-faint"
-                    />
-                    {t.noResult}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {activeDays === 0 && (
-              <Card variant="inner" className="mb-6 border-dashed p-4 text-sm text-muted">
-                {t.noTradesThisMonth}
-              </Card>
-            )}
-
-            <div className="overflow-x-auto">
-              <div className="min-w-[840px] overflow-hidden rounded-inner border-[0.5px] border-white/[0.08]">
-                <div className="grid grid-cols-7 border-b border-white/[0.08] bg-surface-2">
-                  {weekdays.map((day) => (
-                    <div
-                      key={day}
-                      className="border-r border-white/[0.08] p-4 text-center text-sm font-black uppercase tracking-[0.14em] text-muted-faint last:border-r-0"
-                    >
-                      {day}
-                    </div>
-                  ))}
-                </div>
-
-                <div className="grid grid-cols-7 bg-bg-deep/40">
-                  {Array.from({
-                    length:
-                      adjustedFirstDay,
-                  }).map((_, index) => (
-                    <div
-                      key={`empty-${index}`}
-                      className="min-h-[150px] border-r border-b border-white/[0.08] bg-surface-1/60"
-                    />
-                  ))}
-
-                  {Array.from({
-                    length: days,
-                  }).map((_, index) => {
-                    const day = index + 1;
-
-                    const data =
-                      grouped[day];
-
-                    const pnl =
-                      data?.pnl || 0;
-
-                    const tradesCount =
-                      data?.trades || 0;
-
-                    const positive =
-                      pnl > 0;
-
-                    const negative =
-                      pnl < 0;
-
-                    const intensity =
-                      Math.min(
-                        Math.abs(pnl) / 500,
-                        1
-                      );
-
-                    const isToday =
-                      now.getDate() ===
-                      day &&
-                      now.getMonth() ===
-                      month &&
-                      now.getFullYear() ===
-                      year;
-
-                    return (
-                      <div
-                        key={day}
-                        className={`group relative border-r border-b border-white/[0.08] ${pageDensity.calendar.dayCell} transition-colors duration-base last:border-r-0 hover:border-accent-bright/20 hover:bg-white/[0.025]`}
-                        style={{
-                          backgroundColor: positive
-                            ? `color-mix(in srgb, var(--color-positive) ${4 + intensity * 10}%, transparent)`
-                            : negative
-                              ? `color-mix(in srgb, var(--color-negative) ${4 + intensity * 10}%, transparent)`
-                              : undefined,
-                        }}
-                      >
-                        <div
-                          aria-hidden="true"
-                          className="pointer-events-none absolute inset-x-3 top-2 h-px bg-accent-bright/35 opacity-0 transition-opacity duration-base group-hover:opacity-100"
-                        />
-
-                        <div className="relative mb-5 flex items-center justify-between">
-                          <div
-                            className={`flex h-10 w-10 items-center justify-center rounded-full text-sm font-black transition-colors duration-base ${isToday
-                                ? "bg-accent-bright text-bg-deep"
-                                : "bg-white/5 text-white group-hover:bg-white/[0.08]"
-                              }`}
-                          >
-                            {day}
-                          </div>
-
-                          <div
-                            className={`h-2.5 w-2.5 rounded-full ${positive
-                                ? "bg-green-400"
-                                : negative
-                                  ? "bg-red-400"
-                                  : "bg-white/20"
-                              }`}
-                          />
-                        </div>
-
-                        <div className="relative space-y-2">
-                          <p
-                            className={`text-sm font-black ${positive
-                                ? "text-green-400"
-                                : negative
-                                  ? "text-red-400"
-                                  : "text-muted"
-                              }`}
-                          >
-                            {formatCurrencyByLanguage(
-                              pnl,
-                              currency,
-                              language
-                            )}
-                          </p>
-
-                          <p className="text-xs text-muted-faint">
-                            {tradesCount} {t.trades}
-                          </p>
-
-                          {data && (
-                            <p className="text-xs text-muted-faint">
-                              {data.wins}
-                              {t.winsShort} /{" "}
-                              {data.losses}
-                              {t.lossesShort} /{" "}
-                              {data.be}
-                              {t.beShort}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-
-                  {Array.from({
-                    length: endEmptyDays,
-                  }).map((_, index) => (
-                    <div
-                      key={`end-empty-${index}`}
-                      className="min-h-[150px] border-r border-b border-white/[0.08] bg-surface-1/60"
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </Card>
-      </div>
+      <CalendarMatrix
+        accountId={accountId}
+        language={language}
+        currency={currency}
+        month={month}
+        year={year}
+        monthName={monthName}
+        days={days}
+        adjustedFirstDay={adjustedFirstDay}
+        endEmptyDays={endEmptyDays}
+        activeDays={activeDays}
+        weekdays={weekdays}
+        grouped={grouped}
+        previousMonth={previousMonth}
+        previousYear={previousYear}
+        nextMonth={nextMonth}
+        nextYear={nextYear}
+        selectedMemberId={selectedMemberId}
+        labels={{
+          monthlyPerformanceView: t.monthlyPerformanceView,
+          previousMonth: t.previousMonth,
+          nextMonth: t.nextMonth,
+          calendarMatrix: t.calendarMatrix,
+          monthPerformance: t.monthPerformance(monthName),
+          profit: t.profit,
+          loss: t.loss,
+          noResult: t.noResult,
+          noTradesThisMonth: t.noTradesThisMonth,
+          trades: t.trades,
+          winsShort: t.winsShort,
+          lossesShort: t.lossesShort,
+          beShort: t.beShort,
+        }}
+      />
 
       <section
         className="reveal-rise"

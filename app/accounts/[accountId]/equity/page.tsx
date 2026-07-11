@@ -641,12 +641,11 @@ function formatPercent(
 }
 
 function formatDate(
-  date: Date,
-  language: AppLanguage
+  date: Date
 ) {
-  return formatDateByLanguage(date, language, {
-    day: "2-digit",
-    month: "2-digit",
+  return formatDateByLanguage(date, "en", {
+    day: "numeric",
+    month: "short",
     year: "numeric",
   });
 }
@@ -671,6 +670,38 @@ function getResultTone(value: number) {
   }
 
   return "text-yellow-400";
+}
+
+function getOutcomeBadgeClass(outcome: string | null) {
+  if (outcome === "win") {
+    return "border-green-400/20 bg-green-400/10 text-green-300";
+  }
+
+  if (outcome === "loss") {
+    return "border-red-400/20 bg-red-400/10 text-red-300";
+  }
+
+  if (outcome === "be") {
+    return "border-yellow-400/20 bg-yellow-400/10 text-yellow-300";
+  }
+
+  return "border-white/10 bg-white/[0.04] text-muted";
+}
+
+function getOutcomeBadgeLabel(outcome: string | null) {
+  if (outcome === "win") {
+    return "WIN";
+  }
+
+  if (outcome === "loss") {
+    return "LOSS";
+  }
+
+  if (outcome === "be") {
+    return "BE";
+  }
+
+  return "-";
 }
 
 function StatCard({
@@ -876,6 +907,9 @@ export default async function EquityPage({
       )
       : initialBalance;
 
+  const lowestEquityTone =
+    lowestEquity < initialBalance ? "text-red-400" : "text-white";
+
   const bestTrade =
     periodTrades.length > 0
       ? Math.max(
@@ -901,19 +935,30 @@ export default async function EquityPage({
   // Underwater curve: percent below the running peak at each point,
   // derived from the same equity series as the hero chart above (not
   // from trade.drawdownPercent, which could drift out of sync with it).
-  let runningPeak = initialBalance;
-  const underwaterData = periodTrades.map((trade) => {
+  const underwaterData = periodTrades.reduce<{
+    runningPeak: number;
+    points: { date: string; drawdown: number }[];
+  }>((acc, trade) => {
     const equity = trade.equity || initialBalance;
-    runningPeak = Math.max(runningPeak, equity);
+    const runningPeak = Math.max(acc.runningPeak, equity);
 
     return {
-      date: formatShortDate(trade.openDate, language),
-      drawdown:
-        runningPeak > 0
-          ? ((equity - runningPeak) / runningPeak) * 100
-          : 0,
+      runningPeak,
+      points: [
+        ...acc.points,
+        {
+          date: formatShortDate(trade.openDate, language),
+          drawdown:
+            runningPeak > 0
+              ? ((equity - runningPeak) / runningPeak) * 100
+              : 0,
+        },
+      ],
     };
-  });
+  }, {
+    runningPeak: initialBalance,
+    points: [],
+  }).points;
 
   const recentTrades = [...periodTrades].reverse().slice(0, 10);
 
@@ -1061,7 +1106,7 @@ export default async function EquityPage({
           </h2>
         </div>
 
-        <div className={`grid grid-cols-1 ${pageDensity.equity.grid} xl:grid-cols-[minmax(0,2fr)_minmax(220px,1fr)]`}>
+        <div className={`grid grid-cols-1 ${pageDensity.equity.grid} xl:grid-cols-[minmax(0,1.5fr)_minmax(460px,1fr)]`}>
           <Card className={pageDensity.equity.panel}>
             <p className="mb-4 text-sm leading-6 text-muted">
               {t.underwaterDescription}
@@ -1070,7 +1115,7 @@ export default async function EquityPage({
             <DrawdownChart data={underwaterData} language={language} />
           </Card>
 
-          <div className={`grid ${pageDensity.equity.grid}`}>
+          <div className={`grid ${pageDensity.equity.grid} md:grid-cols-2`}>
             <Card interactive className={pageDensity.equity.panel}>
               <p className="text-sm text-muted">
                 {t.equityPeak + periodSuffix}
@@ -1090,7 +1135,7 @@ export default async function EquityPage({
                 {t.lowestEquity + periodSuffix}
               </p>
 
-              <h3 className="mt-2 text-2xl font-black text-red-400">
+              <h3 className={`mt-2 text-2xl font-black ${lowestEquityTone}`}>
                 {money(lowestEquity)}
               </h3>
 
@@ -1118,7 +1163,7 @@ export default async function EquityPage({
           <div className="mt-4 space-y-4 text-sm">
             <div className="flex items-center justify-between gap-4">
               <span className="text-muted">{t.positiveTrades + periodSuffix}</span>
-              <span className="font-black text-accent">{positiveTrades}</span>
+              <span className="font-black text-green-400">{positiveTrades}</span>
             </div>
 
             <div className="flex items-center justify-between gap-4">
@@ -1128,7 +1173,7 @@ export default async function EquityPage({
 
             <div className="flex items-center justify-between gap-4">
               <span className="text-muted">{t.flatTrades + periodSuffix}</span>
-              <span className="font-black text-white">{flatTrades}</span>
+              <span className="font-black text-yellow-300">{flatTrades}</span>
             </div>
           </div>
         </Card>
@@ -1199,11 +1244,14 @@ export default async function EquityPage({
                           </p>
 
                           <p className="mt-1 text-xs text-muted-faint">
-                            {formatDate(
-                              trade.openDate,
-                              language
-                            )}{" "}
-                            · {trade.outcome || "-"}
+                            {formatDate(trade.openDate)}
+                            <span
+                              className={`ml-2 inline-flex rounded-full border px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.12em] ${getOutcomeBadgeClass(
+                                trade.outcome
+                              )}`}
+                            >
+                              {getOutcomeBadgeLabel(trade.outcome)}
+                            </span>
                           </p>
                         </div>
 
@@ -1286,18 +1334,21 @@ export default async function EquityPage({
                           className="border-t border-white/10"
                         >
                           <td className="p-4 text-gray-300">
-                            {formatDate(
-                              trade.openDate,
-                              language
-                            )}
+                            {formatDate(trade.openDate)}
                           </td>
 
                           <td className="p-4 font-semibold text-white">
                             {trade.symbol || "-"}
                           </td>
 
-                          <td className="p-4 text-gray-300">
-                            {trade.outcome || "-"}
+                          <td className="p-4">
+                            <span
+                              className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.14em] ${getOutcomeBadgeClass(
+                                trade.outcome
+                              )}`}
+                            >
+                              {getOutcomeBadgeLabel(trade.outcome)}
+                            </span>
                           </td>
 
                           <td className="p-4 font-semibold text-white">

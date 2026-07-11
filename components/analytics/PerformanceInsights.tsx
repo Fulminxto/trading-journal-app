@@ -9,63 +9,119 @@ type Props = AnalyticsI18nProps & {
   winRate: number;
   averageRR: number;
   totalPnl: number;
+  tradeCount: number;
+  hasRiskRewardData: boolean;
   bestSymbol?: string;
+  symbolCount: number;
 };
+
+const MIN_INSIGHT_SAMPLE_SIZE = 5;
 
 export default function PerformanceInsights({
   winRate,
   averageRR,
   totalPnl,
+  tradeCount,
+  hasRiskRewardData,
   bestSymbol,
+  symbolCount,
   appLanguage,
 }: Props) {
   const t = getAnalyticsLabels(appLanguage);
+  const hasTradeData = tradeCount > 0;
+  const hasLimitedSample =
+    hasTradeData && tradeCount < MIN_INSIGHT_SAMPLE_SIZE;
+  const hasMarketComparison =
+    symbolCount >= 2;
 
   const insights = [
     {
       title: t.performanceHealth,
-      label: totalPnl >= 0 ? t.positive : t.defensive,
+      label: hasTradeData
+        ? totalPnl > 0
+          ? hasLimitedSample
+            ? `${t.positive} - limited sample`
+            : t.positive
+          : totalPnl < 0
+            ? t.defensive
+            : t.pending
+        : "Insufficient data",
       tone:
-        totalPnl >= 0
+        !hasTradeData || totalPnl === 0 || hasLimitedSample
+          ? "text-muted-faint"
+          : totalPnl > 0
           ? "text-green-400"
           : "text-red-400",
       text:
-        totalPnl >= 0
+        !hasTradeData
+          ? "Record trades to generate a supported performance health insight."
+          : totalPnl === 0
+            ? "Performance is flat for the selected period. More trade data is needed before calling the phase positive or defensive."
+            : hasLimitedSample && totalPnl > 0
+              ? "The account is currently profitable, but more trades are required to assess consistency and risk stability."
+          : totalPnl > 0
           ? t.positivePerformanceText
           : t.defensivePerformanceText,
     },
     {
       title: t.winRateQuality,
-      label: winRate >= 50 ? t.stable : t.review,
+      label: hasTradeData
+        ? hasLimitedSample
+          ? "Limited sample"
+          : winRate >= 50
+          ? t.stable
+          : t.review
+        : "Insufficient data",
       tone:
-        winRate >= 50
+        !hasTradeData || hasLimitedSample
+          ? "text-muted-faint"
+          : winRate >= 50
           ? "text-accent-bright"
           : "text-yellow-400",
       text:
-        winRate >= 50
+        !hasTradeData
+          ? "Record closed trades before evaluating win rate quality."
+          : hasLimitedSample
+            ? `A ${winRate.toFixed(0)}% win rate across ${tradeCount} ${tradeCount === 1 ? "trade" : "trades"} is encouraging, but more observations are required to evaluate consistency.`
+          : winRate >= 50
           ? t.stableWinRateText
           : t.weakWinRateText,
     },
     {
       title: t.riskReward,
-      label: averageRR >= 1.5 ? t.healthy : t.weak,
+      label: hasRiskRewardData
+        ? averageRR >= 1.5
+          ? t.healthy
+          : t.weak
+        : "Insufficient data",
       tone:
-        averageRR >= 1.5
+        !hasRiskRewardData
+          ? "text-muted-faint"
+          : averageRR >= 1.5
           ? "text-accent"
           : "text-yellow-400",
       text:
-        averageRR >= 1.5
+        !hasRiskRewardData
+          ? "Record risk/reward values to evaluate this signal."
+          : averageRR >= 1.5
           ? t.healthyRiskRewardText
           : t.weakRiskRewardText,
     },
     {
       title: t.marketEdge,
-      label: bestSymbol || t.pending,
-      tone: bestSymbol
-        ? "text-green-400"
-        : "text-muted-faint",
+      label: bestSymbol
+        ? hasMarketComparison
+          ? bestSymbol
+          : `${bestSymbol} only`
+        : t.pending,
+      tone:
+        bestSymbol && hasMarketComparison
+          ? "text-green-400"
+          : "text-muted-faint",
       text: bestSymbol
-        ? t.bestSymbolText(bestSymbol)
+        ? hasMarketComparison
+          ? t.bestSymbolText(bestSymbol)
+          : `${bestSymbol} is currently the only recorded instrument. More symbols or observations are required to compare market edge.`
         : t.noMarketEdgeText,
     },
   ];

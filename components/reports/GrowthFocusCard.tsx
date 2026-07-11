@@ -7,6 +7,7 @@ import ReportChapterHeader from "@/components/reports/ReportChapterHeader";
 
 type Props = ReportI18nProps & {
   primaryFocus: string;
+  hasSufficientBehavioralData: boolean;
   hasEnoughData: boolean;
 };
 
@@ -20,13 +21,20 @@ type Props = ReportI18nProps & {
  */
 export default function GrowthFocusCard({
   primaryFocus,
+  hasSufficientBehavioralData,
   hasEnoughData,
   appLanguage,
 }: Props) {
   const t = getReportLabels(appLanguage);
 
   return (
-    <Card className="report-card p-6 sm:p-10">
+    <Card
+      className={`report-card ${
+        hasEnoughData && hasSufficientBehavioralData
+          ? "p-6 sm:p-10"
+          : "p-5 sm:p-8"
+      }`}
+    >
       <ReportChapterHeader
         number="05"
         subtitle={t.growthFocusSubtitle}
@@ -34,17 +42,17 @@ export default function GrowthFocusCard({
       />
 
       <Card variant="inner" className="p-5">
-        {hasEnoughData ? (
+        {hasEnoughData && hasSufficientBehavioralData ? (
           <p className="max-w-3xl text-lg font-black leading-relaxed text-white">
             {primaryFocus}
           </p>
         ) : (
           <>
             <h3 className="text-lg font-black text-muted-faint">
-              {t.notEnoughDataTitle}
+              Build a reliable operating sample
             </h3>
             <p className="mt-3 max-w-3xl text-sm leading-relaxed text-gray-300">
-              {t.notEnoughDataMessage}
+              Continue logging trades with confidence, execution quality, emotional state and risk/reward to unlock a complete performance assessment.
             </p>
           </>
         )}
