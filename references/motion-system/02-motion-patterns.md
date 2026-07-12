@@ -1,132 +1,439 @@
 # VOLTIS Motion Patterns
 
+## General Rules
+
+Every interaction should feel:
+
+- intentional
+- physically believable
+- immediate
+- controlled
+- premium
+
+Motion should communicate change, never decoration.
+
+Users should perceive quality without consciously noticing animation.
+
+The interface should always remain responsive.
+
+Motion must support productivity, never interrupt it.
+
 ## Buttons
 
-Buttons must respond immediately.
+Buttons should feel mechanical rather than digital.
 
-### Hover
+Pressing a button should resemble pressing the perfectly engineered button of a luxury product.
 
-- subtle visual change
-- no large translation
-- no dramatic scale
-- no floating effect
+Feedback must be immediate.
 
-### Press
+The button should acknowledge the interaction instantly without appearing soft or elastic.
 
-- short compression
-- immediate response
-- no bounce after release
+Hover should communicate readiness.
 
-### Disabled
+Press should communicate confirmation.
 
-- no interactive motion
-- clearly inactive
+Release should feel precise.
+
+Buttons never bounce.
+
+Buttons never feel playful.
+
+Buttons always feel responsive.
 
 ## Cards
 
-Cards must feel stable and weighted.
+Cards are structural elements.
 
-Allowed:
+They should feel anchored to the interface rather than floating above it.
 
-- subtle border response
-- restrained shadow change
-- small depth change when interactive
+Hover does not lift the card.
+
+Instead, it subtly communicates interaction through refinement.
+
+Users should perceive:
+
+- increased precision
+- improved focus
+- subtle depth
+- controlled responsiveness
+
+Cards behave like solid engineered objects.
+
+Interaction should resemble touching a premium mechanical surface rather than a lightweight digital panel.
+
+Allowed feedback:
+
+- subtle border refinement
+- refined shadow adjustment
+- minimal depth variation
+- soft highlight
+- slight internal content response
 
 Avoid:
 
-- repeated floating
 - large vertical movement
-- excessive scaling
-- decorative tilt
+- exaggerated scaling
+- floating effects
+- dramatic glow
+- bounce
+- playful motion
+- unnecessary rotation
 
-## Dropdowns and menus
+### Physical Inspiration
 
-Menus must open from their trigger.
+Imagine placing your hand on the door of a luxury vehicle.
 
-They should preserve spatial continuity between the trigger and the menu.
+It feels:
 
-Opening should be slightly slower than closing.
+- dense
+- perfectly assembled
+- rigid
+- premium
+- precise
 
-Keyboard navigation and focus management are mandatory.
+It does not wobble.
 
-## Modals
+It does not feel fragile.
 
-Modals should emerge from the current context.
+It reacts with confidence.
 
-The background may soften slightly, but it must not disappear dramatically.
+Every card in VOLTIS should evoke the same feeling.
 
-Focus must move inside the modal.
+## Inputs
 
-Closing must return focus to the original trigger.
+Inputs should feel precise and reliable.
+
+The user should immediately understand when an input is active.
+
+Focus is communicated through clarity rather than excessive animation.
+
+Typing should never trigger distracting movement.
+
+Validation feedback should be immediate, calm and informative.
+
+Avoid:
+
+- shaking
+- bouncing
+- glowing effects
+- delayed focus
+
+## Dropdowns
+
+## Dropdowns
+
+Dropdowns emerge from their trigger.
+
+They should feel connected to the element that opened them.
+
+Opening reinforces continuity.
+
+Closing feels immediate.
+
+Options should never appear independently from the container.
+
+The user should always perceive a single connected object.
 
 ## Sidebar
 
-The sidebar is part of the application structure.
+## Sidebar
 
-It expands and contracts rather than entering like an external panel.
+The sidebar is structural.
 
-Content should adapt smoothly without unnecessary page-wide movement.
+It never feels like an external panel.
+
+Opening extends the existing layout.
+
+Closing compresses it naturally.
+
+The surrounding interface adapts smoothly.
+
+The sidebar should never dominate the experience.
+
+It supports navigation without demanding attention.
 
 ## Tables
 
-Tables should remain stable.
+## Tables
 
-Sorting, filtering and row updates must not cause decorative movement.
+Tables prioritize stability.
 
-Rows may use subtle transitions only when they help communicate insertion, deletion or status change.
+Sorting, filtering and updates should preserve orientation.
+
+Rows should never jump unexpectedly.
+
+Motion communicates data changes rather than visual style.
+
+Large datasets should remain visually calm.
 
 ## Charts
 
-Chart animation must help the user understand data changes.
+## Charts
 
-Avoid replaying full introductory animations on every filter change.
+Charts tell stories.
 
-Prefer continuity between old and new values.
+Motion helps users understand change.
+
+Animations should follow the evolution of the data.
+
+Charts never replay dramatic entrance animations after every filter change.
+
+Transitions preserve continuity between previous and current values.
+
+Data is always more important than animation.
+
+## Modals
+
+Modals are an extension of the current context.
+
+They should never feel like a new page suddenly appearing.
+
+Opening preserves continuity.
+
+Closing returns the user exactly where they came from.
+
+The background remains recognizable.
+
+Users should never lose orientation.
+
+The modal becomes the temporary focus without disconnecting from the underlying interface.
+
+## Drawers
+
+Drawers extend the workspace.
+
+They reveal additional information without interrupting the workflow.
+
+Opening should feel like expanding available space rather than replacing content.
+
+Closing restores the original workspace naturally.
+
+Drawers should support productivity, not create friction.
 
 ## Notifications
 
-Notifications should appear clearly but quietly.
+Notifications communicate.
 
-They must not cover important controls.
+They never demand attention unnecessarily.
 
-Success feedback should be restrained.
+Success messages should feel reassuring.
 
-Errors must be more visible than success messages.
+Warnings should feel noticeable.
 
-## Drag interactions
+Errors should feel clear without becoming alarming.
 
-Dragged elements must remain connected to the pointer.
+Notifications appear, inform and leave.
 
-Use:
+They should never become visual noise.
 
-- direct tracking
-- restrained scaling
-- edge resistance
-- clear drop targets
+## Tooltips
 
-Avoid:
+Tooltips explain.
 
-- uncontrolled momentum
-- looping
-- large bounce
-- delayed pointer tracking
+They never decorate.
 
-## Page transitions
+A tooltip should answer a question before the user consciously asks it.
 
-Navigation must feel immediate.
+They appear naturally.
 
-Use subtle continuity rather than full-page cinematic transitions.
+They disappear naturally.
 
-Do not animate every element independently.
+They never block interaction.
 
 ## Loading
 
-Loading motion must communicate activity without creating visual noise.
+Loading communicates progress.
 
-Prefer:
+The user should always understand that the system is working.
 
-- stable skeletons
-- subtle progress
-- local loading states
+Whenever possible, prefer local loading instead of blocking the entire interface.
 
-Avoid blocking the entire interface when only one section is loading.
+Skeletons should resemble the final layout.
+
+Loading should reduce uncertainty.
+
+Waiting should feel productive rather than passive.
+
+## Empty States
+
+Empty states guide.
+
+They never punish.
+
+An empty screen should immediately explain:
+
+- why nothing is visible
+- what the user can do next
+- how to create content
+
+Empty states should reduce uncertainty rather than simply stating that nothing exists.
+
+## Page Transitions
+
+Page transitions should preserve the feeling of a single continuous workspace.
+
+Users should never feel that one page disappears and another suddenly appears.
+
+Navigation should feel like moving through different areas of the same environment.
+
+The interface remains familiar.
+
+Only the context changes.
+
+Transitions should improve orientation rather than attract attention.
+
+Users should always understand:
+
+- where they came from
+- where they are
+- what changed
+
+Page transitions should feel invisible.
+
+The user should remember the workflow, not the animation.
+
+## Drag & Drop
+
+Drag interactions should feel physical.
+
+Elements have mass.
+
+They never feel weightless.
+
+Dragged objects remain firmly connected to the pointer while preserving a subtle sense of inertia.
+
+Movement should communicate:
+
+- weight
+- resistance
+- precision
+- confidence
+
+Never:
+
+- bounce
+- overshoot
+- exaggerated elasticity
+- delayed response
+
+Dragging should feel similar to moving a precisely engineered mechanical object.
+
+Users should immediately understand:
+
+- what they are dragging
+- where it can be placed
+- when the action is complete
+
+The interface should always remain predictable.
+
+Drag & Drop should improve confidence rather than create visual entertainment.
+
+## Lists
+
+Lists organize information.
+
+They should communicate structure before content.
+
+Users should immediately understand relationships, hierarchy and order without consciously thinking about them.
+
+Adding, removing or reordering items should preserve orientation.
+
+Motion should help users follow change rather than simply showing that change occurred.
+
+Selection should feel deliberate.
+
+Hover should communicate availability.
+
+Active states should communicate certainty.
+
+Lists should always remain visually calm, even when frequently updated.
+
+Avoid:
+
+- unnecessary movement
+- simultaneous row animations
+- decorative stagger effects
+- excessive spacing changes
+- visual instability
+
+## Search
+
+## Search
+
+Search should feel instantaneous.
+
+The interface should communicate that results are being refined rather than regenerated.
+
+Filtering should preserve context whenever possible.
+
+Results should update smoothly without causing users to lose orientation.
+
+Search should reduce effort.
+
+It should never create uncertainty.
+
+Users should immediately understand:
+
+- what changed
+- why it changed
+- how to restore previous results
+
+Avoid:
+
+- complete interface refreshes
+- dramatic loading animations
+- unnecessary layout shifts
+- abrupt content replacement
+
+## AI
+
+## AI
+
+Artificial Intelligence is an assistant, not the main character.
+
+It should enhance decision-making without replacing user control.
+
+AI should appear when it adds value.
+
+It should remain invisible when it does not.
+
+Suggestions should feel timely, contextual and trustworthy.
+
+The interface should never pressure users into accepting AI recommendations.
+
+Users should always feel in control.
+
+AI communicates with clarity, confidence and restraint.
+
+Avoid:
+
+- excessive notifications
+- intrusive suggestions
+- unnecessary conversation
+- unpredictable behavior
+- exaggerated visual presence
+
+## Error States
+
+## Error States
+
+Errors should reduce stress rather than increase it.
+
+Every error should clearly communicate:
+
+- what happened
+- why it happened, when possible
+- what the user can do next
+
+Visual feedback should be calm, direct and informative.
+
+Errors should never make users feel responsible for system failures.
+
+Whenever possible, offer recovery instead of interruption.
+
+Avoid:
+
+- vague messages
+- technical jargon
+- excessive visual emphasis
+- dead ends

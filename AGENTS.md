@@ -1,3 +1,13 @@
+# VOLTIS AI Instructions
+
+Before implementing any feature or interface modification:
+
+1. Read the documentation inside /references.
+2. Treat every document inside /references as part of the project specification.
+3. Do not introduce new design or motion patterns unless explicitly requested.
+4. If a design decision is not covered by the documentation, propose the most coherent solution and clearly explain why.
+5. Preserve consistency before originality.
+
 ## graphify
 
 This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.

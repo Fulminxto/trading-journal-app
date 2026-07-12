@@ -88,7 +88,7 @@ const manageAccountsLabels: Record<
 
         createdBy: "Creato da",
         system: "Sistema",
-        openAccount: "Apri account",
+        openAccount: "Apri Dashboard",
         balance: "Balance",
         pnl: "PnL",
         trades: "Trade",
@@ -148,7 +148,7 @@ const manageAccountsLabels: Record<
 
         createdBy: "Created by",
         system: "System",
-        openAccount: "Open Account",
+        openAccount: "Open Dashboard",
         balance: "Balance",
         pnl: "PnL",
         trades: "Trades",
@@ -208,7 +208,7 @@ const manageAccountsLabels: Record<
 
         createdBy: "Створено",
         system: "Система",
-        openAccount: "Відкрити акаунт",
+        openAccount: "Відкрити Dashboard",
         balance: "Баланс",
         pnl: "PnL",
         trades: "Угоди",
@@ -268,7 +268,7 @@ const manageAccountsLabels: Record<
 
         createdBy: "Создано",
         system: "Система",
-        openAccount: "Открыть аккаунт",
+        openAccount: "Открыть Dashboard",
         balance: "Баланс",
         pnl: "PnL",
         trades: "Сделки",
@@ -328,7 +328,7 @@ const manageAccountsLabels: Record<
 
         createdBy: "Creado por",
         system: "Sistema",
-        openAccount: "Abrir cuenta",
+        openAccount: "Abrir Dashboard",
         balance: "Balance",
         pnl: "PnL",
         trades: "Trades",
@@ -388,7 +388,7 @@ const manageAccountsLabels: Record<
 
         createdBy: "Créé par",
         system: "Système",
-        openAccount: "Ouvrir le compte",
+        openAccount: "Ouvrir le Dashboard",
         balance: "Balance",
         pnl: "PnL",
         trades: "Trades",
@@ -448,7 +448,7 @@ const manageAccountsLabels: Record<
 
         createdBy: "Erstellt von",
         system: "System",
-        openAccount: "Konto öffnen",
+        openAccount: "Dashboard öffnen",
         balance: "Balance",
         pnl: "PnL",
         trades: "Trades",
@@ -668,7 +668,7 @@ export default async function ManageMyAccountsPage() {
                     </div>
 
                     <a
-                        href={`/accounts/${account.id}`}
+                        href={`/accounts/${account.id}/dashboard`}
                         className="rounded-2xl bg-accent px-4 py-3 text-center text-sm font-black text-white hover:bg-accent-bright"
                     >
                         {t.openAccount}

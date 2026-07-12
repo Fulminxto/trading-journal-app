@@ -14,7 +14,6 @@ import {
   Target,
   TrendingUp,
   Upload,
-  User,
   Wallet,
   type LucideIcon,
 } from "lucide-react";
@@ -28,7 +27,6 @@ import {
   formatDateByLanguage,
   formatDateTimeByLanguage,
   normalizeAppLanguage,
-  type AppLanguage,
 } from "@/lib/i18n";
 import { prisma } from "@/lib/prisma";
 import ChangePasswordForm from "./ChangePasswordForm";
@@ -645,7 +643,7 @@ export default async function ProfilePage({
                 user.memberships.map((membership) => (
                   <Link
                     key={membership.id}
-                    href={`/accounts/${membership.tradingAccount.id}`}
+                    href={`/accounts/${membership.tradingAccount.id}/dashboard`}
                     className="block rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4 transition-all duration-base hover:-translate-y-0.5 hover:border-accent-bright/40"
                   >
                     <div className="flex items-center justify-between gap-4">

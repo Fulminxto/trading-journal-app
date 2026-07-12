@@ -27,7 +27,7 @@ const activityLabels: Record<AppLanguage, ActivityLabels> = {
         description:
             "Cronologia intelligente delle attività legate ai tuoi account, trade e permessi.",
         changes: "Modifiche",
-        openAccount: "Apri account",
+        openAccount: "Apri Dashboard",
         emptyState: "Nessuna attività registrata per ora.",
         enabled: "Attivo",
         disabled: "Disattivo",
@@ -40,7 +40,7 @@ const activityLabels: Record<AppLanguage, ActivityLabels> = {
         description:
             "Intelligent timeline of activities related to your accounts, trades and permissions.",
         changes: "Changes",
-        openAccount: "Open Account",
+        openAccount: "Open Dashboard",
         emptyState: "No activity recorded yet.",
         enabled: "Enabled",
         disabled: "Disabled",
@@ -53,7 +53,7 @@ const activityLabels: Record<AppLanguage, ActivityLabels> = {
         description:
             "Інтелектуальна хронологія дій, пов’язаних із вашими акаунтами, угодами та дозволами.",
         changes: "Зміни",
-        openAccount: "Відкрити акаунт",
+        openAccount: "Відкрити Dashboard",
         emptyState: "Поки що немає зареєстрованої активності.",
         enabled: "Увімкнено",
         disabled: "Вимкнено",
@@ -66,7 +66,7 @@ const activityLabels: Record<AppLanguage, ActivityLabels> = {
         description:
             "Интеллектуальная хронология действий, связанных с вашими аккаунтами, сделками и разрешениями.",
         changes: "Изменения",
-        openAccount: "Открыть аккаунт",
+        openAccount: "Открыть Dashboard",
         emptyState: "Пока нет зарегистрированной активности.",
         enabled: "Включено",
         disabled: "Отключено",
@@ -79,7 +79,7 @@ const activityLabels: Record<AppLanguage, ActivityLabels> = {
         description:
             "Cronología inteligente de actividades relacionadas con tus cuentas, trades y permisos.",
         changes: "Cambios",
-        openAccount: "Abrir cuenta",
+        openAccount: "Abrir Dashboard",
         emptyState: "Aún no hay actividad registrada.",
         enabled: "Activado",
         disabled: "Desactivado",
@@ -92,7 +92,7 @@ const activityLabels: Record<AppLanguage, ActivityLabels> = {
         description:
             "Chronologie intelligente des activités liées à vos comptes, trades et permissions.",
         changes: "Modifications",
-        openAccount: "Ouvrir le compte",
+        openAccount: "Ouvrir le Dashboard",
         emptyState: "Aucune activité enregistrée pour le moment.",
         enabled: "Activé",
         disabled: "Désactivé",
@@ -105,7 +105,7 @@ const activityLabels: Record<AppLanguage, ActivityLabels> = {
         description:
             "Intelligente Chronologie der Aktivitäten rund um deine Konten, Trades und Berechtigungen.",
         changes: "Änderungen",
-        openAccount: "Konto öffnen",
+        openAccount: "Dashboard öffnen",
         emptyState: "Noch keine Aktivität aufgezeichnet.",
         enabled: "Aktiviert",
         disabled: "Deaktiviert",
@@ -349,7 +349,7 @@ export default async function ActivitiesPage() {
 
                                     {activity.accountId && (
                                         <Link
-                                            href={`/accounts/${activity.accountId}`}
+                                            href={`/accounts/${activity.accountId}/dashboard`}
                                             className="rounded-xl bg-white/10 px-4 py-3 text-sm font-semibold hover:bg-white/20"
                                         >
                                             {t.openAccount}

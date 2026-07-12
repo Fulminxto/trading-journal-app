@@ -1,55 +1,103 @@
 # VOLTIS Motion Review Checklist
 
-Use this checklist before approving a component or page.
+This checklist must be completed before considering any interface implementation finished.
 
-## Purpose
+Passing the build is not enough.
 
-- [ ] Does every animation communicate something?
-- [ ] Does the motion improve understanding or feedback?
-- [ ] Would removing it make the experience worse?
+The experience must also pass the VOLTIS Design Review.
 
-## Brand coherence
+## Identity
 
-- [ ] Does it feel precise?
-- [ ] Does it feel controlled?
-- [ ] Does it feel solid?
-- [ ] Does it avoid playful or theatrical behaviour?
-- [ ] Is it consistent with nearby components?
+- [ ] Does this feel like VOLTIS?
+- [ ] Does it reinforce the product identity?
+- [ ] Does it communicate professionalism?
+- [ ] Does it feel premium without trying to appear premium?
+- [ ] Does it remain unique without copying existing products?
 
-## Interaction
+## Motion
 
-- [ ] Is feedback immediate?
-- [ ] Can the user interact without waiting?
-- [ ] Does the element remain connected to its origin?
-- [ ] Are opening and closing behaviours coherent?
-- [ ] Are drag interactions connected to the pointer?
+- [ ] Every animation has a purpose.
+- [ ] Motion improves understanding.
+- [ ] Motion improves orientation.
+- [ ] Motion improves feedback.
+- [ ] Motion never distracts from content.
+- [ ] Motion never delays interaction.
+- [ ] Motion feels physically believable.
+- [ ] Motion feels controlled.
+- [ ] Motion feels refined.
+
+## Components
+
+- [ ] Buttons feel mechanical.
+- [ ] Cards feel solid.
+- [ ] Dropdowns preserve continuity.
+- [ ] Sidebar feels structural.
+- [ ] Tables remain stable.
+- [ ] Charts prioritize data.
+- [ ] Modals preserve context.
+- [ ] Loading reduces uncertainty.
+- [ ] Empty states guide users.
+
+## User Experience
+
+- [ ] The workflow became easier.
+- [ ] The interface feels faster.
+- [ ] The user never loses orientation.
+- [ ] The interaction is immediately understandable.
+- [ ] The experience feels effortless.
 
 ## Accessibility
 
-- [ ] Is keyboard navigation supported?
-- [ ] Is focus visible?
-- [ ] Does Escape work where expected?
-- [ ] Is focus restored after closing?
-- [ ] Is reduced motion supported?
+- [ ] Keyboard navigation works.
+- [ ] Focus remains visible.
+- [ ] Reduced Motion is respected.
+- [ ] Screen reader behavior is preserved.
+- [ ] Contrast remains correct.
 
 ## Performance
 
-- [ ] Does the motion remain smooth?
-- [ ] Does it avoid unnecessary blur and shadows?
-- [ ] Does it avoid large layout recalculations?
-- [ ] Does it behave well on mobile?
-- [ ] Does it work with realistic amounts of data?
+- [ ] No unnecessary layout shifts.
+- [ ] No unnecessary repaint.
+- [ ] No unnecessary reflow.
+- [ ] Motion remains smooth.
+- [ ] Mobile performance remains excellent.
 
-## Restraint
+## Design Quality
 
-- [ ] Is the movement amplitude small enough?
-- [ ] Is the animation short enough?
-- [ ] Is bounce absent unless explicitly justified?
-- [ ] Are simultaneous animations limited?
-- [ ] Does content remain more important than motion?
+Score each category from 1 to 10.
 
-## Final decision
+| Category | Score |
+|----------|------:|
+| Visual Quality | |
+| Motion Quality | |
+| Premium Feeling | |
+| Physical Believability | |
+| Consistency | |
+| Craftsmanship | |
+| Responsiveness | |
+| Accessibility | |
+| Performance | |
 
-- [ ] Approved
-- [ ] Needs refinement
-- [ ] Remove motion
+The implementation should not be considered complete if any category scores below 9.
+
+## Final Questions
+
+Before approving the implementation, ask:
+
+- [ ] Would this still feel premium after one thousand interactions?
+- [ ] Does this strengthen the VOLTIS identity?
+- [ ] Would removing the animation make the experience worse?
+- [ ] Is this the simplest solution that achieves the objective?
+- [ ] Would I proudly use this interaction every day?
+
+## Approval
+
+The implementation is approved only if:
+
+- functionality is complete
+- design is coherent
+- motion follows the Motion Language
+- the Design Dictionary has been respected
+- the Physical Language is preserved
+- the overall experience feels unmistakably like VOLTIS
+
