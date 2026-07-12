@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import { redirect } from "next/navigation";
 import {
   Activity,
-  CheckCircle2,
   LockKeyhole,
   Save,
   ShieldCheck,
@@ -26,6 +25,7 @@ import {
   type AppLanguage,
 } from "@/lib/i18n";
 import { saveTradingGoals } from "./actions";
+import RulesStandardsLink from "@/components/rules/RulesStandardsLink";
 
 type Standard = {
   key: string;
@@ -89,6 +89,31 @@ function formatMonthLabel(date: Date, language: AppLanguage) {
   }).format(date);
 }
 
+function getCurrencySymbol(currency: string, language: AppLanguage) {
+  return (
+    new Intl.NumberFormat(getLocaleFromLanguage(language), {
+      style: "currency",
+      currency,
+      currencyDisplay: "narrowSymbol",
+    })
+      .formatToParts(0)
+      .find((part) => part.type === "currency")?.value ?? currency
+  );
+}
+
+function isConfiguredStandard(
+  value: unknown,
+  { min, max, integer = false }: { min: number; max: number; integer?: boolean }
+) {
+  return (
+    typeof value === "number" &&
+    Number.isFinite(value) &&
+    value >= min &&
+    value <= max &&
+    (!integer || Number.isInteger(value))
+  );
+}
+
 function clampPercent(value: number) {
   if (!Number.isFinite(value)) return 0;
   return Math.min(Math.max(value, 0), 100);
@@ -100,42 +125,19 @@ function getMetricTone(value: number) {
   return "text-muted";
 }
 
-function getStandardState({
-  configured,
-  breached,
-  met,
-}: {
-  configured: boolean;
-  breached?: boolean;
-  met?: boolean;
-}) {
-  if (!configured) {
-    return { label: "Not set", tone: "neutral" as const };
-  }
-
-  if (breached) {
-    return { label: "Breached", tone: "warning" as const };
-  }
-
-  if (met) {
-    return { label: "Met", tone: "positive" as const };
-  }
-
-  return { label: "Active", tone: "info" as const };
-}
-
 function StatusPill({
   children,
   tone = "neutral",
 }: {
   children: ReactNode;
-  tone?: "neutral" | "info" | "positive" | "warning";
+  tone?: "neutral" | "info" | "positive" | "warning" | "negative";
 }) {
   const tones = {
     neutral: "border-flash/[0.12] bg-surface-2 text-muted",
     info: "border-accent-bright/25 bg-accent-bright/[0.08] text-accent-bright",
     positive: "border-positive/25 bg-positive/[0.08] text-positive",
     warning: "border-warning/25 bg-warning/[0.08] text-warning",
+    negative: "border-negative/25 bg-negative/[0.08] text-negative",
   };
 
   return (
@@ -168,21 +170,6 @@ function SectionHeader({
         <h2 className="mt-2 text-section text-flash">{title}</h2>
       </div>
       {children}
-    </div>
-  );
-}
-
-function EmptyState({
-  title,
-  description,
-}: {
-  title: string;
-  description: string;
-}) {
-  return (
-    <div className="rounded-inner border-[0.5px] border-dashed border-flash/[0.12] bg-surface-2 p-5">
-      <p className="text-body font-medium text-flash">{title}</p>
-      <p className="mt-2 text-caption text-muted">{description}</p>
     </div>
   );
 }
@@ -245,27 +232,50 @@ function FormField({
   placeholder,
   defaultValue,
   step,
+  prefix,
+  suffix,
 }: {
   name: string;
   label: string;
   placeholder: string;
   defaultValue: number | string;
   step?: string;
+  prefix?: string;
+  suffix?: string;
 }) {
+  const inputId = `rules-${name}`;
+  const unitId = `${inputId}-unit`;
+
   return (
-    <label className="block">
-      <span className="text-micro uppercase tracking-label text-muted-faint">
+    <div>
+      <label htmlFor={inputId} className="text-micro uppercase tracking-label text-muted-faint">
         {label}
-      </span>
-      <input
-        name={name}
-        type="number"
-        step={step}
-        placeholder={placeholder}
-        defaultValue={defaultValue}
-        className="mt-2 w-full rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-2 px-4 py-3 text-sm text-white outline-none transition-all duration-base placeholder:text-muted-faint focus:border-accent-bright/45 focus:ring-2 focus:ring-accent-bright/10"
-      />
-    </label>
+      </label>
+      <div className="relative mt-2">
+        {prefix && (
+          <span id={unitId} className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-sm text-muted">
+            {prefix}
+          </span>
+        )}
+        <input
+          id={inputId}
+          name={name}
+          type="number"
+          step={step}
+          placeholder={placeholder}
+          defaultValue={defaultValue}
+          aria-describedby={prefix || suffix ? unitId : undefined}
+          className={`w-full rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-2 py-3 text-sm text-white outline-none transition-all duration-base placeholder:text-muted-faint focus:border-accent-bright/45 focus:ring-2 focus:ring-accent-bright/10 ${
+            prefix ? "pl-10 pr-4" : suffix ? "pl-4 pr-10" : "px-4"
+          }`}
+        />
+        {suffix && (
+          <span id={unitId} className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-sm text-muted">
+            {suffix}
+          </span>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -315,6 +325,7 @@ export default async function RulesPage({
   const language = normalizeAppLanguage(currentUser.appLanguage);
   const account = membership.tradingAccount;
   const currency = account.currency || "USD";
+  const currencySymbol = getCurrencySymbol(currency, language);
 
   const now = new Date();
   const month = now.getMonth();
@@ -393,100 +404,130 @@ export default async function RulesPage({
   const monthlyWinRateGoal = goal?.monthlyWinRateGoal ?? null;
   const maxDrawdownLimit = goal?.maxDrawdownLimit ?? null;
   const maxTradesPerDay = goal?.maxTradesPerDay ?? null;
-  const configuredStandards = [
-    monthlyProfitGoal,
-    monthlyWinRateGoal,
-    maxDrawdownLimit,
-    maxTradesPerDay,
-  ].filter((value) => value !== null).length;
-  const hasTrades = trades.length > 0;
-  const hasAnyStandard = configuredStandards > 0;
+  const standardConfiguration = {
+    profit: isConfiguredStandard(monthlyProfitGoal, {
+      min: -100000000,
+      max: 100000000,
+    }),
+    winRate: isConfiguredStandard(monthlyWinRateGoal, { min: 0, max: 100 }),
+    drawdown: isConfiguredStandard(maxDrawdownLimit, { min: 0, max: 100 }),
+    frequency: isConfiguredStandard(maxTradesPerDay, {
+      min: 0,
+      max: 1000,
+      integer: true,
+    }),
+  };
+  const configuredStandardsCount = Object.values(
+    standardConfiguration
+  ).filter(Boolean).length;
+  const configuredMonthlyProfitGoal = standardConfiguration.profit
+    ? (monthlyProfitGoal as number)
+    : null;
+  const configuredMonthlyWinRateGoal = standardConfiguration.winRate
+    ? (monthlyWinRateGoal as number)
+    : null;
+  const configuredMaxDrawdownLimit = standardConfiguration.drawdown
+    ? (maxDrawdownLimit as number)
+    : null;
+  const configuredMaxTradesPerDay = standardConfiguration.frequency
+    ? (maxTradesPerDay as number)
+    : null;
+  const hasAnyStandard = configuredStandardsCount > 0;
 
   const profitProgress =
-    monthlyProfitGoal && monthlyProfitGoal !== 0
-      ? (totalPnl / monthlyProfitGoal) * 100
+    configuredMonthlyProfitGoal !== null && configuredMonthlyProfitGoal !== 0
+      ? (totalPnl / configuredMonthlyProfitGoal) * 100
       : null;
   const winRateProgress =
-    monthlyWinRateGoal && winRate !== null
-      ? (winRate / monthlyWinRateGoal) * 100
+    configuredMonthlyWinRateGoal !== null && configuredMonthlyWinRateGoal !== 0 && winRate !== null
+      ? (winRate / configuredMonthlyWinRateGoal) * 100
       : null;
   const drawdownUsage =
-    maxDrawdownLimit && maxDrawdown !== null
-      ? (maxDrawdown / maxDrawdownLimit) * 100
+    configuredMaxDrawdownLimit !== null && configuredMaxDrawdownLimit !== 0 && maxDrawdown !== null
+      ? (maxDrawdown / configuredMaxDrawdownLimit) * 100
       : null;
   const tradeLimitUsage =
-    maxTradesPerDay && busiestDayTrades !== null
-      ? (busiestDayTrades / maxTradesPerDay) * 100
+    configuredMaxTradesPerDay !== null && configuredMaxTradesPerDay !== 0 && busiestDayTrades !== null
+      ? (busiestDayTrades / configuredMaxTradesPerDay) * 100
       : null;
 
-  const profitState = getStandardState({
-    configured: monthlyProfitGoal !== null,
-    met: monthlyProfitGoal !== null && totalPnl >= monthlyProfitGoal,
-  });
-  const winRateState = getStandardState({
-    configured: monthlyWinRateGoal !== null,
-    met:
-      monthlyWinRateGoal !== null &&
-      winRate !== null &&
-      winRate >= monthlyWinRateGoal,
-  });
-  const drawdownState = getStandardState({
-    configured: maxDrawdownLimit !== null,
-    breached:
-      maxDrawdownLimit !== null &&
-      maxDrawdown !== null &&
-      maxDrawdown > maxDrawdownLimit,
-  });
-  const frequencyState = getStandardState({
-    configured: maxTradesPerDay !== null,
-    breached:
-      maxTradesPerDay !== null &&
-      busiestDayTrades !== null &&
-      busiestDayTrades > maxTradesPerDay,
-  });
+  const profitState = !standardConfiguration.profit
+    ? { label: "No standard", tone: "neutral" as const }
+    : totalPnl >= configuredMonthlyProfitGoal!
+      ? { label: "Target reached", tone: "positive" as const }
+      : { label: "Below target", tone: "warning" as const };
+  const winRateState = winRate === null
+    ? { label: "Not measured", tone: "neutral" as const }
+    : !standardConfiguration.winRate
+      ? { label: "No standard", tone: "neutral" as const }
+      : winRate >= configuredMonthlyWinRateGoal!
+        ? { label: "Standard met", tone: "positive" as const }
+        : { label: "Below standard", tone: "negative" as const };
+  const drawdownState = maxDrawdown === null
+    ? { label: "Not measured", tone: "neutral" as const }
+    : !standardConfiguration.drawdown
+      ? { label: "No boundary", tone: "neutral" as const }
+      : maxDrawdown >= configuredMaxDrawdownLimit!
+        ? { label: "Breached", tone: "negative" as const }
+        : { label: "Within limit", tone: "positive" as const };
+  const frequencyState = busiestDayTrades === null
+    ? { label: "Not measured", tone: "neutral" as const }
+    : !standardConfiguration.frequency
+      ? { label: "No cap", tone: "neutral" as const }
+      : busiestDayTrades > configuredMaxTradesPerDay!
+        ? { label: "Breached", tone: "negative" as const }
+        : busiestDayTrades === configuredMaxTradesPerDay
+          ? { label: "Cap reached", tone: "warning" as const }
+          : { label: "Within cap", tone: "positive" as const };
+  const controlAssessment =
+    configuredStandardsCount === 0
+      ? { label: "Unassessed", tone: "neutral" as const }
+      : configuredStandardsCount < 4
+        ? { label: "Partially assessed", tone: "warning" as const }
+        : { label: "Measured", tone: "info" as const };
 
   const standards: Standard[] = [
     {
       key: "profit",
       label: "Monthly profit standard",
       value:
-        monthlyProfitGoal !== null
-          ? formatCurrencyByLanguage(monthlyProfitGoal, currency, language)
+        standardConfiguration.profit
+          ? formatCurrencyByLanguage(configuredMonthlyProfitGoal!, currency, language)
           : "Not set",
       detail: "Defines what counts as enough for the month.",
       icon: TrendingUp,
-      configured: monthlyProfitGoal !== null,
+      configured: standardConfiguration.profit,
     },
     {
       key: "win-rate",
       label: "Win-rate standard",
       value:
-        monthlyWinRateGoal !== null
-          ? formatPercent(monthlyWinRateGoal, language)
+        standardConfiguration.winRate
+          ? formatPercent(configuredMonthlyWinRateGoal!, language)
           : "Not set",
       detail: "Sets the minimum quality bar for closed trades.",
       icon: Target,
-      configured: monthlyWinRateGoal !== null,
+      configured: standardConfiguration.winRate,
     },
     {
       key: "drawdown",
       label: "Drawdown boundary",
       value:
-        maxDrawdownLimit !== null
-          ? formatPercent(maxDrawdownLimit, language)
+        standardConfiguration.drawdown
+          ? formatPercent(configuredMaxDrawdownLimit!, language)
           : "Not set",
       detail: "Marks when protection overrides activity.",
       icon: ShieldCheck,
-      configured: maxDrawdownLimit !== null,
+      configured: standardConfiguration.drawdown,
     },
     {
       key: "frequency",
       label: "Daily frequency cap",
       value:
-        maxTradesPerDay !== null ? String(maxTradesPerDay) : "Not set",
+        standardConfiguration.frequency ? String(configuredMaxTradesPerDay) : "Not set",
       detail: "Limits the most common path into overtrading.",
       icon: Activity,
-      configured: maxTradesPerDay !== null,
+      configured: standardConfiguration.frequency,
     },
   ];
 
@@ -511,7 +552,7 @@ export default async function RulesPage({
             <div className="flex flex-wrap items-center gap-3">
               <StatusPill tone="info">{account.name}</StatusPill>
               <StatusPill>{monthLabel}</StatusPill>
-              <StatusPill tone={hasAnyStandard ? "info" : "warning"}>
+              <StatusPill tone={hasAnyStandard ? "info" : "neutral"}>
                 {hasAnyStandard ? "Rulebook active" : "Standards missing"}
               </StatusPill>
             </div>
@@ -524,6 +565,9 @@ export default async function RulesPage({
               contract and shows only whether the current month is respecting
               that contract.
             </p>
+            {configuredStandardsCount > 0 && configuredStandardsCount < 4 && (
+              <RulesStandardsLink className="mt-5 inline-flex min-h-11 items-center justify-center rounded-inner border-[0.5px] border-accent-bright/30 bg-accent-bright/[0.08] px-4 py-2.5 text-sm font-semibold text-accent-bright transition-colors duration-fast hover:bg-accent-bright/[0.14] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/50" />
+            )}
           </div>
 
           <div className="space-y-4">
@@ -533,40 +577,47 @@ export default async function RulesPage({
                   Standards configured
                 </p>
                 <p className="text-body font-medium text-flash">
-                  {configuredStandards}/4
+                  {configuredStandardsCount}/4
                 </p>
               </div>
-              <ProgressBar value={(configuredStandards / 4) * 100} />
+              <ProgressBar value={(configuredStandardsCount / 4) * 100} />
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div>
               <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
                 <p className="text-micro uppercase tracking-label text-muted-faint">
-                  Month sample
+                  Current month sample
                 </p>
                 <p className="mt-2 text-body text-flash">
-                  {hasTrades ? `${trades.length} trades` : "No trades yet"}
+                  {trades.length} {trades.length === 1 ? "trade" : "trades"}
                 </p>
-              </div>
-              <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
-                <p className="text-micro uppercase tracking-label text-muted-faint">
-                  Permission
-                </p>
-                <p className="mt-2 text-body text-flash">Server gated</p>
               </div>
             </div>
           </div>
         </div>
       </Card>
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {standards.map((standard) => (
-          <StandardCard key={standard.key} standard={standard} />
-        ))}
-      </section>
+      {configuredStandardsCount === 0 ? (
+        <Card className="p-6">
+          <p className="text-micro uppercase tracking-label text-accent-bright">
+            Operating standards
+          </p>
+          <h2 className="mt-3 text-section text-flash">No standards configured</h2>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-muted">
+            Set a monthly profit target, win-rate goal, drawdown boundary and daily trade cap.
+          </p>
+          <RulesStandardsLink className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-inner border-[0.5px] border-accent-bright/30 bg-accent-bright/[0.08] px-4 py-2.5 text-sm font-semibold text-accent-bright transition-colors duration-fast hover:bg-accent-bright/[0.14] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/50 sm:w-auto" />
+        </Card>
+      ) : (
+        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {standards.map((standard) => (
+            <StandardCard key={standard.key} standard={standard} />
+          ))}
+        </section>
+      )}
 
       <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-        <Card>
+        <Card id="set-the-rulebook" className="scroll-mt-6">
           <SectionHeader eyebrow="Execution standards" title="Set the rulebook">
             <StatusPill tone="info">Current month</StatusPill>
           </SectionHeader>
@@ -581,6 +632,7 @@ export default async function RulesPage({
               placeholder="Example: 2500"
               defaultValue={monthlyProfitGoal ?? ""}
               step="0.01"
+              prefix={currencySymbol}
             />
             <FormField
               name="monthlyWinRateGoal"
@@ -588,6 +640,7 @@ export default async function RulesPage({
               placeholder="Example: 55"
               defaultValue={monthlyWinRateGoal ?? ""}
               step="0.01"
+              suffix="%"
             />
             <FormField
               name="maxDrawdownLimit"
@@ -595,6 +648,7 @@ export default async function RulesPage({
               placeholder="Example: 5"
               defaultValue={maxDrawdownLimit ?? ""}
               step="0.01"
+              suffix="%"
             />
             <FormField
               name="maxTradesPerDay"
@@ -641,18 +695,12 @@ export default async function RulesPage({
 
       <section className="space-y-5">
         <SectionHeader eyebrow="Monthly enforcement" title="Current control signals">
-          <StatusPill tone={hasTrades ? "info" : "neutral"}>
-            {hasTrades ? "Measured" : "Waiting for trades"}
+          <StatusPill tone={controlAssessment.tone}>
+            {controlAssessment.label}
           </StatusPill>
         </SectionHeader>
 
-        {!hasTrades ? (
-          <EmptyState
-            title="No current-month trades"
-            description="Control signals will remain limited until real trades exist for this month."
-          />
-        ) : (
-          <div className="grid gap-4 xl:grid-cols-4">
+        <div className="grid gap-4 xl:grid-cols-4">
             <Card className="p-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
@@ -678,7 +726,9 @@ export default async function RulesPage({
                 </>
               ) : (
                 <p className="mt-4 text-caption text-muted">
-                  No monthly profit standard is configured.
+                  {standardConfiguration.profit
+                    ? `Configured standard: ${formatCurrencyByLanguage(configuredMonthlyProfitGoal!, currency, language)}.`
+                    : "No monthly profit standard is configured."}
                 </p>
               )}
             </Card>
@@ -706,12 +756,17 @@ export default async function RulesPage({
                     tone={winRateProgress >= 100 ? "positive" : "info"}
                   />
                   <p className="mt-3 text-caption text-muted">
-                    Based on {closedTrades.length} closed trades.
+                    Based on {closedTrades.length} closed{" "}
+                    {closedTrades.length === 1 ? "trade" : "trades"}.
                   </p>
                 </>
               ) : (
                 <p className="mt-4 text-caption text-muted">
-                  Add closed trades and a win-rate standard to measure this.
+                  {winRate === null
+                    ? "No closed trades are available to measure win rate."
+                    : standardConfiguration.winRate
+                      ? `Configured standard: ${formatPercent(configuredMonthlyWinRateGoal!, language)}.`
+                      : "No win-rate standard is configured."}
                 </p>
               )}
             </Card>
@@ -724,14 +779,14 @@ export default async function RulesPage({
                   </p>
                   <p
                     className={`mt-3 text-metric ${
-                      drawdownState.tone === "warning"
-                        ? "text-warning"
+                      drawdownState.tone === "negative"
+                        ? "text-negative"
                         : "text-flash"
                     }`}
                   >
-                    {drawdownUsage !== null
-                      ? formatPercent(drawdownUsage, language)
-                      : "Not set"}
+                    {maxDrawdown !== null
+                      ? formatPercent(maxDrawdown, language)
+                      : "Not measured"}
                   </p>
                 </div>
                 <StatusPill tone={drawdownState.tone}>
@@ -742,7 +797,7 @@ export default async function RulesPage({
                 <>
                   <ProgressBar
                     value={drawdownUsage}
-                    tone={drawdownUsage > 100 ? "warning" : "info"}
+                    tone={drawdownUsage >= 100 ? "negative" : "info"}
                   />
                   <p className="mt-3 text-caption text-muted">
                     Current max drawdown:{" "}
@@ -754,7 +809,9 @@ export default async function RulesPage({
                 </>
               ) : (
                 <p className="mt-4 text-caption text-muted">
-                  No drawdown boundary is configured.
+                  {standardConfiguration.drawdown
+                    ? `Configured boundary: ${formatPercent(configuredMaxDrawdownLimit!, language)}.`
+                    : "No drawdown boundary is configured."}
                 </p>
               )}
             </Card>
@@ -767,14 +824,16 @@ export default async function RulesPage({
                   </p>
                   <p
                     className={`mt-3 text-metric ${
-                      frequencyState.tone === "warning"
-                        ? "text-warning"
-                        : "text-flash"
+                      frequencyState.tone === "negative"
+                        ? "text-negative"
+                        : frequencyState.tone === "warning"
+                          ? "text-warning"
+                          : "text-flash"
                     }`}
                   >
-                    {tradeLimitUsage !== null
-                      ? formatPercent(tradeLimitUsage, language)
-                      : "Not set"}
+                    {busiestDayTrades !== null
+                      ? String(busiestDayTrades)
+                      : "Not measured"}
                   </p>
                 </div>
                 <StatusPill tone={frequencyState.tone}>
@@ -785,20 +844,28 @@ export default async function RulesPage({
                 <>
                   <ProgressBar
                     value={tradeLimitUsage}
-                    tone={tradeLimitUsage > 100 ? "warning" : "info"}
+                    tone={
+                      tradeLimitUsage > 100
+                        ? "negative"
+                        : tradeLimitUsage === 100
+                          ? "warning"
+                          : "info"
+                    }
                   />
                   <p className="mt-3 text-caption text-muted">
-                    Busiest day: {busiestDayTrades ?? 0} trades.
+                    Busiest day: {busiestDayTrades ?? 0}{" "}
+                    {busiestDayTrades === 1 ? "trade" : "trades"}.
                   </p>
                 </>
               ) : (
                 <p className="mt-4 text-caption text-muted">
-                  No daily trade frequency cap is configured.
+                  {standardConfiguration.frequency
+                    ? `Configured cap: ${configuredMaxTradesPerDay} trades per day.`
+                    : "No daily trade frequency cap is configured."}
                 </p>
               )}
             </Card>
-          </div>
-        )}
+        </div>
       </section>
 
       <Card className="p-5">
@@ -809,17 +876,15 @@ export default async function RulesPage({
             </div>
             <div>
               <p className="text-body font-medium text-flash">
-                Rules are protected by account permissions.
+                Account-protected standards
               </p>
               <p className="mt-1 text-caption text-muted">
-                This page uses the existing server-side manager/account-control
-                gate, and the save action validates the same permissions again.
+                Only authorized members can update the operating rules.
               </p>
             </div>
           </div>
           <StatusPill tone="info">
-            <CheckCircle2 size={13} className="mr-2" />
-            Server enforced
+            Protected
           </StatusPill>
         </div>
       </Card>

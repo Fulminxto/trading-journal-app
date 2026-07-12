@@ -7,12 +7,9 @@ import {
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 import {
-  BrainCircuit,
   Database,
   FileText,
-  MessageSquareText,
   Radar,
-  Route,
   ShieldAlert,
   Sparkles,
   type LucideIcon,
@@ -21,9 +18,9 @@ import {
 import Card from "@/components/ui/Card";
 import SignatureEdge from "@/components/ui/SignatureEdge";
 import CopilotConversationCard from "@/components/copilot/CopilotConversationCard";
+import CopilotMemorySystem from "@/components/copilot/CopilotMemorySystem";
 import { buildCopilotSystem } from "@/lib/copilot";
 import { analyzeCopilotMemory } from "@/lib/copilot/copilot-memory";
-import { generateAnalysis } from "./actions";
 import {
   getArrayCount,
   getCopilotLabels,
@@ -145,7 +142,7 @@ function MetricCard({
   const toneClasses = getToneClasses(tone);
 
   return (
-    <Card interactive className="p-5">
+    <Card className="p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted-faint">
@@ -407,10 +404,6 @@ export default async function CopilotPage({
       ? "danger"
       : "neutral";
 
-  const contextDescription = !hasContext
-    ? "Copilot is using deterministic account rules, but the sample is still small. It will not produce strategic conclusions until more trades are logged."
-    : "Copilot is running server-side rules, pattern memory, review notes, and structured prompts from your account data.";
-
   const promptExamples = [
     "What should I review before the next session?",
     "Where is my execution quality deteriorating?",
@@ -424,8 +417,7 @@ export default async function CopilotPage({
         variant="hero"
         className={`${pageDensity.copilot.hero} ${pageDensity.topbarSafeArea}`}
       >
-        <div className={`grid ${pageDensity.copilot.sectionGrid} xl:grid-cols-[1fr_360px] xl:items-end`}>
-          <div>
+        <div>
             <div className="flex flex-wrap items-center gap-3">
               <SignatureEdge orientation="vertical" className="h-4" />
               <p className="text-sm text-muted">
@@ -445,51 +437,28 @@ export default async function CopilotPage({
             </h1>
 
             <p className="mt-2 max-w-3xl text-sm text-muted">
-              Use AI to review performance, uncover patterns and improve decision making.
+              Review recorded account evidence, operating rules, and retained context without market predictions.
             </p>
-          </div>
-
-          <Card variant="inner" className="p-5">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted-faint">
-                  Engine status
-                </p>
-                <p className="mt-3 text-2xl font-black text-accent-bright">
-                  Rule based
-                </p>
-              </div>
-              <BrainCircuit className="text-accent-bright" size={24} />
-            </div>
-
-            <p className="mt-4 text-sm leading-6 text-muted">
-              {contextDescription}
-            </p>
-          </Card>
         </div>
       </Card>
 
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <MetricCard
-          label={t.common.totalTrades}
-          value={String(totalTrades)}
-          description={
-            hasContext
-              ? "Enough trade history is available for structured account signals."
-              : "Small sample. Copilot will keep conclusions conservative."
-          }
+          label="Evidence base"
+          value={`${totalTrades} ${totalTrades === 1 ? "trade" : "trades"}`}
+          description="Recorded trades available to the operating engine."
           icon={Database}
           tone={hasContext ? "neutral" : "warning"}
         />
 
         <MetricCard
-          label={t.common.behavioralRisk}
+          label="Decision readiness"
           value={
             hasContext
               ? getCopilotStatusLabel(riskLabel, t) || riskLabel
               : "Not ready"
           }
-          description="Behavioral status is derived from weak execution, low confidence, and emotional trade markers."
+          description="Whether the current sample supports reliable operating conclusions."
           icon={Radar}
           tone={
             !hasContext
@@ -503,9 +472,9 @@ export default async function CopilotPage({
         />
 
         <MetricCard
-          label={t.common.activeMemories}
+          label="Active memories"
           value={String(copilotMemories.length)}
-          description="Persistent memory contains recurring account patterns created by server-side analysis."
+          description="Retained observations and account context."
           icon={FileText}
           tone={
             copilotMemories.length > 0
@@ -515,121 +484,80 @@ export default async function CopilotPage({
         />
 
         <MetricCard
-          label={t.common.signals}
+          label="Open signals"
           value={String(protectionSignals)}
-          description="Protection signals include critical/high patterns and current risk supervision triggers."
+          description="Current operational observations requiring attention."
           icon={ShieldAlert}
           tone={
             protectionSignals > 0
               ? "danger"
-              : "good"
+              : "neutral"
           }
         />
       </section>
 
-      <section className={`grid ${pageDensity.copilot.sectionGrid} xl:grid-cols-[1.15fr_0.85fr]`}>
-        <Card className={pageDensity.copilot.panel}>
-          <SectionHeader
-            eyebrow="Structured prompts"
-            title="Ask for operating decisions, not market predictions"
-            description="These prompts route the assistant toward review, risk, discipline, and process. They avoid unsupported forecasting and keep the system inside account data."
-          />
-
-          <div className={`mt-6 grid ${pageDensity.copilot.promptGrid} md:grid-cols-2`}>
-            {promptExamples.map((prompt) => (
-              <Card key={prompt} variant="inner" className="p-4">
-                <div className="flex items-start gap-3">
-                  <MessageSquareText
-                    className="mt-0.5 text-accent-bright"
-                    size={17}
-                  />
-                  <p className="text-sm leading-6 text-gray-300">
-                    {prompt}
-                  </p>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </Card>
-
-        <Card className={pageDensity.copilot.panel}>
-          <SectionHeader
-            eyebrow="Current directive"
-            title={
-              hasContext
-                ? getCopilotStatusLabel(adaptiveCoaching.mode, t) ||
-                  adaptiveCoaching.mode
-                : "Keep logging data"
-            }
-            description={
-              hasContext
-                ? translatedAdaptiveCoachingMessage
-                : "Copilot needs more completed trades before it can separate noise from recurring behavior."
-            }
-          />
-
-          <div className="mt-6 grid grid-cols-2 gap-3">
-            <Card variant="inner" className="p-4">
-              <p className="text-xs text-muted-faint">
-                {t.common.discipline}
-              </p>
-              <p className="mt-2 text-2xl font-black text-white">
-                {hasContext ? `${disciplineScore}%` : "Pending"}
-              </p>
-            </Card>
-            <Card variant="inner" className="p-4">
-              <p className="text-xs text-muted-faint">
-                {t.common.tone}
-              </p>
-              <p className="mt-2 text-2xl font-black text-accent-bright">
-                {getCopilotStatusLabel(adaptiveCoaching.tone, t) ||
-                  adaptiveCoaching.tone}
-              </p>
-            </Card>
-          </div>
-        </Card>
+      <section className="min-h-0">
+        <CopilotConversationCard
+          copilotMessages={translatedCopilotMessages}
+          accountId={accountId}
+          appLanguage={appLanguage}
+          hasContext={hasContext}
+          promptExamples={promptExamples}
+        />
       </section>
 
-      <section className={`grid ${pageDensity.copilot.sectionGrid} xl:grid-cols-3`}>
-        <Card className={`${pageDensity.copilot.panel} xl:col-span-2`}>
+      <section>
+        <Card className="p-5 sm:p-6">
           <SectionHeader
-            eyebrow={t.components.dailyFeed.eyebrow}
-            title="Intelligence queue"
-            description="A compact list of server-side observations. When data is limited, the queue stays quiet instead of inventing conclusions."
+            eyebrow="Operating control"
+            title="Current operating state"
           />
 
-          <div className="mt-6 space-y-3">
-            {!hasContext || translatedIntelligenceFeed.length === 0 ? (
-              <EmptyState
-                title={t.components.dailyFeed.empty}
-                description="Add more completed trades to activate meaningful operating signals."
+          <div className="mt-6 grid items-start md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)_minmax(0,0.9fr)]">
+            <div className="pb-5 md:pr-5 lg:pb-0">
+            <SectionHeader
+              eyebrow="Current directive"
+              title={
+                hasContext
+                  ? getCopilotStatusLabel(adaptiveCoaching.mode, t) ||
+                    adaptiveCoaching.mode
+                  : "Keep logging data"
+              }
+              description={
+                hasContext
+                  ? translatedAdaptiveCoachingMessage
+                  : `Complete at least ${Math.max(
+                      MIN_TRADES_FOR_CONTEXT - totalTrades,
+                      0
+                    )} more completed ${MIN_TRADES_FOR_CONTEXT - totalTrades === 1 ? "trade" : "trades"} before evaluating recurring patterns.`
+              }
+            />
+
+            <div className="mt-4 grid grid-cols-2 gap-4 border-t border-flash/[0.08] pt-4">
+              <div>
+                <p className="text-xs text-muted-faint">{t.common.discipline}</p>
+                <p className="mt-1.5 text-lg font-black text-white">
+                  {hasContext ? `${disciplineScore}%` : "Pending"}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-faint">{t.common.tone}</p>
+                <p className="mt-1.5 text-lg font-black text-accent-bright">
+                  {getCopilotStatusLabel(adaptiveCoaching.tone, t) ||
+                    adaptiveCoaching.tone}
+                </p>
+              </div>
+            </div>
+            </div>
+
+            <div className="border-t border-flash/[0.08] py-5 md:border-l md:border-t-0 md:py-0 md:pl-5 lg:px-5">
+              <SectionHeader
+                eyebrow="Protection"
+                title="Risk guard"
+                description="Protection signals are rules, not discretionary advice."
               />
-            ) : (
-              translatedIntelligenceFeed.slice(0, 5).map((item) => (
-                <Card key={item} variant="inner" className="p-4">
-                  <div className="flex items-start gap-3">
-                    <Sparkles
-                      className="mt-0.5 text-accent-bright"
-                      size={17}
-                    />
-                    <p className="text-sm leading-6 text-gray-300">
-                      {item}
-                    </p>
-                  </div>
-                </Card>
-              ))
-            )}
-          </div>
-        </Card>
 
-        <Card className={pageDensity.copilot.panel}>
-          <SectionHeader
-            eyebrow="Protection"
-            title="Risk guard"
-            description="Protection signals are rules, not discretionary advice."
-          />
-
-          <div className="mt-6 space-y-3">
+          <div className="mt-4 space-y-1.5">
             <SignalRow
               label={t.components.sessionLock.title}
               value={
@@ -646,6 +574,7 @@ export default async function CopilotPage({
                     ? "warning"
                     : "good"
               }
+              compact
             />
             <SignalRow
               label={t.components.riskEscalation.title}
@@ -656,6 +585,7 @@ export default async function CopilotPage({
                 ) || riskEscalation.escalationLevel
               }
               tone={getSeverityTone(riskEscalation.escalationLevel)}
+              compact
             />
             <SignalRow
               label={t.components.aiRiskSupervisor.title}
@@ -664,12 +594,13 @@ export default async function CopilotPage({
                 supervisorLevel
               }
               tone={getSeverityTone(supervisorLevel)}
+              compact
             />
           </div>
 
           {(sessionLock.reviewRequired ||
             riskEscalation.protectionRequired) && (
-            <Card variant="inner" className="mt-5 p-4">
+            <div className="mt-4 border-t border-flash/[0.08] pt-4">
               <p className="text-xs font-medium uppercase tracking-[0.16em] text-warning">
                 Required review
               </p>
@@ -677,165 +608,153 @@ export default async function CopilotPage({
                 {translatedSessionLockReason ||
                   translatedRiskEscalationMessage}
               </p>
-            </Card>
+            </div>
           )}
-        </Card>
-      </section>
+            </div>
 
-      <section className={`grid ${pageDensity.copilot.sectionGrid} xl:grid-cols-2`}>
-        <Card className={pageDensity.copilot.panel}>
-          <SectionHeader
-            eyebrow={t.page.reviewTimeline}
-            title={t.page.persistentReviewMemory}
-            description="Review notes are generated from explicit analysis actions and recent account events."
-          />
+            <div className="border-t border-flash/[0.08] pt-5 md:col-span-2 md:mt-5 lg:col-span-1 lg:mt-0 lg:border-l lg:border-t-0 lg:pl-5 lg:pt-0">
+            <SectionHeader
+              eyebrow={t.components.dailyFeed.eyebrow}
+              title="Intelligence queue"
+              description="What the engine is waiting to evaluate from recorded evidence."
+            />
 
-          <div className="mt-6 space-y-3">
-            {translatedReviewNotes.length === 0 ? (
-              <EmptyState
-                title={t.page.noReviewNotes}
-                description="No review note has been generated yet."
-              />
-            ) : (
-              translatedReviewNotes.slice(0, 4).map((note) => (
-                <Card key={note.id} variant="inner" className="p-4">
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                    <div>
-                      <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted-faint">
-                        {note.title}
-                      </p>
-                      <p className="mt-2 text-sm leading-6 text-gray-300">
-                        {note.content}
-                      </p>
-                    </div>
-                    <StatusPill tone={getSeverityTone(note.severity)}>
-                      {getCopilotStatusLabel(note.severity, t)}
-                    </StatusPill>
+            <div className="mt-4 space-y-2">
+              {!hasContext || translatedIntelligenceFeed.length === 0 ? (
+                <div className="border-l-2 border-flash/[0.12] pl-3">
+                  <p className="text-sm font-medium text-white">Awaiting evidence</p>
+                  <p className="mt-1 text-caption leading-5 text-muted">
+                    More completed trades are required before operating observations can be evaluated.
+                  </p>
+                </div>
+              ) : (
+                translatedIntelligenceFeed.slice(0, 5).map((item) => (
+                  <div
+                    key={item}
+                    className="flex items-start gap-2.5 border-b border-flash/[0.08] py-3 first:pt-0 last:border-0 last:pb-0"
+                  >
+                    <Sparkles
+                      className="mt-0.5 shrink-0 text-accent-bright"
+                      size={15}
+                      aria-hidden="true"
+                    />
+                    <p className="text-caption leading-5 text-gray-300">{item}</p>
                   </div>
-                </Card>
-              ))
-            )}
-          </div>
-        </Card>
-
-        <Card className={pageDensity.copilot.panel}>
-          <SectionHeader
-            eyebrow={t.page.memorySystem}
-            title={t.page.activeOperationalMemory}
-            description={t.page.memoryDescription}
-          />
-
-          <div className="mt-6 space-y-3">
-            {translatedCopilotMemories.length === 0 ? (
-              <EmptyState
-                title={t.page.noMemories}
-                description="Memory activates after recurring patterns are detected in account history."
-              />
-            ) : (
-              translatedCopilotMemories.slice(0, 4).map((memory) => (
-                <MemoryRow
-                  key={memory.id}
-                  memory={memory}
-                  statusLabel={
-                    getCopilotStatusLabel(memory.severity, t) ||
-                    memory.severity
-                  }
-                />
-              ))
-            )}
+                ))
+              )}
+            </div>
+            </div>
           </div>
         </Card>
       </section>
 
-      <section className={`grid ${pageDensity.copilot.sectionGrid} xl:grid-cols-3`}>
-        <Card className={`${pageDensity.copilot.panel} xl:col-span-2`}>
+      <CopilotMemorySystem
+        showReliabilityNote={!hasContext}
+        reviewMemories={translatedReviewNotes.map((note) => ({
+          id: note.id,
+          title: note.title,
+          content: note.content,
+          statusLabel:
+            getCopilotStatusLabel(note.severity, t) || note.severity,
+          tone: getSeverityTone(note.severity),
+        }))}
+        operationalMemories={translatedCopilotMemories.map((memory) => ({
+          id: memory.id,
+          memoryType: memory.memoryType,
+          title: memory.title,
+          description: memory.description,
+          score: memory.score,
+          statusLabel:
+            getCopilotStatusLabel(memory.severity, t) || memory.severity,
+          tone: getSeverityTone(memory.severity),
+        }))}
+      />
+
+      <section>
+        <Card className="p-5 sm:p-6">
           <SectionHeader
-            eyebrow={t.components.patternMemory.eyebrow}
-            title={t.components.patternMemory.title}
-            description="Patterns are stored only when the server-side analysis finds recurrence. No pattern means no conclusion."
+            eyebrow="Account review"
+            title="Behavioral intelligence and latest review"
           />
 
-          <div className="mt-6 space-y-3">
-            {translatedCopilotPatterns.length === 0 ? (
-              <EmptyState
-                title={t.components.patternMemory.empty}
-                description="Copilot has not found a recurring operating pattern yet."
+          <div className="mt-6 grid items-start lg:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)]">
+            <div className="pb-5 lg:pb-0 lg:pr-6">
+              <SectionHeader
+                eyebrow={t.components.patternMemory.eyebrow}
+                title={t.components.patternMemory.title}
+                description="Patterns are stored only when the server-side analysis finds recurrence. No pattern means no conclusion."
               />
-            ) : (
-              translatedCopilotPatterns.slice(0, 5).map((pattern) => (
-                <PatternRow
-                  key={pattern.id}
-                  pattern={pattern}
-                  statusLabel={
-                    getCopilotStatusLabel(pattern.severity, t) ||
-                    pattern.severity
+
+              <div className="mt-5 space-y-3">
+                {translatedCopilotPatterns.length === 0 ? (
+                  <EmptyState
+                    title={t.components.patternMemory.empty}
+                    description="Copilot has not found a recurring operating pattern yet."
+                  />
+                ) : (
+                  translatedCopilotPatterns.map((pattern) => (
+                    <PatternRow
+                      key={pattern.id}
+                      pattern={pattern}
+                      statusLabel={
+                        getCopilotStatusLabel(pattern.severity, t) ||
+                        pattern.severity
+                      }
+                      occurrencesLabel={t.common.occurrences}
+                    />
+                  ))
+                )}
+              </div>
+            </div>
+
+            <div className="border-t border-flash/[0.08] pt-5 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
+              <SectionHeader
+                eyebrow="Latest review"
+                title={
+                  latestTrade
+                    ? latestTrade.symbol
+                    : t.components.tradeReview.empty
+                }
+                description={
+                  latestTrade && hasContext
+                    ? translatedLatestTradeReview
+                    : "Latest-trade review appears only when there is enough account context."
+                }
+              />
+
+              <div className="mt-5 grid gap-1.5">
+                <SignalRow
+                  label={t.common.execution}
+                  value={
+                    latestTrade?.executionRating
+                      ? `${latestTrade.executionRating}/10`
+                      : "Not measured"
                   }
-                  occurrencesLabel={t.common.occurrences}
+                  tone="neutral"
+                  compact
                 />
-              ))
-            )}
-          </div>
-        </Card>
-
-        <Card className={pageDensity.copilot.panel}>
-          <SectionHeader
-            eyebrow="Latest review"
-            title={
-              latestTrade
-                ? latestTrade.symbol
-                : t.components.tradeReview.empty
-            }
-            description={
-              latestTrade && hasContext
-                ? translatedLatestTradeReview
-                : "Latest-trade review appears only when there is enough account context."
-            }
-          />
-
-          <div className="mt-6 grid gap-3">
-            <SignalRow
-              label={t.common.execution}
-              value={
-                latestTrade?.executionRating
-                  ? `${latestTrade.executionRating}/10`
-                  : "Not measured"
-              }
-              tone="neutral"
-            />
-            <SignalRow
-              label={t.common.confidence}
-              value={
-                latestTrade?.confidence
-                  ? `${latestTrade.confidence}/10`
-                  : "Not measured"
-              }
-              tone="neutral"
-            />
-            <SignalRow
-              label={t.components.recoveryIntelligence.recoveryScore}
-              value={
-                hasContext
-                  ? `${recoveryScore}%`
-                  : "Pending"
-              }
-              tone={getSeverityTone(recoveryLabel)}
-            />
+                <SignalRow
+                  label={t.common.confidence}
+                  value={
+                    latestTrade?.confidence
+                      ? `${latestTrade.confidence}/10`
+                      : "Not measured"
+                  }
+                  tone="neutral"
+                  compact
+                />
+                <SignalRow
+                  label={t.components.recoveryIntelligence.recoveryScore}
+                  value={hasContext ? `${recoveryScore}%` : "Pending"}
+                  tone={hasContext ? getSeverityTone(recoveryLabel) : "neutral"}
+                  compact
+                />
+              </div>
+            </div>
           </div>
         </Card>
       </section>
 
-      <AnalyzeButton
-        accountId={accountId}
-        appLanguage={appLanguage}
-        disabled={!hasContext}
-      />
-
-      <CopilotConversationCard
-        copilotMessages={translatedCopilotMessages}
-        accountId={accountId}
-        appLanguage={appLanguage}
-        hasContext={hasContext}
-      />
     </div>
   );
 }
@@ -844,11 +763,22 @@ function SignalRow({
   label,
   value,
   tone,
+  compact = false,
 }: {
   label: string;
   value: string;
   tone: StatusTone;
+  compact?: boolean;
 }) {
+  if (compact) {
+    return (
+      <div className="flex items-center justify-between gap-4 border-b border-flash/[0.08] py-2.5 first:pt-0 last:border-0 last:pb-0">
+        <p className="text-sm text-muted">{label}</p>
+        <StatusPill tone={tone}>{value}</StatusPill>
+      </div>
+    );
+  }
+
   return (
     <Card variant="inner" className="p-4">
       <div className="flex items-center justify-between gap-4">
@@ -856,43 +786,6 @@ function SignalRow({
           {label}
         </p>
         <StatusPill tone={tone}>{value}</StatusPill>
-      </div>
-    </Card>
-  );
-}
-
-function MemoryRow({
-  memory,
-  statusLabel,
-}: {
-  memory: MemoryItem;
-  statusLabel: string;
-}) {
-  return (
-    <Card variant="inner" className="p-4">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted-faint">
-            {memory.memoryType}
-          </p>
-          <h3 className="mt-2 text-subsection text-white">
-            {memory.title}
-          </h3>
-          <p className="mt-2 text-sm leading-6 text-gray-300">
-            {memory.description}
-          </p>
-        </div>
-        <StatusPill tone={getSeverityTone(memory.severity)}>
-          {statusLabel}
-        </StatusPill>
-      </div>
-      <div className="mt-4 flex items-center justify-between rounded-inner border-[0.5px] border-flash/[0.08] bg-bg-base/40 px-4 py-3">
-        <span className="text-xs uppercase tracking-[0.16em] text-muted-faint">
-          Score
-        </span>
-        <span className="text-sm font-black text-white">
-          {memory.score}
-        </span>
       </div>
     </Card>
   );
@@ -929,61 +822,6 @@ function PatternRow({
       <p className="mt-4 text-xs text-muted-faint">
         {occurrencesLabel}: {pattern.occurrences}
       </p>
-    </Card>
-  );
-}
-
-const ANALYZE_LABELS: Record<string, string> = {
-  it: "Genera analisi rule-based",
-  en: "Generate rule-based analysis",
-  uk: "Generate rule-based analysis",
-  ru: "Generate rule-based analysis",
-  es: "Generar análisis con reglas",
-  fr: "Générer une analyse par règles",
-  de: "Regelbasierte Analyse erstellen",
-};
-
-function AnalyzeButton({
-  accountId,
-  appLanguage,
-  disabled,
-}: {
-  accountId: string;
-  appLanguage?: string | null;
-  disabled: boolean;
-}) {
-  const label =
-    ANALYZE_LABELS[appLanguage ?? "en"] ??
-    ANALYZE_LABELS.en;
-
-  return (
-    <Card className="p-5">
-      <form action={generateAnalysis}>
-        <input
-          type="hidden"
-          name="tradingAccountId"
-          value={accountId}
-        />
-
-        <button
-          type="submit"
-          disabled={disabled}
-          className="group flex w-full flex-col items-start rounded-inner border-[0.5px] border-accent-bright/25 bg-accent-bright/[0.06] px-5 py-4 text-left transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/50 hover:shadow-[0_10px_30px_rgba(0,0,0,0.3),0_0_22px_rgba(52,168,255,0.12)] disabled:cursor-not-allowed disabled:border-flash/[0.08] disabled:bg-surface-2 disabled:hover:translate-y-0 disabled:hover:shadow-none"
-        >
-          <span className="flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-accent-bright group-disabled:text-muted-faint">
-            <Route size={15} />
-            VOLTIS analyst
-          </span>
-          <span className="mt-2 text-lg font-black text-white">
-            {label}
-          </span>
-          <span className="mt-2 text-sm leading-6 text-muted">
-            {disabled
-              ? "More completed trades are required before generating an account analysis."
-              : "Creates a deterministic account analysis from trades, review metrics, memory, and protection rules."}
-          </span>
-        </button>
-      </form>
     </Card>
   );
 }

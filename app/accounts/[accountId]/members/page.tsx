@@ -88,11 +88,26 @@ function getRoleLabel(role: string, isOwner = false) {
   return "Member";
 }
 
-function getRoleDescription(role: string, isOwner = false) {
+function getRoleDescription(
+  role: string,
+  isOwner = false,
+  canManageMembers = false,
+  canManageRoles = false
+) {
   if (isOwner) return "Account creator with protected control.";
-  if (role === "MANAGER") return "Can operate and manage account access.";
+  if (role === "MANAGER") {
+    return canManageMembers || canManageRoles
+      ? "Admin hierarchy with explicitly granted management access."
+      : "Admin hierarchy with operational access and read-only management.";
+  }
   if (role === "VIEWER") return "Read-first access with limited execution rights.";
   return "Operational contributor with configured permissions.";
+}
+
+function getManagementAccess(canManageMembers: boolean, canManageRoles: boolean) {
+  if (canManageMembers && canManageRoles) return "Available";
+  if (canManageMembers || canManageRoles) return "Restricted";
+  return "Read only";
 }
 
 function getRoleRank(role: string, isOwner = false) {
@@ -284,7 +299,10 @@ export default async function MembersPage({
 
   const accountCreatorId = membership.tradingAccount.createdById ?? "";
   const managerCount = members.filter((member) => member.role === "MANAGER").length;
-  const canManageAccess = membership.canManageMembers || membership.canManageRoles;
+  const managementAccess = getManagementAccess(
+    membership.canManageMembers,
+    membership.canManageRoles
+  );
   const ownerCount = members.filter((member) => member.userId === accountCreatorId).length;
   const adminCount = members.filter(
     (member) => member.role === "MANAGER" && member.userId !== accountCreatorId
@@ -310,51 +328,58 @@ export default async function MembersPage({
           </p>
           <h1 className="mt-3 text-hero text-flash">Members</h1>
           <p className="mt-2 max-w-3xl text-sm text-muted">
-            Manage traders, permissions and collaboration inside this shared account.
+            Review account roles, permissions, and collaboration boundaries.
           </p>
         </div>
 
       </div>
 
       <Card variant="hero" className="reveal-rise">
-        <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
-          <div>
-            <div className="flex flex-wrap items-center gap-3">
-              <StatusPill tone="info">Control room</StatusPill>
-              <StatusPill>{membership.tradingAccount.name}</StatusPill>
+        <div className="space-y-6">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.55fr)] lg:items-start">
+            <div>
+              <div className="flex flex-wrap items-center gap-3">
+                <StatusPill tone="info">Control room</StatusPill>
+                <StatusPill>Shared account</StatusPill>
+              </div>
+              <h2 className="mt-6 max-w-3xl text-section text-flash">
+                Role hierarchy is the operating boundary.
+              </h2>
+              <p className="mt-4 max-w-3xl text-body text-muted">
+                Owner and admin access sits above execution roles. Member and
+                viewer access stays explicit, narrow, and auditable.
+              </p>
             </div>
-            <h2 className="mt-6 max-w-3xl text-section text-flash">
-              Role hierarchy is the operating boundary.
-            </h2>
-            <p className="mt-4 max-w-3xl text-body text-muted">
-              Owner and admin access sits above execution roles. Member and
-              viewer access stays explicit, narrow, and auditable.
-            </p>
-          </div>
 
-          <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-            <div className="rounded-inner border-[0.5px] border-accent-bright/20 bg-accent-bright/[0.06] p-4">
-              <p className="text-micro uppercase tracking-label text-accent-bright">
-                Owner
-              </p>
-              <p className="mt-2 text-body text-flash">
-                {ownerCount > 0 ? "Protected" : "Not assigned"}
-              </p>
-            </div>
-            <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
+            <div className="w-full lg:min-w-[280px] lg:max-w-[380px] lg:justify-self-end">
               <p className="text-micro uppercase tracking-label text-muted-faint">
-                Admins
+                Your access
               </p>
-              <p className="mt-2 text-body text-flash">{adminCount}</p>
-            </div>
-            <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
-              <p className="text-micro uppercase tracking-label text-muted-faint">
-                Your clearance
-              </p>
-              <p className="mt-2 text-body text-flash">
+              <p className="mt-3 text-section text-flash">
                 {getRoleLabel(membership.role, membership.userId === accountCreatorId)}
               </p>
+              <p className="mt-2 text-body text-muted">
+                {managementAccess === "Read only"
+                  ? "Read-only management"
+                  : `Management ${managementAccess.toLowerCase()}`}
+              </p>
             </div>
+          </div>
+
+          <div className="grid gap-5 border-t border-flash/[0.1] pt-6 sm:grid-cols-2 xl:grid-cols-4">
+            {[
+              ["Account owner", ownerCount > 0 ? "Assigned" : "Not assigned"],
+              ["Admins", String(adminCount)],
+              ["Members", String(members.length)],
+              ["Pending invites", String(pendingInvites.length)],
+            ].map(([label, value]) => (
+              <div key={label}>
+                <p className="text-micro uppercase tracking-label text-muted-faint">
+                  {label}
+                </p>
+                <p className="mt-2 text-body font-medium text-flash">{value}</p>
+              </div>
+            ))}
           </div>
         </div>
       </Card>
@@ -373,25 +398,25 @@ export default async function MembersPage({
           icon={UserPlus}
         />
         <StatCard
-          label="Access density"
+          label="Operational permissions"
           value={
             maxPermissionCount > 0
-              ? `${Math.round((activePermissionCount / maxPermissionCount) * 100)}%`
+              ? `${activePermissionCount}/${maxPermissionCount}`
               : "No members"
           }
-          detail="Granted operational permissions."
+          detail={`Granted execution, intelligence and visibility capabilities across ${members.length} memberships.`}
           icon={KeyRound}
         />
         <StatCard
-          label="Management"
-          value={canManageAccess ? "Enabled" : "Read only"}
-          detail="Based on your server-side role."
+          label="Management access"
+          value={managementAccess}
+          detail="Based on explicit membership permissions."
           icon={ShieldCheck}
         />
       </section>
 
-      {canManageAccess && (
-        <section className="grid gap-6 xl:grid-cols-[1fr_0.9fr]">
+      {membership.canManageMembers && (
+        <section id="invite-access" className="grid scroll-mt-6 gap-6 xl:grid-cols-[1fr_0.9fr]">
           <Card className="reveal-rise">
             <SectionHeader eyebrow="Provisioning" title="Invite access" />
             <p className="mt-3 text-caption text-muted">
@@ -447,7 +472,17 @@ export default async function MembersPage({
 
       <section className="space-y-5">
         <SectionHeader eyebrow="Hierarchy" title="Account access roster">
-          <StatusPill tone="info">Owner - Admin - Member - Viewer</StatusPill>
+          {membership.canManageMembers ? (
+            <Link
+              href="#invite-access"
+              className="inline-flex items-center justify-center gap-2 rounded-inner border-[0.5px] border-accent-bright/25 bg-accent-bright/[0.08] px-4 py-2.5 text-sm font-medium text-accent-bright transition-all duration-fast hover:border-accent-bright/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/50"
+            >
+              <UserPlus size={16} />
+              Invite member
+            </Link>
+          ) : (
+            <StatusPill>View-only access</StatusPill>
+          )}
         </SectionHeader>
 
         <div className="space-y-4">
@@ -460,11 +495,21 @@ export default async function MembersPage({
             const grantedPermissions = editablePermissionKeys.filter(
               (key) => member[key]
             ).length;
+            const hasAllOperationalPermissions =
+              grantedPermissions === editablePermissionKeys.length;
+            const accessLabel = isOwner
+              ? "Protected account control"
+              : member.role === "MANAGER" &&
+                  (member.canManageMembers || member.canManageRoles)
+                ? "Management access"
+                : hasAllOperationalPermissions
+                  ? "Full operational access"
+                  : "Configured operational access";
 
             return (
-              <Card key={member.id} interactive className="reveal-rise">
-                <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
-                  <div className="min-w-0">
+              <Card key={member.id} className="reveal-rise p-5">
+                <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                  <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-3">
                       <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 text-body font-semibold text-flash">
                         {(member.user.name ?? member.user.username)
@@ -490,61 +535,66 @@ export default async function MembersPage({
                       )}
                     </div>
 
-                    <p className="mt-4 max-w-3xl text-body text-muted">
-                      {getRoleDescription(member.role, isOwner)}
+                    <p className="mt-4 text-body font-medium text-flash">
+                      {accessLabel} <span className="text-muted">&middot;</span>{" "}
+                      <span className="font-normal text-muted">
+                        {grantedPermissions}/{editablePermissionKeys.length} permissions
+                      </span>
+                    </p>
+                    <p className="mt-2 max-w-3xl text-caption text-muted">
+                      {getRoleDescription(
+                        member.role,
+                        isOwner,
+                        member.canManageMembers,
+                        member.canManageRoles
+                      )}
                     </p>
                   </div>
 
-                  <div className="grid gap-3 sm:grid-cols-3 xl:min-w-[440px]">
-                    <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
-                      <p className="text-micro uppercase tracking-label text-muted-faint">
-                        Permissions
-                      </p>
-                      <p className="mt-2 text-body text-flash">
-                        {grantedPermissions}/{editablePermissionKeys.length}
-                      </p>
-                    </div>
-                    <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
+                  <div className="grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:min-w-[330px]">
+                    <div>
                       <p className="text-micro uppercase tracking-label text-muted-faint">
                         Joined
                       </p>
-                      <p className="mt-2 text-body text-flash">
+                      <p className="mt-1 text-caption text-muted">
                         {formatDate(member.createdAt)}
                       </p>
                     </div>
-                    <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
+                    <div>
                       <p className="text-micro uppercase tracking-label text-muted-faint">
                         Last seen
                       </p>
-                      <p className="mt-2 text-body text-flash">
+                      <p className="mt-1 text-caption text-muted">
                         {formatDate(member.user.lastActivityAt ?? member.user.lastSeenAt)}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-6 grid gap-3 lg:grid-cols-3">
-                  {getAccessSummary(member).map((item) => (
-                    <div
-                      key={item}
-                      className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 px-4 py-3 text-caption text-muted"
-                    >
+                <div className="mt-5 flex flex-col gap-2 rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 px-4 py-3 text-caption text-muted sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-3">
+                  {getAccessSummary(member).map((item, index) => (
+                    <span key={item} className="inline-flex items-center gap-3">
+                      {index > 0 && (
+                        <span className="hidden text-muted-faint sm:inline" aria-hidden="true">
+                          &middot;
+                        </span>
+                      )}
                       {item}
-                    </div>
+                    </span>
                   ))}
                 </div>
 
-                <div className="mt-6 flex flex-wrap gap-3">
+                <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <Link
                     href={`/accounts/${accountId}/members/${member.userId}`}
-                    className="inline-flex items-center gap-2 rounded-inner border-[0.5px] border-accent-bright/25 bg-accent-bright/[0.08] px-4 py-3 text-sm font-medium text-accent-bright transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/50"
+                    className="inline-flex items-center justify-center gap-2 rounded-inner border-[0.5px] border-accent-bright/25 bg-accent-bright/[0.08] px-4 py-3 text-sm font-medium text-accent-bright transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/50"
                   >
                     <Eye size={16} />
                     View access dossier
                   </Link>
                   <Link
                     href={`/accounts/${accountId}/diary?member=${member.userId}`}
-                    className="inline-flex items-center gap-2 rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-2 px-4 py-3 text-sm font-medium text-muted transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/45 hover:text-accent-bright"
+                    className="inline-flex items-center justify-center gap-2 rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-2 px-4 py-3 text-sm font-medium text-muted transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/45 hover:text-accent-bright focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/50"
                   >
                     <DoorOpen size={16} />
                     Open trades
@@ -581,8 +631,15 @@ export default async function MembersPage({
         </div>
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-4">
-        {[
+      <section className="space-y-4">
+        <div>
+          <p className="text-micro uppercase tracking-label text-accent-bright">
+            Role model
+          </p>
+          <h2 className="mt-2 text-subsection text-flash">Access hierarchy</h2>
+        </div>
+        <div className="grid gap-3 lg:grid-cols-4">
+          {[
           {
             icon: Crown,
             title: "Owner",
@@ -603,15 +660,18 @@ export default async function MembersPage({
             title: "Viewer",
             text: "Observes selected rooms without broad execution authority.",
           },
-        ].map((item) => (
-          <Card key={item.title} className="p-5">
-            <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-3 text-muted">
-              <item.icon size={18} />
-            </div>
-            <p className="mt-4 text-body font-medium text-flash">{item.title}</p>
-            <p className="mt-2 text-caption text-muted">{item.text}</p>
-          </Card>
-        ))}
+          ].map((item) => (
+            <Card key={item.title} className="p-4">
+              <div className="flex items-center gap-3">
+                <item.icon size={16} className="shrink-0 text-muted" />
+                <p className="text-micro font-medium uppercase tracking-label text-flash">
+                  {item.title}
+                </p>
+              </div>
+              <p className="mt-3 text-caption text-muted">{item.text}</p>
+            </Card>
+          ))}
+        </div>
       </section>
     </div>
   );

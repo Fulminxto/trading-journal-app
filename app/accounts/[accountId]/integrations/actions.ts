@@ -14,18 +14,20 @@ const ALLOWED_INTEGRATION_MODES = [
     "hybrid",
 ] as const;
 
-const ALLOWED_SYNC_STATUSES = [
-    "inactive",
-    "pending",
-    "connected",
-    "error",
-] as const;
-
 type IntegrationMode =
     (typeof ALLOWED_INTEGRATION_MODES)[number];
 
-type SyncStatus =
-    (typeof ALLOWED_SYNC_STATUSES)[number];
+export type IntegrationSetupState = {
+    error?: string;
+    fieldErrors?: Partial<Record<
+        | "integrationMode"
+        | "mt5AccountLogin"
+        | "mt5ServerName"
+        | "brokerProvider"
+        | "brokerAccountId",
+        string
+    >>;
+};
 
 function getString(
     formData: FormData,
@@ -51,9 +53,7 @@ function getLimitedString(
     );
 }
 
-function getIntegrationMode(
-    value: string
-): IntegrationMode {
+function getIntegrationMode(value: string) {
     if (
         ALLOWED_INTEGRATION_MODES.includes(
             value as IntegrationMode
@@ -62,21 +62,7 @@ function getIntegrationMode(
         return value as IntegrationMode;
     }
 
-    return "manual";
-}
-
-function getSyncStatus(
-    value: string
-): SyncStatus {
-    if (
-        ALLOWED_SYNC_STATUSES.includes(
-            value as SyncStatus
-        )
-    ) {
-        return value as SyncStatus;
-    }
-
-    return "inactive";
+    return null;
 }
 
 async function getIntegrationAccess(
@@ -130,8 +116,9 @@ async function getIntegrationAccess(
 
 export async function updateAccountIntegrations(
     accountId: string,
+    _previousState: IntegrationSetupState | null,
     formData: FormData
-) {
+): Promise<IntegrationSetupState> {
     const membership =
         await getIntegrationAccess(accountId);
 
@@ -139,6 +126,15 @@ export async function updateAccountIntegrations(
         getIntegrationMode(
             getString(formData, "integrationMode")
         );
+
+    if (!integrationMode) {
+        return {
+            error: "Choose a valid integration mode.",
+            fieldErrors: {
+                integrationMode: "Choose a valid integration mode.",
+            },
+        };
+    }
 
     const mt5Enabled =
         integrationMode === "mt5" ||
@@ -179,17 +175,40 @@ export async function updateAccountIntegrations(
             120
         ) || null;
 
-    const requestedSyncStatus =
-        getSyncStatus(
-            getString(formData, "syncStatus")
-        );
+    const fieldErrors: IntegrationSetupState["fieldErrors"] = {};
+
+    if (mt5Enabled && !mt5AccountLogin) {
+        fieldErrors.mt5AccountLogin = "Enter the MT5 account login.";
+    }
+
+    if (mt5Enabled && !mt5ServerName) {
+        fieldErrors.mt5ServerName = "Enter the MT5 server name.";
+    }
+
+    if (brokerSyncEnabled && !brokerProvider) {
+        fieldErrors.brokerProvider = "Enter the broker provider.";
+    }
+
+    if (brokerSyncEnabled && !brokerAccountId) {
+        fieldErrors.brokerAccountId = "Enter the broker account ID.";
+    }
+
+    if (Object.keys(fieldErrors).length > 0) {
+        return {
+            error: "Complete the required identifiers before saving.",
+            fieldErrors,
+        };
+    }
 
     const syncStatus =
-        autoSyncEnabled
-            ? requestedSyncStatus === "inactive"
+        !autoSyncEnabled
+            ? "inactive"
+            : integrationMode !== membership.tradingAccount.integrationMode
                 ? "pending"
-                : requestedSyncStatus
-            : "inactive";
+                : membership.tradingAccount.syncStatus === "connected" ||
+                    membership.tradingAccount.syncStatus === "error"
+                    ? membership.tradingAccount.syncStatus
+                    : "pending";
 
     const before = {
         integrationMode:
@@ -241,10 +260,7 @@ export async function updateAccountIntegrations(
 
                 syncStatus,
                 lastSyncedAt:
-                    syncStatus === "connected"
-                        ? new Date()
-                        : membership.tradingAccount
-                            .lastSyncedAt,
+                    membership.tradingAccount.lastSyncedAt,
             },
         });
 

@@ -7,7 +7,6 @@ import {
   KeyRound,
   LockKeyhole,
   RefreshCw,
-  Save,
   Server,
   ShieldCheck,
   SlidersHorizontal,
@@ -16,6 +15,7 @@ import {
 } from "lucide-react";
 
 import GlobalToast from "@/components/GlobalToast";
+import IntegrationSetupForm from "@/components/integrations/IntegrationSetupForm";
 import Card from "@/components/ui/Card";
 import SignatureEdge from "@/components/ui/SignatureEdge";
 import { auth } from "@/lib/auth";
@@ -38,8 +38,6 @@ type ConnectionChannel = {
   eyebrow: string;
   description: string;
   icon: LucideIcon;
-  enabled: boolean;
-  configured: boolean;
   state: string;
   tone: StatusTone;
 };
@@ -88,47 +86,57 @@ function formatDate(
   value: Date | null | undefined,
   language: AppLanguage
 ) {
-  if (!value) return "Never";
+  if (!value) return "No sync yet";
   return formatDateTimeByLanguage(value, language);
 }
 
-function getSyncState(account: {
-  integrationMode: string | null;
-  syncStatus: string | null;
-  lastSyncedAt: Date | null;
-}) {
-  const mode = normalizeMode(account.integrationMode);
-
-  if (mode === "manual") {
+function getActivityPresentation(type: string) {
+  if (type === "INTEGRATION_SETTINGS_UPDATED") {
     return {
-      label: "Manual entry",
-      description: "No automatic connection is active for this account.",
-      tone: "neutral" as StatusTone,
+      title: "Integration settings updated",
+      description: "Connection mode or non-sensitive identifiers were updated.",
+      badge: "Settings updated",
     };
   }
 
-  if (account.syncStatus === "error") {
+  if (type === "TRADE_IMPORTED" || type === "TRADE_SYNC_UPDATED") {
     return {
-      label: "Needs review",
-      description: "The last sync attempt reported an error.",
-      tone: "negative" as StatusTone,
+      title: "Account activity imported",
+      description: "External trading activity was imported successfully.",
+      badge: "Import complete",
     };
   }
 
-  if (account.syncStatus === "connected" && account.lastSyncedAt) {
+  if (type === "TRADE_SYNC_ERROR") {
     return {
-      label: "Import recorded",
-      description: "A previous automatic sync has been recorded.",
-      tone: "positive" as StatusTone,
+      title: "Import failed",
+      description: "The external connector could not import account activity.",
+      badge: "Failed",
+    };
+  }
+
+  if (type === "INTEGRATION_SYNC_RESET") {
+    return {
+      title: "Connection status reset",
+      description: "The saved connection status was reset.",
+      badge: "Status reset",
     };
   }
 
   return {
-    label: "Prepared, not live",
-    description:
-      "Configuration exists, but VOLTIS is not claiming a live external connection.",
-    tone: "info" as StatusTone,
+    title: "Connection activity updated",
+    description: "A connection-related account update was recorded.",
+    badge: "Updated",
   };
+}
+
+function getActivitySource(metadata: unknown) {
+  if (!metadata || typeof metadata !== "object" || Array.isArray(metadata)) {
+    return null;
+  }
+
+  const source = (metadata as Record<string, unknown>).source;
+  return source === "mt5" || source === "broker" ? source : null;
 }
 
 function StatusPill({
@@ -224,33 +232,6 @@ function EmptyState({
   );
 }
 
-function TextField({
-  name,
-  label,
-  defaultValue,
-  placeholder,
-}: {
-  name: string;
-  label: string;
-  defaultValue: string;
-  placeholder: string;
-}) {
-  return (
-    <label className="block">
-      <span className="text-micro uppercase tracking-label text-muted-faint">
-        {label}
-      </span>
-      <input
-        name={name}
-        defaultValue={defaultValue}
-        placeholder={placeholder}
-        autoComplete="off"
-        className="mt-2 w-full rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-2 px-4 py-3 text-sm text-flash outline-none transition-all duration-base placeholder:text-muted-faint focus:border-accent-bright/45 focus:ring-2 focus:ring-accent-bright/10"
-      />
-    </label>
-  );
-}
-
 function ChannelCard({ channel }: { channel: ConnectionChannel }) {
   const Icon = channel.icon;
 
@@ -343,7 +324,6 @@ export default async function IntegrationsPage({
 
   const account = membership.tradingAccount;
   const mode = normalizeMode(account.integrationMode);
-  const syncState = getSyncState(account);
   const appBaseUrl = getAppBaseUrl();
   const healthEndpoint = `${appBaseUrl}/api/trade-sync/health`;
   const importEndpoint = `${appBaseUrl}/api/trade-sync/import`;
@@ -369,67 +349,160 @@ export default async function IntegrationsPage({
   const latestSyncError = recentSyncLogs.find(
     (log) => log.type === "TRADE_SYNC_ERROR"
   );
-  const mt5Configured = Boolean(account.mt5AccountLogin && account.mt5ServerName);
-  const brokerConfigured = Boolean(
-    account.brokerProvider && account.brokerAccountId
+  const mt5Configured = Boolean(
+    account.mt5AccountLogin?.trim() && account.mt5ServerName?.trim()
   );
-  const enabledSources = [
-    account.mt5Enabled ? "MT5" : null,
-    account.brokerSyncEnabled ? "Broker" : null,
-  ].filter(Boolean);
+  const brokerConfigured = Boolean(
+    account.brokerProvider?.trim() && account.brokerAccountId?.trim()
+  );
   const needsMt5 = mode === "mt5" || mode === "hybrid";
   const needsBroker = mode === "broker" || mode === "hybrid";
-  const modeConfigured =
-    mode === "manual" ||
-    ((!needsMt5 || mt5Configured) && (!needsBroker || brokerConfigured));
+  const configuredSources = [
+    needsMt5 && mt5Configured ? "MT5" : null,
+    needsBroker && brokerConfigured ? "Broker" : null,
+  ].filter((source): source is string => Boolean(source));
+  const configuredSourceCount = configuredSources.length;
+  const latestSuccessfulImport = recentSyncLogs.find(
+    (log) => log.type === "TRADE_IMPORTED" || log.type === "TRADE_SYNC_UPDATED"
+  );
+  const latestImportSource = getActivitySource(latestSuccessfulImport?.metadata);
+  const hasSuccessfulImport = Boolean(
+    account.syncStatus === "connected" && account.lastSyncedAt
+  );
+  const mt5ImportActive =
+    hasSuccessfulImport && (mode === "mt5" || latestImportSource === "mt5");
+  const brokerImportActive =
+    hasSuccessfulImport && (mode === "broker" || latestImportSource === "broker");
+
+  const heroState = (() => {
+    if (mode === "manual") {
+      return {
+        primaryBadge: "Manual mode",
+        secondaryBadge: "No external source",
+        title: "Manual entry is active.",
+        description:
+          "Trades can be recorded normally through the Diary. Connect an external source only when automation is needed.",
+      };
+    }
+
+    if (mode === "mt5") {
+      return mt5Configured
+        ? {
+            primaryBadge: "MT5 connector",
+            secondaryBadge: "Source configured",
+            title: "External import is prepared.",
+            description:
+              "MT5 identifiers are configured. VOLTIS is ready to receive activity through the protected import path.",
+          }
+        : {
+            primaryBadge: "MT5 mode",
+            secondaryBadge: "Setup required",
+            title: "MT5 mode is selected.",
+            description:
+              "Complete the MT5 identifiers before external imports can be prepared.",
+          };
+    }
+
+    if (mode === "broker") {
+      return brokerConfigured
+        ? {
+            primaryBadge: "Broker connector",
+            secondaryBadge: "Source configured",
+            title: "External import is prepared.",
+            description:
+              "Broker identifiers are configured. VOLTIS is ready to receive activity through the protected import path.",
+          }
+        : {
+            primaryBadge: "Broker mode",
+            secondaryBadge: "Setup required",
+            title: "Broker mode is selected.",
+            description:
+              "Complete the broker identifiers before external imports can be prepared.",
+          };
+    }
+
+    return {
+      primaryBadge: "Hybrid mode",
+      secondaryBadge:
+        configuredSourceCount === 2
+          ? "2 sources configured"
+          : configuredSourceCount === 1
+            ? "Partially configured"
+            : "Setup required",
+      title:
+        configuredSourceCount === 2
+          ? "External import is prepared."
+          : "Hybrid mode is selected.",
+      description:
+        configuredSourceCount === 2
+          ? "MT5 and broker identifiers are configured for the protected import path."
+          : "Complete both connector identifier groups to prepare the full hybrid setup.",
+    };
+  })();
+
+  const externalSyncState =
+    account.syncStatus === "error"
+      ? "Failed"
+      : mode === "manual"
+        ? "Not connected"
+        : configuredSourceCount === 0
+            ? "Awaiting setup"
+            : mode === "hybrid" && configuredSourceCount === 1
+              ? "Partially configured"
+              : hasSuccessfulImport
+                ? "Active"
+                : "Ready for import";
+
   const channels: ConnectionChannel[] = [
     {
       title: "Manual entry",
-      eyebrow: "Primary safe path",
-      description: "Diary entry remains available without external systems.",
+      eyebrow: "Current workflow",
+      description: "Trades can be entered and managed through the Trading Diary.",
       icon: DatabaseZap,
-      enabled: mode === "manual",
-      configured: true,
       state: mode === "manual" ? "Active" : "Available",
       tone: mode === "manual" ? "info" : "neutral",
     },
     {
       title: "MT5 connector",
-      eyebrow: "Prepared channel",
+      eyebrow: "External channel",
       description:
-        "Stores only login and server identifiers. No MT5 password is stored.",
+        "Stores non-sensitive login and server identifiers. Passwords are never collected.",
       icon: Cable,
-      enabled: account.mt5Enabled,
-      configured: mt5Configured,
-      state: account.mt5Enabled
-        ? mt5Configured
-          ? "Prepared"
-          : "Missing IDs"
-        : "Off",
-      tone: account.mt5Enabled
-        ? mt5Configured
-          ? "info"
-          : "warning"
-        : "neutral",
+      state: !needsMt5
+        ? "Available"
+        : !mt5Configured
+          ? "Ready to configure"
+          : mt5ImportActive
+            ? "Import active"
+            : "Identifiers saved",
+      tone: !needsMt5
+        ? "neutral"
+        : !mt5Configured
+          ? "warning"
+          : mt5ImportActive
+            ? "positive"
+            : "info",
     },
     {
       title: "Broker integration",
-      eyebrow: "Coming later",
+      eyebrow: "External channel",
       description:
-        "Only provider and account identifier can be stored at this stage.",
+        "Stores provider and account identifiers for the protected server import path.",
       icon: UploadCloud,
-      enabled: account.brokerSyncEnabled,
-      configured: brokerConfigured,
-      state: account.brokerSyncEnabled
-        ? brokerConfigured
-          ? "Prepared"
-          : "Missing IDs"
-        : "Off",
-      tone: account.brokerSyncEnabled
-        ? brokerConfigured
-          ? "info"
-          : "warning"
-        : "neutral",
+      state: !needsBroker
+        ? "Available"
+        : !brokerConfigured
+          ? "Ready to configure"
+          : brokerImportActive
+            ? "Import active"
+            : "Identifiers saved",
+      tone: !needsBroker
+        ? "neutral"
+        : !brokerConfigured
+          ? "warning"
+          : brokerImportActive
+            ? "positive"
+            : "info",
     },
   ];
 
@@ -451,32 +524,41 @@ export default async function IntegrationsPage({
       </div>
 
       <Card variant="hero" className="reveal-rise">
-        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
           <div>
             <div className="flex flex-wrap items-center gap-3">
-              <StatusPill tone="info">{modeLabels[mode]}</StatusPill>
-              <StatusPill tone={syncState.tone}>{syncState.label}</StatusPill>
-              <StatusPill tone={modeConfigured ? "info" : "warning"}>
-                {modeConfigured ? "Configuration complete" : "Configuration needed"}
+              <StatusPill tone="info">{heroState.primaryBadge}</StatusPill>
+              <StatusPill
+                tone={
+                  mode !== "manual" &&
+                  configuredSourceCount < (mode === "hybrid" ? 2 : 1)
+                    ? "warning"
+                    : configuredSourceCount > 0
+                      ? "info"
+                      : "neutral"
+                }
+              >
+                {heroState.secondaryBadge}
               </StatusPill>
             </div>
 
             <h2 className="mt-6 max-w-3xl text-section text-flash">
-              Connection state is explicit, not implied.
+              {heroState.title}
             </h2>
             <p className="mt-4 max-w-3xl text-body text-muted">
-              {syncState.description} External channels are preparation layers
-              until a real import path records activity.
+              {heroState.description}
             </p>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
               <p className="text-micro uppercase tracking-label text-muted-faint">
-                Enabled sources
+                External sources
               </p>
               <p className="mt-2 text-body text-flash">
-                {enabledSources.length > 0 ? enabledSources.join(" + ") : "None"}
+                {configuredSourceCount === 0 && mode !== "manual"
+                  ? "0 configured"
+                  : `${configuredSourceCount} ${configuredSourceCount === 1 ? "source" : "sources"}`}
               </p>
             </div>
             <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
@@ -487,40 +569,50 @@ export default async function IntegrationsPage({
                 {formatDate(account.lastSyncedAt, language)}
               </p>
             </div>
-            <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4 sm:col-span-2">
-              <p className="text-micro uppercase tracking-label text-muted-faint">
-                Security boundary
-              </p>
-              <p className="mt-2 text-body text-flash">
-                No raw credentials stored in this form
-              </p>
-            </div>
           </div>
         </div>
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <StatCard
-          label="Mode"
-          value={modeLabels[mode]}
-          detail="Controls which source fields are relevant."
+          label="Data mode"
+          value={
+            mode === "manual"
+              ? "Manual"
+              : mode === "hybrid"
+                ? "Hybrid"
+                : modeLabels[mode]
+          }
+          detail="The active account entry workflow."
           icon={SlidersHorizontal}
         />
         <StatCard
-          label="Sync status"
-          value={syncState.label}
-          detail="Derived from saved account sync state."
+          label="External sync"
+          value={externalSyncState}
+          detail="Based on enabled sources and recorded sync state."
           icon={RefreshCw}
         />
         <StatCard
-          label="MT5 identifiers"
-          value={mt5Configured ? "Present" : "Not stored"}
+          label="MT5 setup"
+          value={
+            mt5ImportActive
+              ? "Active"
+              : mt5Configured
+                ? "Identifiers saved"
+                : "Not configured"
+          }
           detail="Login and server only, never password."
           icon={Cable}
         />
         <StatCard
-          label="Broker identifiers"
-          value={brokerConfigured ? "Present" : "Not stored"}
+          label="Broker setup"
+          value={
+            brokerImportActive
+              ? "Active"
+              : brokerConfigured
+                ? "Identifiers saved"
+                : "Not configured"
+          }
           detail="Provider and account ID only."
           icon={UploadCloud}
         />
@@ -563,108 +655,16 @@ export default async function IntegrationsPage({
             <StatusPill tone="info">Non-sensitive only</StatusPill>
           </SectionHeader>
 
-          <form action={updateIntegrationsAction} className="mt-6 space-y-6">
-            <label className="block">
-              <span className="text-micro uppercase tracking-label text-muted-faint">
-                Integration mode
-              </span>
-              <select
-                name="integrationMode"
-                defaultValue={mode}
-                className="mt-2 w-full rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-2 px-4 py-3 text-sm text-flash outline-none transition-all duration-base focus:border-accent-bright/45 focus:ring-2 focus:ring-accent-bright/10"
-              >
-                <option value="manual">{modeLabels.manual}</option>
-                <option value="mt5">{modeLabels.mt5}</option>
-                <option value="broker">{modeLabels.broker}</option>
-                <option value="hybrid">{modeLabels.hybrid}</option>
-              </select>
-            </label>
-
-            {needsMt5 && (
-              <div className="space-y-4 rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
-                <div className="flex items-start gap-3">
-                  <Cable size={18} className="mt-0.5 text-muted" />
-                  <div>
-                    <p className="text-body font-medium text-flash">
-                      MT5 identifiers
-                    </p>
-                    <p className="mt-1 text-caption text-muted">
-                      Store login and server names only. Do not enter passwords,
-                      tokens, investor passwords, or VPS secrets.
-                    </p>
-                  </div>
-                </div>
-                <TextField
-                  name="mt5AccountLogin"
-                  label="MT5 account login"
-                  defaultValue={account.mt5AccountLogin || ""}
-                  placeholder="Example: 12345678"
-                />
-                <TextField
-                  name="mt5ServerName"
-                  label="MT5 server name"
-                  defaultValue={account.mt5ServerName || ""}
-                  placeholder="Example: Broker-Live"
-                />
-              </div>
-            )}
-
-            {needsBroker && (
-              <div className="space-y-4 rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
-                <div className="flex items-start gap-3">
-                  <UploadCloud size={18} className="mt-0.5 text-muted" />
-                  <div>
-                    <p className="text-body font-medium text-flash">
-                      Broker identifiers
-                    </p>
-                    <p className="mt-1 text-caption text-muted">
-                      Broker API credentials are not supported in this form.
-                      Save only provider and account identifiers.
-                    </p>
-                  </div>
-                </div>
-                <TextField
-                  name="brokerProvider"
-                  label="Broker provider"
-                  defaultValue={account.brokerProvider || ""}
-                  placeholder="Example: Broker name"
-                />
-                <TextField
-                  name="brokerAccountId"
-                  label="Broker account ID"
-                  defaultValue={account.brokerAccountId || ""}
-                  placeholder="External account identifier"
-                />
-              </div>
-            )}
-
-            {mode === "manual" && (
-              <EmptyState
-                title="Manual mode selected"
-                description="No external source fields are needed. Trades remain managed through the Diary."
-              />
-            )}
-
-            <input
-              type="hidden"
-              name="syncStatus"
-              value={account.syncStatus || "inactive"}
-            />
-
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-caption leading-5 text-muted">
-                Saving this form updates setup metadata only. It does not store
-                raw credentials and does not prove a live broker connection.
-              </p>
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center gap-2 rounded-inner border-[0.5px] border-accent-bright/30 bg-accent-bright/[0.08] px-5 py-3 text-sm font-semibold text-accent-bright transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/55"
-              >
-                <Save size={17} />
-                Save setup
-              </button>
-            </div>
-          </form>
+          <IntegrationSetupForm
+            action={updateIntegrationsAction}
+            initialMode={mode}
+            initialValues={{
+              mt5AccountLogin: account.mt5AccountLogin || "",
+              mt5ServerName: account.mt5ServerName || "",
+              brokerProvider: account.brokerProvider || "",
+              brokerAccountId: account.brokerAccountId || "",
+            }}
+          />
         </Card>
 
         <div className="space-y-4">
@@ -675,66 +675,94 @@ export default async function IntegrationsPage({
         </div>
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-[1fr_0.9fr]">
+      <section>
         <Card>
-          <SectionHeader eyebrow="Logs" title="Recent sync activity">
-            <StatusPill>{recentSyncLogs.length} loaded</StatusPill>
+          <SectionHeader eyebrow="Security" title="Credential protection">
+            <StatusPill tone="info">Protected</StatusPill>
+          </SectionHeader>
+          <div className="mt-6 grid gap-3 md:grid-cols-2">
+            {[
+              [
+                "Passwords stay outside VOLTIS",
+                "MT5 passwords are never entered or stored in this setup.",
+              ],
+              [
+                "Broker secrets remain protected",
+                "API keys and access tokens are not collected here.",
+              ],
+              [
+                "Connection secrets stay server-side",
+                "Shared connection credentials remain outside the account interface.",
+              ],
+              [
+                "Changes are permission-protected",
+                "Only authorized members can update connection settings.",
+              ],
+            ].map(([title, description]) => (
+              <div
+                key={title}
+                className="flex gap-3 rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4"
+              >
+                <LockKeyhole
+                  size={17}
+                  className="mt-0.5 shrink-0 text-muted"
+                  aria-hidden="true"
+                />
+                <div>
+                  <p className="text-body font-medium text-flash">{title}</p>
+                  <p className="mt-1 text-caption leading-5 text-muted">
+                    {description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </section>
+
+      <section>
+        <Card>
+          <SectionHeader eyebrow="Logs" title="Connection activity">
+            <StatusPill>{recentSyncLogs.length} events</StatusPill>
           </SectionHeader>
           <div className="mt-6 space-y-3">
             {recentSyncLogs.length > 0 ? (
-              recentSyncLogs.map((log) => (
-                <div
-                  key={log.id}
-                  className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4"
-                >
-                  <div className="flex flex-wrap items-center gap-2">
-                    <StatusPill
-                      tone={log.type === "TRADE_SYNC_ERROR" ? "negative" : "info"}
-                    >
-                      {log.type}
-                    </StatusPill>
-                    <span className="text-caption text-muted">
-                      {formatDate(log.createdAt, language)}
-                    </span>
+              recentSyncLogs.map((log) => {
+                const presentation = getActivityPresentation(log.type);
+                const actor = log.user?.name ?? log.user?.username ?? "System";
+
+                return (
+                  <div
+                    key={log.id}
+                    className="flex flex-col gap-3 rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+                  >
+                    <div className="min-w-0">
+                      <p className="text-body font-medium text-flash">
+                        {presentation.title}
+                      </p>
+                      <p className="mt-1 text-caption leading-5 text-muted">
+                        {presentation.description}
+                      </p>
+                    </div>
+                    <div className="flex shrink-0 flex-wrap items-center gap-2">
+                      <StatusPill
+                        tone={log.type === "TRADE_SYNC_ERROR" ? "negative" : "info"}
+                      >
+                        {presentation.badge}
+                      </StatusPill>
+                      <span className="text-caption text-muted">
+                        {actor} &middot; {formatDate(log.createdAt, language)}
+                      </span>
+                    </div>
                   </div>
-                  <p className="mt-3 text-body font-medium text-flash">
-                    {log.title}
-                  </p>
-                  {log.description && (
-                    <p className="mt-2 text-caption leading-5 text-muted">
-                      {log.description}
-                    </p>
-                  )}
-                </div>
-              ))
+                );
+              })
             ) : (
               <EmptyState
-                title="No sync events yet"
-                description="This is expected for manual accounts or channels that have not imported trades."
+                title="No connection activity yet"
+                description="Configuration changes and connector imports will appear here."
               />
             )}
-          </div>
-        </Card>
-
-        <Card>
-          <SectionHeader eyebrow="Security" title="Credential boundary">
-            <StatusPill tone="info">Server-side</StatusPill>
-          </SectionHeader>
-          <div className="mt-6 space-y-3">
-            {[
-              "No MT5 password fields are rendered.",
-              "No broker API key or token fields are rendered.",
-              "The shared sync secret belongs in server environment configuration.",
-              "Mutation actions re-check account membership and management permissions.",
-            ].map((item) => (
-              <div
-                key={item}
-                className="flex gap-3 rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4"
-              >
-                <LockKeyhole size={17} className="mt-0.5 shrink-0 text-muted" />
-                <p className="text-caption leading-5 text-muted">{item}</p>
-              </div>
-            ))}
           </div>
         </Card>
       </section>
@@ -750,8 +778,11 @@ export default async function IntegrationsPage({
                 Technical reference
               </p>
               <h2 className="mt-1 text-subsection text-flash">
-                Connector endpoints and account identifiers
+                Connector reference
               </h2>
+              <p className="mt-1 text-caption text-muted">
+                Endpoints and non-sensitive account identifiers.
+              </p>
             </div>
           </div>
           <ChevronDown
@@ -796,11 +827,10 @@ export default async function IntegrationsPage({
             </div>
             <div>
               <p className="text-body font-medium text-flash">
-                Integration settings are permission-gated.
+                Account-protected integrations
               </p>
               <p className="mt-1 text-caption text-muted">
-                This page is visible only to managers or account-control roles,
-                and the server action validates the same boundary.
+                Only authorized members can update connection settings.
               </p>
             </div>
           </div>

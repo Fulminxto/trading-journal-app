@@ -2,21 +2,20 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
   Activity,
+  ArrowRight,
   BarChart3,
   BookMarked,
   BookOpen,
   Bot,
   CalendarDays,
   CandlestickChart,
+  ChevronRight,
+  CircleAlert,
   FileText,
   Goal,
-  Landmark,
   Layers3,
   LineChart,
-  ShieldCheck,
-  TrendingUp,
   Users,
-  Wallet,
   Zap,
   type LucideIcon,
 } from "lucide-react";
@@ -25,8 +24,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { isManager as checkIsManager } from "@/lib/permissions";
 import Card from "@/components/ui/Card";
-import IconTile from "@/components/ui/IconTile";
-import SignatureEdge from "@/components/ui/SignatureEdge";
+import AccountCore from "@/components/accounts/AccountCore";
 import {
   formatCurrencyByLanguage,
   formatPercentByLanguage,
@@ -43,18 +41,15 @@ type HubCard = {
   show: boolean;
 };
 
-type StatCardProps = {
-  label: string;
-  value: string | number;
-  tone?: string;
-};
-
 type AccountHubLabels = {
   hubBadge: string;
   selectedAccount: string;
   archived: string;
   archivedMessage: string;
   heroDescription: string;
+  directoryEyebrow: string;
+  directoryTitle: string;
+  directoryDescription: string;
 
   currentEquity: string;
   totalPnl: string;
@@ -64,6 +59,7 @@ type AccountHubLabels = {
   initialBalance: string;
   targetProgress: string;
   needsReview: string;
+  tradesNeedReview: string;
   members: string;
 
   accountType: string;
@@ -76,7 +72,6 @@ type AccountHubLabels = {
   intelligenceSectionDescription: string;
   managementSectionTitle: string;
   managementSectionDescription: string;
-  manageTeam: string;
 
   cards: {
     dashboard: HubCardText;
@@ -110,6 +105,10 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
       "Questo account è archiviato. Puoi consultare lo storico, ma le funzioni operative e di gestione sono limitate.",
     heroDescription:
       "Centro operativo dell’account. Da qui puoi accedere rapidamente a performance, diario, analytics, report, team e impostazioni operative.",
+    directoryEyebrow: "Directory account",
+    directoryTitle: "Ambienti applicazione",
+    directoryDescription:
+      "Apri gli ambienti operativi, di intelligence e controllo disponibili per il tuo ruolo.",
 
     currentEquity: "Current Equity",
     totalPnl: "Total PnL",
@@ -119,6 +118,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     initialBalance: "Initial Balance",
     targetProgress: "Target Progress",
     needsReview: "Needs Review",
+    tradesNeedReview: "trade da revisionare",
     members: "Members",
 
     accountType: "Account Type",
@@ -131,10 +131,9 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     intelligenceSectionTitle: "Intelligence layer",
     intelligenceSectionDescription:
       "Analisi, report, sessioni e supporto operativo avanzato.",
-    managementSectionTitle: "Management",
+    managementSectionTitle: "Account control",
     managementSectionDescription:
       "Gestione di membri, workspace, regole e integrazioni.",
-    manageTeam: "Gestisci team",
 
     cards: {
       dashboard: {
@@ -226,6 +225,10 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
       "This account is archived. You can review historical data, but operational and management features are limited.",
     heroDescription:
       "The account operating center. From here you can quickly access performance, diary, analytics, reports, team and operational settings.",
+    directoryEyebrow: "Account directory",
+    directoryTitle: "Application rooms",
+    directoryDescription:
+      "Open the workspace, intelligence and control rooms available to your role.",
 
     currentEquity: "Current Equity",
     totalPnl: "Total PnL",
@@ -235,6 +238,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     initialBalance: "Initial Balance",
     targetProgress: "Target Progress",
     needsReview: "Needs Review",
+    tradesNeedReview: "trades need review",
     members: "Members",
 
     accountType: "Account Type",
@@ -246,90 +250,89 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
       "The main areas to read and manage the account’s progress.",
     intelligenceSectionTitle: "Intelligence layer",
     intelligenceSectionDescription:
-      "Analytics, reports, sessions and advanced operational support.",
-    managementSectionTitle: "Management",
+      "Analysis and decision-support tools.",
+    managementSectionTitle: "Controllo account",
     managementSectionDescription:
-      "Management of members, workspace, rules and integrations.",
-    manageTeam: "Manage team",
+      "Accessi, configurazione e standard operativi.",
 
     cards: {
       dashboard: {
         title: "Dashboard",
         eyebrow: "Overview",
         description:
-          "The main account view: equity, performance, targets and overall operational status.",
+          "Account summary and current operating condition.",
       },
       diary: {
         title: "Trading Diary",
         eyebrow: "Execution",
         description:
-          "Review, enter and improve trades with data, notes, sessions and execution quality.",
+          "Enter, inspect and replay trading activity.",
       },
       calendar: {
         title: "Calendar",
         eyebrow: "Daily view",
         description:
-          "Read daily performance and identify the best, worst and most stable days.",
+          "Review daily performance and consistency.",
       },
       equity: {
         title: "Equity",
         eyebrow: "Capital",
         description:
-          "Track equity curve, drawdown, account growth and progressive capital movement.",
+          "Inspect capital growth and drawdown.",
       },
       analytics: {
         title: "Analytics",
         eyebrow: "Intelligence",
         description:
-          "Advanced analysis on symbols, sessions, psychology, execution quality and recurring patterns.",
+          "Diagnose execution, psychology and recurring patterns.",
       },
       reports: {
         title: "Reports",
         eyebrow: "Review",
         description:
-          "Professional summaries to read results, strengths, weaknesses and operational focus.",
+          "Generate structured performance and risk reviews.",
       },
       sessions: {
         title: "Sessions",
         eyebrow: "Planning",
         description:
-          "Plan and review operational sessions with context, discipline and pre/post-market focus.",
+          "Plan, execute and review trading sessions.",
       },
       copilot: {
         title: "Copilot",
         eyebrow: "AI layer",
         description:
-          "Operational memory, behavioral patterns, risk signals and decision support.",
+          "Use account evidence and operating rules for decisions.",
       },
       members: {
         title: "Members",
         eyebrow: "Team",
         description:
-          "Control members, roles, individual performance, activity and account access.",
+          "Review roles, permissions and collaboration boundaries.",
       },
       workspace: {
         title: "Workspace",
         eyebrow: "Command room",
         description:
-          "Observe live presence, team activity, leaderboard and collaborative signals.",
+          "Review readiness, access and account wiring.",
       },
       rules: {
         title: "Rules & Goals",
         eyebrow: "Control",
         description:
-          "Manage targets, operating rules, limits and the account control structure.",
+          "Define standards, limits and operating rules.",
       },
       integrations: {
         title: "Integrations",
         eyebrow: "Sync",
         description:
-          "Configure MT5, broker sync, import modes and automatic integration status.",
+          "Configure manual and external account connections.",
       },
       playbook: {
         title: "Playbook",
         eyebrow: "Strategies",
         description:
-          "Create and manage your trading strategies, link them to trades and analyse performance by setup.",
+          "Document the strategies the account is allowed to trade.",
       },
     },
   },
@@ -342,6 +345,10 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
       "Цей акаунт архівовано. Ви можете переглядати історію, але операційні та управлінські функції обмежені.",
     heroDescription:
       "Операційний центр акаунта. Звідси можна швидко перейти до performance, щоденника, аналітики, звітів, команди та операційних налаштувань.",
+    directoryEyebrow: "Каталог акаунта",
+    directoryTitle: "Простори застосунку",
+    directoryDescription:
+      "Відкривайте доступні для вашої ролі робочі, аналітичні та контрольні простори.",
 
     currentEquity: "Поточний equity",
     totalPnl: "Загальний PnL",
@@ -351,6 +358,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     initialBalance: "Початковий баланс",
     targetProgress: "Прогрес цілі",
     needsReview: "Потребує перегляду",
+    tradesNeedReview: "угод потребують перегляду",
     members: "Учасники",
 
     accountType: "Тип акаунта",
@@ -366,7 +374,6 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     managementSectionTitle: "Керування",
     managementSectionDescription:
       "Керування учасниками, workspace, правилами та інтеграціями.",
-    manageTeam: "Керувати командою",
 
     cards: {
       dashboard: {
@@ -458,6 +465,10 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
       "Этот аккаунт архивирован. Вы можете просматривать историю, но операционные и управленческие функции ограничены.",
     heroDescription:
       "Операционный центр аккаунта. Отсюда можно быстро перейти к performance, дневнику, аналитике, отчетам, команде и операционным настройкам.",
+    directoryEyebrow: "Каталог аккаунта",
+    directoryTitle: "Разделы приложения",
+    directoryDescription:
+      "Открывайте доступные вашей роли рабочие, аналитические и контрольные разделы.",
 
     currentEquity: "Текущий equity",
     totalPnl: "Общий PnL",
@@ -467,6 +478,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     initialBalance: "Начальный баланс",
     targetProgress: "Прогресс цели",
     needsReview: "Требует проверки",
+    tradesNeedReview: "сделок требуют проверки",
     members: "Участники",
 
     accountType: "Тип аккаунта",
@@ -482,7 +494,6 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     managementSectionTitle: "Управление",
     managementSectionDescription:
       "Управление участниками, workspace, правилами и интеграциями.",
-    manageTeam: "Управление командой",
 
     cards: {
       dashboard: {
@@ -574,6 +585,10 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
       "Esta cuenta está archivada. Puedes consultar el histórico, pero las funciones operativas y de gestión están limitadas.",
     heroDescription:
       "Centro operativo de la cuenta. Desde aquí puedes acceder rápidamente a performance, diario, analítica, informes, equipo y ajustes operativos.",
+    directoryEyebrow: "Directorio de cuenta",
+    directoryTitle: "Áreas de la aplicación",
+    directoryDescription:
+      "Abre las áreas de trabajo, inteligencia y control disponibles para tu rol.",
 
     currentEquity: "Equity actual",
     totalPnl: "PnL total",
@@ -583,6 +598,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     initialBalance: "Balance inicial",
     targetProgress: "Progreso del objetivo",
     needsReview: "Requiere revisión",
+    tradesNeedReview: "operaciones requieren revisión",
     members: "Miembros",
 
     accountType: "Tipo de cuenta",
@@ -598,7 +614,6 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     managementSectionTitle: "Gestión",
     managementSectionDescription:
       "Gestión de miembros, workspace, reglas e integraciones.",
-    manageTeam: "Gestionar equipo",
 
     cards: {
       dashboard: {
@@ -690,6 +705,10 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
       "Ce compte est archivé. Vous pouvez consulter l’historique, mais les fonctions opérationnelles et de gestion sont limitées.",
     heroDescription:
       "Centre opérationnel du compte. Depuis ici, accédez rapidement à la performance, au journal, aux analytics, aux rapports, à l’équipe et aux paramètres opérationnels.",
+    directoryEyebrow: "Répertoire du compte",
+    directoryTitle: "Espaces de l’application",
+    directoryDescription:
+      "Ouvrez les espaces de travail, d’intelligence et de contrôle disponibles pour votre rôle.",
 
     currentEquity: "Equity actuelle",
     totalPnl: "PnL total",
@@ -699,6 +718,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     initialBalance: "Solde initial",
     targetProgress: "Progression de l’objectif",
     needsReview: "À revoir",
+    tradesNeedReview: "trades doivent être révisés",
     members: "Membres",
 
     accountType: "Type de compte",
@@ -714,7 +734,6 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     managementSectionTitle: "Gestion",
     managementSectionDescription:
       "Gestion des membres, workspace, règles et intégrations.",
-    manageTeam: "Gérer l'équipe",
 
     cards: {
       dashboard: {
@@ -806,6 +825,10 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
       "Dieses Konto ist archiviert. Du kannst historische Daten ansehen, aber operative und administrative Funktionen sind eingeschränkt.",
     heroDescription:
       "Operatives Zentrum des Kontos. Von hier aus erreichst du schnell Performance, Tagebuch, Analytics, Berichte, Team und operative Einstellungen.",
+    directoryEyebrow: "Kontoverzeichnis",
+    directoryTitle: "Anwendungsbereiche",
+    directoryDescription:
+      "Öffne die für deine Rolle verfügbaren Arbeits-, Intelligence- und Kontrollbereiche.",
 
     currentEquity: "Aktuelles Equity",
     totalPnl: "Gesamt-PnL",
@@ -815,6 +838,7 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     initialBalance: "Startkapital",
     targetProgress: "Ziel-Fortschritt",
     needsReview: "Review nötig",
+    tradesNeedReview: "Trades müssen geprüft werden",
     members: "Mitglieder",
 
     accountType: "Kontotyp",
@@ -830,7 +854,6 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
     managementSectionTitle: "Management",
     managementSectionDescription:
       "Verwaltung von Mitgliedern, Workspace, Regeln und Integrationen.",
-    manageTeam: "Team verwalten",
 
     cards: {
       dashboard: {
@@ -915,17 +938,6 @@ const accountHubLabels: Record<AppLanguage, AccountHubLabels> = {
   },
 };
 
-function formatOptionalPercent(
-  value: number | null | undefined,
-  language: AppLanguage
-) {
-  if (value === null || value === undefined) {
-    return "-";
-  }
-
-  return formatPercentByLanguage(value, language);
-}
-
 function getResultTone(value: number) {
   if (value > 0) {
     return "text-green-400";
@@ -935,54 +947,90 @@ function getResultTone(value: number) {
     return "text-red-400";
   }
 
-  return "text-yellow-400";
+  return "text-muted";
 }
 
-function AccountHubCard({ card }: { card: HubCard }) {
+function ModuleRow({ card, isLast }: { card: HubCard; isLast: boolean }) {
   const Icon = card.icon;
 
   return (
-    <Link href={card.href} className="block">
-      <Card interactive className="p-6">
-        <div className="mb-8 flex items-start justify-between gap-4">
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-muted-faint">
-              {card.eyebrow}
-            </p>
-
-            <h2 className="mt-3 text-2xl font-black text-white">
-              {card.title}
-            </h2>
-          </div>
-
-          <IconTile>
-            <Icon size={20} />
-          </IconTile>
-        </div>
-
-        <p className="text-sm leading-6 text-muted">
+    <Link
+      href={card.href}
+      className={`group flex min-h-20 items-center gap-3 px-1 py-4 outline-none transition-colors duration-base hover:bg-white/[0.025] focus-visible:rounded-inner focus-visible:ring-2 focus-visible:ring-accent-bright/50 ${
+        isLast ? "" : "border-b-[0.5px] border-flash/[0.08]"
+      }`}
+    >
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-2 text-muted transition-colors duration-base group-hover:text-accent-bright">
+        <Icon size={17} aria-hidden="true" />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-body font-medium text-flash">
+          {card.title}
+        </span>
+        <span className="mt-1 block text-caption leading-5 text-muted">
           {card.description}
-        </p>
-      </Card>
+        </span>
+      </span>
+      <ChevronRight
+        size={17}
+        aria-hidden="true"
+        className="shrink-0 text-muted-faint transition-transform duration-base group-hover:translate-x-0.5 group-hover:text-accent-bright"
+      />
     </Link>
   );
 }
 
-function StatCard({
-  label,
-  value,
-  tone = "text-white",
-}: StatCardProps) {
+function ModulePanel({
+  title,
+  description,
+  cards,
+}: {
+  title: string;
+  description: string;
+  cards: HubCard[];
+}) {
   return (
-    <Card interactive className="p-6">
-      <p className="text-sm text-muted">
-        {label}
-      </p>
-
-      <p className={`mt-3 text-3xl font-black ${tone}`}>
-        {value}
-      </p>
+    <Card className="p-5">
+      <div className="border-b-[0.5px] border-flash/[0.08] pb-4">
+        <p className="text-micro uppercase tracking-label text-accent-bright">
+          {title}
+        </p>
+        <h3 className="mt-2 text-subsection text-flash">{description}</h3>
+      </div>
+      <nav aria-label={title}>
+        {cards.map((card, index) => (
+          <ModuleRow
+            key={card.href}
+            card={card}
+            isLast={index === cards.length - 1}
+          />
+        ))}
+      </nav>
     </Card>
+  );
+}
+
+function QuickAccessTile({ card }: { card: HubCard }) {
+  const Icon = card.icon;
+
+  return (
+    <Link
+      href={card.href}
+      className="group flex min-h-24 items-center gap-3 rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-2 p-4 outline-none transition-all duration-base hover:-translate-y-0.5 hover:border-accent-bright/30 focus-visible:ring-2 focus-visible:ring-accent-bright/60"
+    >
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-1 text-muted group-hover:text-accent-bright">
+        <Icon size={17} aria-hidden="true" />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-body font-medium text-flash">
+          {card.title}
+        </span>
+        <span className="mt-1 block line-clamp-2 text-caption leading-5 text-muted">
+          {card.description}
+        </span>
+      </span>
+      <ChevronRight size={16} aria-hidden="true" className="shrink-0 text-muted-faint" />
+    </Link>
   );
 }
 
@@ -1032,7 +1080,7 @@ export default async function AccountPage({
     currentUser.appLanguage
   );
 
-  const t = accountHubLabels[language];
+  const t = accountHubLabels.en;
 
   const [trades, membersCount] = await Promise.all([
     prisma.trade.findMany({
@@ -1050,6 +1098,7 @@ export default async function AccountPage({
       select: {
         resultUsd: true,
         equity: true,
+        drawdownPercent: true,
         outcome: true,
         needsReview: true,
       },
@@ -1083,24 +1132,13 @@ export default async function AccountPage({
   const canManageAccount =
     isManager || membership.canManageAccount;
 
-  const canManageMembers =
-    isManager || membership.canManageMembers;
+  const canCreateTrades =
+    isManager || membership.canCreateTrades;
 
   const currency = account.currency || "USD";
   const initialBalance = account.initialBalance || 0;
 
   const totalTrades = trades.length;
-
-  const closedTrades = trades.filter(
-    (trade) =>
-      trade.outcome === "win" ||
-      trade.outcome === "loss" ||
-      trade.outcome === "be"
-  );
-
-  const wins = closedTrades.filter(
-    (trade) => trade.outcome === "win"
-  ).length;
 
   const totalPnl = trades.reduce(
     (acc, trade) => acc + (trade.resultUsd || 0),
@@ -1113,34 +1151,40 @@ export default async function AccountPage({
       initialBalance
       : initialBalance;
 
-  const currentProfitPercent =
-    initialBalance > 0
-      ? ((currentEquity - initialBalance) /
-        initialBalance) *
-      100
-      : 0;
-
-  const winRate =
-    closedTrades.length > 0
-      ? (wins / closedTrades.length) * 100
-      : 0;
-
   const needsReviewCount = trades.filter(
     (trade) => trade.needsReview
   ).length;
 
-  const accountProgress =
-    account.profitTarget && account.profitTarget > 0
-      ? Math.max(
-        0,
-        Math.min(
-          100,
-          (currentProfitPercent /
-            account.profitTarget) *
-          100
-        )
-      )
-      : 0;
+  const currentDrawdown =
+    totalTrades > 0 && trades[trades.length - 1].drawdownPercent !== null
+      ? trades[trades.length - 1].drawdownPercent
+      : null;
+  const hasDrawdownBoundary =
+    account.maxDrawdown !== null &&
+    account.maxDrawdown !== undefined &&
+    account.maxDrawdown > 0;
+  const hasProfitTarget =
+    account.profitTarget !== null &&
+    account.profitTarget !== undefined &&
+    account.profitTarget > 0;
+  const drawdownMagnitude = Math.abs(currentDrawdown ?? 0);
+  const drawdownState =
+    currentDrawdown === null
+      ? "Not measured"
+      : !hasDrawdownBoundary
+        ? "No boundary"
+        : drawdownMagnitude > account.maxDrawdown!
+          ? "Breached"
+          : drawdownMagnitude === account.maxDrawdown!
+            ? "Boundary reached"
+            : "Within limit";
+  const drawdownTone =
+    drawdownState === "Breached" || drawdownState === "Boundary reached"
+      ? "text-negative"
+      : "text-muted";
+  const drawdownDetail = hasDrawdownBoundary
+    ? `${drawdownState} · ${formatPercentByLanguage(account.maxDrawdown!, language)} max boundary`
+    : drawdownState;
 
   const coreCards: HubCard[] = [
     {
@@ -1198,16 +1242,16 @@ export default async function AccountPage({
 
   const managementCards: HubCard[] = [
     {
-      href: `/accounts/${account.id}/members`,
-      ...t.cards.members,
-      icon: Users,
-      show: canViewMembers,
-    },
-    {
       href: `/accounts/${account.id}/workspace`,
       ...t.cards.workspace,
       icon: Layers3,
       show: canViewMembers && !isArchived,
+    },
+    {
+      href: `/accounts/${account.id}/members`,
+      ...t.cards.members,
+      icon: Users,
+      show: canViewMembers,
     },
     {
       href: `/accounts/${account.id}/rules`,
@@ -1247,239 +1291,247 @@ export default async function AccountPage({
     },
   ].filter((section) => section.cards.length > 0);
 
+  const riskRequiresAction =
+    hasDrawdownBoundary &&
+    currentDrawdown !== null &&
+    drawdownMagnitude >= account.maxDrawdown!;
+  const nextMove = riskRequiresAction
+    ? {
+        key: "risk",
+        title: "Review the account risk boundary",
+        description:
+          "Current drawdown has reached the configured account boundary.",
+        href:
+          canManageAccount && !isArchived
+            ? `/accounts/${account.id}/rules`
+            : `/accounts/${account.id}/equity`,
+        label:
+          canManageAccount && !isArchived
+            ? "Open Rules & Goals"
+            : "Open Equity",
+      }
+    : needsReviewCount > 0
+      ? {
+          key: "reviews",
+          title: "Review pending trades",
+          description:
+            "Complete the open reviews before evaluating execution consistency.",
+          href: `/accounts/${account.id}/diary`,
+          label: "Open Trading Diary",
+        }
+      : totalTrades === 0
+        ? {
+            key: "trades",
+            title: "Record the first trade",
+            description: "Start building the account’s operational history.",
+            href:
+              canCreateTrades && !isArchived
+                ? `/accounts/${account.id}/diary/new`
+                : `/accounts/${account.id}/diary`,
+            label:
+              canCreateTrades && !isArchived
+                ? "Add first trade"
+                : "Open Trading Diary",
+          }
+        : (!hasProfitTarget || !hasDrawdownBoundary) &&
+            canManageAccount &&
+            !isArchived
+          ? {
+              key: "standards",
+              title: "Configure operating standards",
+              description:
+                "Complete the account target and drawdown boundaries.",
+              href: `/accounts/${account.id}/rules`,
+              label: "Open Rules & Goals",
+            }
+          : {
+              key: "performance",
+              title: "Review current performance",
+              description: "The account has no immediate operating blockers.",
+              href: `/accounts/${account.id}/dashboard`,
+              label: "Open Dashboard",
+            };
+
+  const attentionSignals = [
+    ...(riskRequiresAction
+      ? [
+          {
+            key: "risk",
+            text:
+              drawdownState === "Breached"
+                ? "Drawdown boundary breached"
+                : "Drawdown boundary reached",
+          },
+        ]
+      : []),
+    ...(needsReviewCount > 0
+      ? [
+          {
+            key: "reviews",
+            text: `${needsReviewCount} ${needsReviewCount === 1 ? "trade needs" : "trades need"} review`,
+          },
+        ]
+      : []),
+    ...(!hasProfitTarget
+      ? [{ key: "standards", text: "Profit target not configured" }]
+      : []),
+    ...(!hasDrawdownBoundary
+      ? [{ key: "standards", text: "Drawdown boundary not configured" }]
+      : []),
+    ...(totalTrades === 0
+      ? [{ key: "trades", text: "No trades recorded" }]
+      : []),
+  ]
+    .filter((signal) => signal.key !== nextMove.key)
+    .slice(0, 3);
+
+  const quickAccessCards = [
+    coreCards[0],
+    coreCards[1],
+    coreCards[2],
+    intelligenceCards[2],
+    intelligenceCards[0],
+    intelligenceCards[1],
+  ].filter((card) => card.show);
+
   return (
-    <div className="space-y-10">
-      <Card
-        variant="hero"
-        className="reveal-rise relative p-8 sm:p-10"
-        style={{ animationDelay: "0ms" }}
-      >
-        <SignatureEdge
-          orientation="vertical"
-          className="absolute bottom-8 left-0 top-8"
-        />
-
-        <div className="grid gap-8 pl-4 xl:grid-cols-5">
-          <div className="xl:col-span-3">
-            <div className="mb-6 flex flex-wrap items-center gap-3">
-              <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
-                {t.selectedAccount} &middot; {t.hubBadge}
+    <div className="space-y-6">
+      <Card className="reveal-rise p-5 sm:p-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="rounded-pill border-[0.5px] border-accent-bright/25 bg-accent-bright/[0.08] px-3 py-1 text-micro font-medium uppercase tracking-label text-accent-bright">
+                Selected account · {account.type} account
               </span>
-
-              <span className="rounded-full bg-white/[0.06] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-muted">
-                {isArchived ? t.archived : account.status}
+              <span className="rounded-pill border-[0.5px] border-flash/[0.1] bg-surface-2 px-3 py-1 text-micro font-medium uppercase tracking-label text-muted">
+                {isArchived ? "Archived" : account.status}
               </span>
-
-              <span className="rounded-full bg-white/[0.06] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-muted">
+              <span className="rounded-pill border-[0.5px] border-flash/[0.1] bg-surface-2 px-3 py-1 text-micro font-medium uppercase tracking-label text-muted">
                 {membership.role}
               </span>
             </div>
-
-            <h1 className="text-hero break-words">
+            <h1 className="mt-3 break-words text-section text-flash">
               {account.name}
             </h1>
-
-            {canManageMembers && (
-              <Link
-                href={`/accounts/${account.id}/members`}
-                className="mt-6 inline-flex items-center gap-2 rounded-inner border-[0.5px] border-flash/[0.12] px-5 py-3 text-sm text-muted transition-colors duration-base hover:text-white hover:bg-white/[0.04]"
-              >
-                <Users size={16} />
-                {t.manageTeam}
-              </Link>
-            )}
-
-            {isArchived && (
-              <Card variant="inner" className="mt-6 p-5 text-sm leading-6 text-muted">
-                {t.archivedMessage}
-              </Card>
-            )}
           </div>
+          <p className="text-caption text-muted">
+            {membersCount} {membersCount === 1 ? "member" : "members"}
+          </p>
+        </div>
+        {isArchived && (
+          <p className="mt-3 border-t-[0.5px] border-flash/[0.08] pt-3 text-caption leading-5 text-muted">
+            This account is archived. Operational and management rooms remain limited.
+          </p>
+        )}
+      </Card>
 
-          <div className="grid gap-4 sm:grid-cols-2 xl:col-span-2">
-            <StatCard
-              label={t.currentEquity}
-              value={formatCurrencyByLanguage(
-                currentEquity,
-                currency,
-                language
-              )}
-            />
+      <Card variant="hero" className="reveal-rise p-5 sm:p-6" style={{ animationDelay: "60ms" }}>
+        <AccountCore
+          accountId={account.id}
+          accountName={account.name}
+          status={isArchived ? "Archived" : account.status}
+          totalPnl={formatCurrencyByLanguage(totalPnl, currency, language)}
+          totalPnlTone={getResultTone(totalPnl)}
+          currentEquity={formatCurrencyByLanguage(currentEquity, currency, language)}
+          currentDrawdown={
+            currentDrawdown === null
+              ? "Not measured"
+              : formatPercentByLanguage(currentDrawdown, language)
+          }
+          drawdownDetail={drawdownDetail}
+          drawdownTone={drawdownTone}
+          needsReview={needsReviewCount}
+          totalTrades={totalTrades}
+        />
 
-            <StatCard
-              label={t.totalPnl}
-              value={formatCurrencyByLanguage(
-                totalPnl,
-                currency,
-                language
-              )}
-              tone={getResultTone(totalPnl)}
-            />
+        <div className="mt-6 border-t-[0.5px] border-flash/[0.1] pt-5">
+          <section className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
+              <p className="text-micro uppercase tracking-label text-accent-bright">
+                Next move
+              </p>
+              <h2 className="mt-2 text-subsection text-flash">{nextMove.title}</h2>
+              <p className="mt-2 text-caption leading-5 text-muted">
+                {nextMove.description}
+              </p>
+            </div>
+            <Link
+              href={nextMove.href}
+              className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-inner border-[0.5px] border-accent-bright/25 bg-accent-bright/[0.07] px-4 py-3 text-sm font-medium text-accent-bright outline-none transition-all duration-base hover:-translate-y-0.5 hover:border-accent-bright/45 focus-visible:ring-2 focus-visible:ring-accent-bright/60 sm:w-auto"
+            >
+              {nextMove.label}
+              <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+          </section>
 
-            <StatCard
-              label={t.winRate}
-              value={formatPercentByLanguage(
-                winRate,
-                language
-              )}
-              tone={
-                winRate >= 50
-                  ? "text-green-400"
-                  : "text-yellow-400"
-              }
-            />
-
-            <StatCard
-              label={t.totalTrades}
-              value={totalTrades}
-              tone="text-accent-bright"
-            />
-          </div>
+          <section className="mt-4 flex flex-col gap-2 border-t-[0.5px] border-flash/[0.07] pt-4 sm:flex-row sm:items-center">
+            <p className="shrink-0 text-micro uppercase tracking-label text-muted-faint">
+              Attention
+            </p>
+            {attentionSignals.length > 0 ? (
+              <ul className="flex flex-wrap gap-2">
+                {attentionSignals.map((signal) => (
+                  <li
+                    key={`${signal.key}-${signal.text}`}
+                    className="inline-flex items-center gap-2 rounded-pill border-[0.5px] border-yellow-200/15 bg-yellow-200/[0.04] px-3 py-1.5 text-caption text-muted"
+                  >
+                    <CircleAlert size={14} aria-hidden="true" className="shrink-0 text-yellow-200" />
+                    {signal.text}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-caption text-muted">
+                No immediate operational warnings.
+              </p>
+            )}
+          </section>
         </div>
       </Card>
 
-      <section
-        className="reveal-rise grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4"
-        style={{ animationDelay: "80ms" }}
-      >
-        <Card interactive className="p-6">
-          <div className="flex items-center gap-3">
-            <Wallet className="text-accent" size={22} />
-            <p className="text-sm text-muted">
-              {t.initialBalance}
-            </p>
-          </div>
+      <section className="reveal-rise" style={{ animationDelay: "100ms" }}>
+        <p className="text-micro uppercase tracking-label text-accent-bright">
+          Quick access
+        </p>
+        <h2 className="mt-2 text-section text-flash">Primary rooms</h2>
+        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+          {quickAccessCards.map((card) => (
+            <QuickAccessTile key={card.href} card={card} />
+          ))}
+        </div>
+      </section>
 
-          <p className="mt-4 text-3xl font-black text-white">
-            {formatCurrencyByLanguage(
-              initialBalance,
-              currency,
-              language
-            )}
-          </p>
-        </Card>
-
-        <Card interactive className="p-6">
-          <div className="flex items-center gap-3">
-            <TrendingUp className="text-accent-bright" size={22} />
-            <p className="text-sm text-muted">
-              {t.targetProgress}
-            </p>
-          </div>
-
-          <p className="mt-4 text-3xl font-black text-accent-bright">
-            {account.profitTarget
-              ? formatPercentByLanguage(
-                accountProgress,
-                language
-              )
-              : "-"}
-          </p>
-
-          <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/10">
-            <div
-              className="h-full rounded-full bg-accent-bright"
-              style={{
-                width: `${accountProgress}%`,
-              }}
+      <Card className="reveal-rise p-0" style={{ animationDelay: "140ms" }}>
+        <details className="group">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-bright/60 sm:p-6 [&::-webkit-details-marker]:hidden">
+            <span>
+              <span className="block text-body font-medium text-flash">
+                All application rooms
+              </span>
+              <span className="mt-1 block text-caption text-muted">
+                Open the complete account directory.
+              </span>
+            </span>
+            <ChevronRight
+              size={18}
+              aria-hidden="true"
+              className="shrink-0 text-muted transition-transform duration-base group-open:rotate-90"
             />
+          </summary>
+          <div className="border-t-[0.5px] border-flash/[0.08] p-5 sm:p-6">
+            <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-2 xl:grid-cols-3">
+              {sections.map((section) => (
+                <ModulePanel
+                  key={section.title}
+                  title={section.title}
+                  description={section.description}
+                  cards={section.cards}
+                />
+              ))}
+            </div>
           </div>
-        </Card>
-
-        <Card interactive className="p-6">
-          <div className="flex items-center gap-3">
-            <ShieldCheck className="text-yellow-300" size={22} />
-            <p className="text-sm text-muted">
-              {t.needsReview}
-            </p>
-          </div>
-
-          <p className="mt-4 text-3xl font-black text-yellow-300">
-            {needsReviewCount}
-          </p>
-        </Card>
-
-        <Card interactive className="p-6">
-          <div className="flex items-center gap-3">
-            <Landmark className="text-accent" size={22} />
-            <p className="text-sm text-muted">
-              {t.members}
-            </p>
-          </div>
-
-          <p className="mt-4 text-3xl font-black text-white">
-            {membersCount}
-          </p>
-        </Card>
-      </section>
-
-      <section
-        className="reveal-rise grid gap-4 md:grid-cols-3"
-        style={{ animationDelay: "120ms" }}
-      >
-        <Card interactive className="p-6">
-          <p className="text-sm text-muted">
-            {t.accountType}
-          </p>
-
-          <p className="mt-3 text-2xl font-black text-white">
-            {account.type}
-          </p>
-        </Card>
-
-        <Card interactive className="p-6">
-          <p className="text-sm text-muted">
-            {t.profitTarget}
-          </p>
-
-          <p className="mt-3 text-2xl font-black text-accent">
-            {formatOptionalPercent(
-              account.profitTarget,
-              language
-            )}
-          </p>
-        </Card>
-
-        <Card interactive className="p-6">
-          <p className="text-sm text-muted">
-            {t.maxDrawdown}
-          </p>
-
-          <p className="mt-3 text-2xl font-black text-red-400">
-            {formatOptionalPercent(
-              account.maxDrawdown,
-              language
-            )}
-          </p>
-        </Card>
-      </section>
-
-      {sections.map((section, index) => (
-        <section
-          key={section.title}
-          className="reveal-rise space-y-5"
-          style={{ animationDelay: `${160 + index * 40}ms` }}
-        >
-          <div>
-            <p className="text-sm text-muted">
-              {section.description}
-            </p>
-
-            <h2 className="text-section mt-2 text-white">
-              {section.title}
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {section.cards.map((card) => (
-              <AccountHubCard
-                key={card.href}
-                card={card}
-              />
-            ))}
-          </div>
-        </section>
-      ))}
+        </details>
+      </Card>
     </div>
   );
 }

@@ -9,12 +9,10 @@ import {
   CandlestickChart,
   FileText,
   Goal,
-  KeyRound,
   Layers3,
   LineChart,
   PlugZap,
   Radar,
-  Route,
   ShieldCheck,
   Users,
   type LucideIcon,
@@ -35,9 +33,11 @@ type HubModule = {
   href: string;
   icon: LucideIcon;
   show: boolean;
-  state: "ready" | "limited" | "locked";
+  state: "ready" | "limited" | "pending" | "manual" | "unavailable";
   note: string;
 };
+
+type ReadinessState = "Ready" | "Manual mode" | "Pending" | "Limited" | "Unavailable";
 
 function formatDate(value: Date | null | undefined) {
   if (!value) return "No activity recorded";
@@ -60,27 +60,42 @@ function getRoleLabel(role: string) {
   return "Member";
 }
 
-function getActivityTone(type: string) {
-  const normalizedType = type.toLowerCase();
+function getActivityTitle(type: string) {
+  const titles: Record<string, string> = {
+    TRADING_GOALS_UPDATED: "Trading goals updated",
+    TRADING_SESSION_CREATED: "Trading session created",
+    TRADE_CREATED: "Trade created",
+    TRADE_UPDATED: "Trade updated",
+    TRADE_DELETED: "Trade deleted",
+    INTEGRATION_SETTINGS_UPDATED: "Integration settings updated",
+    MEMBER_INVITED: "Member invited",
+    MEMBER_REMOVED: "Member removed",
+  };
 
-  if (
-    normalizedType.includes("delete") ||
-    normalizedType.includes("remove") ||
-    normalizedType.includes("freeze")
-  ) {
-    return "warning" as const;
-  }
+  if (titles[type]) return titles[type];
 
-  if (
-    normalizedType.includes("create") ||
-    normalizedType.includes("invite") ||
-    normalizedType.includes("sync") ||
-    normalizedType.includes("import")
-  ) {
-    return "info" as const;
-  }
+  const readable = type.toLowerCase().replaceAll("_", " ");
+  return readable.charAt(0).toUpperCase() + readable.slice(1);
+}
 
-  return "neutral" as const;
+function getActivityDescription(type: string) {
+  const descriptions: Record<string, string> = {
+    TRADING_GOALS_UPDATED: "Account standards were updated.",
+    TRADING_SESSION_CREATED: "A trading session was added to the account.",
+    TRADE_CREATED: "A trade was added to the account history.",
+    TRADE_UPDATED: "A trade record was updated.",
+    TRADE_DELETED: "A trade record was removed.",
+    INTEGRATION_SETTINGS_UPDATED: "The account data channel was updated.",
+  };
+
+  return descriptions[type] ?? null;
+}
+
+function getDataMode(mode: string | null) {
+  if (mode === "mt5") return "MT5";
+  if (mode === "broker") return "Broker";
+  if (mode === "hybrid") return "Hybrid";
+  return "Manual";
 }
 
 function StatusPill({
@@ -180,9 +195,13 @@ function ModuleRow({ module }: { module: HubModule }) {
   const stateTone =
     module.state === "ready"
       ? "info"
+      : module.state === "manual"
+        ? "info"
       : module.state === "limited"
         ? "warning"
-        : "neutral";
+        : module.state === "pending"
+          ? "warning"
+          : "neutral";
 
   return (
     <Link href={module.href} className="block">
@@ -207,9 +226,13 @@ function ModuleRow({ module }: { module: HubModule }) {
             <StatusPill tone={stateTone}>
               {module.state === "ready"
                 ? "Ready"
+                : module.state === "manual"
+                  ? "Manual mode"
                 : module.state === "limited"
                   ? "Limited"
-                  : "Locked"}
+                  : module.state === "pending"
+                    ? "Pending"
+                    : "Unavailable"}
             </StatusPill>
             <ArrowRight
               size={17}
@@ -335,18 +358,28 @@ export default async function WorkspacePage({
   const canViewCopilot = isManager || membership.canViewCopilot;
   const canManageMembers = isManager || membership.canManageMembers;
   const canManageAccount = isManager || membership.canManageAccount;
+  const canManagePlaybook = isManager || membership.canCreateTrades;
+  const isManualMode = account.integrationMode === "manual";
+  const hasExternalSync =
+    account.autoSyncEnabled || account.mt5Enabled || account.brokerSyncEnabled;
 
-  const readinessChecks = [
-    { label: "Account created", ready: true },
-    { label: "Trade history", ready: hasTradingData },
-    { label: "Planning layer", ready: hasPlanningData },
-    { label: "Access roster", ready: members.length > 0 },
+  const readinessChecks: Array<{ label: string; state: ReadinessState }> = [
+    { label: "Account created", state: "Ready" },
+    { label: "Trade history", state: hasTradingData ? "Ready" : "Pending" },
+    { label: "Planning layer", state: hasPlanningData ? "Ready" : "Pending" },
+    { label: "Access roster", state: members.length > 0 ? "Ready" : "Unavailable" },
     {
-      label: "Sync channel",
-      ready: account.autoSyncEnabled || account.mt5Enabled || account.brokerSyncEnabled,
+      label: "Data channel",
+      state: isManualMode
+        ? "Manual mode"
+        : hasExternalSync
+          ? "Ready"
+          : "Pending",
     },
   ];
-  const readyCount = readinessChecks.filter((check) => check.ready).length;
+  const readyCount = readinessChecks.filter(
+    (check) => check.state === "Ready" || check.state === "Manual mode"
+  ).length;
   const readinessPercent = (readyCount / readinessChecks.length) * 100;
   const workspaceState =
     readyCount <= 2
@@ -355,9 +388,9 @@ export default async function WorkspacePage({
         ? "Operational"
         : "Fully wired";
   const integrationState =
-    account.integrationMode === "manual"
+    isManualMode
       ? "Manual input"
-      : account.syncStatus || "Configured";
+      : getDataMode(account.integrationMode);
 
   const modules: HubModule[] = [
     {
@@ -490,10 +523,7 @@ export default async function WorkspacePage({
       href: `/accounts/${accountId}/integrations`,
       icon: PlugZap,
       show: canManageAccount,
-      state:
-        account.autoSyncEnabled || account.mt5Enabled || account.brokerSyncEnabled
-          ? "ready"
-          : "limited",
+      state: isManualMode ? "manual" : hasExternalSync ? "ready" : "pending",
       note: `Current mode: ${integrationState}.`,
     },
     {
@@ -520,40 +550,74 @@ export default async function WorkspacePage({
     ["Members", "Rules & Goals", "Integrations", "Playbook"].includes(module.title)
   );
   const nextStep =
-    !hasTradingData
+    !isManualMode && !hasExternalSync && canManageAccount
       ? {
-          title: "Log the first account trade",
+          title: "Connect the account data channel",
           description:
-            "Most performance rooms stay limited until real trade records exist.",
-          href: `/accounts/${accountId}/diary/new`,
-          label: "Add trade",
+            "Configure a supported data source to automate account activity.",
+          href: `/accounts/${accountId}/integrations`,
+          label: "Open integrations",
         }
-      : !hasPlanningData
+      : strategiesCount === 0 && canManagePlaybook
+      ? {
+          title: "Define the operating playbook",
+          description:
+            "Add the first strategy to organize the account's execution language.",
+          href: `/accounts/${accountId}/playbook`,
+          label: "Open playbook",
+        }
+      : goalsCount === 0 && canManageAccount
         ? {
-            title: "Set the operating structure",
+            title: "Configure account guardrails",
             description:
-              "Add sessions, goals, or strategies so the account has a planning layer.",
-            href: canUseSessions
-              ? `/accounts/${accountId}/sessions`
-              : `/accounts/${accountId}/playbook`,
-            label: canUseSessions ? "Open sessions" : "Open playbook",
+              "Define profit, win-rate, drawdown and frequency standards.",
+            href: `/accounts/${accountId}/rules`,
+            label: "Open rules",
           }
         : {
             title: "Review the account operating state",
             description:
-              "The workspace is wired. Move into reports when you need an executive review.",
+              "Move into reports when you need a structured executive review.",
             href: canViewReports
               ? `/accounts/${accountId}/reports`
               : `/accounts/${accountId}/dashboard`,
             label: canViewReports ? "Open reports" : "Open dashboard",
           };
+  const dataChannelBadge = isManualMode
+    ? "Manual mode"
+    : hasExternalSync
+      ? "Ready"
+      : "Pending";
+  const wiringRows = isManualMode
+    ? [
+        ["Mode", "Manual input"],
+        ["Data sync", "Not connected"],
+        ["Last sync", "No external activity"],
+      ]
+    : [
+        ["Mode", getDataMode(account.integrationMode)],
+        [
+          "Data sync",
+          account.syncStatus === "active"
+            ? "Active"
+            : account.syncStatus === "error"
+              ? "Needs attention"
+              : "Not connected",
+        ],
+        [
+          "Last sync",
+          account.lastSyncedAt
+            ? formatDate(account.lastSyncedAt)
+            : "No external activity",
+        ],
+      ];
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 lg:pr-[18rem] xl:pr-[20rem] lg:flex-row lg:items-center lg:justify-between">
         <div>
           <p className="text-micro uppercase tracking-hero text-muted-faint">
-            Account command hub &middot; {account.name}
+            Account command hub &middot; {isSharedAccount ? "Shared account" : "Solo account"}
           </p>
           <h1 className="mt-3 text-hero text-flash">Workspace</h1>
           <p className="mt-2 max-w-3xl text-sm text-muted">
@@ -564,38 +628,27 @@ export default async function WorkspacePage({
       </div>
 
       <Card variant="hero" className="reveal-rise">
-        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
-          <div>
-            <div className="flex flex-wrap items-center gap-3">
-              <StatusPill tone="info">{account.name}</StatusPill>
-              <StatusPill>{getRoleLabel(membership.role)}</StatusPill>
-              <StatusPill tone={isSharedAccount ? "info" : "neutral"}>
-                {isSharedAccount ? "Shared account" : "Solo account"}
-              </StatusPill>
+        <div className="space-y-6">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.7fr)] lg:items-start">
+            <div>
+              <div className="flex flex-wrap items-center gap-3">
+                <StatusPill tone={isSharedAccount ? "info" : "neutral"}>
+                  {isSharedAccount ? "Shared account" : "Solo account"}
+                </StatusPill>
+                <StatusPill>{getRoleLabel(membership.role)}</StatusPill>
+              </div>
+
+              <h2 className="mt-6 max-w-3xl text-section text-flash">
+                {workspaceState}
+              </h2>
+              <p className="mt-4 max-w-3xl text-body text-muted">
+                Workspace does not invent health scores. It reads account setup,
+                permissions, and existing records to show the next operational
+                move.
+              </p>
             </div>
 
-            <h2 className="mt-6 max-w-3xl text-section text-flash">
-              {workspaceState}
-            </h2>
-            <p className="mt-4 max-w-3xl text-body text-muted">
-              Workspace does not invent health scores. It reads account setup,
-              permissions, and existing records to show the next operational
-              move.
-            </p>
-
-            <div className="mt-6">
-              <Link
-                href={nextStep.href}
-                className="inline-flex items-center gap-2 rounded-inner border-[0.5px] border-accent-bright/30 bg-accent-bright/[0.08] px-5 py-3 text-sm font-medium text-accent-bright transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/55"
-              >
-                {nextStep.label}
-                <ArrowRight size={16} />
-              </Link>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-5">
+            <div className="w-full lg:min-w-[300px] lg:max-w-[420px] lg:justify-self-end">
               <div className="flex items-center justify-between gap-4">
                 <p className="text-micro uppercase tracking-label text-muted-faint">
                   Readiness
@@ -611,20 +664,30 @@ export default async function WorkspacePage({
                 />
               </div>
             </div>
+          </div>
 
-            <div className="grid gap-3 sm:grid-cols-2">
-              {readinessChecks.map((check) => (
+          <div className="border-t border-flash/[0.1] pt-6">
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              {readinessChecks.map((check, index) => (
                 <div
                   key={check.label}
-                  className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 px-4 py-3"
+                  className={`rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 px-4 py-3 ${
+                    index === readinessChecks.length - 1
+                      ? "sm:col-span-2 xl:col-span-4"
+                      : ""
+                  }`}
                 >
                   <p className="text-caption text-muted">{check.label}</p>
                   <p
                     className={`mt-1 text-body font-medium ${
-                      check.ready ? "text-accent-bright" : "text-muted-faint"
+                      check.state === "Ready" || check.state === "Manual mode"
+                        ? "text-accent-bright"
+                        : check.state === "Pending" || check.state === "Limited"
+                          ? "text-warning"
+                          : "text-muted-faint"
                     }`}
                   >
-                    {check.ready ? "Ready" : "Pending"}
+                    {check.state}
                   </p>
                 </div>
               ))}
@@ -641,34 +704,34 @@ export default async function WorkspacePage({
           icon={Layers3}
         />
         <StatCard
-          label="Trade history"
-          value={hasTradingData ? String(tradesCount) : "Not started"}
-          detail="Used only as readiness, not performance."
+          label="Recorded trades"
+          value={String(tradesCount)}
+          detail="Trades stored in this account."
           icon={CandlestickChart}
         />
         <StatCard
-          label="Planning layer"
-          value={hasPlanningData ? "Present" : "Missing"}
-          detail="Sessions, goals, or strategies."
-          icon={Route}
+          label="Account members"
+          value={String(members.length)}
+          detail="People listed on the account."
+          icon={Users}
         />
         <StatCard
-          label="Access roster"
-          value={`${members.length} member${members.length === 1 ? "" : "s"}`}
-          detail="Detailed permissions live in Members."
-          icon={Users}
+          label="Data mode"
+          value={getDataMode(account.integrationMode)}
+          detail="How activity enters the account."
+          icon={PlugZap}
         />
       </section>
 
       <section className="grid gap-6 xl:grid-cols-[1fr_0.9fr]">
-        <Card className="reveal-rise">
+        <Card className="reveal-rise xl:h-full xl:[&>div]:flex xl:[&>div]:h-full xl:[&>div]:flex-col">
           <SectionHeader eyebrow="Next move" title={nextStep.title}>
             <StatusPill tone="info">Recommended</StatusPill>
           </SectionHeader>
           <p className="mt-4 text-body text-muted">{nextStep.description}</p>
           <Link
             href={nextStep.href}
-            className="mt-6 inline-flex items-center gap-2 rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-2 px-4 py-3 text-sm font-medium text-muted transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/45 hover:text-accent-bright"
+            className="mt-6 inline-flex w-fit items-center gap-2 rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-2 px-4 py-3 text-sm font-medium text-muted transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/45 hover:text-accent-bright xl:mt-auto"
           >
             {nextStep.label}
             <ArrowRight size={16} />
@@ -679,20 +742,16 @@ export default async function WorkspacePage({
           <SectionHeader eyebrow="Data channel" title="Account wiring">
             <StatusPill
               tone={
-                account.autoSyncEnabled || account.mt5Enabled || account.brokerSyncEnabled
+                isManualMode || hasExternalSync
                   ? "info"
                   : "neutral"
               }
             >
-              {integrationState}
+              {dataChannelBadge}
             </StatusPill>
           </SectionHeader>
           <div className="mt-6 space-y-3">
-            {[
-              ["Mode", account.integrationMode],
-              ["Sync status", account.syncStatus],
-              ["Last sync", formatDate(account.lastSyncedAt)],
-            ].map(([label, value]) => (
+            {wiringRows.map(([label, value]) => (
               <div
                 key={label}
                 className="flex items-center justify-between gap-4 rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 px-4 py-3"
@@ -747,12 +806,12 @@ export default async function WorkspacePage({
         </section>
       )}
 
-      <section className="grid gap-6 xl:grid-cols-[1fr_0.9fr]">
+      <section className="space-y-6">
         <Card>
           <SectionHeader eyebrow="Roster signal" title="Account presence">
             <StatusPill>{members.length} listed</StatusPill>
           </SectionHeader>
-          <div className="mt-6 space-y-3">
+          <div className="mt-6 grid gap-3 md:grid-cols-2">
             {members.length > 0 ? (
               members.slice(0, 4).map((member) => (
                 <div
@@ -798,27 +857,21 @@ export default async function WorkspacePage({
               recentActivities.map((activity) => (
                 <div
                   key={activity.id}
-                  className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4"
+                  className="flex flex-col gap-3 rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
                 >
-                  <div className="flex flex-wrap items-center gap-2">
-                    <StatusPill tone={getActivityTone(activity.type)}>
-                      {activity.type}
-                    </StatusPill>
-                    {activity.user && (
-                      <span className="text-caption text-muted">
-                        @{activity.user.username}
-                      </span>
+                  <div className="min-w-0">
+                    <p className="text-body font-medium text-flash">
+                      {getActivityTitle(activity.type)}
+                    </p>
+                    {getActivityDescription(activity.type) && (
+                      <p className="mt-1 text-caption leading-5 text-muted">
+                        {getActivityDescription(activity.type)}
+                      </p>
                     )}
                   </div>
-                  <p className="mt-3 text-body font-medium text-flash">
-                    {activity.title}
-                  </p>
-                  {activity.description && (
-                    <p className="mt-2 text-caption leading-5 text-muted">
-                      {activity.description}
-                    </p>
-                  )}
-                  <p className="mt-3 text-micro uppercase tracking-label text-muted-faint">
+                  <p className="shrink-0 text-caption text-muted-faint sm:text-right">
+                    By {activity.user?.name ?? activity.user?.username ?? "Account member"}
+                    {" · "}
                     {formatDate(activity.createdAt)}
                   </p>
                 </div>
@@ -841,17 +894,15 @@ export default async function WorkspacePage({
             </div>
             <div>
               <p className="text-body font-medium text-flash">
-                Workspace respects account permissions.
+                Account-protected workspace
               </p>
               <p className="mt-1 text-caption text-muted">
-                Hidden rooms are omitted from this hub, but server-side checks
-                still protect every destination route.
+                Only rooms allowed by your role are available.
               </p>
             </div>
           </div>
           <StatusPill tone="info">
-            <KeyRound size={13} className="mr-2" />
-            Server gated
+            Protected
           </StatusPill>
         </div>
       </Card>

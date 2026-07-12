@@ -3,6 +3,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { logActivity } from "@/lib/activity";
 
 function getString(
@@ -237,4 +238,82 @@ export async function createTradingSession(
   redirect(
     `/accounts/${accountId}/sessions`
   );
+}
+
+export type ReviewActionState = {
+  success: boolean;
+  error?: string;
+};
+
+export async function updateTradingSessionReview(
+  accountId: string,
+  sessionId: string,
+  sessionReview: string,
+  finalScore: number
+): Promise<ReviewActionState> {
+  const userSession = await auth();
+
+  if (!userSession?.user?.id) {
+    return { success: false, error: "You must be signed in to update a review." };
+  }
+
+  const review = sessionReview.trim();
+
+  if (!review) {
+    return { success: false, error: "Final review is required." };
+  }
+
+  if (review.length > 3000) {
+    return { success: false, error: "Final review must be 3000 characters or fewer." };
+  }
+
+  if (
+    !Number.isInteger(finalScore) ||
+    finalScore < 1 ||
+    finalScore > 10
+  ) {
+    return { success: false, error: "Final score must be an integer from 1 to 10." };
+  }
+
+  const membership = await prisma.accountMember.findFirst({
+    where: {
+      userId: userSession.user.id,
+      tradingAccountId: accountId,
+    },
+    include: {
+      tradingAccount: true,
+    },
+  });
+
+  if (
+    !membership ||
+    membership.role === "VIEWER" ||
+    membership.tradingAccount.status === "ARCHIVED"
+  ) {
+    return { success: false, error: "You do not have permission to update this review." };
+  }
+
+  const tradingSession = await prisma.tradingSession.findFirst({
+    where: {
+      id: sessionId,
+      tradingAccountId: accountId,
+    },
+    select: { id: true },
+  });
+
+  if (!tradingSession) {
+    return { success: false, error: "Trading session not found." };
+  }
+
+  await prisma.tradingSession.update({
+    where: { id: tradingSession.id },
+    data: {
+      sessionReview: review,
+      finalScore,
+    },
+  });
+
+  revalidatePath(`/accounts/${accountId}/sessions`);
+
+  return { success: true };
 }
