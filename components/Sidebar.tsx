@@ -98,9 +98,9 @@ type SidebarLabels = {
   reports: string;
   copilot: string;
   playbook: string;
-  workspace: string;
   sessions: string;
   rules: string;
+  members: string;
   integrations: string;
 
   updates: string;
@@ -112,6 +112,9 @@ type SidebarLabels = {
   workspaceGroup: string;
   toolsGroup: string;
   controlGroup: string;
+  tradingGroup: string;
+  intelligenceGroup: string;
+  accountGroup: string;
   generalGroup: string;
   systemGroup: string;
 
@@ -139,9 +142,9 @@ const sidebarLabels: Record<
     reports: "Reports",
     copilot: "Copilot",
     playbook: "Playbook",
-    workspace: "Workspace Intelligence",
     sessions: "Sessions",
     rules: "Rules & Goals",
+    members: "Membri",
     integrations: "Integrazioni",
 
     updates: "Aggiornamenti",
@@ -153,6 +156,9 @@ const sidebarLabels: Record<
     workspaceGroup: "WORKSPACE",
     toolsGroup: "TOOLS",
     controlGroup: "CONTROL",
+    tradingGroup: "TRADING",
+    intelligenceGroup: "INTELLIGENZA",
+    accountGroup: "ACCOUNT",
     generalGroup: "GENERALE",
     systemGroup: "SYSTEM",
 
@@ -176,9 +182,9 @@ const sidebarLabels: Record<
     reports: "Reports",
     copilot: "Copilot",
     playbook: "Playbook",
-    workspace: "Workspace Intelligence",
     sessions: "Sessions",
     rules: "Rules & Goals",
+    members: "Members",
     integrations: "Integrations",
 
     updates: "Updates",
@@ -190,6 +196,9 @@ const sidebarLabels: Record<
     workspaceGroup: "WORKSPACE",
     toolsGroup: "TOOLS",
     controlGroup: "CONTROL",
+    tradingGroup: "TRADING",
+    intelligenceGroup: "INTELLIGENCE",
+    accountGroup: "ACCOUNT",
     generalGroup: "GENERAL",
     systemGroup: "SYSTEM",
 
@@ -213,9 +222,9 @@ const sidebarLabels: Record<
     reports: "Звіти",
     copilot: "Copilot",
     playbook: "Playbook",
-    workspace: "Workspace Intelligence",
     sessions: "Сесії",
     rules: "Правила та цілі",
+    members: "Учасники",
     integrations: "Інтеграції",
 
     updates: "Оновлення",
@@ -227,6 +236,9 @@ const sidebarLabels: Record<
     workspaceGroup: "WORKSPACE",
     toolsGroup: "TOOLS",
     controlGroup: "CONTROL",
+    tradingGroup: "ТОРГІВЛЯ",
+    intelligenceGroup: "ІНТЕЛЕКТ",
+    accountGroup: "АКАУНТ",
     generalGroup: "ЗАГАЛЬНЕ",
     systemGroup: "SYSTEM",
 
@@ -250,9 +262,9 @@ const sidebarLabels: Record<
     reports: "Отчеты",
     copilot: "Copilot",
     playbook: "Playbook",
-    workspace: "Workspace Intelligence",
     sessions: "Сессии",
     rules: "Правила и цели",
+    members: "Участники",
     integrations: "Интеграции",
 
     updates: "Обновления",
@@ -264,6 +276,9 @@ const sidebarLabels: Record<
     workspaceGroup: "WORKSPACE",
     toolsGroup: "TOOLS",
     controlGroup: "CONTROL",
+    tradingGroup: "ТОРГОВЛЯ",
+    intelligenceGroup: "ИНТЕЛЛЕКТ",
+    accountGroup: "АККАУНТ",
     generalGroup: "ОБЩЕЕ",
     systemGroup: "SYSTEM",
 
@@ -287,9 +302,9 @@ const sidebarLabels: Record<
     reports: "Informes",
     copilot: "Copilot",
     playbook: "Playbook",
-    workspace: "Workspace Intelligence",
     sessions: "Sesiones",
     rules: "Reglas y objetivos",
+    members: "Miembros",
     integrations: "Integraciones",
 
     updates: "Actualizaciones",
@@ -301,6 +316,9 @@ const sidebarLabels: Record<
     workspaceGroup: "WORKSPACE",
     toolsGroup: "TOOLS",
     controlGroup: "CONTROL",
+    tradingGroup: "TRADING",
+    intelligenceGroup: "INTELIGENCIA",
+    accountGroup: "CUENTA",
     generalGroup: "GENERAL",
     systemGroup: "SYSTEM",
 
@@ -324,9 +342,9 @@ const sidebarLabels: Record<
     reports: "Rapports",
     copilot: "Copilot",
     playbook: "Playbook",
-    workspace: "Workspace Intelligence",
     sessions: "Sessions",
     rules: "Règles et objectifs",
+    members: "Membres",
     integrations: "Intégrations",
 
     updates: "Mises à jour",
@@ -338,6 +356,9 @@ const sidebarLabels: Record<
     workspaceGroup: "WORKSPACE",
     toolsGroup: "TOOLS",
     controlGroup: "CONTROL",
+    tradingGroup: "TRADING",
+    intelligenceGroup: "INTELLIGENCE",
+    accountGroup: "COMPTE",
     generalGroup: "GÉNÉRAL",
     systemGroup: "SYSTEM",
 
@@ -361,9 +382,9 @@ const sidebarLabels: Record<
     reports: "Berichte",
     copilot: "Copilot",
     playbook: "Playbook",
-    workspace: "Workspace Intelligence",
     sessions: "Sessions",
     rules: "Regeln & Ziele",
+    members: "Mitglieder",
     integrations: "Integrationen",
 
     updates: "Updates",
@@ -375,6 +396,9 @@ const sidebarLabels: Record<
     workspaceGroup: "WORKSPACE",
     toolsGroup: "TOOLS",
     controlGroup: "CONTROL",
+    tradingGroup: "TRADING",
+    intelligenceGroup: "INTELLIGENZ",
+    accountGroup: "KONTO",
     generalGroup: "ALLGEMEIN",
     systemGroup: "SYSTEM",
 
@@ -415,19 +439,43 @@ const baseLinks: AccountLink[] = [
     path: "analytics",
     label: "Analytics",
     icon: BarChart3,
-    group: "tools",
+    group: "workspace",
     canShow: (permissions) =>
       isManager(permissions) ||
       permissions.canViewAnalytics,
   },
   {
+    path: "sessions",
+    label: "Sessions",
+    icon: BookOpen,
+    group: "workspace",
+  },
+  {
     path: "reports",
     label: "Reports",
     icon: FileText,
-    group: "tools",
+    group: "workspace",
     canShow: (permissions) =>
       isManager(permissions) ||
       permissions.canViewReports,
+  },
+  {
+    path: "rules",
+    label: "Rules & Goals",
+    icon: Target,
+    group: "workspace",
+    canShow: (permissions) =>
+      isManager(permissions) ||
+      permissions.canManageAccount,
+  },
+  {
+    path: "playbook",
+    label: "Playbook",
+    icon: ClipboardCheck,
+    group: "workspace",
+    canShow: (permissions) =>
+      isManager(permissions) ||
+      permissions.canCreateTrades,
   },
   {
     path: "copilot",
@@ -439,37 +487,13 @@ const baseLinks: AccountLink[] = [
       permissions.canViewCopilot,
   },
   {
-    path: "playbook",
-    label: "Playbook",
-    icon: ClipboardCheck,
-    group: "tools",
-    canShow: (permissions) =>
-      isManager(permissions) ||
-      permissions.canCreateTrades,
-  },
-  {
-    path: "workspace",
-    label: "Workspace Intelligence",
+    path: "members",
+    label: "Members",
     icon: Users,
-    group: "tools",
-    canShow: (permissions) =>
-      isManager(permissions) ||
-      permissions.canViewMembers,
-  },
-  {
-    path: "sessions",
-    label: "Sessions",
-    icon: BookOpen,
-    group: "tools",
-  },
-  {
-    path: "rules",
-    label: "Rules & Goals",
-    icon: Target,
     group: "control",
     canShow: (permissions) =>
       isManager(permissions) ||
-      permissions.canManageAccount,
+      permissions.canViewMembers,
   },
   {
     path: "integrations",
@@ -519,16 +543,16 @@ function getAccountLinkLabel(
     return labels.playbook;
   }
 
-  if (path === "workspace") {
-    return labels.workspace;
-  }
-
   if (path === "sessions") {
     return labels.sessions;
   }
 
   if (path === "rules") {
     return labels.rules;
+  }
+
+  if (path === "members") {
+    return labels.members;
   }
 
   if (path === "integrations") {
@@ -748,27 +772,33 @@ export default function Sidebar({
     return [
       {
         id: "workspace",
-        label: t.workspaceGroup,
+        label: accountId && !isAdminArea
+          ? t.tradingGroup
+          : t.workspaceGroup,
         items: links.filter(
           (link) => link.group === "workspace"
         ),
       },
       {
         id: "tools",
-        label: t.toolsGroup,
+        label: accountId && !isAdminArea
+          ? t.intelligenceGroup
+          : t.toolsGroup,
         items: links.filter(
           (link) => link.group === "tools"
         ),
       },
       {
         id: "control",
-        label: t.controlGroup,
+        label: accountId && !isAdminArea
+          ? t.accountGroup
+          : t.controlGroup,
         items: links.filter(
           (link) => link.group === "control"
         ),
       },
     ].filter((group) => group.items.length > 0);
-  }, [links, t]);
+  }, [accountId, isAdminArea, links, t]);
 
   const activeHref = useMemo(() => {
     const active = links.find(
