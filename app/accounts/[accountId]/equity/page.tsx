@@ -106,7 +106,7 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
     heroTitle: "Curva Equity",
     heroDescription:
       "Segui la crescita dell’account, la protezione del capitale, il comportamento del drawdown e l’evoluzione della tua equity nel tempo.",
-    backToAccountHub: "Torna all’Account Hub",
+    backToAccountHub: "Torna alla Dashboard",
 
     currentEquity: "Equity attuale",
     currentEquityDescription:
@@ -182,7 +182,7 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
     heroTitle: "Equity Curve",
     heroDescription:
       "Follow account growth, capital protection, drawdown behavior and the progression of your trading equity over time.",
-    backToAccountHub: "Back to Account Hub",
+    backToAccountHub: "Back to Dashboard",
 
     currentEquity: "Current Equity",
     currentEquityDescription:
@@ -258,7 +258,7 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
     heroTitle: "Крива Equity",
     heroDescription:
       "Відстежуй зростання акаунта, захист капіталу, поведінку drawdown та розвиток торгової equity з часом.",
-    backToAccountHub: "Назад до Account Hub",
+    backToAccountHub: "Назад до Dashboard",
 
     currentEquity: "Поточна equity",
     currentEquityDescription:
@@ -334,7 +334,7 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
     heroTitle: "Кривая Equity",
     heroDescription:
       "Следи за ростом аккаунта, защитой капитала, поведением drawdown и развитием торговой equity во времени.",
-    backToAccountHub: "Назад к Account Hub",
+    backToAccountHub: "Назад к Dashboard",
 
     currentEquity: "Текущая equity",
     currentEquityDescription:
@@ -410,7 +410,7 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
     heroTitle: "Curva Equity",
     heroDescription:
       "Sigue el crecimiento de la cuenta, la protección del capital, el comportamiento del drawdown y la evolución de tu equity en el tiempo.",
-    backToAccountHub: "Volver al Account Hub",
+    backToAccountHub: "Volver al Dashboard",
 
     currentEquity: "Equity actual",
     currentEquityDescription:
@@ -486,7 +486,7 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
     heroTitle: "Courbe Equity",
     heroDescription:
       "Suis la croissance du compte, la protection du capital, le comportement du drawdown et l’évolution de ton equity dans le temps.",
-    backToAccountHub: "Retour à l’Account Hub",
+    backToAccountHub: "Retour au Dashboard",
 
     currentEquity: "Equity actuelle",
     currentEquityDescription:
@@ -562,7 +562,7 @@ const equityLabels: Record<AppLanguage, EquityLabels> = {
     heroTitle: "Equity-Kurve",
     heroDescription:
       "Verfolge Kontowachstum, Kapitalschutz, Drawdown-Verhalten und die Entwicklung deiner Trading-Equity im Zeitverlauf.",
-    backToAccountHub: "Zurück zum Account Hub",
+    backToAccountHub: "Zurück zum Dashboard",
 
     currentEquity: "Aktuelle Equity",
     currentEquityDescription:

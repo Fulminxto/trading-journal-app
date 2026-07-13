@@ -77,7 +77,7 @@ const calendarLabels: Record<
     monthlyPerformanceView: "Vista performance mensile",
     heroDescription:
       "Una vista giorno per giorno della performance, dell’attività di trading e della consistenza mensile. Usala per individuare giornate forti, giornate deboli e periodi in cui la disciplina richiede più attenzione.",
-    backToAccountHub: "Torna all’Account Hub",
+    backToAccountHub: "Torna alla Dashboard",
     previousMonth: "Mese precedente",
     nextMonth: "Mese successivo",
 
@@ -128,7 +128,7 @@ const calendarLabels: Record<
     monthlyPerformanceView: "Monthly performance view",
     heroDescription:
       "A day-by-day view of performance, trading activity and monthly consistency. Use it to spot strong days, weak days and periods where discipline needs more attention.",
-    backToAccountHub: "Back to Account Hub",
+    backToAccountHub: "Back to Dashboard",
     previousMonth: "Previous month",
     nextMonth: "Next month",
 
@@ -179,7 +179,7 @@ const calendarLabels: Record<
     monthlyPerformanceView: "Місячний огляд результатів",
     heroDescription:
       "Погляд день за днем на результативність, торгову активність і місячну стабільність. Використовуй це, щоб бачити сильні дні, слабкі дні та періоди, коли дисципліні потрібно більше уваги.",
-    backToAccountHub: "Назад до Account Hub",
+    backToAccountHub: "Назад до Dashboard",
     previousMonth: "Попередній місяць",
     nextMonth: "Наступний місяць",
 
@@ -231,7 +231,7 @@ const calendarLabels: Record<
     monthlyPerformanceView: "Месячный обзор результатов",
     heroDescription:
       "Помесячный и подневный взгляд на результативность, торговую активность и стабильность. Используй его, чтобы видеть сильные дни, слабые дни и периоды, где дисциплине нужно больше внимания.",
-    backToAccountHub: "Назад в Account Hub",
+    backToAccountHub: "Назад в Dashboard",
     previousMonth: "Предыдущий месяц",
     nextMonth: "Следующий месяц",
 
@@ -283,7 +283,7 @@ const calendarLabels: Record<
     monthlyPerformanceView: "Vista de rendimiento mensual",
     heroDescription:
       "Una vista día a día del rendimiento, la actividad de trading y la consistencia mensual. Úsala para detectar días fuertes, días débiles y periodos donde la disciplina necesita más atención.",
-    backToAccountHub: "Volver al Account Hub",
+    backToAccountHub: "Volver al Dashboard",
     previousMonth: "Mes anterior",
     nextMonth: "Mes siguiente",
 
@@ -335,7 +335,7 @@ const calendarLabels: Record<
     monthlyPerformanceView: "Vue de performance mensuelle",
     heroDescription:
       "Une vue jour par jour de la performance, de l’activité de trading et de la régularité mensuelle. Utilise-la pour repérer les jours forts, les jours faibles et les périodes où la discipline demande plus d’attention.",
-    backToAccountHub: "Retour à l’Account Hub",
+    backToAccountHub: "Retour au Dashboard",
     previousMonth: "Mois précédent",
     nextMonth: "Mois suivant",
 
@@ -387,7 +387,7 @@ const calendarLabels: Record<
     monthlyPerformanceView: "Monatliche Performance-Ansicht",
     heroDescription:
       "Eine Tagesansicht von Performance, Trading-Aktivität und monatlicher Konstanz. Nutze sie, um starke Tage, schwache Tage und Phasen zu erkennen, in denen Disziplin mehr Aufmerksamkeit braucht.",
-    backToAccountHub: "Zurück zum Account Hub",
+    backToAccountHub: "Zurück zum Dashboard",
     previousMonth: "Vorheriger Monat",
     nextMonth: "Nächster Monat",
 

@@ -120,7 +120,7 @@ const labels: Record<AppLanguage, SessionsCopy> = {
             title: "Plan. Execute. Review.",
             description:
                 "Organizza mindset, focus, checklist e review operative. Questa pagina serve a proteggere la qualità della sessione prima e dopo il mercato.",
-            backToAccountHub: "Torna all’Account Hub",
+            backToAccountHub: "Torna alla Dashboard",
 
             totalSessions: "Sessioni totali",
             totalSessionsDescription:
@@ -233,7 +233,7 @@ const labels: Record<AppLanguage, SessionsCopy> = {
             title: "Plan. Execute. Review.",
             description:
                 "Organize mindset, focus, checklist and operational reviews. This page protects session quality before and after the market.",
-            backToAccountHub: "Back to Account Hub",
+            backToAccountHub: "Back to Dashboard",
 
             totalSessions: "Total Sessions",
             totalSessionsDescription:
@@ -346,7 +346,7 @@ const labels: Record<AppLanguage, SessionsCopy> = {
             title: "Плануй. Виконуй. Аналізуй.",
             description:
                 "Організуй мислення, фокус, чеклист і операційні review. Ця сторінка допомагає захищати якість сесії до і після ринку.",
-            backToAccountHub: "Назад до Account Hub",
+            backToAccountHub: "Назад до Dashboard",
 
             totalSessions: "Усього сесій",
             totalSessionsDescription:
@@ -459,7 +459,7 @@ const labels: Record<AppLanguage, SessionsCopy> = {
             title: "Планируй. Исполняй. Анализируй.",
             description:
                 "Организуй мышление, фокус, чеклист и операционные review. Эта страница помогает защищать качество сессии до и после рынка.",
-            backToAccountHub: "Назад в Account Hub",
+            backToAccountHub: "Назад в Dashboard",
 
             totalSessions: "Всего сессий",
             totalSessionsDescription:
@@ -572,7 +572,7 @@ const labels: Record<AppLanguage, SessionsCopy> = {
             title: "Planifica. Ejecuta. Revisa.",
             description:
                 "Organiza mentalidad, foco, checklist y reviews operativas. Esta página protege la calidad de la sesión antes y después del mercado.",
-            backToAccountHub: "Volver al Account Hub",
+            backToAccountHub: "Volver al Dashboard",
 
             totalSessions: "Sesiones totales",
             totalSessionsDescription:
@@ -685,7 +685,7 @@ const labels: Record<AppLanguage, SessionsCopy> = {
             title: "Planifier. Exécuter. Revoir.",
             description:
                 "Organise le mindset, le focus, la checklist et les reviews opérationnelles. Cette page protège la qualité de la session avant et après le marché.",
-            backToAccountHub: "Retour à l’Account Hub",
+            backToAccountHub: "Retour au Dashboard",
 
             totalSessions: "Sessions totales",
             totalSessionsDescription:
@@ -798,7 +798,7 @@ const labels: Record<AppLanguage, SessionsCopy> = {
             title: "Planen. Ausführen. Überprüfen.",
             description:
                 "Organisiere Mindset, Fokus, Checkliste und operative Reviews. Diese Seite schützt die Qualität der Session vor und nach dem Markt.",
-            backToAccountHub: "Zurück zum Account Hub",
+            backToAccountHub: "Zurück zum Dashboard",
 
             totalSessions: "Sessions gesamt",
             totalSessionsDescription:

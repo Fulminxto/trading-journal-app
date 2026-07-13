@@ -390,8 +390,8 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/calendar/page.tsx": {
-    "mtime": 1783728492.5419178,
-    "ast_hash": "fd53219314e2be058a1e80e0ea7db61d",
+    "mtime": 1783887578.3009565,
+    "ast_hash": "e106e291111978f6809c18f99fda754d",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/copilot/actions.ts": {
@@ -455,8 +455,8 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/equity/page.tsx": {
-    "mtime": 1783730563.4778965,
-    "ast_hash": "d9a61a25f7fd13105bd4d98181205c3a",
+    "mtime": 1783887579.6527066,
+    "ast_hash": "b71421ea9540cd406e29c75a7733558e",
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/integrations/actions.ts": {
@@ -565,8 +565,8 @@
     "semantic_hash": ""
   },
   "app/accounts/[accountId]/workspace/page.tsx": {
-    "mtime": 1783792623.8518171,
-    "ast_hash": "273c86691a33175650faa460dc262f2b",
+    "mtime": 1783887529.8550253,
+    "ast_hash": "9d97303a5b31f486ce757a975ee978f9",
     "semantic_hash": ""
   },
   "app/accounts/actions.ts": {
@@ -880,8 +880,8 @@
     "semantic_hash": ""
   },
   "components/OnboardingModal.tsx": {
-    "mtime": 1783090258.9708855,
-    "ast_hash": "b0faaaf130bad3ca35cf15b31e0a981e",
+    "mtime": 1783887558.059345,
+    "ast_hash": "9d99540c6c4deb6ebb1413d566ce4d94",
     "semantic_hash": ""
   },
   "components/PWARegister.tsx": {
@@ -910,8 +910,8 @@
     "semantic_hash": ""
   },
   "components/Sidebar.tsx": {
-    "mtime": 1783455502.8860593,
-    "ast_hash": "a91233ace91d7afec1858062b2bd033b",
+    "mtime": 1783887527.170745,
+    "ast_hash": "f82e367ac83f71607dc71a7a9660295a",
     "semantic_hash": ""
   },
   "components/ToggleSwitch.stories.tsx": {
@@ -1180,8 +1180,8 @@
     "semantic_hash": ""
   },
   "components/sessions/SessionI18n.ts": {
-    "mtime": 1780414839.41096,
-    "ast_hash": "a300b5d99f5fde9f47421b2778f71e2c",
+    "mtime": 1783887580.835709,
+    "ast_hash": "6ffbe363749873276a48f94d1d64214a",
     "semantic_hash": ""
   },
   "components/sessions/SessionInsightCard.tsx": {

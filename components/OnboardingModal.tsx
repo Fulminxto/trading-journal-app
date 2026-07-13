@@ -269,16 +269,16 @@ const onboardingText: Record<
       },
       {
         phase: "Account",
-        eyebrow: "Account Hub & Dashboard",
+        eyebrow: "Dashboard e navigazione account",
         title:
           "Parti dal centro operativo dell’account",
         description:
-          "Quando entri in un account, parti dall’Account Hub. Da lì puoi raggiungere Dashboard, Diary, Calendar, Equity, Analytics, Reports, Copilot e gestione.",
+          "Quando entri in un account, parti dalla Dashboard. Da lì puoi raggiungere Diary, Calendar, Equity, Analytics, Reports, Copilot e gestione.",
         cards: [
           {
-            title: "Account Hub",
+            title: "Ingresso account",
             description:
-              "La prima schermata dell’account. Ti orienta e ti porta nelle sezioni giuste.",
+              "La Dashboard è la prima schermata dell’account e ti porta nelle sezioni giuste.",
           },
           {
             title: "Dashboard",
@@ -493,15 +493,15 @@ const onboardingText: Record<
       },
       {
         phase: "Account",
-        eyebrow: "Account Hub & Dashboard",
+        eyebrow: "Dashboard & account navigation",
         title: "Start from the account control center",
         description:
-          "When you enter an account, start from the Account Hub. From there you reach Dashboard, Diary, Calendar, Equity, Analytics, Reports, Copilot and management.",
+          "When you enter an account, start from the Dashboard. From there you reach Diary, Calendar, Equity, Analytics, Reports, Copilot and management.",
         cards: [
           {
-            title: "Account Hub",
+            title: "Account entry",
             description:
-              "The first account screen. It orients you and sends you to the right areas.",
+              "The Dashboard is the first account screen and sends you to the right areas.",
           },
           {
             title: "Dashboard",
@@ -715,15 +715,15 @@ const onboardingText: Record<
       },
       {
         phase: "Акаунт",
-        eyebrow: "Account Hub & Dashboard",
+        eyebrow: "Dashboard і навігація акаунтом",
         title: "Починай з центру керування акаунтом",
         description:
-          "Коли входиш в акаунт, починай з Account Hub. Звідти ти переходиш до Dashboard, Diary, Calendar, Equity, Analytics, Reports, Copilot і керування.",
+          "Коли входиш в акаунт, починай з Dashboard. Звідти ти переходиш до Diary, Calendar, Equity, Analytics, Reports, Copilot і керування.",
         cards: [
           {
-            title: "Account Hub",
+            title: "Вхід в акаунт",
             description:
-              "Перша сторінка акаунта. Вона орієнтує тебе і веде в потрібні розділи.",
+              "Dashboard — перша сторінка акаунта, яка веде тебе в потрібні розділи.",
           },
           {
             title: "Dashboard",
@@ -937,15 +937,15 @@ const onboardingText: Record<
       },
       {
         phase: "Аккаунт",
-        eyebrow: "Account Hub & Dashboard",
+        eyebrow: "Dashboard и навигация по аккаунту",
         title: "Начинай с центра управления аккаунтом",
         description:
-          "Когда ты входишь в аккаунт, начинай с Account Hub. Оттуда ты переходишь к Dashboard, Diary, Calendar, Equity, Analytics, Reports, Copilot и управлению.",
+          "Когда ты входишь в аккаунт, начинай с Dashboard. Оттуда ты переходишь к Diary, Calendar, Equity, Analytics, Reports, Copilot и управлению.",
         cards: [
           {
-            title: "Account Hub",
+            title: "Вход в аккаунт",
             description:
-              "Первая страница аккаунта. Она ориентирует тебя и ведет в нужные разделы.",
+              "Dashboard — первая страница аккаунта, которая ведет тебя в нужные разделы.",
           },
           {
             title: "Dashboard",
@@ -1159,15 +1159,15 @@ const onboardingText: Record<
       },
       {
         phase: "Cuenta",
-        eyebrow: "Account Hub & Dashboard",
+        eyebrow: "Dashboard y navegación de la cuenta",
         title: "Empieza desde el centro operativo de la cuenta",
         description:
-          "Cuando entras en una cuenta, empieza desde Account Hub. Desde allí accedes a Dashboard, Diary, Calendar, Equity, Analytics, Reports, Copilot y gestión.",
+          "Cuando entras en una cuenta, empieza desde Dashboard. Desde allí accedes a Diary, Calendar, Equity, Analytics, Reports, Copilot y gestión.",
         cards: [
           {
-            title: "Account Hub",
+            title: "Entrada a la cuenta",
             description:
-              "La primera pantalla de la cuenta. Te orienta y te lleva a las secciones correctas.",
+              "Dashboard es la primera pantalla de la cuenta y te lleva a las secciones correctas.",
           },
           {
             title: "Dashboard",
@@ -1381,15 +1381,15 @@ const onboardingText: Record<
       },
       {
         phase: "Compte",
-        eyebrow: "Account Hub & Dashboard",
+        eyebrow: "Dashboard et navigation du compte",
         title: "Commence par le centre opérationnel du compte",
         description:
-          "Quand tu entres dans un compte, commence par l’Account Hub. De là, tu accèdes à Dashboard, Diary, Calendar, Equity, Analytics, Reports, Copilot et gestion.",
+          "Quand tu entres dans un compte, commence par le Dashboard. De là, tu accèdes à Diary, Calendar, Equity, Analytics, Reports, Copilot et gestion.",
         cards: [
           {
-            title: "Account Hub",
+            title: "Entrée du compte",
             description:
-              "Le premier écran du compte. Il t’oriente et t’envoie vers les bonnes sections.",
+              "Le Dashboard est le premier écran du compte et t’envoie vers les bonnes sections.",
           },
           {
             title: "Dashboard",
@@ -1603,15 +1603,15 @@ const onboardingText: Record<
       },
       {
         phase: "Account",
-        eyebrow: "Account Hub & Dashboard",
+        eyebrow: "Dashboard und Account-Navigation",
         title: "Starte im operativen Zentrum des Accounts",
         description:
-          "Wenn du einen Account öffnest, starte im Account Hub. Von dort erreichst du Dashboard, Diary, Calendar, Equity, Analytics, Reports, Copilot und Management.",
+          "Wenn du einen Account öffnest, starte im Dashboard. Von dort erreichst du Diary, Calendar, Equity, Analytics, Reports, Copilot und Management.",
         cards: [
           {
-            title: "Account Hub",
+            title: "Account-Einstieg",
             description:
-              "Der erste Account-Bildschirm. Er orientiert dich und führt dich zu den richtigen Bereichen.",
+              "Das Dashboard ist der erste Account-Bildschirm und führt dich zu den richtigen Bereichen.",
           },
           {
             title: "Dashboard",

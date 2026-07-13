@@ -147,11 +147,7 @@
   "145": "vitest.config.ts",
   "146": "vitest.shims.d.ts",
   "147": "activity.ts",
-  "148": "EmotionalStabilityCard.tsx",
-  "149": "ExecutionStabilityCard.tsx",
   "150": "PatternMemoryCard.tsx",
   "151": "ConfidenceStabilityCard.tsx",
-  "152": "ElevatedRiskCard.tsx",
-  "153": "DashboardI18n.ts",
   "158": "postSerializedFindings"
 }
