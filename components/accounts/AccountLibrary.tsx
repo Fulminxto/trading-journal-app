@@ -18,6 +18,7 @@ import {
 
 import Card from "@/components/ui/Card";
 import IconTile from "@/components/ui/IconTile";
+import AccountActionsMenu from "@/components/accounts/AccountActionsMenu";
 
 const VIEW_KEY = "voltis-account-library-view";
 type LibraryView = "focus" | "gallery" | "grid";
@@ -27,36 +28,43 @@ export type AccountLibraryItem = {
   name: string;
   type: string;
   status: string;
-  role: string;
-  broker: string | null;
+  membershipRole: string;
+  membersCount: number;
+  formattedMembersCount: string;
+  hasMultipleMembers: boolean;
+  isSharedType: boolean;
+  initialBalance: string;
   pnl: string;
   pnlValue: number;
-  balance: string;
-  totalTrades: string;
-  totalTradesValue: number;
+  tradeCount: number;
+  formattedTradeCount: string;
   winRate: string | null;
   winRateValue: number | null;
-  members: string;
-  membersValue: number;
+  currency: string;
+  brokerProvider: string | null;
   updatedAt: string;
-  isShared: boolean;
+  canViewMembers: boolean;
+  canManageIntegrations: boolean;
+  canOpenManage: boolean;
+  canArchiveAccount: boolean;
+  canDeleteAccount: boolean;
 };
 
 type Labels = {
-  role: string;
-  balance: string;
+  initialBalance: string;
   trades: string;
-  winRateShort: string;
+  winRate: string;
+  notMeasured: string;
+  member: string;
   members: string;
-  accountPnl: string;
+  pnl: string;
   openAccount: string;
   archived: string;
 };
 
-function AccountCover({ account }: { account: AccountLibraryItem }) {
+function AccountCover({ account, active }: { account: AccountLibraryItem; active: boolean }) {
   const seed = [...account.id].reduce((sum, char) => sum + char.charCodeAt(0), 0);
   const shift = 18 + (seed % 36);
-  const isShared = account.type === "SHARED" || account.membersValue > 1;
   const isTechnical = account.type === "PROP" || account.type === "CHALLENGE" || account.type === "FUNDED";
 
   return (
@@ -80,7 +88,7 @@ function AccountCover({ account }: { account: AccountLibraryItem }) {
             <path d={`M${80 + (seed % 45)} 190 L225 42 L330 154 L500 25`} fill="none" stroke={`url(#cover-${account.id})`} strokeWidth="2" />
             <path d="M52 52 H548 M52 110 H548 M52 168 H548 M150 20 V200 M300 20 V200 M450 20 V200" stroke="#70e7ff" strokeOpacity=".07" strokeWidth="1" />
           </>
-        ) : isShared ? (
+        ) : account.isSharedType ? (
           <>
             <path d={`M-20 54 C155 ${30 + (seed % 30)} 235 104 302 112 C385 122 448 62 620 54`} fill="none" stroke={`url(#cover-${account.id})`} strokeWidth="2" />
             <path d={`M-20 176 C140 ${196 - (seed % 30)} 230 124 302 112 C390 98 464 168 620 176`} fill="none" stroke={`url(#cover-${account.id})`} strokeWidth="1.5" />
@@ -92,57 +100,104 @@ function AccountCover({ account }: { account: AccountLibraryItem }) {
           </>
         )}
       </svg>
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_32%,rgba(2,6,12,.16)_52%,rgba(2,6,12,.95)_100%)]" />
+      <div
+        className="absolute inset-0"
+        style={{
+          background: active
+            ? "linear-gradient(180deg, transparent 32%, rgba(2,6,12,.16) 52%, rgba(2,6,12,.95) 100%)"
+            : "linear-gradient(180deg, transparent 36%, rgba(2,6,12,.1) 56%, rgba(2,6,12,.88) 100%)",
+        }}
+      />
     </div>
   );
 }
 
+function getPnlTone(value: number) {
+  if (value > 0) return "text-accent";
+  if (value < 0) return "text-red-400";
+  return "text-muted";
+}
+
+function getWinRateTone(value: number | null) {
+  if (value === null) return "text-muted";
+  return value >= 50 ? "text-accent" : "text-red-400";
+}
+
+function getMemberCountLabel(account: AccountLibraryItem, labels: Labels) {
+  return `${account.formattedMembersCount} ${account.membersCount === 1 ? labels.member : labels.members}`;
+}
+
+function getMembersHeading(labels: Labels) {
+  return `${labels.members.charAt(0).toUpperCase()}${labels.members.slice(1)}`;
+}
+
 function GridAccountCard({ account, labels }: { account: AccountLibraryItem; labels: Labels }) {
   return (
-    <Card interactive className="p-6">
-      <Link href={`/accounts/${account.id}/dashboard`}>
-        <div className="mb-6 flex items-center justify-between">
-          <IconTile><Wallet size={20} /></IconTile>
-          <div className="flex gap-2">
-            <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-gray-300">{account.type}</span>
-            {account.status === "ARCHIVED" && <span className="rounded-full bg-white/[0.06] px-3 py-1 text-xs font-semibold text-muted">{labels.archived}</span>}
-          </div>
+    <Card className="p-5 sm:p-6">
+      <div className="flex items-start gap-3">
+        <IconTile interactive={false}><Wallet size={20} /></IconTile>
+        <div className="min-w-0 flex-1">
+          <p className="text-micro uppercase tracking-label text-muted">
+            <span className="text-accent-bright">{account.type}</span><span className="text-muted-faint"> · </span>{account.status}<span className="text-muted-faint"> · </span>{account.membershipRole}
+          </p>
+          <h3 aria-label={account.name} title={account.name} className="mt-1.5 line-clamp-2 min-h-[3.5rem] text-xl font-bold leading-7 text-white">{account.name}</h3>
         </div>
-        <div className="flex items-start justify-between gap-4">
-          <div><h3 className="text-xl font-bold text-white transition-colors duration-base group-hover:text-accent-bright">{account.name}</h3><p className="mt-1 text-sm text-muted-faint">{labels.role}: {account.role}</p></div>
-          <ArrowRight size={18} className="mt-1 shrink-0 text-muted transition-all duration-base group-hover:translate-x-1 group-hover:text-accent-bright" />
-        </div>
-        <div className="mt-5"><p className="text-xs text-muted-faint">{labels.accountPnl}</p><p className={`mt-1 text-3xl font-black ${account.pnlValue > 0 ? "text-accent" : account.pnlValue < 0 ? "text-red-400" : "text-muted"}`}>{account.pnl}</p></div>
-        <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-white/[0.06] pt-4 text-xs">
-          <span className="flex items-center gap-1.5 text-muted"><TrendingUp size={13} />{account.balance}</span>
-          <span className="flex items-center gap-1.5 text-muted"><Activity size={13} />{account.totalTrades} {labels.trades}</span>
-          <span className={`flex items-center gap-1.5 ${account.winRateValue === null ? "text-muted" : account.winRateValue >= 50 ? "text-accent" : "text-red-400"}`}><Shield size={13} />{account.winRate ?? "Not measured"} {account.winRate ? labels.winRateShort : ""}</span>
-          <span className="flex items-center gap-1.5 text-muted"><Users size={13} />{account.members}</span>
-        </div>
-      </Link>
-      <Link href={`/accounts/${account.id}/dashboard`} className="mt-5 block rounded-inner bg-accent px-4 py-3 text-center text-sm font-semibold text-white transition-colors duration-base hover:bg-accent-bright">{labels.openAccount}</Link>
+        <AccountActionsMenu
+          accountId={account.id}
+          accountName={account.name}
+          accountStatus={account.status}
+          canOpenManage={account.canOpenManage}
+          canViewMembers={account.canViewMembers}
+          canManageIntegrations={account.canManageIntegrations}
+          canArchiveAccount={account.canArchiveAccount}
+          canDeleteAccount={account.canDeleteAccount}
+          placement="grid"
+        />
+      </div>
+      <div className="mt-3"><p className="text-xs text-muted-faint">{labels.pnl}</p><p className={`mt-0.5 text-3xl font-black leading-tight ${getPnlTone(account.pnlValue)}`}>{account.pnl}</p></div>
+      <div className="mt-3.5 grid grid-cols-2 gap-x-5 gap-y-3 border-t border-white/[0.06] pt-3.5 text-xs">
+        <div><p className="flex items-center gap-1.5 text-muted-faint"><TrendingUp size={13} aria-hidden="true" />{labels.initialBalance}</p><p className="mt-1 text-muted">{account.initialBalance}</p></div>
+        <div><p className="flex items-center gap-1.5 text-muted-faint"><Activity size={13} aria-hidden="true" />{labels.trades}</p><p className="mt-1 text-muted">{account.formattedTradeCount}</p></div>
+        <div><p className="flex items-center gap-1.5 text-muted-faint"><Shield size={13} aria-hidden="true" />{labels.winRate}</p><p className={`mt-1 ${getWinRateTone(account.winRateValue)}`}>{account.winRate ?? labels.notMeasured}</p></div>
+        <div><p className="flex items-center gap-1.5 text-muted-faint"><Users size={13} aria-hidden="true" />{getMembersHeading(labels)}</p><p className="mt-1 text-muted">{getMemberCountLabel(account, labels)}</p></div>
+      </div>
+      <Link href={`/accounts/${account.id}/dashboard`} className="mt-4 block rounded-inner bg-accent px-4 py-3 text-center text-sm font-semibold text-white outline-none transition-colors duration-base hover:bg-accent-bright focus-visible:ring-2 focus-visible:ring-accent-bright/70">{labels.openAccount}</Link>
     </Card>
   );
 }
 
 function FocusCoverCard({ account, labels, active }: { account: AccountLibraryItem; labels: Labels; active: boolean }) {
   return (
-    <article className={`relative aspect-square h-full w-full overflow-hidden rounded-card border bg-surface-1 ${active ? "border-flash/[0.18] shadow-[0_24px_65px_rgba(0,0,0,.5),0_0_35px_rgba(91,224,255,.07)]" : "border-flash/[0.11] shadow-[0_14px_36px_rgba(0,0,0,.32)]"}`}>
-      <AccountCover account={account} />
+    <article className={`relative aspect-square h-full w-full overflow-hidden rounded-card border bg-surface-1 ${active ? "border-flash/[0.18] shadow-[0_24px_65px_rgba(0,0,0,.5),0_0_35px_rgba(91,224,255,.07)]" : "border-flash/[0.15] shadow-[0_14px_36px_rgba(0,0,0,.32)]"}`}>
+      <AccountCover account={account} active={active} />
+      {active && (
+        <AccountActionsMenu
+          accountId={account.id}
+          accountName={account.name}
+          accountStatus={account.status}
+          canOpenManage={account.canOpenManage}
+          canViewMembers={account.canViewMembers}
+          canManageIntegrations={account.canManageIntegrations}
+          canArchiveAccount={account.canArchiveAccount}
+          canDeleteAccount={account.canDeleteAccount}
+          placement="focus"
+          className="absolute right-3 top-3 z-40 sm:right-4 sm:top-4"
+        />
+      )}
       <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6">
         <div className="flex flex-wrap items-center gap-2 text-micro uppercase tracking-label">
-          <span className="text-accent-bright">{account.type}</span><span className="text-muted-faint">·</span><span className="text-muted">{account.status}</span><span className="text-muted-faint">·</span><span className="text-muted">{account.role}</span>
+          <span className="text-accent-bright">{account.type}</span><span className="text-muted-faint">·</span><span className="text-muted">{account.status}</span><span className="text-muted-faint">·</span><span className="text-muted">{account.membershipRole}</span>
         </div>
-        <h3 className={`mt-2 truncate font-semibold text-flash ${active ? "text-2xl sm:text-3xl" : "text-lg sm:text-xl"}`}>{account.name}</h3>
-        {!active && <p className={`mt-2 text-sm font-semibold tabular-nums ${account.pnlValue >= 0 ? "text-accent-bright/80" : "text-red-300/80"}`}>{account.pnl}</p>}
-        {active && <><div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-flash/[0.1] pt-4 sm:grid-cols-4">
-          <div><p className="text-micro text-muted-faint">PnL</p><p className={`mt-1 font-semibold tabular-nums ${account.pnlValue > 0 ? "text-accent" : account.pnlValue < 0 ? "text-red-400" : "text-muted"}`}>{account.pnl}</p></div>
-          <div><p className="text-micro text-muted-faint">{labels.balance}</p><p className="mt-1 font-semibold tabular-nums text-flash">{account.balance}</p></div>
-          <div><p className="text-micro text-muted-faint">{labels.trades}</p><p className="mt-1 font-semibold tabular-nums text-flash">{account.totalTrades}</p></div>
-          {account.winRateValue !== null ? <div><p className="text-micro text-muted-faint">{labels.winRateShort}</p><p className="mt-1 font-semibold tabular-nums text-flash">{account.winRate}</p></div> : account.isShared ? <div><p className="text-micro text-muted-faint">{labels.members}</p><p className="mt-1 font-semibold tabular-nums text-flash">{account.members}</p></div> : null}
+        <h3 aria-label={account.name} title={account.name} className={`mt-2 line-clamp-2 font-semibold text-flash ${active ? "text-2xl sm:text-3xl" : "text-lg sm:text-xl"}`}>{account.name}</h3>
+        {!active && <p className={`mt-2 text-sm font-semibold tabular-nums ${getPnlTone(account.pnlValue)}`}>{account.pnl}</p>}
+        {active && <><div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-flash/[0.1] pt-4 lg:grid-cols-4">
+          <div><p className="text-micro text-muted-faint">{labels.pnl}</p><p className={`mt-1 font-semibold tabular-nums ${getPnlTone(account.pnlValue)}`}>{account.pnl}</p></div>
+          <div><p className="text-micro text-muted-faint">{labels.initialBalance}</p><p className="mt-1 font-semibold tabular-nums text-flash">{account.initialBalance}</p></div>
+          <div><p className="text-micro text-muted-faint">{labels.trades}</p><p className="mt-1 font-semibold tabular-nums text-flash">{account.formattedTradeCount}</p></div>
+          <div><p className="text-micro text-muted-faint">{labels.winRate}</p><p className={`mt-1 font-semibold tabular-nums ${getWinRateTone(account.winRateValue)}`}>{account.winRate ?? labels.notMeasured}</p></div>
         </div></>}
-        {active && <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-caption text-muted">{account.membersValue > 1 || account.type === "SHARED" ? `${account.members} ${labels.members.toLowerCase()}` : `Updated ${account.updatedAt}`}</p>
+        {active && <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-caption font-medium tabular-nums text-muted">{getMemberCountLabel(account, labels)}</p>
           <Link href={`/accounts/${account.id}/dashboard`} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-inner bg-accent px-5 py-3 text-sm font-semibold text-white outline-none transition-colors hover:bg-accent-bright focus-visible:ring-2 focus-visible:ring-accent-bright/70 sm:w-auto">{labels.openAccount}<ArrowRight size={16} aria-hidden="true" /></Link>
         </div>}
       </div>
@@ -201,7 +256,7 @@ function AccountTypeMenu({ value, options, onChange }: { value: string; options:
   return (
     <div ref={rootRef} className="relative shrink-0">
       <span id={`${listboxId}-label`} className="sr-only">Account type</span>
-      <button ref={buttonRef} type="button" aria-labelledby={`${listboxId}-label ${listboxId}-value`} aria-haspopup="listbox" aria-expanded={open} aria-controls={listboxId} onClick={() => open ? setOpen(false) : openMenu()} onKeyDown={(event) => { if (!open && (event.key === "Enter" || event.key === " " || event.key === "ArrowDown" || event.key === "ArrowUp")) { event.preventDefault(); openMenu(); } }} className="flex min-h-11 min-w-44 items-center justify-between gap-3 rounded-inner border-[0.5px] border-flash/[0.14] bg-surface-2 px-3 text-xs text-flash outline-none hover:border-flash/25 focus-visible:ring-2 focus-visible:ring-accent-bright/60">
+      <button ref={buttonRef} type="button" aria-labelledby={`${listboxId}-label ${listboxId}-value`} aria-haspopup="listbox" aria-expanded={open} aria-controls={listboxId} onClick={() => open ? setOpen(false) : openMenu()} onKeyDown={(event) => { if (!open && (event.key === "Enter" || event.key === " " || event.key === "ArrowDown" || event.key === "ArrowUp")) { event.preventDefault(); openMenu(); } }} className="flex min-h-11 min-w-40 items-center justify-between gap-2.5 rounded-inner border-[0.5px] border-flash/[0.14] bg-surface-2 px-2.5 text-xs text-flash outline-none hover:border-flash/25 focus-visible:ring-2 focus-visible:ring-accent-bright/60">
         <span className="flex gap-2"><span className="text-muted">Account type</span><span id={`${listboxId}-value`}>{items.find((item) => item.value === value)?.label}</span></span>
         <ChevronDown size={14} aria-hidden="true" className={`text-muted transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
@@ -249,15 +304,26 @@ export default function AccountLibrary({ accounts, labels }: { accounts: Account
     const term = search.trim().toLowerCase();
     return accounts.filter((account) => {
       if (account.status !== "ACTIVE") return false;
-      if (category === "SHARED" && !account.isShared) return false;
-      if (category === "PERSONAL" && (account.isShared || ["PROP", "CHALLENGE", "FUNDED"].includes(account.type))) return false;
+      if (category === "SHARED" && !account.isSharedType && !account.hasMultipleMembers) return false;
+      if (category === "PERSONAL" && (account.isSharedType || account.hasMultipleMembers || ["PROP", "CHALLENGE", "FUNDED"].includes(account.type))) return false;
       if (category === "PROP" && !["PROP", "CHALLENGE", "FUNDED"].includes(account.type)) return false;
       if (type !== "ALL" && account.type !== type) return false;
-      return !term || account.name.toLowerCase().includes(term) || account.type.toLowerCase().includes(term) || account.broker?.toLowerCase().includes(term);
+      return !term || account.name.toLowerCase().includes(term) || account.type.toLowerCase().includes(term) || account.brokerProvider?.toLowerCase().includes(term);
     });
   }, [accounts, category, search, type]);
 
   const selected = filtered[selectedIndex];
+  const focusEdgeBias = filtered.length <= 1
+    ? "0px"
+    : filtered.length === 2
+      ? selectedIndex === 0
+        ? "clamp(-72px, -6vw, -32px)"
+        : "clamp(32px, 6vw, 72px)"
+      : selectedIndex === 0
+        ? "clamp(-42px, -3vw, -18px)"
+        : selectedIndex === filtered.length - 1
+          ? "clamp(18px, 3vw, 42px)"
+          : "0px";
   const move = useCallback((delta: number) => setSelectedIndex((index) => Math.max(0, Math.min(filtered.length - 1, index + delta))), [filtered.length]);
   const clearHoverIntent = useCallback(() => {
     if (hoverIntent.current) clearTimeout(hoverIntent.current);
@@ -282,14 +348,14 @@ export default function AccountLibrary({ accounts, labels }: { accounts: Account
       </div>
       <div className="mb-6 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <label className="relative block w-full lg:max-w-sm"><span className="sr-only">Search accounts</span><Search size={16} aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" /><input value={search} onChange={(event) => { setSearch(event.target.value); setSelectedIndex(0); }} placeholder="Search accounts" className="w-full rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-2 py-2.5 pl-10 pr-4 text-sm text-flash outline-none placeholder:text-muted-faint focus:border-accent-bright/50 focus:ring-2 focus:ring-accent-bright/30" /></label>
-        <div className="flex min-w-0 gap-3 overflow-x-auto pb-1">
+        <div className="flex min-w-0 gap-2 overflow-x-auto pb-1 lg:flex-wrap lg:justify-end lg:overflow-visible">
           <div aria-label="Account category" className="flex shrink-0 gap-1 rounded-pill border-[0.5px] border-flash/[0.08] bg-surface-2/70 p-1">
-            {([['ALL', 'All accounts'], ['PERSONAL', 'Personal'], ['SHARED', 'Shared'], ['PROP', 'Prop firms']] as const).map(([value, label]) => <button key={value} type="button" aria-pressed={category === value} onClick={() => { setCategory(value); setSelectedIndex(0); }} className={`min-h-9 rounded-pill px-3 text-xs outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/60 ${category === value ? "bg-accent/15 text-accent-bright" : "text-muted hover:text-flash"}`}>{label}</button>)}
+            {([['ALL', 'All accounts'], ['PERSONAL', 'Personal'], ['SHARED', 'Shared'], ['PROP', 'Prop firms']] as const).map(([value, label]) => <button key={value} type="button" aria-pressed={category === value} onClick={() => { setCategory(value); setSelectedIndex(0); }} className={`min-h-9 rounded-pill px-2.5 text-xs outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/60 ${category === value ? "bg-accent/15 text-accent-bright" : "text-muted hover:text-flash"}`}>{label}</button>)}
           </div>
           <AccountTypeMenu value={type} options={types} onChange={(next) => { setType(next); setSelectedIndex(0); }} />
           <div role="group" aria-label="Library view" className="flex shrink-0 rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-2 p-1">
-            <button type="button" aria-pressed={view === "focus"} onClick={() => chooseView("focus")} className={`flex min-h-9 items-center gap-2 rounded-inner px-3 text-xs outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/60 ${view === "focus" ? "bg-accent/15 text-accent-bright" : "text-muted"}`}><Sparkles size={14} />Focus</button>
-            <button type="button" aria-pressed={view === "grid"} onClick={() => chooseView("grid")} className={`flex min-h-9 items-center gap-2 rounded-inner px-3 text-xs outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/60 ${view === "grid" ? "bg-accent/15 text-accent-bright" : "text-muted"}`}><Grid2X2 size={14} />Grid</button>
+            <button type="button" aria-pressed={view === "focus"} onClick={() => chooseView("focus")} className={`flex min-h-9 items-center gap-1.5 rounded-inner px-2.5 text-xs outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/60 ${view === "focus" ? "bg-accent/15 text-accent-bright" : "text-muted"}`}><Sparkles size={14} />Focus</button>
+            <button type="button" aria-pressed={view === "grid"} onClick={() => chooseView("grid")} className={`flex min-h-9 items-center gap-1.5 rounded-inner px-2.5 text-xs outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/60 ${view === "grid" ? "bg-accent/15 text-accent-bright" : "text-muted"}`}><Grid2X2 size={14} />Grid</button>
           </div>
         </div>
       </div>
@@ -306,7 +372,7 @@ export default function AccountLibrary({ accounts, labels }: { accounts: Account
           onKeyDown={(event) => { if (event.key === "ArrowLeft") move(-1); if (event.key === "ArrowRight") move(1); }}
         >
           <p className="sr-only" aria-live="polite">{selected.name}, account {selectedIndex + 1} of {filtered.length}</p>
-          <div ref={carouselRef} className="relative mx-auto h-[min(92vw,590px)] min-h-[350px] max-w-[1280px] touch-pan-y overflow-hidden select-none"
+          <div ref={carouselRef} className="relative mx-auto h-[min(92vw,560px)] min-h-[350px] max-w-[1280px] touch-pan-y overflow-hidden select-none"
             onPointerMove={(event) => { if (event.pointerType === "mouse" && !reducedMotion) { const bounds = event.currentTarget.getBoundingClientRect(); setPointerRatio(Math.max(-1, Math.min(1, ((event.clientX - bounds.left) / bounds.width) * 2 - 1))); } const touch = touchRef.current; if (touch.pointerId !== event.pointerId) return; const dx = event.clientX - touch.startX; const dy = event.clientY - touch.startY; if (touch.axis === "pending" && Math.hypot(dx, dy) > 8) touch.axis = Math.abs(dx) > Math.abs(dy) * 1.15 ? "horizontal" : "vertical"; if (touch.axis === "horizontal") event.preventDefault(); }}
             onPointerLeave={() => { clearHoverIntent(); setPointerRatio(0); }}
             onPointerDown={(event) => { if (event.pointerType === "mouse" || (event.target as HTMLElement).closest("a")) return; touchRef.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, axis: "pending" }; event.currentTarget.setPointerCapture(event.pointerId); }}
@@ -318,15 +384,17 @@ export default function AccountLibrary({ accounts, labels }: { accounts: Account
               const visible = Math.abs(position) <= 2;
               const x = position === 0 ? "-50%" : position === -1 ? "-50% - clamp(145px,27vw,340px)" : position === 1 ? "-50% + clamp(145px,27vw,340px)" : position < 0 ? "-50% - clamp(245px,44vw,560px)" : "-50% + clamp(245px,44vw,560px)";
               const scale = depth === 0 ? 1 : depth === 1 ? .85 : .73;
-              const opacity = visible ? depth === 0 ? 1 : depth === 1 ? .58 : .25 : 0;
+              const opacity = visible ? depth === 0 ? 1 : depth === 1 ? .7 : .36 : 0;
               const parallax = reducedMotion ? 0 : pointerRatio * (depth === 0 ? 8 : depth === 1 ? 5 : 3);
-              const style = { transform: `translate(calc(${x} + ${parallax}px),calc(-50% + ${depth * 7}px)) scale(${scale})`, opacity, zIndex: 30 - depth * 10, filter: `brightness(${depth === 0 ? 1 : depth === 1 ? .76 : .6})`, pointerEvents: visible ? "auto" as const : "none" as const, transition: reducedMotion ? "opacity 80ms linear" : "transform 560ms cubic-bezier(.2,.72,.22,1), opacity 520ms ease, filter 560ms ease" };
+              const style = { transform: `translate(calc(${x} + ${focusEdgeBias} + ${parallax}px),calc(-50% + ${depth * 7}px)) scale(${scale})`, opacity, zIndex: 30 - depth * 10, filter: `brightness(${depth === 0 ? 1 : depth === 1 ? .86 : .72})`, pointerEvents: visible ? "auto" as const : "none" as const, transition: reducedMotion ? "opacity 80ms linear" : "transform 560ms cubic-bezier(.2,.72,.22,1), opacity 520ms ease, filter 560ms ease" };
               return <div key={account.id} className="absolute left-1/2 top-1/2 w-[88%] max-w-[540px]" style={style}>{position === 0 ? <FocusCoverCard account={account} labels={labels} active /> : <button type="button" aria-label={`Select ${account.name}`} onPointerEnter={(event) => { if (event.pointerType === "mouse") selectWithIntent(index); }} onPointerLeave={clearHoverIntent} onClick={() => setSelectedIndex(index)} className="block h-full w-full text-left outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/80"><FocusCoverCard account={account} labels={labels} active={false} /></button>}</div>;
             })}
           </div>
-          <div className="mt-3 text-center text-caption tabular-nums text-muted">{selectedIndex + 1} of {filtered.length}</div>
-          <div className="mt-4 flex gap-2 overflow-x-auto pb-2" role="tablist" aria-label="Select account">
-            {filtered.map((account, index) => <button ref={(node) => { railRefs.current[index] = node; }} key={account.id} type="button" role="tab" aria-selected={index === selectedIndex} aria-current={index === selectedIndex ? "true" : undefined} onClick={() => setSelectedIndex(index)} className={`min-h-10 shrink-0 rounded-pill border-[0.5px] px-3 text-xs outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/60 ${index === selectedIndex ? "border-accent/35 bg-accent/10 text-accent-bright" : "border-flash/[0.08] text-muted"}`}>{account.name}<span className="sr-only">, {index === selectedIndex ? "selected" : `account ${index + 1}`}</span></button>)}
+          <div className="mt-2 flex items-center gap-3">
+            <div className="shrink-0 text-caption tabular-nums text-muted">{selectedIndex + 1} of {filtered.length}</div>
+            <div className="flex min-w-0 flex-1 gap-2 overflow-x-auto pb-1" role="tablist" aria-label="Select account">
+              {filtered.map((account, index) => <button ref={(node) => { railRefs.current[index] = node; }} key={account.id} type="button" role="tab" aria-selected={index === selectedIndex} aria-current={index === selectedIndex ? "true" : undefined} onClick={() => setSelectedIndex(index)} className={`min-h-10 shrink-0 rounded-pill border-[0.5px] px-3 text-xs outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/60 ${index === selectedIndex ? "border-accent/35 bg-accent/10 text-accent-bright" : "border-flash/[0.08] text-muted"}`}>{account.name}<span className="sr-only">, {index === selectedIndex ? "selected" : `account ${index + 1}`}</span></button>)}
+            </div>
           </div>
         </div>
       )}

@@ -11,6 +11,7 @@ import {
   formatNumberByLanguage,
   normalizeAppLanguage,
 } from "@/lib/i18n";
+import { isManager } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 
 const CTA_GRADIENT = "linear-gradient(120deg, #2E62E6, #3f86e8 60%, #5BE0FF)";
@@ -58,19 +59,32 @@ export default async function AccountsPage() {
       name: account.name,
       type: account.type,
       status: account.status,
-      role: membership.role,
-      broker: account.broker || account.brokerProvider,
+      membershipRole: membership.role,
+      membersCount: account.members.length,
+      formattedMembersCount: formatNumberByLanguage(account.members.length, language),
+      hasMultipleMembers: account.members.length > 1,
+      isSharedType: account.type === "SHARED",
+      initialBalance: formatCurrencyByLanguage(account.initialBalance, account.currency, language),
       pnl: formatCurrencyByLanguage(accountPnl, account.currency, language),
       pnlValue: accountPnl,
-      balance: formatCurrencyByLanguage(account.initialBalance, account.currency, language),
-      totalTrades: formatNumberByLanguage(account.trades.length, language),
-      totalTradesValue: account.trades.length,
+      tradeCount: account.trades.length,
+      formattedTradeCount: formatNumberByLanguage(account.trades.length, language),
       winRate: measuredWinRate === null ? null : `${measuredWinRate.toFixed(0)}%`,
       winRateValue: measuredWinRate,
-      members: formatNumberByLanguage(account.members.length, language),
-      membersValue: account.members.length,
+      currency: account.currency,
+      brokerProvider: account.broker || account.brokerProvider,
       updatedAt: new Intl.DateTimeFormat(language, { dateStyle: "medium" }).format(account.updatedAt),
-      isShared: account.type === "SHARED" || account.members.length > 1,
+      canViewMembers: isManager(membership) || membership.canViewMembers,
+      canManageIntegrations: isManager(membership) || membership.canManageAccount,
+      canOpenManage: account.createdById === currentUser.id || membership.role === "MANAGER",
+      canArchiveAccount:
+        currentUser.role === "FOUNDER" ||
+        currentUser.role === "ADMIN" ||
+        (account.createdById === currentUser.id && currentUser.canArchiveOwnAccounts),
+      canDeleteAccount:
+        currentUser.role === "FOUNDER" ||
+        currentUser.role === "ADMIN" ||
+        (account.createdById === currentUser.id && currentUser.canDeleteOwnAccounts),
     };
   });
 
@@ -99,14 +113,14 @@ export default async function AccountsPage() {
       {activeMemberships.length > 0 ? (
         <AccountLibrary
           accounts={libraryAccounts}
-          labels={{ role: "Role", balance: "Balance", trades: "Trades", winRateShort: "WR", members: "Members", accountPnl: "Account PnL", openAccount: "Open Dashboard", archived: "Archived" }}
+          labels={{ initialBalance: "Initial balance", trades: "Trades", winRate: "Win rate", notMeasured: "Not measured", member: "member", members: "members", pnl: "PnL", openAccount: "Open Dashboard", archived: "Archived" }}
         />
       ) : (
         <Card variant="inner" className="border-dashed p-8 text-sm text-muted">No active accounts available.</Card>
       )}
 
-      <Link href="/accounts/archived" className="group mt-7 flex items-center justify-between gap-5 rounded-inner border-[0.5px] border-flash/[0.07] bg-surface-1/25 px-4 py-3 outline-none transition-colors hover:border-flash/[0.14] hover:bg-surface-1/40 focus-visible:ring-2 focus-visible:ring-accent-bright/60 sm:px-5">
-        <span><span className="block text-sm font-medium text-flash/90">Archived accounts</span><span className="mt-0.5 block text-xs text-muted-faint">Accounts you no longer actively use.</span></span>
+      <Link href="/accounts/archived" className="group mt-6 flex items-center justify-between gap-5 rounded-inner border-[0.5px] border-flash/[0.05] bg-surface-1/15 px-4 py-2.5 outline-none transition-colors hover:border-flash/[0.1] hover:bg-surface-1/25 focus-visible:ring-2 focus-visible:ring-accent-bright/60 sm:px-5">
+        <span><span className="block text-sm font-normal text-flash/80">Archived accounts</span><span className="mt-0.5 block text-xs text-muted-faint">Accounts you no longer actively use.</span></span>
         <span className="flex shrink-0 items-center gap-3"><span className="text-sm tabular-nums text-muted">{formatNumberByLanguage(archivedCount, language)}</span><ArrowRight size={16} aria-hidden="true" className="text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-flash" /></span>
       </Link>
     </div>
