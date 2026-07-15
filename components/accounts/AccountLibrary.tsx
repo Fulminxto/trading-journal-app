@@ -173,8 +173,8 @@ function GridAccountCard({ account, labels }: { account: AccountLibraryItem; lab
 
 function FocusCoverCard({ account, labels, active }: { account: AccountLibraryItem; labels: Labels; active: boolean }) {
   return (
-    <article className={`relative aspect-square w-full overflow-hidden rounded-card border bg-surface-1 ${active ? "border-flash/[0.18] shadow-[0_24px_65px_rgba(0,0,0,.5),0_0_35px_rgba(91,224,255,.07)]" : "border-flash/[0.15] shadow-[0_14px_36px_rgba(0,0,0,.32)]"}`}>
-      <div className="absolute inset-y-0 right-0 w-[58%] opacity-75 sm:w-[48%]">
+    <article className={`relative aspect-square w-full overflow-hidden rounded-card border bg-surface-1 sm:aspect-[6/5] ${active ? "border-flash/[0.18] shadow-[0_30px_80px_-38px_rgba(0,0,0,.58)]" : "border-flash/[0.15] shadow-[0_26px_70px_-36px_rgba(0,0,0,.42)]"}`}>
+      <div className="absolute inset-y-0 right-0 w-[60%] opacity-80 sm:w-[52%]">
         <AccountCover account={account} active={active} />
       </div>
       <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,7,14,1)_0%,rgba(3,7,14,.96)_38%,rgba(3,7,14,.68)_68%,rgba(3,7,14,.34)_100%),linear-gradient(0deg,rgba(3,7,14,.8)_0%,transparent_58%)]" />
@@ -185,15 +185,15 @@ function FocusCoverCard({ account, labels, active }: { account: AccountLibraryIt
           </div>
         </div>
         {active && <AccountActionsMenu accountId={account.id} accountName={account.name} accountStatus={account.status} canOpenManage={account.canOpenManage} canViewMembers={account.canViewMembers} canManageIntegrations={account.canManageIntegrations} canArchiveAccount={account.canArchiveAccount} canDeleteAccount={account.canDeleteAccount} placement="focus" className="absolute right-3 top-3 z-40 sm:right-4 sm:top-4" />}
-        <h3 aria-label={account.name} title={account.name} className={`mt-2 line-clamp-2 max-w-[76%] font-semibold text-flash sm:mt-5 sm:max-w-[68%] ${active ? "text-xl leading-6 sm:text-2xl sm:leading-7" : "text-lg leading-6 sm:text-xl"}`}>{account.name}</h3>
+        <h3 aria-label={account.name} title={account.name} className={`mt-2 line-clamp-2 max-w-[76%] font-semibold text-flash sm:mt-4 sm:max-w-[68%] ${active ? "text-xl leading-6 sm:text-2xl sm:leading-7" : "text-lg leading-6 sm:text-xl"}`}>{account.name}</h3>
         <div className="mt-2"><p className="text-micro text-muted-faint">{labels.pnl}</p><p className={`mt-0.5 font-semibold tabular-nums ${getPnlTone(account.pnlValue)} ${active ? "text-xl sm:text-2xl" : "text-base sm:text-lg"}`}>{account.pnl}</p></div>
-        {active && <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3 sm:mt-6 sm:gap-y-5">
+        {active && <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3 sm:mt-4 sm:grid-cols-4">
           <div><p className="flex items-center gap-1 text-micro text-muted-faint"><TrendingUp size={12} aria-hidden="true" />{labels.initialBalance}</p><p className="mt-1 truncate text-xs font-semibold tabular-nums text-flash">{account.initialBalance}</p></div>
           <div><p className="flex items-center gap-1 text-micro text-muted-faint"><Activity size={12} aria-hidden="true" />{labels.trades}</p><p className="mt-1 text-xs font-semibold tabular-nums text-flash">{account.formattedTradeCount}</p></div>
           <div><p className="flex items-center gap-1 text-micro text-muted-faint"><Shield size={12} aria-hidden="true" />{labels.winRate}</p><p className={`mt-1 truncate text-xs font-semibold tabular-nums ${getWinRateTone(account.winRateValue)}`}>{account.winRate ?? labels.notMeasured}</p></div>
           <div><p className="flex items-center gap-1 text-micro text-muted-faint"><Users size={12} aria-hidden="true" />{getMembersHeading(labels)}</p><p className="mt-1 truncate text-xs font-semibold tabular-nums text-flash">{getMemberCountLabel(account, labels)}</p></div>
         </div>}
-        {active && <div className="mt-3 text-right sm:mt-5"><Link href={`/accounts/${account.id}/dashboard`} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-inner bg-accent px-5 py-2.5 text-sm font-semibold text-white outline-none transition-colors hover:bg-accent-bright focus-visible:ring-2 focus-visible:ring-accent-bright/70 sm:w-auto">{labels.openAccount}<ArrowRight size={16} aria-hidden="true" /></Link></div>}
+        {active && <div className="mt-3 text-right sm:mt-4"><Link href={`/accounts/${account.id}/dashboard`} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-inner bg-accent px-5 py-2.5 text-sm font-semibold text-white outline-none transition-colors hover:bg-accent-bright focus-visible:ring-2 focus-visible:ring-accent-bright/70 sm:w-auto">{labels.openAccount}<ArrowRight size={16} aria-hidden="true" /></Link></div>}
       </div>
     </article>
   );
@@ -406,7 +406,7 @@ export default function AccountLibrary({ accounts, labels }: { accounts: Account
           onKeyDown={(event) => { if (event.key === "ArrowLeft") move(-1); if (event.key === "ArrowRight") move(1); }}
         >
           <p className="sr-only" aria-live="polite">{selected.name}, account {selectedIndex + 1} of {filtered.length}</p>
-          <div ref={carouselRef} className="relative mx-auto h-[min(96vw,500px)] min-h-[320px] max-w-[1280px] touch-pan-y overflow-hidden select-none sm:h-[500px] lg:min-h-0"
+          <div ref={carouselRef} className="relative mx-auto h-[min(96vw,500px)] min-h-[320px] max-w-[1280px] touch-pan-y overflow-hidden select-none sm:h-[420px] lg:min-h-0"
             onPointerMove={(event) => { if (event.pointerType === "mouse" && !reducedMotion) { const bounds = event.currentTarget.getBoundingClientRect(); setPointerRatio(Math.max(-1, Math.min(1, ((event.clientX - bounds.left) / bounds.width) * 2 - 1))); } const touch = touchRef.current; if (touch.pointerId !== event.pointerId) return; const dx = event.clientX - touch.startX; const dy = event.clientY - touch.startY; if (touch.axis === "pending" && Math.hypot(dx, dy) > 8) touch.axis = Math.abs(dx) > Math.abs(dy) * 1.15 ? "horizontal" : "vertical"; if (touch.axis === "horizontal") event.preventDefault(); }}
             onPointerLeave={() => { clearHoverIntent(); setPointerRatio(0); }}
             onPointerDown={(event) => { if (event.pointerType === "mouse" || (event.target as HTMLElement).closest("a")) return; touchRef.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, axis: "pending" }; event.currentTarget.setPointerCapture(event.pointerId); }}
