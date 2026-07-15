@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Activity,
   ArrowRight,
-  Check,
-  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Grid2X2,
   Search,
   Shield,
@@ -22,6 +22,11 @@ import AccountActionsMenu from "@/components/accounts/AccountActionsMenu";
 
 const VIEW_KEY = "voltis-account-library-view";
 type LibraryView = "focus" | "gallery" | "grid";
+type QuickFilter = "ALL" | "LIVE" | "DEMO" | "PROP" | "SHARED";
+type AccountTypeFilter = "ANY" | "LIVE" | "DEMO" | "PROP" | "CHALLENGE" | "FUNDED" | "SHARED";
+type CollaborationFilter = "ANY" | "MEMBERS_2" | "MEMBERS_3" | "MEMBERS_4";
+type AccessFilter = "ANY" | "MANAGER" | "MEMBER" | "VIEWER";
+type ActivityFilter = "ANY" | "WITH_TRADES" | "NO_TRADES";
 
 export type AccountLibraryItem = {
   id: string;
@@ -205,66 +210,36 @@ function FocusCoverCard({ account, labels, active }: { account: AccountLibraryIt
   );
 }
 
-function AccountTypeMenu({ value, options, onChange }: { value: string; options: string[]; onChange: (value: string) => void }) {
-  const [open, setOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const rootRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const optionRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  const listboxId = useId();
-  const items = useMemo(() => [{ value: "ALL", label: "All types" }, ...options.map((item) => ({ value: item, label: item }))], [options]);
+type StepperOption<T extends string> = { value: T; label: string };
 
-  useEffect(() => {
-    if (!open) return;
-    const closeOutside = (event: PointerEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
-    };
-    document.addEventListener("pointerdown", closeOutside);
-    return () => document.removeEventListener("pointerdown", closeOutside);
-  }, [open]);
+function FilterStepper<T extends string>({ label, value, options, onChange }: { label: string; value: T; options: Array<StepperOption<T>>; onChange: (value: T) => void }) {
+  const index = options.findIndex((option) => option.value === value);
+  const [direction, setDirection] = useState<-1 | 1>(1);
+  const [outgoingLabel, setOutgoingLabel] = useState<string | null>(null);
+  const transitionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const step = (nextIndex: number, nextDirection: -1 | 1) => {
+    if (transitionTimer.current) clearTimeout(transitionTimer.current);
+    setOutgoingLabel(options[index].label);
+    setDirection(nextDirection);
+    onChange(options[nextIndex].value);
+    transitionTimer.current = setTimeout(() => setOutgoingLabel(null), 210);
+  };
 
-  useEffect(() => {
-    if (open) optionRefs.current[activeIndex]?.focus();
-  }, [activeIndex, open]);
-
-  const openMenu = () => {
-    setActiveIndex(Math.max(0, items.findIndex((item) => item.value === value)));
-    setOpen(true);
-  };
-  const select = (next: string) => {
-    onChange(next);
-    setOpen(false);
-    queueMicrotask(() => buttonRef.current?.focus());
-  };
-  const handleListKey = (event: React.KeyboardEvent) => {
-    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-      event.preventDefault();
-      setActiveIndex((index) => (index + (event.key === "ArrowDown" ? 1 : -1) + items.length) % items.length);
-    } else if (event.key === "Home" || event.key === "End") {
-      event.preventDefault();
-      setActiveIndex(event.key === "Home" ? 0 : items.length - 1);
-    } else if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      select(items[activeIndex].value);
-    } else if (event.key === "Escape") {
-      event.preventDefault();
-      setOpen(false);
-      buttonRef.current?.focus();
-    } else if (event.key === "Tab") setOpen(false);
-  };
+  useEffect(() => () => {
+    if (transitionTimer.current) clearTimeout(transitionTimer.current);
+  }, []);
 
   return (
-    <div ref={rootRef} className="relative shrink-0">
-      <span id={`${listboxId}-label`} className="sr-only">Account type</span>
-      <button ref={buttonRef} type="button" aria-labelledby={`${listboxId}-label ${listboxId}-value`} aria-haspopup="listbox" aria-expanded={open} aria-controls={listboxId} onClick={() => open ? setOpen(false) : openMenu()} onKeyDown={(event) => { if (!open && (event.key === "Enter" || event.key === " " || event.key === "ArrowDown" || event.key === "ArrowUp")) { event.preventDefault(); openMenu(); } }} className="flex min-h-11 min-w-40 items-center justify-between gap-2.5 rounded-inner border-[0.5px] border-flash/[0.14] bg-surface-2 px-2.5 text-xs text-flash outline-none hover:border-flash/25 focus-visible:ring-2 focus-visible:ring-accent-bright/60">
-        <span className="flex gap-2"><span className="text-muted">Account type</span><span id={`${listboxId}-value`}>{items.find((item) => item.value === value)?.label}</span></span>
-        <ChevronDown size={14} aria-hidden="true" className={`text-muted transition-transform ${open ? "rotate-180" : ""}`} />
-      </button>
-      {open && <div id={listboxId} role="listbox" aria-labelledby={`${listboxId}-label`} onKeyDown={handleListKey} className="absolute right-0 top-[calc(100%+6px)] z-50 min-w-full overflow-hidden rounded-inner border-[0.5px] border-flash/[0.16] bg-[#08111d] p-1.5 shadow-[0_18px_45px_rgba(0,0,0,.55)]">
-        {items.map((item, index) => <button ref={(node) => { optionRefs.current[index] = node; }} key={item.value} type="button" role="option" aria-selected={value === item.value} onPointerMove={() => setActiveIndex(index)} onClick={() => select(item.value)} className={`flex min-h-9 w-full items-center justify-between gap-4 rounded-md px-3 text-left text-xs outline-none ${activeIndex === index ? "bg-white/[0.07] text-flash" : "text-muted hover:bg-white/[0.04] hover:text-flash"} focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-bright/60`}>
-          <span>{item.label}</span>{value === item.value && <span className="flex items-center gap-1.5 text-accent-bright"><Check size={13} aria-hidden="true" /><span className="sr-only">Selected</span></span>}
-        </button>)}
-      </div>}
+    <div className="flex min-h-9 items-center justify-between gap-3 border-b border-flash/[0.06] py-1.5 last:border-0">
+      <span className="text-xs text-muted">{label}</span>
+      <div className={`flex h-8 w-36 shrink-0 items-center rounded-inner border-[0.5px] bg-surface-2/80 ${value === "ANY" ? "border-flash/[0.1]" : "border-accent-bright/25"}`}>
+        <button type="button" disabled={index === 0} aria-label={`Previous ${label} option`} onClick={() => step(index - 1, -1)} className="flex size-8 shrink-0 items-center justify-center rounded-l-inner text-muted outline-none hover:text-flash focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-bright/60 disabled:cursor-not-allowed disabled:opacity-25"><ChevronLeft size={14} aria-hidden="true" /></button>
+        <span aria-live="polite" className="relative min-w-0 flex-1 self-stretch overflow-hidden text-center text-[11px] font-medium">
+          {outgoingLabel && <span className="absolute inset-0 flex items-center justify-center truncate text-muted animate-[filter-step-out_200ms_cubic-bezier(.2,.72,.22,1)_forwards] motion-reduce:hidden" style={{ "--filter-direction": direction } as React.CSSProperties}>{outgoingLabel}</span>}
+          <span key={value} className={`absolute inset-0 flex items-center justify-center truncate ${value === "ANY" ? "text-muted" : "text-accent-bright"} animate-[filter-step-in_200ms_cubic-bezier(.2,.72,.22,1)] motion-reduce:animate-none`} style={{ "--filter-direction": direction } as React.CSSProperties}>{options[index].label}</span>
+        </span>
+        <button type="button" disabled={index === options.length - 1} aria-label={`Next ${label} option`} onClick={() => step(index + 1, 1)} className="flex size-8 shrink-0 items-center justify-center rounded-r-inner text-muted outline-none hover:text-flash focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-bright/60 disabled:cursor-not-allowed disabled:opacity-25"><ChevronRight size={14} aria-hidden="true" /></button>
+      </div>
     </div>
   );
 }
@@ -272,8 +247,17 @@ function AccountTypeMenu({ value, options, onChange }: { value: string; options:
 export default function AccountLibrary({ accounts, labels }: { accounts: AccountLibraryItem[]; labels: Labels }) {
   const [view, setView] = useState<LibraryView>("grid");
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState<"ALL" | "PERSONAL" | "SHARED" | "PROP">("ALL");
-  const [type, setType] = useState("ALL");
+  const [quickFilter, setQuickFilter] = useState<QuickFilter>("ALL");
+  const [accountType, setAccountType] = useState<AccountTypeFilter>("ANY");
+  const [collaboration, setCollaboration] = useState<CollaborationFilter>("ANY");
+  const [access, setAccess] = useState<AccessFilter>("ANY");
+  const [activity, setActivity] = useState<ActivityFilter>("ANY");
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const quickOptions: Array<StepperOption<QuickFilter>> = [{ value: "ALL", label: "Accounts" }, { value: "LIVE", label: "Live" }, { value: "DEMO", label: "Demo" }, { value: "PROP", label: "Prop" }, { value: "SHARED", label: "Shared" }];
+  const quickRefs = useRef<Partial<Record<QuickFilter, HTMLButtonElement | null>>>({});
+  const [quickIndicator, setQuickIndicator] = useState({ left: 0, width: 0 });
+  const filtersRootRef = useRef<HTMLDivElement>(null);
+  const filtersTriggerRef = useRef<HTMLButtonElement>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [pointerRatio, setPointerRatio] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -281,7 +265,33 @@ export default function AccountLibrary({ accounts, labels }: { accounts: Account
   const hoverIntent = useRef<ReturnType<typeof setTimeout> | null>(null);
   const touchRef = useRef({ pointerId: -1, startX: 0, startY: 0, axis: "pending" as "pending" | "horizontal" | "vertical" });
   const railRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  const types = useMemo(() => [...new Set(accounts.map((account) => account.type))].sort(), [accounts]);
+  const showAccountType = quickFilter === "ALL";
+  const showCollaboration = true;
+  const activeFiltersCount = (showAccountType && accountType !== "ANY" ? 1 : 0) + (showCollaboration && collaboration !== "ANY" ? 1 : 0) + (access !== "ANY" ? 1 : 0) + (activity !== "ANY" ? 1 : 0);
+
+  useEffect(() => {
+    const active = quickRefs.current[quickFilter];
+    if (active) setQuickIndicator({ left: active.offsetLeft, width: active.offsetWidth });
+  }, [quickFilter]);
+
+  useEffect(() => {
+    if (!isFiltersOpen) return;
+    const closeOutside = (event: PointerEvent) => {
+      if (!filtersRootRef.current?.contains(event.target as Node)) setIsFiltersOpen(false);
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsFiltersOpen(false);
+        filtersTriggerRef.current?.focus();
+      }
+    };
+    document.addEventListener("pointerdown", closeOutside);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeOutside);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [isFiltersOpen]);
 
   useEffect(() => {
     const saved = window.localStorage.getItem(VIEW_KEY);
@@ -300,17 +310,39 @@ export default function AccountLibrary({ accounts, labels }: { accounts: Account
     window.localStorage.setItem(VIEW_KEY, next);
   };
 
+  const clearAdvancedFilters = () => {
+    setAccountType("ANY");
+    setCollaboration("ANY");
+    setAccess("ANY");
+    setActivity("ANY");
+    setSelectedIndex(0);
+  };
+
+  const chooseQuickFilter = (next: QuickFilter) => {
+    if (next !== "ALL") setAccountType("ANY");
+    setQuickFilter(next);
+    setSelectedIndex(0);
+  };
+
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase();
     return accounts.filter((account) => {
       if (account.status !== "ACTIVE") return false;
-      if (category === "SHARED" && !account.isSharedType && !account.hasMultipleMembers) return false;
-      if (category === "PERSONAL" && (account.isSharedType || account.hasMultipleMembers || ["PROP", "CHALLENGE", "FUNDED"].includes(account.type))) return false;
-      if (category === "PROP" && !["PROP", "CHALLENGE", "FUNDED"].includes(account.type)) return false;
-      if (type !== "ALL" && account.type !== type) return false;
-      return !term || account.name.toLowerCase().includes(term) || account.type.toLowerCase().includes(term) || account.brokerProvider?.toLowerCase().includes(term);
+      if (term && !account.name.toLowerCase().includes(term) && !account.type.toLowerCase().includes(term) && !account.brokerProvider?.toLowerCase().includes(term)) return false;
+      if (quickFilter === "LIVE" && account.type !== "LIVE") return false;
+      if (quickFilter === "DEMO" && account.type !== "DEMO") return false;
+      if (quickFilter === "PROP" && !["PROP", "CHALLENGE", "FUNDED"].includes(account.type)) return false;
+      if (quickFilter === "SHARED" && account.type !== "SHARED") return false;
+      if (showAccountType && accountType !== "ANY" && account.type !== accountType) return false;
+      if (showCollaboration && collaboration === "MEMBERS_2" && account.membersCount !== 2) return false;
+      if (showCollaboration && collaboration === "MEMBERS_3" && account.membersCount !== 3) return false;
+      if (showCollaboration && collaboration === "MEMBERS_4" && account.membersCount !== 4) return false;
+      if (access !== "ANY" && account.membershipRole !== access) return false;
+      if (activity === "WITH_TRADES" && account.tradeCount <= 0) return false;
+      if (activity === "NO_TRADES" && account.tradeCount !== 0) return false;
+      return true;
     });
-  }, [accounts, category, search, type]);
+  }, [access, accountType, accounts, activity, collaboration, quickFilter, search, showAccountType, showCollaboration]);
 
   const selected = filtered[selectedIndex];
   const focusEdgeBias = filtered.length <= 1
@@ -346,22 +378,40 @@ export default function AccountLibrary({ accounts, labels }: { accounts: Account
         <p className="text-micro uppercase tracking-label text-accent-bright">Account library</p>
         <h2 id="account-library-title" className="mt-2 text-section text-flash">Choose your workspace</h2>
       </div>
-      <div className="mb-6 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-        <label className="relative block w-full lg:max-w-sm"><span className="sr-only">Search accounts</span><Search size={16} aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" /><input value={search} onChange={(event) => { setSearch(event.target.value); setSelectedIndex(0); }} placeholder="Search accounts" className="w-full rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-2 py-2.5 pl-10 pr-4 text-sm text-flash outline-none placeholder:text-muted-faint focus:border-accent-bright/50 focus:ring-2 focus:ring-accent-bright/30" /></label>
-        <div className="flex min-w-0 gap-2 overflow-x-auto pb-1 lg:flex-wrap lg:justify-end lg:overflow-visible">
-          <div aria-label="Account category" className="flex shrink-0 gap-1 rounded-pill border-[0.5px] border-flash/[0.08] bg-surface-2/70 p-1">
-            {([['ALL', 'All accounts'], ['PERSONAL', 'Personal'], ['SHARED', 'Shared'], ['PROP', 'Prop firms']] as const).map(([value, label]) => <button key={value} type="button" aria-pressed={category === value} onClick={() => { setCategory(value); setSelectedIndex(0); }} className={`min-h-9 rounded-pill px-2.5 text-xs outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/60 ${category === value ? "bg-accent/15 text-accent-bright" : "text-muted hover:text-flash"}`}>{label}</button>)}
+      <div className="mb-6 flex w-full flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-4">
+        <div className="min-w-0 flex-1"><label className="relative block w-full lg:max-w-sm"><span className="sr-only">Search accounts</span><Search size={16} aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" /><input value={search} onChange={(event) => { setSearch(event.target.value); setSelectedIndex(0); }} placeholder="Search accounts" className="w-full rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-2 py-2.5 pl-10 pr-4 text-sm text-flash outline-none placeholder:text-muted-faint focus:border-accent-bright/50 focus:ring-2 focus:ring-accent-bright/30" /></label></div>
+        <div className="flex min-w-0 shrink-0 items-center gap-2 max-lg:w-full">
+          <div className="min-w-0 flex-1 overflow-x-auto lg:flex-none">
+            <div aria-label="Quick account filter" className="relative flex w-max shrink-0 overflow-hidden rounded-pill border-[0.5px] border-flash/[0.08] bg-surface-2/70 p-1">
+              <span aria-hidden="true" className="absolute bottom-1 top-1 rounded-pill border border-accent-bright/20 bg-accent/15 transition-[left,width] duration-200 ease-[cubic-bezier(.2,.72,.22,1)] motion-reduce:transition-none" style={{ left: quickIndicator.left, width: quickIndicator.width }} />
+              {quickOptions.map((option) => <button ref={(node) => { quickRefs.current[option.value] = node; }} key={option.value} type="button" aria-label={option.value === "ALL" ? "All accounts" : undefined} aria-pressed={quickFilter === option.value} onClick={() => chooseQuickFilter(option.value)} className={`relative z-10 min-h-9 rounded-pill px-2.5 text-xs outline-none transition-colors focus-visible:ring-2 focus-visible:ring-accent-bright/60 ${quickFilter === option.value ? "text-accent-bright" : "text-muted hover:text-flash"}`}>{option.label}</button>)}
+            </div>
           </div>
-          <AccountTypeMenu value={type} options={types} onChange={(next) => { setType(next); setSelectedIndex(0); }} />
+          <div ref={filtersRootRef} className="relative shrink-0">
+            <button ref={filtersTriggerRef} type="button" aria-haspopup="dialog" aria-expanded={isFiltersOpen} aria-label={activeFiltersCount === 0 ? "Open advanced account filters" : `Open advanced account filters, ${activeFiltersCount} active`} onClick={() => setIsFiltersOpen((open) => !open)} className={`flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-pill border-[0.5px] px-2.5 outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/60 ${activeFiltersCount > 0 ? "border-accent-bright/25 bg-accent/10 text-accent-bright" : "border-flash/[0.1] bg-surface-2 text-muted hover:text-flash"}`}>
+              <svg className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.7} d="M4 7h10m4 0h2M4 17h2m4 0h10M14 4v6M6 14v6" /></svg>
+              {activeFiltersCount > 0 && <span className="text-[11px] font-semibold tabular-nums">{activeFiltersCount}</span>}
+            </button>
+            {isFiltersOpen && <div role="dialog" aria-label="More filters" className="absolute right-0 top-[calc(100%+8px)] z-[100] w-80 max-w-[calc(100vw-2rem)] rounded-inner border-[0.5px] border-flash/[0.14] bg-[#08111d]/95 p-4 shadow-[0_18px_45px_rgba(0,0,0,.55)] backdrop-blur-md">
+              <div className="mb-2 flex items-center justify-between"><h3 className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted">More filters</h3><span className="text-[10px] tabular-nums text-muted-faint">{activeFiltersCount === 0 ? "None active" : `${activeFiltersCount} active`}</span></div>
+              <div>
+                {showAccountType && <FilterStepper label="Account type" value={accountType} onChange={(next) => { setAccountType(next); setSelectedIndex(0); }} options={[{ value: "ANY", label: "Any" }, { value: "LIVE", label: "Live" }, { value: "DEMO", label: "Demo" }, { value: "PROP", label: "Prop" }, { value: "CHALLENGE", label: "Challenge" }, { value: "FUNDED", label: "Funded" }, { value: "SHARED", label: "Shared" }]} />}
+                {showCollaboration && <FilterStepper label="Collaboration" value={collaboration} onChange={(next) => { setCollaboration(next); setSelectedIndex(0); }} options={[{ value: "ANY", label: "Any" }, { value: "MEMBERS_2", label: "2 members" }, { value: "MEMBERS_3", label: "3 members" }, { value: "MEMBERS_4", label: "4 members" }]} />}
+                <FilterStepper label="Access" value={access} onChange={(next) => { setAccess(next); setSelectedIndex(0); }} options={[{ value: "ANY", label: "Any" }, { value: "MANAGER", label: "Manager" }, { value: "MEMBER", label: "Member" }, { value: "VIEWER", label: "Viewer" }]} />
+                <FilterStepper label="Activity" value={activity} onChange={(next) => { setActivity(next); setSelectedIndex(0); }} options={[{ value: "ANY", label: "Any" }, { value: "WITH_TRADES", label: "With trades" }, { value: "NO_TRADES", label: "No trades" }]} />
+              </div>
+              {activeFiltersCount > 0 && <button type="button" onClick={clearAdvancedFilters} className="mt-2 min-h-9 text-xs font-medium text-accent-bright outline-none hover:text-flash focus-visible:ring-2 focus-visible:ring-accent-bright/60">Clear filters</button>}
+            </div>}
+          </div>
           <div role="group" aria-label="Library view" className="flex shrink-0 rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-2 p-1">
-            <button type="button" aria-pressed={view === "focus"} onClick={() => chooseView("focus")} className={`flex min-h-9 items-center gap-1.5 rounded-inner px-2.5 text-xs outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/60 ${view === "focus" ? "bg-accent/15 text-accent-bright" : "text-muted"}`}><Sparkles size={14} />Focus</button>
             <button type="button" aria-pressed={view === "grid"} onClick={() => chooseView("grid")} className={`flex min-h-9 items-center gap-1.5 rounded-inner px-2.5 text-xs outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/60 ${view === "grid" ? "bg-accent/15 text-accent-bright" : "text-muted"}`}><Grid2X2 size={14} />Grid</button>
+            <button type="button" aria-pressed={view === "focus"} onClick={() => chooseView("focus")} className={`flex min-h-9 items-center gap-1.5 rounded-inner px-2.5 text-xs outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/60 ${view === "focus" ? "bg-accent/15 text-accent-bright" : "text-muted"}`}><Sparkles size={14} />Focus</button>
           </div>
         </div>
       </div>
 
       {filtered.length === 0 ? (
-        <Card variant="inner" className="border-dashed p-8 text-center"><h3 className="text-subsection text-flash">No accounts found</h3><p className="mt-2 text-caption text-muted">Try adjusting your search or account filters.</p><button type="button" onClick={() => { setSearch(""); setType("ALL"); setCategory("ALL"); setSelectedIndex(0); }} className="mt-4 rounded-inner border-[0.5px] border-accent/30 px-4 py-2 text-sm text-accent-bright">Clear filters</button></Card>
+        <Card variant="inner" className="border-dashed p-8 text-center"><h3 className="text-subsection text-flash">No accounts found</h3><p className="mt-2 text-caption text-muted">Try adjusting your search or account filters.</p><button type="button" onClick={() => { setSearch(""); setQuickFilter("ALL"); clearAdvancedFilters(); }} className="mt-4 rounded-inner border-[0.5px] border-accent/30 px-4 py-2 text-sm text-accent-bright">Clear filters</button></Card>
       ) : view === "grid" ? (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">{filtered.map((account) => <GridAccountCard key={account.id} account={account} labels={labels} />)}</div>
       ) : (
@@ -398,7 +448,7 @@ export default function AccountLibrary({ accounts, labels }: { accounts: Account
           </div>
         </div>
       )}
-      <style>{`@media (prefers-reduced-motion: reduce) { .account-library [class*="transition-"] { transition-duration: 0.01ms !important; } }`}</style>
+      <style>{`@keyframes filter-step-out { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(calc(var(--filter-direction) * 5px)); } } @keyframes filter-step-in { from { opacity: 0; transform: translateX(calc(var(--filter-direction) * -5px)); } to { opacity: 1; transform: translateX(0); } } @media (prefers-reduced-motion: reduce) { .account-library [class*="transition-"] { transition-duration: 0.01ms !important; } }`}</style>
     </section>
   );
 }
