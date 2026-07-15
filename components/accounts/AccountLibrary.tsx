@@ -136,6 +136,26 @@ function getMembersHeading(labels: Labels) {
   return `${labels.members.charAt(0).toUpperCase()}${labels.members.slice(1)}`;
 }
 
+function parseFormattedAmount(value: string) {
+  const cleaned = value.replace(/[^\d,.-]/g, "");
+  if (!cleaned) return null;
+  const lastComma = cleaned.lastIndexOf(",");
+  const lastDot = cleaned.lastIndexOf(".");
+  const commaDecimals = lastComma >= 0 ? cleaned.length - lastComma - 1 : -1;
+  const dotDecimals = lastDot >= 0 ? cleaned.length - lastDot - 1 : -1;
+  const normalized = lastComma >= 0 && lastDot >= 0
+    ? lastComma > lastDot
+      ? cleaned.replace(/\./g, "").replace(",", ".")
+      : cleaned.replace(/,/g, "")
+    : lastComma >= 0
+      ? commaDecimals === 2 ? cleaned.replace(",", ".") : cleaned.replace(/,/g, "")
+      : lastDot >= 0 && dotDecimals === 3
+        ? cleaned.replace(/\./g, "")
+        : cleaned;
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
 function GridAccountCard({ account, labels }: { account: AccountLibraryItem; labels: Labels }) {
   return (
     <Card className="p-5 sm:p-6">
@@ -171,35 +191,40 @@ function GridAccountCard({ account, labels }: { account: AccountLibraryItem; lab
   );
 }
 
-function FocusCoverCard({ account, labels, active }: { account: AccountLibraryItem; labels: Labels; active: boolean }) {
+function FocusCoverCard({ account, labels, active, direction }: { account: AccountLibraryItem; labels: Labels; active: boolean; direction: -1 | 1 }) {
+  const initialBalanceValue = parseFormattedAmount(account.initialBalance);
+  const pnlPercentage = initialBalanceValue !== null && initialBalanceValue > 0 && Number.isFinite(account.pnlValue)
+    ? (account.pnlValue / initialBalanceValue) * 100
+    : null;
+
   return (
-    <article className={`relative h-[340px] w-full overflow-hidden rounded-card border bg-surface-1 sm:h-[330px] ${active ? "border-flash/[0.18] shadow-[0_28px_80px_-46px_rgba(0,0,0,.42)]" : "border-flash/[0.15] shadow-[0_24px_68px_-44px_rgba(0,0,0,.34)]"}`}>
-      <div className="absolute inset-y-0 right-0 w-[60%] opacity-80 sm:w-[52%]">
+    <article data-active={active} className={`relative w-full overflow-hidden rounded-[24px] border border-white/[0.05] bg-[#070d19]/80 p-5 backdrop-blur-xl sm:p-6 ${active ? "focus-card-enter shadow-[0_25px_60px_-15px_rgba(0,0,0,.9)]" : "focus-card-exit shadow-[0_20px_52px_-18px_rgba(0,0,0,.6)]"}`} style={{ "--focus-direction": direction } as React.CSSProperties}>
+      <div className="absolute right-0 top-0 h-[58%] w-[62%] opacity-25">
         <AccountCover account={account} active={active} />
       </div>
-      <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,7,14,1)_0%,rgba(3,7,14,.96)_38%,rgba(3,7,14,.68)_68%,rgba(3,7,14,.34)_100%),linear-gradient(0deg,rgba(3,7,14,.8)_0%,transparent_58%)]" />
-      <div className="relative z-10 p-4 sm:p-6">
-        <div className="flex min-h-8 items-start justify-between gap-3 pr-9">
-          <div className="flex flex-wrap items-center gap-2 text-micro uppercase tracking-label">
-          <span className="text-accent-bright">{account.type}</span><span className="text-muted-faint">·</span><span className={active ? "text-muted" : "text-muted/80"}>{account.status}</span><span className="text-muted-faint">·</span><span className={active ? "text-muted" : "text-muted/80"}>{account.membershipRole}</span>
+      <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(110deg,rgba(7,13,25,.98)_0%,rgba(7,13,25,.9)_54%,rgba(7,13,25,.58)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,.025)]" />
+      <div className="relative z-10">
+        <div className="flex items-start gap-3">
+          <IconTile interactive={false}><Wallet size={20} /></IconTile>
+          <div className="min-w-0 flex-1">
+            <p className="text-micro uppercase tracking-label text-muted"><span className="text-accent-bright">{account.type}</span><span className="text-muted-faint"> · </span>{account.status}<span className="text-muted-faint"> · </span>{account.membershipRole}</p>
+            <h3 aria-label={account.name} title={account.name} className="mt-1.5 line-clamp-2 min-h-[3.5rem] text-xl font-bold leading-7 text-white">{account.name}</h3>
           </div>
+          {active && <AccountActionsMenu accountId={account.id} accountName={account.name} accountStatus={account.status} canOpenManage={account.canOpenManage} canViewMembers={account.canViewMembers} canManageIntegrations={account.canManageIntegrations} canArchiveAccount={account.canArchiveAccount} canDeleteAccount={account.canDeleteAccount} placement="focus" />}
         </div>
-        {active && <AccountActionsMenu accountId={account.id} accountName={account.name} accountStatus={account.status} canOpenManage={account.canOpenManage} canViewMembers={account.canViewMembers} canManageIntegrations={account.canManageIntegrations} canArchiveAccount={account.canArchiveAccount} canDeleteAccount={account.canDeleteAccount} placement="focus" className="absolute right-3 top-3 z-40 sm:right-4 sm:top-4" />}
-        <div className={`mt-3 grid gap-4 sm:mt-4 ${active ? "sm:grid-cols-[minmax(0,.85fr)_minmax(0,1.15fr)] sm:gap-6" : "max-w-[68%]"}`}>
-          <div className="min-w-0">
-            <h3 aria-label={account.name} title={account.name} className={`line-clamp-2 font-semibold text-flash ${active ? "text-xl leading-6 sm:text-2xl sm:leading-7" : "text-lg leading-6 sm:text-xl"}`}>{account.name}</h3>
-            <div className="mt-2"><p className="text-micro text-muted-faint">{labels.pnl}</p><p className={`mt-0.5 font-semibold tabular-nums ${getPnlTone(account.pnlValue)} ${active ? "text-xl sm:text-2xl" : "text-base sm:text-lg"}`}>{account.pnl}</p></div>
+        <div className={`mt-4 rounded-xl border border-slate-800/40 bg-slate-950/40 p-4 ${active ? "" : "max-w-[82%]"}`}>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{labels.pnl}</p>
+          <div className="mt-1 flex items-end justify-between gap-3"><p className={`text-3xl font-black leading-tight ${getPnlTone(account.pnlValue)}`}>{account.pnl}</p>{active && pnlPercentage !== null && pnlPercentage !== 0 && <span aria-label={`${pnlPercentage > 0 ? "Positive" : "Negative"} PnL percentage: ${Math.abs(pnlPercentage).toFixed(2)} percent`} className={`shrink-0 rounded-full border px-2 py-0.5 text-xs tabular-nums ${pnlPercentage > 0 ? "border-emerald-400/15 bg-emerald-500/10 text-emerald-400" : "border-rose-400/15 bg-rose-500/10 text-rose-400"}`}>{pnlPercentage > 0 ? "+" : ""}{pnlPercentage.toFixed(2)}%</span>}</div>
+        </div>
+        {active && <>
+          <div className="mt-4 grid grid-cols-2 gap-x-5 gap-y-4">
+            <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><TrendingUp size={12} aria-hidden="true" />{labels.initialBalance}</p><p className="mt-0.5 text-sm font-semibold text-slate-200">{account.initialBalance}</p></div>
+            <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><Activity size={12} aria-hidden="true" />{labels.trades}</p><p className="mt-0.5 text-sm font-semibold text-slate-200">{account.formattedTradeCount}</p></div>
+            <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><Shield size={12} aria-hidden="true" />{labels.winRate}</p><p className={`mt-0.5 text-sm font-semibold ${getWinRateTone(account.winRateValue)}`}>{account.winRate ?? labels.notMeasured}</p></div>
+            <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><Users size={12} aria-hidden="true" />{getMembersHeading(labels)}</p><p className="mt-0.5 text-sm font-semibold text-slate-200">{getMemberCountLabel(account, labels)}</p></div>
           </div>
-          {active && <div className="min-w-0">
-            <div className="grid grid-cols-2 gap-x-4 gap-y-4">
-              <div><p className="flex items-center gap-1 text-micro text-muted-faint"><TrendingUp size={12} aria-hidden="true" />{labels.initialBalance}</p><p className="mt-1 truncate text-xs font-semibold tabular-nums text-flash">{account.initialBalance}</p></div>
-              <div><p className="flex items-center gap-1 text-micro text-muted-faint"><Activity size={12} aria-hidden="true" />{labels.trades}</p><p className="mt-1 text-xs font-semibold tabular-nums text-flash">{account.formattedTradeCount}</p></div>
-              <div><p className="flex items-center gap-1 text-micro text-muted-faint"><Shield size={12} aria-hidden="true" />{labels.winRate}</p><p className={`mt-1 truncate text-xs font-semibold tabular-nums ${getWinRateTone(account.winRateValue)}`}>{account.winRate ?? labels.notMeasured}</p></div>
-              <div><p className="flex items-center gap-1 text-micro text-muted-faint"><Users size={12} aria-hidden="true" />{getMembersHeading(labels)}</p><p className="mt-1 truncate text-xs font-semibold tabular-nums text-flash">{getMemberCountLabel(account, labels)}</p></div>
-            </div>
-            <div className="mt-4 text-right"><Link href={`/accounts/${account.id}/dashboard`} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-inner bg-accent px-5 py-2.5 text-sm font-semibold text-white outline-none transition-colors hover:bg-accent-bright focus-visible:ring-2 focus-visible:ring-accent-bright/70 sm:w-auto">{labels.openAccount}<ArrowRight size={16} aria-hidden="true" /></Link></div>
-          </div>}
-        </div>
+          <Link href={`/accounts/${account.id}/dashboard`} className="group mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-cyan-400/25 bg-slate-950 px-4 py-3 text-sm font-semibold text-slate-100 outline-none transition-all duration-300 hover:border-cyan-400/40 hover:bg-slate-900 hover:shadow-[0_0_20px_rgba(34,211,238,.12)] focus-visible:ring-2 focus-visible:ring-accent-bright/70">Open Workspace<ArrowRight size={16} aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1" /></Link>
+        </>}
       </div>
     </article>
   );
@@ -254,6 +279,7 @@ export default function AccountLibrary({ accounts, labels }: { accounts: Account
   const filtersRootRef = useRef<HTMLDivElement>(null);
   const filtersTriggerRef = useRef<HTMLButtonElement>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [focusDirection, setFocusDirection] = useState<-1 | 1>(1);
   const [pointerRatio, setPointerRatio] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -350,15 +376,15 @@ export default function AccountLibrary({ accounts, labels }: { accounts: Account
         : selectedIndex === filtered.length - 1
           ? "clamp(18px, 3vw, 42px)"
           : "0px";
-  const move = useCallback((delta: number) => setSelectedIndex((index) => Math.max(0, Math.min(filtered.length - 1, index + delta))), [filtered.length]);
+  const move = useCallback((delta: number) => { setFocusDirection(delta < 0 ? -1 : 1); setSelectedIndex((index) => Math.max(0, Math.min(filtered.length - 1, index + delta))); }, [filtered.length]);
   const clearHoverIntent = useCallback(() => {
     if (hoverIntent.current) clearTimeout(hoverIntent.current);
     hoverIntent.current = null;
   }, []);
   const selectWithIntent = useCallback((index: number) => {
     clearHoverIntent();
-    hoverIntent.current = setTimeout(() => setSelectedIndex(index), 170);
-  }, [clearHoverIntent]);
+    hoverIntent.current = setTimeout(() => { setFocusDirection(index < selectedIndex ? -1 : 1); setSelectedIndex(index); }, 170);
+  }, [clearHoverIntent, selectedIndex]);
 
   useEffect(() => clearHoverIntent, [clearHoverIntent]);
 
@@ -412,7 +438,8 @@ export default function AccountLibrary({ accounts, labels }: { accounts: Account
           onKeyDown={(event) => { if (event.key === "ArrowLeft") move(-1); if (event.key === "ArrowRight") move(1); }}
         >
           <p className="sr-only" aria-live="polite">{selected.name}, account {selectedIndex + 1} of {filtered.length}</p>
-          <div ref={carouselRef} className="relative mx-auto h-[360px] max-w-[1280px] touch-pan-y overflow-hidden select-none"
+          <div className="relative overflow-visible pt-5">
+          <div ref={carouselRef} className="relative mx-auto h-[390px] max-w-[1280px] touch-pan-y overflow-x-clip overflow-y-visible select-none"
             onPointerMove={(event) => { if (event.pointerType === "mouse" && !reducedMotion) { const bounds = event.currentTarget.getBoundingClientRect(); setPointerRatio(Math.max(-1, Math.min(1, ((event.clientX - bounds.left) / bounds.width) * 2 - 1))); } const touch = touchRef.current; if (touch.pointerId !== event.pointerId) return; const dx = event.clientX - touch.startX; const dy = event.clientY - touch.startY; if (touch.axis === "pending" && Math.hypot(dx, dy) > 8) touch.axis = Math.abs(dx) > Math.abs(dy) * 1.15 ? "horizontal" : "vertical"; if (touch.axis === "horizontal") event.preventDefault(); }}
             onPointerLeave={() => { clearHoverIntent(); setPointerRatio(0); }}
             onPointerDown={(event) => { if (event.pointerType === "mouse" || (event.target as HTMLElement).closest("a")) return; touchRef.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, axis: "pending" }; event.currentTarget.setPointerCapture(event.pointerId); }}
@@ -426,14 +453,16 @@ export default function AccountLibrary({ accounts, labels }: { accounts: Account
               const scale = depth === 0 ? 1 : depth === 1 ? .85 : .73;
               const opacity = visible ? depth === 0 ? 1 : depth === 1 ? .7 : .36 : 0;
               const parallax = reducedMotion ? 0 : pointerRatio * (depth === 0 ? 8 : depth === 1 ? 5 : 3);
-              const style = { transform: `translate(calc(${x} + ${focusEdgeBias} + ${parallax}px),calc(-50% + ${depth * 7}px)) scale(${scale})`, opacity, zIndex: 30 - depth * 10, filter: `brightness(${depth === 0 ? 1 : depth === 1 ? .86 : .72})`, pointerEvents: visible ? "auto" as const : "none" as const, transition: reducedMotion ? "opacity 80ms linear" : "transform 560ms cubic-bezier(.2,.72,.22,1), opacity 520ms ease, filter 560ms ease" };
-              return <div key={account.id} className="absolute left-1/2 top-1/2 w-[88%] max-w-[480px]" style={style}>{position === 0 ? <FocusCoverCard account={account} labels={labels} active /> : <button type="button" aria-label={`Select ${account.name}`} onPointerEnter={(event) => { if (event.pointerType === "mouse") selectWithIntent(index); }} onPointerLeave={clearHoverIntent} onClick={() => setSelectedIndex(index)} className="block w-full text-left outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/80"><FocusCoverCard account={account} labels={labels} active={false} /></button>}</div>;
+              const horizontalBias = position === 0 ? "0px" : focusEdgeBias;
+              const style = { transform: `translate(calc(${x} + ${horizontalBias} + ${parallax}px),calc(-50% + ${depth * 7}px)) scale(${scale})`, opacity, zIndex: 30 - depth * 10, filter: `brightness(${depth === 0 ? 1 : depth === 1 ? .86 : .72})`, pointerEvents: visible ? "auto" as const : "none" as const, transition: reducedMotion ? "opacity 80ms linear" : "transform 560ms cubic-bezier(.2,.72,.22,1), opacity 520ms ease, filter 560ms ease" };
+              return <div key={account.id} className="absolute left-1/2 top-1/2 w-[88%] max-w-[480px]" style={style}>{position === 0 ? <FocusCoverCard account={account} labels={labels} active direction={focusDirection} /> : <button type="button" aria-label={`Select ${account.name}`} onPointerEnter={(event) => { if (event.pointerType === "mouse") selectWithIntent(index); }} onPointerLeave={clearHoverIntent} onClick={() => { setFocusDirection(index < selectedIndex ? -1 : 1); setSelectedIndex(index); }} className="block w-full text-left outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/80"><FocusCoverCard account={account} labels={labels} active={false} direction={focusDirection} /></button>}</div>;
             })}
           </div>
-          <p aria-hidden="true" className="mt-1 text-center text-xs tracking-[0.08em]"><span className="font-medium tabular-nums text-flash/80">{selectedIndex + 1}</span><span className="text-muted-faint"> of {filtered.length}</span></p>
+          </div>
+          <p aria-hidden="true" className="relative z-10 mt-6 w-full text-center text-xs tracking-[0.08em]"><span className="font-medium tabular-nums text-flash/80">{selectedIndex + 1}</span><span className="text-muted-faint"> of {filtered.length}</span></p>
         </div>
       )}
-      <style>{`@keyframes filter-step-out { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(calc(var(--filter-direction) * 5px)); } } @keyframes filter-step-in { from { opacity: 0; transform: translateX(calc(var(--filter-direction) * -5px)); } to { opacity: 1; transform: translateX(0); } } @media (prefers-reduced-motion: reduce) { .account-library [class*="transition-"] { transition-duration: 0.01ms !important; } }`}</style>
+      <style>{`@keyframes filter-step-out { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(calc(var(--filter-direction) * 5px)); } } @keyframes filter-step-in { from { opacity: 0; transform: translateX(calc(var(--filter-direction) * -5px)); } to { opacity: 1; transform: translateX(0); } } @keyframes focus-card-enter { from { opacity: 0; transform: translateX(calc(var(--focus-direction) * -10px)) scale(.94); } to { opacity: 1; transform: translateX(0) scale(1); } } @keyframes focus-card-exit { 0% { opacity: 1; transform: translateX(0) scale(1); } 72% { opacity: 0; transform: translateX(calc(var(--focus-direction) * 10px)) scale(.9); } 100% { opacity: 1; transform: translateX(0) scale(1); } } .focus-card-enter { animation: focus-card-enter 280ms cubic-bezier(.2,.72,.22,1); } .focus-card-exit { animation: focus-card-exit 280ms cubic-bezier(.2,.72,.22,1); } @media (prefers-reduced-motion: reduce) { .account-library [class*="transition-"] { transition-duration: 0.01ms !important; } .focus-card-enter, .focus-card-exit { animation: none !important; } }`}</style>
     </section>
   );
 }
