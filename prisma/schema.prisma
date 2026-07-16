@@ -3,9 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider   = "postgresql"
-  url        = env("DATABASE_URL")
-  directUrl  = env("DIRECT_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum Role {
@@ -15,73 +15,82 @@ enum Role {
   VIEWER
 }
 
+enum SyncOperationStatus {
+  STARTED
+  PROCESSING
+  COMPLETED
+  PARTIAL
+  FAILED
+  ABANDONED
+}
+
 model User {
-  id            String   @id @default(cuid())
-  username      String   @unique
-  passwordHash  String
+  id           String @id @default(cuid())
+  username     String @unique
+  passwordHash String
 
   role String @default("MEMBER")
 
   canCreatePersonalAccounts Boolean @default(true)
   canCreateSharedAccounts   Boolean @default(false)
 
-  canArchiveOwnAccounts     Boolean @default(true)
-  canDeleteOwnAccounts      Boolean @default(false)
+  canArchiveOwnAccounts Boolean @default(true)
+  canDeleteOwnAccounts  Boolean @default(false)
 
-  canUseCopilot             Boolean @default(true)
+  canUseCopilot Boolean @default(true)
 
-  canViewAnalytics          Boolean @default(true)
-  canViewReports            Boolean @default(true)
+  canViewAnalytics Boolean @default(true)
+  canViewReports   Boolean @default(true)
 
-  canManageUsers            Boolean @default(false)
-  canManageSystem           Boolean @default(false)
+  canManageUsers  Boolean @default(false)
+  canManageSystem Boolean @default(false)
 
-  status      String   @default("ACTIVE")
-  frozenAt    DateTime?
+  status   String    @default("ACTIVE")
+  frozenAt DateTime?
 
   failedLoginAttempts Int       @default(0)
   lockedUntil         DateTime?
 
-  lastSeenAt DateTime?
+  lastSeenAt     DateTime?
   lastLoginAt    DateTime?
   lastActivityAt DateTime?
 
-  loginCount     Int @default(0)
+  loginCount Int @default(0)
 
-  activityLogs ActivityLog[]
+  activityLogs  ActivityLog[]
   notifications Notification[]
 
-  name              String?
-  image             String?
-  bio               String?
-  workspaceName     String?
-  
-  tradingStyle      String?
-  favoriteMarket    String?
-  timezone          String?
+  name          String?
+  image         String?
+  bio           String?
+  workspaceName String?
 
-  preferredSession  String?
-  riskPerTrade      Float?
-  preferredBroker   String?
-  setupStyle        String?
+  tradingStyle   String?
+  favoriteMarket String?
+  timezone       String?
 
-  defaultCurrency    String   @default("USD")
+  preferredSession String?
+  riskPerTrade     Float?
+  preferredBroker  String?
+  setupStyle       String?
+
+  defaultCurrency String @default("USD")
 
   appLanguage     String @default("en")
   themePreference String @default("dark")
   accentColor     String @default("green")
   appIconVariant  String @default("classic")
 
-  compactMode        Boolean  @default(false)
-  performanceBlur    Boolean  @default(false)
-  email              String?  @unique
-  twoFactorEnabled   Boolean  @default(false)
+  compactMode      Boolean @default(false)
+  performanceBlur  Boolean @default(false)
+  email            String? @unique
+  twoFactorEnabled Boolean @default(false)
 
-  emailNotifications Boolean  @default(false)
+  emailNotifications Boolean @default(false)
 
-  reviewReminders       Boolean @default(true)
-  sessionLockAlerts     Boolean @default(true)
-  dailyTradingReminder  Boolean @default(false)
+  reviewReminders      Boolean @default(true)
+  sessionLockAlerts    Boolean @default(true)
+  dailyTradingReminder Boolean @default(false)
 
   notificationsEnabled  Boolean @default(true)
   notifyTradeActivity   Boolean @default(true)
@@ -89,56 +98,57 @@ model User {
   notifyPlatformUpdates Boolean @default(true)
   notifySupport         Boolean @default(true)
 
-  pushNotificationsEnabled Boolean @default(false)
+  pushNotificationsEnabled Boolean            @default(false)
   pushSubscriptions        PushSubscription[]
 
-  twoFactorCodes           TwoFactorCode[]
+  twoFactorCodes TwoFactorCode[]
 
-  memberships     AccountMember[]
-  sentInvites     AccountInvite[] @relation("InvitedBy")
-  receivedInvites AccountInvite[] @relation("InvitedUser")
-  createdTrades Trade[]
-  createdSessions TradingSession[]
+  memberships             AccountMember[]
+  sentInvites             AccountInvite[]  @relation("InvitedBy")
+  receivedInvites         AccountInvite[]  @relation("InvitedUser")
+  createdTrades           Trade[]
+  createdSessions         TradingSession[]
+  initiatedSyncOperations SyncOperation[]
 
   createdAccounts TradingAccount[] @relation("CreatedTradingAccounts")
 
   supportTickets SupportTicket[]
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model TradingAccount {
-  id             String   @id @default(cuid())
-  name           String
-  type           AccountType
-  status         AccountStatus @default(ACTIVE)
+  id     String        @id @default(cuid())
+  name   String
+  type   AccountType
+  status AccountStatus @default(ACTIVE)
 
   initialBalance Float
-  currency       String   @default("USD")
+  currency       String @default("USD")
 
-  createdById    String?
-  createdBy      User?    @relation("CreatedTradingAccounts", fields: [createdById], references: [id], onDelete: SetNull)
+  createdById String?
+  createdBy   User?   @relation("CreatedTradingAccounts", fields: [createdById], references: [id], onDelete: SetNull)
 
-  broker          String?
-  phase           String?
-  profitTarget    Float?
-  maxDrawdown     Float?
-  dailyDrawdown   Float?
+  broker        String?
+  phase         String?
+  profitTarget  Float?
+  maxDrawdown   Float?
+  dailyDrawdown Float?
 
-  integrationMode  String   @default("manual")
-  autoSyncEnabled  Boolean  @default(false)
+  integrationMode String  @default("manual")
+  autoSyncEnabled Boolean @default(false)
 
-  mt5Enabled       Boolean  @default(false)
-  mt5AccountLogin  String?
-  mt5ServerName    String?
+  mt5Enabled      Boolean @default(false)
+  mt5AccountLogin String?
+  mt5ServerName   String?
 
   brokerSyncEnabled Boolean @default(false)
   brokerProvider    String?
   brokerAccountId   String?
 
-  syncStatus       String   @default("inactive")
-  lastSyncedAt     DateTime?
+  syncStatus   String    @default("inactive")
+  lastSyncedAt DateTime?
 
   members        AccountMember[]
   invites        AccountInvite[]
@@ -146,42 +156,43 @@ model TradingAccount {
   sessions       TradingSession[]
   goals          TradingGoal[]
   strategies     Strategy[]
+  syncOperations SyncOperation[]
 
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   activityLogs ActivityLog[]
 
-  copilotMessages CopilotMessage[]
-  copilotPatterns CopilotPattern[]
+  copilotMessages    CopilotMessage[]
+  copilotPatterns    CopilotPattern[]
   copilotReviewNotes CopilotReviewNote[]
-  copilotMemories CopilotMemory[]
+  copilotMemories    CopilotMemory[]
 }
 
 model AccountMember {
-  id               String @id @default(cuid())
+  id               String     @id @default(cuid())
   userId           String
   tradingAccountId String
   role             MemberRole @default(MEMBER)
 
-  canCreateTrades   Boolean @default(true)
-  canEditTrades     Boolean @default(true)
-  canDeleteTrades   Boolean @default(true)
+  canCreateTrades Boolean @default(true)
+  canEditTrades   Boolean @default(true)
+  canDeleteTrades Boolean @default(true)
 
-  canViewAnalytics  Boolean @default(true)
-  canViewReports    Boolean @default(true)
-  canViewCopilot    Boolean @default(true)
-  canViewMembers    Boolean @default(true)
+  canViewAnalytics Boolean @default(true)
+  canViewReports   Boolean @default(true)
+  canViewCopilot   Boolean @default(true)
+  canViewMembers   Boolean @default(true)
 
   // Reserved for future feature: member/role management by MANAGER. Do not remove.
-  canManageMembers  Boolean @default(false)
-  canManageRoles    Boolean @default(false)
-  canManageAccount  Boolean @default(false)
+  canManageMembers Boolean @default(false)
+  canManageRoles   Boolean @default(false)
+  canManageAccount Boolean @default(false)
 
-  user             User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tradingAccount   TradingAccount @relation(fields: [tradingAccountId], references: [id], onDelete: Cascade)
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tradingAccount TradingAccount @relation(fields: [tradingAccountId], references: [id], onDelete: Cascade)
 
-  createdAt        DateTime @default(now())
+  createdAt DateTime @default(now())
 
   @@unique([userId, tradingAccountId])
 }
@@ -204,66 +215,67 @@ model AccountInvite {
 }
 
 model Trade {
-  id               Int      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   tradingAccountId String
   createdById      String
 
-  tradingAccount   TradingAccount @relation(fields: [tradingAccountId], references: [id], onDelete: Cascade)
-  createdBy        User           @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  tradingAccount TradingAccount @relation(fields: [tradingAccountId], references: [id], onDelete: Cascade)
+  createdBy      User           @relation(fields: [createdById], references: [id], onDelete: Cascade)
 
-  openDate         DateTime
-  openTime         String?
-  reason           String?
-  strategy         String?
-  strategyId       String?
-  strategyRef      Strategy?      @relation(fields: [strategyId], references: [id], onDelete: SetNull)
-  symbol           String
-  direction        String
-  amount           Float?
-  openingPrice     Float?
-  stopLoss         Float?
-  takeProfit       Float?
-  riskReward       Float?
-  closeDate        DateTime?
-  closingPrice     Float?
-  outcome          String?
-  resultUsd        Float?
-  resultPercent    Float?
-  equity           Float?
-  equityPeak       Float?
-  drawdownPercent  Float?
-  notes            String?
+  openDate        DateTime
+  openTime        String?
+  reason          String?
+  strategy        String?
+  strategyId      String?
+  strategyRef     Strategy? @relation(fields: [strategyId], references: [id], onDelete: SetNull)
+  symbol          String
+  direction       String
+  amount          Float?
+  openingPrice    Float?
+  stopLoss        Float?
+  takeProfit      Float?
+  riskReward      Float?
+  closeDate       DateTime?
+  closingPrice    Float?
+  outcome         String?
+  resultUsd       Float?
+  resultPercent   Float?
+  equity          Float?
+  equityPeak      Float?
+  drawdownPercent Float?
+  notes           String?
 
-  session          String?
-  emotionalState   String?
-  setupQuality     Int?
-  executionRating  Int?
-  confidence       Int?
-  mistakes         String?
-  lessonsLearned   String?
+  session         String?
+  emotionalState  String?
+  setupQuality    Int?
+  executionRating Int?
+  confidence      Int?
+  mistakes        String?
+  lessonsLearned  String?
 
-  source            String   @default("manual")
-  syncStatus        String   @default("manual")
-  needsReview       Boolean  @default(false)
+  source      String  @default("manual")
+  syncStatus  String  @default("manual")
+  needsReview Boolean @default(false)
 
   externalTradeId   String?
   externalAccountId String?
   externalOrderId   String?
 
-  platform          String?
-  brokerName        String?
+  platform   String?
+  brokerName String?
 
-  commission        Float?
-  swap              Float?
-  fees              Float?
+  commission Float?
+  swap       Float?
+  fees       Float?
 
-  importedAt        DateTime?
-  rawImportData     Json?
+  importedAt    DateTime?
+  rawImportData Json?
 
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([tradingAccountId, externalTradeId])
   @@index([tradingAccountId])
   @@index([strategyId])
   @@index([source])
@@ -272,208 +284,243 @@ model Trade {
   @@index([externalTradeId])
 }
 
+model SyncOperation {
+  id String @id @default(cuid())
+
+  accountId String
+  account   TradingAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  actorUserId String?
+  actorUser   User?   @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  source          String
+  trigger         String
+  externalBatchId String
+
+  status SyncOperationStatus @default(STARTED)
+
+  totalCount    Int?
+  importedCount Int  @default(0)
+  updatedCount  Int  @default(0)
+  skippedCount  Int  @default(0)
+  failedCount   Int  @default(0)
+
+  startedAt   DateTime  @default(now())
+  lastItemAt  DateTime?
+  completedAt DateTime?
+  durationMs  Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([accountId, source, externalBatchId])
+  @@index([accountId, startedAt])
+  @@index([actorUserId, startedAt])
+  @@index([status, startedAt])
+}
+
 model Strategy {
-  id               String         @id @default(cuid())
+  id               String   @id @default(cuid())
   tradingAccountId String
   name             String
   description      String?
   color            String?
-  isActive         Boolean        @default(true)
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
-  tradingAccount   TradingAccount @relation(fields: [tradingAccountId], references: [id], onDelete: Cascade)
-  trades           Trade[]
+  tradingAccount TradingAccount @relation(fields: [tradingAccountId], references: [id], onDelete: Cascade)
+  trades         Trade[]
 
   @@unique([tradingAccountId, name])
   @@index([tradingAccountId])
 }
 
 model CopilotMessage {
-  id               String   @id @default(cuid())
+  id String @id @default(cuid())
 
   tradingAccountId String
   tradingAccount   TradingAccount @relation(fields: [tradingAccountId], references: [id], onDelete: Cascade)
 
-  role             String
-  content          String
+  role    String
+  content String
 
-  createdAt        DateTime @default(now())
+  createdAt DateTime @default(now())
 }
 
 model CopilotPattern {
-  id               String   @id @default(cuid())
+  id String @id @default(cuid())
 
   tradingAccountId String
   tradingAccount   TradingAccount @relation(fields: [tradingAccountId], references: [id], onDelete: Cascade)
 
-  type             String
-  title            String
-  description      String
-  severity         String
+  type        String
+  title       String
+  description String
+  severity    String
 
-  occurrences      Int      @default(1)
+  occurrences Int @default(1)
 
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model CopilotMemory {
-  id               String   @id @default(cuid())
+  id String @id @default(cuid())
 
   tradingAccountId String
   tradingAccount   TradingAccount @relation(fields: [tradingAccountId], references: [id], onDelete: Cascade)
 
-  memoryType       String
-  title            String
-  description      String
+  memoryType  String
+  title       String
+  description String
 
-  severity         String
-  score            Int
+  severity String
+  score    Int
 
-  firstDetectedAt  DateTime @default(now())
-  lastDetectedAt   DateTime @updatedAt
+  firstDetectedAt DateTime @default(now())
+  lastDetectedAt  DateTime @updatedAt
 
-  createdAt        DateTime @default(now())
+  createdAt DateTime @default(now())
 
   @@index([tradingAccountId])
 }
 
 model SupportTicket {
-  id          String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  type        String
-  subject     String
-  message     String
+  type    String
+  subject String
+  message String
 
-  status      String   @default("open")
-  priority    String   @default("normal")
+  status   String @default("open")
+  priority String @default("normal")
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  adminNote   String?
-  resolvedAt  DateTime?
+  adminNote  String?
+  resolvedAt DateTime?
 
   @@index([userId])
 }
 
 model ReleaseNote {
-  id          String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  title       String
-  content     String
-  type        String   @default("update")
-  priority    String   @default("normal")
+  title    String
+  content  String
+  type     String @default("update")
+  priority String @default("normal")
 
-  published   Boolean  @default(false)
+  published Boolean @default(false)
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model MaintenanceMode {
-  id            String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  enabled       Boolean  @default(false)
+  enabled Boolean @default(false)
 
-  title         String
-  message       String
+  title   String
+  message String
 
-  type          String   @default("warning")
+  type String @default("warning")
 
   startAt       DateTime?
   expectedEndAt DateTime?
 
-  blockLogin    Boolean  @default(false)
+  blockLogin Boolean @default(false)
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model CopilotReviewNote {
-  id               String   @id @default(cuid())
+  id String @id @default(cuid())
 
   tradingAccountId String
   tradingAccount   TradingAccount @relation(fields: [tradingAccountId], references: [id], onDelete: Cascade)
 
-  tradeId          String?
+  tradeId String?
 
-  title            String
-  content          String
+  title   String
+  content String
 
-  severity         String
+  severity String
 
-  createdAt        DateTime @default(now())
+  createdAt DateTime @default(now())
 }
 
 model TradingSession {
-  id               String   @id @default(cuid())
+  id String @id @default(cuid())
 
   tradingAccountId String
   createdById      String
 
-  tradingAccount   TradingAccount @relation(fields: [tradingAccountId], references: [id], onDelete: Cascade)
-  createdBy        User           @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  tradingAccount TradingAccount @relation(fields: [tradingAccountId], references: [id], onDelete: Cascade)
+  createdBy      User           @relation(fields: [createdById], references: [id], onDelete: Cascade)
 
-  date             DateTime
+  date DateTime
 
-  title            String?
-  marketBias       String?
-  focus            String?
-  emotionalState   String?
-  sessionType      String?
+  title          String?
+  marketBias     String?
+  focus          String?
+  emotionalState String?
+  sessionType    String?
 
-  checklist        String?
-  goals            String?
-  mistakesToAvoid  String?
+  checklist       String?
+  goals           String?
+  mistakesToAvoid String?
 
-  sessionReview    String?
-  finalScore       Int?
+  sessionReview String?
+  finalScore    Int?
 
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model TradingGoal {
-  id               String   @id @default(cuid())
+  id String @id @default(cuid())
 
   tradingAccountId String
   tradingAccount   TradingAccount @relation(fields: [tradingAccountId], references: [id], onDelete: Cascade)
 
-  month            Int
-  year             Int
+  month Int
+  year  Int
 
-  monthlyProfitGoal Float?
+  monthlyProfitGoal  Float?
   monthlyWinRateGoal Float?
-  maxDrawdownLimit Float?
-  maxTradesPerDay Int?
+  maxDrawdownLimit   Float?
+  maxTradesPerDay    Int?
 
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([tradingAccountId, month, year])
 }
 
 model ActivityLog {
-  id          String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  userId      String?
-  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
 
-  accountId   String?
-  account     TradingAccount? @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId String?
+  account   TradingAccount? @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
   type        String
   title       String
   description String?
 
-  metadata    Json?
+  metadata Json?
 
-  createdAt   DateTime @default(now())
+  createdAt DateTime @default(now())
 
   @@index([userId])
   @@index([accountId])
@@ -481,57 +528,57 @@ model ActivityLog {
 }
 
 model Notification {
-  id          String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  userId      String
-  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  type        String
+  type String
 
-  title       String
-  message     String
+  title   String
+  message String
 
-  read        Boolean @default(false)
+  read Boolean @default(false)
 
-  link        String?
+  link String?
 
-  createdAt   DateTime @default(now())
+  createdAt DateTime @default(now())
 
   @@index([userId])
   @@index([read])
 }
 
 model PushSubscription {
-  id          String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  endpoint    String   @unique
-  p256dh      String
-  auth        String
+  endpoint String @unique
+  p256dh   String
+  auth     String
 
   deviceLabel String?
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId])
 }
 
 model TwoFactorCode {
-  id             String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  userId         String
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  preAuthToken   String   @unique
-  codeHash       String
-  expiresAt      DateTime
-  attempts       Int      @default(0)
-  used           Boolean  @default(false)
+  preAuthToken String   @unique
+  codeHash     String
+  expiresAt    DateTime
+  attempts     Int      @default(0)
+  used         Boolean  @default(false)
 
-  createdAt      DateTime @default(now())
+  createdAt DateTime @default(now())
 
   @@index([userId])
   @@index([preAuthToken])
