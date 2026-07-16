@@ -156,46 +156,71 @@ function parseFormattedAmount(value: string) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+type PnlPercentageBadgeData = {
+  label: string;
+  tone: "positive" | "negative" | "neutral";
+  accessibleLabel: string;
+};
+
+function getPnlPercentageBadgeData({ pnl, initialBalance, tradesCount }: { pnl: number; initialBalance: string; tradesCount: number }): PnlPercentageBadgeData {
+  const initialBalanceValue = parseFormattedAmount(initialBalance);
+  if (!Number.isFinite(pnl) || initialBalanceValue === null || !Number.isFinite(initialBalanceValue) || initialBalanceValue <= 0) {
+    return { label: "--", tone: "neutral", accessibleLabel: "PnL percentage unavailable" };
+  }
+
+  const percentage = (pnl / initialBalanceValue) * 100;
+  if (tradesCount === 0 || pnl === 0 || percentage === 0) {
+    return { label: "0.00%", tone: "neutral", accessibleLabel: "PnL percentage: 0.00 percent" };
+  }
+  if (percentage > 0) {
+    return { label: `+${percentage.toFixed(2)}%`, tone: "positive", accessibleLabel: `PnL percentage: positive ${percentage.toFixed(2)} percent` };
+  }
+  return { label: `${percentage.toFixed(2)}%`, tone: "negative", accessibleLabel: `PnL percentage: negative ${Math.abs(percentage).toFixed(2)} percent` };
+}
+
+function PnlPercentageBadge({ data }: { data: PnlPercentageBadgeData }) {
+  const toneClass = data.tone === "positive"
+    ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
+    : data.tone === "negative"
+      ? "border-rose-500/20 bg-rose-500/10 text-rose-400"
+      : "border-slate-500/10 bg-slate-500/5 text-slate-500";
+  return <span aria-label={data.accessibleLabel} className={`inline-flex h-7 min-w-[76px] shrink-0 items-center justify-center rounded-lg border px-2.5 text-xs font-semibold tabular-nums ${toneClass}`}>{data.label}</span>;
+}
+
 function GridAccountCard({ account, labels }: { account: AccountLibraryItem; labels: Labels }) {
+  const pnlPercentageBadge = getPnlPercentageBadgeData({ pnl: account.pnlValue, initialBalance: account.initialBalance, tradesCount: account.tradeCount });
+
   return (
-    <Card className="p-5 sm:p-6">
-      <div className="flex items-start gap-3">
-        <IconTile interactive={false}><Wallet size={20} /></IconTile>
-        <div className="min-w-0 flex-1">
-          <p className="text-micro uppercase tracking-label text-muted">
-            <span className="text-accent-bright">{account.type}</span><span className="text-muted-faint"> · </span>{account.status}<span className="text-muted-faint"> · </span>{account.membershipRole}
-          </p>
-          <h3 aria-label={account.name} title={account.name} className="mt-1.5 line-clamp-2 min-h-[3.5rem] text-xl font-bold leading-7 text-white">{account.name}</h3>
+    <article className="group relative rounded-2xl border border-white/[0.03] bg-[#070d19]/90 p-5 shadow-[0_8px_24px_-16px_rgba(0,0,0,.55)] transition-[transform,border-color,background-color,box-shadow] duration-[240ms] ease-out hover:-translate-y-1 hover:border-cyan-500/30 hover:bg-[#09111f]/95 hover:shadow-[0_12px_30px_-10px_rgba(0,242,254,.12)] focus-within:border-cyan-400/35 focus-within:bg-[#09111f]/95 motion-reduce:hover:translate-y-0 motion-reduce:transition-colors">
+      <Link href={`/accounts/${account.id}/dashboard`} aria-label={`Open ${account.name} workspace`} className="absolute inset-0 z-10 rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/70"><span className="sr-only">Open {account.name} workspace</span></Link>
+      <div className="pointer-events-none relative z-20">
+        <div className="flex items-start gap-3 pr-12">
+          <IconTile interactive={false}><Wallet size={20} /></IconTile>
+          <div className="min-w-0 flex-1">
+            <p className="text-micro uppercase tracking-label text-muted"><span className="text-accent-bright">{account.type}</span><span className="text-muted-faint"> · </span>{account.status}<span className="text-muted-faint"> · </span>{account.membershipRole}</p>
+            <h3 aria-label={account.name} title={account.name} className="mt-1.5 line-clamp-2 min-h-[3.5rem] text-xl font-bold leading-7 text-white">{account.name}</h3>
+          </div>
         </div>
-        <AccountActionsMenu
-          accountId={account.id}
-          accountName={account.name}
-          accountStatus={account.status}
-          canOpenManage={account.canOpenManage}
-          canViewMembers={account.canViewMembers}
-          canManageIntegrations={account.canManageIntegrations}
-          canArchiveAccount={account.canArchiveAccount}
-          canDeleteAccount={account.canDeleteAccount}
-          placement="grid"
-        />
+        <div className="mt-4 flex min-w-0 items-end justify-between gap-4">
+          <div className="min-w-0"><p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{labels.pnl}</p><p className={`mt-0.5 truncate text-xl font-bold tabular-nums ${getPnlTone(account.pnlValue)}`}>{account.pnl}</p></div>
+          <PnlPercentageBadge data={pnlPercentageBadge} />
+        </div>
+        <div className="my-4 border-t border-slate-900/80" />
+        <div className="grid grid-cols-2 gap-x-5 gap-y-3">
+          <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><TrendingUp size={12} aria-hidden="true" />{labels.initialBalance}</p><p className="mt-0.5 text-sm font-semibold tabular-nums text-slate-300">{account.initialBalance}</p></div>
+          <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><Activity size={12} aria-hidden="true" />{labels.trades}</p><p className="mt-0.5 text-sm font-semibold tabular-nums text-slate-300">{account.formattedTradeCount}</p></div>
+          <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><Shield size={12} aria-hidden="true" />{labels.winRate}</p><p className={`mt-0.5 text-sm font-semibold ${getWinRateTone(account.winRateValue)}`}>{account.winRate ?? labels.notMeasured}</p></div>
+          <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><Users size={12} aria-hidden="true" />{getMembersHeading(labels)}</p><p className="mt-0.5 text-sm font-semibold text-slate-300">{getMemberCountLabel(account, labels)}</p></div>
+        </div>
       </div>
-      <div className="mt-3"><p className="text-xs text-muted-faint">{labels.pnl}</p><p className={`mt-0.5 text-3xl font-black leading-tight ${getPnlTone(account.pnlValue)}`}>{account.pnl}</p></div>
-      <div className="mt-3.5 grid grid-cols-2 gap-x-5 gap-y-3 border-t border-white/[0.06] pt-3.5 text-xs">
-        <div><p className="flex items-center gap-1.5 text-muted-faint"><TrendingUp size={13} aria-hidden="true" />{labels.initialBalance}</p><p className="mt-1 text-muted">{account.initialBalance}</p></div>
-        <div><p className="flex items-center gap-1.5 text-muted-faint"><Activity size={13} aria-hidden="true" />{labels.trades}</p><p className="mt-1 text-muted">{account.formattedTradeCount}</p></div>
-        <div><p className="flex items-center gap-1.5 text-muted-faint"><Shield size={13} aria-hidden="true" />{labels.winRate}</p><p className={`mt-1 ${getWinRateTone(account.winRateValue)}`}>{account.winRate ?? labels.notMeasured}</p></div>
-        <div><p className="flex items-center gap-1.5 text-muted-faint"><Users size={13} aria-hidden="true" />{getMembersHeading(labels)}</p><p className="mt-1 text-muted">{getMemberCountLabel(account, labels)}</p></div>
-      </div>
-      <Link href={`/accounts/${account.id}/dashboard`} className="mt-4 block rounded-inner bg-accent px-4 py-3 text-center text-sm font-semibold text-white outline-none transition-colors duration-base hover:bg-accent-bright focus-visible:ring-2 focus-visible:ring-accent-bright/70">{labels.openAccount}</Link>
-    </Card>
+      <ArrowRight size={16} aria-hidden="true" className="pointer-events-none absolute right-[4.5rem] top-8 z-20 -translate-x-1 text-cyan-300/70 opacity-0 transition-all duration-200 ease-out group-hover:translate-x-0 group-hover:opacity-100 group-focus-within:translate-x-0 group-focus-within:opacity-100 motion-reduce:transform-none" />
+      <div className="pointer-events-auto absolute right-5 top-5 z-30"><AccountActionsMenu accountId={account.id} accountName={account.name} accountStatus={account.status} canOpenManage={account.canOpenManage} canViewMembers={account.canViewMembers} canManageIntegrations={account.canManageIntegrations} canArchiveAccount={account.canArchiveAccount} canDeleteAccount={account.canDeleteAccount} placement="grid" /></div>
+    </article>
   );
 }
 
 function FocusCoverCard({ account, labels, active, direction }: { account: AccountLibraryItem; labels: Labels; active: boolean; direction: -1 | 1 }) {
-  const initialBalanceValue = parseFormattedAmount(account.initialBalance);
-  const pnlPercentage = initialBalanceValue !== null && initialBalanceValue > 0 && Number.isFinite(account.pnlValue)
-    ? (account.pnlValue / initialBalanceValue) * 100
-    : null;
+  const pnlPercentageBadge = getPnlPercentageBadgeData({ pnl: account.pnlValue, initialBalance: account.initialBalance, tradesCount: account.tradeCount });
 
   return (
     <article data-active={active} className={`relative w-full overflow-hidden rounded-[24px] border border-white/[0.05] bg-[#070d19]/80 p-5 backdrop-blur-xl sm:p-6 ${active ? "focus-card-enter shadow-[0_25px_60px_-15px_rgba(0,0,0,.9)]" : "focus-card-exit shadow-[0_20px_52px_-18px_rgba(0,0,0,.6)]"}`} style={{ "--focus-direction": direction } as React.CSSProperties}>
@@ -214,7 +239,7 @@ function FocusCoverCard({ account, labels, active, direction }: { account: Accou
         </div>
         <div className={`mt-4 rounded-xl border border-slate-800/40 bg-slate-950/40 p-4 ${active ? "" : "max-w-[82%]"}`}>
           <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{labels.pnl}</p>
-          <div className="mt-1 flex items-end justify-between gap-3"><p className={`text-3xl font-black leading-tight ${getPnlTone(account.pnlValue)}`}>{account.pnl}</p>{active && pnlPercentage !== null && pnlPercentage !== 0 && <span aria-label={`${pnlPercentage > 0 ? "Positive" : "Negative"} PnL percentage: ${Math.abs(pnlPercentage).toFixed(2)} percent`} className={`shrink-0 rounded-full border px-2 py-0.5 text-xs tabular-nums ${pnlPercentage > 0 ? "border-emerald-400/15 bg-emerald-500/10 text-emerald-400" : "border-rose-400/15 bg-rose-500/10 text-rose-400"}`}>{pnlPercentage > 0 ? "+" : ""}{pnlPercentage.toFixed(2)}%</span>}</div>
+          <div className="mt-1 flex items-end justify-between gap-3"><p className={`text-3xl font-black leading-tight ${getPnlTone(account.pnlValue)}`}>{account.pnl}</p>{active && <PnlPercentageBadge data={pnlPercentageBadge} />}</div>
         </div>
         {active && <>
           <div className="mt-4 grid grid-cols-2 gap-x-5 gap-y-4">
@@ -365,6 +390,8 @@ export default function AccountLibrary({ accounts, labels }: { accounts: Account
   }, [access, accountType, accounts, activity, collaboration, quickFilter, search, showAccountType, showCollaboration]);
 
   const selected = filtered[selectedIndex];
+  const isAtStart = selectedIndex === 0;
+  const isAtEnd = selectedIndex === filtered.length - 1;
   const focusEdgeBias = filtered.length <= 1
     ? "0px"
     : filtered.length === 2
@@ -457,6 +484,8 @@ export default function AccountLibrary({ accounts, labels }: { accounts: Account
               const style = { transform: `translate(calc(${x} + ${horizontalBias} + ${parallax}px),calc(-50% + ${depth * 7}px)) scale(${scale})`, opacity, zIndex: 30 - depth * 10, filter: `brightness(${depth === 0 ? 1 : depth === 1 ? .86 : .72})`, pointerEvents: visible ? "auto" as const : "none" as const, transition: reducedMotion ? "opacity 80ms linear" : "transform 560ms cubic-bezier(.2,.72,.22,1), opacity 520ms ease, filter 560ms ease" };
               return <div key={account.id} className="absolute left-1/2 top-1/2 w-[88%] max-w-[480px]" style={style}>{position === 0 ? <FocusCoverCard account={account} labels={labels} active direction={focusDirection} /> : <button type="button" aria-label={`Select ${account.name}`} onPointerEnter={(event) => { if (event.pointerType === "mouse") selectWithIntent(index); }} onPointerLeave={clearHoverIntent} onClick={() => { setFocusDirection(index < selectedIndex ? -1 : 1); setSelectedIndex(index); }} className="block w-full text-left outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/80"><FocusCoverCard account={account} labels={labels} active={false} direction={focusDirection} /></button>}</div>;
             })}
+            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 z-[25] w-10 bg-gradient-to-r from-bg-base to-transparent transition-opacity duration-300 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none sm:w-16 lg:w-24" style={{ opacity: filtered.length <= 1 || isAtStart ? 0 : 1 }} />
+            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 z-[25] w-10 bg-gradient-to-l from-bg-base to-transparent transition-opacity duration-300 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none sm:w-16 lg:w-24" style={{ opacity: filtered.length <= 1 || isAtEnd ? 0 : 1 }} />
           </div>
           </div>
           <p aria-hidden="true" className="relative z-10 mt-6 w-full text-center text-xs tracking-[0.08em]"><span className="font-medium tabular-nums text-flash/80">{selectedIndex + 1}</span><span className="text-muted-faint"> of {filtered.length}</span></p>
