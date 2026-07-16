@@ -7,6 +7,10 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { logActivity } from "@/lib/activity";
 import {
+  getChangedActivityFields,
+  hasMeaningfulChanges,
+} from "@/lib/activity-policy";
+import {
   canManageRules,
   getAccountMembershipWithAccount,
 } from "@/lib/permissions";
@@ -175,68 +179,78 @@ export async function saveTradingGoals(
       },
     });
 
-  const goal =
-    await prisma.tradingGoal.upsert({
-      where: {
-        tradingAccountId_month_year: {
-          tradingAccountId: accountId,
-          month,
-          year,
-        },
-      },
+  const desiredGoal = {
+    monthlyProfitGoal,
+    monthlyWinRateGoal,
+    maxDrawdownLimit,
+    maxTradesPerDay,
+  };
 
-      update: {
-        monthlyProfitGoal,
-        monthlyWinRateGoal,
-        maxDrawdownLimit,
-        maxTradesPerDay,
-      },
-
-      create: {
+  if (!existingGoal) {
+    const goal = await prisma.tradingGoal.create({
+      data: {
         tradingAccountId: accountId,
         month,
         year,
-        monthlyProfitGoal,
-        monthlyWinRateGoal,
-        maxDrawdownLimit,
-        maxTradesPerDay,
+        ...desiredGoal,
       },
     });
 
-  await logActivity({
-    userId: membership.userId,
-    accountId,
-    type: "TRADING_GOALS_UPDATED",
-    title: "Trading goals updated",
-    description: `${membership.userId} updated trading rules and goals`,
-    metadata: {
-      goalId: goal.id,
-      month,
-      year,
-      before: existingGoal
-        ? {
-          monthlyProfitGoal:
-            existingGoal.monthlyProfitGoal,
-          monthlyWinRateGoal:
-            existingGoal.monthlyWinRateGoal,
-          maxDrawdownLimit:
-            existingGoal.maxDrawdownLimit,
-          maxTradesPerDay:
-            existingGoal.maxTradesPerDay,
-        }
-        : null,
-      after: {
-        monthlyProfitGoal:
-          goal.monthlyProfitGoal,
-        monthlyWinRateGoal:
-          goal.monthlyWinRateGoal,
-        maxDrawdownLimit:
-          goal.maxDrawdownLimit,
-        maxTradesPerDay:
-          goal.maxTradesPerDay,
+    await logActivity({
+      userId: membership.userId,
+      accountId,
+      type: "TRADING_GOALS_UPDATED",
+      title: "Trading goals updated",
+      description: `${membership.userId} updated trading rules and goals`,
+      metadata: {
+        goalId: goal.id,
+        month,
+        year,
+        changedFields: Object.keys(desiredGoal),
+        before: null,
+        after: desiredGoal,
       },
-    },
-  });
+    });
+  } else {
+    const currentGoal = {
+      monthlyProfitGoal:
+        existingGoal.monthlyProfitGoal,
+      monthlyWinRateGoal:
+        existingGoal.monthlyWinRateGoal,
+      maxDrawdownLimit:
+        existingGoal.maxDrawdownLimit,
+      maxTradesPerDay:
+        existingGoal.maxTradesPerDay,
+    };
+
+    const changes = getChangedActivityFields(
+      currentGoal,
+      desiredGoal
+    );
+
+    if (hasMeaningfulChanges(changes)) {
+      await prisma.tradingGoal.update({
+        where: {
+          id: existingGoal.id,
+        },
+        data: desiredGoal,
+      });
+
+      await logActivity({
+        userId: membership.userId,
+        accountId,
+        type: "TRADING_GOALS_UPDATED",
+        title: "Trading goals updated",
+        description: `${membership.userId} updated trading rules and goals`,
+        metadata: {
+          goalId: existingGoal.id,
+          month,
+          year,
+          ...changes,
+        },
+      });
+    }
+  }
 
   revalidatePath(
     `/accounts/${accountId}/rules`

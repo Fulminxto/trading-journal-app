@@ -609,7 +609,8 @@ export default function Sidebar({
   const accountId =
     rawAccountId &&
       rawAccountId !== "create" &&
-      rawAccountId !== "manage"
+      rawAccountId !== "manage" &&
+      rawAccountId !== "archived"
       ? rawAccountId
       : undefined;
 
@@ -804,6 +805,8 @@ export default function Sidebar({
     const active = links.find(
       (link) =>
         pathname === link.href ||
+        (pathname === "/accounts/archived" &&
+          link.href === "/accounts") ||
         (link.href !== "/accounts" &&
           pathname.startsWith(`${link.href}/`))
     );

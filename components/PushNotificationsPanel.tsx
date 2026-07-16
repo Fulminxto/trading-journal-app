@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { BellRing, BellOff, Loader2 } from "lucide-react";
 import { type AppLanguage } from "@/lib/i18n";
@@ -243,16 +243,38 @@ export default function PushNotificationsPanel({
   language,
 }: Props) {
   const t = LABELS[language];
-  const [status, setStatus] = useState<PushStatus>(() => {
-    if (typeof window === "undefined") return "loading";
-    if (!("Notification" in window) || !("serviceWorker" in navigator))
-      return "unsupported";
-    const perm = Notification.permission;
-    if (perm === "denied") return "denied";
-    if (perm === "granted" && initialEnabled) return "active";
-    return "idle";
-  });
+  const [status, setStatus] = useState<PushStatus>("loading");
   const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    queueMicrotask(() => {
+      if (cancelled) return;
+
+      if (!("Notification" in window) || !("serviceWorker" in navigator)) {
+        setStatus("unsupported");
+        return;
+      }
+
+      const permission = Notification.permission;
+      if (permission === "denied") {
+        setStatus("denied");
+        return;
+      }
+
+      if (permission === "granted" && initialEnabled) {
+        setStatus("active");
+        return;
+      }
+
+      setStatus("idle");
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [initialEnabled]);
 
   async function handleEnable() {
     if (busy) return;

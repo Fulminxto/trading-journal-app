@@ -5,6 +5,10 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { logActivity } from "@/lib/activity";
+import {
+  getChangedActivityFields,
+  hasMeaningfulChanges,
+} from "@/lib/activity-policy";
 import { normalizeAppLanguage } from "@/lib/i18n";
 
 function getString(
@@ -88,7 +92,7 @@ export async function updateSettings(
     "classic"
   );
 
-  const before = {
+  const currentSettings = {
     defaultCurrency:
       currentUser.defaultCurrency,
 
@@ -105,48 +109,36 @@ export async function updateSettings(
       currentUser.appIconVariant,
   };
 
-  const updatedUser =
+  const desiredSettings = {
+    defaultCurrency,
+    appLanguage,
+    themePreference,
+    accentColor,
+    appIconVariant,
+  };
+
+  const changes = getChangedActivityFields(
+    currentSettings,
+    desiredSettings
+  );
+
+  if (hasMeaningfulChanges(changes)) {
     await prisma.user.update({
       where: {
         id: session.user.id,
       },
 
-      data: {
-        defaultCurrency,
-        appLanguage,
-        themePreference,
-        accentColor,
-        appIconVariant,
-      },
+      data: desiredSettings,
     });
 
-  const after = {
-    defaultCurrency:
-      updatedUser.defaultCurrency,
-
-    appLanguage:
-      updatedUser.appLanguage,
-
-    themePreference:
-      updatedUser.themePreference,
-
-    accentColor:
-      updatedUser.accentColor,
-
-    appIconVariant:
-      updatedUser.appIconVariant,
-  };
-
-  await logActivity({
-    userId: session.user.id,
-    type: "SETTINGS_UPDATED",
-    title: "Settings updated",
-    description: `${updatedUser.username} updated settings`,
-    metadata: {
-      before,
-      after,
-    },
-  });
+    await logActivity({
+      userId: session.user.id,
+      type: "SETTINGS_UPDATED",
+      title: "Settings updated",
+      description: `${currentUser.username} updated settings`,
+      metadata: changes,
+    });
+  }
 
   redirect(`/settings?toast=success&refresh=${Date.now()}`);
 }

@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { prisma } from "@/lib/prisma";
-import { importSyncedTrade } from "@/lib/trade-sync";
+import { logActivity } from "@/lib/activity";
+import {
+    importSyncedTrade,
+    TradeSyncServiceError,
+    type TradeSyncErrorCode,
+} from "@/lib/trade-sync";
 
 type TradeSyncPayload = {
     tradingAccountId?: string;
@@ -142,36 +147,43 @@ function isSourceAllowedForMode({
 
 async function markAccountSyncError({
     tradingAccountId,
-    error,
     source,
-    externalTradeId,
+    code,
+    stage,
+    retryable,
+    safeMessage,
 }: {
     tradingAccountId: string;
-    error: string;
     source?: string | null;
-    externalTradeId?: string | null;
+    code: TradeSyncErrorCode;
+    stage: "validation" | "persistence" | "internal";
+    retryable: boolean;
+    safeMessage: string;
 }) {
     try {
-        await prisma.tradingAccount.update({
+        await prisma.tradingAccount.updateMany({
             where: {
                 id: tradingAccountId,
+                syncStatus: {
+                    not: "error",
+                },
             },
             data: {
                 syncStatus: "error",
             },
         });
 
-        await prisma.activityLog.create({
-            data: {
-                accountId: tradingAccountId,
-                type: "TRADE_SYNC_ERROR",
-                title: "Trade sync error",
-                description: error,
-                metadata: {
-                    source,
-                    externalTradeId,
-                    error,
-                },
+        await logActivity({
+            userId: null,
+            accountId: tradingAccountId,
+            type: "TRADE_SYNC_ERROR",
+            title: "Trade sync error",
+            description: safeMessage,
+            metadata: {
+                source,
+                code,
+                stage,
+                retryable,
             },
         });
     } catch {
@@ -512,50 +524,47 @@ export async function POST(request: NextRequest) {
                 },
             });
 
-        if (result.status === "error") {
-            await markAccountSyncError({
-                tradingAccountId,
-                error: result.reason,
-                source,
-                externalTradeId,
-            });
-
-            return NextResponse.json(
-                {
-                    error: result.reason,
-                },
-                {
-                    status: 400,
-                }
-            );
-        }
-
         return NextResponse.json({
             status: result.status,
-            tradeId: result.trade.id,
-            needsReview: result.trade.needsReview,
-            syncStatus: result.trade.syncStatus,
+            tradeId: result.tradeId,
+            needsReview: result.needsReview,
+            syncStatus: result.syncStatus,
+            ...(result.status === "updated"
+                ? {
+                    changedFields:
+                        result.changedFields,
+                }
+                : {}),
         });
     } catch (error) {
-        const errorMessage =
-            error instanceof Error
-                ? error.message
-                : "Unknown trade sync error";
+        const syncError =
+            error instanceof TradeSyncServiceError
+                ? error
+                : new TradeSyncServiceError(
+                    "TRADE_PERSISTENCE_FAILED",
+                    "persistence",
+                    true,
+                    "Trade sync import failed."
+                );
 
         await markAccountSyncError({
             tradingAccountId,
-            error: errorMessage,
             source,
-            externalTradeId,
+            code: syncError.code,
+            stage: syncError.stage,
+            retryable: syncError.retryable,
+            safeMessage: syncError.safeMessage,
         });
 
         return NextResponse.json(
             {
-                error: "Trade sync import failed",
-                details: errorMessage,
+                error: syncError.safeMessage,
             },
             {
-                status: 500,
+                status:
+                    syncError.stage === "validation"
+                        ? 400
+                        : 500,
             }
         );
     }

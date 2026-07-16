@@ -6,6 +6,10 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { logActivity } from "@/lib/activity";
+import {
+    getChangedActivityFields,
+    hasMeaningfulChanges,
+} from "@/lib/activity-policy";
 
 const ALLOWED_INTEGRATION_MODES = [
     "manual",
@@ -210,7 +214,7 @@ export async function updateAccountIntegrations(
                     ? membership.tradingAccount.syncStatus
                     : "pending";
 
-    const before = {
+    const currentConfiguration = {
         integrationMode:
             membership.tradingAccount.integrationMode,
         autoSyncEnabled:
@@ -231,69 +235,83 @@ export async function updateAccountIntegrations(
             membership.tradingAccount.syncStatus,
     };
 
-    const updatedAccount =
+    const desiredConfiguration = {
+        integrationMode,
+        autoSyncEnabled,
+        mt5Enabled,
+        mt5AccountLogin: mt5Enabled
+            ? mt5AccountLogin
+            : null,
+        mt5ServerName: mt5Enabled
+            ? mt5ServerName
+            : null,
+        brokerSyncEnabled,
+        brokerProvider: brokerSyncEnabled
+            ? brokerProvider
+            : null,
+        brokerAccountId: brokerSyncEnabled
+            ? brokerAccountId
+            : null,
+        syncStatus,
+    };
+
+    const changes = getChangedActivityFields(
+        currentConfiguration,
+        desiredConfiguration
+    );
+
+    if (hasMeaningfulChanges(changes)) {
         await prisma.tradingAccount.update({
             where: {
                 id: accountId,
             },
             data: {
-                integrationMode,
-                autoSyncEnabled,
-
-                mt5Enabled,
-                mt5AccountLogin: mt5Enabled
-                    ? mt5AccountLogin
-                    : null,
-                mt5ServerName: mt5Enabled
-                    ? mt5ServerName
-                    : null,
-
-                brokerSyncEnabled,
-                brokerProvider:
-                    brokerSyncEnabled
-                        ? brokerProvider
-                        : null,
-                brokerAccountId:
-                    brokerSyncEnabled
-                        ? brokerAccountId
-                        : null,
-
-                syncStatus,
+                ...desiredConfiguration,
                 lastSyncedAt:
                     membership.tradingAccount.lastSyncedAt,
             },
         });
 
-    await logActivity({
-        userId: membership.userId,
-        accountId,
-        type: "INTEGRATION_SETTINGS_UPDATED",
-        title: "Integration settings updated",
-        description: `${membership.user.username} updated integration settings`,
-        metadata: {
-            before,
-            after: {
-                integrationMode:
-                    updatedAccount.integrationMode,
-                autoSyncEnabled:
-                    updatedAccount.autoSyncEnabled,
-                mt5Enabled:
-                    updatedAccount.mt5Enabled,
-                mt5AccountLogin:
-                    updatedAccount.mt5AccountLogin,
-                mt5ServerName:
-                    updatedAccount.mt5ServerName,
-                brokerSyncEnabled:
-                    updatedAccount.brokerSyncEnabled,
-                brokerProvider:
-                    updatedAccount.brokerProvider,
-                brokerAccountId:
-                    updatedAccount.brokerAccountId,
-                syncStatus:
-                    updatedAccount.syncStatus,
+        const sensitiveFields = new Set([
+            "mt5AccountLogin",
+            "mt5ServerName",
+            "brokerAccountId",
+        ]);
+        const sensitiveFieldsChanged =
+            changes.changedFields.filter((field) =>
+                sensitiveFields.has(field)
+            );
+        const safeChangedFields =
+            changes.changedFields.filter((field) =>
+                !sensitiveFields.has(field)
+            );
+        const safeBefore = Object.fromEntries(
+            safeChangedFields.map((field) => [
+                field,
+                changes.before[field],
+            ])
+        );
+        const safeAfter = Object.fromEntries(
+            safeChangedFields.map((field) => [
+                field,
+                changes.after[field],
+            ])
+        );
+
+        await logActivity({
+            userId: membership.userId,
+            accountId,
+            type: "INTEGRATION_SETTINGS_UPDATED",
+            title: "Integration settings updated",
+            description: `${membership.user.username} updated integration settings`,
+            metadata: {
+                changedFields: changes.changedFields,
+                sensitiveFieldsChanged,
+                before: safeBefore,
+                after: safeAfter,
             },
-        },
-    });
+        });
+    }
 
     revalidatePath(
         `/accounts/${accountId}/integrations`
@@ -315,7 +333,10 @@ export async function resetAccountSyncStatus(
             ? "inactive"
             : "pending";
 
-    const updatedAccount =
+    const currentStatus =
+        membership.tradingAccount.syncStatus;
+
+    if (currentStatus !== nextStatus) {
         await prisma.tradingAccount.update({
             where: {
                 id: accountId,
@@ -325,23 +346,23 @@ export async function resetAccountSyncStatus(
             },
         });
 
-    await logActivity({
-        userId: membership.userId,
-        accountId,
-        type: "INTEGRATION_SYNC_RESET",
-        title: "Sync status reset",
-        description: `${membership.user.username} reset integration sync status`,
-        metadata: {
-            before: {
-                syncStatus:
-                    membership.tradingAccount.syncStatus,
+        await logActivity({
+            userId: membership.userId,
+            accountId,
+            type: "INTEGRATION_SYNC_RESET",
+            title: "Sync status reset",
+            description: `${membership.user.username} reset integration sync status`,
+            metadata: {
+                changedFields: ["syncStatus"],
+                before: {
+                    syncStatus: currentStatus,
+                },
+                after: {
+                    syncStatus: nextStatus,
+                },
             },
-            after: {
-                syncStatus:
-                    updatedAccount.syncStatus,
-            },
-        },
-    });
+        });
+    }
 
     revalidatePath(
         `/accounts/${accountId}/integrations`

@@ -44,6 +44,44 @@ type SyncTradeInput = {
     rawImportData?: Prisma.InputJsonValue;
 };
 
+export type TradeSyncResult =
+    | {
+        status: "created";
+        tradeId: number;
+        needsReview: boolean;
+        syncStatus: string;
+    }
+    | {
+        status: "updated";
+        tradeId: number;
+        needsReview: boolean;
+        syncStatus: string;
+        changedFields: string[];
+    }
+    | {
+        status: "skipped";
+        tradeId: number;
+        needsReview: boolean;
+        syncStatus: string;
+    };
+
+export type TradeSyncErrorCode =
+    | "TRADE_VALIDATION_FAILED"
+    | "TRADE_PERSISTENCE_FAILED"
+    | "INTERNAL_SYNC_ERROR";
+
+export class TradeSyncServiceError extends Error {
+    constructor(
+        readonly code: TradeSyncErrorCode,
+        readonly stage: "validation" | "persistence" | "internal",
+        readonly retryable: boolean,
+        readonly safeMessage: string
+    ) {
+        super(code);
+        this.name = "TradeSyncServiceError";
+    }
+}
+
 function normalizeDirection(value: string) {
     const direction = value.trim().toUpperCase();
 
@@ -79,7 +117,109 @@ function normalizeOutcome(
     return "be";
 }
 
-async function getImporterUserId(
+function normalizeOptionalString(
+    value?: string | null
+) {
+    const normalized = value?.trim();
+
+    return normalized || null;
+}
+
+function buildDesiredSyncedTradeData({
+    input,
+    existingTrade,
+    importedAt,
+}: {
+    input: SyncTradeInput;
+    existingTrade?: {
+        importedAt: Date | null;
+        needsReview: boolean;
+        syncStatus: string;
+    };
+    importedAt: Date;
+}) {
+    return {
+        openDate: input.openDate,
+        openTime: normalizeOptionalString(
+            input.openTime
+        ),
+        symbol: input.symbol.trim(),
+        direction: normalizeDirection(
+            input.direction
+        ),
+        amount: input.amount ?? null,
+        openingPrice: input.openingPrice ?? null,
+        stopLoss: input.stopLoss ?? null,
+        takeProfit: input.takeProfit ?? null,
+        riskReward: input.riskReward ?? null,
+        closeDate: input.closeDate ?? null,
+        closingPrice: input.closingPrice ?? null,
+        outcome:
+            input.outcome ||
+            normalizeOutcome(input.resultUsd),
+        resultUsd: input.resultUsd ?? null,
+        source: input.source,
+        syncStatus: existingTrade
+            ? existingTrade.needsReview
+                ? "imported"
+                : existingTrade.syncStatus
+            : "imported",
+        needsReview:
+            existingTrade?.needsReview ?? true,
+        externalTradeId: input.externalTradeId,
+        externalAccountId: normalizeOptionalString(
+            input.externalAccountId
+        ),
+        externalOrderId: normalizeOptionalString(
+            input.externalOrderId
+        ),
+        platform: normalizeOptionalString(
+            input.platform
+        ),
+        brokerName: normalizeOptionalString(
+            input.brokerName
+        ),
+        commission: input.commission ?? null,
+        swap: input.swap ?? null,
+        fees: input.fees ?? null,
+        importedAt:
+            existingTrade?.importedAt ?? importedAt,
+    };
+}
+
+function getComparableTradeValue(value: unknown) {
+    if (value instanceof Date) {
+        return value.getTime();
+    }
+
+    if (
+        typeof value === "object" &&
+        value !== null &&
+        "toNumber" in value &&
+        typeof value.toNumber === "function"
+    ) {
+        return value.toNumber();
+    }
+
+    return value;
+}
+
+function getChangedTradeFields(
+    existingTrade: Record<string, unknown>,
+    desiredTrade: Record<string, unknown>
+) {
+    return Object.keys(desiredTrade).filter(
+        (field) =>
+            getComparableTradeValue(
+                existingTrade[field]
+            ) !==
+            getComparableTradeValue(
+                desiredTrade[field]
+            )
+    );
+}
+
+async function getDomainTradeUserId(
     tradingAccountId: string
 ) {
     const account =
@@ -128,6 +268,35 @@ async function markAccountSyncConnected(
             autoSyncEnabled: true,
         },
     });
+}
+
+async function restoreAccountSyncConnectedIfNeeded(
+    tradingAccountId: string
+) {
+    const account =
+        await prisma.tradingAccount.findUnique({
+            where: {
+                id: tradingAccountId,
+            },
+            select: {
+                syncStatus: true,
+                autoSyncEnabled: true,
+            },
+        });
+
+    if (
+        !account ||
+        (
+            account.syncStatus === "connected" &&
+            account.autoSyncEnabled
+        )
+    ) {
+        return;
+    }
+
+    await markAccountSyncConnected(
+        tradingAccountId
+    );
 }
 
 async function recalculateAccountEquity(
@@ -198,17 +367,19 @@ async function recalculateAccountEquity(
 
 export async function importSyncedTrade(
     input: SyncTradeInput
-) {
-    const importerUserId =
-        await getImporterUserId(
+) : Promise<TradeSyncResult> {
+    const domainUserId =
+        await getDomainTradeUserId(
             input.tradingAccountId
         );
 
-    if (!importerUserId) {
-        return {
-            status: "error" as const,
-            reason: "No importer user found",
-        };
+    if (!domainUserId) {
+        throw new TradeSyncServiceError(
+            "TRADE_VALIDATION_FAILED",
+            "validation",
+            false,
+            "Trade sync could not assign the required trade owner."
+        );
     }
 
     const existingTrade =
@@ -221,70 +392,43 @@ export async function importSyncedTrade(
             },
         });
 
-    const outcome =
-        input.outcome ||
-        normalizeOutcome(input.resultUsd);
+    const importedAt = new Date();
+    const desiredTrade =
+        buildDesiredSyncedTradeData({
+            input,
+            existingTrade: existingTrade ?? undefined,
+            importedAt,
+        });
 
     if (existingTrade) {
+        const changedFields =
+            getChangedTradeFields(
+                existingTrade,
+                desiredTrade
+            );
+
+        if (changedFields.length === 0) {
+            await restoreAccountSyncConnectedIfNeeded(
+                input.tradingAccountId
+            );
+
+            return {
+                status: "skipped",
+                tradeId: existingTrade.id,
+                needsReview:
+                    existingTrade.needsReview,
+                syncStatus:
+                    existingTrade.syncStatus,
+            };
+        }
+
         const updatedTrade =
             await prisma.trade.update({
                 where: {
                     id: existingTrade.id,
                 },
                 data: {
-                    symbol: input.symbol,
-                    direction: normalizeDirection(
-                        input.direction
-                    ),
-
-                    openDate: input.openDate,
-                    openTime: input.openTime || null,
-
-                    amount: input.amount ?? null,
-                    openingPrice:
-                        input.openingPrice ?? null,
-                    stopLoss: input.stopLoss ?? null,
-                    takeProfit:
-                        input.takeProfit ?? null,
-                    riskReward:
-                        input.riskReward ?? null,
-
-                    closeDate: input.closeDate ?? null,
-                    closingPrice:
-                        input.closingPrice ?? null,
-
-                    outcome,
-                    resultUsd:
-                        input.resultUsd ?? null,
-
-                    source: input.source,
-
-                    syncStatus:
-                        existingTrade.needsReview
-                            ? "imported"
-                            : existingTrade.syncStatus,
-
-                    needsReview:
-                        existingTrade.needsReview,
-
-                    externalAccountId:
-                        input.externalAccountId ?? null,
-                    externalOrderId:
-                        input.externalOrderId ?? null,
-
-                    platform: input.platform ?? null,
-                    brokerName:
-                        input.brokerName ?? null,
-
-                    commission:
-                        input.commission ?? null,
-                    swap: input.swap ?? null,
-                    fees: input.fees ?? null,
-
-                    importedAt:
-                        existingTrade.importedAt ||
-                        new Date(),
-
+                    ...desiredTrade,
                     rawImportData:
                         input.rawImportData ??
                         Prisma.JsonNull,
@@ -300,7 +444,7 @@ export async function importSyncedTrade(
         );
 
         await logActivity({
-            userId: importerUserId,
+            userId: null,
             accountId: input.tradingAccountId,
             type: "TRADE_SYNC_UPDATED",
             title: "Imported trade updated",
@@ -311,18 +455,20 @@ export async function importSyncedTrade(
             metadata: {
                 tradeId: updatedTrade.id,
                 source: input.source,
-                externalTradeId:
-                    input.externalTradeId,
                 platform: input.platform,
                 brokerName: input.brokerName,
-                needsReview:
-                    updatedTrade.needsReview,
+                reviewState:
+                    updatedTrade.needsReview
+                        ? "needs_review"
+                        : "reviewed",
+                changedFields,
+                origin: "system",
             },
         });
 
         await notifyAccountMembers({
             accountId: input.tradingAccountId,
-            actorId: importerUserId,
+            actorId: domainUserId,
             type: "TRADE_SYNC_UPDATED",
             title: "Imported trade updated",
             message: `${input.symbol} ${normalizeDirection(
@@ -332,8 +478,13 @@ export async function importSyncedTrade(
         });
 
         return {
-            status: "updated" as const,
-            trade: updatedTrade,
+            status: "updated",
+            tradeId: updatedTrade.id,
+            needsReview:
+                updatedTrade.needsReview,
+            syncStatus:
+                updatedTrade.syncStatus,
+            changedFields,
         };
     }
 
@@ -341,54 +492,8 @@ export async function importSyncedTrade(
         data: {
             tradingAccountId:
                 input.tradingAccountId,
-            createdById: importerUserId,
-
-            openDate: input.openDate,
-            openTime: input.openTime || null,
-
-            symbol: input.symbol,
-            direction: normalizeDirection(
-                input.direction
-            ),
-
-            amount: input.amount ?? null,
-            openingPrice:
-                input.openingPrice ?? null,
-            stopLoss: input.stopLoss ?? null,
-            takeProfit:
-                input.takeProfit ?? null,
-            riskReward:
-                input.riskReward ?? null,
-
-            closeDate: input.closeDate ?? null,
-            closingPrice:
-                input.closingPrice ?? null,
-
-            outcome,
-            resultUsd:
-                input.resultUsd ?? null,
-
-            source: input.source,
-            syncStatus: "imported",
-            needsReview: true,
-
-            externalTradeId:
-                input.externalTradeId,
-            externalAccountId:
-                input.externalAccountId ?? null,
-            externalOrderId:
-                input.externalOrderId ?? null,
-
-            platform: input.platform ?? null,
-            brokerName:
-                input.brokerName ?? null,
-
-            commission:
-                input.commission ?? null,
-            swap: input.swap ?? null,
-            fees: input.fees ?? null,
-
-            importedAt: new Date(),
+            createdById: domainUserId,
+            ...desiredTrade,
             rawImportData:
                 input.rawImportData ??
                 Prisma.JsonNull,
@@ -396,7 +501,7 @@ export async function importSyncedTrade(
     });
 
     await logActivity({
-        userId: importerUserId,
+        userId: null,
         accountId: input.tradingAccountId,
         type: "TRADE_IMPORTED",
         title: "Trade imported",
@@ -406,17 +511,16 @@ export async function importSyncedTrade(
         metadata: {
             tradeId: trade.id,
             source: input.source,
-            externalTradeId:
-                input.externalTradeId,
             platform: input.platform,
             brokerName: input.brokerName,
-            needsReview: true,
+            reviewState: "needs_review",
+            origin: "system",
         },
     });
 
     await notifyAccountMembers({
         accountId: input.tradingAccountId,
-        actorId: importerUserId,
+        actorId: domainUserId,
         type: "TRADE_IMPORTED",
         title: "Trade imported",
         message: `${input.symbol} ${normalizeDirection(
@@ -434,7 +538,9 @@ export async function importSyncedTrade(
     );
 
     return {
-        status: "created" as const,
-        trade,
+        status: "created",
+        tradeId: trade.id,
+        needsReview: trade.needsReview,
+        syncStatus: trade.syncStatus,
     };
-} 
+}
