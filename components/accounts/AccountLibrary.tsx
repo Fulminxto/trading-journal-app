@@ -50,6 +50,9 @@ export type AccountLibraryItem = {
   currency: string;
   brokerProvider: string | null;
   updatedAt: string;
+  integrationMode: string;
+  autoSyncEnabled: boolean;
+  syncStatus: string;
   canViewMembers: boolean;
   canManageIntegrations: boolean;
   canOpenManage: boolean;
@@ -144,6 +147,44 @@ type PnlPercentageBadgeData = {
   accessibleLabel: string;
 };
 
+export type AccountOperationalSignal = {
+  kind: "attention" | "pending" | "connected" | "manual";
+  label: string;
+};
+
+export function getAccountOperationalSignal({ integrationMode, autoSyncEnabled, syncStatus }: Pick<AccountLibraryItem, "integrationMode" | "autoSyncEnabled" | "syncStatus">): AccountOperationalSignal | null {
+  if (syncStatus === "error") {
+    return { kind: "attention", label: "Sync needs attention" };
+  }
+  if (syncStatus === "pending" && integrationMode !== "manual" && autoSyncEnabled) {
+    return { kind: "pending", label: "Sync pending" };
+  }
+  if (syncStatus === "connected" && integrationMode !== "manual" && autoSyncEnabled) {
+    return { kind: "connected", label: "Connected" };
+  }
+  if (syncStatus === "inactive" && integrationMode === "manual" && !autoSyncEnabled) {
+    return { kind: "manual", label: "Manual" };
+  }
+  return null;
+}
+
+function OperationalSignal({ signal }: { signal: AccountOperationalSignal }) {
+  const tone = signal.kind === "attention"
+    ? "border-negative/25 bg-negative/[0.08] text-negative"
+    : signal.kind === "pending"
+      ? "border-warning/25 bg-warning/[0.08] text-warning"
+      : signal.kind === "connected"
+        ? "border-accent/20 bg-accent/[0.08] text-accent"
+        : "border-flash/[0.1] bg-surface-2 text-muted";
+
+  return (
+    <span className={`inline-flex min-w-0 items-center gap-1.5 rounded-pill border-[0.5px] px-2 py-1 text-micro font-medium ${tone}`}>
+      <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-current" />
+      <span className="truncate">{signal.label}</span>
+    </span>
+  );
+}
+
 export function getPnlPercentageBadgeData({ pnl, initialBalance, tradesCount }: { pnl: number; initialBalance: number; tradesCount: number }): PnlPercentageBadgeData {
   if (!Number.isFinite(pnl) || !Number.isFinite(initialBalance) || initialBalance <= 0) {
     return { label: "--", tone: "neutral", accessibleLabel: "PnL percentage unavailable" };
@@ -194,8 +235,9 @@ function PnlPercentageBadge({ data }: { data: PnlPercentageBadgeData }) {
   return <span aria-label={data.accessibleLabel} className={`inline-flex h-7 min-w-[76px] shrink-0 items-center justify-center rounded-lg border px-2.5 text-xs font-semibold tabular-nums ${toneClass}`}>{data.label}</span>;
 }
 
-function GridAccountCard({ account, labels }: { account: AccountLibraryItem; labels: Labels }) {
+export function GridAccountCard({ account, labels }: { account: AccountLibraryItem; labels: Labels }) {
   const pnlPercentageBadge = getPnlPercentageBadgeData({ pnl: account.pnlValue, initialBalance: account.initialBalance, tradesCount: account.tradeCount });
+  const operationalSignal = getAccountOperationalSignal(account);
 
   return (
     <article className="group relative rounded-2xl border border-white/[0.03] bg-[#070d19]/90 p-5 shadow-[0_8px_24px_-16px_rgba(0,0,0,.55)] transition-[transform,border-color,background-color,box-shadow] duration-[240ms] ease-out hover:-translate-y-1 hover:border-cyan-500/30 hover:bg-[#09111f]/95 hover:shadow-[0_12px_30px_-10px_rgba(0,242,254,.12)] focus-within:border-cyan-400/35 focus-within:bg-[#09111f]/95 motion-reduce:hover:translate-y-0 motion-reduce:transition-colors">
@@ -206,6 +248,7 @@ function GridAccountCard({ account, labels }: { account: AccountLibraryItem; lab
           <div className="min-w-0 flex-1">
             <p className="text-micro uppercase tracking-label text-muted"><span className="text-accent-bright">{account.type}</span><span className="text-muted-faint"> · </span>{account.status}<span className="text-muted-faint"> · </span>{account.membershipRole}</p>
             <h3 aria-label={account.name} title={account.name} className="mt-1.5 line-clamp-2 min-h-[3.5rem] text-xl font-bold leading-7 text-white">{account.name}</h3>
+            {operationalSignal && <div className="mt-2"><OperationalSignal signal={operationalSignal} /></div>}
           </div>
         </div>
         <div className="mt-4 flex min-w-0 items-end justify-between gap-4">
@@ -219,8 +262,8 @@ function GridAccountCard({ account, labels }: { account: AccountLibraryItem; lab
           <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><Shield size={12} aria-hidden="true" />{labels.winRate}</p><p className={`mt-0.5 text-sm font-semibold ${getWinRateTone(account.winRateValue)}`}>{account.winRate ?? labels.notMeasured}</p></div>
           <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><Users size={12} aria-hidden="true" />{getMembersHeading(labels)}</p><p className="mt-0.5 text-sm font-semibold text-slate-300">{getMemberCountLabel(account, labels)}</p></div>
         </div>
+        <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-cyan-300/80">{labels.openAccount}<ArrowRight size={14} aria-hidden="true" /></span>
       </div>
-      <ArrowRight size={16} aria-hidden="true" className="pointer-events-none absolute right-[4.5rem] top-8 z-20 -translate-x-1 text-cyan-300/70 opacity-0 transition-all duration-200 ease-out group-hover:translate-x-0 group-hover:opacity-100 group-focus-within:translate-x-0 group-focus-within:opacity-100 motion-reduce:transform-none" />
       <div className="pointer-events-auto absolute right-5 top-5 z-30"><AccountActionsMenu accountId={account.id} accountName={account.name} accountStatus={account.status} canOpenManage={account.canOpenManage} canViewMembers={account.canViewMembers} canManageIntegrations={account.canManageIntegrations} canArchiveAccount={account.canArchiveAccount} canDeleteAccount={account.canDeleteAccount} placement="grid" /></div>
     </article>
   );
@@ -228,6 +271,7 @@ function GridAccountCard({ account, labels }: { account: AccountLibraryItem; lab
 
 export function FocusCoverCard({ account, labels, active }: { account: AccountLibraryItem; labels: Labels; active: boolean }) {
   const pnlPercentageBadge = getPnlPercentageBadgeData({ pnl: account.pnlValue, initialBalance: account.initialBalance, tradesCount: account.tradeCount });
+  const operationalSignal = getAccountOperationalSignal(account);
 
   return (
     <article data-active={active} className={`relative w-full overflow-hidden rounded-card border border-white/[0.05] bg-[#070d19]/80 p-5 backdrop-blur-xl sm:p-6 ${active ? "shadow-[0_25px_60px_-15px_rgba(0,0,0,.9)]" : "shadow-[0_20px_52px_-18px_rgba(0,0,0,.6)]"}`}>
@@ -241,6 +285,7 @@ export function FocusCoverCard({ account, labels, active }: { account: AccountLi
           <div className="min-w-0 flex-1">
             <p className="text-micro uppercase tracking-label text-muted"><span className="text-accent-bright">{account.type}</span><span className="text-muted-faint"> · </span>{account.status}<span className="text-muted-faint"> · </span>{account.membershipRole}</p>
             <h3 aria-label={account.name} title={account.name} className="mt-1.5 line-clamp-2 min-h-[3.5rem] text-xl font-bold leading-7 text-white">{account.name}</h3>
+            {active && operationalSignal && <div className="mt-2"><OperationalSignal signal={operationalSignal} /></div>}
           </div>
           {active && <AccountActionsMenu accountId={account.id} accountName={account.name} accountStatus={account.status} canOpenManage={account.canOpenManage} canViewMembers={account.canViewMembers} canManageIntegrations={account.canManageIntegrations} canArchiveAccount={account.canArchiveAccount} canDeleteAccount={account.canDeleteAccount} placement="focus" />}
         </div>
@@ -255,7 +300,7 @@ export function FocusCoverCard({ account, labels, active }: { account: AccountLi
             <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><Shield size={12} aria-hidden="true" />{labels.winRate}</p><p className={`mt-0.5 text-sm font-semibold ${getWinRateTone(account.winRateValue)}`}>{account.winRate ?? labels.notMeasured}</p></div>
             <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><Users size={12} aria-hidden="true" />{getMembersHeading(labels)}</p><p className="mt-0.5 text-sm font-semibold text-slate-200">{getMemberCountLabel(account, labels)}</p></div>
           </div>
-          <Link href={`/accounts/${account.id}/dashboard`} className="group mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-cyan-400/25 bg-slate-950 px-4 py-3 text-sm font-semibold text-slate-100 outline-none transition-all duration-300 hover:border-cyan-400/40 hover:bg-slate-900 hover:shadow-[0_0_20px_rgba(34,211,238,.12)] focus-visible:ring-2 focus-visible:ring-accent-bright/70">Open Workspace<ArrowRight size={16} aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1" /></Link>
+          <Link href={`/accounts/${account.id}/dashboard`} className="group mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-cyan-400/25 bg-slate-950 px-4 py-3 text-sm font-semibold text-slate-100 outline-none transition-all duration-300 hover:border-cyan-400/40 hover:bg-slate-900 hover:shadow-[0_0_20px_rgba(34,211,238,.12)] focus-visible:ring-2 focus-visible:ring-accent-bright/70">{labels.openAccount}<ArrowRight size={16} aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1" /></Link>
         </>}
       </div>
     </article>

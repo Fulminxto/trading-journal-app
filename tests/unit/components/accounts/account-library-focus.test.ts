@@ -40,6 +40,9 @@ const account: AccountLibraryItem = {
   currency: "USD",
   brokerProvider: null,
   updatedAt: "2026-07-17T12:00:00.000Z",
+  integrationMode: "mt5",
+  autoSyncEnabled: true,
+  syncStatus: "connected",
   canViewMembers: true,
   canManageIntegrations: true,
   canOpenManage: true,
@@ -55,7 +58,7 @@ const labels = {
   member: "member",
   members: "members",
   pnl: "PnL",
-  openAccount: "Open account",
+  openAccount: "Open workspace",
   archived: "Archived",
 };
 
@@ -77,7 +80,7 @@ describe("Account Library Focus mode", () => {
     const active = renderToStaticMarkup(React.createElement(FocusCoverCard, { account, labels, active: true }));
 
     expect(preview).not.toMatch(/<(?:a(?:\s|>)|button\b)/);
-    expect(active).toContain("Open Workspace");
+    expect(active).toContain("Open workspace");
     expect(active).toContain('aria-label="Account actions"');
     expect(active).not.toMatch(/<button[^>]*>(?:(?!<\/button>)[\s\S])*<a(?:\s|>)/);
     expect(active).not.toMatch(/<a(?:\s[^>]*)?>(?:(?!<\/a>)[\s\S])*<button\b/);

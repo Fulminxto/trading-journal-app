@@ -272,7 +272,7 @@ export default function AccountActionsMenu({
         >
           {canOpenManage && (
             <Link role="menuitem" href="/accounts/manage" onClick={() => setOpen(false)} className="flex min-h-10 items-center gap-3 rounded-md px-3 text-sm text-muted outline-none hover:bg-white/[0.06] hover:text-flash focus-visible:bg-white/[0.08] focus-visible:text-flash focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-bright/60">
-              <Settings size={15} aria-hidden="true" />Manage account
+              <Settings size={15} aria-hidden="true" />Manage accounts
             </Link>
           )}
           {canViewMembers && (

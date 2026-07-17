@@ -75,6 +75,9 @@ export default async function AccountsPage() {
       currency: account.currency,
       brokerProvider: account.broker || account.brokerProvider,
       updatedAt: new Intl.DateTimeFormat(language, { dateStyle: "medium" }).format(account.updatedAt),
+      integrationMode: account.integrationMode,
+      autoSyncEnabled: account.autoSyncEnabled,
+      syncStatus: account.syncStatus,
       canViewMembers: isManager(membership) || membership.canViewMembers,
       canManageIntegrations: isManager(membership) || membership.canManageAccount,
       canOpenManage: account.createdById === currentUser.id || membership.role === "MANAGER",
@@ -121,7 +124,7 @@ export default async function AccountsPage() {
       {activeMemberships.length > 0 ? (
         <AccountLibrary
           accounts={libraryAccounts}
-          labels={{ initialBalance: "Initial balance", trades: "Trades", winRate: "Win rate", notMeasured: "Not measured", member: "member", members: "members", pnl: "PnL", openAccount: "Open Dashboard", archived: "Archived" }}
+          labels={{ initialBalance: "Initial balance", trades: "Trades", winRate: "Win rate", notMeasured: "Not measured", member: "member", members: "members", pnl: "PnL", openAccount: "Open workspace", archived: "Archived" }}
         />
       ) : (
         <Card variant="inner" className="border-dashed p-8 text-sm text-muted">No active accounts available.</Card>
