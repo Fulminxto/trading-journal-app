@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { prisma } from "@/lib/prisma";
+import {
+    authenticateTradeSyncRequest,
+    authorizeTradeSyncAccount,
+    getTradeSyncSource,
+} from "@/lib/trade-sync-auth";
 
 type TradeSyncHealthPayload = {
     tradingAccountId?: string;
@@ -15,65 +19,18 @@ function getString(value: unknown) {
     return value.trim();
 }
 
-function getSource(value: unknown) {
-    const source = getString(value).toLowerCase();
-
-    if (source === "mt5" || source === "broker") {
-        return source;
-    }
-
-    return null;
-}
-
-function isSourceAllowedForMode({
-    integrationMode,
-    source,
-}: {
-    integrationMode: string | null;
-    source: "mt5" | "broker";
-}) {
-    if (integrationMode === "mt5") {
-        return source === "mt5";
-    }
-
-    if (integrationMode === "broker") {
-        return source === "broker";
-    }
-
-    if (integrationMode === "hybrid") {
-        return source === "mt5" || source === "broker";
-    }
-
-    return false;
-}
-
 export async function POST(request: NextRequest) {
-    const expectedSecret =
-        process.env.TRADE_SYNC_SECRET;
+    const authentication =
+        authenticateTradeSyncRequest(request.headers);
 
-    if (!expectedSecret) {
+    if (!authentication.authorized) {
         return NextResponse.json(
             {
                 ok: false,
-                error: "Trade sync is not configured",
+                error: authentication.error,
             },
             {
-                status: 500,
-            }
-        );
-    }
-
-    const providedSecret =
-        request.headers.get("x-voltis-sync-secret");
-
-    if (providedSecret !== expectedSecret) {
-        return NextResponse.json(
-            {
-                ok: false,
-                error: "Unauthorized",
-            },
-            {
-                status: 401,
+                status: authentication.status,
             }
         );
     }
@@ -98,7 +55,7 @@ export async function POST(request: NextRequest) {
         payload.tradingAccountId
     );
 
-    const source = getSource(payload.source);
+    const source = getTradeSyncSource(payload.source);
 
     if (!tradingAccountId || !source) {
         return NextResponse.json(
@@ -113,141 +70,48 @@ export async function POST(request: NextRequest) {
         );
     }
 
-    const account =
-        await prisma.tradingAccount.findUnique({
-            where: {
-                id: tradingAccountId,
-            },
-            select: {
-                id: true,
-                name: true,
-                status: true,
-
-                integrationMode: true,
-                autoSyncEnabled: true,
-
-                mt5Enabled: true,
-                brokerSyncEnabled: true,
-
-                syncStatus: true,
-                lastSyncedAt: true,
-            },
-        });
-
-    if (!account) {
-        return NextResponse.json(
-            {
-                ok: false,
-                error: "Trading account not found",
-            },
-            {
-                status: 404,
-            }
-        );
-    }
-
-    if (account.status === "ARCHIVED") {
-        return NextResponse.json(
-            {
-                ok: false,
-                error:
-                    "Trade sync is disabled for archived accounts",
-                account: {
-                    id: account.id,
-                    name: account.name,
-                    status: account.status,
-                },
-            },
-            {
-                status: 403,
-            }
-        );
-    }
-
-    if (account.integrationMode === "manual") {
-        return NextResponse.json(
-            {
-                ok: false,
-                error:
-                    "Trade sync is disabled because this account is set to Manual Only",
-                account: {
-                    id: account.id,
-                    name: account.name,
-                    integrationMode:
-                        account.integrationMode,
-                },
-            },
-            {
-                status: 403,
-            }
-        );
-    }
-
-    const sourceAllowedByMode =
-        isSourceAllowedForMode({
-            integrationMode: account.integrationMode,
+    const accessCheck =
+        await authorizeTradeSyncAccount({
+            tradingAccountId,
             source,
         });
 
-    if (!sourceAllowedByMode) {
-        return NextResponse.json(
-            {
-                ok: false,
-                error: `Source "${source}" is not allowed for integration mode "${account.integrationMode}"`,
-                account: {
+    if (!accessCheck.allowed) {
+        const account = accessCheck.account;
+        const accountContext = account
+            ? accessCheck.reason === "archived"
+                ? {
                     id: account.id,
                     name: account.name,
-                    integrationMode:
-                        account.integrationMode,
-                },
+                    status: account.status,
+                }
+                : accessCheck.reason === "manual" ||
+                    accessCheck.reason ===
+                        "source_not_allowed"
+                    ? {
+                        id: account.id,
+                        name: account.name,
+                        integrationMode:
+                            account.integrationMode,
+                    }
+                    : undefined
+            : undefined;
+
+        return NextResponse.json(
+            {
+                ok: false,
+                error: accessCheck.error,
+                ...(accountContext
+                    ? { account: accountContext }
+                    : {}),
             },
             {
-                status: 403,
+                status: accessCheck.status,
             }
         );
     }
 
-    if (source === "mt5" && !account.mt5Enabled) {
-        return NextResponse.json(
-            {
-                ok: false,
-                error:
-                    "MT5 sync is not enabled for this account",
-            },
-            {
-                status: 403,
-            }
-        );
-    }
-
-    if (
-        source === "broker" &&
-        !account.brokerSyncEnabled
-    ) {
-        return NextResponse.json(
-            {
-                ok: false,
-                error:
-                    "Broker sync is not enabled for this account",
-            },
-            {
-                status: 403,
-            }
-        );
-    }
-
-    if (!account.autoSyncEnabled) {
-        return NextResponse.json(
-            {
-                ok: false,
-                error:
-                    "Auto sync is not enabled for this account",
-            },
-            {
-                status: 403,
-            }
-        );
-    }
+    const account = accessCheck.account;
 
     return NextResponse.json({
         ok: true,

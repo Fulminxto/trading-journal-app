@@ -86,6 +86,44 @@ describe("POST /api/trade-sync/import legacy response contract", () => {
     delete process.env.TRADE_SYNC_SECRET;
   });
 
+  it("preserves import authentication response bodies", async () => {
+    delete process.env.TRADE_SYNC_SECRET;
+    const unconfigured = await POST(request());
+    expect(unconfigured.status).toBe(500);
+    expect(await unconfigured.json()).toEqual({
+      error: "Trade sync is not configured",
+    });
+
+    process.env.TRADE_SYNC_SECRET = secret;
+    const unauthorizedRequest = new Request(
+      "http://localhost/api/trade-sync/import",
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "x-voltis-sync-secret": "wrong",
+        },
+        body: JSON.stringify(payload),
+      },
+    ) as never;
+    const unauthorized = await POST(unauthorizedRequest);
+    expect(unauthorized.status).toBe(401);
+    expect(await unauthorized.json()).toEqual({ error: "Unauthorized" });
+    expect(mocks.importSyncedTrade).not.toHaveBeenCalled();
+  });
+
+  it("preserves import account-authorization response bodies", async () => {
+    mocks.accountFindUnique.mockResolvedValue(null);
+
+    const response = await POST(request());
+
+    expect(response.status).toBe(404);
+    expect(await response.json()).toEqual({
+      error: "Trading account not found",
+    });
+    expect(mocks.importSyncedTrade).not.toHaveBeenCalled();
+  });
+
   it.each([
     {
       name: "created",
