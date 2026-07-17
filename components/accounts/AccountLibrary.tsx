@@ -226,11 +226,11 @@ function GridAccountCard({ account, labels }: { account: AccountLibraryItem; lab
   );
 }
 
-function FocusCoverCard({ account, labels, active, direction }: { account: AccountLibraryItem; labels: Labels; active: boolean; direction: -1 | 1 }) {
+export function FocusCoverCard({ account, labels, active }: { account: AccountLibraryItem; labels: Labels; active: boolean }) {
   const pnlPercentageBadge = getPnlPercentageBadgeData({ pnl: account.pnlValue, initialBalance: account.initialBalance, tradesCount: account.tradeCount });
 
   return (
-    <article data-active={active} className={`relative w-full overflow-hidden rounded-[24px] border border-white/[0.05] bg-[#070d19]/80 p-5 backdrop-blur-xl sm:p-6 ${active ? "focus-card-enter shadow-[0_25px_60px_-15px_rgba(0,0,0,.9)]" : "focus-card-exit shadow-[0_20px_52px_-18px_rgba(0,0,0,.6)]"}`} style={{ "--focus-direction": direction } as React.CSSProperties}>
+    <article data-active={active} className={`relative w-full overflow-hidden rounded-card border border-white/[0.05] bg-[#070d19]/80 p-5 backdrop-blur-xl sm:p-6 ${active ? "shadow-[0_25px_60px_-15px_rgba(0,0,0,.9)]" : "shadow-[0_20px_52px_-18px_rgba(0,0,0,.6)]"}`}>
       <div className="absolute right-0 top-0 h-[58%] w-[62%] opacity-25">
         <AccountCover account={account} active={active} />
       </div>
@@ -296,6 +296,32 @@ function FilterStepper<T extends string>({ label, value, options, onChange }: { 
   );
 }
 
+export function isEditableFocusTarget(target: EventTarget | null) {
+  const candidate = target as (EventTarget & { closest?: (selector: string) => unknown }) | null;
+  return typeof candidate?.closest === "function"
+    && Boolean(candidate.closest("input, textarea, select, [contenteditable='true'], [role='textbox']"));
+}
+
+export function getFocusSelectionIndex(index: number, delta: number, accountCount: number) {
+  return Math.max(0, Math.min(accountCount - 1, index + delta));
+}
+
+export function getFocusCardTransition(reducedMotion: boolean) {
+  return reducedMotion
+    ? "none"
+    : "transform var(--duration-base) ease-out, opacity var(--duration-base) ease-out, filter var(--duration-base) ease-out";
+}
+
+export function FocusNavigationControls({ index, accountCount, onMove }: { index: number; accountCount: number; onMove: (delta: -1 | 1) => void }) {
+  return (
+    <div className="relative z-30 mt-4 flex items-center justify-center gap-3">
+      <button type="button" aria-label="Previous account" disabled={index === 0} onClick={() => onMove(-1)} className="flex size-11 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-2 text-muted outline-none transition-colors duration-fast hover:border-accent-bright/25 hover:text-flash focus-visible:ring-2 focus-visible:ring-accent-bright/60 disabled:cursor-not-allowed disabled:opacity-30 motion-reduce:transition-none"><ChevronLeft size={18} aria-hidden="true" /></button>
+      <p aria-hidden="true" className="min-w-16 text-center text-xs tracking-[0.08em]"><span className="font-medium tabular-nums text-flash/80">{index + 1}</span><span className="text-muted-faint"> of {accountCount}</span></p>
+      <button type="button" aria-label="Next account" disabled={index === accountCount - 1} onClick={() => onMove(1)} className="flex size-11 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-2 text-muted outline-none transition-colors duration-fast hover:border-accent-bright/25 hover:text-flash focus-visible:ring-2 focus-visible:ring-accent-bright/60 disabled:cursor-not-allowed disabled:opacity-30 motion-reduce:transition-none"><ChevronRight size={18} aria-hidden="true" /></button>
+    </div>
+  );
+}
+
 export default function AccountLibrary({ accounts, labels }: { accounts: AccountLibraryItem[]; labels: Labels }) {
   const [view, setView] = useState<LibraryView>("grid");
   const [search, setSearch] = useState("");
@@ -311,11 +337,8 @@ export default function AccountLibrary({ accounts, labels }: { accounts: Account
   const filtersRootRef = useRef<HTMLDivElement>(null);
   const filtersTriggerRef = useRef<HTMLButtonElement>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [focusDirection, setFocusDirection] = useState<-1 | 1>(1);
-  const [pointerRatio, setPointerRatio] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
-  const hoverIntent = useRef<ReturnType<typeof setTimeout> | null>(null);
   const touchRef = useRef({ pointerId: -1, startX: 0, startY: 0, axis: "pending" as "pending" | "horizontal" | "vertical" });
   const showAccountType = quickFilter === "ALL";
   const showCollaboration = true;
@@ -410,17 +433,9 @@ export default function AccountLibrary({ accounts, labels }: { accounts: Account
         : selectedIndex === filtered.length - 1
           ? "clamp(18px, 3vw, 42px)"
           : "0px";
-  const move = useCallback((delta: number) => { setFocusDirection(delta < 0 ? -1 : 1); setSelectedIndex((index) => Math.max(0, Math.min(filtered.length - 1, index + delta))); }, [filtered.length]);
-  const clearHoverIntent = useCallback(() => {
-    if (hoverIntent.current) clearTimeout(hoverIntent.current);
-    hoverIntent.current = null;
-  }, []);
-  const selectWithIntent = useCallback((index: number) => {
-    clearHoverIntent();
-    hoverIntent.current = setTimeout(() => { setFocusDirection(index < selectedIndex ? -1 : 1); setSelectedIndex(index); }, 170);
-  }, [clearHoverIntent, selectedIndex]);
-
-  useEffect(() => clearHoverIntent, [clearHoverIntent]);
+  const move = useCallback((delta: number) => {
+    setSelectedIndex((index) => getFocusSelectionIndex(index, delta, filtered.length));
+  }, [filtered.length]);
 
   return (
     <section aria-labelledby="account-library-title" className="account-library reveal-rise" style={{ animationDelay: "100ms" }}>
@@ -469,13 +484,16 @@ export default function AccountLibrary({ accounts, labels }: { accounts: Account
           className="outline-none"
           tabIndex={0}
           aria-label="Focus account carousel"
-          onKeyDown={(event) => { if (event.key === "ArrowLeft") move(-1); if (event.key === "ArrowRight") move(1); }}
+          onKeyDown={(event) => {
+            if (isEditableFocusTarget(event.target)) return;
+            if (event.key === "ArrowLeft") { event.preventDefault(); move(-1); }
+            if (event.key === "ArrowRight") { event.preventDefault(); move(1); }
+          }}
         >
           <p className="sr-only" aria-live="polite">{selected.name}, account {selectedIndex + 1} of {filtered.length}</p>
           <div className="relative overflow-visible pt-5">
           <div ref={carouselRef} className="relative mx-auto h-[390px] max-w-[1280px] touch-pan-y overflow-x-clip overflow-y-visible select-none"
-            onPointerMove={(event) => { if (event.pointerType === "mouse" && !reducedMotion) { const bounds = event.currentTarget.getBoundingClientRect(); setPointerRatio(Math.max(-1, Math.min(1, ((event.clientX - bounds.left) / bounds.width) * 2 - 1))); } const touch = touchRef.current; if (touch.pointerId !== event.pointerId) return; const dx = event.clientX - touch.startX; const dy = event.clientY - touch.startY; if (touch.axis === "pending" && Math.hypot(dx, dy) > 8) touch.axis = Math.abs(dx) > Math.abs(dy) * 1.15 ? "horizontal" : "vertical"; if (touch.axis === "horizontal") event.preventDefault(); }}
-            onPointerLeave={() => { clearHoverIntent(); setPointerRatio(0); }}
+            onPointerMove={(event) => { const touch = touchRef.current; if (touch.pointerId !== event.pointerId) return; const dx = event.clientX - touch.startX; const dy = event.clientY - touch.startY; if (touch.axis === "pending" && Math.hypot(dx, dy) > 8) touch.axis = Math.abs(dx) > Math.abs(dy) * 1.15 ? "horizontal" : "vertical"; if (touch.axis === "horizontal") event.preventDefault(); }}
             onPointerDown={(event) => { if (event.pointerType === "mouse" || (event.target as HTMLElement).closest("a")) return; touchRef.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, axis: "pending" }; event.currentTarget.setPointerCapture(event.pointerId); }}
             onPointerUp={(event) => { const touch = touchRef.current; if (touch.pointerId !== event.pointerId) return; const dx = event.clientX - touch.startX; if (touch.axis === "horizontal" && Math.abs(dx) > 48) move(dx < 0 ? 1 : -1); touch.pointerId = -1; if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId); }}
             onPointerCancel={(event) => { touchRef.current.pointerId = -1; if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId); }}>
@@ -484,21 +502,20 @@ export default function AccountLibrary({ accounts, labels }: { accounts: Account
               const depth = Math.min(Math.abs(position), 2);
               const visible = Math.abs(position) <= 2;
               const x = position === 0 ? "-50%" : position === -1 ? "-50% - clamp(145px,27vw,340px)" : position === 1 ? "-50% + clamp(145px,27vw,340px)" : position < 0 ? "-50% - clamp(245px,44vw,560px)" : "-50% + clamp(245px,44vw,560px)";
-              const scale = depth === 0 ? 1 : depth === 1 ? .85 : .73;
-              const opacity = visible ? depth === 0 ? 1 : depth === 1 ? .7 : .36 : 0;
-              const parallax = reducedMotion ? 0 : pointerRatio * (depth === 0 ? 8 : depth === 1 ? 5 : 3);
+              const scale = depth === 0 ? 1 : depth === 1 ? .94 : .9;
+              const opacity = visible ? depth === 0 ? 1 : depth === 1 ? .82 : .62 : 0;
               const horizontalBias = position === 0 ? "0px" : focusEdgeBias;
-              const style = { transform: `translate(calc(${x} + ${horizontalBias} + ${parallax}px),calc(-50% + ${depth * 7}px)) scale(${scale})`, opacity, zIndex: 30 - depth * 10, filter: `brightness(${depth === 0 ? 1 : depth === 1 ? .86 : .72})`, pointerEvents: visible ? "auto" as const : "none" as const, transition: reducedMotion ? "opacity 80ms linear" : "transform 560ms cubic-bezier(.2,.72,.22,1), opacity 520ms ease, filter 560ms ease" };
-              return <div key={account.id} className="absolute left-1/2 top-1/2 w-[88%] max-w-[480px]" style={style}>{position === 0 ? <FocusCoverCard account={account} labels={labels} active direction={focusDirection} /> : <button type="button" aria-label={`Select ${account.name}`} onPointerEnter={(event) => { if (event.pointerType === "mouse") selectWithIntent(index); }} onPointerLeave={clearHoverIntent} onClick={() => { setFocusDirection(index < selectedIndex ? -1 : 1); setSelectedIndex(index); }} className="block w-full text-left outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/80"><FocusCoverCard account={account} labels={labels} active={false} direction={focusDirection} /></button>}</div>;
+              const style = { transform: `translate(calc(${x} + ${horizontalBias}),calc(-50% + ${depth * 7}px)) scale(${scale})`, opacity, zIndex: 30 - depth * 10, filter: `brightness(${depth === 0 ? 1 : depth === 1 ? .94 : .86})`, pointerEvents: position === 0 ? "auto" as const : "none" as const, transition: getFocusCardTransition(reducedMotion) };
+              return <div key={account.id} aria-hidden={position === 0 ? undefined : true} className="absolute left-1/2 top-1/2 w-[88%] max-w-[480px]" style={style}><FocusCoverCard account={account} labels={labels} active={position === 0} /></div>;
             })}
             <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 z-[25] w-10 bg-gradient-to-r from-bg-base to-transparent transition-opacity duration-300 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none sm:w-16 lg:w-24" style={{ opacity: filtered.length <= 1 || isAtStart ? 0 : 1 }} />
             <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 z-[25] w-10 bg-gradient-to-l from-bg-base to-transparent transition-opacity duration-300 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none sm:w-16 lg:w-24" style={{ opacity: filtered.length <= 1 || isAtEnd ? 0 : 1 }} />
           </div>
           </div>
-          <p aria-hidden="true" className="relative z-10 mt-6 w-full text-center text-xs tracking-[0.08em]"><span className="font-medium tabular-nums text-flash/80">{selectedIndex + 1}</span><span className="text-muted-faint"> of {filtered.length}</span></p>
+          <FocusNavigationControls index={selectedIndex} accountCount={filtered.length} onMove={move} />
         </div>
       )}
-      <style>{`@keyframes filter-step-out { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(calc(var(--filter-direction) * 5px)); } } @keyframes filter-step-in { from { opacity: 0; transform: translateX(calc(var(--filter-direction) * -5px)); } to { opacity: 1; transform: translateX(0); } } @keyframes focus-card-enter { from { opacity: 0; transform: translateX(calc(var(--focus-direction) * -10px)) scale(.94); } to { opacity: 1; transform: translateX(0) scale(1); } } @keyframes focus-card-exit { 0% { opacity: 1; transform: translateX(0) scale(1); } 72% { opacity: 0; transform: translateX(calc(var(--focus-direction) * 10px)) scale(.9); } 100% { opacity: 1; transform: translateX(0) scale(1); } } .focus-card-enter { animation: focus-card-enter 280ms cubic-bezier(.2,.72,.22,1); } .focus-card-exit { animation: focus-card-exit 280ms cubic-bezier(.2,.72,.22,1); } @media (prefers-reduced-motion: reduce) { .account-library [class*="transition-"] { transition-duration: 0.01ms !important; } .focus-card-enter, .focus-card-exit { animation: none !important; } }`}</style>
+      <style>{`@keyframes filter-step-out { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(calc(var(--filter-direction) * 5px)); } } @keyframes filter-step-in { from { opacity: 0; transform: translateX(calc(var(--filter-direction) * -5px)); } to { opacity: 1; transform: translateX(0); } } @media (prefers-reduced-motion: reduce) { .account-library [class*="transition-"] { transition-duration: 0.01ms !important; } }`}</style>
     </section>
   );
 }
