@@ -1,5 +1,5 @@
-import VoltisLightningLoader from "@/components/VoltisLightningLoader";
+import { ManageAccountsSkeleton } from "@/components/accounts/AccountRouteSkeletons";
 
 export default function ManageLoading() {
-  return <VoltisLightningLoader size={80} fullPage />;
+  return <ManageAccountsSkeleton />;
 }

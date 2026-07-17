@@ -1,5 +1,5 @@
-import VoltisLightningLoader from "@/components/VoltisLightningLoader";
+import { CreateAccountSkeleton } from "@/components/accounts/AccountRouteSkeletons";
 
 export default function CreateLoading() {
-  return <VoltisLightningLoader size={80} fullPage />;
+  return <CreateAccountSkeleton />;
 }

@@ -7,6 +7,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Card from "@/components/ui/Card";
 import IconTile from "@/components/ui/IconTile";
+import EmptyState from "@/components/EmptyState";
 import {
   formatCurrencyByLanguage,
   formatNumberByLanguage,
@@ -62,12 +63,7 @@ export default async function ArchivedAccountsPage() {
       </header>
 
       {memberships.length === 0 ? (
-        <Card variant="inner" className="border-dashed p-8 text-center">
-          <Archive size={22} aria-hidden="true" className="mx-auto text-muted" />
-          <h2 className="mt-4 text-subsection text-flash">No archived accounts</h2>
-          <p className="mt-2 text-caption text-muted">Accounts you archive will appear here.</p>
-          <Link href="/accounts" className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-inner border-[0.5px] border-accent/30 px-4 py-3 text-sm text-accent-bright">Back to account library<ArrowRight size={15} /></Link>
-        </Card>
+        <EmptyState title="No archived accounts" description="Archived trading accounts will appear here." icon={Archive} action={<Link href="/accounts" aria-label="Back to account library" className="inline-flex min-h-11 items-center gap-2 rounded-inner border-[0.5px] border-accent/30 px-4 py-3 text-sm text-accent-bright outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/60">Back to account library<ArrowRight size={15} aria-hidden="true" /></Link>} />
       ) : (
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
           {memberships.map((membership) => {

@@ -1,6 +1,10 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import Link from "next/link";
+import { FolderCog } from "lucide-react";
+
+import EmptyState from "@/components/EmptyState";
 
 import {
     createAccount,
@@ -25,6 +29,16 @@ const accountTypes = [
 ] as const;
 
 type AccountType = (typeof accountTypes)[number];
+
+const manageableEmptyLabels: Record<AppLanguage, { title: string; description: string; back: string }> = {
+    en: { title: "No manageable accounts", description: "You do not currently have authority to manage any trading accounts.", back: "Back to account library" },
+    it: { title: "Nessun account gestibile", description: "Al momento non hai l’autorizzazione per gestire account di trading.", back: "Torna alla libreria account" },
+    uk: { title: "Немає акаунтів для керування", description: "Наразі у вас немає прав для керування торговими акаунтами.", back: "Назад до бібліотеки акаунтів" },
+    ru: { title: "Нет аккаунтов для управления", description: "Сейчас у вас нет прав на управление торговыми аккаунтами.", back: "Назад к библиотеке аккаунтов" },
+    es: { title: "No hay cuentas gestionables", description: "Actualmente no tienes autorización para gestionar cuentas de trading.", back: "Volver a la biblioteca de cuentas" },
+    fr: { title: "Aucun compte à gérer", description: "Vous n’êtes actuellement autorisé à gérer aucun compte de trading.", back: "Retour à la bibliothèque de comptes" },
+    de: { title: "Keine verwaltbaren Konten", description: "Du bist derzeit nicht berechtigt, Trading-Konten zu verwalten.", back: "Zurück zur Kontobibliothek" },
+};
 
 type ManageAccountsLabels = {
     personalWorkspace: string;
@@ -527,6 +541,7 @@ export default async function ManageMyAccountsPage() {
     );
 
     const t = manageAccountsLabels[language];
+    const emptyT = manageableEmptyLabels[language];
 
     const canCreatePersonalAccount =
         currentUser.role === "FOUNDER" ||
@@ -1026,7 +1041,9 @@ export default async function ManageMyAccountsPage() {
                 </form>
             )}
 
-            <div className="space-y-12">
+            {accounts.length === 0 ? (
+                <EmptyState title={emptyT.title} description={emptyT.description} icon={FolderCog} action={<Link href="/accounts" aria-label={emptyT.back} className="inline-flex min-h-11 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.14] px-4 py-3 text-sm font-medium text-muted outline-none hover:text-flash focus-visible:ring-2 focus-visible:ring-accent-bright/60">{emptyT.back}</Link>} />
+            ) : <div className="space-y-12">
                 {accountTypes.map((type) => {
                     const sectionAccounts = activeAccounts.filter(
                         (account) => account.type === type
@@ -1046,7 +1063,7 @@ export default async function ManageMyAccountsPage() {
                     archivedAccounts,
                     "yellow"
                 )}
-            </div>
+            </div>}
         </div>
     );
 }

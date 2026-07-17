@@ -7,6 +7,7 @@ import AccountLibrary, {
   sortAccountLibraryItems,
   type AccountLibraryItem,
 } from "@/components/accounts/AccountLibrary";
+import AccountLibraryEmptyState from "@/components/accounts/AccountLibraryEmptyState";
 import Card from "@/components/ui/Card";
 import SignatureEdge from "@/components/ui/SignatureEdge";
 import { auth } from "@/lib/auth";
@@ -46,6 +47,7 @@ export default async function AccountsPage() {
 
   const activeMemberships = memberships.filter(({ tradingAccount }) => tradingAccount.status === "ACTIVE");
   const archivedCount = memberships.filter(({ tradingAccount }) => tradingAccount.status === "ARCHIVED").length;
+  const canManageAccounts = memberships.some((membership) => membership.role === "MANAGER" || membership.tradingAccount.createdById === currentUser.id);
   const totalTrades = activeMemberships.reduce((sum, { tradingAccount }) => sum + tradingAccount.trades.length, 0);
   const libraryAccounts = sortAccountLibraryItems<AccountLibraryItem>(activeMemberships.map((membership) => {
     const account = membership.tradingAccount;
@@ -99,8 +101,13 @@ export default async function AccountsPage() {
       ? "Multiple currencies"
       : `${formatCurrencyByLanguage(0, defaultCurrency, language)} total PnL`;
   const operatingSummary = `${formatNumberByLanguage(activeMemberships.length, language)} active ${activeMemberships.length === 1 ? "account" : "accounts"} · ${formatNumberByLanguage(totalTrades, language)} ${totalTrades === 1 ? "trade" : "trades"} · ${aggregatePnlLabel}`;
-  const primaryHref = canCreateAccount ? "/accounts/create" : "/accounts/manage";
-  const primaryLabel = canCreateAccount ? "Create Account" : "Manage My Accounts";
+  const primaryAction = canCreateAccount
+    ? { href: "/accounts/create", label: "Create Account" }
+    : canManageAccounts
+      ? { href: "/accounts/manage", label: "Manage My Accounts" }
+      : archivedCount > 0
+        ? { href: "/accounts/archived", label: "View Archived Accounts" }
+        : null;
 
   return (
     <div>
@@ -115,8 +122,8 @@ export default async function AccountsPage() {
             {pnlAggregate.kind === "mixed" && <p className="mt-2 text-xs text-muted-faint">View totals on individual accounts</p>}
           </div>
           <div className="flex flex-wrap gap-3">
-            <Link href={primaryHref} style={{ background: CTA_GRADIENT }} className="inline-flex items-center gap-2 rounded-inner px-4 py-3 text-sm font-semibold text-white outline-none transition-shadow hover:shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)] focus-visible:ring-2 focus-visible:ring-accent-bright/60">{primaryLabel}</Link>
-            {canCreateAccount && <Link href="/accounts/manage" className="inline-flex items-center gap-2 rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-3 text-sm text-muted outline-none hover:bg-white/[0.04] hover:text-white focus-visible:ring-2 focus-visible:ring-accent-bright/60"><Settings size={16} />Manage My Accounts</Link>}
+            {primaryAction && <Link href={primaryAction.href} style={{ background: CTA_GRADIENT }} className="inline-flex items-center gap-2 rounded-inner px-4 py-3 text-sm font-semibold text-white outline-none transition-shadow hover:shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)] focus-visible:ring-2 focus-visible:ring-accent-bright/60">{primaryAction.label}</Link>}
+            {canCreateAccount && canManageAccounts && <Link href="/accounts/manage" className="inline-flex items-center gap-2 rounded-inner border-[0.5px] border-flash/[0.12] px-4 py-3 text-sm text-muted outline-none hover:bg-white/[0.04] hover:text-white focus-visible:ring-2 focus-visible:ring-accent-bright/60"><Settings size={16} aria-hidden="true" />Manage My Accounts</Link>}
           </div>
         </div>
       </Card>
@@ -127,7 +134,7 @@ export default async function AccountsPage() {
           labels={{ initialBalance: "Initial balance", trades: "Trades", winRate: "Win rate", notMeasured: "Not measured", member: "member", members: "members", pnl: "PnL", openAccount: "Open workspace", archived: "Archived" }}
         />
       ) : (
-        <Card variant="inner" className="border-dashed p-8 text-sm text-muted">No active accounts available.</Card>
+        <AccountLibraryEmptyState language={language} canCreateAccount={canCreateAccount} canManageAccounts={canManageAccounts} hasArchivedAccounts={archivedCount > 0} />
       )}
 
       <Link href="/accounts/archived" className="group mt-6 flex items-center justify-between gap-5 rounded-inner border-[0.5px] border-flash/[0.05] bg-surface-1/15 px-4 py-2.5 outline-none transition-colors hover:border-flash/[0.1] hover:bg-surface-1/25 focus-visible:ring-2 focus-visible:ring-accent-bright/60 sm:px-5">
