@@ -24,6 +24,14 @@ enum SyncOperationStatus {
   ABANDONED
 }
 
+enum SyncOperationItemStatus {
+  PROCESSING
+  CREATED
+  UPDATED
+  SKIPPED
+  FAILED
+}
+
 model User {
   id           String @id @default(cuid())
   username     String @unique
@@ -272,6 +280,8 @@ model Trade {
   importedAt    DateTime?
   rawImportData Json?
 
+  syncOperationItems SyncOperationItem[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -299,6 +309,8 @@ model SyncOperation {
 
   status SyncOperationStatus @default(STARTED)
 
+  items SyncOperationItem[]
+
   totalCount    Int?
   importedCount Int  @default(0)
   updatedCount  Int  @default(0)
@@ -317,6 +329,38 @@ model SyncOperation {
   @@index([accountId, startedAt])
   @@index([actorUserId, startedAt])
   @@index([status, startedAt])
+}
+
+model SyncOperationItem {
+  id String @id @default(cuid())
+
+  operationId String
+  operation   SyncOperation @relation(fields: [operationId], references: [id], onDelete: Cascade)
+
+  itemKey     String
+  payloadHash String
+
+  status SyncOperationItemStatus @default(PROCESSING)
+
+  tradeId Int?
+  trade   Trade? @relation(fields: [tradeId], references: [id], onDelete: SetNull)
+
+  needsReview   Boolean?
+  syncStatus    String?
+  changedFields String[] @default([])
+
+  safeErrorCode String?
+  httpStatus    Int?
+
+  startedAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([operationId, itemKey])
+  @@index([operationId, status])
+  @@index([tradeId])
 }
 
 model Strategy {
