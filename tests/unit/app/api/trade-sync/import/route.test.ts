@@ -1,0 +1,186 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+const mocks = vi.hoisted(() => ({
+  accountFindUnique: vi.fn(),
+  accountUpdateMany: vi.fn(),
+  importSyncedTrade: vi.fn(),
+  logActivity: vi.fn(),
+}));
+
+vi.mock("@/lib/prisma", () => ({
+  prisma: {
+    tradingAccount: {
+      findUnique: mocks.accountFindUnique,
+      updateMany: mocks.accountUpdateMany,
+    },
+  },
+}));
+
+vi.mock("@/lib/activity", () => ({
+  logActivity: mocks.logActivity,
+}));
+
+vi.mock("@/lib/trade-sync", () => {
+  class TradeSyncServiceError extends Error {
+    constructor(
+      readonly code: string,
+      readonly stage: "validation" | "persistence" | "internal",
+      readonly retryable: boolean,
+      readonly safeMessage: string,
+    ) {
+      super(code);
+      this.name = "TradeSyncServiceError";
+    }
+  }
+
+  return {
+    importSyncedTrade: mocks.importSyncedTrade,
+    TradeSyncServiceError,
+  };
+});
+
+import { POST } from "@/app/api/trade-sync/import/route";
+
+const secret = "unit-test-secret";
+const payload = {
+  tradingAccountId: "account-1",
+  source: "mt5",
+  externalTradeId: "external-trade-sensitive",
+  externalAccountId: "external-account-sensitive",
+  externalOrderId: "external-order-sensitive",
+  symbol: "EURUSD",
+  direction: "BUY",
+  openDate: "2026-07-01T08:00:00.000Z",
+  rawImportData: { sensitive: "raw-payload" },
+};
+
+function request(body = payload) {
+  return new Request("http://localhost/api/trade-sync/import", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "x-voltis-sync-secret": secret,
+    },
+    body: JSON.stringify(body),
+  }) as never;
+}
+
+describe("POST /api/trade-sync/import legacy response contract", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    process.env.TRADE_SYNC_SECRET = secret;
+    mocks.accountFindUnique.mockResolvedValue({
+      id: "account-1",
+      status: "ACTIVE",
+      integrationMode: "mt5",
+      autoSyncEnabled: true,
+      mt5Enabled: true,
+      brokerSyncEnabled: false,
+      syncStatus: "connected",
+    });
+    mocks.accountUpdateMany.mockResolvedValue({ count: 1 });
+    mocks.logActivity.mockResolvedValue(undefined);
+  });
+
+  afterEach(() => {
+    delete process.env.TRADE_SYNC_SECRET;
+  });
+
+  it.each([
+    {
+      name: "created",
+      serviceResult: {
+        status: "created",
+        tradeId: 10,
+        needsReview: true,
+        syncStatus: "imported",
+      },
+      response: {
+        status: "created",
+        tradeId: 10,
+        needsReview: true,
+        syncStatus: "imported",
+      },
+    },
+    {
+      name: "updated",
+      serviceResult: {
+        status: "updated",
+        tradeId: 10,
+        needsReview: false,
+        syncStatus: "reviewed",
+        changedFields: ["resultUsd"],
+      },
+      response: {
+        status: "updated",
+        tradeId: 10,
+        needsReview: false,
+        syncStatus: "reviewed",
+        changedFields: ["resultUsd"],
+      },
+    },
+    {
+      name: "skipped",
+      serviceResult: {
+        status: "skipped",
+        tradeId: 10,
+        needsReview: true,
+        syncStatus: "imported",
+      },
+      response: {
+        status: "skipped",
+        tradeId: 10,
+        needsReview: true,
+        syncStatus: "imported",
+      },
+    },
+  ])("preserves the $name response shape", async ({ serviceResult, response }) => {
+    mocks.importSyncedTrade.mockResolvedValue(serviceResult);
+
+    const result = await POST(request());
+
+    expect(result.status).toBe(200);
+    expect(await result.json()).toEqual(response);
+  });
+
+  it("returns a safe persistence error and logs only sanitized metadata", async () => {
+    const unsafeError = new Error("database exploded external-trade-sensitive");
+    unsafeError.stack = "secret stack trace";
+    mocks.importSyncedTrade.mockRejectedValue(unsafeError);
+
+    const result = await POST(request());
+
+    expect(result.status).toBe(500);
+    expect(await result.json()).toEqual({ error: "Trade sync import failed." });
+    expect(mocks.accountUpdateMany).toHaveBeenCalledOnce();
+    expect(mocks.logActivity).toHaveBeenCalledOnce();
+
+    const activity = mocks.logActivity.mock.calls[0][0];
+    expect(activity).toEqual({
+      userId: null,
+      accountId: "account-1",
+      type: "TRADE_SYNC_ERROR",
+      title: "Trade sync error",
+      description: "Trade sync import failed.",
+      metadata: {
+        source: "mt5",
+        code: "TRADE_PERSISTENCE_FAILED",
+        stage: "persistence",
+        retryable: true,
+      },
+    });
+
+    const serializedActivity = JSON.stringify(activity);
+    for (const sensitiveValue of [
+      payload.externalTradeId,
+      payload.externalAccountId,
+      payload.externalOrderId,
+      "raw-payload",
+      unsafeError.message,
+      unsafeError.stack,
+      secret,
+    ]) {
+      expect(serializedActivity).not.toContain(sensitiveValue);
+    }
+  });
+});
