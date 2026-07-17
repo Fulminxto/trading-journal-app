@@ -1,19 +1,19 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import Link from "next/link";
 import {
   normalizeAppLanguage,
   type AppLanguage,
 } from "@/lib/i18n";
 
-import { createAccount } from "../actions";
+import CreateAccountForm from "./CreateAccountForm";
 
 type CreateAccountLabels = {
   eyebrow: string;
   title: string;
   description: string;
   accountNamePlaceholder: string;
+  accountTypeLabel: string;
   initialBalancePlaceholder: string;
   currencyPlaceholder: string;
   brokerPlaceholder: string;
@@ -23,6 +23,9 @@ type CreateAccountLabels = {
   dailyDrawdownPlaceholder: string;
   cancelButton: string;
   createButton: string;
+  requiredLabel: string;
+  optionalLabel: string;
+  creatingLabel: string;
 };
 
 const labels: Record<AppLanguage, CreateAccountLabels> =
@@ -33,6 +36,7 @@ const labels: Record<AppLanguage, CreateAccountLabels> =
       description:
         "Create a new personal or shared trading account inside VOLTIS.",
       accountNamePlaceholder: "Account name",
+      accountTypeLabel: "Account type",
       initialBalancePlaceholder: "Initial balance",
       currencyPlaceholder: "Currency",
       brokerPlaceholder: "Broker / Prop Firm",
@@ -42,6 +46,9 @@ const labels: Record<AppLanguage, CreateAccountLabels> =
       dailyDrawdownPlaceholder: "Daily Drawdown %",
       cancelButton: "Cancel",
       createButton: "Create Account",
+      requiredLabel: "Required",
+      optionalLabel: "Optional",
+      creatingLabel: "Creating account…",
     },
     it: {
       eyebrow: "Workspace",
@@ -49,6 +56,7 @@ const labels: Record<AppLanguage, CreateAccountLabels> =
       description:
         "Crea un nuovo account di trading personale o condiviso in VOLTIS.",
       accountNamePlaceholder: "Nome account",
+      accountTypeLabel: "Tipo di account",
       initialBalancePlaceholder: "Saldo iniziale",
       currencyPlaceholder: "Valuta",
       brokerPlaceholder: "Broker / Prop Firm",
@@ -58,6 +66,9 @@ const labels: Record<AppLanguage, CreateAccountLabels> =
       dailyDrawdownPlaceholder: "Daily Drawdown %",
       cancelButton: "Annulla",
       createButton: "Crea Account",
+      requiredLabel: "Obbligatorio",
+      optionalLabel: "Opzionale",
+      creatingLabel: "Creazione account…",
     },
     uk: {
       eyebrow: "Workspace",
@@ -65,6 +76,7 @@ const labels: Record<AppLanguage, CreateAccountLabels> =
       description:
         "Створіть новий особистий або спільний торговий акаунт у VOLTIS.",
       accountNamePlaceholder: "Назва акаунту",
+      accountTypeLabel: "Тип акаунту",
       initialBalancePlaceholder: "Початковий баланс",
       currencyPlaceholder: "Валюта",
       brokerPlaceholder: "Брокер / Prop Firm",
@@ -74,6 +86,9 @@ const labels: Record<AppLanguage, CreateAccountLabels> =
       dailyDrawdownPlaceholder: "Daily Drawdown %",
       cancelButton: "Скасувати",
       createButton: "Створити акаунт",
+      requiredLabel: "Обов’язково",
+      optionalLabel: "Необов’язково",
+      creatingLabel: "Створення акаунта…",
     },
     ru: {
       eyebrow: "Workspace",
@@ -81,6 +96,7 @@ const labels: Record<AppLanguage, CreateAccountLabels> =
       description:
         "Создайте новый личный или совместный торговый аккаунт в VOLTIS.",
       accountNamePlaceholder: "Название аккаунта",
+      accountTypeLabel: "Тип аккаунта",
       initialBalancePlaceholder: "Начальный баланс",
       currencyPlaceholder: "Валюта",
       brokerPlaceholder: "Брокер / Prop Firm",
@@ -90,6 +106,9 @@ const labels: Record<AppLanguage, CreateAccountLabels> =
       dailyDrawdownPlaceholder: "Daily Drawdown %",
       cancelButton: "Отмена",
       createButton: "Создать аккаунт",
+      requiredLabel: "Обязательно",
+      optionalLabel: "Необязательно",
+      creatingLabel: "Создание аккаунта…",
     },
     es: {
       eyebrow: "Workspace",
@@ -97,6 +116,7 @@ const labels: Record<AppLanguage, CreateAccountLabels> =
       description:
         "Crea una nueva cuenta de trading personal o compartida en VOLTIS.",
       accountNamePlaceholder: "Nombre de cuenta",
+      accountTypeLabel: "Tipo de cuenta",
       initialBalancePlaceholder: "Saldo inicial",
       currencyPlaceholder: "Divisa",
       brokerPlaceholder: "Broker / Prop Firm",
@@ -106,6 +126,9 @@ const labels: Record<AppLanguage, CreateAccountLabels> =
       dailyDrawdownPlaceholder: "Daily Drawdown %",
       cancelButton: "Cancelar",
       createButton: "Crear cuenta",
+      requiredLabel: "Obligatorio",
+      optionalLabel: "Opcional",
+      creatingLabel: "Creando cuenta…",
     },
     fr: {
       eyebrow: "Workspace",
@@ -113,6 +136,7 @@ const labels: Record<AppLanguage, CreateAccountLabels> =
       description:
         "Créez un nouveau compte de trading personnel ou partagé dans VOLTIS.",
       accountNamePlaceholder: "Nom du compte",
+      accountTypeLabel: "Type de compte",
       initialBalancePlaceholder: "Solde initial",
       currencyPlaceholder: "Devise",
       brokerPlaceholder: "Broker / Prop Firm",
@@ -122,6 +146,9 @@ const labels: Record<AppLanguage, CreateAccountLabels> =
       dailyDrawdownPlaceholder: "Daily Drawdown %",
       cancelButton: "Annuler",
       createButton: "Créer le compte",
+      requiredLabel: "Obligatoire",
+      optionalLabel: "Facultatif",
+      creatingLabel: "Création du compte…",
     },
     de: {
       eyebrow: "Workspace",
@@ -129,6 +156,7 @@ const labels: Record<AppLanguage, CreateAccountLabels> =
       description:
         "Erstelle ein neues persönliches oder gemeinsames Trading-Konto in VOLTIS.",
       accountNamePlaceholder: "Kontoname",
+      accountTypeLabel: "Kontotyp",
       initialBalancePlaceholder: "Anfangssaldo",
       currencyPlaceholder: "Währung",
       brokerPlaceholder: "Broker / Prop Firm",
@@ -138,6 +166,9 @@ const labels: Record<AppLanguage, CreateAccountLabels> =
       dailyDrawdownPlaceholder: "Daily Drawdown %",
       cancelButton: "Abbrechen",
       createButton: "Konto erstellen",
+      requiredLabel: "Erforderlich",
+      optionalLabel: "Optional",
+      creatingLabel: "Konto wird erstellt…",
     },
   };
 
@@ -196,109 +227,26 @@ export default async function CreateAccountPage() {
         </p>
       </div>
 
-      <form
-        action={createAccount}
-        className="grid grid-cols-1 gap-4 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:grid-cols-2"
-      >
-        <input
-          name="name"
-          placeholder={t.accountNamePlaceholder}
-          className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white placeholder:text-gray-500 focus:border-accent/50 focus:outline-none"
-          required
-        />
-
-        <select
-          name="type"
-          defaultValue={
-            canCreatePersonalAccount ? "LIVE" : "SHARED"
-          }
-          aria-label="Account type"
-          className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white placeholder:text-gray-500 focus:border-accent/50 focus:outline-none"
-          required
-        >
-          {canCreatePersonalAccount && (
-            <>
-              <option value="LIVE">LIVE</option>
-              <option value="DEMO">DEMO</option>
-              <option value="PROP">PROP</option>
-              <option value="CHALLENGE">CHALLENGE</option>
-              <option value="FUNDED">FUNDED</option>
-            </>
-          )}
-
-          {canCreateSharedAccount && (
-            <option value="SHARED">SHARED</option>
-          )}
-        </select>
-
-        <input
-          name="initialBalance"
-          type="number"
-          placeholder={t.initialBalancePlaceholder}
-          className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white placeholder:text-gray-500 focus:border-accent/50 focus:outline-none"
-          required
-        />
-
-        <input
-          name="currency"
-          defaultValue="USD"
-          placeholder={t.currencyPlaceholder}
-          className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white placeholder:text-gray-500 focus:border-accent/50 focus:outline-none"
-          required
-        />
-
-        <input
-          name="broker"
-          placeholder={t.brokerPlaceholder}
-          className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white placeholder:text-gray-500 focus:border-accent/50 focus:outline-none"
-        />
-
-        <input
-          name="phase"
-          placeholder={t.phasePlaceholder}
-          className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white placeholder:text-gray-500 focus:border-accent/50 focus:outline-none"
-        />
-
-        <input
-          name="profitTarget"
-          type="number"
-          step="0.01"
-          placeholder={t.profitTargetPlaceholder}
-          className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white placeholder:text-gray-500 focus:border-accent/50 focus:outline-none"
-        />
-
-        <input
-          name="maxDrawdown"
-          type="number"
-          step="0.01"
-          placeholder={t.maxDrawdownPlaceholder}
-          className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white placeholder:text-gray-500 focus:border-accent/50 focus:outline-none"
-        />
-
-        <input
-          name="dailyDrawdown"
-          type="number"
-          step="0.01"
-          placeholder={t.dailyDrawdownPlaceholder}
-          className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white placeholder:text-gray-500 focus:border-accent/50 focus:outline-none"
-        />
-
-        <div className="flex gap-3 md:col-span-2">
-          <Link
-            href="/accounts"
-            className="rounded-2xl bg-white/10 px-6 py-4 text-sm font-bold text-white hover:bg-white/20"
-          >
-            {t.cancelButton}
-          </Link>
-
-          <button
-            type="submit"
-            className="flex-1 rounded-2xl bg-accent px-6 py-4 text-sm font-bold text-white hover:bg-accent-bright"
-          >
-            {t.createButton}
-          </button>
-        </div>
-      </form>
+      <CreateAccountForm
+        canCreatePersonalAccount={canCreatePersonalAccount}
+        canCreateSharedAccount={canCreateSharedAccount}
+        labels={{
+          accountName: t.accountNamePlaceholder,
+          accountType: t.accountTypeLabel,
+          initialBalance: t.initialBalancePlaceholder,
+          currency: t.currencyPlaceholder,
+          broker: t.brokerPlaceholder,
+          phase: t.phasePlaceholder,
+          profitTarget: t.profitTargetPlaceholder,
+          maxDrawdown: t.maxDrawdownPlaceholder,
+          dailyDrawdown: t.dailyDrawdownPlaceholder,
+          required: t.requiredLabel,
+          optional: t.optionalLabel,
+          cancel: t.cancelButton,
+          submit: t.createButton,
+          pending: t.creatingLabel,
+        }}
+      />
     </div>
   );
 }
