@@ -9,6 +9,7 @@ import {
     completeSyncOperation,
     SyncOperationCompletionError,
 } from "@/lib/trade-sync-operation-completion";
+import { dispatchSyncOperationPushEffects } from "@/lib/trade-sync-operation-effects";
 
 type CompleteSyncOperationPayload = {
     tradingAccountId?: unknown;
@@ -86,6 +87,16 @@ export async function POST(
             tradingAccountId,
             source,
         });
+
+        try {
+            await dispatchSyncOperationPushEffects({
+                operationId: result.operationId,
+            });
+        } catch {
+            console.error(
+                "[trade-sync] push effect dispatch failed"
+            );
+        }
 
         return NextResponse.json({
             operationId: result.operationId,

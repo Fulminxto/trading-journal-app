@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({
   accountFindUnique: vi.fn(),
   completeSyncOperation: vi.fn(),
+  dispatchPushEffects: vi.fn(),
   sendPush: vi.fn(),
 }));
 
@@ -27,6 +28,10 @@ vi.mock("@/lib/trade-sync-operation-completion", () => {
 });
 
 vi.mock("@/lib/push", () => ({ sendPushToUser: mocks.sendPush }));
+
+vi.mock("@/lib/trade-sync-operation-effects", () => ({
+  dispatchSyncOperationPushEffects: mocks.dispatchPushEffects,
+}));
 
 import { POST } from "@/app/api/trade-sync/operations/[operationId]/complete/route";
 import { SyncOperationCompletionError } from "@/lib/trade-sync-operation-completion";
@@ -84,6 +89,15 @@ describe("POST /api/trade-sync/operations/[operationId]/complete", () => {
     process.env.TRADE_SYNC_SECRET = secret;
     mocks.accountFindUnique.mockResolvedValue(account);
     mocks.completeSyncOperation.mockResolvedValue(result);
+    mocks.dispatchPushEffects.mockResolvedValue({
+      operationId: "path-operation",
+      claimedCount: 0,
+      completedCount: 0,
+      failedCount: 0,
+      skippedCount: 0,
+      exhaustedCount: 0,
+      pendingCount: 0,
+    });
   });
 
   afterEach(() => {
@@ -100,6 +114,11 @@ describe("POST /api/trade-sync/operations/[operationId]/complete", () => {
       source: "mt5",
     });
     expect(mocks.accountFindUnique).toHaveBeenCalledOnce();
+    expect(mocks.dispatchPushEffects).toHaveBeenCalledWith({
+      operationId: "path-operation",
+    });
+    expect(mocks.completeSyncOperation.mock.invocationCallOrder[0])
+      .toBeLessThan(mocks.dispatchPushEffects.mock.invocationCallOrder[0]);
   });
 
   it("returns exactly the approved fields and an ISO completion timestamp", async () => {
@@ -127,6 +146,25 @@ describe("POST /api/trade-sync/operations/[operationId]/complete", () => {
 
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual(expect.objectContaining({ replayed: true }));
+    expect(mocks.dispatchPushEffects).toHaveBeenCalledWith({
+      operationId: "path-operation",
+    });
+  });
+
+  it("dispatches using the operation ID returned by completion", async () => {
+    mocks.completeSyncOperation.mockResolvedValue({
+      ...result,
+      operationId: "persisted-operation",
+    });
+
+    await POST(request(), context("path-operation"));
+
+    expect(mocks.completeSyncOperation).toHaveBeenCalledWith(expect.objectContaining({
+      operationId: "path-operation",
+    }));
+    expect(mocks.dispatchPushEffects).toHaveBeenCalledWith({
+      operationId: "persisted-operation",
+    });
   });
 
   it("ignores a body operation ID and uses only the path parameter", async () => {
@@ -172,6 +210,7 @@ describe("POST /api/trade-sync/operations/[operationId]/complete", () => {
       error: "Missing or invalid fields: tradingAccountId, source",
     });
     expect(mocks.completeSyncOperation).not.toHaveBeenCalled();
+    expect(mocks.dispatchPushEffects).not.toHaveBeenCalled();
   });
 
   it("stops before authorization and completion on authentication failure", async () => {
@@ -181,6 +220,7 @@ describe("POST /api/trade-sync/operations/[operationId]/complete", () => {
     expect(await response.json()).toEqual({ error: "Unauthorized" });
     expect(mocks.accountFindUnique).not.toHaveBeenCalled();
     expect(mocks.completeSyncOperation).not.toHaveBeenCalled();
+    expect(mocks.dispatchPushEffects).not.toHaveBeenCalled();
   });
 
   it("preserves missing server-secret behavior", async () => {
@@ -191,6 +231,7 @@ describe("POST /api/trade-sync/operations/[operationId]/complete", () => {
     expect(response.status).toBe(500);
     expect(await response.json()).toEqual({ error: "Trade sync is not configured" });
     expect(mocks.completeSyncOperation).not.toHaveBeenCalled();
+    expect(mocks.dispatchPushEffects).not.toHaveBeenCalled();
   });
 
   it("preserves account authorization failures and skips completion", async () => {
@@ -201,6 +242,7 @@ describe("POST /api/trade-sync/operations/[operationId]/complete", () => {
     expect(response.status).toBe(404);
     expect(await response.json()).toEqual({ error: "Trading account not found" });
     expect(mocks.completeSyncOperation).not.toHaveBeenCalled();
+    expect(mocks.dispatchPushEffects).not.toHaveBeenCalled();
   });
 
   it.each([
@@ -216,6 +258,38 @@ describe("POST /api/trade-sync/operations/[operationId]/complete", () => {
 
     expect(response.status).toBe(status);
     expect(await response.json()).toEqual({ error: safeMessage });
+    expect(mocks.dispatchPushEffects).not.toHaveBeenCalled();
+  });
+
+  it("keeps the exact HTTP 200 completion response when dispatch fails", async () => {
+    const consoleError = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    mocks.dispatchPushEffects.mockRejectedValue(
+      new Error("provider token and internal stack"),
+    );
+
+    const response = await POST(request(), context());
+    const responseBody = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(responseBody).toEqual({
+      operationId: "path-operation",
+      status: "COMPLETED",
+      totalCount: 3,
+      importedCount: 1,
+      updatedCount: 1,
+      skippedCount: 1,
+      failedCount: 0,
+      processedCount: 3,
+      completedAt: "2026-07-17T12:00:00.000Z",
+      durationMs: 60_000,
+      replayed: false,
+    });
+    expect(JSON.stringify(responseBody)).not.toContain("provider token");
+    expect(consoleError).toHaveBeenCalledWith(
+      "[trade-sync] push effect dispatch failed",
+    );
+    expect(consoleError.mock.calls.flat().join(" ")).not.toContain("provider token");
+    consoleError.mockRestore();
   });
 
   it("returns a generic safe HTTP 500 for unknown errors", async () => {
@@ -229,6 +303,7 @@ describe("POST /api/trade-sync/operations/[operationId]/complete", () => {
     expect(response.status).toBe(500);
     expect(responseBody).toEqual({ error: "Batch completion failed" });
     expect(JSON.stringify(responseBody)).not.toContain("credentials");
+    expect(mocks.dispatchPushEffects).not.toHaveBeenCalled();
     expect(mocks.sendPush).not.toHaveBeenCalled();
   });
 });
