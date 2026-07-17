@@ -836,7 +836,7 @@ function getOutcomeLabel(
 
 function getOutcomeClass(outcome: string | null) {
   // win was previously bg-accent/10 (cyan) here - every other page
-  // (Dashboard, Equity, Account Hub) treats a win outcome as green.
+  // Account performance views treat a win outcome as green.
   // Fixed to match; loss/be were already correct.
   if (outcome === "win") {
     return "bg-green-500/10 text-green-400";
