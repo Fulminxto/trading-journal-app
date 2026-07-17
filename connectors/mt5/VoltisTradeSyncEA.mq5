@@ -16,6 +16,9 @@ input int HISTORY_LOOKBACK_DAYS = 30;
 
 datetime lastCheckTime = 0;
 
+const int HTTP_MAX_ATTEMPTS = 3;
+const int HTTP_RETRY_DELAY_MS = 500;
+
 //+------------------------------------------------------------------+
 //| Expert initialization                                            |
 //+------------------------------------------------------------------+
@@ -25,7 +28,6 @@ int OnInit()
    Print("Sync enabled: ", ENABLE_SYNC);
    Print("Dry run: ", DRY_RUN);
    Print("Base URL: ", VOLTIS_BASE_URL);
-   Print("VOLTIS Account ID: ", VOLTIS_ACCOUNT_ID);
 
    return(INIT_SUCCEEDED);
 }
@@ -86,6 +88,7 @@ void CheckClosedTrades()
    }
 
    int totalDeals = HistoryDealsTotal();
+   ulong selectedDeals[];
 
    Print("VOLTIS: total deals found in history: ", totalDeals);
 
@@ -110,19 +113,81 @@ void CheckClosedTrades()
          continue;
       }
 
-      bool sent = HandleClosedDeal(dealTicket);
+      int selectedCount = ArraySize(selectedDeals);
+      ArrayResize(selectedDeals, selectedCount + 1);
+      selectedDeals[selectedCount] = dealTicket;
+   }
 
-      if(sent)
+   int totalCount = ArraySize(selectedDeals);
+   Print("VOLTIS: eligible closed trades collected: ", totalCount);
+
+   if(DRY_RUN)
+   {
+      for(int dryRunIndex = 0; dryRunIndex < totalCount; dryRunIndex++)
+      {
+         BuildTradePayloadForDeal(selectedDeals[dryRunIndex]);
+         MarkDealAsProcessed(selectedDeals[dryRunIndex]);
+      }
+
+      Print("VOLTIS DRY RUN: batch prepared but not sent.");
+      return;
+   }
+
+   string externalBatchId = GenerateExternalBatchId();
+   string operationId = "";
+
+   if(!StartSyncOperation(externalBatchId, totalCount, operationId))
+   {
+      Print("VOLTIS: batch start failed. No trades were sent.");
+      return;
+   }
+
+   int localItemFailures = 0;
+
+   for(int itemIndex = 0; itemIndex < totalCount; itemIndex++)
+   {
+      ulong dealTicket = selectedDeals[itemIndex];
+      string itemKey = "trade:" + IntegerToString((long)dealTicket);
+      string tradePayload = BuildTradePayloadForDeal(dealTicket);
+      string boundPayload = BindTradeToOperation(
+         tradePayload,
+         operationId,
+         itemKey
+      );
+      string itemResponse = "";
+      int itemStatusCode = 0;
+
+      bool itemSent = SendPostRequestWithRetry(
+         "/api/trade-sync/import",
+         boundPayload,
+         itemResponse,
+         itemStatusCode
+      );
+
+      if(itemSent)
       {
          MarkDealAsProcessed(dealTicket);
       }
+      else
+      {
+         localItemFailures++;
+         Print("VOLTIS: one trade item could not be confirmed; continuing batch.");
+      }
    }
+
+   if(!CompleteSyncOperation(operationId))
+   {
+      Print("VOLTIS: synchronization items were sent, but finalization was not confirmed.");
+      return;
+   }
+
+   Print("VOLTIS: batch synchronization finalized. Local item failures: ", localItemFailures);
 }
 
 //+------------------------------------------------------------------+
-//| Handle one closed deal                                           |
+//| Build one closed deal payload                                    |
 //+------------------------------------------------------------------+
-bool HandleClosedDeal(ulong dealTicket)
+string BuildTradePayloadForDeal(ulong dealTicket)
 {
    string symbol = HistoryDealGetString(dealTicket, DEAL_SYMBOL);
    double volume = HistoryDealGetDouble(dealTicket, DEAL_VOLUME);
@@ -141,7 +206,7 @@ bool HandleClosedDeal(ulong dealTicket)
 
    FindOpeningDealByPosition(positionId, openTime, openPrice);
 
-   string payload = BuildTradePayload(
+   return BuildTradePayload(
       dealTicket,
       positionId,
       symbol,
@@ -155,45 +220,23 @@ bool HandleClosedDeal(ulong dealTicket)
       commission,
       swap
    );
+}
 
-   Print("VOLTIS: closed deal prepared.");
-   Print("Deal ticket: ", dealTicket);
-   Print("Position ID: ", positionId);
-   Print("Symbol: ", symbol);
-   Print("Direction: ", direction);
-   Print("Volume: ", volume);
-   Print("Open price: ", openPrice);
-   Print("Close price: ", closePrice);
-   Print("Profit: ", profit);
-   Print("Commission: ", commission);
-   Print("Swap: ", swap);
-   Print("Open time: ", TimeToString(openTime, TIME_DATE | TIME_SECONDS));
-   Print("Close time: ", TimeToString(closeTime, TIME_DATE | TIME_SECONDS));
+//+------------------------------------------------------------------+
+//| Bind the legacy trade shape to a durable operation item          |
+//+------------------------------------------------------------------+
+string BindTradeToOperation(
+   string tradePayload,
+   string operationId,
+   string itemKey
+)
+{
+   string prefix =
+      "{"
+      "\"operationId\":\"" + EscapeJson(operationId) + "\","
+      "\"itemKey\":\"" + EscapeJson(itemKey) + "\",";
 
-   if(DRY_RUN)
-   {
-      Print("VOLTIS DRY RUN: payload prepared but not sent.");
-      Print(payload);
-      return true;
-   }
-
-   string response = "";
-
-   bool success = SendPostRequest(
-      "/api/trade-sync/import",
-      payload,
-      response
-   );
-
-   if(!success)
-   {
-      Print("VOLTIS: import failed for deal ticket: ", dealTicket);
-      return false;
-   }
-
-   Print("VOLTIS: import successful for deal ticket: ", dealTicket);
-
-   return true;
+   return prefix + StringSubstr(tradePayload, 1);
 }
 
 //+------------------------------------------------------------------+
@@ -290,6 +333,7 @@ bool FindOpeningDealByPosition(
 bool CheckVoltIsHealth()
 {
    string response = "";
+   int statusCode = 0;
 
    string jsonBody =
       "{"
@@ -297,10 +341,11 @@ bool CheckVoltIsHealth()
       "\"source\":\"mt5\""
       "}";
 
-   bool success = SendPostRequest(
+   bool success = SendPostRequestWithRetry(
       "/api/trade-sync/health",
       jsonBody,
-      response
+      response,
+      statusCode
    );
 
    if(!success)
@@ -314,14 +359,160 @@ bool CheckVoltIsHealth()
       return true;
    }
 
-   Print("VOLTIS health response was not OK: ", response);
+   Print("VOLTIS health response was not OK.");
+   return false;
+}
+
+//+------------------------------------------------------------------+
+//| Start one persistent synchronization operation                   |
+//+------------------------------------------------------------------+
+bool StartSyncOperation(
+   string externalBatchId,
+   int totalCount,
+   string &operationId
+)
+{
+   string payload =
+      "{"
+      "\"tradingAccountId\":\"" + EscapeJson(VOLTIS_ACCOUNT_ID) + "\","
+      "\"source\":\"mt5\","
+      "\"externalBatchId\":\"" + EscapeJson(externalBatchId) + "\","
+      "\"trigger\":\"automatic\","
+      "\"totalCount\":" + IntegerToString(totalCount) +
+      "}";
+   string response = "";
+   int statusCode = 0;
+
+   if(!SendPostRequestWithRetry(
+      "/api/trade-sync/operations/start",
+      payload,
+      response,
+      statusCode
+   ))
+   {
+      return false;
+   }
+
+   operationId = ExtractJsonString(response, "operationId");
+
+   if(StringLen(operationId) == 0)
+   {
+      Print("VOLTIS: batch start response was missing its operation identity.");
+      return false;
+   }
+
+   Print("VOLTIS: persistent synchronization batch started.");
+   return true;
+}
+
+//+------------------------------------------------------------------+
+//| Complete one persistent synchronization operation                |
+//+------------------------------------------------------------------+
+bool CompleteSyncOperation(string operationId)
+{
+   string payload =
+      "{"
+      "\"tradingAccountId\":\"" + EscapeJson(VOLTIS_ACCOUNT_ID) + "\","
+      "\"source\":\"mt5\""
+      "}";
+   string response = "";
+   int statusCode = 0;
+   string endpoint =
+      "/api/trade-sync/operations/" + operationId + "/complete";
+
+   if(!SendPostRequestWithRetry(
+      endpoint,
+      payload,
+      response,
+      statusCode
+   ))
+   {
+      return false;
+   }
+
+   string terminalStatus = ExtractJsonString(response, "status");
+   long importedCount = ExtractJsonInteger(response, "importedCount");
+   long updatedCount = ExtractJsonInteger(response, "updatedCount");
+   long skippedCount = ExtractJsonInteger(response, "skippedCount");
+   long failedCount = ExtractJsonInteger(response, "failedCount");
+   long processedCount = ExtractJsonInteger(response, "processedCount");
+   long totalCount = ExtractJsonInteger(response, "totalCount");
+   long durationMs = ExtractJsonInteger(response, "durationMs");
+   bool replayed = ExtractJsonBoolean(response, "replayed");
+
+   Print(
+      "VOLTIS: batch result status=", terminalStatus,
+      ", imported=", importedCount,
+      ", updated=", updatedCount,
+      ", skipped=", skippedCount,
+      ", failed=", failedCount,
+      ", processed=", processedCount,
+      ", total=", totalCount,
+      ", durationMs=", durationMs,
+      ", replayed=", replayed
+   );
+
+   return
+      terminalStatus == "COMPLETED" ||
+      terminalStatus == "PARTIAL" ||
+      terminalStatus == "FAILED";
+}
+
+//+------------------------------------------------------------------+
+//| Stable non-secret identifier for one scan execution              |
+//+------------------------------------------------------------------+
+string GenerateExternalBatchId()
+{
+   return StringFormat(
+      "mt5-%I64d-%u",
+      (long)TimeGMT(),
+      GetTickCount()
+   );
+}
+
+//+------------------------------------------------------------------+
+//| Bounded retry wrapper                                            |
+//+------------------------------------------------------------------+
+bool SendPostRequestWithRetry(
+   string endpoint,
+   string jsonBody,
+   string &response,
+   int &statusCode
+)
+{
+   for(int attempt = 1; attempt <= HTTP_MAX_ATTEMPTS; attempt++)
+   {
+      if(SendPostRequest(endpoint, jsonBody, response, statusCode))
+      {
+         return true;
+      }
+
+      bool retryable =
+         statusCode == -1 ||
+         statusCode == 409 ||
+         statusCode == 429 ||
+         statusCode >= 500;
+
+      if(!retryable || attempt == HTTP_MAX_ATTEMPTS)
+      {
+         break;
+      }
+
+      Sleep(HTTP_RETRY_DELAY_MS);
+   }
+
    return false;
 }
 
 //+------------------------------------------------------------------+
 //| Send HTTP POST to VOLTIS                                         |
 //+------------------------------------------------------------------+
-bool SendPostRequest(string endpoint, string jsonBody, string &response)
+bool SendPostRequest(
+   string endpoint,
+   string jsonBody,
+   string &response,
+   int &statusCode
+)
 {
    string url = VOLTIS_BASE_URL + endpoint;
 
@@ -342,7 +533,7 @@ bool SendPostRequest(string endpoint, string jsonBody, string &response)
 
    ResetLastError();
 
-   int statusCode = WebRequest(
+   statusCode = WebRequest(
       "POST",
       url,
       headers,
@@ -365,9 +556,77 @@ bool SendPostRequest(string endpoint, string jsonBody, string &response)
    response = CharArrayToString(result, 0, WHOLE_ARRAY, CP_UTF8);
 
    Print("VOLTIS response code: ", statusCode);
-   Print("VOLTIS response: ", response);
 
    return statusCode >= 200 && statusCode < 300;
+}
+
+//+------------------------------------------------------------------+
+//| Minimal safe response parsing                                    |
+//+------------------------------------------------------------------+
+string ExtractJsonString(string json, string key)
+{
+   string marker = "\"" + key + "\":\"";
+   int start = StringFind(json, marker);
+
+   if(start < 0)
+   {
+      return "";
+   }
+
+   start += StringLen(marker);
+   int finish = StringFind(json, "\"", start);
+
+   if(finish < 0)
+   {
+      return "";
+   }
+
+   return StringSubstr(json, start, finish - start);
+}
+
+long ExtractJsonInteger(string json, string key)
+{
+   string marker = "\"" + key + "\":";
+   int start = StringFind(json, marker);
+
+   if(start < 0)
+   {
+      return 0;
+   }
+
+   start += StringLen(marker);
+   int finish = start;
+
+   while(finish < StringLen(json))
+   {
+      ushort character = StringGetCharacter(json, finish);
+
+      if(
+         character != '-' &&
+         (character < '0' || character > '9')
+      )
+      {
+         break;
+      }
+
+      finish++;
+   }
+
+   return StringToInteger(StringSubstr(json, start, finish - start));
+}
+
+bool ExtractJsonBoolean(string json, string key)
+{
+   string marker = "\"" + key + "\":";
+   int start = StringFind(json, marker);
+
+   if(start < 0)
+   {
+      return false;
+   }
+
+   start += StringLen(marker);
+   return StringSubstr(json, start, 4) == "true";
 }
 
 //+------------------------------------------------------------------+
