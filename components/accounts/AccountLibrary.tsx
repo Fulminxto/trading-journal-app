@@ -38,8 +38,10 @@ export type AccountLibraryItem = {
   formattedMembersCount: string;
   hasMultipleMembers: boolean;
   isSharedType: boolean;
-  initialBalance: string;
-  pnl: string;
+  initialBalance: number;
+  formattedInitialBalance: string;
+  pnl: number;
+  formattedPnl: string;
   pnlValue: number;
   tradeCount: number;
   formattedTradeCount: string;
@@ -136,39 +138,18 @@ function getMembersHeading(labels: Labels) {
   return `${labels.members.charAt(0).toUpperCase()}${labels.members.slice(1)}`;
 }
 
-function parseFormattedAmount(value: string) {
-  const cleaned = value.replace(/[^\d,.-]/g, "");
-  if (!cleaned) return null;
-  const lastComma = cleaned.lastIndexOf(",");
-  const lastDot = cleaned.lastIndexOf(".");
-  const commaDecimals = lastComma >= 0 ? cleaned.length - lastComma - 1 : -1;
-  const dotDecimals = lastDot >= 0 ? cleaned.length - lastDot - 1 : -1;
-  const normalized = lastComma >= 0 && lastDot >= 0
-    ? lastComma > lastDot
-      ? cleaned.replace(/\./g, "").replace(",", ".")
-      : cleaned.replace(/,/g, "")
-    : lastComma >= 0
-      ? commaDecimals === 2 ? cleaned.replace(",", ".") : cleaned.replace(/,/g, "")
-      : lastDot >= 0 && dotDecimals === 3
-        ? cleaned.replace(/\./g, "")
-        : cleaned;
-  const parsed = Number(normalized);
-  return Number.isFinite(parsed) ? parsed : null;
-}
-
 type PnlPercentageBadgeData = {
   label: string;
   tone: "positive" | "negative" | "neutral";
   accessibleLabel: string;
 };
 
-function getPnlPercentageBadgeData({ pnl, initialBalance, tradesCount }: { pnl: number; initialBalance: string; tradesCount: number }): PnlPercentageBadgeData {
-  const initialBalanceValue = parseFormattedAmount(initialBalance);
-  if (!Number.isFinite(pnl) || initialBalanceValue === null || !Number.isFinite(initialBalanceValue) || initialBalanceValue <= 0) {
+export function getPnlPercentageBadgeData({ pnl, initialBalance, tradesCount }: { pnl: number; initialBalance: number; tradesCount: number }): PnlPercentageBadgeData {
+  if (!Number.isFinite(pnl) || !Number.isFinite(initialBalance) || initialBalance <= 0) {
     return { label: "--", tone: "neutral", accessibleLabel: "PnL percentage unavailable" };
   }
 
-  const percentage = (pnl / initialBalanceValue) * 100;
+  const percentage = (pnl / initialBalance) * 100;
   if (tradesCount === 0 || pnl === 0 || percentage === 0) {
     return { label: "0.00%", tone: "neutral", accessibleLabel: "PnL percentage: 0.00 percent" };
   }
@@ -176,6 +157,32 @@ function getPnlPercentageBadgeData({ pnl, initialBalance, tradesCount }: { pnl: 
     return { label: `+${percentage.toFixed(2)}%`, tone: "positive", accessibleLabel: `PnL percentage: positive ${percentage.toFixed(2)} percent` };
   }
   return { label: `${percentage.toFixed(2)}%`, tone: "negative", accessibleLabel: `PnL percentage: negative ${Math.abs(percentage).toFixed(2)} percent` };
+}
+
+export function sortAccountLibraryItems<T extends Pick<AccountLibraryItem, "id" | "name">>(accounts: T[]) {
+  return [...accounts].sort((left, right) => {
+    const nameOrder = left.name.localeCompare(right.name, undefined, { sensitivity: "base" });
+    return nameOrder !== 0 ? nameOrder : left.id.localeCompare(right.id);
+  });
+}
+
+export function getAccountLibraryPnlAggregate(
+  accounts: Array<Pick<AccountLibraryItem, "currency" | "pnl">>,
+) {
+  if (accounts.length === 0) {
+    return { kind: "empty" as const, pnl: 0, currency: null };
+  }
+
+  const currencies = new Set(accounts.map((account) => account.currency));
+  if (currencies.size !== 1) {
+    return { kind: "mixed" as const, pnl: null, currency: null };
+  }
+
+  return {
+    kind: "single" as const,
+    pnl: accounts.reduce((sum, account) => sum + account.pnl, 0),
+    currency: accounts[0].currency,
+  };
 }
 
 function PnlPercentageBadge({ data }: { data: PnlPercentageBadgeData }) {
@@ -202,12 +209,12 @@ function GridAccountCard({ account, labels }: { account: AccountLibraryItem; lab
           </div>
         </div>
         <div className="mt-4 flex min-w-0 items-end justify-between gap-4">
-          <div className="min-w-0"><p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{labels.pnl}</p><p className={`mt-0.5 truncate text-xl font-bold tabular-nums ${getPnlTone(account.pnlValue)}`}>{account.pnl}</p></div>
+          <div className="min-w-0"><p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{labels.pnl}</p><p className={`mt-0.5 truncate text-xl font-bold tabular-nums ${getPnlTone(account.pnlValue)}`}>{account.formattedPnl}</p></div>
           <PnlPercentageBadge data={pnlPercentageBadge} />
         </div>
         <div className="my-4 border-t border-slate-900/80" />
         <div className="grid grid-cols-2 gap-x-5 gap-y-3">
-          <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><TrendingUp size={12} aria-hidden="true" />{labels.initialBalance}</p><p className="mt-0.5 text-sm font-semibold tabular-nums text-slate-300">{account.initialBalance}</p></div>
+          <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><TrendingUp size={12} aria-hidden="true" />{labels.initialBalance}</p><p className="mt-0.5 text-sm font-semibold tabular-nums text-slate-300">{account.formattedInitialBalance}</p></div>
           <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><Activity size={12} aria-hidden="true" />{labels.trades}</p><p className="mt-0.5 text-sm font-semibold tabular-nums text-slate-300">{account.formattedTradeCount}</p></div>
           <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><Shield size={12} aria-hidden="true" />{labels.winRate}</p><p className={`mt-0.5 text-sm font-semibold ${getWinRateTone(account.winRateValue)}`}>{account.winRate ?? labels.notMeasured}</p></div>
           <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><Users size={12} aria-hidden="true" />{getMembersHeading(labels)}</p><p className="mt-0.5 text-sm font-semibold text-slate-300">{getMemberCountLabel(account, labels)}</p></div>
@@ -239,11 +246,11 @@ function FocusCoverCard({ account, labels, active, direction }: { account: Accou
         </div>
         <div className={`mt-4 rounded-xl border border-slate-800/40 bg-slate-950/40 p-4 ${active ? "" : "max-w-[82%]"}`}>
           <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{labels.pnl}</p>
-          <div className="mt-1 flex items-end justify-between gap-3"><p className={`text-3xl font-black leading-tight ${getPnlTone(account.pnlValue)}`}>{account.pnl}</p>{active && <PnlPercentageBadge data={pnlPercentageBadge} />}</div>
+          <div className="mt-1 flex items-end justify-between gap-3"><p className={`text-3xl font-black leading-tight ${getPnlTone(account.pnlValue)}`}>{account.formattedPnl}</p>{active && <PnlPercentageBadge data={pnlPercentageBadge} />}</div>
         </div>
         {active && <>
           <div className="mt-4 grid grid-cols-2 gap-x-5 gap-y-4">
-            <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><TrendingUp size={12} aria-hidden="true" />{labels.initialBalance}</p><p className="mt-0.5 text-sm font-semibold text-slate-200">{account.initialBalance}</p></div>
+            <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><TrendingUp size={12} aria-hidden="true" />{labels.initialBalance}</p><p className="mt-0.5 text-sm font-semibold text-slate-200">{account.formattedInitialBalance}</p></div>
             <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><Activity size={12} aria-hidden="true" />{labels.trades}</p><p className="mt-0.5 text-sm font-semibold text-slate-200">{account.formattedTradeCount}</p></div>
             <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><Shield size={12} aria-hidden="true" />{labels.winRate}</p><p className={`mt-0.5 text-sm font-semibold ${getWinRateTone(account.winRateValue)}`}>{account.winRate ?? labels.notMeasured}</p></div>
             <div><p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500"><Users size={12} aria-hidden="true" />{getMembersHeading(labels)}</p><p className="mt-0.5 text-sm font-semibold text-slate-200">{getMemberCountLabel(account, labels)}</p></div>

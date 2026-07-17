@@ -2,7 +2,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowRight, Settings } from "lucide-react";
 
-import AccountLibrary, { type AccountLibraryItem } from "@/components/accounts/AccountLibrary";
+import AccountLibrary, {
+  getAccountLibraryPnlAggregate,
+  sortAccountLibraryItems,
+  type AccountLibraryItem,
+} from "@/components/accounts/AccountLibrary";
 import Card from "@/components/ui/Card";
 import SignatureEdge from "@/components/ui/SignatureEdge";
 import { auth } from "@/lib/auth";
@@ -43,12 +47,7 @@ export default async function AccountsPage() {
   const activeMemberships = memberships.filter(({ tradingAccount }) => tradingAccount.status === "ACTIVE");
   const archivedCount = memberships.filter(({ tradingAccount }) => tradingAccount.status === "ARCHIVED").length;
   const totalTrades = activeMemberships.reduce((sum, { tradingAccount }) => sum + tradingAccount.trades.length, 0);
-  const totalPnl = activeMemberships.reduce(
-    (sum, { tradingAccount }) => sum + tradingAccount.trades.reduce((tradeSum, trade) => tradeSum + (trade.resultUsd || 0), 0),
-    0
-  );
-
-  const libraryAccounts: AccountLibraryItem[] = activeMemberships.map((membership) => {
+  const libraryAccounts = sortAccountLibraryItems<AccountLibraryItem>(activeMemberships.map((membership) => {
     const account = membership.tradingAccount;
     const accountPnl = account.trades.reduce((sum, trade) => sum + (trade.resultUsd || 0), 0);
     const wins = account.trades.filter((trade) => trade.outcome === "win").length;
@@ -64,8 +63,10 @@ export default async function AccountsPage() {
       formattedMembersCount: formatNumberByLanguage(account.members.length, language),
       hasMultipleMembers: account.members.length > 1,
       isSharedType: account.type === "SHARED",
-      initialBalance: formatCurrencyByLanguage(account.initialBalance, account.currency, language),
-      pnl: formatCurrencyByLanguage(accountPnl, account.currency, language),
+      initialBalance: account.initialBalance,
+      formattedInitialBalance: formatCurrencyByLanguage(account.initialBalance, account.currency, language),
+      pnl: accountPnl,
+      formattedPnl: formatCurrencyByLanguage(accountPnl, account.currency, language),
       pnlValue: accountPnl,
       tradeCount: account.trades.length,
       formattedTradeCount: formatNumberByLanguage(account.trades.length, language),
@@ -86,9 +87,15 @@ export default async function AccountsPage() {
         currentUser.role === "ADMIN" ||
         (account.createdById === currentUser.id && currentUser.canDeleteOwnAccounts),
     };
-  });
+  }));
 
-  const operatingSummary = `${formatNumberByLanguage(activeMemberships.length, language)} active ${activeMemberships.length === 1 ? "account" : "accounts"} · ${formatNumberByLanguage(totalTrades, language)} ${totalTrades === 1 ? "trade" : "trades"} · ${formatCurrencyByLanguage(totalPnl, defaultCurrency, language)} total PnL`;
+  const pnlAggregate = getAccountLibraryPnlAggregate(libraryAccounts);
+  const aggregatePnlLabel = pnlAggregate.kind === "single"
+    ? `${formatCurrencyByLanguage(pnlAggregate.pnl, pnlAggregate.currency, language)} total PnL`
+    : pnlAggregate.kind === "mixed"
+      ? "Multiple currencies"
+      : `${formatCurrencyByLanguage(0, defaultCurrency, language)} total PnL`;
+  const operatingSummary = `${formatNumberByLanguage(activeMemberships.length, language)} active ${activeMemberships.length === 1 ? "account" : "accounts"} · ${formatNumberByLanguage(totalTrades, language)} ${totalTrades === 1 ? "trade" : "trades"} · ${aggregatePnlLabel}`;
   const primaryHref = canCreateAccount ? "/accounts/create" : "/accounts/manage";
   const primaryLabel = canCreateAccount ? "Create Account" : "Manage My Accounts";
 
@@ -102,6 +109,7 @@ export default async function AccountsPage() {
             <h1 className="text-hero mt-3">Welcome back, {currentUser.name || currentUser.username}</h1>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-muted">Choose the trading workspace you want to continue working on.</p>
             <p className="mt-4 inline-flex rounded-pill border-[0.5px] border-flash/[0.1] bg-surface-2/70 px-3 py-1.5 text-micro uppercase tracking-label text-muted">{operatingSummary}</p>
+            {pnlAggregate.kind === "mixed" && <p className="mt-2 text-xs text-muted-faint">View totals on individual accounts</p>}
           </div>
           <div className="flex flex-wrap gap-3">
             <Link href={primaryHref} style={{ background: CTA_GRADIENT }} className="inline-flex items-center gap-2 rounded-inner px-4 py-3 text-sm font-semibold text-white outline-none transition-shadow hover:shadow-[0_0_30px_color-mix(in_srgb,var(--color-accent)_18%,transparent)] focus-visible:ring-2 focus-visible:ring-accent-bright/60">{primaryLabel}</Link>
