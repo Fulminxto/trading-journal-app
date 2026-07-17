@@ -19,12 +19,34 @@ type CreateNotificationParams = {
   link?: string;
 };
 
-async function touchUserActivity(userId?: string | null) {
+type ActivityPersistenceClient = {
+  activityLog: Pick<Prisma.TransactionClient["activityLog"], "create">;
+  user: Pick<Prisma.TransactionClient["user"], "update">;
+};
+
+type AccountNotificationPersistenceClient = {
+  accountMember: Pick<Prisma.TransactionClient["accountMember"], "findMany">;
+  notification: Pick<Prisma.TransactionClient["notification"], "createManyAndReturn">;
+};
+
+type NotifyAccountMembersParams = {
+  accountId: string;
+  actorId?: string | null;
+  type: string;
+  title: string;
+  message: string;
+  link?: string;
+};
+
+async function touchUserActivity(
+  db: ActivityPersistenceClient,
+  userId?: string | null
+) {
   if (!userId) {
     return;
   }
 
-  await prisma.user.update({
+  await db.user.update({
     where: {
       id: userId,
     },
@@ -35,15 +57,18 @@ async function touchUserActivity(userId?: string | null) {
   });
 }
 
-export async function logActivity({
+export async function persistActivityLog(
+  db: ActivityPersistenceClient,
+  {
   userId,
   accountId,
   type,
   title,
   description,
   metadata,
-}: LogActivityParams) {
-  await prisma.activityLog.create({
+}: LogActivityParams
+) {
+  await db.activityLog.create({
     data: {
       userId: userId || null,
       accountId: accountId || null,
@@ -54,7 +79,11 @@ export async function logActivity({
     },
   });
 
-  await touchUserActivity(userId);
+  await touchUserActivity(db, userId);
+}
+
+export async function logActivity(params: LogActivityParams) {
+  await persistActivityLog(prisma, params);
 }
 
 export async function createNotification({
@@ -96,7 +125,8 @@ function getNotificationCategory(
 ): "trade" | "account" | "platform" | "support" | "always" {
   if (
     ["TRADE_CREATED", "TRADE_UPDATED", "TRADE_DELETED",
-     "TRADE_IMPORTED", "TRADE_SYNC_UPDATED"].includes(type)
+     "TRADE_IMPORTED", "TRADE_SYNC_UPDATED",
+     "trade_sync_summary", "trade_sync_warning"].includes(type)
   ) return "trade";
 
   if (
@@ -115,22 +145,18 @@ function getNotificationCategory(
   return "always";
 }
 
-export async function notifyAccountMembers({
-  accountId,
-  actorId,
-  type,
-  title,
-  message,
-  link,
-}: {
-  accountId: string;
-  actorId?: string | null;
-  type: string;
-  title: string;
-  message: string;
-  link?: string;
-}) {
-  const members = await prisma.accountMember.findMany({
+export async function persistAccountMemberNotifications(
+  db: AccountNotificationPersistenceClient,
+  {
+    accountId,
+    actorId,
+    type,
+    title,
+    message,
+    link,
+  }: NotifyAccountMembersParams
+) {
+  const members = await db.accountMember.findMany({
     where: {
       tradingAccountId: accountId,
       userId: actorId
@@ -152,7 +178,7 @@ export async function notifyAccountMembers({
     },
   });
 
-  if (members.length === 0) return;
+  if (members.length === 0) return [];
 
   const category = getNotificationCategory(type);
   const eligible = members.filter((m) => {
@@ -164,9 +190,9 @@ export async function notifyAccountMembers({
     return true;
   });
 
-  if (eligible.length === 0) return;
+  if (eligible.length === 0) return [];
 
-  await prisma.notification.createMany({
+  const notifications = await db.notification.createManyAndReturn({
     data: eligible.map((m) => ({
       userId: m.userId,
       type,
@@ -174,21 +200,48 @@ export async function notifyAccountMembers({
       message,
       link: link || null,
     })),
+    select: {
+      id: true,
+      userId: true,
+    },
   });
 
+  const pushEnabledByUserId = new Map(
+    eligible.map((member) => [
+      member.userId,
+      member.user.pushNotificationsEnabled,
+    ])
+  );
+
+  return notifications.map((notification) => ({
+    notificationId: notification.id,
+    userId: notification.userId,
+    pushNotificationsEnabled:
+      pushEnabledByUserId.get(notification.userId) ?? false,
+  }));
+}
+
+export async function notifyAccountMembers(
+  params: NotifyAccountMembersParams
+) {
+  const persisted = await persistAccountMemberNotifications(
+    prisma,
+    params
+  );
+
   // Push notifications — non-blocking, never fail the in-app notification
-  const pushTargets = eligible.filter(
-    (m) => m.user.pushNotificationsEnabled
+  const pushTargets = persisted.filter(
+    (notification) => notification.pushNotificationsEnabled
   );
   await Promise.allSettled(
-    pushTargets.map((m) =>
-      sendPushToUser(m.userId, {
-        title,
-        body: message,
-        url: link,
+    pushTargets.map((notification) =>
+      sendPushToUser(notification.userId, {
+        title: params.title,
+        body: params.message,
+        url: params.link,
       }).catch((err) =>
         console.error(
-          `[push] notifyAccountMembers userId=${m.userId}:`,
+          `[push] notifyAccountMembers userId=${notification.userId}:`,
           err
         )
       )
