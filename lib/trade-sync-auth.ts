@@ -1,4 +1,8 @@
 import { prisma } from "@/lib/prisma";
+import {
+    ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE,
+    isArchivedAccount,
+} from "@/lib/account-write-guard";
 
 export type TradeSyncSource = "mt5" | "broker";
 
@@ -82,13 +86,12 @@ export async function authorizeTradeSyncAccount({
         };
     }
 
-    if (account.status === "ARCHIVED") {
+    if (isArchivedAccount(account.status)) {
         return {
             allowed: false as const,
             reason: "archived" as const,
-            status: 403,
-            error:
-                "Trade sync is disabled for archived accounts",
+            status: 409,
+            error: ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE,
             account,
         };
     }

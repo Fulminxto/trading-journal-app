@@ -81,15 +81,10 @@ describe("POST /api/trade-sync/health authorization", () => {
 
     const response = await POST(request());
 
-    expect(response.status).toBe(403);
+    expect(response.status).toBe(409);
     expect(await response.json()).toEqual({
       ok: false,
-      error: "Trade sync is disabled for archived accounts",
-      account: {
-        id: "account-1",
-        name: "Account",
-        status: "ARCHIVED",
-      },
+      error: "This account is archived and read-only.",
     });
   });
 

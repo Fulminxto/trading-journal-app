@@ -305,10 +305,6 @@ export default async function RulesPage({
     redirect(`/accounts/${accountId}/dashboard`);
   }
 
-  if (membership.tradingAccount.status === "ARCHIVED") {
-    redirect(`/accounts/${accountId}/dashboard`);
-  }
-
   const currentUser = await prisma.user.update({
     where: {
       id: session.user.id,
@@ -324,6 +320,7 @@ export default async function RulesPage({
 
   const language = normalizeAppLanguage(currentUser.appLanguage);
   const account = membership.tradingAccount;
+  const isArchived = account.status === "ARCHIVED";
   const currency = account.currency || "USD";
   const currencySymbol = getCurrencySymbol(currency, language);
 
@@ -565,7 +562,7 @@ export default async function RulesPage({
               contract and shows only whether the current month is respecting
               that contract.
             </p>
-            {configuredStandardsCount > 0 && configuredStandardsCount < 4 && (
+            {!isArchived && configuredStandardsCount > 0 && configuredStandardsCount < 4 && (
               <RulesStandardsLink className="mt-5 inline-flex min-h-11 items-center justify-center rounded-inner border-[0.5px] border-accent-bright/30 bg-accent-bright/[0.08] px-4 py-2.5 text-sm font-semibold text-accent-bright transition-colors duration-fast hover:bg-accent-bright/[0.14] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/50" />
             )}
           </div>
@@ -606,7 +603,7 @@ export default async function RulesPage({
           <p className="mt-3 max-w-3xl text-sm leading-6 text-muted">
             Set a monthly profit target, win-rate goal, drawdown boundary and daily trade cap.
           </p>
-          <RulesStandardsLink className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-inner border-[0.5px] border-accent-bright/30 bg-accent-bright/[0.08] px-4 py-2.5 text-sm font-semibold text-accent-bright transition-colors duration-fast hover:bg-accent-bright/[0.14] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/50 sm:w-auto" />
+          {!isArchived && <RulesStandardsLink className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-inner border-[0.5px] border-accent-bright/30 bg-accent-bright/[0.08] px-4 py-2.5 text-sm font-semibold text-accent-bright transition-colors duration-fast hover:bg-accent-bright/[0.14] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/50 sm:w-auto" />}
         </Card>
       ) : (
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -617,7 +614,7 @@ export default async function RulesPage({
       )}
 
       <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-        <Card id="set-the-rulebook" className="scroll-mt-6">
+        {!isArchived && <Card id="set-the-rulebook" className="scroll-mt-6">
           <SectionHeader eyebrow="Execution standards" title="Set the rulebook">
             <StatusPill tone="info">Current month</StatusPill>
           </SectionHeader>
@@ -665,7 +662,7 @@ export default async function RulesPage({
               Save standards
             </button>
           </form>
-        </Card>
+        </Card>}
 
         <Card>
           <SectionHeader eyebrow="Operating charter" title="Discipline rules">

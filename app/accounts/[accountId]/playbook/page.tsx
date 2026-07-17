@@ -304,13 +304,10 @@ export default async function PlaybookPage({
   }
 
   const account = membership.tradingAccount;
-  if (account.status === "ARCHIVED") {
-    redirect(`/accounts/${accountId}`);
-  }
-
   const language = normalizeAppLanguage(membership.user.appLanguage);
   const currency = account.currency ?? "USD";
-  const canManageStrategies = membership.canCreateTrades;
+  const canManageStrategies =
+    account.status !== "ARCHIVED" && membership.canCreateTrades;
 
   const [strategies, linkedTrades, totalTrades] = await Promise.all([
     prisma.strategy.findMany({

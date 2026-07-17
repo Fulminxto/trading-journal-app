@@ -246,6 +246,21 @@ describe("POST /api/trade-sync/operations/start", () => {
     expect(mocks.startSyncOperation).not.toHaveBeenCalled();
   });
 
+  it("rejects archived accounts before creating an operation or side effect", async () => {
+    mocks.accountFindUnique.mockResolvedValue({ ...account, status: "ARCHIVED" });
+
+    const response = await POST(request());
+
+    expect(response.status).toBe(409);
+    expect(await response.json()).toEqual({
+      error: "This account is archived and read-only.",
+    });
+    expect(mocks.startSyncOperation).not.toHaveBeenCalled();
+    expect(mocks.logActivity).not.toHaveBeenCalled();
+    expect(mocks.notifyAccountMembers).not.toHaveBeenCalled();
+    expect(mocks.accountUpdate).not.toHaveBeenCalled();
+  });
+
   it.each([
     {},
     { ...body, tradingAccountId: " " },

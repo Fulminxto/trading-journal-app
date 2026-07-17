@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { assertAccountWritable } from "@/lib/account-write-guard";
 import { logActivity } from "@/lib/activity";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
@@ -790,6 +791,8 @@ export async function addMemberToAccount(
     return;
   }
 
+  assertAccountWritable(account.status);
+
   const user = await prisma.user.findUnique({
     where: {
       username,
@@ -871,6 +874,8 @@ export async function updateMemberRole(
     return;
   }
 
+  assertAccountWritable(membership.tradingAccount.status);
+
   const isDowngradingManager =
     membership.role === "MANAGER" &&
     nextRole !== "MANAGER";
@@ -946,6 +951,8 @@ export async function updateMemberPermissions(
   if (!membership) {
     return;
   }
+
+  assertAccountWritable(membership.tradingAccount.status);
 
   const before =
     getPermissionSnapshot(membership);
@@ -1061,6 +1068,8 @@ export async function removeMemberFromAccount(
   if (!membership) {
     return;
   }
+
+  assertAccountWritable(membership.tradingAccount.status);
 
   if (membership.role === "MANAGER") {
     const managersCount =

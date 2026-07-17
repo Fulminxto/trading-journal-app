@@ -14,6 +14,7 @@ import {
   canManageRules,
   getAccountMembershipWithAccount,
 } from "@/lib/permissions";
+import { assertAccountWritable } from "@/lib/account-write-guard";
 
 function getString(
   formData: FormData,
@@ -104,15 +105,6 @@ async function getRulesAccess(
 
   if (!membership) {
     redirect("/accounts");
-  }
-
-  if (
-    membership.tradingAccount.status ===
-    "ARCHIVED"
-  ) {
-    redirect(
-      `/accounts/${accountId}/rules`
-    );
   }
 
   if (!canManageRules(membership)) {
@@ -251,6 +243,8 @@ export async function saveTradingGoals(
       });
     }
   }
+
+  assertAccountWritable(membership.tradingAccount.status);
 
   revalidatePath(
     `/accounts/${accountId}/rules`

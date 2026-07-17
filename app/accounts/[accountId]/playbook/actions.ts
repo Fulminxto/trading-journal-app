@@ -5,6 +5,10 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import {
+  ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE,
+  isArchivedAccount,
+} from "@/lib/account-write-guard";
 
 async function getMembership(accountId: string) {
   const session = await auth();
@@ -12,6 +16,7 @@ async function getMembership(accountId: string) {
 
   const membership = await prisma.accountMember.findFirst({
     where: { userId: session.user.id, tradingAccountId: accountId },
+    include: { tradingAccount: { select: { status: true } } },
   });
 
   if (!membership) redirect("/accounts");
@@ -26,6 +31,9 @@ async function createStrategyRecord(
 
   if (!membership.canCreateTrades) {
     return { error: "Non hai il permesso di creare strategie." };
+  }
+  if (isArchivedAccount(membership.tradingAccount.status)) {
+    return { error: ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE };
   }
 
   const name = formData.get("name");
@@ -65,6 +73,9 @@ async function updateStrategyRecord(
 
   if (!membership.canCreateTrades) {
     return { error: "Non hai il permesso di modificare strategie." };
+  }
+  if (isArchivedAccount(membership.tradingAccount.status)) {
+    return { error: ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE };
   }
 
   const existing = await prisma.strategy.findFirst({
@@ -125,6 +136,9 @@ export async function deleteStrategy(
 
   if (!membership.canCreateTrades) {
     return { error: "Non hai il permesso di eliminare strategie." };
+  }
+  if (isArchivedAccount(membership.tradingAccount.status)) {
+    return { error: ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE };
   }
 
   const existing = await prisma.strategy.findFirst({

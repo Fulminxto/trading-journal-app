@@ -79,13 +79,7 @@ export async function POST(request: NextRequest) {
     if (!accessCheck.allowed) {
         const account = accessCheck.account;
         const accountContext = account
-            ? accessCheck.reason === "archived"
-                ? {
-                    id: account.id,
-                    name: account.name,
-                    status: account.status,
-                }
-                : accessCheck.reason === "manual" ||
+            ? accessCheck.reason === "manual" ||
                     accessCheck.reason ===
                         "source_not_allowed"
                     ? {

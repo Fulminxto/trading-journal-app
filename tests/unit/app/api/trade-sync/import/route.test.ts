@@ -144,6 +144,36 @@ describe("POST /api/trade-sync/import legacy response contract", () => {
     expect(mocks.importSyncedTrade).not.toHaveBeenCalled();
   });
 
+  it("rejects archived legacy and operation-bound imports before persistence", async () => {
+    mocks.accountFindUnique.mockResolvedValue({
+      id: "account-1",
+      name: "Archived",
+      status: "ARCHIVED",
+      integrationMode: "mt5",
+      autoSyncEnabled: true,
+      mt5Enabled: true,
+      brokerSyncEnabled: false,
+      syncStatus: "connected",
+      lastSyncedAt: null,
+    });
+
+    for (const body of [
+      payload,
+      { ...payload, operationId: "operation-1", itemKey: "item-1" },
+    ]) {
+      const response = await POST(request(body));
+      expect(response.status).toBe(409);
+      expect(await response.json()).toEqual({
+        error: "This account is archived and read-only.",
+      });
+    }
+
+    expect(mocks.importSyncedTrade).not.toHaveBeenCalled();
+    expect(mocks.processSyncOperationItem).not.toHaveBeenCalled();
+    expect(mocks.accountUpdateMany).not.toHaveBeenCalled();
+    expect(mocks.logActivity).not.toHaveBeenCalled();
+  });
+
   it("requires operationId and itemKey together", async () => {
     const response = await POST(
       request({ ...payload, operationId: "operation-1" }),

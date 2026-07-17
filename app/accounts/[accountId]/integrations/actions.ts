@@ -10,6 +10,7 @@ import {
     getChangedActivityFields,
     hasMeaningfulChanges,
 } from "@/lib/activity-policy";
+import { assertAccountWritable } from "@/lib/account-write-guard";
 
 const ALLOWED_INTEGRATION_MODES = [
     "manual",
@@ -106,14 +107,7 @@ async function getIntegrationAccess(
         );
     }
 
-    if (
-        membership.tradingAccount.status ===
-        "ARCHIVED"
-    ) {
-        redirect(
-            `/accounts/${accountId}/dashboard`
-        );
-    }
+    assertAccountWritable(membership.tradingAccount.status);
 
     return membership;
 }

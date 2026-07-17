@@ -5,6 +5,11 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { logActivity } from "@/lib/activity";
+import {
+  ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE,
+  assertAccountWritable,
+  isArchivedAccount,
+} from "@/lib/account-write-guard";
 
 function getString(
   formData: FormData,
@@ -118,20 +123,13 @@ async function getAccess(accountId: string) {
     redirect("/accounts");
   }
 
-  if (
-    membership.tradingAccount.status ===
-    "ARCHIVED"
-  ) {
-    redirect(
-      `/accounts/${accountId}/sessions`
-    );
-  }
-
   if (membership.role === "VIEWER") {
     redirect(
       `/accounts/${accountId}/sessions`
     );
   }
+
+  assertAccountWritable(membership.tradingAccount.status);
 
   return membership;
 }
@@ -285,12 +283,12 @@ export async function updateTradingSessionReview(
     },
   });
 
-  if (
-    !membership ||
-    membership.role === "VIEWER" ||
-    membership.tradingAccount.status === "ARCHIVED"
-  ) {
+  if (!membership || membership.role === "VIEWER") {
     return { success: false, error: "You do not have permission to update this review." };
+  }
+
+  if (isArchivedAccount(membership.tradingAccount.status)) {
+    return { success: false, error: ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE };
   }
 
   const tradingSession = await prisma.tradingSession.findFirst({

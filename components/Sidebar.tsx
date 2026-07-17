@@ -46,6 +46,7 @@ import { isManager } from "@/lib/permissions";
 
 type AccountPermissions = {
   role: string;
+  accountStatus: string;
 
   canCreateTrades: boolean;
   canEditTrades: boolean;
@@ -506,6 +507,14 @@ const baseLinks: AccountLink[] = [
   },
 ];
 
+export function isAccountDestinationVisibleForStatus(
+  path: string,
+  accountStatus: string
+): boolean {
+  return accountStatus !== "ARCHIVED" ||
+    !["members", "integrations", "copilot"].includes(path);
+}
+
 function getAccountLinkLabel(
   path: string,
   fallback: string,
@@ -704,6 +713,12 @@ export default function Sidebar({
       const visibleAccountLinks =
         accountPermissions
           ? baseLinks.filter((link) => {
+            if (!isAccountDestinationVisibleForStatus(
+              link.path,
+              accountPermissions.accountStatus
+            )) {
+              return false;
+            }
             if (!link.canShow) {
               return true;
             }

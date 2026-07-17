@@ -5,6 +5,7 @@ import { useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import Topbar from "@/components/Topbar";
 import OnboardingModal from "@/components/OnboardingModal";
+import ArchivedAccountBanner from "@/components/ArchivedAccountBanner";
 
 type AppShellUser = {
   name: string | null;
@@ -38,6 +39,7 @@ export default function AppShell({
         <Topbar user={user} onOpenSidebar={() => setSidebarOpen(true)} />
 
         <div className="p-4 pt-[calc(env(safe-area-inset-top)+5rem)] sm:p-6 sm:pt-[calc(env(safe-area-inset-top)+5.5rem)] lg:p-8 lg:pt-8">
+          <ArchivedAccountBanner appLanguage={user?.appLanguage} />
           {children}
 
           <footer className="mt-16 hidden border-t border-white/5 pt-6 text-center print:hidden">

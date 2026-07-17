@@ -401,6 +401,10 @@ export async function archiveAccount(formData: FormData) {
     return;
   }
 
+  if (context.account.status === "ARCHIVED") {
+    return;
+  }
+
   await prisma.tradingAccount.update({
     where: {
       id: accountId,
@@ -463,6 +467,10 @@ export async function restoreAccount(formData: FormData) {
     return;
   }
 
+  if (context.account.status !== "ARCHIVED") {
+    return;
+  }
+
   await prisma.tradingAccount.update({
     where: {
       id: accountId,
@@ -522,6 +530,10 @@ export async function deleteAccount(formData: FormData) {
     );
 
   if (!canDelete) {
+    return;
+  }
+
+  if (context.account.status === "ARCHIVED") {
     return;
   }
 

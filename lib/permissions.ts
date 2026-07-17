@@ -17,6 +17,10 @@ export type AccountPermissionFlags = {
   canManageAccount: boolean;
 };
 
+export type AccountNavigationPermissions = AccountPermissionFlags & {
+  accountStatus: string;
+};
+
 const PERMISSION_SELECT = {
   role: true,
 
@@ -54,13 +58,24 @@ export async function getAccountPermissions(
   userId: string,
   accountId: string
 ) {
-  return prisma.accountMember.findFirst({
+  const membership = await prisma.accountMember.findFirst({
     where: {
       userId,
       tradingAccountId: accountId,
     },
-    select: PERMISSION_SELECT,
+    select: {
+      ...PERMISSION_SELECT,
+      tradingAccount: { select: { status: true } },
+    },
   });
+
+  if (!membership) return null;
+
+  const { tradingAccount, ...permissions } = membership;
+  return {
+    ...permissions,
+    accountStatus: tradingAccount.status,
+  };
 }
 
 export async function getAccountMembershipWithAccount(

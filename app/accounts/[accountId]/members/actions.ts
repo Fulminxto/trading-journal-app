@@ -11,6 +11,10 @@ import {
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import type { MemberRole } from "@prisma/client";
+import {
+  ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE,
+  isArchivedAccount,
+} from "@/lib/account-write-guard";
 
 // ─── Helper ───────────────────────────────────────────────────────────────────
 
@@ -39,6 +43,9 @@ export async function inviteMember(
 
   if (!membership.canManageMembers) {
     return { error: "Non hai il permesso di invitare membri." };
+  }
+  if (isArchivedAccount(membership.tradingAccount.status)) {
+    return { error: ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE };
   }
 
   const usernameRaw = formData.get("username");
@@ -129,6 +136,9 @@ export async function cancelInvite(
   if (!membership.canManageMembers) {
     return { error: "Non hai il permesso di annullare inviti." };
   }
+  if (isArchivedAccount(membership.tradingAccount.status)) {
+    return { error: ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE };
+  }
 
   const invite = await prisma.accountInvite.findFirst({
     where: { id: inviteId, tradingAccountId: accountId },
@@ -191,9 +201,12 @@ export async function acceptInvite(
 
   const invite = await prisma.accountInvite.findFirst({
     where: { invitedUserId: userId, tradingAccountId: accountId },
-    include: { invitedBy: { select: { id: true, appLanguage: true } }, tradingAccount: { select: { name: true } } },
+    include: { invitedBy: { select: { id: true, appLanguage: true } }, tradingAccount: { select: { name: true, status: true } } },
   });
   if (!invite) return { error: "Nessun invito trovato per questo account." };
+  if (isArchivedAccount(invite.tradingAccount.status)) {
+    return { error: ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE };
+  }
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -245,9 +258,12 @@ export async function declineInvite(
 
   const invite = await prisma.accountInvite.findFirst({
     where: { invitedUserId: userId, tradingAccountId: accountId },
-    include: { invitedBy: { select: { id: true, appLanguage: true } }, tradingAccount: { select: { name: true } } },
+    include: { invitedBy: { select: { id: true, appLanguage: true } }, tradingAccount: { select: { name: true, status: true } } },
   });
   if (!invite) return { error: "Nessun invito trovato per questo account." };
+  if (isArchivedAccount(invite.tradingAccount.status)) {
+    return { error: ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE };
+  }
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -286,6 +302,9 @@ export async function removeMember(
 
   if (!membership.canManageMembers) {
     return { error: "Non hai il permesso di rimuovere membri." };
+  }
+  if (isArchivedAccount(membership.tradingAccount.status)) {
+    return { error: ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE };
   }
 
   // Cannot remove yourself
@@ -336,6 +355,9 @@ export async function changeMemberRole(
 
   if (!membership.canManageRoles) {
     return { error: "Non hai il permesso di cambiare i ruoli." };
+  }
+  if (isArchivedAccount(membership.tradingAccount.status)) {
+    return { error: ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE };
   }
 
   if (targetUserId === userId) {
@@ -398,6 +420,9 @@ export async function updateMemberPermissions(
 
   if (!membership.canManageRoles) {
     return { error: "Non hai il permesso di modificare i permessi." };
+  }
+  if (isArchivedAccount(membership.tradingAccount.status)) {
+    return { error: ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE };
   }
 
   if (targetUserId === userId) {

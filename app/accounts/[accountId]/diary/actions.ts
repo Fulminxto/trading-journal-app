@@ -7,6 +7,7 @@ import {
   notifyAccountMembers,
 } from "@/lib/activity";
 import { redirect } from "next/navigation";
+import { assertAccountWritable } from "@/lib/account-write-guard";
 
 function getString(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -169,13 +170,6 @@ async function getAccess(
     options?.requireDeleteTrades;
 
   if (
-    isMutatingAction &&
-    membership.tradingAccount.status === "ARCHIVED"
-  ) {
-    redirect(`/accounts/${accountId}/dashboard`);
-  }
-
-  if (
     membership.role === "VIEWER" &&
     !options?.allowViewer
   ) {
@@ -204,6 +198,10 @@ async function getAccess(
     !membership.canDeleteTrades
   ) {
     redirect(`/accounts/${accountId}/dashboard`);
+  }
+
+  if (isMutatingAction) {
+    assertAccountWritable(membership.tradingAccount.status);
   }
 
   return membership;

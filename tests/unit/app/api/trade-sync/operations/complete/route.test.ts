@@ -245,6 +245,20 @@ describe("POST /api/trade-sync/operations/[operationId]/complete", () => {
     expect(mocks.dispatchPushEffects).not.toHaveBeenCalled();
   });
 
+  it("rejects archived completion before finalization and effects", async () => {
+    mocks.accountFindUnique.mockResolvedValue({ ...account, status: "ARCHIVED" });
+
+    const response = await POST(request(), context());
+
+    expect(response.status).toBe(409);
+    expect(await response.json()).toEqual({
+      error: "This account is archived and read-only.",
+    });
+    expect(mocks.completeSyncOperation).not.toHaveBeenCalled();
+    expect(mocks.dispatchPushEffects).not.toHaveBeenCalled();
+    expect(mocks.sendPush).not.toHaveBeenCalled();
+  });
+
   it.each([
     [404, "Sync operation not found"],
     [409, "Sync operation does not match request"],

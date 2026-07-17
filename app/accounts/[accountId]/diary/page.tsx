@@ -968,17 +968,18 @@ export default async function DiaryPage({
 
   const isManager =
     membership.role === "MANAGER";
+  const isArchived = membership.tradingAccount.status === "ARCHIVED";
 
   const canCreateTrades = Boolean(
-    isManager || membership.canCreateTrades
+    !isArchived && (isManager || membership.canCreateTrades)
   );
 
   const canEditTrades = Boolean(
-    isManager || membership.canEditTrades
+    !isArchived && (isManager || membership.canEditTrades)
   );
 
   const canDeleteTrades = Boolean(
-    isManager || membership.canDeleteTrades
+    !isArchived && (isManager || membership.canDeleteTrades)
   );
 
   const isReadOnly =

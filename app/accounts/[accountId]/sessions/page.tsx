@@ -178,12 +178,6 @@ export default async function SessionsPage({
     redirect(`/accounts/${accountId}/dashboard`);
   }
 
-  if (
-    membership.tradingAccount.status === "ARCHIVED"
-  ) {
-    redirect(`/accounts/${accountId}/dashboard`);
-  }
-
   const [currentUser, accountMembers] =
     await Promise.all([
       prisma.user.update({
@@ -214,8 +208,9 @@ export default async function SessionsPage({
   const t = getSessionsCopy(appLanguage);
 
   const canCreateSessions =
-    membership.role === "MANAGER" ||
-    membership.role === "MEMBER";
+    membership.tradingAccount.status !== "ARCHIVED" &&
+    (membership.role === "MANAGER" ||
+      membership.role === "MEMBER");
 
   const sessions =
     await prisma.tradingSession.findMany({

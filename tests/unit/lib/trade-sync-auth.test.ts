@@ -93,8 +93,8 @@ describe("trade-sync source and account authorization", () => {
       account: { ...enabledAccount, status: "ARCHIVED" },
       source: "mt5" as const,
       expected: {
-        status: 403,
-        error: "Trade sync is disabled for archived accounts",
+        status: 409,
+        error: "This account is archived and read-only.",
       },
     },
     {
