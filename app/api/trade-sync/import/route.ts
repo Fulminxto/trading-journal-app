@@ -10,10 +10,19 @@ import {
 import {
     importSyncedTrade,
     TradeSyncServiceError,
+    type SyncTradeInput,
     type TradeSyncErrorCode,
 } from "@/lib/trade-sync";
+import {
+    hashSyncTradePayload,
+    OperationItemError,
+    processSyncOperationItem,
+} from "@/lib/trade-sync-operation-item";
 
 type TradeSyncPayload = {
+    operationId?: unknown;
+    itemKey?: unknown;
+
     tradingAccountId?: string;
 
     source?: string;
@@ -246,140 +255,149 @@ export async function POST(request: NextRequest) {
 
     const closeDate = getDate(payload.closeDate);
 
+    const normalizedInput: SyncTradeInput = {
+        tradingAccountId,
+        source,
+        externalTradeId,
+        externalAccountId: getOptionalString(
+            payload.externalAccountId
+        ),
+        externalOrderId: getOptionalString(
+            payload.externalOrderId
+        ),
+        platform: getOptionalString(payload.platform),
+        brokerName: getOptionalString(
+            payload.brokerName
+        ),
+        symbol,
+        direction,
+        openDate,
+        openTime: getOptionalString(payload.openTime),
+        amount: getNumber(payload.amount),
+        openingPrice: getNumber(payload.openingPrice),
+        stopLoss: getNumber(payload.stopLoss),
+        takeProfit: getNumber(payload.takeProfit),
+        riskReward: getNumber(payload.riskReward),
+        closeDate,
+        closingPrice: getNumber(payload.closingPrice),
+        outcome: getOutcome(payload.outcome),
+        resultUsd: getNumber(payload.resultUsd),
+        commission: getNumber(payload.commission),
+        swap: getNumber(payload.swap),
+        fees: getNumber(payload.fees),
+        rawImportData: {
+            receivedAt: new Date().toISOString(),
+            tradingAccountId,
+            source,
+            externalTradeId,
+            externalAccountId: getOptionalString(
+                payload.externalAccountId
+            ),
+            externalOrderId: getOptionalString(
+                payload.externalOrderId
+            ),
+            platform: getOptionalString(payload.platform),
+            brokerName: getOptionalString(
+                payload.brokerName
+            ),
+            symbol,
+            direction,
+            openDate: openDate.toISOString(),
+            openTime: getOptionalString(payload.openTime),
+            amount: getNumber(payload.amount),
+            openingPrice: getNumber(payload.openingPrice),
+            stopLoss: getNumber(payload.stopLoss),
+            takeProfit: getNumber(payload.takeProfit),
+            riskReward: getNumber(payload.riskReward),
+            closeDate: closeDate?.toISOString() ?? null,
+            closingPrice: getNumber(payload.closingPrice),
+            outcome: getOutcome(payload.outcome),
+            resultUsd: getNumber(payload.resultUsd),
+            commission: getNumber(payload.commission),
+            swap: getNumber(payload.swap),
+            fees: getNumber(payload.fees),
+        },
+    };
+
+    const hasOperationId =
+        payload.operationId !== undefined;
+    const hasItemKey = payload.itemKey !== undefined;
+
+    if (hasOperationId !== hasItemKey) {
+        return NextResponse.json(
+            {
+                error:
+                    "operationId and itemKey must be provided together",
+            },
+            { status: 400 }
+        );
+    }
+
+    if (hasOperationId && hasItemKey) {
+        const operationId = getString(payload.operationId);
+        const itemKey = getString(payload.itemKey);
+
+        if (
+            !operationId ||
+            !itemKey ||
+            operationId.length > 200 ||
+            itemKey.length > 200
+        ) {
+            return NextResponse.json(
+                {
+                    error:
+                        "operationId and itemKey must be non-empty strings of at most 200 characters",
+                },
+                { status: 400 }
+            );
+        }
+
+        try {
+            const processed =
+                await processSyncOperationItem({
+                    operationId,
+                    itemKey,
+                    payloadHash:
+                        hashSyncTradePayload(
+                            normalizedInput
+                        ),
+                    input: normalizedInput,
+                });
+            const result = processed.result;
+
+            return NextResponse.json({
+                status: result.status,
+                tradeId: result.tradeId,
+                needsReview: result.needsReview,
+                syncStatus: result.syncStatus,
+                ...(result.status === "updated"
+                    ? {
+                        changedFields:
+                            result.changedFields,
+                    }
+                    : {}),
+                operationId,
+                itemStatus: "processed",
+                replayed: processed.replayed,
+            });
+        } catch (error) {
+            if (error instanceof OperationItemError) {
+                return NextResponse.json(
+                    { error: error.safeMessage },
+                    { status: error.httpStatus }
+                );
+            }
+
+            return NextResponse.json(
+                { error: "Trade sync import failed." },
+                { status: 500 }
+            );
+        }
+    }
+
     try {
         const result =
-            await importSyncedTrade({
-                tradingAccountId,
-                source,
-                externalTradeId,
-
-                externalAccountId: getOptionalString(
-                    payload.externalAccountId
-                ),
-
-                externalOrderId: getOptionalString(
-                    payload.externalOrderId
-                ),
-
-                platform: getOptionalString(
-                    payload.platform
-                ),
-
-                brokerName: getOptionalString(
-                    payload.brokerName
-                ),
-
-                symbol,
-                direction,
-
-                openDate,
-
-                openTime: getOptionalString(
-                    payload.openTime
-                ),
-
-                amount: getNumber(payload.amount),
-
-                openingPrice: getNumber(
-                    payload.openingPrice
-                ),
-
-                stopLoss: getNumber(payload.stopLoss),
-
-                takeProfit: getNumber(
-                    payload.takeProfit
-                ),
-
-                riskReward: getNumber(
-                    payload.riskReward
-                ),
-
-                closeDate,
-
-                closingPrice: getNumber(
-                    payload.closingPrice
-                ),
-
-                outcome: getOutcome(payload.outcome),
-
-                resultUsd: getNumber(payload.resultUsd),
-
-                commission: getNumber(
-                    payload.commission
-                ),
-
-                swap: getNumber(payload.swap),
-
-                fees: getNumber(payload.fees),
-
-                rawImportData: {
-                    receivedAt: new Date().toISOString(),
-
-                    tradingAccountId,
-                    source,
-                    externalTradeId,
-
-                    externalAccountId: getOptionalString(
-                        payload.externalAccountId
-                    ),
-
-                    externalOrderId: getOptionalString(
-                        payload.externalOrderId
-                    ),
-
-                    platform: getOptionalString(
-                        payload.platform
-                    ),
-
-                    brokerName: getOptionalString(
-                        payload.brokerName
-                    ),
-
-                    symbol,
-                    direction,
-
-                    openDate: openDate.toISOString(),
-
-                    openTime: getOptionalString(
-                        payload.openTime
-                    ),
-
-                    amount: getNumber(payload.amount),
-
-                    openingPrice: getNumber(
-                        payload.openingPrice
-                    ),
-
-                    stopLoss: getNumber(payload.stopLoss),
-
-                    takeProfit: getNumber(
-                        payload.takeProfit
-                    ),
-
-                    riskReward: getNumber(
-                        payload.riskReward
-                    ),
-
-                    closeDate:
-                        closeDate?.toISOString() ?? null,
-
-                    closingPrice: getNumber(
-                        payload.closingPrice
-                    ),
-
-                    outcome: getOutcome(payload.outcome),
-
-                    resultUsd: getNumber(payload.resultUsd),
-
-                    commission: getNumber(
-                        payload.commission
-                    ),
-
-                    swap: getNumber(payload.swap),
-
-                    fees: getNumber(payload.fees),
-                },
-            });
+            await importSyncedTrade(normalizedInput);
 
         return NextResponse.json({
             status: result.status,

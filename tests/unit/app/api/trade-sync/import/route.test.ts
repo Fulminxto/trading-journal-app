@@ -5,7 +5,25 @@ const mocks = vi.hoisted(() => ({
   accountUpdateMany: vi.fn(),
   importSyncedTrade: vi.fn(),
   logActivity: vi.fn(),
+  processSyncOperationItem: vi.fn(),
 }));
+
+vi.mock("@/lib/trade-sync-operation-item", () => {
+  class OperationItemError extends Error {
+    constructor(
+      readonly httpStatus: number,
+      readonly safeMessage: string,
+    ) {
+      super(safeMessage);
+    }
+  }
+
+  return {
+    hashSyncTradePayload: vi.fn(() => "payload-hash"),
+    processSyncOperationItem: mocks.processSyncOperationItem,
+    OperationItemError,
+  };
+});
 
 vi.mock("@/lib/prisma", () => ({
   prisma: {
@@ -54,7 +72,9 @@ const payload = {
   rawImportData: { sensitive: "raw-payload" },
 };
 
-function request(body = payload) {
+function request(
+  body: Record<string, unknown> = payload,
+) {
   return new Request("http://localhost/api/trade-sync/import", {
     method: "POST",
     headers: {
@@ -122,6 +142,54 @@ describe("POST /api/trade-sync/import legacy response contract", () => {
       error: "Trading account not found",
     });
     expect(mocks.importSyncedTrade).not.toHaveBeenCalled();
+  });
+
+  it("requires operationId and itemKey together", async () => {
+    const response = await POST(
+      request({ ...payload, operationId: "operation-1" }),
+    );
+
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({
+      error: "operationId and itemKey must be provided together",
+    });
+    expect(mocks.importSyncedTrade).not.toHaveBeenCalled();
+    expect(mocks.processSyncOperationItem).not.toHaveBeenCalled();
+  });
+
+  it("returns operation metadata only for a bound item", async () => {
+    mocks.processSyncOperationItem.mockResolvedValue({
+      result: {
+        status: "updated",
+        tradeId: 10,
+        needsReview: true,
+        syncStatus: "imported",
+        changedFields: ["resultUsd"],
+      },
+      replayed: false,
+    });
+
+    const response = await POST(
+      request({
+        ...payload,
+        operationId: " operation-1 ",
+        itemKey: " item-1 ",
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({
+      status: "updated",
+      tradeId: 10,
+      needsReview: true,
+      syncStatus: "imported",
+      changedFields: ["resultUsd"],
+      operationId: "operation-1",
+      itemStatus: "processed",
+      replayed: false,
+    });
+    expect(mocks.importSyncedTrade).not.toHaveBeenCalled();
+    expect(mocks.logActivity).not.toHaveBeenCalled();
   });
 
   it.each([
