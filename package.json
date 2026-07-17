@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "prisma migrate deploy && prisma generate && next build",
     "start": "next start",
+    "test:unit": "vitest run --config vitest.unit.config.ts",
     "lint": "eslint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
