@@ -8,7 +8,7 @@ import {
 
 type TradeSyncSource = "mt5" | "broker";
 
-type SyncTradeInput = {
+export type SyncTradeInput = {
     tradingAccountId: string;
 
     source: TradeSyncSource;
@@ -63,6 +63,22 @@ export type TradeSyncResult =
         tradeId: number;
         needsReview: boolean;
         syncStatus: string;
+    };
+
+export type TradeSyncPersistenceClient = {
+    tradingAccount: Pick<
+        Prisma.TransactionClient["tradingAccount"],
+        "findUnique"
+    >;
+    trade: Pick<
+        Prisma.TransactionClient["trade"],
+        "findFirst" | "create" | "update"
+    >;
+};
+
+export type PersistedTradeSyncResult =
+    TradeSyncResult & {
+        domainUserId: string;
     };
 
 export type TradeSyncErrorCode =
@@ -220,10 +236,11 @@ function getChangedTradeFields(
 }
 
 async function getDomainTradeUserId(
+    db: TradeSyncPersistenceClient,
     tradingAccountId: string
 ) {
     const account =
-        await prisma.tradingAccount.findUnique({
+        await db.tradingAccount.findUnique({
             where: {
                 id: tradingAccountId,
             },
@@ -365,11 +382,13 @@ async function recalculateAccountEquity(
     }
 }
 
-export async function importSyncedTrade(
+export async function persistSyncedTrade(
+    db: TradeSyncPersistenceClient,
     input: SyncTradeInput
-) : Promise<TradeSyncResult> {
+): Promise<PersistedTradeSyncResult> {
     const domainUserId =
         await getDomainTradeUserId(
+            db,
             input.tradingAccountId
         );
 
@@ -383,7 +402,7 @@ export async function importSyncedTrade(
     }
 
     const existingTrade =
-        await prisma.trade.findFirst({
+        await db.trade.findFirst({
             where: {
                 tradingAccountId:
                     input.tradingAccountId,
@@ -408,10 +427,6 @@ export async function importSyncedTrade(
             );
 
         if (changedFields.length === 0) {
-            await restoreAccountSyncConnectedIfNeeded(
-                input.tradingAccountId
-            );
-
             return {
                 status: "skipped",
                 tradeId: existingTrade.id,
@@ -419,11 +434,12 @@ export async function importSyncedTrade(
                     existingTrade.needsReview,
                 syncStatus:
                     existingTrade.syncStatus,
+                domainUserId,
             };
         }
 
         const updatedTrade =
-            await prisma.trade.update({
+            await db.trade.update({
                 where: {
                     id: existingTrade.id,
                 },
@@ -435,6 +451,60 @@ export async function importSyncedTrade(
                 },
             });
 
+        return {
+            status: "updated",
+            tradeId: updatedTrade.id,
+            needsReview:
+                updatedTrade.needsReview,
+            syncStatus:
+                updatedTrade.syncStatus,
+            changedFields,
+            domainUserId,
+        };
+    }
+
+    const trade = await db.trade.create({
+        data: {
+            tradingAccountId:
+                input.tradingAccountId,
+            createdById: domainUserId,
+            ...desiredTrade,
+            rawImportData:
+                input.rawImportData ??
+                Prisma.JsonNull,
+        },
+    });
+
+    return {
+        status: "created",
+        tradeId: trade.id,
+        needsReview: trade.needsReview,
+        syncStatus: trade.syncStatus,
+        domainUserId,
+    };
+}
+
+export async function importSyncedTrade(
+    input: SyncTradeInput
+): Promise<TradeSyncResult> {
+    const persisted = await persistSyncedTrade(
+        prisma,
+        input
+    );
+    const {
+        domainUserId,
+        ...result
+    } = persisted;
+
+    if (result.status === "skipped") {
+        await restoreAccountSyncConnectedIfNeeded(
+            input.tradingAccountId
+        );
+
+        return result;
+    }
+
+    if (result.status === "updated") {
         await markAccountSyncConnected(
             input.tradingAccountId
         );
@@ -453,15 +523,15 @@ export async function importSyncedTrade(
             )} imported trade updated from ${input.source
                 }`,
             metadata: {
-                tradeId: updatedTrade.id,
+                tradeId: result.tradeId,
                 source: input.source,
                 platform: input.platform,
                 brokerName: input.brokerName,
                 reviewState:
-                    updatedTrade.needsReview
+                    result.needsReview
                         ? "needs_review"
                         : "reviewed",
-                changedFields,
+                changedFields: result.changedFields,
                 origin: "system",
             },
         });
@@ -477,28 +547,8 @@ export async function importSyncedTrade(
             link: `/accounts/${input.tradingAccountId}/diary?source=${input.source}`,
         });
 
-        return {
-            status: "updated",
-            tradeId: updatedTrade.id,
-            needsReview:
-                updatedTrade.needsReview,
-            syncStatus:
-                updatedTrade.syncStatus,
-            changedFields,
-        };
+        return result;
     }
-
-    const trade = await prisma.trade.create({
-        data: {
-            tradingAccountId:
-                input.tradingAccountId,
-            createdById: domainUserId,
-            ...desiredTrade,
-            rawImportData:
-                input.rawImportData ??
-                Prisma.JsonNull,
-        },
-    });
 
     await logActivity({
         userId: null,
@@ -509,7 +559,7 @@ export async function importSyncedTrade(
             input.direction
         )} trade imported from ${input.source}`,
         metadata: {
-            tradeId: trade.id,
+            tradeId: result.tradeId,
             source: input.source,
             platform: input.platform,
             brokerName: input.brokerName,
@@ -537,10 +587,5 @@ export async function importSyncedTrade(
         input.tradingAccountId
     );
 
-    return {
-        status: "created",
-        tradeId: trade.id,
-        needsReview: trade.needsReview,
-        syncStatus: trade.syncStatus,
-    };
+    return result;
 }

@@ -31,7 +31,11 @@ vi.mock("@/lib/activity", () => ({
   notifyAccountMembers: mocks.notifyAccountMembers,
 }));
 
-import { importSyncedTrade } from "@/lib/trade-sync";
+import {
+  importSyncedTrade,
+  persistSyncedTrade,
+  type TradeSyncPersistenceClient,
+} from "@/lib/trade-sync";
 
 const openDate = new Date("2026-07-01T08:00:00.000Z");
 const closeDate = new Date("2026-07-01T09:00:00.000Z");
@@ -95,6 +99,105 @@ function persistedTrade(overrides: Record<string, unknown> = {}) {
     ...overrides,
   };
 }
+
+function transactionClient() {
+  const transactionMocks = {
+    accountFindUnique: vi.fn().mockResolvedValue({
+      id: "account-1",
+      createdById: "owner-1",
+      members: [],
+    }),
+    tradeFindFirst: vi.fn(),
+    tradeCreate: vi.fn(),
+    tradeUpdate: vi.fn(),
+  };
+  const db = {
+    tradingAccount: {
+      findUnique: transactionMocks.accountFindUnique,
+    },
+    trade: {
+      findFirst: transactionMocks.tradeFindFirst,
+      create: transactionMocks.tradeCreate,
+      update: transactionMocks.tradeUpdate,
+    },
+  } as unknown as TradeSyncPersistenceClient;
+
+  return { db, transactionMocks };
+}
+
+describe("persistSyncedTrade database-only core", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("creates through an injected transaction-compatible client without side effects", async () => {
+    const { db, transactionMocks } = transactionClient();
+    transactionMocks.tradeFindFirst.mockResolvedValue(null);
+    transactionMocks.tradeCreate.mockResolvedValue({
+      id: 10,
+      needsReview: true,
+      syncStatus: "imported",
+    });
+
+    await expect(persistSyncedTrade(db, input)).resolves.toEqual({
+      status: "created",
+      tradeId: 10,
+      needsReview: true,
+      syncStatus: "imported",
+      domainUserId: "owner-1",
+    });
+    expect(transactionMocks.tradeCreate).toHaveBeenCalledOnce();
+    expect(mocks.logActivity).not.toHaveBeenCalled();
+    expect(mocks.notifyAccountMembers).not.toHaveBeenCalled();
+    expect(mocks.accountUpdate).not.toHaveBeenCalled();
+    expect(mocks.tradeFindMany).not.toHaveBeenCalled();
+  });
+
+  it("updates through an injected client without side effects", async () => {
+    const { db, transactionMocks } = transactionClient();
+    transactionMocks.tradeFindFirst.mockResolvedValue(
+      persistedTrade({ closingPrice: 1.15, resultUsd: 50 }),
+    );
+    transactionMocks.tradeUpdate.mockResolvedValue({
+      id: 10,
+      needsReview: true,
+      syncStatus: "imported",
+    });
+
+    await expect(persistSyncedTrade(db, input)).resolves.toEqual({
+      status: "updated",
+      tradeId: 10,
+      needsReview: true,
+      syncStatus: "imported",
+      changedFields: ["closingPrice", "resultUsd"],
+      domainUserId: "owner-1",
+    });
+    expect(transactionMocks.tradeUpdate).toHaveBeenCalledOnce();
+    expect(mocks.logActivity).not.toHaveBeenCalled();
+    expect(mocks.notifyAccountMembers).not.toHaveBeenCalled();
+    expect(mocks.accountUpdate).not.toHaveBeenCalled();
+    expect(mocks.tradeFindMany).not.toHaveBeenCalled();
+  });
+
+  it("skips through an injected client without persistence or side effects", async () => {
+    const { db, transactionMocks } = transactionClient();
+    transactionMocks.tradeFindFirst.mockResolvedValue(persistedTrade());
+
+    await expect(persistSyncedTrade(db, input)).resolves.toEqual({
+      status: "skipped",
+      tradeId: 10,
+      needsReview: true,
+      syncStatus: "imported",
+      domainUserId: "owner-1",
+    });
+    expect(transactionMocks.tradeCreate).not.toHaveBeenCalled();
+    expect(transactionMocks.tradeUpdate).not.toHaveBeenCalled();
+    expect(mocks.logActivity).not.toHaveBeenCalled();
+    expect(mocks.notifyAccountMembers).not.toHaveBeenCalled();
+    expect(mocks.accountUpdate).not.toHaveBeenCalled();
+    expect(mocks.tradeFindMany).not.toHaveBeenCalled();
+  });
+});
 
 describe("importSyncedTrade legacy path", () => {
   beforeEach(() => {
