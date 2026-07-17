@@ -32,6 +32,13 @@ enum SyncOperationItemStatus {
   FAILED
 }
 
+enum SyncOperationEffectStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
 model User {
   id           String @id @default(cuid())
   username     String @unique
@@ -309,7 +316,8 @@ model SyncOperation {
 
   status SyncOperationStatus @default(STARTED)
 
-  items SyncOperationItem[]
+  items   SyncOperationItem[]
+  effects SyncOperationEffect[]
 
   totalCount    Int?
   importedCount Int  @default(0)
@@ -361,6 +369,33 @@ model SyncOperationItem {
   @@unique([operationId, itemKey])
   @@index([operationId, status])
   @@index([tradeId])
+}
+
+model SyncOperationEffect {
+  id String @id @default(cuid())
+
+  operationId String
+  operation   SyncOperation @relation(fields: [operationId], references: [id], onDelete: Cascade)
+
+  effectKey String
+  status    SyncOperationEffectStatus @default(PENDING)
+
+  attemptCount  Int     @default(0)
+  safeErrorCode String?
+
+  notificationId String?       @unique
+  notification   Notification? @relation(fields: [notificationId], references: [id], onDelete: SetNull)
+
+  startedAt     DateTime?
+  lastAttemptAt DateTime?
+  completedAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([operationId, effectKey])
+  @@index([status, updatedAt])
+  @@index([operationId, status])
 }
 
 model Strategy {
@@ -587,6 +622,8 @@ model Notification {
   link String?
 
   createdAt DateTime @default(now())
+
+  syncOperationEffect SyncOperationEffect?
 
   @@index([userId])
   @@index([read])
