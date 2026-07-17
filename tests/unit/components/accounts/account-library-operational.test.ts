@@ -14,8 +14,8 @@ import {
   FocusCoverCard,
   GridAccountCard,
   getAccountOperationalSignal,
-  type AccountLibraryItem,
 } from "@/components/accounts/AccountLibrary";
+import type { AccountLibraryItem } from "@/components/accounts/account-library-utils";
 
 const account: AccountLibraryItem = {
   id: "account-a",

@@ -1,14 +1,15 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("@/components/accounts/AccountActionsMenu", () => ({
   default: vi.fn(),
 }));
 
+import { getPnlPercentageBadgeData } from "@/components/accounts/AccountLibrary";
 import {
   getAccountLibraryPnlAggregate,
-  getPnlPercentageBadgeData,
   sortAccountLibraryItems,
-} from "@/components/accounts/AccountLibrary";
+} from "@/components/accounts/account-library-utils";
 
 describe("Account Library financial semantics", () => {
   it("orders accounts by name and then ID without mutating the input", () => {
@@ -30,6 +31,32 @@ describe("Account Library financial semantics", () => {
       "account-2",
       "account-1",
     ]);
+  });
+
+  it("keeps the shared helper server-safe and browser-independent", () => {
+    const source = readFileSync(
+      "components/accounts/account-library-utils.ts",
+      "utf8",
+    );
+
+    expect(source).not.toMatch(/^\s*["']use client["']/m);
+    expect(source).not.toContain("react");
+    expect(source).not.toMatch(/\b(?:window|document|localStorage|navigator)\b/);
+    expect(source).not.toContain("AccountLibrary.tsx");
+  });
+
+  it("keeps the Accounts Server Component free of callable client-module imports", () => {
+    const source = readFileSync("app/accounts/page.tsx", "utf8");
+
+    expect(source).toContain(
+      'import AccountLibrary from "@/components/accounts/AccountLibrary";',
+    );
+    expect(source).toContain(
+      'from "@/components/accounts/account-library-utils";',
+    );
+    expect(source).not.toMatch(
+      /import AccountLibrary\s*,\s*\{[\s\S]*?\}\s*from\s*["']@\/components\/accounts\/AccountLibrary["']/,
+    );
   });
 
   it("calculates PnL percentage from raw PnL and initial balance", () => {

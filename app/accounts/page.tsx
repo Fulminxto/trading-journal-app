@@ -2,11 +2,12 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowRight, Settings } from "lucide-react";
 
-import AccountLibrary, {
+import AccountLibrary from "@/components/accounts/AccountLibrary";
+import {
   getAccountLibraryPnlAggregate,
   sortAccountLibraryItems,
   type AccountLibraryItem,
-} from "@/components/accounts/AccountLibrary";
+} from "@/components/accounts/account-library-utils";
 import AccountLibraryEmptyState from "@/components/accounts/AccountLibraryEmptyState";
 import Card from "@/components/ui/Card";
 import SignatureEdge from "@/components/ui/SignatureEdge";
