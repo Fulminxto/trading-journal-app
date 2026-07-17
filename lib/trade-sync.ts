@@ -76,6 +76,24 @@ export type TradeSyncPersistenceClient = {
     >;
 };
 
+type TradeSyncAccountStateClient = {
+    tradingAccount: Pick<
+        Prisma.TransactionClient["tradingAccount"],
+        "update"
+    >;
+};
+
+type TradeSyncEquityClient = {
+    tradingAccount: Pick<
+        Prisma.TransactionClient["tradingAccount"],
+        "findUnique"
+    >;
+    trade: Pick<
+        Prisma.TransactionClient["trade"],
+        "findMany" | "update"
+    >;
+};
+
 export type PersistedTradeSyncResult =
     TradeSyncResult & {
         domainUserId: string;
@@ -272,19 +290,30 @@ async function getDomainTradeUserId(
     return account.members[0]?.userId || null;
 }
 
-async function markAccountSyncConnected(
-    tradingAccountId: string
+export async function updateTradeSyncAccountConnected(
+    db: TradeSyncAccountStateClient,
+    tradingAccountId: string,
+    syncedAt: Date = new Date()
 ) {
-    await prisma.tradingAccount.update({
+    await db.tradingAccount.update({
         where: {
             id: tradingAccountId,
         },
         data: {
             syncStatus: "connected",
-            lastSyncedAt: new Date(),
+            lastSyncedAt: syncedAt,
             autoSyncEnabled: true,
         },
     });
+}
+
+async function markAccountSyncConnected(
+    tradingAccountId: string
+) {
+    await updateTradeSyncAccountConnected(
+        prisma,
+        tradingAccountId
+    );
 }
 
 async function restoreAccountSyncConnectedIfNeeded(
@@ -316,11 +345,12 @@ async function restoreAccountSyncConnectedIfNeeded(
     );
 }
 
-async function recalculateAccountEquity(
+export async function recalculateTradeSyncAccountEquity(
+    db: TradeSyncEquityClient,
     tradingAccountId: string
 ) {
     const account =
-        await prisma.tradingAccount.findUnique({
+        await db.tradingAccount.findUnique({
             where: {
                 id: tradingAccountId,
             },
@@ -330,7 +360,7 @@ async function recalculateAccountEquity(
         return;
     }
 
-    const trades = await prisma.trade.findMany({
+    const trades = await db.trade.findMany({
         where: {
             tradingAccountId,
         },
@@ -368,7 +398,7 @@ async function recalculateAccountEquity(
                 100
                 : 0;
 
-        await prisma.trade.update({
+        await db.trade.update({
             where: {
                 id: trade.id,
             },
@@ -380,6 +410,15 @@ async function recalculateAccountEquity(
             },
         });
     }
+}
+
+async function recalculateAccountEquity(
+    tradingAccountId: string
+) {
+    await recalculateTradeSyncAccountEquity(
+        prisma,
+        tradingAccountId
+    );
 }
 
 export async function persistSyncedTrade(

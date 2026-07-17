@@ -34,6 +34,8 @@ vi.mock("@/lib/activity", () => ({
 import {
   importSyncedTrade,
   persistSyncedTrade,
+  recalculateTradeSyncAccountEquity,
+  updateTradeSyncAccountConnected,
   type TradeSyncPersistenceClient,
 } from "@/lib/trade-sync";
 
@@ -196,6 +198,93 @@ describe("persistSyncedTrade database-only core", () => {
     expect(mocks.notifyAccountMembers).not.toHaveBeenCalled();
     expect(mocks.accountUpdate).not.toHaveBeenCalled();
     expect(mocks.tradeFindMany).not.toHaveBeenCalled();
+  });
+});
+
+describe("trade-sync finalization database cores", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("updates account state through the supplied client and timestamp", async () => {
+    const accountUpdate = vi.fn().mockResolvedValue({});
+    const db = {
+      tradingAccount: { update: accountUpdate },
+    } as unknown as Parameters<typeof updateTradeSyncAccountConnected>[0];
+    const syncedAt = new Date("2026-07-17T17:00:00.000Z");
+
+    await updateTradeSyncAccountConnected(db, "account-1", syncedAt);
+
+    expect(accountUpdate).toHaveBeenCalledWith({
+      where: { id: "account-1" },
+      data: {
+        syncStatus: "connected",
+        lastSyncedAt: syncedAt,
+        autoSyncEnabled: true,
+      },
+    });
+    expect(mocks.accountUpdate).not.toHaveBeenCalled();
+    expect(mocks.logActivity).not.toHaveBeenCalled();
+    expect(mocks.notifyAccountMembers).not.toHaveBeenCalled();
+  });
+
+  it("recalculates the existing equity sequence using only the supplied client", async () => {
+    const accountFindUnique = vi.fn().mockResolvedValue({
+      id: "account-1",
+      initialBalance: 1_000,
+    });
+    const tradeFindMany = vi.fn().mockResolvedValue([
+      { id: 1, resultUsd: 100 },
+      { id: 2, resultUsd: -50 },
+      { id: 3, resultUsd: null },
+    ]);
+    const tradeUpdate = vi.fn().mockResolvedValue({});
+    const db = {
+      tradingAccount: { findUnique: accountFindUnique },
+      trade: {
+        findMany: tradeFindMany,
+        update: tradeUpdate,
+      },
+    } as unknown as Parameters<typeof recalculateTradeSyncAccountEquity>[0];
+
+    await recalculateTradeSyncAccountEquity(db, "account-1");
+
+    expect(tradeFindMany).toHaveBeenCalledWith({
+      where: { tradingAccountId: "account-1" },
+      orderBy: [{ openDate: "asc" }, { id: "asc" }],
+    });
+    expect(tradeUpdate).toHaveBeenNthCalledWith(1, {
+      where: { id: 1 },
+      data: {
+        equity: 1_100,
+        equityPeak: 1_100,
+        drawdownPercent: 0,
+        resultPercent: 10,
+      },
+    });
+    expect(tradeUpdate).toHaveBeenNthCalledWith(2, {
+      where: { id: 2 },
+      data: {
+        equity: 1_050,
+        equityPeak: 1_100,
+        drawdownPercent: (-50 / 1_100) * 100,
+        resultPercent: -5,
+      },
+    });
+    expect(tradeUpdate).toHaveBeenNthCalledWith(3, {
+      where: { id: 3 },
+      data: {
+        equity: 1_050,
+        equityPeak: 1_100,
+        drawdownPercent: (-50 / 1_100) * 100,
+        resultPercent: 0,
+      },
+    });
+    expect(mocks.accountFindUnique).not.toHaveBeenCalled();
+    expect(mocks.tradeFindMany).not.toHaveBeenCalled();
+    expect(mocks.tradeUpdate).not.toHaveBeenCalled();
+    expect(mocks.logActivity).not.toHaveBeenCalled();
+    expect(mocks.notifyAccountMembers).not.toHaveBeenCalled();
   });
 });
 
