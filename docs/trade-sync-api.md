@@ -1,177 +1,128 @@
 # VOLTIS Trade Sync API
 
-Endpoint:
+VOLTIS uses a persistent three-stage protocol for automatic MT5 synchronization:
+
+1. Start a synchronization operation.
+2. Import each selected trade as an operation-bound item.
+3. Complete the operation and derive its terminal result from durable receipts.
+
+All three endpoints require the shared connector header:
+
+```text
+x-voltis-sync-secret: <TRADE_SYNC_SECRET>
+```
+
+The server validates the shared secret, trading account, account status, integration mode, enabled source, and automatic-sync setting. Supported normalized sources are `mt5` and `broker`; the MT5 connector uses `mt5`.
+
+Secrets, authorization headers, raw request or response bodies, external identifiers, payload hashes, item keys, and exception details must not be logged.
+
+## 1. Start an operation
+
+```text
+POST /api/trade-sync/operations/start
+```
+
+Request shape:
+
+```json
+{
+  "tradingAccountId": "configured-account-id",
+  "source": "mt5",
+  "externalBatchId": "stable-non-secret-run-id",
+  "trigger": "automatic",
+  "totalCount": 12
+}
+```
+
+`totalCount` is the exact number of trades collected by the connector before transmission. The non-secret `externalBatchId` remains stable across retries of the same scan execution.
+
+Start is idempotent through the unique account, source, and external-batch identity. A compatible retry returns the persisted `SyncOperation` and does not reset its state or counters. Reusing a batch identity with incompatible immutable parameters returns a safe conflict.
+
+## 2. Import operation-bound items
 
 ```text
 POST /api/trade-sync/import
 ```
 
-Required header:
-
-```text
-x-voltis-sync-secret: TRADE_SYNC_SECRET
-```
-
-The secret must match the server-side environment variable:
-
-```env
-TRADE_SYNC_SECRET="..."
-```
-
-## Required Payload Fields
+Each request contains the existing trade import fields plus:
 
 ```json
 {
-  "tradingAccountId": "account_id_here",
+  "operationId": "server-issued-operation-id",
+  "itemKey": "deterministic-key-for-this-trade",
+  "tradingAccountId": "configured-account-id",
   "source": "mt5",
-  "externalTradeId": "123456789",
-  "symbol": "XAUUSD",
+  "externalTradeId": "stable-platform-trade-id",
+  "symbol": "MARKET",
   "direction": "BUY",
-  "openDate": "2026-06-01T09:30:00.000Z"
+  "openDate": "2026-01-01T09:30:00.000Z"
 }
 ```
 
-## Full Payload Example
+`operationId` and `itemKey` must be supplied together. The connector derives a deterministic item key from the stable platform trade identity and reuses the same request across retries.
+
+The server stores one `SyncOperationItem` receipt per operation item. Its payload hash covers only normalized accepted trade fields. Matching terminal receipts replay their original `created`, `updated`, `skipped`, or safe failure result without repeating trade persistence. A reused item key with a different normalized payload is rejected.
+
+The existing unbound import contract remains available for legacy callers, but the MT5 automatic batch flow never falls back to it after an operation has started.
+
+## 3. Complete an operation
+
+```text
+POST /api/trade-sync/operations/[operationId]/complete
+```
+
+Request shape:
 
 ```json
 {
-  "tradingAccountId": "account_id_here",
-  "source": "mt5",
-  "externalTradeId": "123456789",
-  "externalAccountId": "987654",
-  "externalOrderId": "123456789",
-
-  "platform": "MT5",
-  "brokerName": "FTMO",
-
-  "symbol": "XAUUSD",
-  "direction": "BUY",
-
-  "openDate": "2026-06-01T09:30:00.000Z",
-  "openTime": "09:30",
-
-  "amount": 1.0,
-  "openingPrice": 2340.5,
-  "stopLoss": 2330.0,
-  "takeProfit": 2360.0,
-  "riskReward": 2.0,
-
-  "closeDate": "2026-06-01T11:20:00.000Z",
-  "closingPrice": 2355.0,
-
-  "outcome": "win",
-  "resultUsd": 350.0,
-
-  "commission": -7.0,
-  "swap": 0,
-  "fees": -7.0
+  "tradingAccountId": "configured-account-id",
+  "source": "mt5"
 }
 ```
 
-## Allowed Sources
+Completion derives counters from durable terminal item receipts:
 
-```text
-mt5
-broker
-```
+- `CREATED` contributes to `importedCount`.
+- `UPDATED` contributes to `updatedCount`.
+- `SKIPPED` contributes to `skippedCount`.
+- `FAILED` contributes to `failedCount`.
 
-## Direction Mapping
+Terminal operation statuses are:
 
-VOLTIS accepts:
+- `COMPLETED`: no failed receipts and no missing expected items.
+- `PARTIAL`: at least one successful or skipped receipt plus a failure or missing expected item.
+- `FAILED`: no successful or skipped receipts and at least one failure or missing expected item.
 
-```text
-BUY
-SELL
-LONG
-SHORT
-```
+Zero-item and all-skipped successful batches are `COMPLETED`. Completion retries return the persisted terminal result with `replayed: true` and do not duplicate database effects.
 
-and stores them internally as:
+## Durable records and transaction boundary
 
-```text
-LONG
-SHORT
-```
+- `SyncOperation` stores batch identity, lifecycle, terminal counters, and timing.
+- `SyncOperationItem` stores per-item idempotency receipts and safe technical results.
+- `SyncOperationEffect` is the durable outbox for post-completion push delivery.
 
-## Outcome Values
+One completion transaction atomically persists the terminal operation, receipt-derived counters, account connected state, optional equity recalculation, optional aggregate automatic ActivityLog, member Notification rows, and pending push effects. Automatic ActivityLog entries use `userId: null` and safe aggregate metadata only.
 
-```text
-win
-loss
-be
-```
+Equity is recalculated only when at least one trade was created or updated. Zero-item and all-skipped successful batches update account sync state but create no aggregate ActivityLog, Notification, push effect, or equity work.
 
-If `outcome` is not provided, VOLTIS calculates it from `resultUsd`:
+## Post-commit push delivery
 
-```text
-resultUsd > 0  → win
-resultUsd < 0  → loss
-resultUsd = 0  → be
-```
+After completion commits, the route runs the durable push-effect dispatcher for both first completion and terminal replay. It claims eligible effects conditionally and sends push content derived only from the linked Notification.
 
-## Integration Mode Rules
+The dispatcher processes at most 25 effects per invocation, retries failed or stale processing effects, uses a five-minute stale timeout, and stops retrying after five attempts. Push dispatch failure never changes an already successful completion HTTP response. External push delivery is at-least-once: a crash after remote delivery but before durable completion can result in a duplicate device notification.
 
-VOLTIS only accepts imports if the account integration mode allows the source.
+## MT5 retry and failure policy
 
-```text
-manual  → blocks all imports
-mt5     → accepts only mt5
-broker  → accepts only broker
-hybrid  → accepts mt5 and broker
-```
+The EA uses three bounded attempts with a 500 ms delay for transport failures and retryable HTTP responses. It retries the exact same start, item, or completion request with stable identifiers.
 
-Archived accounts cannot receive imports.
+- Start failure aborts the batch before items are sent.
+- Individual item failure is counted locally and does not stop remaining items.
+- Completion is attempted after every item attempt, including controlled item failures.
+- Completion failure reports that item transmission occurred but finalization was not confirmed.
+- The EA does not create a replacement operation or use legacy unbound import after a batch has started.
 
-Auto sync must be enabled.
+## Verification status
 
-## Duplicate Protection
+The persistent protocol implementation is complete. The current project checkpoint records nine Prisma migrations, 143 passing unit tests, and MetaEditor compilation with 0 errors. The repository was clean at that implementation checkpoint.
 
-VOLTIS prevents duplicates using:
-
-```text
-tradingAccountId + externalTradeId
-```
-
-If a trade with the same external ID already exists:
-
-```text
-VOLTIS updates the existing trade
-```
-
-If it does not exist:
-
-```text
-VOLTIS creates a new imported trade
-```
-
-## Imported Trade Behavior
-
-New imported trades are created with:
-
-```text
-source = mt5 or broker
-syncStatus = imported
-needsReview = true
-```
-
-After the user completes the personal review, the trade can be marked as:
-
-```text
-syncStatus = reviewed
-needsReview = false
-```
-
-## Security Notes
-
-VOLTIS does not store MT5 passwords, broker passwords, API keys, or sensitive tokens in the database at this stage.
-
-The endpoint is protected by:
-
-```text
-TRADE_SYNC_SECRET
-Integration mode validation
-Account status validation
-Source validation
-Payload validation
-Duplicate protection
-```
+Real MT5-to-VOLTIS execution remains deferred because no active MT5 account is currently available. This is a verification task, not unfinished implementation, and live MT5 synchronization has not yet been claimed as tested.

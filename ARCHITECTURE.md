@@ -35,6 +35,22 @@
 - Support
 - Maintenance / Frozen states
 
+## Persistent Trade Synchronization
+
+Automatic MT5 synchronization uses a durable three-stage protocol:
+
+```text
+POST /api/trade-sync/operations/start
+POST /api/trade-sync/import              (operationId + deterministic itemKey)
+POST /api/trade-sync/operations/[operationId]/complete
+```
+
+All stages use the shared connector secret and shared account/source authorization. `SyncOperation` owns the batch lifecycle, `SyncOperationItem` provides durable per-item replay and receipt-derived counters, and `SyncOperationEffect` provides the post-completion push outbox.
+
+Completion uses one database transaction for terminal status and counters, account connected state, conditional equity recalculation, aggregate automatic ActivityLog, member Notifications, and pending push-effect rows. Push delivery occurs only after commit and is retried through concurrency-safe durable claims. Terminal completion retries replay persisted state without duplicating database effects.
+
+The MT5 connector collects its exact trade list before start, reuses stable request identities across three bounded attempts with a 500 ms delay, continues after controlled item failures, and never falls back to legacy unbound import after starting a batch. Connector and server metadata/logging exclude secrets, raw payloads, external identifiers, and exception details.
+
 ## Role System
 Global roles:
 - OWNER
