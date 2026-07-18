@@ -109,9 +109,6 @@ export default async function ArchivedAccountsPage() {
                     <div className="min-w-0"><dt className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Last modified</dt><dd className="mt-0.5 break-words text-sm font-semibold text-slate-400">{new Intl.DateTimeFormat(language, { dateStyle: "medium" }).format(account.updatedAt)}</dd></div>
                   </dl>
 
-                  <p className="mt-5 inline-flex items-center text-xs font-semibold text-slate-300">
-                    View archived account
-                  </p>
                 </div>
 
                 {canRestore && (
