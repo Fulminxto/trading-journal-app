@@ -59,14 +59,14 @@ export default function CreateAccountForm({
         )}
 
         <label className="block">
-          <span className="text-micro uppercase tracking-label text-muted-faint">{labels.accountName} <span className="normal-case tracking-normal">({labels.required})</span></span>
-          <Input name="name" defaultValue={values?.name ?? ""} maxLength={80} required disabled={isPending} className="mt-2" {...fieldProps("name")} />
+          <span className="text-micro uppercase tracking-label text-slate-300">{labels.accountName} <span className="normal-case tracking-normal text-slate-500">({labels.required})</span></span>
+          <Input name="name" defaultValue={values?.name ?? ""} maxLength={80} required disabled={isPending} className="mt-2 bg-[#070d19]/60 border border-white/[0.06] rounded-xl text-sm text-slate-200 placeholder-slate-500 px-4 py-2.5 focus:border-cyan-500/30 focus:ring-1 focus:ring-cyan-500/20 focus:outline-none transition-all" {...fieldProps("name")} />
           <FieldError name="name" error={errors.name} />
         </label>
 
         <label className="block">
-          <span className="text-micro uppercase tracking-label text-muted-faint">{labels.accountType} <span className="normal-case tracking-normal">({labels.required})</span></span>
-          <select name="type" defaultValue={values?.type || (canCreatePersonalAccount ? "LIVE" : "SHARED")} required disabled={isPending} className="mt-2 w-full rounded-inner border-[0.5px] border-white/[0.08] bg-surface-2 px-4 py-3 text-sm text-white outline-none transition-colors duration-base focus:border-accent-bright/50 disabled:opacity-50" {...fieldProps("type")}>
+          <span className="text-micro uppercase tracking-label text-slate-300">{labels.accountType} <span className="normal-case tracking-normal text-slate-500">({labels.required})</span></span>
+          <select name="type" defaultValue={values?.type || (canCreatePersonalAccount ? "LIVE" : "SHARED")} required disabled={isPending} className="mt-2 w-full bg-[#070d19]/60 border border-white/[0.06] rounded-xl text-sm text-slate-200 placeholder-slate-500 px-4 py-2.5 focus:border-cyan-500/30 focus:ring-1 focus:ring-cyan-500/20 focus:outline-none transition-all disabled:opacity-50" {...fieldProps("type")}>
             {canCreatePersonalAccount && <><option value="LIVE">LIVE</option><option value="DEMO">DEMO</option><option value="PROP">PROP</option><option value="CHALLENGE">CHALLENGE</option><option value="FUNDED">FUNDED</option></>}
             {canCreateSharedAccount && <option value="SHARED">SHARED</option>}
           </select>
@@ -74,14 +74,14 @@ export default function CreateAccountForm({
         </label>
 
         <label className="block">
-          <span className="text-micro uppercase tracking-label text-muted-faint">{labels.initialBalance} <span className="normal-case tracking-normal">({labels.required})</span></span>
-          <Input name="initialBalance" type="number" defaultValue={values?.initialBalance ?? ""} required disabled={isPending} className="mt-2" {...fieldProps("initialBalance")} />
+          <span className="text-micro uppercase tracking-label text-slate-300">{labels.initialBalance} <span className="normal-case tracking-normal text-slate-500">({labels.required})</span></span>
+          <Input name="initialBalance" type="number" defaultValue={values?.initialBalance ?? ""} required disabled={isPending} className="mt-2 bg-[#070d19]/60 border border-white/[0.06] rounded-xl text-sm text-slate-200 placeholder-slate-500 px-4 py-2.5 focus:border-cyan-500/30 focus:ring-1 focus:ring-cyan-500/20 focus:outline-none transition-all" {...fieldProps("initialBalance")} />
           <FieldError name="initialBalance" error={errors.initialBalance} />
         </label>
 
         <label className="block">
-          <span className="text-micro uppercase tracking-label text-muted-faint">{labels.currency} <span className="normal-case tracking-normal">({labels.required})</span></span>
-          <select name="currency" defaultValue={values?.currency || "USD"} required disabled={isPending} className="mt-2 w-full rounded-inner border-[0.5px] border-white/[0.08] bg-surface-2 px-4 py-3 text-sm text-white outline-none transition-colors duration-base focus:border-accent-bright/50 disabled:opacity-50" {...fieldProps("currency")}>
+          <span className="text-micro uppercase tracking-label text-slate-300">{labels.currency} <span className="normal-case tracking-normal text-slate-500">({labels.required})</span></span>
+          <select name="currency" defaultValue={values?.currency || "USD"} required disabled={isPending} className="mt-2 w-full bg-[#070d19]/60 border border-white/[0.06] rounded-xl text-sm text-slate-200 placeholder-slate-500 px-4 py-2.5 focus:border-cyan-500/30 focus:ring-1 focus:ring-cyan-500/20 focus:outline-none transition-all disabled:opacity-50" {...fieldProps("currency")}>
             <option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option><option value="JPY">JPY</option>
           </select>
           <FieldError name="currency" error={errors.currency} />
@@ -95,17 +95,17 @@ export default function CreateAccountForm({
           ["dailyDrawdown", labels.dailyDrawdown, "number", "0.01"],
         ] as const).map(([name, label, type, step]) => (
           <label key={name} className="block">
-            <span className="text-micro uppercase tracking-label text-muted-faint">{label} <span className="normal-case tracking-normal">({labels.optional})</span></span>
-            <Input name={name} type={type} step={step} defaultValue={values?.[name] ?? ""} maxLength={type === "text" ? 80 : undefined} disabled={isPending} className="mt-2" {...fieldProps(name)} />
+            <span className="text-micro uppercase tracking-label text-slate-300">{label} <span className="normal-case tracking-normal text-slate-500">({labels.optional})</span></span>
+            <Input name={name} type={type} step={step} defaultValue={values?.[name] ?? ""} maxLength={type === "text" ? 80 : undefined} disabled={isPending} className="mt-2 bg-[#070d19]/60 border border-white/[0.06] rounded-xl text-sm text-slate-200 placeholder-slate-500 px-4 py-2.5 focus:border-cyan-500/30 focus:ring-1 focus:ring-cyan-500/20 focus:outline-none transition-all" {...fieldProps(name)} />
             <FieldError name={name} error={errors[name]} />
           </label>
         ))}
 
-        <div className="flex flex-col-reverse gap-3 md:col-span-2 sm:flex-row">
-          <Link href="/accounts" className="inline-flex min-h-11 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.12] px-5 py-3 text-sm font-semibold text-muted outline-none hover:bg-white/[0.04] hover:text-flash focus-visible:ring-2 focus-visible:ring-accent-bright/60">
+        <div className="flex flex-wrap justify-end items-center gap-4 mt-6 md:col-span-2 max-sm:flex-col-reverse max-sm:items-stretch">
+          <Link href="/accounts" className="text-sm text-slate-400 hover:text-slate-200 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/40 max-sm:inline-flex max-sm:min-h-11 max-sm:items-center max-sm:justify-center">
             {labels.cancel}
           </Link>
-          <button type="submit" disabled={isPending} aria-disabled={isPending} className="inline-flex min-h-11 flex-1 items-center justify-center rounded-inner border-[0.5px] border-accent-bright/30 bg-accent-bright/[0.08] px-5 py-3 text-sm font-semibold text-accent-bright outline-none transition-colors duration-fast hover:border-accent-bright/55 focus-visible:ring-2 focus-visible:ring-accent-bright/50 disabled:cursor-not-allowed disabled:opacity-60">
+          <button type="submit" disabled={isPending} aria-disabled={isPending} className="px-5 py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-semibold rounded-xl shadow-[0_0_20px_rgba(6,182,212,0.15)] transition-all outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/50 disabled:cursor-not-allowed disabled:opacity-60 max-sm:w-full">
             {isPending ? labels.pending : labels.submit}
           </button>
         </div>

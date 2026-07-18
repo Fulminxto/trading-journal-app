@@ -212,8 +212,8 @@ export default async function CreateAccountPage() {
   const t = labels[language];
 
   return (
-    <div>
-      <div className="mb-10">
+    <div className="max-w-2xl mx-auto mt-8">
+      <div className="mb-8">
         <p className="text-sm text-gray-400">
           {t.eyebrow}
         </p>
@@ -222,7 +222,7 @@ export default async function CreateAccountPage() {
           {t.title}
         </h1>
 
-        <p className="mt-3 max-w-2xl text-sm text-gray-400">
+        <p className="mt-3 text-sm text-gray-400">
           {t.description}
         </p>
       </div>
