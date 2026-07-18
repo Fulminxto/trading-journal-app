@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
@@ -11,10 +12,6 @@ vi.mock("@/components/accounts/AccountActionsMenu", async () => {
 
 import {
   FocusCoverCard,
-  FocusNavigationControls,
-  getFocusCardTransition,
-  getFocusSelectionIndex,
-  isEditableFocusTarget,
 } from "@/components/accounts/AccountLibrary";
 import type { AccountLibraryItem } from "@/components/accounts/account-library-utils";
 
@@ -63,18 +60,6 @@ const labels = {
 };
 
 describe("Account Library Focus mode", () => {
-  it("renders visible, named previous and next controls without nested interactions", () => {
-    const markup = renderToStaticMarkup(React.createElement(FocusNavigationControls, {
-      index: 1,
-      accountCount: 3,
-      onMove: vi.fn(),
-    }));
-
-    expect(markup).toContain('aria-label="Previous account"');
-    expect(markup).toContain('aria-label="Next account"');
-    expect(markup).not.toMatch(/<button[^>]*>(?:(?!<\/button>)[\s\S])*<(?:button\b|a(?:\s|>))/);
-  });
-
   it("keeps side previews presentation-only and exposes controls only on the active card", () => {
     const preview = renderToStaticMarkup(React.createElement(FocusCoverCard, { account, labels, active: false }));
     const active = renderToStaticMarkup(React.createElement(FocusCoverCard, { account, labels, active: true }));
@@ -86,24 +71,14 @@ describe("Account Library Focus mode", () => {
     expect(active).not.toMatch(/<a(?:\s[^>]*)?>(?:(?!<\/a>)[\s\S])*<button\b/);
   });
 
-  it("clamps explicit and arrow navigation to the available accounts", () => {
-    expect(getFocusSelectionIndex(1, -1, 3)).toBe(0);
-    expect(getFocusSelectionIndex(1, 1, 3)).toBe(2);
-    expect(getFocusSelectionIndex(0, -1, 3)).toBe(0);
-    expect(getFocusSelectionIndex(2, 1, 3)).toBe(2);
-  });
+  it("uses the pre-arrow hover-intent carousel behavior", () => {
+    const source = readFileSync("components/accounts/AccountLibrary.tsx", "utf8");
 
-  it("excludes editable descendants from carousel arrow handling", () => {
-    const editable = Object.assign(new EventTarget(), { closest: vi.fn(() => ({ tagName: "INPUT" })) });
-    const staticContent = Object.assign(new EventTarget(), { closest: vi.fn(() => null) });
-
-    expect(isEditableFocusTarget(editable)).toBe(true);
-    expect(isEditableFocusTarget(staticContent)).toBe(false);
-  });
-
-  it("uses the base motion token and removes transitions for reduced-motion users", () => {
-    expect(getFocusCardTransition(false)).toContain("var(--duration-base)");
-    expect(getFocusCardTransition(false)).not.toMatch(/(?:520|560)ms/);
-    expect(getFocusCardTransition(true)).toBe("none");
+    expect(source).toContain("selectWithIntent");
+    expect(source).toContain("onPointerEnter");
+    expect(source).toContain("pointerRatio");
+    expect(source).toContain("focus-card-enter");
+    expect(source).not.toContain("FocusNavigationControls");
+    expect(source).not.toContain('aria-label="Previous account"');
   });
 });
