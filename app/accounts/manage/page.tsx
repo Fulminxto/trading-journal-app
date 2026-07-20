@@ -1,9 +1,8 @@
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { redirect } from "next/navigation";
 
-import AccountLifecycleList, { type LifecycleAccount, type LifecycleLabels } from "@/components/accounts/AccountLifecycleList";
-import EmptyState from "@/components/EmptyState";
-import Card from "@/components/ui/Card";
+import AccountLifecycleManager, { type LifecycleAccount, type LifecycleLabels } from "@/components/accounts/AccountLifecycleManager";
 import { auth } from "@/lib/auth";
 import { normalizeAppLanguage, type AppLanguage } from "@/lib/i18n";
 import { prisma } from "@/lib/prisma";
@@ -48,7 +47,7 @@ export default async function ManageAccountsPage() {
   const canCreateAccount = isGlobalAdmin || currentUser.canCreatePersonalAccounts || currentUser.canCreateSharedAccounts;
   const accounts = await prisma.tradingAccount.findMany({
     where: { OR: [{ createdById: currentUser.id }, { members: { some: { userId: currentUser.id, role: "MANAGER" } } }] },
-    select: { id: true, name: true, status: true, type: true, currency: true, broker: true, createdById: true },
+    select: { id: true, name: true, status: true, type: true, currency: true, broker: true, createdById: true, members: { where: { userId: currentUser.id }, select: { role: true }, take: 1 } },
     orderBy: [{ name: "asc" }, { id: "asc" }],
   });
   const lifecycleAccounts: LifecycleAccount[] = accounts.map((account) => ({
@@ -58,12 +57,17 @@ export default async function ManageAccountsPage() {
     type: account.type,
     currency: account.currency,
     broker: account.broker,
+    role: account.members[0]?.role ?? null,
     canArchiveOrRestore: isGlobalAdmin || (account.createdById === currentUser.id && currentUser.canArchiveOwnAccounts),
     canDelete: account.status === "ACTIVE" && (isGlobalAdmin || (account.createdById === currentUser.id && currentUser.canDeleteOwnAccounts)),
   }));
   const activeAccounts = lifecycleAccounts.filter((account) => account.status === "ACTIVE");
   const archivedAccounts = lifecycleAccounts.filter((account) => account.status === "ARCHIVED");
   const t = labels[normalizeAppLanguage(currentUser.appLanguage)];
+  // Visual prototype only — real soft-delete persistence and 14-day lifecycle are deferred.
+  const recentlyDeletedPreview = process.env.NODE_ENV === "development"
+    ? { name: "Test 5", type: "DEMO", currency: "USD", daysRemaining: 12 }
+    : null;
 
-  return <div className="space-y-8"><header className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-micro uppercase tracking-label text-accent-bright">{t.eyebrow}</p><h1 className="mt-2 text-section text-flash">{t.title}</h1><p className="mt-3 max-w-2xl text-sm leading-6 text-muted">{t.description}</p></div><div className="flex flex-col gap-3 sm:flex-row">{canCreateAccount && lifecycleAccounts.length > 0 && <Link href="/accounts/create" className="inline-flex min-h-11 items-center justify-center rounded-inner bg-accent px-4 py-3 text-sm font-semibold text-white outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/60">{t.create}</Link>}<Link href="/accounts" className="inline-flex min-h-11 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.14] px-4 py-3 text-sm text-muted outline-none hover:text-flash focus-visible:ring-2 focus-visible:ring-accent-bright/60">{t.back}</Link></div></header>{lifecycleAccounts.length === 0 ? <EmptyState title={t.emptyTitle} description={t.emptyDescription} action={canCreateAccount ? <Link href="/accounts/create" className="inline-flex min-h-11 items-center justify-center rounded-inner bg-accent px-4 py-3 text-sm font-semibold text-white outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/60">{t.create}</Link> : undefined} /> : <><Card><div className="mb-5"><h2 className="text-subsection text-flash">{t.activeTitle}</h2><p className="mt-1 text-sm text-muted">{t.activeDescription}</p></div>{activeAccounts.length > 0 ? <AccountLifecycleList accounts={activeAccounts} labels={t} /> : <p className="rounded-inner border-[0.5px] border-dashed border-flash/[0.1] p-5 text-sm text-muted">{t.activeEmpty}</p>}</Card><Card><div className="mb-5"><h2 className="text-subsection text-flash">{t.archivedTitle}</h2><p className="mt-1 text-sm text-muted">{t.archivedDescription}</p></div>{archivedAccounts.length > 0 ? <AccountLifecycleList accounts={archivedAccounts} labels={t} /> : <p className="rounded-inner border-[0.5px] border-dashed border-flash/[0.1] p-5 text-sm text-muted">{t.archivedEmpty}</p>}</Card></>}</div>;
+  return <div className="space-y-8"><header><p className="text-micro uppercase tracking-label text-accent-bright">{t.eyebrow}</p><div className="mb-2 mt-2 flex items-center gap-4"><h1 className="text-section text-flash">{t.title}</h1><Link href="/accounts" aria-label="Back to account library" className="group/back inline-flex h-8 w-fit shrink-0 translate-y-[1px] items-center gap-2 rounded-full border border-white/[0.05] bg-[#070d19]/80 px-3 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400 backdrop-blur-md transition-all duration-300 hover:border-cyan-500/25 hover:text-slate-200 hover:shadow-[0_0_15px_rgba(0,242,254,0.05)] focus-visible:border-cyan-400/30 focus-visible:text-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/20 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base"><ArrowLeft size={14} aria-hidden="true" className="shrink-0 transition-transform duration-300 group-hover/back:-translate-x-[3px] group-focus-visible/back:-translate-x-[3px] motion-reduce:transform-none motion-reduce:transition-none" /><span>BACK TO LIBRARY</span></Link></div><p className="max-w-2xl text-sm leading-6 text-muted">{t.description}</p></header><AccountLifecycleManager activeAccounts={activeAccounts} archivedAccounts={archivedAccounts} recentlyDeletedPreview={recentlyDeletedPreview} labels={t} /></div>;
 }
