@@ -10,16 +10,13 @@ describe("archived account presentation policy", () => {
     expect(shouldShowArchivedAccountBanner()).toBe(false);
   });
 
-  it("keeps historical navigation and excludes management destinations", () => {
+  it("keeps the complete active workspace navigation for archived accounts", () => {
     for (const path of [
       "dashboard", "diary", "calendar", "equity", "analytics",
-      "reports", "sessions", "rules", "playbook",
+      "reports", "sessions", "rules", "playbook", "copilot", "members",
+      "integrations",
     ]) {
       expect(isAccountDestinationVisibleForStatus(path, "ARCHIVED")).toBe(true);
-    }
-
-    for (const path of ["members", "integrations", "copilot"]) {
-      expect(isAccountDestinationVisibleForStatus(path, "ARCHIVED")).toBe(false);
       expect(isAccountDestinationVisibleForStatus(path, "ACTIVE")).toBe(true);
     }
   });

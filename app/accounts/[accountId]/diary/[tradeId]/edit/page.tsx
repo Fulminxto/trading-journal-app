@@ -11,6 +11,7 @@ import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
 
 import { updateAccountTrade } from "../../actions";
+import { isCorrectionMode } from "@/lib/correction-mode";
 
 // CTA Fulmine: matches "Save changes" to the same gradient treatment
 // New Trade's "Add trade" uses (REBRAND_BLUEPRINT.md §6).
@@ -483,11 +484,13 @@ function getTradeSourceClass(source?: string | null) {
 
 export default async function EditTradePage({
   params,
+  searchParams,
 }: {
   params: Promise<{
     accountId: string;
     tradeId: string;
   }>;
+  searchParams: Promise<{ correction?: string }>;
 }) {
   const session = await auth();
 
@@ -496,6 +499,7 @@ export default async function EditTradePage({
   }
 
   const { accountId, tradeId } = await params;
+  const query = await searchParams;
 
   const membership =
     await prisma.accountMember.findFirst({
@@ -522,9 +526,11 @@ export default async function EditTradePage({
     redirect(`/accounts/${accountId}/diary`);
   }
 
-  if (
-    membership.tradingAccount.status === "ARCHIVED"
-  ) {
+  const correctionMode =
+    membership.tradingAccount.status === "ARCHIVED" &&
+    isCorrectionMode(query.correction) &&
+    (isManager || membership.canManageAccount);
+  if (membership.tradingAccount.status === "ARCHIVED" && !correctionMode) {
     redirect(`/accounts/${accountId}/diary`);
   }
 
@@ -567,6 +573,8 @@ export default async function EditTradePage({
     formData: FormData
   ) {
     "use server";
+
+    if (correctionMode) formData.set("correctionMode", "1");
 
     await updateAccountTrade(
       accountId,

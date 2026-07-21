@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   useEffect,
   useMemo,
@@ -43,6 +43,7 @@ import {
 } from "@/lib/icon-variants";
 
 import { isManager } from "@/lib/permissions";
+import { isCorrectionMode, withCorrectionMode } from "@/lib/correction-mode";
 
 type AccountPermissions = {
   role: string;
@@ -508,11 +509,25 @@ const baseLinks: AccountLink[] = [
 ];
 
 export function isAccountDestinationVisibleForStatus(
-  path: string,
-  accountStatus: string
+  _path: string,
+  _accountStatus: string
 ): boolean {
-  return accountStatus !== "ARCHIVED" ||
-    !["members", "integrations", "copilot"].includes(path);
+  return true;
+}
+
+function getCanonicalAccountLinks(
+  permissions: AccountPermissions
+): AccountLink[] {
+  const permittedLinks = baseLinks.filter(
+    (link) => !link.canShow || link.canShow(permissions)
+  );
+
+  return permittedLinks.filter((link) =>
+    isAccountDestinationVisibleForStatus(
+      link.path,
+      permissions.accountStatus
+    )
+  );
 }
 
 function getAccountLinkLabel(
@@ -578,6 +593,7 @@ export default function Sidebar({
   iconVariant,
 }: SidebarProps) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [pendingHref, setPendingHref] = useState<string | null>(null);
@@ -712,28 +728,18 @@ export default function Sidebar({
     if (accountId) {
       const visibleAccountLinks =
         accountPermissions
-          ? baseLinks.filter((link) => {
-            if (!isAccountDestinationVisibleForStatus(
-              link.path,
-              accountPermissions.accountStatus
-            )) {
-              return false;
-            }
-            if (!link.canShow) {
-              return true;
-            }
-
-            return link.canShow(
-              accountPermissions
-            );
-          })
+          ? getCanonicalAccountLinks(accountPermissions)
           : baseLinks.filter(
             (link) => !link.canShow
           );
 
       return [
         ...visibleAccountLinks.map((link) => ({
-          href: `/accounts/${accountId}/${link.path}`,
+          href: withCorrectionMode(
+            `/accounts/${accountId}/${link.path}`,
+            accountPermissions?.accountStatus === "ARCHIVED" &&
+              isCorrectionMode(searchParams.get("correction"))
+          ),
           label: getAccountLinkLabel(
             link.path,
             link.label,
@@ -776,6 +782,7 @@ export default function Sidebar({
     accountPermissions,
     isAdminArea,
     t,
+    searchParams,
   ]);
 
   const groupedLinks = useMemo(() => {
@@ -819,11 +826,11 @@ export default function Sidebar({
   const activeHref = useMemo(() => {
     const active = links.find(
       (link) =>
-        pathname === link.href ||
+        pathname === link.href.split("?")[0] ||
         (pathname === "/accounts/archived" &&
           link.href === "/accounts") ||
         (link.href !== "/accounts" &&
-          pathname.startsWith(`${link.href}/`))
+          pathname.startsWith(`${link.href.split("?")[0]}/`))
     );
 
     return active?.href;

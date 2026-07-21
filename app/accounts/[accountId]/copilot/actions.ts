@@ -14,6 +14,7 @@ import { analyzeCopilotMemory } from "@/lib/copilot/copilot-memory";
 import { buildCopilotSystem } from "@/lib/copilot";
 import { composeAnalysis } from "@/lib/copilot/analysis-composer";
 import { normalizeAppLanguage } from "@/lib/i18n";
+import { assertAccountWritable } from "@/lib/account-write-guard";
 
 const MAX_COPILOT_MESSAGE_LENGTH = 1200;
 
@@ -65,14 +66,7 @@ async function getCopilotAccess(
         );
     }
 
-    if (
-        membership.tradingAccount.status ===
-        "ARCHIVED"
-    ) {
-        redirect(
-            `/accounts/${tradingAccountId}/copilot`
-        );
-    }
+    assertAccountWritable(membership.tradingAccount.status);
 
     return membership;
 }

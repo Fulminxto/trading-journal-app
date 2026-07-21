@@ -271,21 +271,20 @@ export default async function MembersPage({
     redirect("/accounts");
   }
 
-  if (membership.tradingAccount.status === "ARCHIVED") {
-    redirect(`/accounts/${accountId}/dashboard`);
-  }
-
   if (membership.role !== "MANAGER" && !membership.canViewMembers) {
     redirect(`/accounts/${accountId}/dashboard`);
   }
 
+  const isArchived = membership.tradingAccount.status === "ARCHIVED";
+  const canMutateMembers = !isArchived && membership.canManageMembers;
+  const canMutateRoles = !isArchived && membership.canManageRoles;
   const [members, pendingInvites] = await Promise.all([
     prisma.accountMember.findMany({
       where: { tradingAccountId: accountId },
       include: { user: true },
       orderBy: { createdAt: "asc" },
     }),
-    membership.canManageMembers
+    canMutateMembers
       ? prisma.accountInvite.findMany({
           where: { tradingAccountId: accountId },
           include: {
@@ -415,7 +414,7 @@ export default async function MembersPage({
         />
       </section>
 
-      {membership.canManageMembers && (
+      {canMutateMembers && (
         <section id="invite-access" className="grid scroll-mt-6 gap-6 xl:grid-cols-[1fr_0.9fr]">
           <Card className="reveal-rise">
             <SectionHeader eyebrow="Provisioning" title="Invite access" />
@@ -472,7 +471,7 @@ export default async function MembersPage({
 
       <section className="space-y-5">
         <SectionHeader eyebrow="Hierarchy" title="Account access roster">
-          {membership.canManageMembers ? (
+          {canMutateMembers ? (
             <Link
               href="#invite-access"
               className="inline-flex items-center justify-center gap-2 rounded-inner border-[0.5px] border-accent-bright/25 bg-accent-bright/[0.08] px-4 py-2.5 text-sm font-medium text-accent-bright transition-all duration-fast hover:border-accent-bright/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/50"
@@ -491,7 +490,7 @@ export default async function MembersPage({
             const isOwner = member.userId === accountCreatorId;
             const isLastManager = member.role === "MANAGER" && managerCount === 1;
             const canManageThisMember =
-              !isMe && (membership.canManageMembers || membership.canManageRoles);
+              !isMe && (canMutateMembers || canMutateRoles);
             const grantedPermissions = editablePermissionKeys.filter(
               (key) => member[key]
             ).length;
@@ -618,8 +617,8 @@ export default async function MembersPage({
                       canViewCopilot: member.canViewCopilot,
                       canViewMembers: member.canViewMembers,
                     }}
-                    canManageRoles={membership.canManageRoles}
-                    canManageMembers={membership.canManageMembers}
+                    canManageRoles={canMutateRoles}
+                    canManageMembers={canMutateMembers}
                     isCreator={isOwner}
                     isLastManager={isLastManager}
                     t={managementLabels}

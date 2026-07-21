@@ -10,14 +10,34 @@ export class ArchivedAccountReadOnlyError extends Error {
   }
 }
 
+export type ArchivedCorrectionAccess = {
+  intent: "ARCHIVED_CORRECTION";
+  authorized: boolean;
+};
+
 export function isArchivedAccount(status: string): boolean {
   return status === "ARCHIVED";
 }
 
-export function assertAccountWritable(status: string): void {
-  if (isArchivedAccount(status)) {
-    throw new ArchivedAccountReadOnlyError();
-  }
+export function assertAccountWritable(
+  status: string,
+  correctionAccess?: ArchivedCorrectionAccess
+): void {
+  if (!isArchivedAccount(status)) return;
+  if (
+    correctionAccess?.intent === "ARCHIVED_CORRECTION" &&
+    correctionAccess.authorized
+  ) return;
+  throw new ArchivedAccountReadOnlyError();
+}
+
+export function getArchivedCorrectionAccess(
+  correctionRequested: boolean,
+  authorized: boolean
+): ArchivedCorrectionAccess | undefined {
+  return correctionRequested
+    ? { intent: "ARCHIVED_CORRECTION", authorized }
+    : undefined;
 }
 
 export function getArchivedAccountActionError(status: string) {

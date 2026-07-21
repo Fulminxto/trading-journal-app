@@ -33,6 +33,7 @@ import { getSessionsCopy } from "@/components/sessions/SessionI18n";
 import SessionBuilderLink from "@/components/sessions/SessionBuilderLink";
 import SessionReviewWorkspace from "@/components/sessions/SessionReviewWorkspace";
 import { isSessionReviewed } from "@/components/sessions/review-status";
+import { isCorrectionMode } from "@/lib/correction-mode";
 
 type MetricCardProps = {
   title: string;
@@ -139,6 +140,7 @@ export default async function SessionsPage({
     member?: string;
     period?: string;
     ref?: string;
+    correction?: string;
   }>;
 }) {
   const session = await auth();
@@ -207,8 +209,12 @@ export default async function SessionsPage({
 
   const t = getSessionsCopy(appLanguage);
 
+  const correctionMode =
+    membership.tradingAccount.status === "ARCHIVED" &&
+    isCorrectionMode(filters.correction) &&
+    (membership.role === "MANAGER" || membership.canManageAccount);
   const canCreateSessions =
-    membership.tradingAccount.status !== "ARCHIVED" &&
+    (membership.tradingAccount.status !== "ARCHIVED" || correctionMode) &&
     (membership.role === "MANAGER" ||
       membership.role === "MEMBER");
 
@@ -449,6 +455,7 @@ export default async function SessionsPage({
               )}
               className="mt-8 space-y-6"
             >
+              {correctionMode && <input type="hidden" name="correctionMode" value="1" />}
               <Card variant="inner" className="p-5">
                 <div className="mb-5 flex items-center gap-3">
                   <span className="flex h-7 w-7 items-center justify-center rounded-pill border-[0.5px] border-accent-bright/30 bg-accent-bright/[0.08] text-xs font-black text-accent-bright">
@@ -792,6 +799,7 @@ export default async function SessionsPage({
           <SessionReviewWorkspace
             accountId={accountId}
             canEdit={canCreateSessions}
+            correctionMode={correctionMode}
             sessions={periodSessions.map((tradingSession) => ({
               id: tradingSession.id,
               dateLabel: formatDate(tradingSession.date, appLanguage),

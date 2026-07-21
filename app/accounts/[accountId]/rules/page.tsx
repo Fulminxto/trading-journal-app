@@ -26,6 +26,7 @@ import {
 } from "@/lib/i18n";
 import { saveTradingGoals } from "./actions";
 import RulesStandardsLink from "@/components/rules/RulesStandardsLink";
+import { isCorrectionMode } from "@/lib/correction-mode";
 
 type Standard = {
   key: string;
@@ -281,8 +282,10 @@ function FormField({
 
 export default async function RulesPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ accountId: string }>;
+  searchParams: Promise<{ correction?: string }>;
 }) {
   const session = await auth();
 
@@ -291,6 +294,7 @@ export default async function RulesPage({
   }
 
   const { accountId } = await params;
+  const query = await searchParams;
 
   const membership = await getAccountMembershipWithAccount(
     session.user.id,
@@ -321,6 +325,7 @@ export default async function RulesPage({
   const language = normalizeAppLanguage(currentUser.appLanguage);
   const account = membership.tradingAccount;
   const isArchived = account.status === "ARCHIVED";
+  const correctionMode = isArchived && isCorrectionMode(query.correction);
   const currency = account.currency || "USD";
   const currencySymbol = getCurrencySymbol(currency, language);
 
@@ -562,7 +567,7 @@ export default async function RulesPage({
               contract and shows only whether the current month is respecting
               that contract.
             </p>
-            {!isArchived && configuredStandardsCount > 0 && configuredStandardsCount < 4 && (
+            {(!isArchived || correctionMode) && configuredStandardsCount > 0 && configuredStandardsCount < 4 && (
               <RulesStandardsLink className="mt-5 inline-flex min-h-11 items-center justify-center rounded-inner border-[0.5px] border-accent-bright/30 bg-accent-bright/[0.08] px-4 py-2.5 text-sm font-semibold text-accent-bright transition-colors duration-fast hover:bg-accent-bright/[0.14] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/50" />
             )}
           </div>
@@ -614,7 +619,7 @@ export default async function RulesPage({
       )}
 
       <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-        {!isArchived && <Card id="set-the-rulebook" className="scroll-mt-6">
+        {(!isArchived || correctionMode) && <Card id="set-the-rulebook" className="scroll-mt-6">
           <SectionHeader eyebrow="Execution standards" title="Set the rulebook">
             <StatusPill tone="info">Current month</StatusPill>
           </SectionHeader>
@@ -623,6 +628,7 @@ export default async function RulesPage({
             action={saveTradingGoals.bind(null, accountId)}
             className="mt-6 space-y-4"
           >
+            {correctionMode && <input type="hidden" name="correctionMode" value="1" />}
             <FormField
               name="monthlyProfitGoal"
               label="Monthly profit"

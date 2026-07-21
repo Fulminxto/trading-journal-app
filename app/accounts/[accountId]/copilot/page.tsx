@@ -264,11 +264,8 @@ export default async function CopilotPage({
     redirect(`/accounts/${accountId}/dashboard`);
   }
 
-  if (membership.tradingAccount.status === "ARCHIVED") {
-    redirect(`/accounts/${accountId}/dashboard`);
-  }
-
   const appLanguage = currentUser?.appLanguage;
+  const isArchived = membership.tradingAccount.status === "ARCHIVED";
   const t = getCopilotLabels(appLanguage);
 
   const [trades, copilotMessages, memorySnapshot] =
@@ -503,6 +500,7 @@ export default async function CopilotPage({
           appLanguage={appLanguage}
           hasContext={hasContext}
           promptExamples={promptExamples}
+          readOnly={isArchived}
         />
       </section>
 

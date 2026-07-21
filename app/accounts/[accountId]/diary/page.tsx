@@ -23,6 +23,7 @@ import {
   getPeriodSuffix,
 } from "@/lib/scope";
 import { pageDensity } from "@/lib/page-density";
+import { isCorrectionMode } from "@/lib/correction-mode";
 
 import { deleteAccountTrade } from "./actions";
 
@@ -895,6 +896,7 @@ export default async function DiaryPage({
     period?: string;
     ref?: string;
     page?: string;
+    correction?: string;
   }>;
 }) {
   const session = await auth();
@@ -969,13 +971,18 @@ export default async function DiaryPage({
   const isManager =
     membership.role === "MANAGER";
   const isArchived = membership.tradingAccount.status === "ARCHIVED";
+  const correctionMode = Boolean(
+    isArchived &&
+    isCorrectionMode(filters.correction) &&
+    (isManager || membership.canManageAccount)
+  );
 
   const canCreateTrades = Boolean(
     !isArchived && (isManager || membership.canCreateTrades)
   );
 
   const canEditTrades = Boolean(
-    !isArchived && (isManager || membership.canEditTrades)
+    (!isArchived || correctionMode) && (isManager || membership.canEditTrades)
   );
 
   const canDeleteTrades = Boolean(
@@ -1879,7 +1886,7 @@ export default async function DiaryPage({
                       <div className="flex gap-2">
                         {canEditTrades && (
                           <Link
-                            href={`/accounts/${accountId}/diary/${trade.id}/edit`}
+                            href={`/accounts/${accountId}/diary/${trade.id}/edit${correctionMode ? "?correction=1" : ""}`}
                             className="rounded-inner bg-white/10 px-3 py-2 text-sm transition-colors duration-base hover:bg-white/20"
                           >
                             {t.edit}
@@ -2091,7 +2098,7 @@ export default async function DiaryPage({
                 </Link>
                 {canEditTrades && (
                   <Link
-                    href={`/accounts/${accountId}/diary/${trade.id}/edit`}
+                    href={`/accounts/${accountId}/diary/${trade.id}/edit${correctionMode ? "?correction=1" : ""}`}
                     className="flex-1 rounded-inner bg-white/10 px-3 py-3 text-center text-sm transition-colors duration-base hover:bg-white/20"
                   >
                     {t.edit}

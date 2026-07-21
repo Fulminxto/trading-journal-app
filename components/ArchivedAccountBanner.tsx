@@ -60,13 +60,18 @@ export default function ArchivedAccountBanner({ appLanguage }: { appLanguage?: s
     <div
       role="status"
       aria-live="polite"
-      className="mb-5 flex items-start gap-3 rounded-inner border border-accent/20 bg-accent/[0.07] px-4 py-3 text-sm"
+      className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-cyan-400/20 border-l-2 border-l-cyan-400/50 bg-cyan-500/[0.05] px-4 py-3 text-sm"
     >
-      <Archive aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-accent-bright" />
-      <div>
-        <p className="font-semibold text-flash">{labels.title}</p>
-        <p className="mt-0.5 text-muted">{labels.description}</p>
+      <div className="flex min-w-0 items-center gap-3">
+        <Archive aria-hidden="true" strokeWidth={1.75} className="h-5 w-5 shrink-0 text-cyan-300" />
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-slate-100">{labels.title}</p>
+          <p className="mt-0.5 text-xs leading-5 text-slate-400">{labels.description}</p>
+        </div>
       </div>
+      <span className="shrink-0 rounded-full border border-cyan-400/20 bg-cyan-400/[0.08] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-cyan-300">
+        Read only
+      </span>
     </div>
   );
 }

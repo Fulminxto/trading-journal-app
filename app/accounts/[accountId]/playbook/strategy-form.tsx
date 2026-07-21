@@ -62,9 +62,11 @@ function ColorPicker({
 export function CreateStrategyForm({
   accountId,
   defaultColor,
+  correctionMode = false,
 }: {
   accountId: string;
   defaultColor: string;
+  correctionMode?: boolean;
 }) {
   const [state, formAction, isPending] = useActionState(
     createStrategy.bind(null, accountId),
@@ -100,6 +102,7 @@ export function CreateStrategyForm({
       className="mt-6 space-y-5"
     >
       <input type="hidden" name="color" value={color} />
+      {correctionMode && <input type="hidden" name="correctionMode" value="1" />}
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
         <label className="block min-w-0" htmlFor="strategy-name">
           <span className="text-micro uppercase tracking-label text-muted-faint">
@@ -185,12 +188,14 @@ export function StrategyEditor({
   strategyName,
   description,
   color: initialColor,
+  correctionMode = false,
 }: {
   accountId: string;
   strategyId: string;
   strategyName: string;
   description: string | null;
   color: string;
+  correctionMode?: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -214,6 +219,7 @@ export function StrategyEditor({
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     formData.set("color", color);
+    if (correctionMode) formData.set("correctionMode", "1");
     setEditError(null);
     startEditTransition(async () => {
       const result = await updateStrategy(accountId, strategyId, null, formData);
@@ -228,7 +234,7 @@ export function StrategyEditor({
   function handleDelete() {
     setDeleteError(null);
     startDeleteTransition(async () => {
-      const result = await deleteStrategy(accountId, strategyId);
+      const result = await deleteStrategy(accountId, strategyId, correctionMode);
       if (result?.error) {
         setDeleteError(result.error);
         setShowDeleteConfirm(false);

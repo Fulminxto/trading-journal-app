@@ -10,12 +10,16 @@ const mocks = vi.hoisted(() => ({
   logActivity: vi.fn(),
   redirect: vi.fn(),
   sendPush: vi.fn(),
+  memberFindFirst: vi.fn(),
+  accountUpdate: vi.fn(),
 }));
 
 vi.mock("@/lib/auth", () => ({ auth: mocks.auth }));
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     user: { findUnique: mocks.userFindUnique },
+    accountMember: { findFirst: mocks.memberFindFirst },
+    tradingAccount: { update: mocks.accountUpdate },
     $transaction: mocks.transaction,
   },
 }));
@@ -26,7 +30,7 @@ vi.mock("@/lib/activity", () => ({
 vi.mock("next/navigation", () => ({ redirect: mocks.redirect }));
 vi.mock("@/lib/push", () => ({ sendPushToUser: mocks.sendPush }));
 
-import { createAccountWithState } from "@/app/accounts/actions";
+import { createAccountWithState, updateAccountInformationWithState } from "@/app/accounts/actions";
 
 const currentUser = {
   id: "user-1",
@@ -207,5 +211,58 @@ describe("account creation action", () => {
     );
     expect(mocks.redirect).toHaveBeenCalledOnce();
     expect(mocks.transaction).toHaveBeenCalledOnce();
+  });
+});
+
+describe("account information correction", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mocks.auth.mockResolvedValue({ user: { id: "user-1" } });
+    mocks.userFindUnique.mockResolvedValue(currentUser);
+    mocks.accountUpdate.mockResolvedValue(account);
+    mocks.logActivity.mockResolvedValue({ id: "activity-1" });
+    mocks.redirect.mockImplementation((path: string) => { throw new Error(`REDIRECT:${path}`); });
+  });
+
+  it("updates an archived account for an explicit authorized correction without restoring it", async () => {
+    mocks.memberFindFirst.mockResolvedValue({
+      userId: "user-1", role: "MANAGER", canManageAccount: true,
+      tradingAccount: { ...account, status: "ARCHIVED" },
+    });
+    const data = form();
+    data.set("accountId", "account-1");
+    data.set("correctionMode", "1");
+
+    await expect(updateAccountInformationWithState(null, data)).rejects.toThrow(
+      "REDIRECT:/accounts/account-1/dashboard?correction=1",
+    );
+    expect(mocks.accountUpdate).toHaveBeenCalledWith({
+      where: { id: "account-1" },
+      data: expect.not.objectContaining({ status: expect.anything() }),
+    });
+  });
+
+  it("rejects normal archived writes and unauthorized correction attempts", async () => {
+    mocks.memberFindFirst.mockResolvedValue({
+      userId: "user-1", role: "MANAGER", canManageAccount: true,
+      tradingAccount: { ...account, status: "ARCHIVED" },
+    });
+    const normal = form();
+    normal.set("accountId", "account-1");
+    await expect(updateAccountInformationWithState(null, normal)).rejects.toThrow(
+      "This account is archived and read-only.",
+    );
+
+    mocks.memberFindFirst.mockResolvedValue({
+      userId: "user-1", role: "MEMBER", canManageAccount: false,
+      tradingAccount: { ...account, status: "ARCHIVED" },
+    });
+    const unauthorized = form();
+    unauthorized.set("accountId", "account-1");
+    unauthorized.set("correctionMode", "1");
+    await expect(updateAccountInformationWithState(null, unauthorized)).resolves.toMatchObject({
+      error: "You do not have permission to create this account.",
+    });
+    expect(mocks.accountUpdate).not.toHaveBeenCalled();
   });
 });

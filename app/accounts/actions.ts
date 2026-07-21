@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { logActivity, persistActivityLog } from "@/lib/activity";
 import { redirect } from "next/navigation";
 import { normalizeAppLanguage, type AppLanguage } from "@/lib/i18n";
+import { assertAccountWritable, getArchivedCorrectionAccess } from "@/lib/account-write-guard";
 
 const ACCOUNT_TYPES = [
   "DEMO",
@@ -364,6 +365,76 @@ export async function createAccountWithState(
 
 export async function createAccount(formData: FormData): Promise<void> {
   await createAccountFromForm(formData);
+}
+
+export async function updateAccountInformationWithState(
+  _previousState: CreateAccountState | null,
+  formData: FormData
+): Promise<CreateAccountState> {
+  const currentUser = await getCurrentUser();
+  const accountId = getString(formData, "accountId");
+  const correctionRequested = getString(formData, "correctionMode") === "1";
+  const values = getSubmittedAccountValues(formData);
+  const messages = creationMessages[normalizeAppLanguage(currentUser.appLanguage)];
+  const membership = await prisma.accountMember.findFirst({
+    where: { userId: currentUser.id, tradingAccountId: accountId },
+    include: { tradingAccount: true },
+  });
+  if (!membership || (membership.role !== "MANAGER" && !membership.canManageAccount)) {
+    return { error: messages.unauthorized, values };
+  }
+
+  assertAccountWritable(
+    membership.tradingAccount.status,
+    getArchivedCorrectionAccess(
+      correctionRequested,
+      membership.role === "MANAGER" || membership.canManageAccount
+    )
+  );
+
+  const type = getAccountType(values.type);
+  const initialBalance = getNumber(formData, "initialBalance");
+  const currency = getCurrency(values.currency);
+  const profitTarget = getNumber(formData, "profitTarget");
+  const maxDrawdown = getNumber(formData, "maxDrawdown");
+  const dailyDrawdown = getNumber(formData, "dailyDrawdown");
+  const fieldErrors: CreateAccountState["fieldErrors"] = {};
+  if (!values.name || values.name.length > 80) fieldErrors.name = messages.field;
+  if (!type) fieldErrors.type = messages.field;
+  if (initialBalance === null) fieldErrors.initialBalance = messages.field;
+  if (!currency) fieldErrors.currency = messages.field;
+  if (values.broker.length > 80) fieldErrors.broker = messages.field;
+  if (values.phase.length > 80) fieldErrors.phase = messages.field;
+  if (values.profitTarget && profitTarget === null) fieldErrors.profitTarget = messages.field;
+  if (values.maxDrawdown && maxDrawdown === null) fieldErrors.maxDrawdown = messages.field;
+  if (values.dailyDrawdown && dailyDrawdown === null) fieldErrors.dailyDrawdown = messages.field;
+  if (Object.keys(fieldErrors).length || !type || !currency || initialBalance === null) {
+    return { error: messages.invalid, fieldErrors, values };
+  }
+
+  await prisma.tradingAccount.update({
+    where: { id: accountId },
+    data: {
+      name: values.name,
+      type,
+      initialBalance,
+      currency,
+      broker: values.broker || null,
+      phase: values.phase || null,
+      profitTarget,
+      maxDrawdown,
+      dailyDrawdown,
+    },
+  });
+  await logActivity({
+    userId: currentUser.id,
+    accountId,
+    type: "ACCOUNT_INFORMATION_UPDATED",
+    title: "Account information updated",
+    description: `${currentUser.username} updated account information`,
+    metadata: { correctionMode: membership.tradingAccount.status === "ARCHIVED" },
+  });
+  redirect(`/accounts/${accountId}/dashboard${membership.tradingAccount.status === "ARCHIVED" ? "?correction=1" : ""}`);
 }
 
 export async function archiveAccount(formData: FormData) {

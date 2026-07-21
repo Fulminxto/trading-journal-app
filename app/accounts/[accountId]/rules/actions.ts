@@ -14,7 +14,7 @@ import {
   canManageRules,
   getAccountMembershipWithAccount,
 } from "@/lib/permissions";
-import { assertAccountWritable } from "@/lib/account-write-guard";
+import { assertAccountWritable, getArchivedCorrectionAccess } from "@/lib/account-write-guard";
 
 function getString(
   formData: FormData,
@@ -122,6 +122,11 @@ export async function saveTradingGoals(
 ) {
   const membership =
     await getRulesAccess(accountId);
+  const correctionRequested = getString(formData, "correctionMode") === "1";
+  assertAccountWritable(
+    membership.tradingAccount.status,
+    getArchivedCorrectionAccess(correctionRequested, canManageRules(membership))
+  );
 
   const now = new Date();
 
@@ -243,8 +248,6 @@ export async function saveTradingGoals(
       });
     }
   }
-
-  assertAccountWritable(membership.tradingAccount.status);
 
   revalidatePath(
     `/accounts/${accountId}/rules`

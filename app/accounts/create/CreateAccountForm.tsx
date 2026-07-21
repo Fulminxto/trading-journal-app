@@ -5,7 +5,9 @@ import { useActionState } from "react";
 
 import {
   createAccountWithState,
+  updateAccountInformationWithState,
   type CreateAccountField,
+  type CreateAccountValues,
 } from "@/app/accounts/actions";
 import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
@@ -36,14 +38,23 @@ export default function CreateAccountForm({
   labels,
   canCreatePersonalAccount,
   canCreateSharedAccount,
+  accountId,
+  initialValues,
+  correctionMode = false,
+  cancelHref = "/accounts",
 }: {
   labels: CreateAccountFormLabels;
   canCreatePersonalAccount: boolean;
   canCreateSharedAccount: boolean;
+  accountId?: string;
+  initialValues?: CreateAccountValues;
+  correctionMode?: boolean;
+  cancelHref?: string;
 }) {
-  const [state, formAction, isPending] = useActionState(createAccountWithState, null);
+  const action = accountId ? updateAccountInformationWithState : createAccountWithState;
+  const [state, formAction, isPending] = useActionState(action, null);
   const errors = state?.fieldErrors ?? {};
-  const values = state?.values;
+  const values = state?.values ?? initialValues;
   const fieldProps = (name: CreateAccountField) => ({
     "aria-invalid": Boolean(errors[name]),
     "aria-describedby": errors[name] ? `${name}-error` : undefined,
@@ -52,6 +63,13 @@ export default function CreateAccountForm({
   return (
     <Card variant="inner" className="p-6">
       <form action={formAction} noValidate className="grid grid-cols-1 gap-5 md:grid-cols-2">
+        {accountId && <input type="hidden" name="accountId" value={accountId} />}
+        {correctionMode && <input type="hidden" name="correctionMode" value="1" />}
+        {correctionMode && (
+          <p className="rounded-inner border-[0.5px] border-warning/25 bg-warning/[0.06] px-4 py-3 text-sm text-warning md:col-span-2">
+            This account is archived. Changes to account parameters may affect how historical performance is interpreted.
+          </p>
+        )}
         {state?.error && (
           <p role="alert" className="rounded-inner border-[0.5px] border-negative/25 bg-negative/[0.06] px-4 py-3 text-sm text-negative md:col-span-2">
             {state.error}
@@ -102,7 +120,7 @@ export default function CreateAccountForm({
         ))}
 
         <div className="flex flex-wrap justify-end items-center gap-4 mt-6 md:col-span-2 max-sm:flex-col-reverse max-sm:items-stretch">
-          <Link href="/accounts" className="text-sm text-slate-400 hover:text-slate-200 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/40 max-sm:inline-flex max-sm:min-h-11 max-sm:items-center max-sm:justify-center">
+          <Link href={cancelHref} className="text-sm text-slate-400 hover:text-slate-200 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/40 max-sm:inline-flex max-sm:min-h-11 max-sm:items-center max-sm:justify-center">
             {labels.cancel}
           </Link>
           <button type="submit" disabled={isPending} aria-disabled={isPending} className="px-5 py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-semibold rounded-xl shadow-[0_0_20px_rgba(6,182,212,0.15)] transition-all outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/50 disabled:cursor-not-allowed disabled:opacity-60 max-sm:w-full">

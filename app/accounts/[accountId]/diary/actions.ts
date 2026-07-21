@@ -7,7 +7,7 @@ import {
   notifyAccountMembers,
 } from "@/lib/activity";
 import { redirect } from "next/navigation";
-import { assertAccountWritable } from "@/lib/account-write-guard";
+import { assertAccountWritable, getArchivedCorrectionAccess } from "@/lib/account-write-guard";
 
 function getString(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -138,6 +138,7 @@ async function getAccess(
     requireCreateTrades?: boolean;
     requireEditTrades?: boolean;
     requireDeleteTrades?: boolean;
+    correctionRequested?: boolean;
   }
 ) {
   const session = await auth();
@@ -201,7 +202,15 @@ async function getAccess(
   }
 
   if (isMutatingAction) {
-    assertAccountWritable(membership.tradingAccount.status);
+    const correctionAuthorized = Boolean(
+      options?.requireEditTrades &&
+      (isManager || membership.canEditTrades) &&
+      (isManager || membership.canManageAccount)
+    );
+    assertAccountWritable(
+      membership.tradingAccount.status,
+      getArchivedCorrectionAccess(Boolean(options?.correctionRequested), correctionAuthorized)
+    );
   }
 
   return membership;
@@ -431,6 +440,7 @@ export async function updateAccountTrade(
 ) {
   const membership = await getAccess(accountId, {
     requireEditTrades: true,
+    correctionRequested: getString(formData, "correctionMode") === "1",
   });
 
   const existingTrade =
@@ -491,7 +501,7 @@ export async function updateAccountTrade(
 
   await recalculateEquity(accountId);
 
-  redirect(`/accounts/${accountId}/diary`);
+  redirect(`/accounts/${accountId}/diary${getString(formData, "correctionMode") === "1" ? "?correction=1" : ""}`);
 }
 
 export async function deleteAccountTrade(

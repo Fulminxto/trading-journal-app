@@ -7,6 +7,7 @@ import {
   Ellipsis,
   LoaderCircle,
   Settings,
+  Pencil,
   Trash2,
   Users,
 } from "lucide-react";
@@ -93,7 +94,8 @@ export default function AccountActionsMenu({
   const [confirmation, setConfirmation] = useState<ConfirmationKind | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  const navigationCount = [canOpenManage, canViewMembers, canManageIntegrations].filter(Boolean).length;
+  const canEditAccount = accountStatus === "ACTIVE" && canOpenManage;
+  const navigationCount = [canEditAccount, canOpenManage, canViewMembers, canManageIntegrations].filter(Boolean).length;
   const canArchive = accountStatus === "ACTIVE" && canArchiveAccount;
   const mutationCount = [canArchive, canDeleteAccount].filter(Boolean).length;
   const hasActions = navigationCount + mutationCount > 0;
@@ -270,6 +272,11 @@ export default function AccountActionsMenu({
           className="fixed z-[100] overflow-hidden rounded-inner border-[0.5px] border-flash/[0.16] bg-[#08111d] p-1.5 shadow-[0_18px_45px_rgba(0,0,0,.58)]"
           style={menuPosition}
         >
+          {canEditAccount && (
+            <Link role="menuitem" href={`/accounts/${accountId}/edit`} onClick={() => setOpen(false)} className="flex min-h-10 items-center gap-3 rounded-md px-3 text-sm text-muted outline-none hover:bg-white/[0.06] hover:text-flash focus-visible:bg-white/[0.08] focus-visible:text-flash focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-bright/60">
+              <Pencil size={15} aria-hidden="true" />Edit account information
+            </Link>
+          )}
           {canOpenManage && (
             <Link role="menuitem" href="/accounts/manage" onClick={() => setOpen(false)} className="flex min-h-10 items-center gap-3 rounded-md px-3 text-sm text-muted outline-none hover:bg-white/[0.06] hover:text-flash focus-visible:bg-white/[0.08] focus-visible:text-flash focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-bright/60">
               <Settings size={15} aria-hidden="true" />Manage accounts

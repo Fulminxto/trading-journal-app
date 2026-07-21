@@ -171,10 +171,6 @@ export default async function MemberAccessPage({
     redirect("/accounts");
   }
 
-  if (membership.tradingAccount.status === "ARCHIVED") {
-    redirect(`/accounts/${accountId}/dashboard`);
-  }
-
   if (membership.role !== "MANAGER" && !membership.canViewMembers) {
     redirect(`/accounts/${accountId}/dashboard`);
   }

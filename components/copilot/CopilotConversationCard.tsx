@@ -31,6 +31,7 @@ type Props = CopilotI18nProps & {
   accountId: string;
   hasContext: boolean;
   promptExamples: string[];
+  readOnly?: boolean;
 };
 
 export default function CopilotConversationCard({
@@ -39,6 +40,7 @@ export default function CopilotConversationCard({
   appLanguage,
   hasContext,
   promptExamples,
+  readOnly = false,
 }: Props) {
   const t = getCopilotLabels(appLanguage);
   const [content, setContent] = useState("");
@@ -125,14 +127,16 @@ export default function CopilotConversationCard({
             </div>
           </div>
 
-          <GenerateCurrentAnalysisButton
-            accountId={accountId}
-            disabled={!hasContext}
-          />
+          {!readOnly && (
+            <GenerateCurrentAnalysisButton
+              accountId={accountId}
+              disabled={!hasContext}
+            />
+          )}
         </div>
       </div>
 
-      <div className="shrink-0 border-b border-flash/[0.08] px-4 py-2.5 sm:px-6">
+      {!readOnly && <div className="shrink-0 border-b border-flash/[0.08] px-4 py-2.5 sm:px-6">
         <p className="mb-2 text-xs font-medium uppercase tracking-[0.16em] text-muted-faint">
           Quick prompts
         </p>
@@ -146,7 +150,7 @@ export default function CopilotConversationCard({
             />
           ))}
         </div>
-      </div>
+      </div>}
 
       <div
         ref={scrollAreaRef}
@@ -201,7 +205,7 @@ export default function CopilotConversationCard({
         )}
       </div>
 
-      <form
+      {!readOnly && <form
         onSubmit={handleSubmit}
         className="shrink-0 border-t border-flash/[0.08] bg-surface-1 p-4 sm:p-5"
       >
@@ -242,7 +246,7 @@ export default function CopilotConversationCard({
         <span className="sr-only" aria-live="polite">
           {isPending ? "Sending message" : ""}
         </span>
-      </form>
+      </form>}
     </Card>
   );
 }

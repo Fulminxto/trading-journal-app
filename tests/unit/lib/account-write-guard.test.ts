@@ -5,6 +5,7 @@ import {
   ArchivedAccountReadOnlyError,
   assertAccountWritable,
   getArchivedAccountActionError,
+  getArchivedCorrectionAccess,
   isArchivedAccount,
 } from "@/lib/account-write-guard";
 
@@ -33,5 +34,17 @@ describe("archived account write guard", () => {
     expect(getArchivedAccountActionError("ARCHIVED")).toEqual({
       error: ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE,
     });
+  });
+
+  it("allows only explicit authorized archived correction access", () => {
+    expect(() => assertAccountWritable(
+      "ARCHIVED",
+      getArchivedCorrectionAccess(true, true),
+    )).not.toThrow();
+    expect(() => assertAccountWritable(
+      "ARCHIVED",
+      getArchivedCorrectionAccess(true, false),
+    )).toThrow(ArchivedAccountReadOnlyError);
+    expect(() => assertAccountWritable("ARCHIVED")).toThrow(ArchivedAccountReadOnlyError);
   });
 });

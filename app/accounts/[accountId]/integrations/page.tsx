@@ -308,11 +308,9 @@ export default async function IntegrationsPage({
     redirect(`/accounts/${accountId}`);
   }
 
-  if (membership.tradingAccount.status === "ARCHIVED") {
-    redirect(`/accounts/${accountId}`);
-  }
+  const isArchived = membership.tradingAccount.status === "ARCHIVED";
 
-  await prisma.user.update({
+  if (!isArchived) await prisma.user.update({
     where: {
       id: session.user.id,
     },
@@ -636,7 +634,7 @@ export default async function IntegrationsPage({
                   "The latest automatic sync event reported an error."}
               </p>
             </div>
-            <form action={resetSyncStatusAction}>
+            {!isArchived && <form action={resetSyncStatusAction}>
               <button
                 type="submit"
                 className="inline-flex items-center gap-2 rounded-inner border-[0.5px] border-negative/30 bg-negative/[0.08] px-4 py-3 text-sm font-medium text-negative transition-all duration-fast hover:-translate-y-0.5 hover:border-negative/55"
@@ -644,13 +642,13 @@ export default async function IntegrationsPage({
                 <RefreshCw size={16} />
                 Reset status
               </button>
-            </form>
+            </form>}
           </div>
         </Card>
       )}
 
       <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-        <Card>
+        {!isArchived && <Card>
           <SectionHeader eyebrow="Configuration" title="Connection mode">
             <StatusPill tone="info">Non-sensitive only</StatusPill>
           </SectionHeader>
@@ -665,7 +663,7 @@ export default async function IntegrationsPage({
               brokerAccountId: account.brokerAccountId || "",
             }}
           />
-        </Card>
+        </Card>}
 
         <div className="space-y-4">
           <SectionHeader eyebrow="Channels" title="Connection readiness" />

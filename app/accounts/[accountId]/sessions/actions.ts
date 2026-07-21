@@ -9,6 +9,7 @@ import {
   ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE,
   assertAccountWritable,
   isArchivedAccount,
+  getArchivedCorrectionAccess,
 } from "@/lib/account-write-guard";
 
 function getString(
@@ -101,7 +102,7 @@ function getDate(
   return date;
 }
 
-async function getAccess(accountId: string) {
+async function getAccess(accountId: string, correctionRequested = false) {
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -129,7 +130,13 @@ async function getAccess(accountId: string) {
     );
   }
 
-  assertAccountWritable(membership.tradingAccount.status);
+  assertAccountWritable(
+    membership.tradingAccount.status,
+    getArchivedCorrectionAccess(
+      correctionRequested,
+      membership.role === "MANAGER" || membership.canManageAccount
+    )
+  );
 
   return membership;
 }
@@ -138,7 +145,8 @@ export async function createTradingSession(
   accountId: string,
   formData: FormData
 ) {
-  const membership = await getAccess(accountId);
+  const correctionRequested = getString(formData, "correctionMode") === "1";
+  const membership = await getAccess(accountId, correctionRequested);
 
   const date = getDate(formData, "date");
 
@@ -234,7 +242,7 @@ export async function createTradingSession(
   });
 
   redirect(
-    `/accounts/${accountId}/sessions`
+    `/accounts/${accountId}/sessions${correctionRequested ? "?correction=1" : ""}`
   );
 }
 
@@ -248,6 +256,7 @@ export async function updateTradingSessionReview(
   sessionId: string,
   sessionReview: string,
   finalScore: number
+  , correctionRequested = false
 ): Promise<ReviewActionState> {
   const userSession = await auth();
 
@@ -287,7 +296,10 @@ export async function updateTradingSessionReview(
     return { success: false, error: "You do not have permission to update this review." };
   }
 
-  if (isArchivedAccount(membership.tradingAccount.status)) {
+  if (
+    isArchivedAccount(membership.tradingAccount.status) &&
+    !(correctionRequested && (membership.role === "MANAGER" || membership.canManageAccount))
+  ) {
     return { success: false, error: ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE };
   }
 

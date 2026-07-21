@@ -37,13 +37,13 @@ const archived: LifecycleAccount = { id: "archived-1", name: "Archived account",
 
 describe("account lifecycle management", () => {
   it("gives active and archived accounts distinct applicable actions", () => {
-    expect(getLifecycleActionLabels(active, labels)).toEqual(["Open workspace", "Archive account", "Delete account"]);
-    expect(getLifecycleActionLabels(archived, labels)).toEqual(["View archived account", "Restore account"]);
+    expect(getLifecycleActionLabels(active, labels)).toEqual(["Open workspace", "Edit account information", "Archive account", "Delete account"]);
+    expect(getLifecycleActionLabels(archived, labels)).toEqual(["View archived account", "Edit archived account", "Restore account"]);
   });
 
   it("honors existing archive, restore, and delete permission flags", () => {
-    expect(getLifecycleActionLabels({ ...active, canArchiveOrRestore: false, canDelete: false }, labels)).toEqual(["Open workspace"]);
-    expect(getLifecycleActionLabels({ ...archived, canArchiveOrRestore: false }, labels)).toEqual(["View archived account"]);
+    expect(getLifecycleActionLabels({ ...active, canArchiveOrRestore: false, canDelete: false }, labels)).toEqual(["Open workspace", "Edit account information"]);
+    expect(getLifecycleActionLabels({ ...archived, canArchiveOrRestore: false }, labels)).toEqual(["View archived account", "Edit archived account"]);
   });
 
   it("renders lifecycle actions as accessible siblings without nested controls", () => {
@@ -66,7 +66,7 @@ describe("account lifecycle management", () => {
     expect(source).toContain("<AccountLifecycleManager");
     expect(source).not.toContain("createAccount(formData");
     expect(source).not.toContain('<form action={createAccount}');
-    expect(source).not.toMatch(/Edit account|Configure account/);
+    expect(source).not.toContain('<form action={createAccount}');
   });
 
   it("passes distinct account groups into the unified client-side manager", () => {

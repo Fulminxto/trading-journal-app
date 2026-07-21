@@ -8,7 +8,18 @@ import { prisma } from "@/lib/prisma";
 import {
   ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE,
   isArchivedAccount,
+  assertAccountWritable,
+  getArchivedCorrectionAccess,
 } from "@/lib/account-write-guard";
+
+function correctionRequested(formData: FormData) {
+  return formData.get("correctionMode") === "1";
+}
+
+function canCorrect(membership: { role: string; canCreateTrades: boolean; canManageAccount: boolean }) {
+  return (membership.role === "MANAGER" || membership.canManageAccount) &&
+    (membership.role === "MANAGER" || membership.canCreateTrades);
+}
 
 async function getMembership(accountId: string) {
   const session = await auth();
@@ -32,9 +43,8 @@ async function createStrategyRecord(
   if (!membership.canCreateTrades) {
     return { error: "Non hai il permesso di creare strategie." };
   }
-  if (isArchivedAccount(membership.tradingAccount.status)) {
-    return { error: ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE };
-  }
+  try { assertAccountWritable(membership.tradingAccount.status, getArchivedCorrectionAccess(correctionRequested(formData), canCorrect(membership))); }
+  catch { return { error: ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE }; }
 
   const name = formData.get("name");
   if (typeof name !== "string" || !name.trim()) {
@@ -74,9 +84,8 @@ async function updateStrategyRecord(
   if (!membership.canCreateTrades) {
     return { error: "Non hai il permesso di modificare strategie." };
   }
-  if (isArchivedAccount(membership.tradingAccount.status)) {
-    return { error: ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE };
-  }
+  try { assertAccountWritable(membership.tradingAccount.status, getArchivedCorrectionAccess(correctionRequested(formData), canCorrect(membership))); }
+  catch { return { error: ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE }; }
 
   const existing = await prisma.strategy.findFirst({
     where: { id: strategyId, tradingAccountId: accountId },
@@ -130,14 +139,15 @@ export async function updateStrategy(
 
 export async function deleteStrategy(
   accountId: string,
-  strategyId: string
+  strategyId: string,
+  correctionMode = false
 ): Promise<{ error?: string }> {
   const { membership } = await getMembership(accountId);
 
   if (!membership.canCreateTrades) {
     return { error: "Non hai il permesso di eliminare strategie." };
   }
-  if (isArchivedAccount(membership.tradingAccount.status)) {
+  if (isArchivedAccount(membership.tradingAccount.status) && !(correctionMode && canCorrect(membership))) {
     return { error: ARCHIVED_ACCOUNT_READ_ONLY_MESSAGE };
   }
 

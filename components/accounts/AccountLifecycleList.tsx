@@ -66,7 +66,10 @@ function LifecycleOverflowMenu({ account, labels, onRequest }: { account: Lifecy
     <button ref={triggerRef} id={triggerId} type="button" aria-label={`Account actions for ${account.name}`} aria-haspopup="menu" aria-expanded={open} aria-controls={open ? menuId : undefined} onClick={() => setOpen((value) => !value)} onKeyDown={(event) => { if (event.key === "ArrowDown" || event.key === "ArrowUp") { event.preventDefault(); setOpen(true); } else if (event.key === "Escape" && open) { event.preventDefault(); close(true); } }} className="inline-flex h-8 w-8 items-center justify-center rounded-md text-slate-500 outline-none transition-colors hover:bg-white/[0.04] hover:text-slate-200 focus-visible:ring-2 focus-visible:ring-accent-bright/60">
       <Ellipsis size={16} aria-hidden="true" />
     </button>
-    {open && <div ref={menuRef} id={menuId} role="menu" aria-labelledby={triggerId} onKeyDown={handleMenuKeyDown} className="absolute right-0 top-full z-30 mt-1 w-36 overflow-hidden rounded-inner border-[0.5px] border-flash/[0.16] bg-[#08111d] p-1.5 shadow-[0_18px_45px_rgba(0,0,0,.58)]">
+    {open && <div ref={menuRef} id={menuId} role="menu" aria-labelledby={triggerId} onKeyDown={handleMenuKeyDown} className="absolute right-0 top-full z-30 mt-1 w-52 overflow-hidden rounded-inner border-[0.5px] border-flash/[0.16] bg-[#08111d] p-1.5 shadow-[0_18px_45px_rgba(0,0,0,.58)]">
+      <Link role="menuitem" href={`/accounts/${account.id}/edit${account.status === "ARCHIVED" ? "?correction=1" : ""}`} onClick={() => close()} className="flex min-h-9 w-full items-center rounded-md px-3 text-left text-xs text-slate-400 outline-none transition-colors hover:bg-white/[0.05] hover:text-slate-200 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-bright/50">
+        {account.status === "ARCHIVED" ? "Edit archived account" : "Edit account information"}
+      </Link>
       {actions.map((action) => <button key={action.kind} type="button" role="menuitem" onClick={() => { close(); if (triggerRef.current) onRequest(action.kind, account, triggerRef.current); }} className={`flex min-h-9 w-full items-center rounded-md px-3 text-left text-xs outline-none transition-colors focus-visible:ring-2 focus-visible:ring-inset ${action.kind === "delete" ? "text-red-400/80 hover:bg-red-400/[0.06] hover:text-red-400 focus-visible:ring-red-400/50" : "text-slate-400 hover:bg-white/[0.05] hover:text-slate-200 focus-visible:ring-accent-bright/50"}`}>{action.label}</button>)}
     </div>}
   </div>;
@@ -74,8 +77,8 @@ function LifecycleOverflowMenu({ account, labels, onRequest }: { account: Lifecy
 
 export function getLifecycleActionLabels(account: LifecycleAccount, labels: LifecycleLabels) {
   return account.status === "ACTIVE"
-    ? [labels.open, ...(account.canArchiveOrRestore ? [labels.archive] : []), ...(account.canDelete ? [labels.delete] : [])]
-    : [labels.viewArchived, ...(account.canArchiveOrRestore ? [labels.restore] : [])];
+    ? [labels.open, "Edit account information", ...(account.canArchiveOrRestore ? [labels.archive] : []), ...(account.canDelete ? [labels.delete] : [])]
+    : [labels.viewArchived, "Edit archived account", ...(account.canArchiveOrRestore ? [labels.restore] : [])];
 }
 
 export default function AccountLifecycleList({ accounts, labels }: { accounts: LifecycleAccount[]; labels: LifecycleLabels }) {

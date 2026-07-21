@@ -19,6 +19,7 @@ import {
 } from "@/lib/i18n";
 import { prisma } from "@/lib/prisma";
 import { CreateStrategyForm, StrategyEditor } from "./strategy-form";
+import { isCorrectionMode } from "@/lib/correction-mode";
 
 type StrategyStats = {
   count: number;
@@ -154,16 +155,18 @@ function EmptyState({
 function CreateStrategyPanel({
   accountId,
   defaultColor,
+  correctionMode,
 }: {
   accountId: string;
   defaultColor: string;
+  correctionMode: boolean;
 }) {
   return (
     <Card>
       <SectionHeader eyebrow="Setup" title="Add a strategy">
         <StatusPill tone="info">Editable</StatusPill>
       </SectionHeader>
-      <CreateStrategyForm accountId={accountId} defaultColor={defaultColor} />
+      <CreateStrategyForm accountId={accountId} defaultColor={defaultColor} correctionMode={correctionMode} />
     </Card>
   );
 }
@@ -176,6 +179,7 @@ function StrategyRow({
   currency,
   language,
   canManageStrategies,
+  correctionMode,
 }: {
   accountId: string;
   strategy: {
@@ -190,6 +194,7 @@ function StrategyRow({
   currency: string;
   language: AppLanguage;
   canManageStrategies: boolean;
+  correctionMode: boolean;
 }) {
   const winRate =
     stats.count > 0 ? Math.round((stats.wins / stats.count) * 100) : null;
@@ -260,6 +265,7 @@ function StrategyRow({
           strategyName={strategy.name}
           description={strategy.description}
           color={color}
+          correctionMode={correctionMode}
         />
       )}
     </Card>
@@ -268,10 +274,13 @@ function StrategyRow({
 
 export default async function PlaybookPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ accountId: string }>;
+  searchParams: Promise<{ correction?: string }>;
 }) {
   const { accountId } = await params;
+  const query = await searchParams;
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -306,8 +315,12 @@ export default async function PlaybookPage({
   const account = membership.tradingAccount;
   const language = normalizeAppLanguage(membership.user.appLanguage);
   const currency = account.currency ?? "USD";
+  const correctionMode = account.status === "ARCHIVED" &&
+    isCorrectionMode(query.correction) &&
+    (membership.role === "MANAGER" || membership.canManageAccount);
   const canManageStrategies =
-    account.status !== "ARCHIVED" && membership.canCreateTrades;
+    (account.status !== "ARCHIVED" || correctionMode) &&
+    membership.canCreateTrades;
 
   const [strategies, linkedTrades, totalTrades] = await Promise.all([
     prisma.strategy.findMany({
@@ -463,6 +476,7 @@ export default async function PlaybookPage({
           <CreateStrategyPanel
             accountId={accountId}
             defaultColor={coldSwatches[strategies.length % coldSwatches.length]}
+            correctionMode={correctionMode}
           />
         )}
 
@@ -491,6 +505,7 @@ export default async function PlaybookPage({
                   currency={currency}
                   language={language}
                   canManageStrategies={canManageStrategies}
+                  correctionMode={correctionMode}
                 />
               ))
             ) : (

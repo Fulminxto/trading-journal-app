@@ -34,6 +34,7 @@ type SessionReviewWorkspaceProps = {
   accountId: string;
   sessions: SessionReviewItem[];
   canEdit: boolean;
+  correctionMode?: boolean;
 };
 
 type FormErrors = {
@@ -73,6 +74,7 @@ export default function SessionReviewWorkspace({
   accountId,
   sessions,
   canEdit,
+  correctionMode = false,
 }: SessionReviewWorkspaceProps) {
   const router = useRouter();
   const [selectedSession, setSelectedSession] =
@@ -211,6 +213,7 @@ export default function SessionReviewWorkspace({
           selectedSession.id,
           trimmedReview,
           numericScore
+          , correctionMode
         );
 
         if (!result.success) {
