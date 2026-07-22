@@ -213,25 +213,29 @@ export default function Topbar({
 
           {profileOpen && (
             <div
-              className="absolute right-0 mt-3 w-60 overflow-hidden rounded-card border-[0.5px] border-flash/[0.14] shadow-[0_22px_70px_rgba(0,0,0,0.58)] backdrop-blur-2xl"
+              className="absolute right-0 mt-2 w-64 overflow-hidden rounded-xl border border-white/[0.07] shadow-[0_22px_70px_rgba(0,0,0,0.52)] backdrop-blur-2xl"
               style={{ background: OVERLAY_FACE }}
             >
-              <div className="border-b border-white/10 bg-surface-2/55 p-4">
-                <div className="flex items-center gap-3">
+              <div className="bg-surface-2/55 p-3 pb-0">
+                <div className="mb-2 flex items-center gap-3 border-b border-white/[0.06] pb-3">
                   <span
-                    className="flex h-10 w-10 items-center justify-center rounded-full border-[0.5px] border-flash/[0.1] text-sm font-bold text-accent-bright"
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-[0.5px] border-flash/[0.1] text-sm font-bold text-accent-bright"
                     style={{ background: CRYSTAL_FACE }}
                   >
                     {initials}
                   </span>
 
-                  <div>
-                    <p className="text-sm font-bold text-white">
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-white">
                       {displayName}
                     </p>
 
-                    <p className="text-xs text-muted-faint">@{username}</p>
+                    <p className="truncate text-xs text-slate-500">@{username}</p>
                   </div>
+
+                  <span className="shrink-0 rounded border border-white/[0.06] bg-white/[0.04] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-slate-400">
+                    {role}
+                  </span>
                 </div>
               </div>
 
@@ -239,55 +243,57 @@ export default function Topbar({
                 <Link
                   href="/profile"
                   onClick={() => setProfileOpen(false)}
-                  className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white"
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-medium text-slate-300 transition-all hover:bg-white/[0.05] hover:text-white"
                 >
-                  <User size={17} />
+                  <User size={16} />
                   {t.profile}
                 </Link>
 
                 <Link
                   href="/settings"
                   onClick={() => setProfileOpen(false)}
-                  className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white"
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-medium text-slate-300 transition-all hover:bg-white/[0.05] hover:text-white"
                 >
-                  <Settings size={17} />
+                  <Settings size={16} />
                   {t.settings}
                 </Link>
 
                 <Link
                   href="/support"
                   onClick={() => setProfileOpen(false)}
-                  className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white"
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-medium text-slate-300 transition-all hover:bg-white/[0.05] hover:text-white"
                 >
-                  <LifeBuoy size={17} />
+                  <LifeBuoy size={16} />
                   {t.support}
                 </Link>
 
                 <Link
                   href="/accounts"
                   onClick={() => setProfileOpen(false)}
-                  className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white"
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-medium text-slate-300 transition-all hover:bg-white/[0.05] hover:text-white"
                 >
-                  <ArrowLeftRight size={17} />
+                  <ArrowLeftRight size={16} />
                   {t.switchAccount}
                 </Link>
+
+                <div className="my-1 border-t border-white/[0.05]" />
 
                 {(role === "FOUNDER" || role === "ADMIN") && (
                   <Link
                     href="/admin"
                     onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-medium text-slate-300 transition-all hover:bg-white/[0.05] hover:text-white"
                   >
-                    <Shield size={17} />
+                    <Shield size={16} />
                     {t.admin}
                   </Link>
                 )}
 
                 <button
                   onClick={() => signOut({ callbackUrl: "/login" })}
-                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm text-red-400 hover:bg-red-500/10"
+                  className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-xs font-medium text-rose-400 transition-all hover:bg-rose-500/10 hover:text-rose-300"
                 >
-                  <LogOut size={17} />
+                  <LogOut size={16} />
                   {t.logout}
                 </button>
               </div>

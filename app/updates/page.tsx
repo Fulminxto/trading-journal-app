@@ -1,20 +1,9 @@
-import {
-  Megaphone,
-  Wrench,
-  Sparkles,
-  AlertTriangle,
-  type LucideIcon,
-} from "lucide-react";
-
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
-import {
-  formatDateByLanguage,
-  normalizeAppLanguage,
-  type AppLanguage,
-} from "@/lib/i18n";
+import { normalizeAppLanguage, type AppLanguage } from "@/lib/i18n";
+import UpdatesPageContent from "./UpdatesPageContent";
 
 type UpdatesLabels = {
   eyebrow: string;
@@ -169,60 +158,6 @@ const updatesLabels: Record<AppLanguage, UpdatesLabels> = {
   },
 };
 
-function getUpdateIcon(type: string | null): LucideIcon {
-  if (type === "feature") {
-    return Sparkles;
-  }
-
-  if (type === "bugfix") {
-    return Wrench;
-  }
-
-  if (type === "maintenance") {
-    return AlertTriangle;
-  }
-
-  return Megaphone;
-}
-
-function getTypeLabel(
-  type: string | null,
-  labels: UpdatesLabels
-) {
-  if (type === "feature") {
-    return labels.typeFeature;
-  }
-
-  if (type === "bugfix") {
-    return labels.typeBugfix;
-  }
-
-  if (type === "maintenance") {
-    return labels.typeMaintenance;
-  }
-
-  return labels.typeAnnouncement;
-}
-
-function getPriorityLabel(
-  priority: string | null,
-  labels: UpdatesLabels
-) {
-  if (priority === "critical") {
-    return labels.priorityCritical;
-  }
-
-  if (priority === "high") {
-    return labels.priorityHigh;
-  }
-
-  if (priority === "medium") {
-    return labels.priorityMedium;
-  }
-
-  return labels.priorityLow;
-}
-
 export default async function UpdatesPage() {
   const session = await auth();
 
@@ -246,88 +181,14 @@ export default async function UpdatesPage() {
 
   const t = updatesLabels[appLanguage];
 
-  const updates =
-    await prisma.releaseNote.findMany({
-      where: {
-        published: true,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-
   return (
-    <div className="space-y-8">
-      <div>
-        <p className="text-sm text-gray-400">
-          {t.eyebrow}
-        </p>
-
-        <h1 className="mt-2 flex items-center gap-3 text-4xl font-black text-white">
-          <Megaphone className="text-accent-bright" />
-          {t.title}
-        </h1>
-
-        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-gray-400">
-          {t.description}
-        </p>
-      </div>
-
-      <div className="space-y-4">
-        {updates.length === 0 ? (
-          <div className="rounded-[32px] border border-white/10 bg-white/[0.03] p-8">
-            <p className="text-sm text-gray-400">
-              {t.empty}
-            </p>
-          </div>
-        ) : (
-          updates.map((update) => {
-            const Icon = getUpdateIcon(update.type);
-
-            return (
-              <div
-                key={update.id}
-                className="rounded-[32px] border border-white/10 bg-white/[0.03] p-8"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <div className="flex items-center gap-3">
-                      <Icon className="text-accent-bright" />
-
-                      <p className="text-xs uppercase tracking-[0.15em] text-accent-bright">
-                        {getTypeLabel(update.type, t)}
-                      </p>
-                    </div>
-
-                    <h2 className="mt-4 text-2xl font-black text-white">
-                      {update.title}
-                    </h2>
-
-                    <p className="mt-4 max-w-4xl text-sm leading-relaxed text-gray-300">
-                      {update.content}
-                    </p>
-
-                    <p className="mt-5 text-xs text-gray-500">
-                      {t.published}:{" "}
-                      {formatDateByLanguage(
-                        update.createdAt,
-                        appLanguage
-                      )}
-                    </p>
-                  </div>
-
-                  <div className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-accent-bright">
-                    {getPriorityLabel(
-                      update.priority,
-                      t
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })
-        )}
-      </div>
-    </div>
+    <UpdatesPageContent
+      labels={{
+        eyebrow: t.eyebrow,
+        title: t.title,
+        description: t.description,
+        empty: t.empty,
+      }}
+    />
   );
 }

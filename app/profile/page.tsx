@@ -5,16 +5,20 @@ import {
   ArrowRight,
   BadgeCheck,
   Briefcase,
+  Check,
   Clock3,
   IdCard,
   KeyRound,
   LineChart,
+  Monitor,
   Save,
   ShieldCheck,
+  Sparkles,
   Target,
   TrendingUp,
   Upload,
   Wallet,
+  X,
   type LucideIcon,
 } from "lucide-react";
 
@@ -26,10 +30,12 @@ import {
   formatCurrencyByLanguage,
   formatDateByLanguage,
   formatDateTimeByLanguage,
+  getLocaleFromLanguage,
   normalizeAppLanguage,
 } from "@/lib/i18n";
 import { prisma } from "@/lib/prisma";
 import ChangePasswordForm from "./ChangePasswordForm";
+import ProfileTabs from "./ProfileTabs";
 import { updateProfile } from "./actions";
 
 type Tone = "neutral" | "info" | "positive" | "negative";
@@ -46,12 +52,6 @@ function getInitials(name: string) {
 function isOnline(date?: Date | null) {
   if (!date) return false;
   return Date.now() - new Date(date).getTime() < 5 * 60 * 1000;
-}
-
-function valueTone(value: number) {
-  if (value > 0) return "text-positive";
-  if (value < 0) return "text-negative";
-  return "text-muted";
 }
 
 function StatusPill({
@@ -282,12 +282,6 @@ export default async function ProfilePage({
           },
         },
       },
-      createdTrades: {
-        orderBy: {
-          openDate: "desc",
-        },
-        take: 10,
-      },
     },
   });
 
@@ -314,7 +308,7 @@ export default async function ProfilePage({
   const wins = allTrades.filter((trade) => trade.outcome === "win").length;
   const winRate = totalTrades > 0 ? (wins / totalTrades) * 100 : null;
 
-  const profileCompletionItems = [
+  const headerCompletionItems = [
     user.name,
     user.username,
     user.bio,
@@ -327,18 +321,51 @@ export default async function ProfilePage({
     user.preferredBroker,
     user.setupStyle,
   ];
-  const completedProfileItems =
-    profileCompletionItems.filter(Boolean).length;
-  const profileCompletion = Math.round(
-    (completedProfileItems / profileCompletionItems.length) * 100
+  const headerProfileCompletion = Math.round(
+    (headerCompletionItems.filter(Boolean).length / headerCompletionItems.length) * 100
   );
-
+  const hasText = (value?: string | null) => Boolean(value?.trim());
+  const readinessFields = [
+    { label: "Avatar", complete: Boolean(user.image) },
+    { label: "Display Name", complete: hasText(user.name) },
+    { label: "Username", complete: hasText(user.username) },
+    { label: "Workspace Name", complete: hasText(user.workspaceName) },
+    { label: "TimeZone", complete: hasText(user.timezone) },
+    { label: "Trading Style", complete: hasText(user.tradingStyle) },
+    { label: "Favorite Market", complete: hasText(user.favoriteMarket) },
+    { label: "Preferred Session", complete: hasText(user.preferredSession) },
+    { label: "Risk Per Trade", complete: user.riskPerTrade !== null && Number.isFinite(user.riskPerTrade) },
+    { label: "Broker", complete: hasText(user.preferredBroker) },
+    { label: "Setup Style", complete: hasText(user.setupStyle) },
+  ];
+  const completedProfileItems = readinessFields.filter((field) => field.complete).length;
+  const missingReadinessFields = readinessFields.filter((field) => !field.complete);
+  const readinessPercentage = Math.round(
+    (completedProfileItems / readinessFields.length) * 100
+  );
+  const tradingPassportRows = [
+    { label: "Style", value: user.tradingStyle ?? "" },
+    { label: "Favorite Market", value: user.favoriteMarket ?? "" },
+    { label: "Preferred Session", value: user.preferredSession ?? "" },
+    { label: "Risk", value: user.riskPerTrade === null ? "" : `${user.riskPerTrade}%` },
+    { label: "Broker", value: user.preferredBroker ?? "" },
+  ];
+  const currentSetupRows = [
+    { label: "Risk", value: user.riskPerTrade === null ? "Not set" : `${user.riskPerTrade}%` },
+    { label: "Market", value: hasText(user.favoriteMarket) ? user.favoriteMarket : "Not set" },
+    { label: "Style", value: hasText(user.tradingStyle) ? user.tradingStyle : "Not set" },
+  ];
   const formatCurrency = (value: number) =>
     formatCurrencyByLanguage(value, currency, appLanguage);
   const formatDateTime = (date?: Date | null) =>
     date ? formatDateTimeByLanguage(date, appLanguage) : "Never";
-  const formatShortDate = (date: Date) =>
-    formatDateByLanguage(date, appLanguage);
+  const formatHeaderDateTime = (date?: Date | null) =>
+    date
+      ? `${formatDateByLanguage(date, appLanguage)} • ${new Date(date).toLocaleTimeString(
+          getLocaleFromLanguage(appLanguage),
+          { hour: "2-digit", minute: "2-digit" }
+        )}`
+      : "Never";
   const securityRows: Array<{
     label: string;
     value: string;
@@ -346,11 +373,6 @@ export default async function ProfilePage({
   }> = [
     { label: "Authentication", value: "Protected", icon: ShieldCheck },
     { label: "System role", value: user.role, icon: IdCard },
-    {
-      label: "Two-factor",
-      value: user.twoFactorEnabled ? "Enabled" : "Not enabled",
-      icon: KeyRound,
-    },
     { label: "Email", value: user.email ? user.email : "Not set", icon: BadgeCheck },
     {
       label: "Last activity",
@@ -361,7 +383,7 @@ export default async function ProfilePage({
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="mx-auto max-w-6xl space-y-8">
       <GlobalToast status={query.toast} language={appLanguage} />
 
       <div>
@@ -406,7 +428,7 @@ export default async function ProfilePage({
               <p className="mt-2 text-body text-muted">@{user.username}</p>
               <div className="mt-4 flex flex-wrap gap-2">
                 <StatusPill>{user.role}</StatusPill>
-                <StatusPill tone="info">{profileCompletion}% complete</StatusPill>
+                <StatusPill tone="info">{headerProfileCompletion}% complete</StatusPill>
               </div>
             </div>
           </div>
@@ -416,16 +438,16 @@ export default async function ProfilePage({
               <p className="text-micro uppercase tracking-label text-muted-faint">
                 Last login
               </p>
-              <p className="mt-2 text-caption leading-5 text-flash">
-                {formatDateTime(user.lastLoginAt)}
+              <p className="mt-2 whitespace-nowrap text-xs leading-5 text-flash">
+                {formatHeaderDateTime(user.lastLoginAt)}
               </p>
             </div>
             <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
               <p className="text-micro uppercase tracking-label text-muted-faint">
                 Last activity
               </p>
-              <p className="mt-2 text-caption leading-5 text-flash">
-                {formatDateTime(user.lastActivityAt)}
+              <p className="mt-2 whitespace-nowrap text-xs leading-5 text-flash">
+                {formatHeaderDateTime(user.lastActivityAt)}
               </p>
             </div>
             <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
@@ -469,280 +491,307 @@ export default async function ProfilePage({
         />
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-        <Card>
-          <SectionHeader eyebrow="Identity" title="Personal profile">
-            <StatusPill tone="info">Private</StatusPill>
-          </SectionHeader>
-
-          <form action={updateProfile} className="mt-6 space-y-8">
-            <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-5">
-              <div className="flex items-start gap-4">
-                <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-1 p-3 text-muted">
-                  <Upload size={18} />
-                </div>
-                <div>
-                  <p className="text-body font-medium text-flash">
-                    Profile image
-                  </p>
-                  <p className="mt-2 text-caption leading-5 text-muted">
-                    JPG, PNG, or WEBP. Maximum size: 5MB. The server validates
-                    file type, size, and image signature before upload.
-                  </p>
-                </div>
-              </div>
-              <input
-                type="file"
-                name="profileImage"
-                accept="image/jpeg,image/png,image/webp"
-                className="mt-4 w-full rounded-inner border-[0.5px] border-flash/[0.12] bg-surface-1 px-4 py-3 text-sm text-muted outline-none file:mr-4 file:rounded-inner file:border-0 file:bg-accent-bright/[0.12] file:px-4 file:py-2 file:text-sm file:font-medium file:text-accent-bright hover:file:bg-accent-bright/[0.18]"
-              />
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <TextField
-                name="name"
-                label="Display name"
-                defaultValue={user.name}
-                placeholder="Display name"
-              />
-              <TextField
-                name="username"
-                label="Username"
-                defaultValue={user.username}
-                placeholder="Username"
-                required
-              />
-              <TextField
-                name="workspaceName"
-                label="Workspace name"
-                defaultValue={user.workspaceName}
-                placeholder="Workspace name"
-              />
-              <TextField
-                name="timezone"
-                label="Timezone"
-                defaultValue={user.timezone}
-                placeholder="Europe/Rome"
-              />
-              <TextAreaField
-                name="bio"
-                label="Bio"
-                defaultValue={user.bio}
-                placeholder="Briefly describe your trader profile."
-              />
-            </div>
-
-            <div>
-              <SectionHeader
-                eyebrow="Operating preferences"
-                title="Trading identity"
-              />
-              <div className="mt-5 grid gap-4 md:grid-cols-2">
-                <SelectField
-                  name="tradingStyle"
-                  label="Trading style"
-                  defaultValue={user.tradingStyle}
-                  placeholder="Select style"
-                  options={[
-                    "Scalping",
-                    "Day Trading",
-                    "Swing Trading",
-                    "Position Trading",
-                  ]}
-                />
-                <SelectField
-                  name="favoriteMarket"
-                  label="Favorite market"
-                  defaultValue={user.favoriteMarket}
-                  placeholder="Select market"
-                  options={[
-                    "Forex",
-                    "Gold",
-                    "Crypto",
-                    "Indices",
-                    "Commodities",
-                  ]}
-                />
-                <SelectField
-                  name="preferredSession"
-                  label="Preferred session"
-                  defaultValue={user.preferredSession}
-                  placeholder="Select session"
-                  options={["Asia", "London", "New York", "Overlap"]}
-                />
-                <TextField
-                  name="riskPerTrade"
-                  label="Risk per trade %"
-                  type="number"
-                  step="0.01"
-                  defaultValue={user.riskPerTrade}
-                  placeholder="1"
-                />
-                <TextField
-                  name="preferredBroker"
-                  label="Preferred broker"
-                  defaultValue={user.preferredBroker}
-                  placeholder="Broker / Prop Firm"
-                />
-                <TextField
-                  name="setupStyle"
-                  label="Setup style"
-                  defaultValue={user.setupStyle}
-                  placeholder="Breakout, Pullback, SMC"
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-caption leading-5 text-muted">
-                Profile data personalizes the app experience. Security-sensitive
-                changes remain server-side.
-              </p>
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center gap-2 rounded-inner border-[0.5px] border-accent-bright/30 bg-accent-bright/[0.08] px-5 py-3 text-sm font-semibold text-accent-bright transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/55"
-              >
-                <Save size={17} />
-                Save profile
-              </button>
-            </div>
-          </form>
-        </Card>
-
-        <div className="space-y-6">
-          <Card>
-            <SectionHeader eyebrow="Completion" title="Identity readiness">
-              <StatusPill tone="info">{profileCompletion}%</StatusPill>
-            </SectionHeader>
-            <div className="mt-6 rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-5">
-              <div className="flex items-center justify-between gap-4">
-                <p className="text-caption text-muted">Completed fields</p>
-                <p className="text-caption text-flash">
-                  {completedProfileItems}/{profileCompletionItems.length}
-                </p>
-              </div>
-              <div className="mt-4 h-2 rounded-pill bg-surface-1">
-                <div
-                  className="h-2 rounded-pill bg-accent-bright"
-                  style={{ width: `${profileCompletion}%` }}
-                />
-              </div>
-              <p className="mt-4 text-caption leading-5 text-muted">
-                This is a setup completeness indicator, not a quality score.
-              </p>
-            </div>
-          </Card>
-
-          <Card>
-            <SectionHeader eyebrow="Workspace" title="Account access">
-              <StatusPill>{user.memberships.length} linked</StatusPill>
-            </SectionHeader>
-            <div className="mt-6 space-y-3">
-              {user.memberships.length > 0 ? (
-                user.memberships.map((membership) => (
-                  <Link
-                    key={membership.id}
-                    href={`/accounts/${membership.tradingAccount.id}/dashboard`}
-                    className="block rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4 transition-all duration-base hover:-translate-y-0.5 hover:border-accent-bright/40"
-                  >
-                    <div className="flex items-center justify-between gap-4">
-                      <div className="min-w-0">
-                        <p className="truncate text-body font-medium text-flash">
-                          {membership.tradingAccount.name}
-                        </p>
-                        <p className="mt-1 text-caption text-muted">
-                          {membership.tradingAccount.type} / {membership.role}
-                        </p>
-                      </div>
-                      <ArrowRight size={16} className="shrink-0 text-muted" />
+      <ProfileTabs
+        general={
+          <div className="grid items-stretch gap-6 lg:grid-cols-[3fr_2fr]">
+            <Card className="h-full">
+              <form action={updateProfile} className="flex h-full flex-col">
+                <div className="space-y-7">
+                <section>
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                    <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/[0.08] bg-surface-2">
+                      {user.image ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={user.image} alt={displayName} className="h-full w-full object-cover" />
+                      ) : (
+                        <span className="text-lg font-semibold text-accent-bright">{initials}</span>
+                      )}
                     </div>
-                  </Link>
-                ))
-              ) : (
-                <EmptyState
-                  title="No linked accounts"
-                  description="Account access will appear here after you create or join a trading account."
-                />
-              )}
-            </div>
-          </Card>
+                    <div className="min-w-0 flex-1">
+                      <h2 className="text-sm font-semibold text-white">Profile Image</h2>
+                      <p className="mt-1 text-xs leading-5 text-slate-400">
+                        JPG, PNG, or WEBP. Maximum size: 5MB. Files are validated server-side.
+                      </p>
+                      <label className="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-xs font-medium text-slate-300 transition-all hover:bg-white/[0.07] hover:text-white">
+                        <Upload size={15} aria-hidden="true" />
+                        Upload image
+                        <input
+                          type="file"
+                          name="profileImage"
+                          accept="image/jpeg,image/png,image/webp"
+                          className="sr-only"
+                        />
+                      </label>
+                    </div>
+                  </div>
+                </section>
 
-          <Card>
-            <SectionHeader eyebrow="Activity" title="Recent trades">
-              <StatusPill>{user.createdTrades.length} loaded</StatusPill>
-            </SectionHeader>
-            <div className="mt-6 space-y-3">
-              {user.createdTrades.length > 0 ? (
-                user.createdTrades.map((trade) => (
-                  <div
-                    key={trade.id}
-                    className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4"
-                  >
+                <section className="border-t border-white/[0.05] pt-6">
+                  <h2 className="text-sm font-semibold text-white">Personal Details</h2>
+                  <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <TextField name="name" label="Display name" defaultValue={user.name} placeholder="Display name" />
+                    <TextField name="username" label="Username" defaultValue={user.username} placeholder="Username" required />
+                    <TextField name="workspaceName" label="Workspace name" defaultValue={user.workspaceName} placeholder="Workspace name" />
+                    <TextField name="timezone" label="TimeZone" defaultValue={user.timezone} placeholder="Europe/Rome" />
+                    <TextAreaField name="bio" label="Bio" defaultValue={user.bio} placeholder="Briefly describe your trader profile." />
+                  </div>
+                </section>
+
+                <section className="border-t border-white/[0.05] pt-6">
+                  <h2 className="text-sm font-semibold text-white">Trading Identity</h2>
+                  <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <SelectField name="tradingStyle" label="Trading style" defaultValue={user.tradingStyle} placeholder="Select style" options={["Scalping", "Day Trading", "Swing Trading", "Position Trading"]} />
+                    <SelectField name="favoriteMarket" label="Favorite market" defaultValue={user.favoriteMarket} placeholder="Select market" options={["Forex", "Gold", "Crypto", "Indices", "Commodities"]} />
+                    <SelectField name="preferredSession" label="Preferred session" defaultValue={user.preferredSession} placeholder="Select session" options={["Asia", "London", "New York", "Overlap"]} />
+                    <TextField name="riskPerTrade" label="Risk per trade %" type="number" step="0.01" defaultValue={user.riskPerTrade} placeholder="1" />
+                    <TextField name="preferredBroker" label="Broker" defaultValue={user.preferredBroker} placeholder="Broker / Prop Firm" />
+                    <TextField name="setupStyle" label="Setup style" defaultValue={user.setupStyle} placeholder="Breakout, Pullback, SMC" />
+                  </div>
+                </section>
+                </div>
+
+                <div className="mt-7 flex justify-end border-t border-white/[0.05] pt-6">
+                  <button type="submit" className="inline-flex items-center justify-center gap-2 rounded-inner border-[0.5px] border-accent-bright/30 bg-accent-bright/[0.08] px-5 py-3 text-sm font-semibold text-accent-bright transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/55">
+                    <Save size={17} />
+                    Save profile
+                  </button>
+                </div>
+              </form>
+            </Card>
+
+            <Card
+              className={
+                readinessPercentage < 100
+                  ? "h-full flex flex-col justify-between p-6"
+                  : "h-full flex flex-col justify-between"
+              }
+            >
+              {readinessPercentage === 100 ? (
+                <>
+                  <div>
                     <div className="flex items-center justify-between gap-4">
-                      <div>
-                        <p className="text-body font-medium text-flash">
-                          {trade.symbol}
-                        </p>
-                        <p className="mt-1 text-caption text-muted">
-                          {formatShortDate(trade.openDate)}
-                        </p>
+                      <div className="flex items-center gap-2">
+                        <span className="flex h-7 w-7 items-center justify-center rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-400">
+                          <Check size={15} aria-hidden="true" />
+                        </span>
+                        <h2 className="text-sm font-semibold text-white">Verified Trader Profile</h2>
                       </div>
-                      <span
-                        className={`rounded-pill border-[0.5px] border-flash/[0.08] bg-surface-1 px-3 py-1 text-caption font-medium ${valueTone(
-                          trade.resultUsd || 0
-                        )}`}
-                      >
-                        {formatCurrency(trade.resultUsd || 0)}
+                      <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-400">
+                        {readinessPercentage}% Complete
                       </span>
                     </div>
                   </div>
-                ))
+
+                  <section className="my-8">
+                    <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">Trading Passport</h3>
+                    <div className="mt-4 divide-y divide-white/[0.05]">
+                      {tradingPassportRows.map((row) => (
+                        <div key={row.label} className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0">
+                          <span className="text-xs text-slate-500">{row.label}</span>
+                          <span className="max-w-[60%] truncate text-right text-xs font-medium text-slate-200">{row.value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+
+                  <section>
+                    <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">Engine Status</h3>
+                    <div className="mt-3 divide-y divide-white/[0.05]">
+                      {[
+                        ["Journaling Engine", "Active"],
+                        ["Risk Analytics", "Calibrated"],
+                        ["AI Pattern Matching", "Optimal"],
+                      ].map(([label, value]) => (
+                        <div key={label} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
+                          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" aria-hidden="true" />
+                          <span className="min-w-0 flex-1 text-xs text-slate-400">{label}</span>
+                          <span className="text-xs font-medium text-slate-200">{value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                </>
               ) : (
-                <EmptyState
-                  title="No recent trades"
-                  description="Recent trades created by this identity will appear here when they exist."
-                />
-              )}
-            </div>
-          </Card>
+                <>
+                  <div>
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <h2 className="text-sm font-semibold text-white">Identity Diagnostic</h2>
+                        <p className="mt-1 text-xs text-slate-500">Profile readiness overview</p>
+                      </div>
+                      <span className="text-xl font-semibold text-cyan-400">{readinessPercentage}%</span>
+                    </div>
 
-          <Card>
-            <SectionHeader eyebrow="Security" title="Change password">
-              <StatusPill tone="info">Protected</StatusPill>
-            </SectionHeader>
-            <div className="mt-6">
-              <ChangePasswordForm appLanguage={appLanguage} />
-            </div>
-          </Card>
+                    <div
+                      role="progressbar"
+                      aria-label="Identity readiness"
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-valuenow={readinessPercentage}
+                      className="mt-5 h-1.5 overflow-hidden rounded-full bg-white/[0.06]"
+                    >
+                      <div className="h-1.5 rounded-full bg-cyan-400 transition-all" style={{ width: `${readinessPercentage}%` }} />
+                    </div>
+                    <p className="mt-3 text-xs text-slate-400">
+                      {completedProfileItems} / {readinessFields.length} fields complete
+                    </p>
+                  </div>
 
-          <Card>
-            <SectionHeader eyebrow="Access" title="Security status">
-              <StatusPill>{user.status}</StatusPill>
-            </SectionHeader>
-            <div className="mt-6 grid gap-3">
-              {securityRows.map(({ label, value, icon: RowIcon }) => {
-                return (
-                  <div
-                    key={label}
-                    className="flex items-center gap-3 rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4"
-                  >
-                    <RowIcon size={17} className="shrink-0 text-muted" />
-                    <div className="min-w-0">
-                      <p className="text-micro uppercase tracking-label text-muted-faint">
-                        {label}
-                      </p>
-                      <p className="mt-1 break-words text-caption text-flash">
-                        {value}
+                  <div className="flex-1 my-6 flex flex-col justify-start gap-3">
+                    <h3 className="text-xs font-semibold text-slate-300">Missing information</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
+                      {missingReadinessFields.map((field) => (
+                        <div
+                          key={field.label}
+                          className="flex items-center gap-2 rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-2"
+                        >
+                          <X size={13} className="shrink-0 text-rose-400" aria-hidden="true" />
+                          <span className="text-xs text-slate-300">{field.label}</span>
+                          <span className="sr-only">Missing</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-3.5 mb-4">
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Current Setup</p>
+                    <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
+                      {currentSetupRows.map((item) => {
+                        const missing = item.value === "Not set";
+                        return (
+                          <div key={item.label}>
+                            <p className="text-[10px] uppercase tracking-wide text-slate-500">{item.label}</p>
+                            <p className={missing ? "mt-1 text-xs text-slate-500" : "mt-1 text-xs font-medium text-slate-200"}>
+                              {item.value}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="mt-auto rounded-xl border border-cyan-500/15 bg-cyan-500/[0.04] p-4">
+                    <div className="flex items-start gap-3">
+                      <Sparkles size={15} className="mt-0.5 shrink-0 text-cyan-400" aria-hidden="true" />
+                      <p className="text-xs leading-relaxed text-slate-400">
+                        Completa la tua Trading Identity per personalizzare gli algoritmi di analisi e le metriche del Journal.
                       </p>
                     </div>
                   </div>
-                );
-              })}
+                </>
+              )}
+            </Card>
+          </div>
+        }
+        security={
+          <div className="grid gap-6 lg:grid-cols-2">
+            <Card className="h-full">
+              <SectionHeader eyebrow="Security" title="Change Password">
+                <StatusPill tone="info">Protected</StatusPill>
+              </SectionHeader>
+              <div className="mt-6"><ChangePasswordForm appLanguage={appLanguage} /></div>
+            </Card>
+
+            <Card className="flex flex-col justify-between h-full">
+              <div>
+                <SectionHeader eyebrow="Access" title="Security Status">
+                  <StatusPill>{user.status}</StatusPill>
+                </SectionHeader>
+                <div className="mt-6 divide-y divide-white/[0.05]">
+                  {securityRows.map(({ label, value, icon: RowIcon }) => (
+                    <div key={label} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
+                      <RowIcon size={16} className="shrink-0 text-slate-500" />
+                      <p className="min-w-0 flex-1 text-xs text-slate-400">{label}</p>
+                      <p className="max-w-[60%] break-words text-right text-xs font-medium text-slate-200">{value}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-6 divide-y divide-white/[0.05] border-t border-white/[0.05]">
+                <div className="flex items-center gap-3 py-3">
+                  <Monitor size={16} className="shrink-0 text-slate-500" />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs text-slate-400">Active Sessions</p>
+                    <p className="mt-1 text-xs font-medium text-slate-200">Current authenticated session</p>
+                    <p className="mt-1 text-[11px] text-slate-500">Device details are not tracked.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 py-3 last:pb-0">
+                  <KeyRound size={16} className="shrink-0 text-slate-500" />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs text-slate-400">Two-Factor Auth</p>
+                    <p className="mt-1 text-xs font-medium text-slate-200">
+                      {user.twoFactorEnabled ? "Enabled" : "Disabled"}
+                    </p>
+                  </div>
+                  {!user.twoFactorEnabled ? (
+                    <Link
+                      href="/settings"
+                      className="shrink-0 text-xs font-medium text-cyan-400 transition-all hover:text-cyan-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60"
+                    >
+                      Enable 2FA
+                    </Link>
+                  ) : null}
+                </div>
+              </div>
+            </Card>
+          </div>
+        }
+        connected={
+          <Card>
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h2 className="text-sm font-semibold text-white">Connected Accounts</h2>
+                <p className="mt-1 text-xs text-slate-400">Trading workspaces available to this identity.</p>
+              </div>
+              <StatusPill>{user.memberships.length} linked</StatusPill>
             </div>
+            {user.memberships.length > 0 ? (
+              <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+                {user.memberships.map((membership) => (
+                  <div
+                    key={membership.id}
+                    className="flex items-center justify-between gap-4 rounded-xl border border-white/[0.06] bg-[#070d19]/70 p-4 transition-all hover:border-white/[0.10] hover:bg-white/[0.02]"
+                  >
+                    <div className="flex min-w-0 items-center gap-3">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400">
+                        <Wallet size={17} aria-hidden="true" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold text-slate-100">
+                          {membership.tradingAccount.name}
+                        </p>
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-cyan-400">
+                            {membership.tradingAccount.type}
+                          </span>
+                          <span className="rounded-full border border-white/[0.06] bg-white/[0.03] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                            {membership.role}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <Link
+                      href={`/accounts/${membership.tradingAccount.id}/dashboard`}
+                      className="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-cyan-400 transition-all hover:text-cyan-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60"
+                    >
+                      Open workspace
+                      <ArrowRight size={13} aria-hidden="true" />
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="mt-5">
+                <EmptyState title="No linked accounts" description="Account access will appear here after you create or join a trading account." />
+              </div>
+            )}
           </Card>
-        </div>
-      </section>
+        }
+      />
     </div>
   );
 }

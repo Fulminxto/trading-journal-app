@@ -44,7 +44,6 @@ type NotificationItem = {
 type PanelCopy = {
   bell: string;
   title: string;
-  commandSurface: string;
   markAllAsRead: string;
   refresh: string;
   viewAll: string;
@@ -55,10 +54,9 @@ type PanelCopy = {
 const basePanelCopy: PanelCopy = {
   bell: "Notifications",
   title: "Notifications",
-  commandSurface: "Command surface",
   markAllAsRead: "Mark all read",
   refresh: "Refresh",
-  viewAll: "View all",
+  viewAll: "View all notifications",
   emptyTitle: "No notifications",
   emptyDescription: "Important account updates will appear here.",
 };
@@ -386,42 +384,43 @@ export default function NotificationBell({ language }: { language?: string }) {
 
       {open && (
         <div
-          className="absolute right-0 z-50 mt-3 w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-card border-[0.5px] border-flash/[0.14] shadow-[0_22px_70px_rgba(0,0,0,0.58)] backdrop-blur-2xl sm:w-96"
+          className="absolute right-0 z-50 mt-2 w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-xl border border-white/[0.07] shadow-[0_22px_70px_rgba(0,0,0,0.52)] backdrop-blur-2xl sm:w-96"
           style={{ background: OVERLAY_FACE }}
         >
-          <div className="border-b-[0.5px] border-flash/[0.08] bg-surface-2/55 p-4">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="text-micro uppercase tracking-label text-muted-faint">
-                  {t.commandSurface}
-                </p>
-                <h2 className="mt-1 text-subsection text-flash">{t.title}</h2>
-              </div>
+          <div className="border-b border-white/[0.06] bg-surface-2/55 p-4">
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-sm font-semibold text-white">{t.title}</h2>
 
               <div className="flex shrink-0 items-center gap-2">
+                <span className="rounded-full border border-white/[0.06] bg-white/[0.04] px-2 py-0.5 text-[10px] font-medium text-slate-400">
+                  {count}
+                </span>
+
                 <button
                   type="button"
                   onClick={handleRefresh}
                   disabled={loading}
-                  className="inline-flex items-center gap-1.5 rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-2 px-3 py-2 text-caption font-medium text-muted transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/45 hover:text-accent-bright disabled:pointer-events-none disabled:opacity-60"
+                  aria-label={t.refresh}
+                  title={t.refresh}
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.02] text-slate-400 transition-all hover:bg-white/[0.05] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60 disabled:pointer-events-none disabled:opacity-60"
                 >
                   <RefreshCw
                     size={14}
                     className={loading ? "animate-spin" : ""}
                   />
-                  {t.refresh}
                 </button>
 
-              {count > 0 && (
-                <button
-                  type="button"
-                  onClick={handleMarkAllAsRead}
-                  className="inline-flex items-center gap-1.5 rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-2 px-3 py-2 text-caption font-medium text-muted transition-all duration-fast hover:-translate-y-0.5 hover:border-accent-bright/45 hover:text-accent-bright"
-                >
-                  <CheckCheck size={14} />
-                  {t.markAllAsRead}
-                </button>
-              )}
+                {count > 0 && (
+                  <button
+                    type="button"
+                    onClick={handleMarkAllAsRead}
+                    aria-label={t.markAllAsRead}
+                    title={t.markAllAsRead}
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.02] text-slate-400 transition-all hover:bg-white/[0.05] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60"
+                  >
+                    <CheckCheck size={14} />
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -538,11 +537,11 @@ export default function NotificationBell({ language }: { language?: string }) {
                 )
               )
             ) : (
-              <div className="m-2 rounded-inner border-[0.5px] border-dashed border-flash/[0.12] bg-surface-2 p-6 text-center">
-                <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-1 text-muted">
-                  <Inbox size={18} />
+              <div className="m-2 rounded-xl border border-white/[0.05] bg-white/[0.02] p-6 text-center">
+                <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500/10 p-3 text-cyan-400">
+                  <Inbox size={17} />
                 </div>
-                <p className="mt-4 text-body font-medium text-flash">
+                <p className="text-body font-medium text-flash">
                   {t.emptyTitle}
                 </p>
                 <p className="mt-2 text-caption leading-5 text-muted">
@@ -552,11 +551,11 @@ export default function NotificationBell({ language }: { language?: string }) {
             )}
           </div>
 
-          <div className="border-t-[0.5px] border-flash/[0.08] p-2">
+          <div className="border-t border-white/[0.05] px-3 pb-3 pt-3 text-center">
             <Link
               href="/notifications"
               onClick={() => setOpen(false)}
-              className="flex items-center justify-center gap-2 rounded-inner px-3 py-3 text-sm font-medium text-muted transition-all duration-fast hover:bg-surface-2 hover:text-accent-bright"
+              className="inline-flex items-center justify-center gap-2 text-xs text-cyan-400 hover:underline"
             >
               {t.viewAll}
               <ArrowRight size={15} />
