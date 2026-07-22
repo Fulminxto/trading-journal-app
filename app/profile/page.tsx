@@ -28,15 +28,17 @@ import SignatureEdge from "@/components/ui/SignatureEdge";
 import { auth } from "@/lib/auth";
 import {
   formatCurrencyByLanguage,
-  formatDateByLanguage,
   formatDateTimeByLanguage,
-  getLocaleFromLanguage,
   normalizeAppLanguage,
 } from "@/lib/i18n";
 import { prisma } from "@/lib/prisma";
 import ChangePasswordForm from "./ChangePasswordForm";
 import ProfileTabs from "./ProfileTabs";
 import { updateProfile } from "./actions";
+import {
+  buildProfileReadiness,
+  formatProfileHeaderDateTime,
+} from "./profile-model";
 
 type Tone = "neutral" | "info" | "positive" | "negative";
 
@@ -325,24 +327,7 @@ export default async function ProfilePage({
     (headerCompletionItems.filter(Boolean).length / headerCompletionItems.length) * 100
   );
   const hasText = (value?: string | null) => Boolean(value?.trim());
-  const readinessFields = [
-    { label: "Avatar", complete: Boolean(user.image) },
-    { label: "Display Name", complete: hasText(user.name) },
-    { label: "Username", complete: hasText(user.username) },
-    { label: "Workspace Name", complete: hasText(user.workspaceName) },
-    { label: "TimeZone", complete: hasText(user.timezone) },
-    { label: "Trading Style", complete: hasText(user.tradingStyle) },
-    { label: "Favorite Market", complete: hasText(user.favoriteMarket) },
-    { label: "Preferred Session", complete: hasText(user.preferredSession) },
-    { label: "Risk Per Trade", complete: user.riskPerTrade !== null && Number.isFinite(user.riskPerTrade) },
-    { label: "Broker", complete: hasText(user.preferredBroker) },
-    { label: "Setup Style", complete: hasText(user.setupStyle) },
-  ];
-  const completedProfileItems = readinessFields.filter((field) => field.complete).length;
-  const missingReadinessFields = readinessFields.filter((field) => !field.complete);
-  const readinessPercentage = Math.round(
-    (completedProfileItems / readinessFields.length) * 100
-  );
+  const readiness = buildProfileReadiness(user);
   const tradingPassportRows = [
     { label: "Style", value: user.tradingStyle ?? "" },
     { label: "Favorite Market", value: user.favoriteMarket ?? "" },
@@ -359,13 +344,6 @@ export default async function ProfilePage({
     formatCurrencyByLanguage(value, currency, appLanguage);
   const formatDateTime = (date?: Date | null) =>
     date ? formatDateTimeByLanguage(date, appLanguage) : "Never";
-  const formatHeaderDateTime = (date?: Date | null) =>
-    date
-      ? `${formatDateByLanguage(date, appLanguage)} • ${new Date(date).toLocaleTimeString(
-          getLocaleFromLanguage(appLanguage),
-          { hour: "2-digit", minute: "2-digit" }
-        )}`
-      : "Never";
   const securityRows: Array<{
     label: string;
     value: string;
@@ -439,7 +417,7 @@ export default async function ProfilePage({
                 Last login
               </p>
               <p className="mt-2 whitespace-nowrap text-xs leading-5 text-flash">
-                {formatHeaderDateTime(user.lastLoginAt)}
+                {formatProfileHeaderDateTime(user.lastLoginAt, appLanguage)}
               </p>
             </div>
             <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
@@ -447,7 +425,7 @@ export default async function ProfilePage({
                 Last activity
               </p>
               <p className="mt-2 whitespace-nowrap text-xs leading-5 text-flash">
-                {formatHeaderDateTime(user.lastActivityAt)}
+                {formatProfileHeaderDateTime(user.lastActivityAt, appLanguage)}
               </p>
             </div>
             <div className="rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-2 p-4">
@@ -561,12 +539,12 @@ export default async function ProfilePage({
 
             <Card
               className={
-                readinessPercentage < 100
+                readiness.percentage < 100
                   ? "h-full flex flex-col justify-between p-6"
                   : "h-full flex flex-col justify-between"
               }
             >
-              {readinessPercentage === 100 ? (
+              {readiness.percentage === 100 ? (
                 <>
                   <div>
                     <div className="flex items-center justify-between gap-4">
@@ -577,7 +555,7 @@ export default async function ProfilePage({
                         <h2 className="text-sm font-semibold text-white">Verified Trader Profile</h2>
                       </div>
                       <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-400">
-                        {readinessPercentage}% Complete
+                        {readiness.percentage}% Complete
                       </span>
                     </div>
                   </div>
@@ -619,7 +597,7 @@ export default async function ProfilePage({
                         <h2 className="text-sm font-semibold text-white">Identity Diagnostic</h2>
                         <p className="mt-1 text-xs text-slate-500">Profile readiness overview</p>
                       </div>
-                      <span className="text-xl font-semibold text-cyan-400">{readinessPercentage}%</span>
+                      <span className="text-xl font-semibold text-cyan-400">{readiness.percentage}%</span>
                     </div>
 
                     <div
@@ -627,20 +605,20 @@ export default async function ProfilePage({
                       aria-label="Identity readiness"
                       aria-valuemin={0}
                       aria-valuemax={100}
-                      aria-valuenow={readinessPercentage}
+                      aria-valuenow={readiness.percentage}
                       className="mt-5 h-1.5 overflow-hidden rounded-full bg-white/[0.06]"
                     >
-                      <div className="h-1.5 rounded-full bg-cyan-400 transition-all" style={{ width: `${readinessPercentage}%` }} />
+                      <div className="h-1.5 rounded-full bg-cyan-400 transition-all" style={{ width: `${readiness.percentage}%` }} />
                     </div>
                     <p className="mt-3 text-xs text-slate-400">
-                      {completedProfileItems} / {readinessFields.length} fields complete
+                      {readiness.completedCount} / {readiness.fields.length} fields complete
                     </p>
                   </div>
 
                   <div className="flex-1 my-6 flex flex-col justify-start gap-3">
                     <h3 className="text-xs font-semibold text-slate-300">Missing information</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
-                      {missingReadinessFields.map((field) => (
+                      {readiness.missingFields.map((field) => (
                         <div
                           key={field.label}
                           className="flex items-center gap-2 rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-2"
