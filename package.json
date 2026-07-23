@@ -14,7 +14,6 @@
     "security:snyk:monitor": "snyk monitor"
   },
   "dependencies": {
-    "@auth/prisma-adapter": "^2.11.2",
     "@prisma/client": "^6.19.0",
     "@sentry/nextjs": "^10.63.0",
     "@supabase/supabase-js": "^2.106.2",
