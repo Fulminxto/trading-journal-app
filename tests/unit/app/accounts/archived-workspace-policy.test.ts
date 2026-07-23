@@ -16,7 +16,9 @@ describe("archived historical workspace policy", () => {
     expect(page).not.toContain('membership.tradingAccount.status === "ARCHIVED") {\n    redirect');
     expect(page).toContain("readOnly={isArchived}");
     expect(conversation).toContain("{!readOnly && <form");
-    expect(conversation).toContain("{!readOnly && (\n            <GenerateCurrentAnalysisButton");
+    expect(conversation).toMatch(
+      /\{!readOnly\s*&&\s*\(\s*<GenerateCurrentAnalysisButton/
+    );
     expect(actions).toContain("assertAccountWritable(membership.tradingAccount.status)");
   });
 
