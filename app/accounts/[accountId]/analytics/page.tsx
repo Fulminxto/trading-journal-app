@@ -1453,6 +1453,17 @@ export default async function AnalyticsPage({
       }))
     : undefined;
 
+  const analyticsScopeBar = (
+    <ScopeBar
+      accountId={accountId}
+      members={scopeMembers}
+      selectedMemberId={selectedMemberId}
+      currentPeriod={period}
+      currentRef={ref}
+      appLanguage={language}
+    />
+  );
+
   return (
     <AccountPageShell
       className={pageDensity.analytics.page}
@@ -1462,17 +1473,10 @@ export default async function AnalyticsPage({
         </>
       }
       title={t.analyticsTitle}
+      headerLayout={!isSharedAccount ? "split-md" : "default"}
       supportLine="Discover statistical patterns and behavioral insights hidden in your trading data."
-      scopeBar={
-        <ScopeBar
-          accountId={accountId}
-          members={scopeMembers}
-          selectedMemberId={selectedMemberId}
-          currentPeriod={period}
-          currentRef={ref}
-          appLanguage={language}
-        />
-      }
+      action={!isSharedAccount ? analyticsScopeBar : undefined}
+      scopeBar={isSharedAccount ? analyticsScopeBar : undefined}
     >
 
       <div className="reveal-rise" style={{ animationDelay: "60ms" }}>

@@ -593,6 +593,17 @@ export default async function ReportsPage({
       }))
     : undefined;
 
+  const reportsScopeBar = (
+    <ScopeBar
+      members={members}
+      selectedMemberId={selectedMemberId ?? undefined}
+      currentPeriod={period}
+      currentRef={ref}
+      appLanguage={language}
+      accountId={accountId}
+    />
+  );
+
   // Shared with the on-screen hero's document-meta strip below, so the
   // web view and the printed cover page agree on who this was prepared
   // for - a "referto" states this once, not per-chapter.
@@ -632,17 +643,10 @@ export default async function ReportsPage({
             </>
           }
           title={t.heroTitle}
+          headerLayout={!isSharedAccount ? "split-md" : "default"}
           supportLine="Generate executive reports that summarize performance, risk and trading behavior."
-          scopeBar={
-            <ScopeBar
-              members={members}
-              selectedMemberId={selectedMemberId ?? undefined}
-              currentPeriod={period}
-              currentRef={ref}
-              appLanguage={language}
-              accountId={accountId}
-            />
-          }
+          action={!isSharedAccount ? reportsScopeBar : undefined}
+          scopeBar={isSharedAccount ? reportsScopeBar : undefined}
         >
 
         <div className={`grid grid-cols-2 ${pageDensity.reports.grid} xl:grid-cols-4`}>

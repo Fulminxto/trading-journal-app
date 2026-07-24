@@ -12,6 +12,7 @@ type AccountPageShellProps = {
   scopeBar?: ReactNode;
   children: ReactNode;
   className?: string;
+  headerLayout?: "default" | "split-md";
 };
 
 export default function AccountPageShell({
@@ -23,41 +24,81 @@ export default function AccountPageShell({
   scopeBar,
   children,
   className = "",
+  headerLayout = "default",
 }: AccountPageShellProps) {
+  const splitHeaderAtMd = headerLayout === "split-md";
+
   return (
     <div className={`space-y-5 ${className}`.trim()}>
       <section className="reveal-rise space-y-4" style={{ animationDelay: "0ms" }}>
         <header
-          className={`flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between ${pageDensity.topbarSafeArea}`}
+          className={splitHeaderAtMd
+            ? "w-full"
+            : `flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between ${pageDensity.topbarSafeArea}`}
         >
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-3">
-              <SignatureEdge orientation="vertical" className="h-4" />
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-muted">
-                {eyebrow}
-              </p>
-            </div>
+          {splitHeaderAtMd ? (
+            <>
+              <div className="flex flex-wrap items-center gap-3">
+                <SignatureEdge orientation="vertical" className="h-4" />
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-muted">
+                  {eyebrow}
+                </p>
+              </div>
 
-            <div className="mt-2 flex flex-wrap items-center gap-3">
-              <h1 className="text-hero text-flash">{title}</h1>
-              {badges && (
-                <div className="flex flex-wrap items-center gap-2">
-                  {badges}
+              <div className="mt-2 flex flex-wrap items-center gap-3">
+                <h1 className="text-hero text-flash">{title}</h1>
+                {badges && (
+                  <div className="flex flex-wrap items-center gap-2">
+                    {badges}
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-2 flex w-full flex-wrap items-center gap-4">
+                {supportLine && (
+                  <p className="max-w-3xl text-sm text-muted">
+                    {supportLine}
+                  </p>
+                )}
+                {action && (
+                  <div className="ml-auto flex items-center gap-2">
+                    {action}
+                  </div>
+                )}
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-3">
+                  <SignatureEdge orientation="vertical" className="h-4" />
+                  <p className="text-xs font-black uppercase tracking-[0.18em] text-muted">
+                    {eyebrow}
+                  </p>
+                </div>
+
+                <div className="mt-2 flex flex-wrap items-center gap-3">
+                  <h1 className="text-hero text-flash">{title}</h1>
+                  {badges && (
+                    <div className="flex flex-wrap items-center gap-2">
+                      {badges}
+                    </div>
+                  )}
+                </div>
+
+                {supportLine && (
+                  <p className="mt-2 max-w-3xl text-sm text-muted">
+                    {supportLine}
+                  </p>
+                )}
+              </div>
+
+              {action && (
+                <div className="flex shrink-0 flex-wrap items-center gap-2">
+                  {action}
                 </div>
               )}
-            </div>
-
-            {supportLine && (
-              <p className="mt-2 max-w-3xl text-sm text-muted">
-                {supportLine}
-              </p>
-            )}
-          </div>
-
-          {action && (
-            <div className="flex shrink-0 flex-wrap items-center gap-2">
-              {action}
-            </div>
+            </>
           )}
         </header>
 

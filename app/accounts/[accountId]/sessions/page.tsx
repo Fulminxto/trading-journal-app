@@ -26,7 +26,6 @@ import {
   getPeriodRange,
   getPeriodSuffix,
 } from "@/lib/scope";
-import { pageDensity } from "@/lib/page-density";
 
 import { createTradingSession } from "./actions";
 import { getSessionsCopy } from "@/components/sessions/SessionI18n";
@@ -328,40 +327,47 @@ export default async function SessionsPage({
       }))
     : undefined;
 
+  const sessionsScopeBar = (
+    <ScopeBar
+      members={members}
+      selectedMemberId={selectedMemberId}
+      currentPeriod={period}
+      currentRef={ref}
+      appLanguage={appLanguage}
+      accountId={accountId}
+    />
+  );
+
   return (
     <div className="space-y-6">
-      <Card
-        variant="hero"
-        className={`p-6 sm:p-8 ${pageDensity.topbarSafeArea}`}
-      >
-        <div>
-          <div className="flex flex-wrap items-center gap-3">
-            <SignatureEdge orientation="vertical" className="h-4" />
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-muted">
-              {t.page.workspaceBadge} &middot; {membership.tradingAccount.name}
-            </p>
-          </div>
+      <header className="w-full">
+        <div className="flex flex-wrap items-center gap-3">
+          <SignatureEdge orientation="vertical" className="h-4" />
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-muted">
+            {t.page.workspaceBadge} &middot; {membership.tradingAccount.name}
+          </p>
+        </div>
 
-          <h1 className="mt-3 text-hero text-white">
-            {t.page.title}
-          </h1>
+        <h1 className="mt-3 text-hero text-white">
+          {t.page.title}
+        </h1>
+        {isSharedAccount ? (
           <p className="mt-2 max-w-3xl text-sm text-muted">
             Plan, execute and review every trading session with a structured workflow.
           </p>
-          <SessionBuilderLink className="mt-5 inline-flex min-h-11 items-center justify-center rounded-inner border-[0.5px] border-accent-bright/30 bg-accent-bright/[0.08] px-4 py-2.5 text-sm font-semibold text-accent-bright transition-colors duration-fast hover:bg-accent-bright/[0.14] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/50">
-            Plan session
-          </SessionBuilderLink>
-        </div>
-      </Card>
+        ) : (
+          <div className="mt-2 flex w-full flex-wrap items-center gap-4">
+            <p className="max-w-3xl text-sm text-muted">
+              Plan, execute and review every trading session with a structured workflow.
+            </p>
+            <div className="ml-auto flex items-center gap-2">
+              {sessionsScopeBar}
+            </div>
+          </div>
+        )}
+      </header>
 
-      <ScopeBar
-        members={members}
-        selectedMemberId={selectedMemberId}
-        currentPeriod={period}
-        currentRef={ref}
-        appLanguage={appLanguage}
-        accountId={accountId}
-      />
+      {isSharedAccount && sessionsScopeBar}
 
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <MetricCard

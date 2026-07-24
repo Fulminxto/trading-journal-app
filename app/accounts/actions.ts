@@ -57,6 +57,11 @@ const ALLOWED_CURRENCIES = [
   "EUR",
   "GBP",
   "JPY",
+  "CAD",
+  "AUD",
+  "CHF",
+  "USDT",
+  "USDC",
 ] as const;
 
 function getString(formData: FormData, key: string) {

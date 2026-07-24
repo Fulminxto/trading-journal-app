@@ -13,6 +13,7 @@ import {
 } from "@/lib/i18n";
 
 import AccountPageShell from "@/components/AccountPageShell";
+import DiaryFilterSelect from "@/components/diary/DiaryFilterSelect";
 import ExecutionInsights from "@/components/diary/ExecutionInsights";
 import ScopeBar from "@/components/ScopeBar";
 import Card from "@/components/ui/Card";
@@ -34,9 +35,6 @@ const CTA_GRADIENT =
 
 const selectClass =
   "min-h-10 w-full rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-2 px-3 py-2 text-sm text-white outline-none transition-colors duration-base focus:border-accent-bright/50";
-const compactSelectClass =
-  "diary-compact-select h-9 w-auto rounded-inner border-[0.5px] border-flash/[0.1] bg-surface-2 text-sm text-white outline-none transition-colors duration-base focus:border-accent-bright/50";
-
 type DiaryLabels = {
   filteredPnl: string;
   currentEquity: string;
@@ -168,7 +166,7 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     allStatuses: "Tutti gli stati",
     allTraders: "Tutti i trader",
     strategy: "Strategia",
-    allStrategies: "— Tutte le strategie —",
+    allStrategies: "Tutte le strategie",
     noStrategy: "— Nessuna strategia —",
     applyFilters: "Applica filtri",
 
@@ -265,7 +263,7 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     allStatuses: "All statuses",
     allTraders: "All traders",
     strategy: "Strategy",
-    allStrategies: "— All strategies —",
+    allStrategies: "All strategies",
     noStrategy: "— No strategy —",
     applyFilters: "Apply filters",
 
@@ -360,7 +358,7 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     allStatuses: "Ð£ÑÑ– ÑÑ‚Ð°Ñ‚ÑƒÑÐ¸",
     allTraders: "Ð£ÑÑ– Ñ‚Ñ€ÐµÐ¹Ð´ÐµÑ€Ð¸",
     strategy: "Ð¡Ñ‚Ñ€Ð°Ñ‚ÐµÐ³Ñ–Ñ",
-    allStrategies: "— Ð£ÑÑ– ÑÑ‚Ñ€Ð°Ñ‚ÐµÐ³Ñ–Ñ— —",
+    allStrategies: "Ð£ÑÑ– ÑÑ‚Ñ€Ð°Ñ‚ÐµÐ³Ñ–Ñ—",
     noStrategy: "— Ð‘ÐµÐ· ÑÑ‚Ñ€Ð°Ñ‚ÐµÐ³Ñ–Ñ— —",
     applyFilters: "Ð—Ð°ÑÑ‚Ð¾ÑÑƒÐ²Ð°Ñ‚Ð¸ Ñ„Ñ–Ð»ÑŒÑ‚Ñ€Ð¸",
     newTradeEyebrow: "ÐÐ¾Ð²Ð° Ð¾Ð¿ÐµÑ€Ð°Ñ†Ñ–Ñ",
@@ -451,7 +449,7 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     allStatuses: "Ð’ÑÐµ ÑÑ‚Ð°Ñ‚ÑƒÑÑ‹",
     allTraders: "Ð’ÑÐµ Ñ‚Ñ€ÐµÐ¹Ð´ÐµÑ€Ñ‹",
     strategy: "Ð¡Ñ‚Ñ€Ð°Ñ‚ÐµÐ³Ð¸Ñ",
-    allStrategies: "— Ð’ÑÐµ ÑÑ‚Ñ€Ð°Ñ‚ÐµÐ³Ð¸Ð¸ —",
+    allStrategies: "Ð’ÑÐµ ÑÑ‚Ñ€Ð°Ñ‚ÐµÐ³Ð¸Ð¸",
     noStrategy: "— Ð‘ÐµÐ· ÑÑ‚Ñ€Ð°Ñ‚ÐµÐ³Ð¸Ð¸ —",
     applyFilters: "ÐŸÑ€Ð¸Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ Ñ„Ð¸Ð»ÑŒÑ‚Ñ€Ñ‹",
     newTradeEyebrow: "ÐÐ¾Ð²Ð°Ñ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ñ",
@@ -542,7 +540,7 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     allStatuses: "Todos los estados",
     allTraders: "Todos los traders",
     strategy: "Estrategia",
-    allStrategies: "— Todas las estrategias —",
+    allStrategies: "Todas las estrategias",
     noStrategy: "— Sin estrategia —",
     applyFilters: "Aplicar filtros",
     newTradeEyebrow: "Nueva operación",
@@ -633,7 +631,7 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     allStatuses: "Tous les statuts",
     allTraders: "Tous les traders",
     strategy: "Stratégie",
-    allStrategies: "— Toutes les stratégies —",
+    allStrategies: "Toutes les stratégies",
     noStrategy: "— Aucune stratégie —",
     applyFilters: "Appliquer les filtres",
     newTradeEyebrow: "Nouvelle opération",
@@ -724,7 +722,7 @@ const diaryLabels: Record<AppLanguage, DiaryLabels> = {
     allStatuses: "Alle Status",
     allTraders: "Alle Trader",
     strategy: "Strategie",
-    allStrategies: "— Alle Strategien —",
+    allStrategies: "Alle Strategien",
     noStrategy: "— Keine Strategie —",
     applyFilters: "Filter anwenden",
     newTradeEyebrow: "Neue Operation",
@@ -1216,13 +1214,6 @@ export default async function DiaryPage({
     period !== "all",
   ].filter(Boolean).length;
 
-  const activeFilterSummary =
-    activeFilterCount > 0
-      ? `${activeFilterCount} active ${
-        activeFilterCount === 1 ? "filter" : "filters"
-      }`
-      : "No active filters";
-
   const pageQuery = new URLSearchParams();
   Object.entries(filters).forEach(([key, value]) => {
     if (key !== "page" && value) {
@@ -1244,8 +1235,8 @@ export default async function DiaryPage({
   const nextPageHref = getPageHref(currentPage + 1);
   const paginationSummary =
     filteredTradeCount > 0
-      ? `Showing ${pageStart}-${pageEnd} of ${filteredTradeCount} filtered trades`
-      : "Showing 0 of 0 filtered trades";
+      ? `Showing ${pageStart}-${pageEnd} of ${filteredTradeCount} trades`
+      : "Showing 0 of 0 trades";
   const paginationItems = (() => {
     const visiblePages = new Set<number>([1, totalPages]);
 
@@ -1434,13 +1425,25 @@ export default async function DiaryPage({
       }))
     : undefined;
 
+  const diaryScopeBar = (
+    <ScopeBar
+      members={scopeMembers}
+      selectedMemberId={selectedTraderId ?? undefined}
+      currentPeriod={period}
+      currentRef={ref}
+      appLanguage={language}
+      accountId={accountId}
+    />
+  );
+
   const tradeListStatusBar = (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-inner border-[0.5px] border-flash/[0.08] bg-bg-base/25 px-3 py-2 text-xs">
-      <span className="font-medium text-muted-faint">{paginationSummary}</span>
-      {secondaryMetrics.map((stat) => (
+      {secondaryMetrics.map((stat, index) => (
         <div
           key={stat.label}
-          className="flex items-center gap-1 border-l border-white/[0.07] pl-3"
+          className={`flex items-center gap-1 ${
+            index > 0 ? "border-l border-white/[0.07] pl-3" : ""
+          }`}
         >
           <span className="text-muted-faint">
             {stat.label}:
@@ -1468,16 +1471,9 @@ export default async function DiaryPage({
           </div>
         ) : undefined
       }
-      scopeBar={
-        <ScopeBar
-          members={scopeMembers}
-          selectedMemberId={selectedTraderId ?? undefined}
-          currentPeriod={period}
-          currentRef={ref}
-          appLanguage={language}
-          accountId={accountId}
-        />
-      }
+      headerLayout={!isSharedAccount ? "split-md" : "default"}
+      action={!isSharedAccount ? diaryScopeBar : undefined}
+      scopeBar={isSharedAccount ? diaryScopeBar : undefined}
     >
       {selectedMember && (
         <Card variant="inner" className="p-5">
@@ -1549,19 +1545,13 @@ export default async function DiaryPage({
       </div>
 
       <div
-        className="reveal-rise space-y-3"
+        className="relative z-50 reveal-rise space-y-3"
         style={{ animationDelay: "140ms" }}
       >
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p className="text-sm text-muted">
-              {t.historyEyebrow}
-            </p>
-
-            <h2 className="text-2xl font-bold">
-              {t.historyTitle}
-            </h2>
-          </div>
+        <div className="flex items-center justify-between w-full mb-3">
+          <h2 className="text-xl font-bold text-white">
+            {t.historyTitle}
+          </h2>
 
           {canCreateTrades && (
             <Link
@@ -1575,7 +1565,7 @@ export default async function DiaryPage({
         </div>
 
         <details className="group">
-          <summary className="flex min-h-11 cursor-pointer list-none flex-wrap items-center gap-3 rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-1/35 px-2 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.025)] outline-none transition-colors duration-base hover:bg-surface-1/55 focus-visible:ring-2 focus-visible:ring-accent-bright/40 [&::-webkit-details-marker]:hidden">
+          <summary className="flex cursor-pointer list-none items-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-accent-bright/40 [&::-webkit-details-marker]:hidden">
             <span className="inline-flex items-center gap-2 rounded-inner border-[0.5px] border-flash/[0.14] bg-surface-2 px-3 py-1.5 text-sm font-semibold text-white shadow-[0_0_18px_rgba(91,224,255,0.04)]">
               <SlidersHorizontal size={14} aria-hidden="true" />
               Filters
@@ -1585,100 +1575,88 @@ export default async function DiaryPage({
                 aria-hidden="true"
               />
             </span>
-            <span
-              className={`text-xs font-semibold ${
-                activeFilterCount > 0
-                  ? "text-accent-bright"
-                  : "text-muted-faint"
-              }`}
-            >
-              {activeFilterSummary}
-            </span>
-            {hasActiveFilters && (
-              <Link
-                href={`/accounts/${accountId}/diary`}
-                className="ml-auto inline-flex min-h-8 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.1] px-3 py-1 text-xs font-semibold text-muted transition-colors duration-base hover:bg-white/[0.05] hover:text-white"
-              >
-                {t.resetFilters}
-              </Link>
+            {activeFilterCount > 0 && (
+              <span className="flex h-7 w-7 items-center justify-center rounded-full border border-cyan-500/30 bg-cyan-500/20 text-xs font-semibold text-cyan-400">
+                {activeFilterCount}
+              </span>
             )}
           </summary>
 
           <form
             action={`/accounts/${accountId}/diary`}
-            className="mt-2 rounded-inner border-[0.5px] border-flash/[0.08] bg-surface-1/45 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.025)]"
+            className="relative z-50 mt-3 w-full rounded-3xl border border-white/10 bg-[#0b1329]/60 px-3 py-2"
           >
-            <div className="flex flex-wrap items-center gap-2">
-          <select
+            <div className="flex w-full items-center justify-between gap-1.5">
+              <div className="flex min-w-0 items-center gap-1.5">
+          <DiaryFilterSelect
             name="symbol"
             defaultValue={filters.symbol || ""}
-            className={`${compactSelectClass} min-w-[8.125rem]`}
-          >
-            <option value="">{t.allSymbols}</option>
-            {symbols.map((symbol) => (
-              <option key={symbol} value={symbol}>{symbol}</option>
-            ))}
-          </select>
+            options={[
+              { value: "", label: t.allSymbols },
+              ...symbols.map((symbol) => ({ value: symbol, label: symbol })),
+            ]}
+          />
 
-          <select
+          <DiaryFilterSelect
             name="outcome"
             defaultValue={filters.outcome || ""}
-            className={`${compactSelectClass} min-w-[8.4375rem]`}
-          >
-            <option value="">{t.allOutcomes}</option>
-            <option value="win">{t.win}</option>
-            <option value="loss">{t.loss}</option>
-            <option value="be">{t.be}</option>
-          </select>
+            options={[
+              { value: "", label: t.allOutcomes },
+              { value: "win", label: t.win },
+              { value: "loss", label: t.loss },
+              { value: "be", label: t.be },
+            ]}
+          />
 
-          <select
+          <DiaryFilterSelect
             name="direction"
             defaultValue={filters.direction || ""}
-            className={`${compactSelectClass} min-w-[8.4375rem]`}
-          >
-            <option value="">{t.allDirections}</option>
-            <option value="LONG">LONG</option>
-            <option value="SHORT">SHORT</option>
-          </select>
+            options={[
+              { value: "", label: t.allDirections },
+              { value: "LONG", label: "LONG" },
+              { value: "SHORT", label: "SHORT" },
+            ]}
+          />
 
-          <select
+          <DiaryFilterSelect
             name="strategyId"
             defaultValue={filters.strategyId || ""}
-            className={`${compactSelectClass} min-w-[9.0625rem]`}
-          >
-            <option value="">{t.allStrategies}</option>
-            {strategies.map((s) => (
-              <option key={s.id} value={s.id}>{s.name}</option>
-            ))}
-          </select>
+            options={[
+              { value: "", label: t.allStrategies },
+              ...strategies.map((strategy) => ({
+                value: strategy.id,
+                label: strategy.name,
+              })),
+            ]}
+          />
 
-          <select
+          <DiaryFilterSelect
             name="source"
             defaultValue={filters.source || ""}
-            className={`${compactSelectClass} min-w-[8.125rem]`}
-          >
-            <option value="">{t.allSources}</option>
-            <option value="manual">{t.manual}</option>
-            <option value="mt5">{t.mt5}</option>
-            <option value="broker">{t.broker}</option>
-          </select>
+            options={[
+              { value: "", label: t.allSources },
+              { value: "manual", label: t.manual },
+              { value: "mt5", label: t.mt5 },
+              { value: "broker", label: t.broker },
+            ]}
+          />
 
-          <select
+          <DiaryFilterSelect
             name="needsReview"
             defaultValue={filters.needsReview || ""}
-            className={`${compactSelectClass} min-w-[8.125rem]`}
-          >
-            <option value="">{t.allStatuses}</option>
-            <option value="true">{t.needsReview}</option>
-          </select>
+            options={[
+              { value: "", label: t.allStatuses },
+              { value: "true", label: t.needsReview },
+            ]}
+          />
 
-          <div className={`flex min-h-9 w-[18.75rem] max-w-[21.25rem] flex-wrap items-center justify-center gap-1.5 rounded-inner border-[0.5px] px-2.5 py-1.5 ${activeDateConflict ? "border-yellow-500/40 bg-yellow-500/[0.06]" : "border-flash/[0.1] bg-surface-2"}`}>
+          <div className={`flex min-h-9 w-auto shrink-0 flex-nowrap items-center justify-center gap-1 rounded-inner border-[0.5px] px-2.5 py-1.5 ${activeDateConflict ? "border-yellow-500/40 bg-yellow-500/[0.06]" : "border-flash/[0.1] bg-surface-2"}`}>
             <div className="dt-wrap">
               <input
                 name="from"
                 type="date"
                 defaultValue={filters.from || ""}
-                className="w-[7.25rem] bg-transparent pr-6 text-sm text-gray-300 outline-none"
+                className="w-[6.5rem] bg-transparent pr-6 text-xs text-gray-300 outline-none"
               />
               <span className="dt-icon" aria-hidden="true"><CalendarIcon /></span>
             </div>
@@ -1688,7 +1666,7 @@ export default async function DiaryPage({
                 name="to"
                 type="date"
                 defaultValue={filters.to || ""}
-                className="w-[7.25rem] bg-transparent pr-6 text-sm text-gray-300 outline-none"
+                className="w-[6.5rem] bg-transparent pr-6 text-xs text-gray-300 outline-none"
               />
               <span className="dt-icon" aria-hidden="true"><CalendarIcon /></span>
             </div>
@@ -1697,34 +1675,25 @@ export default async function DiaryPage({
             )}
           </div>
 
-          {hasActiveFilters && (
-            <div className="ml-auto flex items-center gap-2">
-            <Link
-              href={`/accounts/${accountId}/diary`}
-              className="inline-flex min-h-9 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.1] px-3 py-1.5 text-sm text-muted transition-colors duration-base hover:bg-white/[0.05] hover:text-white"
-            >
-              {t.resetFilters}
-            </Link>
+              </div>
+              <div className="ml-auto flex shrink-0 items-center gap-2 border-l border-white/5 pl-4">
+                {hasActiveFilters && (
+                  <Link
+                    href={`/accounts/${accountId}/diary`}
+                    className="inline-flex min-h-9 items-center justify-center rounded-inner border-[0.5px] border-flash/[0.1] px-3 py-1.5 text-sm text-muted transition-colors duration-base hover:bg-white/[0.05] hover:text-white"
+                  >
+                    {t.resetFilters}
+                  </Link>
+                )}
 
-          <button
-            type="submit"
-            style={{ background: CTA_GRADIENT }}
-            className="inline-flex min-h-9 w-[8.75rem] items-center justify-center rounded-inner px-3 py-1.5 text-sm font-semibold text-white transition-shadow duration-base hover:shadow-[0_0_24px_color-mix(in_srgb,var(--color-accent)_18%,transparent)]"
-          >
-            {t.applyFilters}
-          </button>
-            </div>
-          )}
-
-          {!hasActiveFilters && (
-            <button
-              type="submit"
-              style={{ background: CTA_GRADIENT }}
-              className="ml-auto inline-flex min-h-9 w-[8.75rem] items-center justify-center rounded-inner px-3 py-1.5 text-sm font-semibold text-white transition-shadow duration-base hover:shadow-[0_0_24px_color-mix(in_srgb,var(--color-accent)_18%,transparent)]"
-            >
-              {t.applyFilters}
-            </button>
-          )}
+                <button
+                  type="submit"
+                  style={{ background: CTA_GRADIENT }}
+                  className="inline-flex min-h-9 w-[8.75rem] items-center justify-center rounded-inner px-3 py-1.5 text-sm font-semibold text-white transition-shadow duration-base hover:shadow-[0_0_24px_color-mix(in_srgb,var(--color-accent)_18%,transparent)]"
+                >
+                  {t.applyFilters}
+                </button>
+              </div>
           </div>
           </form>
         </details>
@@ -2127,15 +2096,15 @@ export default async function DiaryPage({
         )}
       </div>
 
-      <div className="reveal-rise flex flex-wrap items-center justify-between gap-3 rounded-card border-[0.5px] border-flash/[0.08] bg-surface-1/70 px-4 py-3 text-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.025)]">
+      <div className="reveal-rise flex flex-wrap items-center justify-between gap-3">
         <p className="text-xs font-medium text-muted-faint">{paginationSummary}</p>
         <nav
-          className="flex flex-wrap items-center gap-1 rounded-inner border-[0.5px] border-flash/[0.08] bg-bg-base/25 p-1"
+          className="ml-auto flex items-center gap-2 rounded-full border border-white/10 bg-[#0b1329]/60 px-3 py-1.5"
           aria-label="Registered trades pagination"
         >
           {currentPage <= 1 ? (
             <span
-              className="inline-flex h-8 items-center justify-center rounded-inner px-3 text-xs font-semibold text-muted-faint opacity-50"
+              className="inline-flex items-center justify-center border-0 bg-transparent px-2 py-1 text-xs text-slate-400 opacity-50"
               aria-disabled="true"
             >
               Previous
@@ -2143,46 +2112,48 @@ export default async function DiaryPage({
           ) : (
             <Link
               href={previousPageHref}
-              className="inline-flex h-8 items-center justify-center rounded-inner px-3 text-xs font-semibold text-muted transition-colors duration-base hover:bg-white/[0.05] hover:text-white"
+              className="inline-flex items-center justify-center border-0 bg-transparent px-2 py-1 text-xs text-slate-400 transition-colors hover:text-white"
             >
               Previous
             </Link>
           )}
 
-          <div className="flex items-center gap-1 border-x border-white/[0.07] px-1">
-            {paginationItems.map((item, index) =>
-              item === "ellipsis" ? (
-                <span
-                  key={`ellipsis-${index}`}
-                  className="inline-flex h-8 w-8 items-center justify-center text-xs font-semibold text-muted-faint"
-                  aria-hidden="true"
-                >
-                  ...
-                </span>
-              ) : item === currentPage ? (
-                <span
-                  key={item}
-                  className="inline-flex h-8 min-w-8 items-center justify-center rounded-inner bg-accent-bright/[0.12] px-2 text-xs font-semibold text-accent-bright"
-                  aria-current="page"
-                >
-                  {item}
-                </span>
-              ) : (
-                <Link
-                  key={item}
-                  href={getPageHref(item)}
-                  className="inline-flex h-8 min-w-8 items-center justify-center rounded-inner px-2 text-xs font-semibold text-muted transition-colors duration-base hover:bg-white/[0.05] hover:text-white"
-                  aria-label={`Go to page ${item}`}
-                >
-                  {item}
-                </Link>
-              )
-            )}
-          </div>
+          <span className="h-4 border-r border-white/10" aria-hidden="true" />
+
+          {paginationItems.map((item, index) =>
+            item === "ellipsis" ? (
+              <span
+                key={`ellipsis-${index}`}
+                className="inline-flex h-8 w-8 items-center justify-center text-xs font-semibold text-muted-faint"
+                aria-hidden="true"
+              >
+                ...
+              </span>
+            ) : item === currentPage ? (
+              <span
+                key={item}
+                className="flex h-7 w-7 items-center justify-center rounded-full border border-cyan-500/30 bg-cyan-500/20 text-xs font-semibold text-cyan-400"
+                aria-current="page"
+              >
+                {item}
+              </span>
+            ) : (
+              <Link
+                key={item}
+                href={getPageHref(item)}
+                className="inline-flex h-8 min-w-8 items-center justify-center rounded-inner px-2 text-xs font-semibold text-muted transition-colors duration-base hover:bg-white/[0.05] hover:text-white"
+                aria-label={`Go to page ${item}`}
+              >
+                {item}
+              </Link>
+            )
+          )}
+
+          <span className="h-4 border-r border-white/10" aria-hidden="true" />
 
           {currentPage >= totalPages ? (
             <span
-              className="inline-flex h-8 items-center justify-center rounded-inner px-3 text-xs font-semibold text-muted-faint opacity-50"
+              className="inline-flex items-center justify-center border-0 bg-transparent px-2 py-1 text-xs text-slate-400 opacity-50"
               aria-disabled="true"
             >
               Next
@@ -2190,7 +2161,7 @@ export default async function DiaryPage({
           ) : (
             <Link
               href={nextPageHref}
-              className="inline-flex h-8 items-center justify-center rounded-inner px-3 text-xs font-semibold text-muted transition-colors duration-base hover:bg-white/[0.05] hover:text-white"
+              className="inline-flex items-center justify-center border-0 bg-transparent px-2 py-1 text-xs text-slate-400 transition-colors hover:text-white"
             >
               Next
             </Link>

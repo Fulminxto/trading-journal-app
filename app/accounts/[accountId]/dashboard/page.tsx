@@ -1186,6 +1186,25 @@ export default async function DashboardPage({
           },
         ];
 
+  const dashboardScopeBar = (
+    <ScopeBar
+      accountId={accountId}
+      members={
+        isSharedAccount
+          ? accountMembers.map((m) => ({
+              id: m.user.id,
+              name: m.user.name,
+              username: m.user.username,
+            }))
+          : undefined
+      }
+      selectedMemberId={selectedMemberId}
+      currentPeriod={period}
+      currentRef={ref}
+      appLanguage={language}
+    />
+  );
+
   return (
     <AccountPageShell
       className={pageDensity.dashboard.page}
@@ -1195,6 +1214,7 @@ export default async function DashboardPage({
         </>
       }
       title={t.dashboardAccount}
+      headerLayout={!isSharedAccount ? "split-md" : "default"}
       supportLine="Get a complete overview of performance, risk, discipline and recent trading activity."
       badges={
         <>
@@ -1207,24 +1227,8 @@ export default async function DashboardPage({
           </span>
         </>
       }
-      scopeBar={
-        <ScopeBar
-          accountId={accountId}
-          members={
-            isSharedAccount
-              ? accountMembers.map((m) => ({
-                  id: m.user.id,
-                  name: m.user.name,
-                  username: m.user.username,
-                }))
-              : undefined
-          }
-          selectedMemberId={selectedMemberId}
-          currentPeriod={period}
-          currentRef={ref}
-          appLanguage={language}
-        />
-      }
+      action={!isSharedAccount ? dashboardScopeBar : undefined}
+      scopeBar={isSharedAccount ? dashboardScopeBar : undefined}
     >
 
       {/* PRIMARY — the equity curve is the one hero, full width, dominant. */}
@@ -1649,21 +1653,20 @@ export default async function DashboardPage({
         </Card>
       </div>
 
-      <details className="group rounded-card border-[0.5px] border-flash/[0.1] bg-surface-1 p-4 sm:p-5">
-        <summary className="flex cursor-pointer list-none flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-faint">
-              Technical profile
-            </p>
-
-            <h2 className="mt-1 text-lg font-black text-white">
+      <details className="group">
+        <summary className="flex w-full cursor-pointer list-none items-center justify-between rounded-xl border border-white/5 bg-white/[0.015] px-4 py-3 transition-colors hover:bg-white/[0.03]">
+          <div className="flex flex-col gap-0.5">
+            <span className="text-xs font-semibold text-slate-300">
               Account details
-            </h2>
+            </span>
+            <span className="text-[11px] font-normal text-slate-500">
+              Technical specs and connection parameters
+            </span>
           </div>
 
-          <div className="flex items-center gap-3 text-xs font-semibold text-muted-faint">
-            <span>{t.accountStatus}: {accountHealth}</span>
-            <ChevronDown size={16} className="transition group-open:rotate-180" />
+          <div className="flex shrink-0 items-center">
+            <span className="mr-2 text-xs text-slate-400">{t.accountStatus}: {accountHealth}</span>
+            <ChevronDown size={16} className="h-4 w-4 text-slate-500 transition group-open:rotate-180" />
           </div>
         </summary>
 

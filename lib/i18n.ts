@@ -14,6 +14,14 @@ export type AppLanguage =
 export const DEFAULT_APP_LANGUAGE: AppLanguage = "en";
 export const FALLBACK_APP_LANGUAGE: AppLanguage = "en";
 
+const ACCOUNT_CURRENCY_SYMBOLS: Readonly<Record<string, string>> = {
+  CAD: "C$",
+  AUD: "A$",
+  CHF: "CHF",
+  USDT: "₮",
+  USDC: "$",
+};
+
 export function isSupportedAppLanguage(
   language?: string | null
 ): language is AppLanguage {
@@ -52,11 +60,25 @@ export function formatCurrencyByLanguage(
   currency = "USD",
   language?: string | null
 ) {
+  const normalizedCurrency = currency.toUpperCase();
+  const accountCurrencySymbol = ACCOUNT_CURRENCY_SYMBOLS[normalizedCurrency];
+  const locale = getLocaleFromLanguage(language);
+
+  if (accountCurrencySymbol) {
+    const formattedValue = new Intl.NumberFormat(locale, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(Math.abs(value));
+    const separator = normalizedCurrency === "CHF" ? " " : "";
+
+    return `${value < 0 ? "-" : ""}${accountCurrencySymbol}${separator}${formattedValue}`;
+  }
+
   return new Intl.NumberFormat(
-    getLocaleFromLanguage(language),
+    locale,
     {
       style: "currency",
-      currency,
+      currency: normalizedCurrency,
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }

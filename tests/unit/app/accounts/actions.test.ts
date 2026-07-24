@@ -146,7 +146,7 @@ describe("account creation action", () => {
     const result = await createAccountWithState(null, form({
       name: "   ",
       type: "UNKNOWN",
-      currency: "BTC",
+      currency: "XYZ",
     }));
 
     expect(result).toEqual({
@@ -159,7 +159,7 @@ describe("account creation action", () => {
       values: expect.objectContaining({
         name: "",
         type: "UNKNOWN",
-        currency: "BTC",
+        currency: "XYZ",
       }),
     });
     expect(mocks.transaction).not.toHaveBeenCalled();
@@ -204,6 +204,34 @@ describe("account creation action", () => {
       }),
     });
   });
+
+  it.each(["CAD", "AUD", "CHF", "USDT", "USDC"])(
+    "accepts the supported %s account currency",
+    async (currency) => {
+      await expect(
+        createAccountWithState(null, form({ currency }))
+      ).rejects.toThrow("REDIRECT:/accounts/account-1/dashboard");
+
+      expect(mocks.accountCreate).toHaveBeenCalledWith({
+        data: expect.objectContaining({ currency }),
+      });
+    }
+  );
+
+  it.each(["BTC", "ETH"])(
+    "rejects %s as an account currency",
+    async (currency) => {
+      await expect(
+        createAccountWithState(null, form({ currency }))
+      ).resolves.toEqual({
+        error: "Check the highlighted fields and try again.",
+        fieldErrors: { currency: "Check this field." },
+        values: expect.objectContaining({ currency }),
+      });
+
+      expect(mocks.transaction).not.toHaveBeenCalled();
+    }
+  );
 
   it("does not catch redirect control flow as a persistence failure", async () => {
     await expect(createAccountWithState(null, form())).rejects.toThrow(

@@ -269,38 +269,38 @@ export default function AccountActionsMenu({
           role="menu"
           aria-labelledby={triggerId}
           onKeyDown={handleMenuKeyDown}
-          className="fixed z-[100] overflow-hidden rounded-inner border-[0.5px] border-flash/[0.16] bg-[#08111d] p-1.5 shadow-[0_18px_45px_rgba(0,0,0,.58)]"
+          className="fixed z-[100] w-56 overflow-hidden rounded-xl border border-white/10 bg-[#090f1e]/95 p-1.5 shadow-2xl backdrop-blur-md"
           style={menuPosition}
         >
           {canEditAccount && (
-            <Link role="menuitem" href={`/accounts/${accountId}/edit`} onClick={() => setOpen(false)} className="flex min-h-10 items-center gap-3 rounded-md px-3 text-sm text-muted outline-none hover:bg-white/[0.06] hover:text-flash focus-visible:bg-white/[0.08] focus-visible:text-flash focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-bright/60">
-              <Pencil size={15} aria-hidden="true" />Edit account information
+            <Link role="menuitem" href={`/accounts/${accountId}/edit`} onClick={() => setOpen(false)} className="flex min-h-10 items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium text-slate-300 outline-none transition-all hover:bg-white/[0.06] hover:text-white focus-visible:bg-white/[0.08] focus-visible:text-white focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-bright/60">
+              <Pencil className="h-4 w-4 text-slate-400" aria-hidden="true" />Edit account information
             </Link>
           )}
           {canOpenManage && (
-            <Link role="menuitem" href="/accounts/manage" onClick={() => setOpen(false)} className="flex min-h-10 items-center gap-3 rounded-md px-3 text-sm text-muted outline-none hover:bg-white/[0.06] hover:text-flash focus-visible:bg-white/[0.08] focus-visible:text-flash focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-bright/60">
-              <Settings size={15} aria-hidden="true" />Manage accounts
+            <Link role="menuitem" href="/accounts/manage" onClick={() => setOpen(false)} className="flex min-h-10 items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium text-slate-300 outline-none transition-all hover:bg-white/[0.06] hover:text-white focus-visible:bg-white/[0.08] focus-visible:text-white focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-bright/60">
+              <Settings className="h-4 w-4 text-slate-400" aria-hidden="true" />Manage accounts
             </Link>
           )}
           {canViewMembers && (
-            <Link role="menuitem" href={`/accounts/${accountId}/members`} onClick={() => setOpen(false)} className="flex min-h-10 items-center gap-3 rounded-md px-3 text-sm text-muted outline-none hover:bg-white/[0.06] hover:text-flash focus-visible:bg-white/[0.08] focus-visible:text-flash focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-bright/60">
-              <Users size={15} aria-hidden="true" />Members
+            <Link role="menuitem" href={`/accounts/${accountId}/members`} onClick={() => setOpen(false)} className="flex min-h-10 items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium text-slate-300 outline-none transition-all hover:bg-white/[0.06] hover:text-white focus-visible:bg-white/[0.08] focus-visible:text-white focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-bright/60">
+              <Users className="h-4 w-4 text-slate-400" aria-hidden="true" />Members
             </Link>
           )}
           {canManageIntegrations && (
-            <Link role="menuitem" href={`/accounts/${accountId}/integrations`} onClick={() => setOpen(false)} className="flex min-h-10 items-center gap-3 rounded-md px-3 text-sm text-muted outline-none hover:bg-white/[0.06] hover:text-flash focus-visible:bg-white/[0.08] focus-visible:text-flash focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-bright/60">
-              <Cable size={15} aria-hidden="true" />Integrations
+            <Link role="menuitem" href={`/accounts/${accountId}/integrations`} onClick={() => setOpen(false)} className="flex min-h-10 items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium text-slate-300 outline-none transition-all hover:bg-white/[0.06] hover:text-white focus-visible:bg-white/[0.08] focus-visible:text-white focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-bright/60">
+              <Cable className="h-4 w-4 text-slate-400" aria-hidden="true" />Integrations
             </Link>
           )}
-          {navigationCount > 0 && mutationCount > 0 && <div role="separator" className="my-1.5 border-t-[0.5px] border-flash/[0.1]" />}
           {canArchive && (
-            <button type="button" role="menuitem" onClick={() => openConfirmation("archive")} className="flex min-h-10 w-full items-center gap-3 rounded-md px-3 text-left text-sm text-warning outline-none hover:bg-warning/[0.08] focus-visible:bg-warning/[0.1] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-warning/60">
-              <Archive size={15} aria-hidden="true" />Archive account
+            <button type="button" role="menuitem" onClick={() => openConfirmation("archive")} className="flex min-h-10 w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-xs font-medium text-amber-400/90 outline-none transition-all hover:bg-amber-500/10 hover:text-amber-300 focus-visible:bg-amber-500/10 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-amber-400/60">
+              <Archive className="h-4 w-4 text-amber-400/80" aria-hidden="true" />Archive account
             </button>
           )}
+          {(navigationCount > 0 || canArchive) && canDeleteAccount && <div role="separator" className="my-1 border-t border-white/[0.06]" />}
           {canDeleteAccount && (
-            <button type="button" role="menuitem" onClick={() => openConfirmation("delete")} className="flex min-h-10 w-full items-center gap-3 rounded-md px-3 text-left text-sm text-red-400 outline-none hover:bg-red-400/[0.08] focus-visible:bg-red-400/[0.1] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-red-400/60">
-              <Trash2 size={15} aria-hidden="true" />Delete account
+            <button type="button" role="menuitem" onClick={() => openConfirmation("delete")} className="flex min-h-10 w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-xs font-medium text-rose-400 outline-none transition-all hover:bg-rose-500/10 hover:text-rose-300 focus-visible:bg-rose-500/10 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-rose-400/60">
+              <Trash2 className="h-4 w-4 text-rose-400" aria-hidden="true" />Delete account
             </button>
           )}
         </div>,

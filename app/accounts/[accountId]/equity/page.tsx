@@ -999,6 +999,25 @@ export default async function EquityPage({
     },
   ];
 
+  const equityScopeBar = (
+    <ScopeBar
+      accountId={accountId}
+      members={
+        isSharedAccount
+          ? accountMembers.map((m) => ({
+              id: m.user.id,
+              name: m.user.name,
+              username: m.user.username,
+            }))
+          : undefined
+      }
+      selectedMemberId={selectedMemberId}
+      currentPeriod={period}
+      currentRef={ref}
+      appLanguage={language}
+    />
+  );
+
   return (
     <AccountPageShell
       className={pageDensity.equity.page}
@@ -1008,30 +1027,15 @@ export default async function EquityPage({
         </>
       }
       title={t.heroTitle}
+      headerLayout={!isSharedAccount ? "split-md" : "default"}
       supportLine="Monitor capital growth, drawdown and long-term account progression."
       badges={
         <span className="rounded-full border border-accent-bright/20 bg-accent-bright/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-accent-bright">
           {t.heroBadge}
         </span>
       }
-      scopeBar={
-        <ScopeBar
-          accountId={accountId}
-          members={
-            isSharedAccount
-              ? accountMembers.map((m) => ({
-                  id: m.user.id,
-                  name: m.user.name,
-                  username: m.user.username,
-                }))
-              : undefined
-          }
-          selectedMemberId={selectedMemberId}
-          currentPeriod={period}
-          currentRef={ref}
-          appLanguage={language}
-        />
-      }
+      action={!isSharedAccount ? equityScopeBar : undefined}
+      scopeBar={isSharedAccount ? equityScopeBar : undefined}
     >
 
       {/* PRIMARY - the equity curve, dominant, alone. */}

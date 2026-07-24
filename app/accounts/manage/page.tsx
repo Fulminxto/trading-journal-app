@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import AccountLifecycleManager, { type LifecycleAccount, type LifecycleLabels } from "@/components/accounts/AccountLifecycleManager";
@@ -69,5 +67,5 @@ export default async function ManageAccountsPage() {
     ? { name: "Test 5", type: "DEMO", currency: "USD", daysRemaining: 12 }
     : null;
 
-  return <div className="space-y-8"><header><p className="text-micro uppercase tracking-label text-accent-bright">{t.eyebrow}</p><div className="mb-2 mt-2 flex items-center gap-4"><h1 className="text-section text-flash">{t.title}</h1><Link href="/accounts" aria-label="Back to account library" className="group/back inline-flex h-8 w-fit shrink-0 translate-y-[1px] items-center gap-2 rounded-full border border-white/[0.05] bg-[#070d19]/80 px-3 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400 backdrop-blur-md transition-all duration-300 hover:border-cyan-500/25 hover:text-slate-200 hover:shadow-[0_0_15px_rgba(0,242,254,0.05)] focus-visible:border-cyan-400/30 focus-visible:text-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/20 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base"><ArrowLeft size={14} aria-hidden="true" className="shrink-0 transition-transform duration-300 group-hover/back:-translate-x-[3px] group-focus-visible/back:-translate-x-[3px] motion-reduce:transform-none motion-reduce:transition-none" /><span>BACK TO LIBRARY</span></Link></div><p className="max-w-2xl text-sm leading-6 text-muted">{t.description}</p></header><AccountLifecycleManager activeAccounts={activeAccounts} archivedAccounts={archivedAccounts} recentlyDeletedPreview={recentlyDeletedPreview} labels={t} /></div>;
+  return <div className="space-y-8"><header><p className="text-micro uppercase tracking-label text-accent-bright">{t.eyebrow}</p><h1 className="mb-2 mt-2 text-2xl font-bold tracking-tight text-white md:text-3xl">{t.title}</h1><p className="max-w-2xl text-sm leading-6 text-muted">{t.description}</p></header><AccountLifecycleManager activeAccounts={activeAccounts} archivedAccounts={archivedAccounts} recentlyDeletedPreview={recentlyDeletedPreview} labels={t} /></div>;
 }

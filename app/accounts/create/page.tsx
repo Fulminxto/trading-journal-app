@@ -212,17 +212,17 @@ export default async function CreateAccountPage() {
   const t = labels[language];
 
   return (
-    <div className="max-w-2xl mx-auto mt-8">
+    <div className="mx-auto mt-8 max-w-2xl">
       <div className="mb-8">
-        <p className="text-sm text-gray-400">
+        <p className="text-micro uppercase tracking-label text-accent-bright">
           {t.eyebrow}
         </p>
 
-        <h1 className="mt-2 text-4xl font-bold">
+        <h1 className="mt-2 text-2xl font-bold tracking-tight text-white md:text-3xl">
           {t.title}
         </h1>
 
-        <p className="mt-3 text-sm text-gray-400">
+        <p className="mt-3 text-sm leading-6 text-slate-400">
           {t.description}
         </p>
       </div>
@@ -230,6 +230,7 @@ export default async function CreateAccountPage() {
       <CreateAccountForm
         canCreatePersonalAccount={canCreatePersonalAccount}
         canCreateSharedAccount={canCreateSharedAccount}
+        usePremiumSelectionUi
         labels={{
           accountName: t.accountNamePlaceholder,
           accountType: t.accountTypeLabel,
